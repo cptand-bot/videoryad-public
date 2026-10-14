@@ -9,6 +9,7 @@ Usage:
 """
 import json
 import os
+import re
 import sys
 import subprocess
 import random
@@ -53,6 +54,7 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
             f"[fg]scale={W}:{H}:force_original_aspect_ratio=decrease[fgs];"
             f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2[base];"
             f"[base]zoompan=z='{z}':d={frames}:s={W}x{H}:fps={FPS},format=yuv420p"
+            f"{_caps(out_path)}"
         )
     else:
         zoom_dir = random.choice(["in", "out"])
@@ -61,12 +63,36 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
         vf = (
             f"scale=2560:1440:force_original_aspect_ratio=increase,crop=2560:1440,"
             f"zoompan=z='{zexpr}':d={frames}:s={W}x{H}:fps={FPS},format=yuv420p"
+            f"{_caps(out_path)}"
         )
 
     cmd = [ffmpeg, "-y", "-loop", "1", "-i", src,
            ("-vf" if not portrait else "-filter_complex"), vf, "-t", str(duration),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
+
+
+def _caps(out_path):
+    """Добавка фильтра субтитров к цепочке — ТОЛЬКО если они явно включены.
+
+    Включаются присутствием каталога с по-сценными .ass (переменная
+    CAPTIONS_DIR, её выставляет workflow, когда в проекте лежит captions.ass).
+    Переменной нет или куска для этой сцены нет -> возвращается пустая строка,
+    то есть поведение ровно такое же, как было до появления субтитров.
+    Стоимость самого вжигания — +2% к кодированию клипа (замер 2026-10-14),
+    поэтому делаем это здесь, на 12 машинах, а не одним проходом по финалу.
+    """
+    d = os.environ.get("CAPTIONS_DIR", "")
+    if not d:
+        return ""
+    m = re.search(r"clip_(\d+)", os.path.basename(out_path))
+    if not m:
+        return ""
+    f = os.path.join(d, f"scene_{int(m.group(1)):03d}.ass")
+    if not os.path.isfile(f):
+        return ""
+    esc = f.replace("\\", "/").replace(":", r"\:").replace(",", r"\,")
+    return f",ass='{esc}'"
 
 
 def _pick_start(src, sid, src_dur, duration):
@@ -100,7 +126,8 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
     # hit once: 14 stock-video clips at 25fps + 68 generated clips at 30fps
     # concatenated into a video ffprobe reported as 25fps throughout, playing
     # ~20% longer than the sum of the source clips' own durations).
-    vf = f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setpts=PTS-STARTPTS,fps={FPS},format=yuv420p"
+    vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+          f"setpts=PTS-STARTPTS,fps={FPS},format=yuv420p{_caps(out_path)}")
     loop_args = ["-stream_loop", "-1"] if (src_dur and src_dur < duration) else []
     seek_args = ["-ss", str(start)] if start > 0 else []
     cmd = [ffmpeg, "-y", *loop_args, *seek_args, "-i", src, "-vf", vf, "-t", str(duration),

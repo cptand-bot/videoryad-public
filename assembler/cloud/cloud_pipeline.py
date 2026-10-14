@@ -335,8 +335,41 @@ def step_overlays(proj, scenes_json):
         pm = hashlib.md5(open(ph, "rb").read()).hexdigest() if os.path.isfile(ph) else "-"
         return hashlib.md5((spec + pm + anchor).encode()).hexdigest()
     ids = [k for k in ov if str(k).isdigit()]
-    prev_path = os.path.join(clips, ".overlaid.json")
+
+    # ── МАТРИЦА ВСПЛЫВАШЕК (2026-10-14) ──────────────────────────────────
+    # Этап был последним, кто работал на ОДНОЙ машине по очереди: 146с на 33
+    # всплывашки (публичный раннер) против 279-345с на приватных — самый
+    # дорогой кусок assemble после того, как клипы разнесли на 12 воркеров.
+    # Теперь его точно так же режем по машинам: OVL_SHARD_COUNT/OVL_SHARD_ID
+    # приходят из workflow-матрицы, каждая машина берёт свою долю id.
+    # ВАЖНО: это НЕ то же самое, что CLOUD_WORKERS — тот делит работу между
+    # процессами ВНУТРИ одной машины и продолжает работать как раньше.
+    shard_n = int(os.environ.get("OVL_SHARD_COUNT", "1"))
+    shard_i = int(os.environ.get("OVL_SHARD_ID", "0"))
+    if shard_n > 1:
+        ids = [k for k in ids if int(k) % shard_n == shard_i]
+        log(f"всплывашки: машина {shard_i} из {shard_n}, её доля — {len(ids)} шт")
+
+    # Отпечатки готовых всплывашек. В режиме матрицы каждая машина пишет СВОЙ
+    # файл (.overlaid.<N>.json), иначе 12 машин затёрли бы друг друга. На
+    # сборке (shard_n == 1) все такие файлы сливаются в один: id, который
+    # какая-то машина не осилила, просто не попадёт в слияние и будет
+    # дорисован здесь — то есть падение одной машины не ломает ролик.
+    prev_path = os.path.join(clips, f".overlaid.{shard_i}.json" if shard_n > 1
+                             else ".overlaid.json")
     prev = json.load(open(prev_path)) if os.path.isfile(prev_path) else {}
+    if shard_n == 1:
+        merged = dict(prev)
+        for f in sorted(glob.glob(os.path.join(clips, ".overlaid.*.json"))):
+            if os.path.basename(f) == ".overlaid.json":
+                continue
+            try:
+                merged.update(json.load(open(f)))
+            except Exception as e:
+                log(f"  не прочитал {os.path.basename(f)}: {e}")
+        if len(merged) > len(prev):
+            log(f"всплывашки: с машин матрицы пришло готовых {len(merged)} шт")
+        prev = merged
     stale = []
     for k in ids:
         rebuilt_clean = not os.path.isfile(os.path.join(clips, f"clip_{int(k):03d}.orig.mp4"))

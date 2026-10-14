@@ -370,7 +370,23 @@ jobs:
           PY
           )
           mkdir -p "$proj/clips"
-          BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
+          # СУБТИТРЫ — ВЫКЛЮЧЕНЫ ПО УМОЛЧАНИЮ (2026-10-14, прямое требование
+          # пользователя: «подключать только по отдельной команде»).
+          # Включатель один: наличие файла captions.ass в проекте. Его кладу
+          # туда только я и только когда попросили. Нет файла — переменная
+          # CAPTIONS_DIR не выставляется, и build_clips_1080.py работает ровно
+          # как раньше (проверено: 0 пикселей текста против 25926 при
+          # включённых). Вжигание стоит +2% к кодированию клипа, то есть на
+          # 12 машинах — около двух секунд на весь ролик.
+          caps=""
+          if [ -f "$proj/captions.ass" ]; then
+            python3 assembler/template/captions_shard.py "$sc" "$proj/captions.ass" "$proj/.caps"
+            caps="$PWD/$proj/.caps"
+            echo "субтитры: ВКЛЮЧЕНЫ (найден captions.ass)"
+          else
+            echo "субтитры: выключены (captions.ass в проекте нет)"
+          fi
+          CAPTIONS_DIR="$caps" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
             python3 assembler/template/build_clips_1080.py "$sc" "$proj/images" "$proj/clips"
           echo "shard ${{ matrix.shard }}: $(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l) clips"
 
@@ -392,9 +408,106 @@ jobs:
           path: clips-out
           key: clip-${{ github.run_id }}-${{ matrix.shard }}
 
+  # ------------------------------------------------------------------ overlays (matrix)
+  # Всплывашки были ПОСЛЕДНИМ этапом, который работал на одной машине по
+  # очереди: 146с на 33 всплывашки (замер 2026-10-14, публичный раннер) —
+  # самый дорогой кусок assemble после того, как клипы разнесли на 12 машин.
+  # Режем так же. Ключевая экономия: build_clips_1080.py и build_overlays.py
+  # делят работу по ОДНОМУ правилу (sid % WORKER_COUNT == WORKER_ID), поэтому
+  # машине k нужны ровно те клипы, которые отрисовала клип-машина k — один
+  # restore вместо двенадцати.
+  overlays:
+    needs: [setup, fetch, clips]
+    # `always()` — та же мина, что ловили на clips 2026-10-12: GitHub скипает
+    # джоб с пропущенной зависимостью, не читая его собственный `if`.
+    if: >-
+      always()
+      && needs.setup.result == 'success'
+      && needs.setup.outputs.have == 'true'
+      && needs.setup.outputs.fetch_only != 'true'
+      && needs.clips.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/cache/restore@v4
+        with:
+          path: project-src.tgz
+          key: proj-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - run: tar xzf project-src.tgz
+
+      # кадры всплывашек обычно уже лежат в очереди (сценарий --fetch-only ->
+      # ship), но на одноразовой сквозной сборке их добыла матрица
+      - name: Collect every shard's images
+        if: needs.setup.outputs.shards != '[]' && needs.setup.outputs.shards != ''
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard-${{ needs.setup.outputs.name }}-*
+          path: queue/${{ needs.setup.outputs.name }}/images
+          merge-multiple: true
+
+      - name: Restore this worker's own clips
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-${{ matrix.shard }}
+
+      - name: Put clips in place
+        id: have
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p "$proj/clips"
+          cp clips-out/clip_*.mp4 "$proj/clips/" 2>/dev/null || true
+          n=$(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l)
+          echo "клипов у этой машины: $n"
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+
+      - name: Set up tools
+        if: steps.have.outputs.count != '0'
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu
+          python3 -m pip install --quiet pillow
+
+      - name: Render this worker's pop-ups
+        if: steps.have.outputs.count != '0'
+        env:
+          OVL_SHARD_COUNT: "12"
+          OVL_SHARD_ID: ${{ matrix.shard }}
+          CLOUD_WORKERS: "4"
+        run: python3 assembler/cloud/cloud_pipeline.py "queue/${{ needs.setup.outputs.name }}" --only overlays
+
+      - name: Stage overlaid clips
+        id: stage
+        if: steps.have.outputs.count != '0'
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p ovl-out
+          cp "$proj/clips"/clip_*.mp4 ovl-out/ 2>/dev/null || true
+          # отпечатки готовых всплывашек этой машины — по ним assemble поймёт,
+          # что переделывать нечего (а чего нет — дорисует сам)
+          cp "$proj/clips"/.overlaid.*.json ovl-out/ 2>/dev/null || true
+          n=$(ls ovl-out/clip_*.mp4 2>/dev/null | wc -l)
+          echo "отдаю клипов: $n"
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache/save@v4
+        if: steps.stage.outputs.count != '0' && steps.stage.outputs.count != ''
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-${{ matrix.shard }}
+
   # ------------------------------------------------------------------ assemble
   assemble:
-    needs: [setup, fetch, clips]
+    needs: [setup, fetch, clips, overlays]
     if: always() && needs.setup.result == 'success' && needs.setup.outputs.have == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 180
@@ -491,12 +604,96 @@ jobs:
         with:
           path: clips-out
           key: clip-${{ github.run_id }}-11
+      - name: Restore overlaid clips 0
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-0
+      - name: Restore overlaid clips 1
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-1
+      - name: Restore overlaid clips 2
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-2
+      - name: Restore overlaid clips 3
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-3
+      - name: Restore overlaid clips 4
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-4
+      - name: Restore overlaid clips 5
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-5
+      - name: Restore overlaid clips 6
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-6
+      - name: Restore overlaid clips 7
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-7
+      - name: Restore overlaid clips 8
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-8
+      - name: Restore overlaid clips 9
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-9
+      - name: Restore overlaid clips 10
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-10
+      - name: Restore overlaid clips 11
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: ovl-out
+          key: ovl-${{ github.run_id }}-11
       - name: Gather restored clips
         if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
         run: |
           mkdir -p "queue/${{ needs.setup.outputs.name }}/clips"
           cp clips-out/clip_*.mp4 "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
           echo "clips gathered: $(ls "queue/${{ needs.setup.outputs.name }}/clips"/clip_*.mp4 2>/dev/null | wc -l)"
+          # ПОВЕРХ голых клипов кладём те, на которых матрица уже нарисовала
+          # всплывашки (порядок важен: клип со всплывашкой должен победить).
+          # Вместе с ними приезжают .overlaid.<N>.json — отпечатки готового,
+          # по ним step_overlays поймёт, что переделывать нечего. Чего матрица
+          # не осилила — здесь дорисуется как раньше, ролик не ломается.
+          if ls ovl-out/clip_*.mp4 >/dev/null 2>&1; then
+            cp ovl-out/clip_*.mp4 "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
+            cp ovl-out/.overlaid.*.json "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
+            echo "со всплывашками пришло: $(ls ovl-out/clip_*.mp4 2>/dev/null | wc -l), отпечатков: $(ls ovl-out/.overlaid.*.json 2>/dev/null | wc -l)"
+          else
+            echo "матрица всплывашек ничего не отдала — рисую здесь, как раньше"
+          fi
 
       - name: Set up tools
         run: |
