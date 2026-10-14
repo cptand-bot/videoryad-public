@@ -1,0 +1,52 @@
+{
+ "scenes": [
+  {
+   "id": 2,
+   "text": "",
+   "duration_sec": 14.56,
+   "source": "press_photo",
+   "source_query": "компрессорная станция газопровода реальное фото",
+   "visual_prompt": "компрессорная станция газопровода реальное фото"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 12.33,
+   "source": "press_photo",
+   "source_query": "нефтяные резервуары на терминале реальное фото",
+   "visual_prompt": "нефтяные резервуары на терминале реальное фото"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 10.09,
+   "source": "press_photo",
+   "source_query": "ветряные турбины на поле реальное фото",
+   "visual_prompt": "ветряные турбины на поле реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "duration_sec": 14.06,
+   "source": "press_photo",
+   "source_query": "цех металлургического завода реальное фото",
+   "visual_prompt": "цех металлургического завода реальное фото"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "duration_sec": 12.72,
+   "source": "press_photo",
+   "source_query": "морской порт причал кран реальное фото",
+   "visual_prompt": "морской порт причал кран реальное фото"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "duration_sec": 14.11,
+   "source": "press_photo",
+   "source_query": "газовый счётчик крупным планом реальное фото",
+   "visual_prompt": "газовый счётчик крупным планом реальное фото"
+  }
+ ]
+}
