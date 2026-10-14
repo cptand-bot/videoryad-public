@@ -1,0 +1,688 @@
+# Free cloud assembler for news видеоряд — GitHub's Ubuntu runners, no cost.
+#
+# THREE jobs so the slow part (WEB image search) runs on many machines at once.
+# The media-library is NOT here and never can be — library scenes are fetched
+# on the user's machine (fast local disk) and their images/ ride along in
+# project-src. The cloud only searches the scenes the library can't cover.
+#
+#   setup    — pick queue/<name>/, (optionally) Claude classifies, then shard
+#              the scenes with no image yet AND source != local_library —
+#              PLUS the pop-up photo searches from overlays_fetch.scenes.json
+#              (tagged _dest:overlays) so they ride the matrix too.
+#   fetch    — a MATRIX: one runner per shard, each on its own IP. Yandex /
+#              Wikimedia rate-limit per IP, so N runners ≈ N× faster search
+#              with no bans. Each runner fetches its main scenes -> images/ and
+#              its overlay scenes -> overlays/. Skipped when nothing to fetch.
+#   assemble — one runner: merge shards into images/ + overlays/ next to the
+#              library frames, rebuild the manifest from disk, then build
+#              clips → pop-ups → concat → sfx, publish mp4 + dashboard as a
+#              Release. The old serial overlay fetch here is now a mop-up only.
+#
+# BUSY file at repo root = "session is working live, don't spend Max quota" —
+# push-triggered runs defer to the nightly cron. Everything is checkpointed.
+#
+# If ANYTHING here fails, the machine-side wrapper (cloud/run.sh) falls back to
+# a normal local build — the cloud is never a single point of failure.
+
+name: videoryad-cloud
+
+on:
+  push:
+    paths: ["queue/**"]
+  schedule:
+    - cron: "0 1 * * *"      # 01:00 UTC nightly — catches anything deferred
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "run even if BUSY flag is set"
+        type: boolean
+        default: false
+
+concurrency:
+  group: videoryad-cloud
+  cancel-in-progress: false   # let a running build finish; queue the next
+
+permissions:
+  contents: write             # commit cleanup + create Releases
+  actions: write              # delete this run's scratch artifacts at the end
+
+jobs:
+  # ------------------------------------------------------------------ setup
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      have:       ${{ steps.pick.outputs.have }}
+      name:       ${{ steps.pick.outputs.name }}
+      shards:     ${{ steps.shard.outputs.shards }}
+      has_token:  ${{ steps.facts.outputs.has_token }}
+      fetch_only: ${{ steps.pick.outputs.fetch_only }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }   # HEAD tree ~0.5 MB; full history = 3.5 GB of old queue/ blobs, never needed on a runner
+
+      - name: Respect the BUSY flag (session priority)
+        id: busy
+        run: |
+          if [ -f BUSY ] && [ "${{ github.event_name }}" = "push" ] && [ "${{ inputs.force }}" != "true" ]; then
+            echo "BUSY + push -> defer to nightly"; echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pick the next project in queue/
+        id: pick
+        if: steps.busy.outputs.skip != 'true'
+        run: |
+          proj=$(ls -d queue/*/ 2>/dev/null | head -1 | sed 's:/*$::')
+          if [ -z "$proj" ]; then echo "queue empty"; echo "have=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          echo "have=true" >> "$GITHUB_OUTPUT"
+          echo "proj=$proj" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$proj")" >> "$GITHUB_OUTPUT"
+          fo=false; [ -f "$proj/.fetch-only" ] && fo=true
+          echo "fetch_only=$fo" >> "$GITHUB_OUTPUT"
+          echo "Selected: $proj   (fetch-only: $fo)"
+
+      - name: Assembler present
+        if: steps.pick.outputs.have == 'true'
+        run: |
+          test -d assembler/template || { echo "assembler/ missing — run cloud/sync_assembler.sh"; exit 1; }
+          ln -sfn assembler _assembler   # classify_prompt.md refers to _assembler/
+
+      - name: Env facts (is the Claude token configured?)
+        id: facts
+        if: steps.pick.outputs.have == 'true'
+        env: { TOK: "${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" }
+        run: |
+          tok=no; [ -n "$TOK" ] && tok=yes
+          echo "has_token=$tok" >> "$GITHUB_OUTPUT"
+          echo "claude token configured: $tok"
+
+      - name: Check classification
+        id: cls
+        if: steps.pick.outputs.have == 'true'
+        env: { PROJ: "${{ steps.pick.outputs.proj }}" }
+        run: |
+          classified=$(python3 - "$PROJ" <<'PY'
+          import json, glob, os, sys
+          p = sys.argv[1]
+          sc = [x for x in glob.glob(os.path.join(p, "*.scenes.json")) if "overlays_fetch" not in os.path.basename(x)]
+          if not sc: print("no"); raise SystemExit
+          # most scenes = the real script (ignore leftover retry*/r2.scenes.json)
+          sc.sort(key=lambda q: (-len(json.load(open(q)).get("scenes", [])), len(os.path.basename(q))))
+          d = json.load(open(sc[0]))
+          bad = [s for s in d["scenes"]
+                 if not s.get("source") or not s.get("source_query")
+                 or str(s.get("source_query")).startswith("TODO")]
+          print("no" if bad else "yes")
+          PY
+          )
+          echo "classified=$classified"
+          echo "classified=$classified" >> "$GITHUB_OUTPUT"
+
+      - name: Guard — need a classified scenes.json (or the Claude token to make one)
+        if: steps.pick.outputs.have == 'true' && steps.cls.outputs.classified == 'no' && steps.facts.outputs.has_token == 'no'
+        run: |
+          echo "::error::scenes.json не классифицирован и секрета CLAUDE_CODE_OAUTH_TOKEN нет."
+          echo "::error::Сцены раскладываю я в сессии (library-first), либо запусти /install-github-app."
+          exit 1
+
+      - name: Set up python deps for classify/shard
+        if: steps.pick.outputs.have == 'true'
+        run: python3 -m pip install --quiet pillow
+
+      - name: Claude Code — split + classify (only if a token is configured)
+        if: steps.pick.outputs.have == 'true' && steps.cls.outputs.classified == 'no' && steps.facts.outputs.has_token == 'yes'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Follow assembler/cloud/classify_prompt.md exactly. The project to
+            classify is at ${{ steps.pick.outputs.proj }} .
+          claude_args: >-
+            --add-dir ${{ steps.pick.outputs.proj }}
+            --add-dir assembler
+
+      - name: Shard the WEB scenes for the matrix (library scenes stay local)
+        id: shard
+        if: steps.pick.outputs.have == 'true'
+        env: { PROJ: "${{ steps.pick.outputs.proj }}" }
+        run: |
+          # КЛЮЧИ В ОЧЕРЕДЬ НЕ ЕДУТ (2026-10-14). Всё, что попало в queue/,
+          # остаётся в истории git НАВСЕГДА и, в публичном репозитории, ещё и
+          # уходит в релиз и в кэш между джобами. .env теперь собирается из
+          # секретов в тех джобах, где он нужен (fetch и build).
+          rm -f "$PROJ/.env"
+          sc=$(python3 - "$PROJ" <<'PY'
+          import json, glob, os, sys
+          cs = [x for x in glob.glob(os.path.join(sys.argv[1], "*.scenes.json")) if "overlays_fetch" not in os.path.basename(x)]
+          cs.sort(key=lambda q: (-len(json.load(open(q)).get("scenes", [])), len(os.path.basename(q))))
+          print(cs[0] if cs else "")
+          PY
+          )
+          python3 - "$sc" <<'PY'
+          import json, sys
+          d = json.load(open(sys.argv[1]))
+          bad = [s["id"] for s in d["scenes"]
+                 if not s.get("source") or not s.get("source_query")
+                 or str(s.get("source_query")).startswith("TODO")]
+          if bad:
+              sys.exit(f"still not classified: {bad[:20]}")
+          PY
+          shards=$(python3 assembler/cloud/shard_scenes.py "$sc" "$PROJ/images/.shards" \
+                    --images-dir "$PROJ/images" --overlays-dir "$PROJ/overlays")
+          echo "shards=$shards"
+          echo "shards=$shards" >> "$GITHUB_OUTPUT"
+
+      - name: Pack the project for the other jobs
+        if: steps.pick.outputs.have == 'true'
+        run: tar czf project-src.tgz --exclude='.env' "${{ steps.pick.outputs.proj }}"
+
+      # project-src rides between jobs via Actions CACHE, not artifacts — cache
+      # storage (10 GB/repo) is free and does NOT count against the 0.5 GB
+      # artifact quota that jammed the free plan (see cleanup job). Key is
+      # per-run; cleanup deletes it at the end.
+      - uses: actions/cache/save@v4
+        if: steps.pick.outputs.have == 'true'
+        with:
+          path: project-src.tgz
+          key: proj-${{ github.run_id }}
+
+  # ------------------------------------------------------------------ fetch (matrix)
+  fetch:
+    needs: setup
+    if: needs.setup.outputs.have == 'true' && needs.setup.outputs.shards != '[]' && needs.setup.outputs.shards != ''
+    runs-on: ubuntu-latest
+    # 15, не 40 (срезано 2026-10-12). Нормальный шард отрабатывает за 1-2 мин
+    # (замеры: самый долгий 1м51с на 2026-10-10, столько же 2026-10-12), так
+    # что 15 — это шестикратный запас, а 40 было двадцатикратным. Цена разницы
+    # выросла вдвое после фикса `clips` ниже: зависший шард теперь не только
+    # держит прогон до таймаута, но и роняет `fetch.result` в failure, из-за
+    # чего `clips` не запускается и `assemble` режет клипы в одиночку (+8 мин).
+    # Живой случай: шард 13 из 20 завис намертво, 19 остальных отработали, а
+    # верхний ярлык прогона всё это время показывал обычный in_progress —
+    # зависание видно ТОЛЬКО поимённо по джобам, иначе читается как «долго
+    # качает». Пропуск клипов при упавшем поиске оставлен намеренно: лучше
+    # медленно и правильно, чем быстро и по недокачанным кадрам.
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJson(needs.setup.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: project-src.tgz
+          key: proj-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - run: tar xzf project-src.tgz
+
+      - name: Set up tools
+        run: |
+          # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
+          # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
+          sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu
+          python3 -m pip install --quiet pillow
+
+      - name: Ключи из Secrets (в репозиторий они не попадают никогда)
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          FLICKR_API_KEY: ${{ secrets.FLICKR_API_KEY }}
+          DVIDS_API_KEY: ${{ secrets.DVIDS_API_KEY }}
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p "$proj"
+          { printf 'PEXELS_API_KEY=%s\n' "$PEXELS_API_KEY"
+            printf 'FLICKR_API_KEY=%s\n' "$FLICKR_API_KEY"
+            printf 'DVIDS_API_KEY=%s\n'  "$DVIDS_API_KEY"; } > "$proj/.env"
+          chmod 600 "$proj/.env"
+          # видно в логе, не раскрывая значения: без этой строки пустой секрет
+          # выглядит как «просто не нашлось кадров»
+          k=$(grep -c '^PEXELS_API_KEY=.\+' "$proj/.env" || true)
+          [ "$k" = 1 ] && echo "ключ Pexels: есть" || echo "::warning::ключ Pexels ПУСТ — проверь секрет PEXELS_API_KEY в настройках репозитория"
+
+      - name: Fetch this shard (own IP — no shared rate limit; main scenes + pop-up photos)
+        env:
+          MANIFEST_NAME: manifest.shard${{ matrix.shard }}.json
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          python3 assembler/cloud/fetch_shard.py \
+            "$proj/images/.shards/shard${{ matrix.shard }}.scenes.json" \
+            "$proj" "$proj/.env"
+
+      - name: Stage this shard's output
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p out out/overlays
+          # ONLY this shard's own scenes — the project unpack drags in all the
+          # library frames too, and copying those into every shard blew each
+          # artifact up to ~280 МБ (13× the same 87 files). Read the ids this
+          # runner actually fetched from its shard file and copy just those.
+          python3 - "$proj" "${{ matrix.shard }}" <<'PY'
+          import glob, json, os, shutil, sys
+          proj, k = sys.argv[1], sys.argv[2]
+          sf = os.path.join(proj, "images", ".shards", "shard%s.scenes.json" % k)
+          sc = json.load(open(sf, encoding="utf-8")).get("scenes", [])
+          n_main = n_ov = 0
+          for s in sc:
+              ov = s.get("_dest") == "overlays"
+              src = os.path.join(proj, "overlays" if ov else "images")
+              dst = "out/overlays" if ov else "out"
+              for p in glob.glob(os.path.join(src, "scene_%03d.*" % s["id"])):
+                  shutil.copy2(p, dst)
+              n_ov += ov
+              n_main += not ov
+          print("staged main=%d overlays=%d" % (n_main, n_ov))
+          PY
+          cp "$proj"/images/manifest.shard${{ matrix.shard }}.json out/ 2>/dev/null || true
+          cp "$proj"/overlays/manifest.shard${{ matrix.shard }}.ov.json out/overlays/ 2>/dev/null || true
+          ls -lR out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ needs.setup.outputs.name }}-${{ matrix.shard }}
+          path: out/
+          if-no-files-found: warn
+          retention-days: 1
+
+  # ------------------------------------------------------------------ clips (matrix)
+  # Ken-Burns / blur-fill clip rendering is the slow step (~30-40 min for 80-90
+  # scenes on one runner). Fan it out over 12 runners; build_clips_1080.py shards
+  # on WORKER_COUNT/WORKER_ID and skips existing clips. assemble collects the
+  # rendered clips. Skipped on a fetch-only run.
+  clips:
+    needs: [setup, fetch]
+    # ВНИМАНИЕ НА `always()` — без него этот джоб МОЛЧА ВЫКЛЮЧАЕТСЯ на основном
+    # сценарии работы (найдено 2026-10-12, прогон 38247742395).
+    # GitHub пропускает джоб, у которого пропущена зависимость из `needs`, НЕ
+    # заглядывая в его собственный `if`. А на ПЛАНЕТА-сценарии (сначала
+    # --fetch-only, потом ревью дашборда, потом ship) ко второму прогону все
+    # кадры уже лежат в очереди → setup отдаёт пустой список шардов → джоб
+    # `fetch` штатно скипается по своему условию → и `clips` скипался следом.
+    # Итог: вся 12-воркерная параллельность выключалась, и `assemble` резал
+    # все клипы в одиночку — 493с против 53с на 76 сценах, ~8 минут на каждом
+    # ролике, собранном через ревью-гейт (то есть на каждом ролике ПЛАНЕТЫ).
+    # Симптом в логе assemble: «Cache not found for input keys: clip-<run>-0»
+    # по всем 12 ключам и «clips gathered: 0».
+    # `fetch.result` проверяем явно: идём дальше и когда поиск отработал, и
+    # когда он штатно пропущен, но НЕ когда он упал или был отменён — иначе
+    # начнём резать клипы по недокачанным кадрам.
+    if: >-
+      always()
+      && needs.setup.result == 'success'
+      && needs.setup.outputs.have == 'true'
+      && needs.setup.outputs.fetch_only != 'true'
+      && (needs.fetch.result == 'success' || needs.fetch.result == 'skipped')
+    runs-on: ubuntu-latest
+    # 12 workers × ~6-7 scenes each ≈ 3-5 min wall. 20 caps the damage when one
+    # worker hangs on a bad fetched image (a hung worker burned a full hour in
+    # testing — 60 wasted compute-minutes against the free 2000/mo cap). Never
+    # overlaps the fetch matrix (needs: fetch), so this stays well under the
+    # account's 20-concurrent-job ceiling on its own.
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/cache/restore@v4
+        with:
+          path: project-src.tgz
+          key: proj-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - run: tar xzf project-src.tgz
+
+      - name: Collect every shard's images
+        if: needs.setup.outputs.shards != '[]' && needs.setup.outputs.shards != ''
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard-${{ needs.setup.outputs.name }}-*
+          path: queue/${{ needs.setup.outputs.name }}/images
+          merge-multiple: true
+
+      - name: Set up tools
+        run: |
+          # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
+          # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu
+          python3 -m pip install --quiet pillow
+
+      # No clip cache on the parallel path: a rebuild re-renders every clip
+      # (80 scenes / 12 shards ≈ 3-5 min wall) — faster than the old single-runner
+      # incremental build AND always correct (no stale clip for a changed scene).
+      - name: Build this shard's clips
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          sc=$(python3 - "$proj" <<'PY'
+          import json, glob, os, sys
+          cs = [x for x in glob.glob(os.path.join(sys.argv[1], "*.scenes.json")) if "overlays_fetch" not in os.path.basename(x)]
+          cs.sort(key=lambda q: (-len(json.load(open(q)).get("scenes", [])), len(os.path.basename(q))))
+          print(cs[0] if cs else "")
+          PY
+          )
+          mkdir -p "$proj/clips"
+          BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
+            python3 assembler/template/build_clips_1080.py "$sc" "$proj/images" "$proj/clips"
+          echo "shard ${{ matrix.shard }}: $(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l) clips"
+
+      - name: Stage this worker's clips
+        id: stage
+        run: |
+          mkdir -p clips-out
+          cp queue/${{ needs.setup.outputs.name }}/clips/clip_*.mp4 clips-out/ 2>/dev/null || true
+          n=$(ls clips-out/clip_*.mp4 2>/dev/null | wc -l)
+          echo "staged $n clips"
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+
+      # rendered clips (the heavy payload) ride via CACHE, not artifacts —
+      # 12 fixed workers -> 12 fixed keys. cleanup deletes them at run end.
+      # A worker with no clips (scenes < 12) saves nothing.
+      - uses: actions/cache/save@v4
+        if: steps.stage.outputs.count != '0'
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-${{ matrix.shard }}
+
+  # ------------------------------------------------------------------ assemble
+  assemble:
+    needs: [setup, fetch, clips]
+    if: always() && needs.setup.result == 'success' && needs.setup.outputs.have == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/cache/restore@v4
+        with:
+          path: project-src.tgz
+          key: proj-${{ github.run_id }}
+          fail-on-cache-miss: true
+      - run: tar xzf project-src.tgz
+
+      - name: Collect every shard's images
+        if: needs.setup.outputs.shards != '[]' && needs.setup.outputs.shards != ''
+        uses: actions/download-artifact@v4
+        with:
+          pattern: shard-${{ needs.setup.outputs.name }}-*
+          path: queue/${{ needs.setup.outputs.name }}/images
+          merge-multiple: true
+
+      # rendered clips come back from CACHE — 12 fixed worker keys. A worker that
+      # produced nothing simply has no cache -> restore misses and moves on
+      # (fail-on-cache-miss defaults false).
+      - name: Restore worker 0 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-0
+      - name: Restore worker 1 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-1
+      - name: Restore worker 2 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-2
+      - name: Restore worker 3 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-3
+      - name: Restore worker 4 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-4
+      - name: Restore worker 5 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-5
+      - name: Restore worker 6 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-6
+      - name: Restore worker 7 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-7
+      - name: Restore worker 8 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-8
+      - name: Restore worker 9 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-9
+      - name: Restore worker 10 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-10
+      - name: Restore worker 11 clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: clips-out
+          key: clip-${{ github.run_id }}-11
+      - name: Gather restored clips
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        run: |
+          mkdir -p "queue/${{ needs.setup.outputs.name }}/clips"
+          cp clips-out/clip_*.mp4 "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
+          echo "clips gathered: $(ls "queue/${{ needs.setup.outputs.name }}/clips"/clip_*.mp4 2>/dev/null | wc -l)"
+
+      - name: Set up tools
+        run: |
+          # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
+          # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
+          sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu
+          python3 -m pip install --quiet pillow
+
+      - name: Ключи из Secrets (в репозиторий они не попадают никогда)
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          FLICKR_API_KEY: ${{ secrets.FLICKR_API_KEY }}
+          DVIDS_API_KEY: ${{ secrets.DVIDS_API_KEY }}
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p "$proj"
+          { printf 'PEXELS_API_KEY=%s\n' "$PEXELS_API_KEY"
+            printf 'FLICKR_API_KEY=%s\n' "$FLICKR_API_KEY"
+            printf 'DVIDS_API_KEY=%s\n'  "$DVIDS_API_KEY"; } > "$proj/.env"
+          chmod 600 "$proj/.env"
+          # видно в логе, не раскрывая значения: без этой строки пустой секрет
+          # выглядит как «просто не нашлось кадров»
+          k=$(grep -c '^PEXELS_API_KEY=.\+' "$proj/.env" || true)
+          [ "$k" = 1 ] && echo "ключ Pexels: есть" || echo "::warning::ключ Pexels ПУСТ — проверь секрет PEXELS_API_KEY в настройках репозитория"
+
+      - name: Merge shards + rebuild manifest + mark fetch done
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          sc=$(python3 - "$proj" <<'PY'
+          import json, glob, os, sys
+          cs = [x for x in glob.glob(os.path.join(sys.argv[1], "*.scenes.json")) if "overlays_fetch" not in os.path.basename(x)]
+          cs.sort(key=lambda q: (-len(json.load(open(q)).get("scenes", [])), len(os.path.basename(q))))
+          print(cs[0] if cs else "")
+          PY
+          )
+          python3 assembler/cloud/merge_shards.py "$sc" "$proj/images" "$proj/.env" "$proj"
+
+      - name: Assemble (clips ready -> pop-ups -> concat -> sfx -> dashboard -> qa)
+        id: assemble
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        env: { CLOUD_WORKERS: "4" }
+        run: python3 assembler/cloud/cloud_pipeline.py "queue/${{ needs.setup.outputs.name }}" --from clips
+
+      - name: Fetch-only — stop before the build (dashboard review happens locally)
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) != ''
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          mkdir -p "$proj/_cloud"
+          n_img=$(ls "$proj"/images/scene_* 2>/dev/null | wc -l)
+          n_ov=$(ls "$proj"/overlays/scene_* 2>/dev/null | wc -l)
+          {
+            echo "# FETCH-ONLY — кадры собраны на матрице, сборка НЕ запускалась"
+            echo
+            echo "- картинок сцен:   $n_img"
+            echo "- фото всплывашек: $n_ov"
+            echo
+            echo "Дальше в сессии: get.sh <name> -> локальный дашборд (review.py --live)"
+            echo "-> правки/«собирай» -> ship.sh <dir> <name>  (БЕЗ --fetch-only) -> облако собирает."
+          } > "$proj/_cloud/QA-report.md"
+          cat "$proj/_cloud/QA-report.md"
+
+      - name: QA report on a partial build (if assemble failed)
+        if: failure()
+        run: python3 assembler/cloud/cloud_pipeline.py "queue/${{ needs.setup.outputs.name }}" --only qa || true
+
+      - name: Pack the logs (always)
+        if: success() || failure()
+        run: tar czf cloud-logs.tgz -C "queue/${{ needs.setup.outputs.name }}" _cloud progress.json 2>/dev/null || true
+
+      - name: Publish result as a Release
+        if: success() || failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ needs.setup.outputs.name }}
+        run: |
+          shopt -s nullglob
+          proj="queue/$NAME"
+          tar czf "$NAME-project.tgz" --exclude='clips' --exclude='_silent.mp4' --exclude='.env' -C queue "$NAME"
+          # only attach files that actually exist — gh release create errors on a missing asset
+          assets=()
+          for f in "$proj"/*ВИДЕОРЯД.mp4 "$proj"/*дашборд.html "$proj"/*.scenes.json \
+                   "$proj"/overlays.json "$proj"/_cloud/QA-report.md \
+                   "$proj"/_cloud/pipeline.log "$proj"/_cloud/report.json \
+                   "$proj"/_cloud/classify_report.md "$NAME-project.tgz" \
+                   cloud-logs.tgz; do
+            [ -f "$f" ] && assets+=("$f")
+          done
+          echo "attaching: ${assets[*]}"
+          notes="$proj/_cloud/QA-report.md"; [ -f "$notes" ] || { echo "build incomplete" > /tmp/n.md; notes=/tmp/n.md; }
+          gh release delete "$NAME" -y --cleanup-tag 2>/dev/null || true
+          gh release create "$NAME" "${assets[@]}" --title "$NAME" --notes-file "$notes"
+
+      - name: Clear the queue slot
+        if: success() || failure()
+        run: |
+          git config user.name  "videoryad-cloud"
+          git config user.email "actions@users.noreply.github.com"
+          # the assemble step writes untracked files into queue/<name> (overlay
+          # mop-up, _cloud logs) which made `git pull --rebase` abort on
+          # "unstaged changes" and leave the slot stuck (2026-09-08). The build
+          # is already on the Release, so just discard the runner tree and
+          # delete the slot from a fresh remote state.
+          git fetch --quiet origin "${{ github.ref_name }}" || true
+          git reset --hard "origin/${{ github.ref_name }}" --quiet || true
+          git clean -fdq queue/ || true
+          git rm -rf --quiet --ignore-unmatch "queue/${{ needs.setup.outputs.name }}"
+          git commit -q -m "built ${{ needs.setup.outputs.name }} -> Release" || { echo "nothing to clear"; exit 0; }
+          for i in 1 2 3; do
+            git push && break
+            git fetch --quiet origin "${{ github.ref_name }}" && git rebase --quiet "origin/${{ github.ref_name }}" || true
+            sleep 3
+          done
+
+      - name: Re-trigger if more projects are queued
+        if: success()
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          git fetch -q origin ${{ github.ref_name }}
+          if git ls-tree -d --name-only origin/${{ github.ref_name }} queue/ | grep -q . ; then
+            echo "queue still has projects -> re-triggering"
+            gh workflow run videoryad-cloud.yml || true
+          fi
+
+  # ---------------------------------------------------------------- cleanup
+  # The deliverable ships as a Release (get.sh pulls from there). Everything
+  # this run passed between jobs is throwaway scratch the moment it ends:
+  #   - the heavy payloads (project-src, rendered clips) go via Actions CACHE
+  #     now — free, 10 GB/repo, NOT counted against the 0.5 GB artifact quota
+  #     that used to jam the free plan. Deleted here by run-id key.
+  #   - shard-* (fetched images) are still small artifacts — deleted here too.
+  # Runs on every path (full build or --fetch-only) and even if a job failed.
+  cleanup:
+    needs: [setup, fetch, clips, assemble]
+    if: always()
+    # Это дворник: он стирает временные файлы, а не делает видео. Его падение
+    # НИКОГДА не должно красить вердикт всей сборки — иначе читаешь «run
+    # failed/cancelled» и идёшь выяснять, цел ли ролик, хотя ролик давно готов
+    # и лежит в релизе (поймано 2026-10-12 на planeta-8-mostov-1310: дворник
+    # упал за 2 секунды, не дойдя до собственных шагов — сбой запуска джоба на
+    # стороне GitHub, чинить внутри нечего). В интерфейсе он всё равно будет
+    # помечен упавшим, так что систематические падения видно — а это важно:
+    # именно переполненное хранилище артефактов 2026-09-10 положило день.
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete this run's scratch artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          ids=$(gh api --paginate "/repos/$REPO/actions/runs/$RUN_ID/artifacts" \
+                  --jq '.artifacts[].id' || true)
+          n=0
+          for id in $ids; do
+            gh api -X DELETE "/repos/$REPO/actions/artifacts/$id" >/dev/null 2>&1 && n=$((n+1)) || true
+          done
+          echo "deleted $n artifact(s) from run $RUN_ID"
+          # belt-and-suspenders: prune anything older than 1 day still lingering
+          old=$(gh api --paginate "/repos/$REPO/actions/artifacts" \
+                  --jq ".artifacts[] | select(.created_at < \"$(date -u -d '1 day ago' +%Y-%m-%dT%H:%M:%SZ)\") | .id" || true)
+          for id in $old; do
+            gh api -X DELETE "/repos/$REPO/actions/artifacts/$id" >/dev/null 2>&1 || true
+          done
+
+      - name: Delete this run's scratch caches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          # our per-run keys: proj-<id>, clip-<id>-0..5
+          keys=$(gh api --paginate "/repos/$REPO/actions/caches" \
+                  --jq ".actions_caches[] | select(.key | test(\"-${RUN_ID}(-|$)\")) | .key" || true)
+          n=0
+          for k in $keys; do
+            gh api -X DELETE "/repos/$REPO/actions/caches?key=$k" >/dev/null 2>&1 && n=$((n+1)) || true
+          done
+          echo "deleted $n cache(s) for run $RUN_ID"
+          # belt-and-suspenders: prune any proj-/clip- cache older than 1 day
+          old=$(gh api --paginate "/repos/$REPO/actions/caches" \
+                  --jq ".actions_caches[] | select((.key|startswith(\"proj-\")) or (.key|startswith(\"clip-\"))) | select(.created_at < \"$(date -u -d '1 day ago' +%Y-%m-%dT%H:%M:%SZ)\") | .key" || true)
+          for k in $old; do
+            gh api -X DELETE "/repos/$REPO/actions/caches?key=$k" >/dev/null 2>&1 || true
+          done
