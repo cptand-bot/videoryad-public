@@ -1075,6 +1075,26 @@ def main():
         # Mirrors the same exclusion selfcheck.py's dedup pass already uses.
         existing = [p for p in glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*"))
                     if os.path.getsize(p) > 0 and not p.endswith((".json", ".text.png", ".lock"))]
+        # ЗАБАНЕННЫЙ КАДР НЕ СЧИТАЕТСЯ КЭШЕМ (2026-10-15). Бан проверялся только
+        # при СКАЧИВАНИИ (_accept/_accept_video), а уже лежащий файл принимался
+        # как «cached» без единой проверки. Поэтому забаненный клип возвращался
+        # из ролика в ролик: в слоте очереди оставался файл от прошлой сборки,
+        # фетч видел его и ничего не качал — бан-лист при этом был доставлен и
+        # исправен, просто его никто не спрашивал. Поймано живьём на
+        # planeta-territorii-1610, пользователь: «Я его баню, баню, а оно опять».
+        if existing:
+            _ban = load_banned_md5()
+            _kept = []
+            for _p in existing:
+                try:
+                    if file_md5(_p) in _ban:
+                        os.remove(_p)
+                        print(f"[{sid:03d}] кэш забанен — удалил {os.path.basename(_p)}, качаю заново", flush=True)
+                        continue
+                except OSError:
+                    pass
+                _kept.append(_p)
+            existing = _kept
         if existing:
             manifest.append({"id": sid, "file": os.path.basename(existing[0]), "source": source, "status": "cached"})
             _mt = manifest_path + ".tmp"
