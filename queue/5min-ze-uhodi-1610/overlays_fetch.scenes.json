@@ -1,0 +1,121 @@
+{
+ "scenes": [
+  {
+   "id": 2,
+   "text": "",
+   "duration_sec": 13.84,
+   "source": "press_photo",
+   "source_query": "кортеж президента США у Белого дома реальное фото",
+   "visual_prompt": "кортеж президента США у Белого дома реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "duration_sec": 12.72,
+   "source": "press_photo",
+   "source_query": "Илон Маск выступает на сцене презентации реальное фото",
+   "visual_prompt": "Илон Маск выступает на сцене презентации реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 12.0,
+   "source": "press_photo",
+   "source_query": "антенна спутниковой связи на крыше жилого дома в Киеве реальное фото",
+   "visual_prompt": "антенна спутниковой связи на крыше жилого дома в Киеве реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 14.0,
+   "source": "press_photo",
+   "source_query": "украинский дрон дальнего радиуса действия на пусковой установке реальное фото",
+   "visual_prompt": "украинский дрон дальнего радиуса действия на пусковой установке реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "duration_sec": 12.16,
+   "source": "press_photo",
+   "source_query": "железнодорожные цистерны с топливом на станции в России реальное фото",
+   "visual_prompt": "железнодорожные цистерны с топливом на станции в России реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "duration_sec": 7.37,
+   "source": "press_photo",
+   "source_query": "повреждённая опора линии электропередачи в Украине реальное фото",
+   "visual_prompt": "повреждённая опора линии электропередачи в Украине реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 13.28,
+   "source": "press_photo",
+   "source_query": "здание посольства США в Киеве реальное фото",
+   "visual_prompt": "здание посольства США в Киеве реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "duration_sec": 12.96,
+   "source": "press_photo",
+   "source_query": "антенна военной спутниковой связи армии США реальное фото",
+   "visual_prompt": "антенна военной спутниковой связи армии США реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "duration_sec": 12.8,
+   "source": "press_photo",
+   "source_query": "авианосец ВМС США в море реальное фото",
+   "visual_prompt": "авианосец ВМС США в море реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "duration_sec": 13.76,
+   "source": "press_photo",
+   "source_query": "пачки долларовых купюр на столе реальное фото",
+   "visual_prompt": "пачки долларовых купюр на столе реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "duration_sec": 13.04,
+   "source": "press_photo",
+   "source_query": "король Чарльз III принимает гостя в Лондоне реальное фото",
+   "visual_prompt": "король Чарльз III принимает гостя в Лондоне реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "duration_sec": 12.4,
+   "source": "press_photo",
+   "source_query": "штаб-квартира SpaceX в Хоторне вывеска реальное фото",
+   "visual_prompt": "штаб-квартира SpaceX в Хоторне вывеска реальное фото",
+   "_dest": "overlays"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 12.48,
+   "source": "press_photo",
+   "source_query": "американские артиллерийские снаряды на складе реальное фото",
+   "visual_prompt": "американские артиллерийские снаряды на складе реальное фото",
+   "_dest": "overlays"
+  }
+ ]
+}
