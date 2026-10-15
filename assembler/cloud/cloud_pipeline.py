@@ -223,7 +223,23 @@ def _dur(p):
 
 # ---------------------------------------------------------------- steps
 
+def _ban_env(proj):
+    """Бан-лист приезжает в очереди (ship.sh, 2026-10-15). Выставляем путь в
+    окружение, чтобы fetch_assets_news.py его прочитал: без этого забаненный
+    кадр возвращается облачным фетчем, как случилось на planeta-territorii-1610."""
+    ban = os.path.join(proj, ".banned_md5.json")
+    if os.path.isfile(ban):
+        os.environ["VIDEORYAD_BANNED_FILE"] = ban
+        try:
+            n = len(json.load(open(ban, encoding="utf-8")))
+        except Exception:
+            n = "?"
+        log(f"бан-лист: {n} md5 из очереди — забаненные кадры не возьмём")
+    return ban
+
+
 def step_fetch(proj, scenes_json):
+    _ban_env(proj)
     env = os.path.join(proj, ".env")
     if not os.path.isfile(env):
         open(env, "w").write("PEXELS_API_KEY=\nFLICKR_API_KEY=\n")
@@ -236,6 +252,7 @@ def step_overlays_fetch(proj):
     folds overlays_fetch.scenes.json into the shards). This step only mops up
     the few the matrix missed — a serial one-IP fetch of the whole set is what
     used to make the dashboard slow, so never do that here."""
+    _ban_env(proj)
     ovf = os.path.join(proj, "overlays_fetch.scenes.json")
     if not os.path.isfile(ovf):
         log("no overlays_fetch.scenes.json — skipping overlay-photo fetch")

@@ -31,6 +31,13 @@ def _run(scenes, dest_dir, env_path, manifest_name):
     env = dict(os.environ)
     if manifest_name:
         env["MANIFEST_NAME"] = manifest_name
+    # бан-лист, приехавший в очереди (ship.sh кладёт обезличенную копию):
+    # без него забаненный кадр спокойно возвращается облачным фетчем —
+    # ровно это случилось 2026-10-15 на planeta-territorii-1610.
+    proj_dir = os.path.dirname(os.path.abspath(dest_dir))
+    ban = os.path.join(proj_dir, ".banned_md5.json")
+    if os.path.exists(ban):
+        env["VIDEORYAD_BANNED_FILE"] = ban
     subprocess.run([sys.executable, os.path.join(TPL, "fetch_assets_news.py"),
                     tmp, dest_dir, env_path], env=env, check=False)
     try:

@@ -136,7 +136,13 @@ USAGE_LOG = os.path.expanduser("~/projects/media-library/.usage_log.json")
 # with a "until" date (YYYY-MM-DD) expires on its own — load_banned_md5()
 # stops returning it once today's date passes "until". No "until" key =
 # permanent, same as before (backward compatible with old entries).
-BANNED_LOG = os.path.expanduser("~/projects/media-library/.banned_md5.json")
+# 2026-10-15: путь переопределяется переменной VIDEORYAD_BANNED_FILE —
+# так бан-лист доезжает до облачного раннера, у которого медиатеки нет.
+# ship.sh кладёт обезличенную копию (только md5, без локальных путей) в
+# queue/<name>/.banned_md5.json, fetch_shard.py выставляет переменную.
+# Без переменной поведение прежнее — локальный файл медиатеки.
+BANNED_LOG = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.expanduser(
+    "~/projects/media-library/.banned_md5.json")
 
 
 def load_banned_md5():
