@@ -1,0 +1,735 @@
+{
+ "anchor": "top",
+ "1": {
+  "sound": "whoosh",
+  "at": 4.69,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "КРЕСЛО ШАТАЕТСЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 7.37,
+   "scale": 1.0
+  }
+ },
+ "2": {
+  "sound": "zatvor",
+  "at": 4.84,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_002.jpg"
+ },
+ "3": {
+  "sound": "pop",
+  "at": 4.45,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_003.jpg",
+  "text": {
+   "words": "НУЖЕН НОВЫЙ ПРЕЗИДЕНТ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 7.0,
+   "scale": 1.0
+  }
+ },
+ "4": {
+  "sound": "whoosh",
+  "at": 4.2,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_004.jpg",
+  "text": {
+   "words": "МАСК: ПОРА УХОДИТЬ",
+   "color": "red",
+   "pos": "mc",
+   "at": 6.6,
+   "scale": 1.0
+  }
+ },
+ "7": {
+  "sound": "zatvor",
+  "at": 4.9,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_007.jpg",
+  "text": {
+   "words": "НЕ БИТЬ ПО НПЗ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 7.7,
+   "scale": 1.0
+  }
+ },
+ "8": {
+  "sound": "pop",
+  "at": 5.1,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_008.jpg",
+  "text": {
+   "words": "ВЫБОРЫ В КОНГРЕСС",
+   "color": "white",
+   "pos": "tc",
+   "at": 8.01,
+   "scale": 1.0
+  }
+ },
+ "9": {
+  "sound": "whoosh",
+  "at": 5.07,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_009.jpg",
+  "text": {
+   "words": "ДОЛЛАРЫ ЗА ГАЛЛОН",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 7.96,
+   "scale": 1.0
+  }
+ },
+ "10": {
+  "sound": "zatvor",
+  "at": 4.26,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_010.jpg",
+  "text": {
+   "words": "ДИЗЕЛЬ ИЗ МОСКВЫ",
+   "color": "red",
+   "pos": "mc",
+   "at": 6.69,
+   "scale": 1.0
+  }
+ },
+ "12": {
+  "sound": "pop",
+  "at": 4.59,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_012.jpg",
+  "text": {
+   "words": "РАКЕТЫ. ТЕРРИТОРИИ. САНКЦИИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 7.22,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "sound": "whoosh",
+  "at": 3.32,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "ПЛЮС КРЕСЛО ПРЕЗИДЕНТА",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.22,
+   "scale": 1.0
+  }
+ },
+ "14": {
+  "sound": "zatvor",
+  "at": 3.96,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "ДВА МЕСЯЦА ТИШИНЫ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 6.22,
+   "scale": 1.0
+  }
+ },
+ "15": {
+  "sound": "pop",
+  "at": 4.46,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_015.jpg",
+  "text": {
+   "words": "СНАЧАЛА ПУТИН",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.01,
+   "scale": 1.0
+  }
+ },
+ "16": {
+  "sound": "whoosh",
+  "at": 3.74,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "ПОТОМ. ПОТОМ. ПОТОМ",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.88,
+   "scale": 1.0
+  }
+ },
+ "17": {
+  "sound": "zatvor",
+  "at": 4.76,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_017.jpg",
+  "text": {
+   "words": "ВЫИГРАТЬ ВРЕМЯ",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.48,
+   "scale": 1.0
+  }
+ },
+ "20": {
+  "sound": "pop",
+  "at": 4.68,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_020.jpg",
+  "text": {
+   "words": "ВАШИНГТОНУ НУЖЕН РЕЗУЛЬТАТ",
+   "color": "white",
+   "pos": "tc",
+   "at": 7.36,
+   "scale": 1.0
+  }
+ },
+ "22": {
+  "sound": "whoosh",
+  "at": 2.58,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_022.jpg",
+  "text": {
+   "words": "УДАРЫ ПО ЭНЕРГЕТИКЕ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.05,
+   "scale": 1.0
+  }
+ },
+ "24": {
+  "sound": "zatvor",
+  "at": 4.57,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "КТО БУДЕТ ВЫПОЛНЯТЬ?",
+   "color": "white",
+   "pos": "mc",
+   "at": 7.18,
+   "scale": 1.0
+  }
+ },
+ "25": {
+  "sound": "pop",
+  "at": 3.73,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "ЗАДУМАТЬСЯ О СОБЕСЕДНИКЕ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 5.87,
+   "scale": 1.0
+  }
+ },
+ "26": {
+  "sound": "whoosh",
+  "at": 4.45,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "РАЗГОВОР ИЗМЕНИЛСЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 7.0,
+   "scale": 1.0
+  }
+ },
+ "27": {
+  "sound": "zatvor",
+  "at": 5.04,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_027.jpg",
+  "text": {
+   "words": "КЛЮЧ НА СТОЛ",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.92,
+   "scale": 1.0
+  }
+ },
+ "29": {
+  "sound": "pop",
+  "at": 4.65,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_029.jpg",
+  "text": {
+   "words": "ЧУВСТВУЮ СЕБЯ ПРЕДАННЫМ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 7.3,
+   "scale": 1.0
+  }
+ },
+ "30": {
+  "sound": "whoosh",
+  "at": 4.54,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_030.jpg",
+  "text": {
+   "words": "ДЕНЬГИ. ОРУЖИЕ. РАЗВЕДКА",
+   "color": "white",
+   "pos": "tc",
+   "at": 7.13,
+   "scale": 1.0
+  }
+ },
+ "32": {
+  "sound": "zatvor",
+  "at": 3.69,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "ПОЛИТИКА СТРОИТСЯ НА ИНТЕРЕСАХ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.8,
+   "scale": 1.0
+  }
+ },
+ "33": {
+  "sound": "pop",
+  "at": 4.29,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_033.jpg",
+  "text": {
+   "words": "ВЕСНА 1917 ГОДА",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 6.74,
+   "scale": 1.0
+  }
+ },
+ "34": {
+  "sound": "whoosh",
+  "at": 3.14,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_034.jpg"
+ },
+ "35": {
+  "sound": "zatvor",
+  "at": 3.78,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_035.jpg",
+  "text": {
+   "words": "ДЕКАБРЬ 1941 ГОДА",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.94,
+   "scale": 1.0
+  }
+ },
+ "36": {
+  "sound": "pop",
+  "at": 5.78,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_036.jpg",
+  "text": {
+   "words": "НОРМАНДИЯ: ИЮНЬ 1944",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 9.09,
+   "scale": 1.0
+  }
+ },
+ "37": {
+  "sound": "whoosh",
+  "at": 4.48,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_037.jpg",
+  "text": {
+   "words": "НЕ БЛАГОТВОРИТЕЛЬНЫЙ ФОНД",
+   "color": "red",
+   "pos": "tc",
+   "at": 7.04,
+   "scale": 1.0
+  }
+ },
+ "38": {
+  "sound": "zatvor",
+  "at": 4.82,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_038.jpg",
+  "text": {
+   "words": "ЗАХОДИТ БУХГАЛТЕРИЯ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 7.57,
+   "scale": 1.0
+  }
+ },
+ "39": {
+  "sound": "pop",
+  "at": 3.28,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "СКОЛЬКО СТОИТ ПРОДОЛЖЕНИЕ?",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.15,
+   "scale": 1.0
+  }
+ },
+ "41": {
+  "sound": "whoosh",
+  "at": 4.79,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "ИНТЕРЕСЫ, А НЕ ВЕРНОСТЬ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 7.52,
+   "scale": 1.0
+  }
+ },
+ "43": {
+  "sound": "zatvor",
+  "at": 3.24,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "СЛИШКОМ ДОРОГО",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.09,
+   "scale": 1.0
+  }
+ },
+ "44": {
+  "sound": "pop",
+  "at": 4.99,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "ОЧЕНЬ БОЛЬШАЯ ДИСТАНЦИЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 7.85,
+   "scale": 1.0
+  }
+ },
+ "45": {
+  "sound": "whoosh",
+  "at": 4.68,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_045.jpg",
+  "text": {
+   "words": "ЛОНДОН: МЫ С ВАМИ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 7.35,
+   "scale": 1.0
+  }
+ },
+ "46": {
+  "sound": "zatvor",
+  "at": 4.56,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_046.jpg",
+  "text": {
+   "words": "РАКЕТЫ ПВО И КОРОЛЬ",
+   "color": "white",
+   "pos": "tc",
+   "at": 7.17,
+   "scale": 1.0
+  }
+ },
+ "47": {
+  "sound": "pop",
+  "at": 3.23,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_047.jpg"
+ },
+ "48": {
+  "sound": "whoosh",
+  "at": 4.68,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_048.jpg",
+  "text": {
+   "words": "ЗАМЕНИТЬ США НЕЛЬЗЯ",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.35,
+   "scale": 1.0
+  }
+ },
+ "49": {
+  "sound": "zatvor",
+  "at": 4.65,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_049.jpg"
+ },
+ "50": {
+  "sound": "pop",
+  "at": 4.34,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_050.jpg"
+ },
+ "51": {
+  "sound": "whoosh",
+  "at": 5.41,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "ДРОНЫ БЕЗ СВЯЗИ",
+   "color": "red",
+   "pos": "mc",
+   "at": 8.5,
+   "scale": 1.0
+  }
+ },
+ "52": {
+  "sound": "zatvor",
+  "at": 4.95,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "STARSHIELD — ПЕНТАГОН",
+   "color": "white",
+   "pos": "tc",
+   "at": 7.78,
+   "scale": 1.0
+  }
+ },
+ "53": {
+  "sound": "pop",
+  "at": 2.12,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "СЛЕДУЮЩЕЕ ОКОШКО",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.34,
+   "scale": 1.0
+  }
+ },
+ "54": {
+  "sound": "whoosh",
+  "at": 4.61,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_054.jpg",
+  "text": {
+   "words": "СОЖГЛИ 11 ИЗ 17 АНТЕНН",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.24,
+   "scale": 1.0
+  }
+ },
+ "55": {
+  "sound": "zatvor",
+  "at": 3.22,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "photo": "overlays/scene_055.jpg",
+  "text": {
+   "words": "ЗАМЕНЫ У ЕВРОПЫ НЕТ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 5.05,
+   "scale": 1.0
+  }
+ },
+ "56": {
+  "sound": "pop",
+  "at": 4.76,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_056.jpg"
+ },
+ "57": {
+  "sound": "whoosh",
+  "at": 4.37,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "photo": "overlays/scene_057.jpg",
+  "text": {
+   "words": "СОЮЗ ИЛИ РЫЧАГ",
+   "color": "white",
+   "pos": "mc",
+   "at": 6.86,
+   "scale": 1.0
+  }
+ },
+ "59": {
+  "sound": "zatvor",
+  "at": 2.3,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "КАБИНЕТ. ПОЛНОМОЧИЯ. ПОЛОЖЕНИЕ",
+   "color": "white",
+   "pos": "tc",
+   "at": 3.61,
+   "scale": 1.0
+  }
+ },
+ "60": {
+  "sound": "pop",
+  "at": 3.33,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "СКОЛЬКО ОПОР ОСТАЛОСЬ?",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.23,
+   "scale": 1.0
+  }
+ },
+ "61": {
+  "sound": "whoosh",
+  "at": 5.13,
+  "shape": "rect",
+  "size": "m",
+  "scale": 1.0,
+  "text": {
+   "words": "УНОСЯТ ВЕСЬ КАБИНЕТ",
+   "color": "red",
+   "pos": "mc",
+   "at": 8.06,
+   "scale": 1.0
+  }
+ },
+ "62": {
+  "sound": "zatvor",
+  "at": 4.55,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "text": {
+   "words": "ВАШИНГТОН СЧИТАЕТ",
+   "color": "white",
+   "pos": "mc",
+   "at": 7.16,
+   "scale": 1.0
+  }
+ },
+ "63": {
+  "sound": "pop",
+  "at": 4.29,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "ИНСТРУМЕНТ ДАВЛЕНИЯ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 6.74,
+   "scale": 1.0
+  }
+ },
+ "65": {
+  "sound": "whoosh",
+  "at": 4.83,
+  "shape": "rect",
+  "size": "l",
+  "scale": 1.0,
+  "photo": "overlays/scene_065.jpg",
+  "text": {
+   "words": "СКОЛЬКО СТОИТ ЭТА ДРУЖБА?",
+   "color": "red",
+   "pos": "mc",
+   "at": 7.58,
+   "scale": 1.0
+  }
+ },
+ "66": {
+  "sound": "zatvor",
+  "at": 2.88,
+  "shape": "rect",
+  "size": "s",
+  "scale": 1.0,
+  "text": {
+   "words": "ДРУГОМ — ФАТАЛЬНО",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.53,
+   "scale": 1.0
+  }
+ }
+}
