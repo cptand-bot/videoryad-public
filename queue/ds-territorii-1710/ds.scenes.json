@@ -1,0 +1,844 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 13.0,
+   "visual_prompt": "refrigerator interior shelves closeup",
+   "source": "pexels_video",
+   "source_query": "refrigerator interior shelves closeup"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 13.0,
+   "duration_sec": 12.0,
+   "visual_prompt": "Капитолий Вашингтон купол здание конгресса",
+   "source": "press_photo",
+   "source_query": "Капитолий Вашингтон купол здание конгресса"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 25.0,
+   "duration_sec": 13.44,
+   "visual_prompt": "Дмитрий Песков брифинг в Кремле 2026",
+   "source": "press_photo",
+   "source_query": "Дмитрий Песков брифинг в Кремле 2026"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 38.44,
+   "duration_sec": 13.2,
+   "visual_prompt": "телекамеры журналистов на пресс-подходе в Кремле",
+   "source": "press_photo",
+   "source_query": "телекамеры журналистов на пресс-подходе в Кремле"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 51.64,
+   "duration_sec": 14.38,
+   "visual_prompt": "зал заседаний Евросовета в Брюсселе",
+   "source": "press_photo",
+   "source_query": "зал заседаний Евросовета в Брюсселе"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 66.02,
+   "duration_sec": 9.02,
+   "visual_prompt": "Министерство финансов США здание Вашингтон",
+   "source": "press_photo",
+   "source_query": "Министерство финансов США здание Вашингтон"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 75.04,
+   "duration_sec": 9.04,
+   "visual_prompt": "Кремль Спасская башня Красная площадь",
+   "source": "press_photo",
+   "source_query": "Кремль Спасская башня Красная площадь"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 84.08,
+   "duration_sec": 13.52,
+   "visual_prompt": "car keys on wooden table closeup",
+   "source": "pexels_video",
+   "source_query": "car keys on wooden table closeup"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 97.6,
+   "duration_sec": 10.16,
+   "visual_prompt": "Дональд Трамп в Овальном кабинете октябрь 2026",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп в Овальном кабинете октябрь 2026"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 107.76,
+   "duration_sec": 10.32,
+   "visual_prompt": "oil tanker ship open sea aerial",
+   "source": "pexels_video",
+   "source_query": "oil tanker ship open sea aerial"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 118.08,
+   "duration_sec": 12.32,
+   "visual_prompt": "oil terminal loading pipes industrial",
+   "source": "pexels_video",
+   "source_query": "oil terminal loading pipes industrial"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 130.4,
+   "duration_sec": 13.02,
+   "visual_prompt": "здание МИД России на Смоленской площади",
+   "source": "press_photo",
+   "source_query": "здание МИД России на Смоленской площади"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 143.42,
+   "duration_sec": 9.47,
+   "visual_prompt": "Государственный департамент США здание Вашингтон",
+   "source": "press_photo",
+   "source_query": "Государственный департамент США здание Вашингтон"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 152.89,
+   "duration_sec": 13.14,
+   "visual_prompt": "зал Совета Безопасности ООН заседание",
+   "source": "press_photo",
+   "source_query": "зал Совета Безопасности ООН заседание"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 166.03,
+   "duration_sec": 12.48,
+   "visual_prompt": "Владимир Зеленский выступление октябрь 2026",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский выступление октябрь 2026"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 178.51,
+   "duration_sec": 14.64,
+   "visual_prompt": "Бундестаг Берлин зал заседаний парламента",
+   "source": "press_photo",
+   "source_query": "Бундестаг Берлин зал заседаний парламента"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 193.15,
+   "duration_sec": 9.6,
+   "visual_prompt": "Елисейский дворец Париж фасад",
+   "source": "press_photo",
+   "source_query": "Елисейский дворец Париж фасад"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 202.75,
+   "duration_sec": 14.48,
+   "visual_prompt": "Владимир Путин выступление октябрь 2026",
+   "source": "press_photo",
+   "source_query": "Владимир Путин выступление октябрь 2026"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 217.23,
+   "duration_sec": 11.72,
+   "visual_prompt": "Донецк вид на город с высоты",
+   "source": "press_photo",
+   "source_query": "Донецк вид на город с высоты"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 228.95,
+   "duration_sec": 12.88,
+   "visual_prompt": "Офис президента Украины Банковая Киев",
+   "source": "press_photo",
+   "source_query": "Офис президента Украины Банковая Киев"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 241.83,
+   "duration_sec": 5.85,
+   "visual_prompt": "Владивосток Золотой мост панорама города",
+   "source": "press_photo",
+   "source_query": "Владивосток Золотой мост панорама города"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 247.68,
+   "duration_sec": 11.3,
+   "visual_prompt": "сибирская тайга вид с воздуха Россия",
+   "source": "press_photo",
+   "source_query": "сибирская тайга вид с воздуха Россия"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 258.98,
+   "duration_sec": 10.85,
+   "visual_prompt": "металлургический завод в Донбассе дымящиеся трубы",
+   "source": "press_photo",
+   "source_query": "металлургический завод в Донбассе дымящиеся трубы"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 269.83,
+   "duration_sec": 12.4,
+   "visual_prompt": "блокпост на дороге в Донбассе",
+   "source": "press_photo",
+   "source_query": "блокпост на дороге в Донбассе"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 282.23,
+   "duration_sec": 5.52,
+   "visual_prompt": "штаб-квартира НАТО в Брюсселе здание",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО в Брюсселе здание"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 287.75,
+   "duration_sec": 6.76,
+   "visual_prompt": "учения НАТО в Польше бронетехника 2026",
+   "source": "press_photo",
+   "source_query": "учения НАТО в Польше бронетехника 2026"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 294.51,
+   "duration_sec": 13.44,
+   "visual_prompt": "заседание Совета Безопасности России в Кремле",
+   "source": "press_photo",
+   "source_query": "заседание Совета Безопасности России в Кремле"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 307.95,
+   "duration_sec": 8.64,
+   "visual_prompt": "флаги стран НАТО у штаб-квартиры",
+   "source": "press_photo",
+   "source_query": "флаги стран НАТО у штаб-квартиры"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 316.59,
+   "duration_sec": 8.0,
+   "visual_prompt": "Верховная Рада Украины здание в Киеве",
+   "source": "press_photo",
+   "source_query": "Верховная Рада Украины здание в Киеве"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 324.59,
+   "duration_sec": 14.08,
+   "visual_prompt": "американская военная помощь Украине погрузка в самолёт",
+   "source": "press_photo",
+   "source_query": "американская военная помощь Украине погрузка в самолёт"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 338.67,
+   "duration_sec": 13.12,
+   "visual_prompt": "пограничный пункт на российско-украинской границе",
+   "source": "press_photo",
+   "source_query": "пограничный пункт на российско-украинской границе"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 351.79,
+   "duration_sec": 14.8,
+   "visual_prompt": "саммит Евросовета в Брюсселе флаги стран",
+   "source": "press_photo",
+   "source_query": "саммит Евросовета в Брюсселе флаги стран"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 366.59,
+   "duration_sec": 7.96,
+   "visual_prompt": "Мария Захарова брифинг МИД России 2026",
+   "source": "press_photo",
+   "source_query": "Мария Захарова брифинг МИД России 2026"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 374.55,
+   "duration_sec": 7.07,
+   "visual_prompt": "Европарламент зал заседаний Страсбург",
+   "source": "press_photo",
+   "source_query": "Европарламент зал заседаний Страсбург"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 381.63,
+   "duration_sec": 13.33,
+   "visual_prompt": "российский ракетный комплекс Ярс на параде",
+   "source": "press_photo",
+   "source_query": "российский ракетный комплекс Ярс на параде"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 394.96,
+   "duration_sec": 13.92,
+   "visual_prompt": "военная база США в Европе техника",
+   "source": "press_photo",
+   "source_query": "военная база США в Европе техника"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 408.88,
+   "duration_sec": 14.24,
+   "visual_prompt": "зал заседаний ОБСЕ в Вене",
+   "source": "press_photo",
+   "source_query": "зал заседаний ОБСЕ в Вене"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 423.12,
+   "duration_sec": 14.4,
+   "visual_prompt": "oil refinery flare stack night industrial",
+   "source": "pexels_video",
+   "source_query": "oil refinery flare stack night industrial"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 437.52,
+   "duration_sec": 6.16,
+   "visual_prompt": "Пентагон здание с воздуха",
+   "source": "press_photo",
+   "source_query": "Пентагон здание с воздуха"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 443.68,
+   "duration_sec": 7.47,
+   "visual_prompt": "satellite antenna dish closeup sky",
+   "source": "pexels_video",
+   "source_query": "satellite antenna dish closeup sky"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 451.15,
+   "duration_sec": 14.56,
+   "visual_prompt": "Белый дом западное крыло вход",
+   "source": "press_photo",
+   "source_query": "Белый дом западное крыло вход"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 465.71,
+   "duration_sec": 13.52,
+   "visual_prompt": "заседание совета министров Евросоюза Брюссель",
+   "source": "press_photo",
+   "source_query": "заседание совета министров Евросоюза Брюссель"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 479.23,
+   "duration_sec": 5.75,
+   "visual_prompt": "наблюдатели миссии ОБСЕ на Донбассе",
+   "source": "press_photo",
+   "source_query": "наблюдатели миссии ОБСЕ на Донбассе"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 484.98,
+   "duration_sec": 5.36,
+   "visual_prompt": "artillery shells stacked closeup",
+   "source": "pexels_video",
+   "source_query": "artillery shells stacked closeup"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 490.34,
+   "duration_sec": 7.2,
+   "visual_prompt": "Центральный банк России здание в Москве",
+   "source": "press_photo",
+   "source_query": "Центральный банк России здание в Москве"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 497.54,
+   "duration_sec": 12.41,
+   "visual_prompt": "подписание Минских соглашений 2015 Минск",
+   "source": "press_photo",
+   "source_query": "подписание Минских соглашений 2015 Минск"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 509.95,
+   "duration_sec": 9.1,
+   "visual_prompt": "Сергей Лавров пресс-конференция октябрь 2026",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров пресс-конференция октябрь 2026"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 519.05,
+   "duration_sec": 9.66,
+   "visual_prompt": "Министерство обороны России здание Москва",
+   "source": "press_photo",
+   "source_query": "Министерство обороны России здание Москва"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 528.71,
+   "duration_sec": 6.24,
+   "visual_prompt": "разрушенный дом в Донбассе после обстрела",
+   "source": "press_photo",
+   "source_query": "разрушенный дом в Донбассе после обстрела"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 534.94,
+   "duration_sec": 14.24,
+   "visual_prompt": "терриконы Донбасса пейзаж",
+   "source": "press_photo",
+   "source_query": "терриконы Донбасса пейзаж"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 549.19,
+   "duration_sec": 13.12,
+   "visual_prompt": "Владимир Путин на совещании в Кремле 2026",
+   "source": "press_photo",
+   "source_query": "Владимир Путин на совещании в Кремле 2026"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 562.31,
+   "duration_sec": 7.2,
+   "visual_prompt": "Европейская комиссия Берлемон Брюссель",
+   "source": "press_photo",
+   "source_query": "Европейская комиссия Берлемон Брюссель"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 569.5,
+   "duration_sec": 6.72,
+   "visual_prompt": "Европейский центральный банк Франкфурт здание",
+   "source": "press_photo",
+   "source_query": "Европейский центральный банк Франкфурт здание"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 576.23,
+   "duration_sec": 8.78,
+   "visual_prompt": "steel vault door closed closeup",
+   "source": "pexels_video",
+   "source_query": "steel vault door closed closeup"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 585.0,
+   "duration_sec": 10.87,
+   "visual_prompt": "gold bars stacked closeup",
+   "source": "pexels_video",
+   "source_query": "gold bars stacked closeup"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 595.87,
+   "duration_sec": 9.03,
+   "visual_prompt": "Овальный кабинет Белого дома интерьер",
+   "source": "press_photo",
+   "source_query": "Овальный кабинет Белого дома интерьер"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 604.9,
+   "duration_sec": 7.29,
+   "visual_prompt": "флаги стран участников на международном саммите",
+   "source": "press_photo",
+   "source_query": "флаги стран участников на международном саммите"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 612.19,
+   "duration_sec": 13.52,
+   "visual_prompt": "журналисты с камерами у входа на саммит",
+   "source": "press_photo",
+   "source_query": "журналисты с камерами у входа на саммит"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 625.71,
+   "duration_sec": 9.19,
+   "visual_prompt": "большой зал для пресс-конференций ряды кресел",
+   "source": "press_photo",
+   "source_query": "большой зал для пресс-конференций ряды кресел"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 634.9,
+   "duration_sec": 13.21,
+   "visual_prompt": "Московская биржа торговый зал",
+   "source": "press_photo",
+   "source_query": "Московская биржа торговый зал"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 648.11,
+   "duration_sec": 9.8,
+   "visual_prompt": "нефтебаза резервуары Россия",
+   "source": "press_photo",
+   "source_query": "нефтебаза резервуары Россия"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 657.91,
+   "duration_sec": 8.43,
+   "visual_prompt": "Белый дом ночью фасад",
+   "source": "press_photo",
+   "source_query": "Белый дом ночью фасад"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 666.34,
+   "duration_sec": 9.55,
+   "visual_prompt": "Дональд Трамп на брифинге в Белом доме октябрь 2026",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп на брифинге в Белом доме октябрь 2026"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 675.9,
+   "duration_sec": 10.32,
+   "visual_prompt": "заседание правительства России зал",
+   "source": "press_photo",
+   "source_query": "заседание правительства России зал"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 686.22,
+   "duration_sec": 7.21,
+   "visual_prompt": "нефтеперерабатывающий завод в России установки",
+   "source": "press_photo",
+   "source_query": "нефтеперерабатывающий завод в России установки"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 693.42,
+   "duration_sec": 11.89,
+   "visual_prompt": "Киев без света вечерняя улица 2026",
+   "source": "press_photo",
+   "source_query": "Киев без света вечерняя улица 2026"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 705.32,
+   "duration_sec": 9.47,
+   "visual_prompt": "зенитный комплекс Patriot на позиции в Украине",
+   "source": "press_photo",
+   "source_query": "зенитный комплекс Patriot на позиции в Украине"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 714.79,
+   "duration_sec": 6.22,
+   "visual_prompt": "silk necktie on table closeup",
+   "source": "pexels_video",
+   "source_query": "silk necktie on table closeup"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 721.01,
+   "duration_sec": 14.19,
+   "visual_prompt": "ракеты для комплекса Patriot в пусковом контейнере",
+   "source": "press_photo",
+   "source_query": "ракеты для комплекса Patriot в пусковом контейнере"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 735.2,
+   "duration_sec": 9.31,
+   "visual_prompt": "pipeline valve industrial closeup",
+   "source": "pexels_video",
+   "source_query": "pipeline valve industrial closeup"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 744.51,
+   "duration_sec": 8.08,
+   "visual_prompt": "танкеры на рейде у нефтяного порта",
+   "source": "press_photo",
+   "source_query": "танкеры на рейде у нефтяного порта"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 752.59,
+   "duration_sec": 10.4,
+   "visual_prompt": "Дом правительства России Москва",
+   "source": "press_photo",
+   "source_query": "Дом правительства России Москва"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 762.99,
+   "duration_sec": 12.64,
+   "visual_prompt": "Министерство иностранных дел Украины здание Киев",
+   "source": "press_photo",
+   "source_query": "Министерство иностранных дел Украины здание Киев"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 775.63,
+   "duration_sec": 14.96,
+   "visual_prompt": "военный полигон в Германии техника Бундесвера",
+   "source": "press_photo",
+   "source_query": "военный полигон в Германии техника Бундесвера"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "start_sec": 790.59,
+   "duration_sec": 12.65,
+   "visual_prompt": "заседание Верховной Рады Украины зал",
+   "source": "press_photo",
+   "source_query": "заседание Верховной Рады Украины зал"
+  },
+  {
+   "id": 76,
+   "text": "",
+   "start_sec": 803.24,
+   "duration_sec": 6.31,
+   "visual_prompt": "Совет Федерации зал заседаний Москва",
+   "source": "press_photo",
+   "source_query": "Совет Федерации зал заседаний Москва"
+  },
+  {
+   "id": 77,
+   "text": "",
+   "start_sec": 809.55,
+   "duration_sec": 7.89,
+   "visual_prompt": "мешки с песком и укрепления на улице Донецка",
+   "source": "press_photo",
+   "source_query": "мешки с песком и укрепления на улице Донецка"
+  },
+  {
+   "id": 78,
+   "text": "",
+   "start_sec": 817.44,
+   "duration_sec": 6.02,
+   "visual_prompt": "barbed wire fence closeup field",
+   "source": "pexels_video",
+   "source_query": "barbed wire fence closeup field"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "start_sec": 823.46,
+   "duration_sec": 6.46,
+   "visual_prompt": "пограничный столб и забор на границе России",
+   "source": "press_photo",
+   "source_query": "пограничный столб и забор на границе России"
+  },
+  {
+   "id": 80,
+   "text": "",
+   "start_sec": 829.92,
+   "duration_sec": 5.6,
+   "visual_prompt": "глобус на столе в кабинете крупным планом реальное фото",
+   "source": "press_photo",
+   "source_query": "глобус на столе в кабинете крупным планом реальное фото"
+  },
+  {
+   "id": 81,
+   "text": "",
+   "start_sec": 835.52,
+   "duration_sec": 5.52,
+   "visual_prompt": "steel rebar construction concrete closeup",
+   "source": "pexels_video",
+   "source_query": "steel rebar construction concrete closeup"
+  },
+  {
+   "id": 82,
+   "text": "",
+   "start_sec": 841.04,
+   "duration_sec": 6.09,
+   "visual_prompt": "ведомство федерального канцлера Германии Берлин",
+   "source": "press_photo",
+   "source_query": "ведомство федерального канцлера Германии Берлин"
+  },
+  {
+   "id": 83,
+   "text": "",
+   "start_sec": 847.12,
+   "duration_sec": 9.43,
+   "visual_prompt": "container crane loading cargo port",
+   "source": "pexels_video",
+   "source_query": "container crane loading cargo port"
+  },
+  {
+   "id": 84,
+   "text": "",
+   "start_sec": 856.55,
+   "duration_sec": 13.04,
+   "visual_prompt": "Генеральная Ассамблея ООН зал заседаний",
+   "source": "press_photo",
+   "source_query": "Генеральная Ассамблея ООН зал заседаний"
+  },
+  {
+   "id": 85,
+   "text": "",
+   "start_sec": 869.6,
+   "duration_sec": 10.63,
+   "visual_prompt": "welding sparks steel structure closeup",
+   "source": "pexels_video",
+   "source_query": "welding sparks steel structure closeup"
+  },
+  {
+   "id": 86,
+   "text": "",
+   "start_sec": 880.23,
+   "duration_sec": 10.87,
+   "visual_prompt": "Сейм Польши зал заседаний Варшава",
+   "source": "press_photo",
+   "source_query": "Сейм Польши зал заседаний Варшава"
+  },
+  {
+   "id": 87,
+   "text": "",
+   "start_sec": 891.1,
+   "duration_sec": 13.82,
+   "visual_prompt": "boiling pot lid steam kitchen closeup",
+   "source": "pexels_video",
+   "source_query": "boiling pot lid steam kitchen closeup"
+  },
+  {
+   "id": 88,
+   "text": "",
+   "start_sec": 904.92,
+   "duration_sec": 12.44,
+   "visual_prompt": "панорама Москвы Москва-Сити вечер",
+   "source": "press_photo",
+   "source_query": "панорама Москвы Москва-Сити вечер"
+  },
+  {
+   "id": 89,
+   "text": "",
+   "start_sec": 917.35,
+   "duration_sec": 5.81,
+   "visual_prompt": "old suitcase packed on floor closeup",
+   "source": "pexels_video",
+   "source_query": "old suitcase packed on floor closeup"
+  },
+  {
+   "id": 90,
+   "text": "",
+   "start_sec": 923.16,
+   "duration_sec": 5.84,
+   "visual_prompt": "closed old book on wooden desk closeup",
+   "source": "pexels_video",
+   "source_query": "closed old book on wooden desk closeup"
+  },
+  {
+   "id": 91,
+   "text": "",
+   "start_sec": 929.0,
+   "duration_sec": 15.68,
+   "visual_prompt": "тихая улица в Донецке днём",
+   "source": "press_photo",
+   "source_query": "тихая улица в Донецке днём"
+  },
+  {
+   "id": 92,
+   "text": "",
+   "start_sec": 944.68,
+   "duration_sec": 7.69,
+   "visual_prompt": "Киев панорама города и Днепр",
+   "source": "press_photo",
+   "source_query": "Киев панорама города и Днепр"
+  }
+ ],
+ "context": "ДИПЛОМАТИЯ СИЛЫ. О чём: почему мирный план по Украине ничего не гарантирует без механизма принуждения; спор о территории важен, но слишком узок. Стороны: Россия (Кремль, МИД, Путин, Лавров), США (Белый дом, Капитолий, Минфин, Трамп), Украина (Банковая, Рада, Зеленский), Европа (Брюссель, Берлин, Париж, Варшава, Прибалтика), НАТО. Где физически: Москва и Кремль; Вашингтон; Брюссель; Киев; Донбасс и линия фронта; российские НПЗ и нефтебазы; танкеры и нефтяные порты; Минск. Узел: одна сторона отдаёт конкретное сейчас, вторая оставляет себе 'возможно' потом; нет автоматического последствия за нарушение; проект 'Украина как Антироссия'; память об обмане Минска. Время: октябрь 2026, торг 'НПЗ в обмен на Patriot', смягчение санкций по танкерам. Чем кончается: мир = невыгодность нарушения, а не подписи. Чувство: усталая ирония и требование показать кнопки.",
+ "lines": [
+  "Российская власть: Кремль, МИД РФ на Смоленской, Путин, Лавров, Захарова, Песков, Госдума, Совет Федерации, ЦБ РФ",
+  "Американская власть: Белый дом, Капитолий, Минфин США, Госдеп, Пентагон, Трамп",
+  "Европейские институты и страны: Евросовет и Еврокомиссия в Брюсселе, Европарламент, ЕЦБ, Бундестаг, Елисейский дворец, Сейм Польши",
+  "Украинская власть и Киев: Банковая, Верховная Рада, МИД Украины, Зеленский, город Киев",
+  "Санкционно-нефтяной слой РФ: НПЗ, нефтебазы, резервуары, нефтепровод, танкеры, нефтяные порты",
+  "Военный слой с хозяином: Patriot и HIMARS (США у Украины), Starlink, базы США и учения НАТО в Европе, Ярс и армия России",
+  "Донбасс и линия фронта: Донецк, терриконы, шахты, блокпосты, разрушенные дома, укрепления"
+ ],
+ "channel": "ДИПЛОМАТИЯ СИЛЫ",
+ "library": "NO (search-only)"
+}
