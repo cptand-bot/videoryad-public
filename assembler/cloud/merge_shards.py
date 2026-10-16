@@ -102,12 +102,24 @@ def _collect_overlays(images_dir, proj):
             ov = json.load(open(ovj, encoding="utf-8"))
         except Exception:
             ov = {}
+        kept_text = 0
         for k in [k for k in list(ov) if k.isdigit()]:
+            e = ov.get(k) if isinstance(ov.get(k), dict) else {}
+            # ТЕКСТОВАЯ ВСПЛЫВАШКА ФАЙЛА НЕ ИМЕЕТ И НЕ ДОЛЖНА ИМЕТЬ
+            # (починено 2026-10-16). Прежний цикл выбрасывал ЛЮБУЮ запись, для
+            # которой нет scene_NNN.* в overlays/ — то есть весь класс
+            # текстовых разом. Живой случай: отправлено 26 записей (9 фото +
+            # 17 текстовых), get.sh вернул 9. Для «5 МИНУТ», где текстовые
+            # всплывашки обязательны, это означало ролик вообще без текста.
+            if (e.get("text") or {}).get("words"):
+                kept_text += 1
+                continue
             if not glob.glob(os.path.join(dst, f"scene_{int(k):03d}.*")):
                 ov.pop(k)
                 dropped.append(k)
         json.dump(ov, open(ovj, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"[merge] всплывашки: {moved} фото с матрицы"
+          + (f", сохранил текстовых: {kept_text}" if kept_text else "")
           + (f", убрал без фото: {dropped}" if dropped else ""), flush=True)
 
 

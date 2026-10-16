@@ -23,7 +23,12 @@ os.chdir(proj)
 FAIL, WARN = [], []
 d = json.load(open(scenes_path, encoding="utf-8"))
 scenes = d["scenes"] if isinstance(d, dict) else d
-meta = d.get("meta", {}) if isinstance(d, dict) else {}
+# Канал в шапке `<niche>.scenes.json` лежит ВЕРХНИМ УРОВНЕМ (`channel`), а не
+# в блоке `meta` — проверено на всех живых проектах 2026-10-16. Раньше читался
+# только `meta`, которого там нет ни у кого: печаталось «канал ?», и проверка
+# `anchor` по каналу МОЛЧА не выполнялась ни разу за всё время. Читаем оба
+# места, чтобы работало и со старыми файлами, где `meta` всё-таки есть.
+meta = {} if not isinstance(d, dict) else {**d, **(d.get("meta") or {})}
 ids = [s["id"] for s in scenes]
 total = sum(s["duration_sec"] for s in scenes)
 

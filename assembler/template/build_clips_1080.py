@@ -40,6 +40,13 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
     frames = int(duration * FPS)
     w, h = _img_wh(ffprobe, src)
     portrait = (w / h) < 1.15  # portrait / square / 4:3 -> would lose too much to a 16:9 centre-crop
+    m = re.search(r"clip_(\d+)", os.path.basename(out_path))
+    # -1, а не 0: при нераспознанном имени 0 %% N == 0 включало блик
+    # на КАЖДОЙ такой сцене (поймано на тесте 2026-10-16)
+    sid = int(m.group(1)) if m else -1
+    fxc = _fx_chain(sid)                      # виньетка/дыхание/зерно, пусто если fx.json нет
+    fx_in, fx_steps, fx_out = _fx_layers(sid, duration)  # блик/пылинки/дымка
+    tail = (("," + fxc) if fxc else "")
 
     if portrait:
         # blurred-fill: whole image visible (fit by the frame), sides filled
@@ -47,30 +54,139 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
         # on the composite so no edge is ever revealed. Faces never get cut.
         z = ("min(zoom+0.00035,1.08)" if random.random() < 0.5
              else "if(eq(on,0),1.08,max(zoom-0.00035,1.0))")
-        vf = (
+        core = (
             f"[0:v]split=2[bg][fg];"
             f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
             f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
             f"[fg]scale={W}:{H}:force_original_aspect_ratio=decrease[fgs];"
             f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2[base];"
-            f"[base]zoompan=z='{z}':d={frames}:s={W}x{H}:fps={FPS},format=yuv420p"
-            f"{_caps(out_path)}"
+            f"[base]zoompan=z='{z}':d={frames}:s={W}x{H}:fps={FPS}{tail}"
         )
     else:
         zoom_dir = random.choice(["in", "out"])
         zexpr = ("min(zoom+0.0006,1.18)" if zoom_dir == "in"
                  else "if(eq(on,0),1.18,max(zoom-0.0006,1.0))")
-        vf = (
-            f"scale=2560:1440:force_original_aspect_ratio=increase,crop=2560:1440,"
-            f"zoompan=z='{zexpr}':d={frames}:s={W}x{H}:fps={FPS},format=yuv420p"
-            f"{_caps(out_path)}"
+        core = (
+            f"[0:v]scale=2560:1440:force_original_aspect_ratio=increase,crop=2560:1440,"
+            f"zoompan=z='{zexpr}':d={frames}:s={W}x{H}:fps={FPS}{tail}"
         )
 
-    cmd = [ffmpeg, "-y", "-loop", "1", "-i", src,
-           ("-vf" if not portrait else "-filter_complex"), vf, "-t", str(duration),
+    # Субтитры всегда идут ПОСЛЕДНИМИ — поверх эффектов, иначе виньетка
+    # притемняет их край, а блик проезжает по тексту.
+    if fx_steps:
+        vf = f"{core}[vfx];{fx_steps};[{fx_out}]format=yuv420p{_caps(out_path)}[final]"
+    else:
+        vf = f"{core},format=yuv420p{_caps(out_path)}[final]"
+    out_map = ["-map", "[final]"]
+
+    cmd = [ffmpeg, "-y", "-loop", "1", "-i", src, *fx_in,
+           "-filter_complex", vf, *out_map, "-t", str(duration),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
 
+
+_FX = None
+
+
+def _fx():
+    """Параметры эффектов. Выключатель ФИЗИЧЕСКИЙ, как у субтитров: файл
+    `fx.json` в папке проекта. Нет файла — ни один фильтр не добавляется и
+    поведение ровно такое же, как было до появления этой функции.
+
+    Формат (все ключи необязательны):
+        {"vignette": true,          # затемнение краёв кадра
+         "breath": true,            # медленное «дыхание» яркости
+         "grain": 0,                # зерно плёнки, 0 = выкл, обычно 4-8
+         "flare_every": 6,          # блик-пролёт на каждой N-й сцене, 0 = выкл
+         "flare_opacity": 0.28}     # сила блика
+
+    Цена (замер 2026-10-16 на 12-секундном клипе): дыхание +19%, блик +73%,
+    виньетка +98%, зерно +111% к КОДИРОВАНИЮ. В облаке кодирование — меньше
+    половины джоба (27-40 с из 65-79 с, остальное установка ffmpeg), поэтому
+    весь набор добавляет к сборке ролика около минуты, не больше.
+    """
+    global _FX
+    if _FX is None:
+        try:
+            with open(os.path.join(_fx_dir(), "fx.json"), encoding="utf-8") as fh:
+                _FX = json.load(fh)
+        except (OSError, ValueError):
+            _FX = {}
+    return _FX
+
+
+def _fx_dir():
+    """Каталог проекта. В облаке клипы режет ШАГ WORKFLOW, а не
+    cloud_pipeline, и рабочий каталог там — корень репозитория, а не папка
+    ролика: `fx.json` рядом с cwd не находится и эффекты молча не
+    применяются (поймано на первой же пробной сборке 2026-10-16 — ролик
+    приехал с субтитрами, но без единого эффекта). Субтитры этим не
+    страдали, потому что им путь отдаётся переменной CAPTIONS_DIR. Теперь
+    так же: FX_DIR с абсолютным путём, иначе текущий каталог (локальный
+    запуск).
+    """
+    return os.environ.get("FX_DIR", "") or "."
+
+
+def _fx_chain(sid):
+    """Фильтры эффектов для ОДНОЙ сцены, без ведущей запятой."""
+    fx = _fx()
+    if not fx:
+        return ""
+    parts = []
+    if fx.get("vignette"):
+        parts.append("vignette=PI/5")
+    if fx.get("breath"):
+        # период 6 с, амплитуда 2% — заметно глазу как «живой» кадр, но не как эффект
+        parts.append("eq=brightness='0.02*sin(2*PI*t/6)'")
+    g = fx.get("grain") or 0
+    if g:
+        parts.append(f"noise=alls={int(g)}:allf=t")
+    return ",".join(parts)
+
+
+def _fx_layers(sid, duration):
+    """Все световые слои сцены: (доп. входы ffmpeg, кусок фильтра, метка выхода).
+
+    Слоёв два вида:
+      flare  — блик-пролёт по широкой картинке `fx_flare.png` (окно едет crop'ом);
+      видео  — зацикленные `particles.mp4` / `haze.mp4` из template/fx.
+
+    Смешивание всегда ЭКРАННОЕ и всегда в RGB: у слоёв чёрный фон, при screen
+    он не меняет кадр. В yuv420p тот же режим калечит цветовые плоскости и
+    кадр уезжает в маджента (поймано 2026-10-16).
+    """
+    fx = _fx()
+    if sid < 0 or not fx:
+        return [], "", "vfx"
+    ins, steps, cur = [], [], "vfx"
+    idx = 1                                   # 0 — сам кадр
+
+    every = int(fx.get("flare_every") or 0)
+    flare_png = os.path.join(_fx_dir(), "fx_flare.png")
+    if every and sid % every == 0 and os.path.isfile(flare_png):
+        ins += ["-loop", "1", "-i", flare_png]
+        x = f"(t/{duration})*{4800 - W}"
+        nxt = f"v{idx}"
+        steps.append(f"[{idx}:v]crop={W}:{H}:x='{x}':y=0,format=gbrp[fl];"
+                     f"[{cur}]format=gbrp[b{idx}];[b{idx}][fl]blend=all_mode=screen[{nxt}]")
+        cur = nxt; idx += 1
+
+    for name in (fx.get("layers") or []):
+        src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fx", f"{name}.mp4")
+        if not os.path.isfile(src):
+            continue
+        op = float(fx.get("layer_opacity") or 0.55)
+        ins += ["-stream_loop", "-1", "-i", src]
+        nxt = f"v{idx}"
+        steps.append(f"[{idx}:v]scale={W}:{H},format=gbrp,"
+                     f"colorchannelmixer=rr={op}:gg={op}:bb={op}[ly{idx}];"
+                     f"[{cur}]format=gbrp[b{idx}];[b{idx}][ly{idx}]blend=all_mode=screen[{nxt}]")
+        cur = nxt; idx += 1
+
+    if not steps:
+        return [], "", "vfx"
+    return ins, ";".join(steps), cur
 
 def _caps(out_path):
     """Добавка фильтра субтитров к цепочке — ТОЛЬКО если они явно включены.
@@ -126,8 +242,11 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
     # hit once: 14 stock-video clips at 25fps + 68 generated clips at 30fps
     # concatenated into a video ffprobe reported as 25fps throughout, playing
     # ~20% longer than the sum of the source clips' own durations).
+    _m = re.search(r"clip_(\d+)", os.path.basename(out_path))
+    _fxc = _fx_chain(int(_m.group(1)) if _m else 0)
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
-          f"setpts=PTS-STARTPTS,fps={FPS},format=yuv420p{_caps(out_path)}")
+          f"setpts=PTS-STARTPTS,fps={FPS}" + ("," + _fxc if _fxc else "") +
+          f",format=yuv420p{_caps(out_path)}")
     loop_args = ["-stream_loop", "-1"] if (src_dur and src_dur < duration) else []
     seek_args = ["-ss", str(start)] if start > 0 else []
     cmd = [ffmpeg, "-y", *loop_args, *seek_args, "-i", src, "-vf", vf, "-t", str(duration),

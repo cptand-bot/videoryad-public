@@ -765,6 +765,26 @@ def _scene_meta(sid, scenes, images_dir, kind):
     return meta
 
 
+def _channel_of(project):
+    """Канал ролика — для журнала отказов. Берём из `.source_dir`, который
+    ship.sh кладёт в кэш: там путь вида D:\\YouTube\\НОВОСТИ\\<канал>\\…
+    Фоллбэк — префикс имени проекта. Раньше канал брался из JSON браузера,
+    которого тот не шлёт, и поле было пустым во ВСЕХ записях (поймано
+    2026-10-16 на 17 живых записях)."""
+    try:
+        sd = os.path.expanduser(f"~/.cache/videoryad/{project}.source_dir")
+        if os.path.exists(sd):
+            parts = open(sd, encoding="utf-8").read().replace("\\", "/").split("/")
+            for i, p in enumerate(parts):
+                if p.upper().startswith("НОВОСТИ") and i + 1 < len(parts):
+                    return parts[i + 1]
+    except OSError:
+        pass
+    pref = project.split("-", 1)[0].lower()
+    return {"planeta": "ПЛАНЕТА", "5min": "5 МИНУТ", "ds": "ДИПЛОМАТИЯ СИЛЫ",
+            "olka": "ОЛЬКА", "perevod": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО"}.get(pref, "")
+
+
 def _log_reject_async(spec, sid, scenes, images_dir, project):
     """Пишет отказ в журнал; если приложено аудио — сперва расшифровывает."""
     def work():
@@ -797,7 +817,7 @@ def _log_reject_async(spec, sid, scenes, images_dir, project):
                           action=str(spec.get("action", "clear")),
                           reason=str(spec.get("reason", "other")),
                           note=note, project=project,
-                          channel=str(spec.get("channel", "")), **meta)
+                          channel=_channel_of(project), **meta)
         except Exception:
             pass
     threading.Thread(target=work, daemon=True).start()
@@ -1922,22 +1942,76 @@ function imgOpts(id){{ _opts(id, document.getElementById("imgq"+id).value, "opts
 function ovOpts(id){{ _opts(id, document.getElementById("ovq"+id).value, "opts_ov"+id, "ovfile"+id, "overlay"); }}
 // push-to-talk: держишь кнопку и говоришь -> текст в поле вживую; отпустил ->
 // стоп, текст применён, поиск сам. Статус и ошибки пишутся ПРЯМО В ПОЛЕ.
-let _mic = null;
+let _mic = null, _micRec = null, _micChunks = [], _micWantStop = false;
+function micSrBad(){{ try{{ return localStorage.getItem("mic_sr_bad") === "1"; }}catch(e){{ return false; }} }}
+function micMarkSrBad(){{ try{{ localStorage.setItem("mic_sr_bad", "1"); }}catch(e){{}} }}
+
+/* ЗАПАСНОЙ ПУТЬ ДИКТОВКИ — запись в файл + локальный whisper на сервере
+   (маршрут /voice). Зачем: браузерное распознавание (Web Speech API) живёт
+   только в Chrome/Edge, требует интернета и регулярно отвечает ошибкой
+   "network" — пользователь при этом видел «нужен Chrome» и оставался вообще
+   без диктовки. Поймано дважды за 2026-10-16: в панели «почему убрал» откат
+   в тот же день сделали, а в ПОИСКЕ ПО КАРТОЧКЕ его не было, и пользователь
+   получил ту же стену второй раз. Здесь работает любой браузер и без сети,
+   платой — несколько секунд ожидания после отпускания кнопки. */
+function micFileStart(inpId, msgId, findFn){{
+  const inp = document.getElementById(inpId);
+  const btn = document.querySelector('[data-mic="'+inpId+'"]');
+  const msg = msgId ? document.getElementById(msgId) : null;
+  const show = (t) => {{ if(inp) inp.value = t; if(msg) msg.textContent = t; }};
+  _micWantStop = false;
+  if(!navigator.mediaDevices || !window.MediaRecorder){{ show("⚠ микрофон недоступен — напиши текстом"); return; }}
+  navigator.mediaDevices.getUserMedia({{audio:true}}).then(function(stream){{
+    const rec = new MediaRecorder(stream);
+    _micRec = rec; _micChunks = [];
+    rec.ondataavailable = function(e){{ if(e.data.size) _micChunks.push(e.data); }};
+    rec.onstop = function(){{
+      stream.getTracks().forEach(function(t){{ t.stop(); }});
+      _micRec = null;
+      if(btn) btn.textContent = "🎤";
+      show("… расшифровываю на этой машине");
+      const blob = new Blob(_micChunks, {{type:"audio/webm"}});
+      const fr = new FileReader();
+      fr.onloadend = async function(){{
+        const b64 = String(fr.result).split(",")[1] || "";
+        try{{
+          const r = await fetch("voice", {{method:"POST",
+            headers:{{"Content-Type":"application/json"}},
+            body: JSON.stringify({{audio:b64}})}});
+          const j = await r.json();
+          const txt = (j.text || "").trim();
+          if(txt){{
+            if(inp) inp.value = txt;
+            if(msg) msg.textContent = "ищу: " + txt;
+            if(findFn) findFn();
+          }} else show("не разобрал — скажи ещё раз или напиши");
+        }}catch(e){{ show("расшифровка не ответила — напиши текстом"); }}
+      }};
+      fr.readAsDataURL(blob);
+    }};
+    rec.start();
+    if(btn) btn.textContent = "🔴";
+    show("🔴 говори, потом отпусти кнопку");
+    if(_micWantStop){{ try{{ rec.stop(); }}catch(e){{}} }}   // отпустили раньше, чем включился микрофон
+  }}).catch(function(){{ show("⚠ микрофон недоступен — напиши текстом"); }});
+}}
+
 function micStart(ev, inpId, msgId, findFn){{
   if(ev){{ try{{ ev.preventDefault(); ev.target.setPointerCapture(ev.pointerId); }}catch(e){{}} }}
   const inp = document.getElementById(inpId);
   const btn = document.querySelector('[data-mic="'+inpId+'"]');
   const msg = msgId ? document.getElementById(msgId) : null;
-  // show status where the user is looking: the input itself, plus the side msg
   const show = (t) => {{ if(inp) inp.value = t; if(msg) msg.textContent = t; }};
   const side = (t) => {{ if(msg) msg.textContent = t; }};
   if(_mic){{ try{{ _mic.abort(); }}catch(e){{}} _mic = null; }}
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(location.protocol === "file:"){{ show("⚠ открой http://localhost:8090/review.html — не файл"); return; }}
-  if(!window.isSecureContext){{ show("⚠ голос только на localhost, не по IP-адресу " + location.host); return; }}
-  if(!SR){{ show("⚠ голос: открой в Chrome"); return; }}
+  /* Браузерное распознавание нет смысла даже пробовать, если оно здесь
+     отсутствует, уже падало, или страница открыта по IP (там Web Speech
+     запрещён как небезопасный контекст) — сразу локальный путь. */
+  if(!SR || micSrBad() || !window.isSecureContext){{ micFileStart(inpId, msgId, findFn); return; }}
   let rec;
-  try {{ rec = new SR(); }} catch(e) {{ show("⚠ микрофон не запустился"); return; }}
+  try {{ rec = new SR(); }} catch(e) {{ micFileStart(inpId, msgId, findFn); return; }}
   rec.lang = "ru-RU"; rec.interimResults = true; rec.continuous = false;
   rec._final = ""; rec._done = false; rec._started = false; rec._stopWanted = false;
   const finish = () => {{
@@ -1960,26 +2034,37 @@ function micStart(ev, inpId, msgId, findFn){{
     if(inp) inp.value = (rec._final + interim).replace(/\\s+/g, " ").trim();
   }};
   rec.onerror = (e) => {{
+    rec._done = true; if(_mic === rec) _mic = null;
+    if(btn) btn.textContent = "🎤";
+    /* Сервис распознавания недоступен (нет сети, Edge без службы, запрет в
+       браузере) — НЕ показываем стену «нужен Chrome», а запоминаем это и
+       переходим на локальный whisper прямо в этой же попытке. */
+    if(e.error === "network" || e.error === "service-not-allowed" || e.error === "language-not-supported"){{
+      micMarkSrBad();
+      micFileStart(inpId, msgId, findFn);
+      return;
+    }}
     const M = {{"not-allowed":"⚠ разреши микрофон: значок 🔒/📷 слева в адресной строке",
-               "service-not-allowed":"⚠ микрофон заблокирован в настройках браузера",
                "no-speech":"⚠ не расслышал, держи кнопку и говори громче",
-               "network":"⚠ нет связи с распознаванием — нужен Chrome и интернет",
                "aborted":"", "audio-capture":"⚠ микрофон не найден"}};
     const t = M[e.error]; if(t) show(t); else if(e.error !== "aborted") show("⚠ " + e.error);
-    if(btn) btn.textContent = "🎤"; rec._done = true; if(_mic === rec) _mic = null;
   }};
   rec.onend = finish;
   _mic = rec;
   try {{ rec.start(); side("подключаю микрофон…"); }}
-  catch(e) {{ show("⚠ микрофон занят, подожди секунду"); _mic = null; return; }}
-  // watchdog: recognition never even started
+  catch(e) {{ micFileStart(inpId, msgId, findFn); return; }}
+  // сторож: распознавание так и не стартовало — уходим на локальный путь
   setTimeout(() => {{
-    if(_mic === rec && !rec._started && !rec._done)
-      show("⚠ микрофон молчит — проверь разрешение (🔒) и что это Chrome");
+    if(_mic === rec && !rec._started && !rec._done){{
+      rec._done = true; _mic = null;
+      micMarkSrBad();
+      micFileStart(inpId, msgId, findFn);
+    }}
   }}, 2500);
 }}
 function micStop(){{
-  if(!_mic) return;
+  if(_micRec){{ _micWantStop = true; try{{ _micRec.stop(); }}catch(e){{}} return; }}
+  if(!_mic){{ _micWantStop = true; return; }}
   if(!_mic._started){{ _mic._stopWanted = true; return; }}   // stop once it starts
   try{{ _mic.stop(); }}catch(e){{}}
 }}

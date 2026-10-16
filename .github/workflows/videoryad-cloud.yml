@@ -386,7 +386,18 @@ jobs:
           else
             echo "субтитры: выключены (captions.ass в проекте нет)"
           fi
-          CAPTIONS_DIR="$caps" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
+          # Эффекты (виньетка/дыхание/блик) — выключатель тот же по духу, что у
+          # субтитров: файл fx.json в папке ролика. Путь отдаём АБСОЛЮТНЫЙ:
+          # рабочий каталог этого шага — корень репозитория, а не папка
+          # проекта, и относительный путь молча не находится.
+          fxd=""
+          if [ -f "$proj/fx.json" ]; then
+            fxd="$PWD/$proj"
+            echo "эффекты: ВКЛЮЧЕНЫ (найден fx.json)"
+          else
+            echo "эффекты: выключены (fx.json в проекте нет)"
+          fi
+          FX_DIR="$fxd" CAPTIONS_DIR="$caps" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
             python3 assembler/template/build_clips_1080.py "$sc" "$proj/images" "$proj/clips"
           echo "shard ${{ matrix.shard }}: $(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l) clips"
 

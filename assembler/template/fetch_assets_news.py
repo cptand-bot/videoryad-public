@@ -246,6 +246,7 @@ def _tesseract_env():
 # heavy-text filter misses them because a single "alamy" tile is only 1 word.
 # Hit live on ukraincy-begut-0709: alamy (scene 120), dreamstime (73, 78).
 _STOCK_WATERMARKS = (
+    "recommend.ru",   # отзывный сайт, логотип в правом нижнем углу (2026-10-16)
     "alamy", "dreamstime", "shutterstock", "getty", "gettyimages",
     "depositphotos", "123rf", "istock", "istockphoto", "adobestock",
     "bigstock", "canstockphoto", "vectorstock", "vecteezy", "stockphoto", "photostock",

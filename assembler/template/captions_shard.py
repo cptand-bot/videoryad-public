@@ -42,6 +42,52 @@ def _s2t(x):
     return f"{h}:{m:02d}:{x:05.2f}"
 
 
+
+# --- вид субтитров (2026-10-16, прямая просьба пользователя) ----------------
+# Было: BorderStyle=3 — ffmpeg рисует подложку ПО РАЗМЕРУ ТЕКСТА, поэтому она
+# прыгает по ширине и высоте на каждой фразе. Стало: текст жёлтый с чёрной
+# обводкой (BorderStyle=1), а подложка — отдельная НЕПОДВИЖНАЯ плашка, которую
+# мы дорисовываем сами (см. _plate_line) и держим всю сцену целиком.
+CAPTION_STYLE = ("Style: Caption,Arial,52,&H0078E2FF,&H000000FF,&H00101014,"
+                 "&H00000000,1,0,0,0,100,100,0,0,1,3,0,2,80,80,96,1")
+PLATE_STYLE = ("Style: Plate,Arial,20,&H32100C0C,&H000000FF,&H32100C0C,"
+               "&H32100C0C,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1")
+PLATE_MARGIN = 36                     # отступ плашки от краёв кадра
+PLATE_W, PLATE_H = 1920 - PLATE_MARGIN * 2, 148
+PLATE_X, PLATE_Y = PLATE_MARGIN, 1080 - PLATE_H - 34
+# Текст ставим ЖЁСТКО в центр плашки (\an5 + \pos), а не отступом снизу:
+# при отступе одна строка и две строки встают по-разному, и текст «плавает»
+# по высоте плашки (пользователь, 2026-10-16: «а они сейчас немного выше»).
+TEXT_X, TEXT_Y = 960, PLATE_Y + PLATE_H // 2
+
+
+def _plate_line(dur):
+    r"""Неподвижная подложка на всю длительность сцены — отдельным слоем ПОД
+    текстом. Рисуется как прямоугольник (\p1), а не как фон текста, поэтому
+    не зависит от длины фразы и не дёргается при её смене."""
+    return (f"Dialogue: 0,{_s2t(0.0)},{_s2t(dur)},Plate,,0,0,0,,"
+            f"{{\\pos({PLATE_X},{PLATE_Y})\\p1}}m 0 0 l {PLATE_W} 0 "
+            f"l {PLATE_W} {PLATE_H} l 0 {PLATE_H}{{\\p0}}")
+
+
+def _restyle(head):
+    """Подменяем стиль Caption на свой и добавляем стиль плашки."""
+    out, added = [], False
+    for ln in head:
+        if ln.startswith("Style: Caption,"):
+            out.append(CAPTION_STYLE)
+            out.append(PLATE_STYLE)
+            added = True
+        else:
+            out.append(ln)
+    if not added:                       # на случай другого имени стиля
+        for i, ln in enumerate(out):
+            if ln.strip().lower().startswith("[events]"):
+                out.insert(i, PLATE_STYLE)
+                break
+    return out
+
+
 def main():
     if len(sys.argv) < 4:
         print(__doc__); sys.exit(1)
@@ -83,11 +129,17 @@ def main():
             if e0 <= a or s0 >= b:          # реплика не попадает в эту сцену
                 continue
             # обрезаем по границам сцены и переносим в местное время клипа
+            parts = tail.split(",", 6)
+            if len(parts) == 7 and parts[0].strip() == "Caption":
+                parts[6] = f"{{\\an5\\pos({TEXT_X},{TEXT_Y})}}" + parts[6]
+                tail = ",".join(parts)
             lines.append(f"{pre}{_s2t(max(s0, a) - a)},{_s2t(min(e0, b) - a)},{tail}")
         if not lines:
             continue
+        # плашка идёт ПЕРВОЙ строкой событий: слой 0, под текстом, вся сцена
+        lines.insert(0, _plate_line(dur))
         with open(os.path.join(out_dir, f"scene_{sid:03d}.ass"), "w", encoding="utf-8") as f:
-            f.write("\n".join(head) + "\n" + "\n".join(lines) + "\n")
+            f.write("\n".join(_restyle(head)) + "\n" + "\n".join(lines) + "\n")
         made += 1
     print(f"captions_shard: кусков субтитров — {made} из {len(scenes)} сцен")
     return 0
