@@ -1,0 +1,691 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 13.0,
+   "visual_prompt": "Владимир Зеленский за рабочим столом в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский за рабочим столом в Киеве 2026 реальное фото"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 13.0,
+   "duration_sec": 12.64,
+   "visual_prompt": "Нарезки - Путин3.mp4",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН/Нарезки - Путин3.mp4"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 25.64,
+   "duration_sec": 7.61,
+   "visual_prompt": "фасад Офиса президента Украины на Банковой реальное фото",
+   "source": "press_photo",
+   "source_query": "фасад Офиса президента Украины на Банковой реальное фото"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 33.25,
+   "duration_sec": 13.11,
+   "visual_prompt": "Дональд Трамп отвечает журналистам у Белого дома 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп отвечает журналистам у Белого дома 2026 реальное фото"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 46.36,
+   "duration_sec": 14.96,
+   "visual_prompt": "Дональд Трамп даёт интервью телеканалу октябрь 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп даёт интервью телеканалу октябрь 2026 реальное фото"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 61.32,
+   "duration_sec": 11.63,
+   "visual_prompt": "military satellite ground station radome dome closeup no people",
+   "source": "pexels_video",
+   "source_query": "military satellite ground station radome dome closeup no people"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 72.95,
+   "duration_sec": 12.53,
+   "visual_prompt": "флаги США у входа в Белый дом реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги США у входа в Белый дом реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 85.48,
+   "duration_sec": 8.86,
+   "visual_prompt": "Владимир Зеленский на брифинге для прессы 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на брифинге для прессы 2026 реальное фото"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 94.34,
+   "duration_sec": 13.24,
+   "visual_prompt": "пустой зал заседаний Верховной Рады Украины реальное фото",
+   "source": "press_photo",
+   "source_query": "пустой зал заседаний Верховной Рады Украины реальное фото"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 107.59,
+   "duration_sec": 12.56,
+   "visual_prompt": "Сергей Лавров на пресс-конференции МИД России 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров на пресс-конференции МИД России 2026 реальное фото"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 120.15,
+   "duration_sec": 12.24,
+   "visual_prompt": "Спасская башня Кремля реальное фото",
+   "source": "press_photo",
+   "source_query": "Спасская башня Кремля реальное фото"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 132.39,
+   "duration_sec": 7.72,
+   "visual_prompt": "Владимир Зеленский на совещании с военными 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на совещании с военными 2026 реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 140.11,
+   "duration_sec": 8.65,
+   "visual_prompt": "Дональд Трамп на подиуме с флагами США 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп на подиуме с флагами США 2026 реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 148.76,
+   "duration_sec": 12.8,
+   "visual_prompt": "oil refinery flare stack burning night industrial no people",
+   "source": "pexels_video",
+   "source_query": "oil refinery flare stack burning night industrial no people"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 161.56,
+   "duration_sec": 13.74,
+   "visual_prompt": "diesel fuel pump nozzle closeup no people",
+   "source": "pexels_video",
+   "source_query": "diesel fuel pump nozzle closeup no people"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 175.3,
+   "duration_sec": 13.61,
+   "visual_prompt": "украинская электроподстанция после удара 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "украинская электроподстанция после удара 2026 реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 188.91,
+   "duration_sec": 13.85,
+   "visual_prompt": "пожар на нефтеперерабатывающем заводе в России 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "пожар на нефтеперерабатывающем заводе в России 2026 реальное фото"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 202.76,
+   "duration_sec": 12.56,
+   "visual_prompt": "Капитолий в Вашингтоне реальное фото",
+   "source": "press_photo",
+   "source_query": "Капитолий в Вашингтоне реальное фото"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 215.32,
+   "duration_sec": 8.83,
+   "visual_prompt": "oil refinery distillation columns pipes night industrial",
+   "source": "pexels_video",
+   "source_query": "oil refinery distillation columns pipes night industrial"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 224.15,
+   "duration_sec": 7.2,
+   "visual_prompt": "Screenshot_8.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЦЕНЫ на БЕНЗИН ЕС/Screenshot_8.jpg"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 231.34,
+   "duration_sec": 12.56,
+   "visual_prompt": "Владимир Путин на совещании в Кремле октябрь 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Путин на совещании в Кремле октябрь 2026 реальное фото"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 243.91,
+   "duration_sec": 12.38,
+   "visual_prompt": "защита заводов рф от дронов (7).jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗАЩИТА-ЗАВОДОВ-РФ/защита заводов рф от дронов (7).jpg"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 256.29,
+   "duration_sec": 9.57,
+   "visual_prompt": "флаги России и США на столе переговоров реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги России и США на столе переговоров реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 265.86,
+   "duration_sec": 15.09,
+   "visual_prompt": "украинский цех по производству дронов 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "украинский цех по производству дронов 2026 реальное фото"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 280.94,
+   "duration_sec": 5.28,
+   "visual_prompt": "зенитный комплекс Patriot на позиции в Украине 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "зенитный комплекс Patriot на позиции в Украине 2026 реальное фото"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 286.23,
+   "duration_sec": 12.99,
+   "visual_prompt": "Screenshot_6.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПВО-укр/Screenshot_6.jpg"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 299.22,
+   "duration_sec": 9.24,
+   "visual_prompt": "склад артиллерийских снарядов армии США реальное фото",
+   "source": "press_photo",
+   "source_query": "склад артиллерийских снарядов армии США реальное фото"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 308.46,
+   "duration_sec": 14.38,
+   "visual_prompt": "погрузка военного груза в транспортный самолёт США реальное фото",
+   "source": "press_photo",
+   "source_query": "погрузка военного груза в транспортный самолёт США реальное фото"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 322.84,
+   "duration_sec": 14.62,
+   "visual_prompt": "здание Государственного департамента США реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Государственного департамента США реальное фото"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 337.46,
+   "duration_sec": 11.44,
+   "visual_prompt": "здание Еврокомиссии Берлемон в Брюсселе реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Еврокомиссии Берлемон в Брюсселе реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 348.9,
+   "duration_sec": 13.68,
+   "visual_prompt": "антенна спутниковой связи на военной базе реальное фото",
+   "source": "press_photo",
+   "source_query": "антенна спутниковой связи на военной базе реальное фото"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 362.58,
+   "duration_sec": 8.34,
+   "visual_prompt": "флаги стран Евросоюза у здания Евросовета в Брюсселе реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги стран Евросоюза у здания Евросовета в Брюсселе реальное фото"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 370.93,
+   "duration_sec": 14.13,
+   "visual_prompt": "Дональд Трамп жестикулирует на публичном выступлении 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп жестикулирует на публичном выступлении 2026 реальное фото"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 385.05,
+   "duration_sec": 12.19,
+   "visual_prompt": "защита заводов рф от дронов (10).jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗАЩИТА-ЗАВОДОВ-РФ/защита заводов рф от дронов (10).jpg"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 397.25,
+   "duration_sec": 12.4,
+   "visual_prompt": "Screenshot_5.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЦЕНЫ на БЕНЗИН ЕС/Screenshot_5.jpg"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 409.65,
+   "duration_sec": 12.58,
+   "visual_prompt": "здание Пентагона в Вашингтоне реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Пентагона в Вашингтоне реальное фото"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 422.23,
+   "duration_sec": 12.54,
+   "visual_prompt": "разрушенное здание после обстрела в Украине без людей реальное фото",
+   "source": "press_photo",
+   "source_query": "разрушенное здание после обстрела в Украине без людей реальное фото"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 434.77,
+   "duration_sec": 10.43,
+   "visual_prompt": "Владимир Зеленский выступает в парламенте Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский выступает в парламенте Украины 2026 реальное фото"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 445.19,
+   "duration_sec": 12.91,
+   "visual_prompt": "Screenshot_13.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/Украина выборы/Screenshot_13.jpg"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 458.11,
+   "duration_sec": 12.61,
+   "visual_prompt": "здание МИД России на Смоленской площади реальное фото",
+   "source": "press_photo",
+   "source_query": "здание МИД России на Смоленской площади реальное фото"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 470.71,
+   "duration_sec": 14.08,
+   "visual_prompt": "Владимир Зеленский на церемонии в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на церемонии в Киеве 2026 реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 484.79,
+   "duration_sec": 13.52,
+   "visual_prompt": "пустой зал заседаний Кабинета министров Украины реальное фото",
+   "source": "press_photo",
+   "source_query": "пустой зал заседаний Кабинета министров Украины реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 498.31,
+   "duration_sec": 12.17,
+   "visual_prompt": "флаг Украины на флагштоке у правительственного здания в Киеве реальное фото",
+   "source": "press_photo",
+   "source_query": "флаг Украины на флагштоке у правительственного здания в Киеве реальное фото"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 510.49,
+   "duration_sec": 11.45,
+   "visual_prompt": "fuel hose pumping into tank closeup no people",
+   "source": "pexels_video",
+   "source_query": "fuel hose pumping into tank closeup no people"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 521.94,
+   "duration_sec": 8.32,
+   "visual_prompt": "цех по производству боеприпасов в США реальное фото",
+   "source": "press_photo",
+   "source_query": "цех по производству боеприпасов в США реальное фото"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 530.26,
+   "duration_sec": 10.0,
+   "visual_prompt": "вход в Западное крыло Белого дома реальное фото",
+   "source": "press_photo",
+   "source_query": "вход в Западное крыло Белого дома реальное фото"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 540.26,
+   "duration_sec": 14.09,
+   "visual_prompt": "Дональд Трамп крупным планом на мероприятии 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп крупным планом на мероприятии 2026 реальное фото"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 554.34,
+   "duration_sec": 13.12,
+   "visual_prompt": "здание Федеральной резервной системы в Вашингтоне реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Федеральной резервной системы в Вашингтоне реальное фото"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 567.46,
+   "duration_sec": 12.73,
+   "visual_prompt": "Владимир Путин на пресс-конференции 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Путин на пресс-конференции 2026 реальное фото"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 580.19,
+   "duration_sec": 12.94,
+   "visual_prompt": "защита заводов рф от дронов (1).jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗАЩИТА-ЗАВОДОВ-РФ/защита заводов рф от дронов (1).jpg"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 593.13,
+   "duration_sec": 13.56,
+   "visual_prompt": "Дмитрий Песков на брифинге в Кремле 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дмитрий Песков на брифинге в Кремле 2026 реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 606.69,
+   "duration_sec": 12.67,
+   "visual_prompt": "Владимир Зеленский на фоне украинского флага 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на фоне украинского флага 2026 реальное фото"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 619.36,
+   "duration_sec": 6.66,
+   "visual_prompt": "empty large meeting room table chairs daylight no people",
+   "source": "pexels_video",
+   "source_query": "empty large meeting room table chairs daylight no people"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 626.02,
+   "duration_sec": 12.35,
+   "visual_prompt": "nasams.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПВО-укр/nasams.jpg"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 638.37,
+   "duration_sec": 14.08,
+   "visual_prompt": "здание Министерства обороны России реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны России реальное фото"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 652.45,
+   "duration_sec": 14.4,
+   "visual_prompt": "Screenshot_9.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/Украина выборы/Screenshot_9.jpg"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 666.85,
+   "duration_sec": 12.42,
+   "visual_prompt": "здание Европейского парламента в Страсбурге фасад реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Европейского парламента в Страсбурге фасад реальное фото"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 679.27,
+   "duration_sec": 14.42,
+   "visual_prompt": "зал для подписания соглашений с флагами реальное фото",
+   "source": "press_photo",
+   "source_query": "зал для подписания соглашений с флагами реальное фото"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 693.69,
+   "duration_sec": 14.72,
+   "visual_prompt": "здание посольства США в Москве реальное фото",
+   "source": "press_photo",
+   "source_query": "здание посольства США в Москве реальное фото"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 708.41,
+   "duration_sec": 12.48,
+   "visual_prompt": "oil tanker ship at sea aerial no people",
+   "source": "pexels_video",
+   "source_query": "oil tanker ship at sea aerial no people"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 720.89,
+   "duration_sec": 13.68,
+   "visual_prompt": "украинский дальнобойный дрон перед запуском 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "украинский дальнобойный дрон перед запуском 2026 реальное фото"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 734.57,
+   "duration_sec": 10.77,
+   "visual_prompt": "Владимир Зеленский идёт по коридору 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский идёт по коридору 2026 реальное фото"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 745.34,
+   "duration_sec": 8.55,
+   "visual_prompt": "здание посольства США в Киеве реальное фото",
+   "source": "press_photo",
+   "source_query": "здание посольства США в Киеве реальное фото"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 753.89,
+   "duration_sec": 7.74,
+   "visual_prompt": "Дональд Трамп говорит с прессой у самолёта 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп говорит с прессой у самолёта 2026 реальное фото"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 761.62,
+   "duration_sec": 12.58,
+   "visual_prompt": "фасад здания Кабинета министров Украины реальное фото",
+   "source": "press_photo",
+   "source_query": "фасад здания Кабинета министров Украины реальное фото"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 774.21,
+   "duration_sec": 15.18,
+   "visual_prompt": "заседание правительства Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "заседание правительства Украины 2026 реальное фото"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 789.39,
+   "duration_sec": 14.79,
+   "visual_prompt": "Белый дом вид с южного газона реальное фото",
+   "source": "press_photo",
+   "source_query": "Белый дом вид с южного газона реальное фото"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 804.18,
+   "duration_sec": 5.91,
+   "visual_prompt": "здание Министерства обороны Украины реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны Украины реальное фото"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 810.09,
+   "duration_sec": 14.56,
+   "visual_prompt": "главком ВСУ Драпатый на совещании 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "главком ВСУ Драпатый на совещании 2026 реальное фото"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 824.65,
+   "duration_sec": 14.0,
+   "visual_prompt": "зал саммита с пустыми креслами и флагами реальное фото",
+   "source": "press_photo",
+   "source_query": "зал саммита с пустыми креслами и флагами реальное фото"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 838.65,
+   "duration_sec": 13.52,
+   "visual_prompt": "long polished conference table empty hall no people",
+   "source": "pexels_video",
+   "source_query": "long polished conference table empty hall no people"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 852.17,
+   "duration_sec": 15.04,
+   "visual_prompt": "us dollar banknotes stack closeup no people",
+   "source": "pexels_video",
+   "source_query": "us dollar banknotes stack closeup no people"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 867.21,
+   "duration_sec": 10.75,
+   "visual_prompt": "фасад здания Генерального штаба Украины реальное фото",
+   "source": "press_photo",
+   "source_query": "фасад здания Генерального штаба Украины реальное фото"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 877.96,
+   "duration_sec": 12.45,
+   "visual_prompt": "зал Совета Безопасности ООН реальное фото",
+   "source": "press_photo",
+   "source_query": "зал Совета Безопасности ООН реальное фото"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "start_sec": 890.41,
+   "duration_sec": 2.48,
+   "visual_prompt": "empty office chair behind desk window light no people",
+   "source": "pexels_video",
+   "source_query": "empty office chair behind desk window light no people"
+  }
+ ],
+ "channel": "ПЛАНЕТА",
+ "library": "да, потолок 20%",
+ "context": "Право последнего слова по Украине уходит из Киева. Стороны: Трамп и Белый дом, Зеленский и Киев, Путин с Лавровым и Москва, Брюссель. Физически: Вашингтон, Банковая и Рада, Кремль и МИД на Смоленской, Брюссель, российские НПЗ, украинское ПВО и фронт. Узел: Киев ставит условия (60 дней тишины ради выборов), а рычаги у других — Patriot, перехватчики, спутники, разведка, боеприпасы, цены на дизель. Время: 15-17 октября 2026, перед американскими выборами. Финал: большой кабинет оказывается просто кабинетом. Чувство: холодный расчёт, каждый считает свои карты.",
+ "lines": [
+  "американская власть: Белый дом, Капитолий, Госдеп, Минфин США, Пентагон, Трамп у микрофонов",
+  "украинская власть: Банковая, Верховная Рада, Кабмин, Минобороны Украины, Зеленский",
+  "московская власть: Кремль, МИД на Смоленской, Минобороны РФ, Путин, Лавров, Песков",
+  "европейские институты БЕЗ ЛЮДЕЙ: Берлемон, Евросовет, Европарламент, флаги ЕС",
+  "нефтяной слой: российские НПЗ, факелы, нефтебазы, цистерны, танкеры, американская АЗС и дизель",
+  "американское вооружение у Киева: Patriot, перехватчики, спутниковая связь, склады боеприпасов",
+  "украинская война: цех дронов, расчёт ПВО, разрушенная энергетика, Генштаб"
+ ]
+}
