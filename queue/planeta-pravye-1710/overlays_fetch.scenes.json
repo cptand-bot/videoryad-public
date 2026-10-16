@@ -1,0 +1,468 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "duration_sec": 13.08,
+   "source": "press_photo",
+   "source_query": "Алиса Вайдель лидер АдГ портрет 2026",
+   "visual_prompt": "Алиса Вайдель лидер АдГ портрет 2026"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "duration_sec": 14.4,
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц канцлер Германии портрет",
+   "visual_prompt": "Фридрих Мерц канцлер Германии портрет"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "duration_sec": 9.82,
+   "source": "press_photo",
+   "source_query": "Тино Хрупалла портрет крупный план",
+   "visual_prompt": "Тино Хрупалла портрет крупный план"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 13.3,
+   "source": "press_photo",
+   "source_query": "Бьорн Хёкке лидер АдГ Тюрингия выступление",
+   "visual_prompt": "Бьорн Хёкке лидер АдГ Тюрингия выступление"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 12.88,
+   "source": "press_photo",
+   "source_query": "автобус партии АдГ на улице в Германии 2026",
+   "visual_prompt": "автобус партии АдГ на улице в Германии 2026"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 13.21,
+   "source": "press_photo",
+   "source_query": "кабинка для голосования на избирательном участке в Германии",
+   "visual_prompt": "кабинка для голосования на избирательном участке в Германии"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "duration_sec": 11.6,
+   "source": "press_photo",
+   "source_query": "центральный офис АдГ в Берлине здание",
+   "visual_prompt": "центральный офис АдГ в Берлине здание"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "duration_sec": 13.63,
+   "source": "press_photo",
+   "source_query": "Штефан Харбарт председатель Федерального конституционного суда Германии",
+   "visual_prompt": "Штефан Харбарт председатель Федерального конституционного суда Германии"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "duration_sec": 12.29,
+   "source": "press_photo",
+   "source_query": "штаб-квартира ХДС Конрад-Аденауэр-Хаус в Берлине",
+   "visual_prompt": "штаб-квартира ХДС Конрад-Аденауэр-Хаус в Берлине"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "duration_sec": 13.58,
+   "source": "press_photo",
+   "source_query": "вход в Федеральный конституционный суд Карлсруэ табличка",
+   "visual_prompt": "вход в Федеральный конституционный суд Карлсруэ табличка"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 14.27,
+   "source": "press_photo",
+   "source_query": "центр Манчестера городская ратуша",
+   "visual_prompt": "центр Манчестера городская ратуша"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "duration_sec": 12.8,
+   "source": "press_photo",
+   "source_query": "Владимир Путин выступление 2026",
+   "visual_prompt": "Владимир Путин выступление 2026"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "duration_sec": 8.55,
+   "source": "press_photo",
+   "source_query": "Энди Бёрнэм на трибуне выступление",
+   "visual_prompt": "Энди Бёрнэм на трибуне выступление"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "duration_sec": 12.46,
+   "source": "press_photo",
+   "source_query": "Кремль Спасская башня Москва",
+   "visual_prompt": "Кремль Спасская башня Москва"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "duration_sec": 13.4,
+   "source": "press_photo",
+   "source_query": "Марин Ле Пен портрет 2026",
+   "visual_prompt": "Марин Ле Пен портрет 2026"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "duration_sec": 10.56,
+   "source": "press_photo",
+   "source_query": "Жордан Барделла портрет 2026",
+   "visual_prompt": "Жордан Барделла портрет 2026"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 13.28,
+   "source": "press_photo",
+   "source_query": "Марин Ле Пен в зале суда Париж",
+   "visual_prompt": "Марин Ле Пен в зале суда Париж"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "duration_sec": 12.34,
+   "source": "press_photo",
+   "source_query": "Жан-Люк Меланшон портрет 2026",
+   "visual_prompt": "Жан-Люк Меланшон портрет 2026"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "duration_sec": 10.72,
+   "source": "press_photo",
+   "source_query": "французский лицей фасад здания",
+   "visual_prompt": "французский лицей фасад здания"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 8.38,
+   "source": "press_photo",
+   "source_query": "мэрия Парижа Отель-де-Виль фасад",
+   "visual_prompt": "мэрия Парижа Отель-де-Виль фасад"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "duration_sec": 13.86,
+   "source": "press_photo",
+   "source_query": "Национальное собрание Франции фасад здания",
+   "visual_prompt": "Национальное собрание Франции фасад здания"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "duration_sec": 10.08,
+   "source": "press_photo",
+   "source_query": "Эмманюэль Макрон портрет президента Франции",
+   "visual_prompt": "Эмманюэль Макрон портрет президента Франции"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "duration_sec": 6.8,
+   "source": "press_photo",
+   "source_query": "учительский стол в пустом классе",
+   "visual_prompt": "учительский стол в пустом классе"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 7.6,
+   "source": "press_photo",
+   "source_query": "министерство образования Франции здание Париж",
+   "visual_prompt": "министерство образования Франции здание Париж"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "duration_sec": 14.64,
+   "source": "press_photo",
+   "source_query": "Марин Ле Пен на трибуне митинга",
+   "visual_prompt": "Марин Ле Пен на трибуне митинга"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 12.19,
+   "source": "press_photo",
+   "source_query": "баннер Национального объединения на улице во Франции 2026",
+   "visual_prompt": "баннер Национального объединения на улице во Франции 2026"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "duration_sec": 13.73,
+   "source": "press_photo",
+   "source_query": "панорама Лиона вечером город",
+   "visual_prompt": "панорама Лиона вечером город"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "duration_sec": 9.93,
+   "source": "press_photo",
+   "source_query": "пустой коридор учебного корпуса во Франции без людей",
+   "visual_prompt": "пустой коридор учебного корпуса во Франции без людей"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "duration_sec": 10.44,
+   "source": "press_photo",
+   "source_query": "полицейский фургон CRS на улице Парижа",
+   "visual_prompt": "полицейский фургон CRS на улице Парижа"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "duration_sec": 7.76,
+   "source": "press_photo",
+   "source_query": "Эмманюэль Макрон в рабочем кабинете",
+   "visual_prompt": "Эмманюэль Макрон в рабочем кабинете"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "duration_sec": 14.08,
+   "source": "press_photo",
+   "source_query": "пожарная машина на улице Парижа",
+   "visual_prompt": "пожарная машина на улице Парижа"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 10.6,
+   "source": "press_photo",
+   "source_query": "Жан-Люк Меланшон на митинге с микрофоном",
+   "visual_prompt": "Жан-Люк Меланшон на митинге с микрофоном"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 14.52,
+   "source": "press_photo",
+   "source_query": "пустой спортивный зал учебного заведения Франция без людей",
+   "visual_prompt": "пустой спортивный зал учебного заведения Франция без людей"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "duration_sec": 14.56,
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц на пресс-конференции",
+   "visual_prompt": "Фридрих Мерц на пресс-конференции"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "duration_sec": 14.42,
+   "source": "press_photo",
+   "source_query": "Кэлин Джорджеску портрет Румыния",
+   "visual_prompt": "Кэлин Джорджеску портрет Румыния"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "duration_sec": 12.22,
+   "source": "press_photo",
+   "source_query": "центр Бухареста улица здания",
+   "visual_prompt": "центр Бухареста улица здания"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "duration_sec": 8.56,
+   "source": "press_photo",
+   "source_query": "Джордже Симион лидер AUR портрет",
+   "visual_prompt": "Джордже Симион лидер AUR портрет"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "duration_sec": 14.32,
+   "source": "press_photo",
+   "source_query": "Кэлин Джорджеску на митинге Румыния",
+   "visual_prompt": "Кэлин Джорджеску на митинге Румыния"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 10.06,
+   "source": "press_photo",
+   "source_query": "площадь Победы в Бухаресте здание правительства",
+   "visual_prompt": "площадь Победы в Бухаресте здание правительства"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "duration_sec": 12.18,
+   "source": "press_photo",
+   "source_query": "Эйфелева башня Париж",
+   "visual_prompt": "Эйфелева башня Париж"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "duration_sec": 8.17,
+   "source": "press_photo",
+   "source_query": "Штефан Харбарт в мантии судьи Конституционного суда",
+   "visual_prompt": "Штефан Харбарт в мантии судьи Конституционного суда"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 13.92,
+   "source": "press_photo",
+   "source_query": "Марин Ле Пен на фоне флага Франции",
+   "visual_prompt": "Марин Ле Пен на фоне флага Франции"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "duration_sec": 9.3,
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц у Ведомства федерального канцлера",
+   "visual_prompt": "Фридрих Мерц у Ведомства федерального канцлера"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "duration_sec": 12.54,
+   "source": "press_photo",
+   "source_query": "Алиса Вайдель на пресс-конференции АдГ",
+   "visual_prompt": "Алиса Вайдель на пресс-конференции АдГ"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "duration_sec": 13.2,
+   "source": "press_photo",
+   "source_query": "Бьорн Хёкке на митинге в Тюрингии",
+   "visual_prompt": "Бьорн Хёкке на митинге в Тюрингии"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "duration_sec": 14.8,
+   "source": "press_photo",
+   "source_query": "Тино Хрупалла на партийном съезде АдГ",
+   "visual_prompt": "Тино Хрупалла на партийном съезде АдГ"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "duration_sec": 5.51,
+   "source": "press_photo",
+   "source_query": "Джордже Симион на митинге Румыния",
+   "visual_prompt": "Джордже Симион на митинге Румыния"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "duration_sec": 12.94,
+   "source": "press_photo",
+   "source_query": "избирательный участок в Румынии помещение",
+   "visual_prompt": "избирательный участок в Румынии помещение"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "duration_sec": 13.33,
+   "source": "press_photo",
+   "source_query": "площадь Конкорд в Париже",
+   "visual_prompt": "площадь Конкорд в Париже"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "duration_sec": 12.08,
+   "source": "press_photo",
+   "source_query": "Жордан Барделла на митинге Национального объединения",
+   "visual_prompt": "Жордан Барделла на митинге Национального объединения"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "duration_sec": 12.77,
+   "source": "press_photo",
+   "source_query": "Эмманюэль Макрон на трибуне выступление",
+   "visual_prompt": "Эмманюэль Макрон на трибуне выступление"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "duration_sec": 15.0,
+   "source": "press_photo",
+   "source_query": "улица Парижа с закрытыми магазинами",
+   "visual_prompt": "улица Парижа с закрытыми магазинами"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "duration_sec": 8.36,
+   "source": "press_photo",
+   "source_query": "Жан-Люк Меланшон в Национальном собрании",
+   "visual_prompt": "Жан-Люк Меланшон в Национальном собрании"
+  },
+  {
+   "id": 76,
+   "text": "",
+   "duration_sec": 11.27,
+   "source": "press_photo",
+   "source_query": "Жордан Барделла в Национальном собрании Франции",
+   "visual_prompt": "Жордан Барделла в Национальном собрании Франции"
+  },
+  {
+   "id": 77,
+   "text": "",
+   "duration_sec": 13.92,
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен председатель Еврокомиссии 2026",
+   "visual_prompt": "Урсула фон дер Ляйен председатель Еврокомиссии 2026"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "duration_sec": 13.17,
+   "source": "press_photo",
+   "source_query": "Кэлин Джорджеску выступление перед сторонниками",
+   "visual_prompt": "Кэлин Джорджеску выступление перед сторонниками"
+  },
+  {
+   "id": 80,
+   "text": "",
+   "duration_sec": 14.2,
+   "source": "press_photo",
+   "source_query": "Елисейский дворец ночью подсветка",
+   "visual_prompt": "Елисейский дворец ночью подсветка"
+  },
+  {
+   "id": 81,
+   "text": "",
+   "duration_sec": 11.39,
+   "source": "press_photo",
+   "source_query": "купол Рейхстага в Берлине ночью",
+   "visual_prompt": "купол Рейхстага в Берлине ночью"
+  }
+ ]
+}
