@@ -22,6 +22,7 @@ Source badge on each thumbnail (top-right), colour-coded:
   🎞 СТОК · ФОТО/ВИДЕО   оранжевый(pexels_*)
   🎨 ГЕНЕРАЦИЯ           жёлтый   (generate — script-to-video only)
 """
+import base64
 import glob
 import io
 import json
@@ -29,6 +30,8 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
+import threading
 
 from PIL import Image
 
@@ -706,6 +709,100 @@ def load_scenes(scenes_path):
     return json.load(open(scenes_path, encoding="utf-8"))["scenes"]
 
 
+# ---------------------------------------------------------------- отказы ----
+# Журнал «почему пользователь это убрал» (2026-10-16). Бан по md5 блокирует
+# ровно тот файл и не мешает прийти следующему с тем же дефектом; здесь отказ
+# привязан к ЗАПРОСУ и к ПРИЧИНЕ. Подробности — rejections.py.
+#
+# Расшифровка голосового комментария идёт В ФОНЕ: короткая фраза занимает у
+# whisper около девяти секунд, и столько ждать после каждого снятия нельзя.
+# Поэтому карточка закрывается мгновенно, а запись дописывается, когда текст
+# готов. Если расшифровка не удалась — запись всё равно пишется, без текста:
+# сам факт отказа и его причина ценнее комментария.
+
+def _scene_meta(sid, scenes, images_dir, kind):
+    """Запрос, источник и md5 того, что сняли, — чтобы отказ был привязан к
+    запросу, а не к одному файлу."""
+    meta = {"query": "", "source": "", "md5": "", "file": "", "base_query": ""}
+    for s in scenes:
+        if s.get("id") == sid:
+            meta["base_query"] = s.get("source_query") or ""
+            meta["query"] = meta["base_query"]
+            meta["source"] = s.get("source") or ""
+            break
+    # Для ВСПЛЫВАШКИ запрос лежит не в scenes.json, а в overlays_fetch —
+    # иначе в журнал попадает запрос базы, и запись выглядит так, будто
+    # сняли базовый кадр (поймано на первых трёх живых записях 2026-10-16:
+    # пользователь снимал всплывашки Вэнса, аэропорта и Госдепа, а в журнале
+    # стояли запросы их баз). Базовый запрос при этом тоже сохраняем: пара
+    # «база + всплывашка» и есть то, что он оценивает, когда говорит
+    # «что оно иллюстрирует».
+    if kind in ("overlay", "text"):
+        for cand in (glob.glob("*overlays_fetch*.json")
+                     + glob.glob("*overlay*fetch*.scenes.json")):
+            try:
+                ovq = json.load(open(cand, encoding="utf-8"))["scenes"]
+            except (OSError, ValueError, KeyError):
+                continue
+            for o in ovq:
+                if o.get("id") == sid:
+                    meta["query"] = o.get("source_query") or meta["query"]
+                    meta["source"] = o.get("source") or meta["source"]
+                    break
+            break
+    sub = "overlays" if kind in ("overlay", "text") else images_dir
+    for p in glob.glob(os.path.join(sub, f"scene_{sid:03d}.*")):
+        if p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg")):
+            continue
+        meta["file"] = p
+        try:
+            import hashlib
+            with open(p, "rb") as fh:
+                meta["md5"] = hashlib.md5(fh.read()).hexdigest()
+        except OSError:
+            pass
+        break
+    return meta
+
+
+def _log_reject_async(spec, sid, scenes, images_dir, project):
+    """Пишет отказ в журнал; если приложено аудио — сперва расшифровывает."""
+    def work():
+        note = str(spec.get("note", "") or "").strip()
+        audio_b64 = spec.get("audio") or ""
+        if audio_b64:
+            tmp = None
+            try:
+                raw = base64.b64decode(audio_b64)
+                fd, tmp = tempfile.mkstemp(suffix=".webm")
+                with os.fdopen(fd, "wb") as fh:
+                    fh.write(raw)
+                from voice_note import transcribe
+                spoken = transcribe(tmp)
+                if spoken:
+                    note = (note + " " + spoken).strip() if note else spoken
+            except Exception:
+                pass
+            finally:
+                if tmp and os.path.exists(tmp):
+                    try:
+                        os.remove(tmp)
+                    except OSError:
+                        pass
+        kind = str(spec.get("kind", "scene"))
+        meta = _scene_meta(sid, scenes, images_dir, kind)
+        try:
+            from rejections import log_rejection
+            log_rejection(scene=sid, kind=kind,
+                          action=str(spec.get("action", "clear")),
+                          reason=str(spec.get("reason", "other")),
+                          note=note, project=project,
+                          channel=str(spec.get("channel", "")), **meta)
+        except Exception:
+            pass
+    threading.Thread(target=work, daemon=True).start()
+
+
 def planned_is_video(scene):
     q = scene.get("source_query", "")
     return scene.get("source") == "pexels_video" or q.lower().endswith(VID_EXT)
@@ -839,6 +936,9 @@ figcaption{padding:10px 13px 13px}
   background:#1f6b4f;border:1px solid #2f8f6a;color:#dffff0;cursor:pointer}
 .ovok:hover{background:#268160}
 .ovdone{font-size:12px;color:#8ef0c8;font-weight:600}
+.rjgood{background:transparent;border:1px solid #3a5a48;color:#7fd6aa;border-radius:5px;
+        padding:1px 6px;margin-left:6px;cursor:pointer;font-size:12px;opacity:.55}
+.rjgood:hover{opacity:1;border-color:#6fbf94;background:#1e3328}
 .ovedit{margin-left:8px;padding:3px 8px;font-size:11px;border-radius:5px;
   background:#0e0f12;border:1px solid #3a3d48;color:#a9c9bd;cursor:pointer}
 .ovrow{display:flex;align-items:center;gap:8px;font-size:12px;color:#a9c9bd}
@@ -1075,7 +1175,8 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'</div>'
             f'<div class="ovdone" id="ovdone{sid}"{"" if _ov_approved else " hidden"}>✓ всплывашка утверждена '
             f'<span class="ovpos" id="ovpos{sid}"></span> '
-            f'<button class="ovedit" onclick="ovEdit({sid})">изменить</button></div>'
+            f'<button class="ovedit" onclick="ovEdit({sid})">изменить</button>'
+            f'<button class="rjgood" onclick="rjAsk({sid},&quot;overlay&quot;,&quot;keep&quot;)" title="сказать, чем кадр хорош — по желанию">💬</button></div>'
             f'</div>'
         )
         # --- ОТДЕЛЬНАЯ панель: ТЕКСТ поверх кадра (своя кнопка «➕ текст») ---
@@ -1116,6 +1217,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<span class="ovmsg" id="txtmsg{sid}"></span>'
             f'</div>'
             f'<div class="ovdone" id="txtdone{sid}"{"" if _txt_approved else " hidden"}>✓ текст утверждён '
+            f'<button class="rjgood" onclick="rjAsk({sid},&quot;text&quot;,&quot;keep&quot;)" title="сказать, чем хорош — по желанию">💬</button> '
             f'<button class="ovedit" onclick="txtEdit({sid})">изменить</button></div>'
             f'</div>'
         )
@@ -1460,7 +1562,8 @@ async function banAsset(id){{
   const daysStr = prompt("Убрать на сколько дней? (пусто = навсегда)", "10");
   if(daysStr === null) return;   // отмена
   const days = daysStr.trim() === "" ? null : parseInt(daysStr.trim(), 10);
-  const why = prompt("Почему? (можно пусто)", "примелькалось") || "";
+  const ans = await rjAsk(id, "scene", "ban");
+  const why = (ans.note || RJ_LABEL[ans.reason] || "").trim();
   const b = document.getElementById("ban"+id); if(b) b.textContent = "…";
   const origLabel = "🚫 Не использовать";
   try{{
@@ -1685,6 +1788,7 @@ async function ovTextClear(id){{
     const dn=document.getElementById("txtdone"+id); if(dn) dn.hidden=true; }}
   const b=document.getElementById("txtadd"+id); if(b) b.hidden=false;
   const mk=document.getElementById("txtmark"+id); if(mk) mk.hidden=true;
+  rjAsk(id, "text", "clear");
 }}
 // --- бегущая строка (ticker) — отдельная панель, свой роут /ticker -----
 async function tkSave(id, approvedVal){{
@@ -1913,11 +2017,263 @@ async function ovClear(id){{
   w.classList.remove("ok");
   const mk = document.getElementById("ovmark"+id); if(mk){{ mk.hidden = true; mk.classList.remove("solid"); }}
   const add = document.getElementById("ovadd"+id); if(add) add.hidden = false;
+  rjAsk(id, "overlay", "clear");
 }}
 render();
 {poll}
+/* ---- «Почему убрал» (2026-10-16) ----
+   Модальное окно, как у бана: посередине, фон затемнён, закрыть крестиком
+   или кликом мимо НЕЛЬЗЯ — только кнопкой. Два выхода: причина (клик по
+   кнопке, можно с голосом) или крупная кнопка ИГНОР, когда некогда. Игнор
+   тоже пишет запись, просто без причины: сам факт снятия с запросом полезен.
+   Предыдущая версия с всплывашкой в углу убрана — пользователь нажал на неё
+   и ничего не открылось (в rjPanel остались переменные от старой сигнатуры,
+   ReferenceError обрывал показ). */
+let _rjCtx = null, _rjRec = null, _rjChunks = [], _rjAudio = "";
+const RJ_REASONS = [
+  ["watermark","водяной знак / логотип"],
+  ["not_real","не реальное фото (AI, графика)"],
+  ["wrong_country","чужая страна / объект"],
+  ["wrong_person","не тот человек / устарело"],
+  ["archive","архив вместо современности"],
+  ["people","люди в кадре / дети"],
+  ["stale","примелькалось"],
+  ["offtopic","не по теме сцены"],
+  ["document","документ или текст"],
+  ["other","другое"]
+];
+const RJ_LABEL = {{watermark:"водяной знак/логотип", not_real:"не реальное фото",
+  wrong_country:"чужая страна", wrong_person:"не тот человек",
+  archive:"архив вместо современности", people:"люди в кадре",
+  stale:"примелькалось", offtopic:"не по теме сцены",
+  document:"документ/текст в кадре", other:""}};
+const RJ_KIND = {{overlay:"всплывашку", text:"текст", scene:"сцену"}};
+/* Для ОСТАВЛЕННОГО — свой короткий список: это не причины отказа, а то,
+   чем кадр хорош. Пользователь просил 2026-10-16: «расширило бы картину не
+   просто по запретам, но и по допуску». Окно для keep НЕ всплывает само —
+   только по кнопке 💬 на утверждённой карточке. */
+const RJ_GOOD = [
+  ["fits","точно по этой сцене"],
+  ["adds","добавляет то, чего нет в базе"],
+  ["readable","хорошо видно / читается"],
+  ["rare","редкий удачный кадр"],
+  ["good_other","просто хорошо"]
+];
+
+function rjCommit(ctx, reason, note){{
+  fetch("reject?id=" + ctx.id, {{method:"POST",
+    headers:{{"Content-Type":"application/json"}},
+    body: JSON.stringify({{kind:ctx.kind, action:ctx.action,
+      reason: reason || "", note: note || "", audio: _rjAudio || ""}})
+  }}).catch(function(){{}});
+}}
+
+function rjAsk(id, kind, action){{
+  return new Promise(function(resolve){{
+    _rjCtx = {{id:id, kind:kind, action:action, resolve:resolve}};
+    _rjAudio = ""; _rjChunks = [];
+    const box = document.getElementById("rjbtns");
+    box.innerHTML = "";
+    const list = (action === "keep") ? RJ_GOOD : RJ_REASONS;
+    list.forEach(function(r){{
+      const b = document.createElement("button");
+      b.className = "rjb"; b.textContent = r[1];
+      b.onclick = function(){{ rjSend(r[0]); }};
+      box.appendChild(b);
+    }});
+    document.getElementById("rjnote").value = "";
+    document.getElementById("rjstat").textContent = "";
+    document.getElementById("rjmic").textContent = "🎤 надиктовать причину";
+    document.getElementById("rjttl").textContent =
+      (action === "keep" ? "Оставил " : (action === "ban" ? "Забанил " : "Снял ")) +
+      (RJ_KIND[kind] || kind) + " " + id +
+      (action === "keep" ? " — чем хорош?" : " — почему?");
+    document.getElementById("rjw").hidden = false;
+  }});
+}}
+
+/* Диктовка в реальном времени. Основной путь — распознавание самого
+   браузера (Web Speech API): слова появляются в поле ПОКА ГОВОРИШЬ, ждать
+   нечего. Оно работает в Chrome/Edge на localhost и требует сети — голос
+   при этом уходит на сервера Google. Если API нет или оно отвалилось,
+   автоматически включается запасной путь: запись в файл и локальный
+   whisper (приватно, но ~8 секунд ожидания — пользователь, 2026-10-16:
+   «я что, на каждую всплывашку буду 8 секунд тратить?»). */
+let _rjSR = null, _rjFinal = "";
+
+function rjMic(){{
+  /* Если браузерное распознавание один раз уже отказало — больше не пытаемся.
+     Иначе каждая диктовка начинается с неудачной попытки, пользователь теряет
+     первые слова и видит мигающие сообщения. Запомнили — идём сразу локально.
+     (Edge, 2026-10-16: сервис распознавания недоступен, а API объявлен.) */
+  try{{ if(localStorage.getItem("rjsr_bad") === "1") return rjMicFile(); }}catch(e){{}}
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return rjMicFile();        /* нет API — пишем файл и шлём whisper */
+  const btn = document.getElementById("rjmic");
+  const st = document.getElementById("rjstat");
+  const note = document.getElementById("rjnote");
+  if(_rjSR){{ _rjSR.stop(); return; }}
+  _rjFinal = note.value.trim();
+  const r = new SR();
+  r.lang = "ru-RU";
+  r.continuous = true;
+  r.interimResults = true;           /* ключ: промежуточные слова сразу */
+  r.onresult = function(e){{
+    let interim = "";
+    for(let i = e.resultIndex; i < e.results.length; i++){{
+      const t = e.results[i][0].transcript;
+      if(e.results[i].isFinal) _rjFinal = (_rjFinal + " " + t).trim();
+      else interim += t;
+    }}
+    note.value = (_rjFinal + " " + interim).trim();
+    note.scrollTop = note.scrollHeight;
+  }};
+  r.onerror = function(ev){{
+    _rjSR = null;
+    btn.textContent = "🎤 надиктовать причину";
+    /* ТОЛЬКО not-allowed означает, что микрофон запретил сам пользователь.
+       Всё остальное — отказ СЕРВИСА распознавания (нет сети, сервис не
+       отвечает, в Edge это приходит как service-not-allowed), и тогда надо
+       молча уходить на локальный whisper, а не упрекать человека настройками
+       браузера. Поймано живьём 2026-10-16: пользователь в Edge увидел
+       «нужен Chrome и интернет» и остался без диктовки вообще. */
+    if(ev.error === "not-allowed"){{
+      st.textContent = "микрофон запрещён в браузере — разреши доступ и повтори";
+      return;
+    }}
+    try{{ localStorage.setItem("rjsr_bad", "1"); }}catch(e){{}}
+    st.textContent = "распознавание браузера недоступно — пишу локально…";
+    rjMicFile();
+  }};
+  r.onend = function(){{
+    _rjSR = null;
+    btn.textContent = "🎤 надиктовать ещё";
+    if(st.textContent === "говори — текст идёт в поле") st.textContent = "можно поправить и жать причину";
+  }};
+  try{{
+    r.start();
+  }}catch(e){{
+    /* бывает, что API объявлен, но стартовать не даёт — не теряем диктовку */
+    _rjSR = null;
+    try{{ localStorage.setItem("rjsr_bad", "1"); }}catch(e2){{}}
+    st.textContent = "распознавание браузера не стартовало — пишу локально…";
+    return rjMicFile();
+  }}
+  _rjSR = r;
+  btn.textContent = "⏹ стоп";
+  st.textContent = "говори — текст идёт в поле";
+}}
+
+/* Запасной путь: запись в файл + локальный whisper. Медленно, зато офлайн
+   и в любом браузере. */
+async function rjMicFile(){{
+  const btn = document.getElementById("rjmic");
+  const st = document.getElementById("rjstat");
+  if(_rjRec && _rjRec.state === "recording"){{ _rjRec.stop(); return; }}
+  try{{
+    const stream = await navigator.mediaDevices.getUserMedia({{audio:true}});
+    _rjRec = new MediaRecorder(stream);
+    _rjChunks = [];
+    _rjRec.ondataavailable = function(e){{ if(e.data.size) _rjChunks.push(e.data); }};
+    _rjRec.onstop = function(){{
+      stream.getTracks().forEach(function(t){{ t.stop(); }});
+      const blob = new Blob(_rjChunks, {{type:"audio/webm"}});
+      const fr = new FileReader();
+      fr.onloadend = async function(){{
+        const b64 = String(fr.result).split(",")[1] || "";
+        _rjAudio = "";
+        btn.textContent = "🎤 надиктовать ещё";
+        st.textContent = "расшифровываю локально…";
+        const note = document.getElementById("rjnote");
+        try{{
+          const r = await fetch("voice", {{method:"POST",
+            headers:{{"Content-Type":"application/json"}},
+            body: JSON.stringify({{audio:b64}})}});
+          const j = await r.json();
+          const txt = (j.text || "").trim();
+          if(txt){{
+            note.value = note.value.trim() ? (note.value.trim() + " " + txt) : txt;
+            st.textContent = "можно поправить и жать причину";
+            note.focus();
+            note.setSelectionRange(note.value.length, note.value.length);
+          }} else st.textContent = "не разобрал — скажи ещё раз или напиши";
+        }}catch(e){{
+          _rjAudio = b64;
+          st.textContent = "расшифровать не вышло, пошлю голос как есть";
+        }}
+      }};
+      fr.readAsDataURL(blob);
+    }};
+    _rjRec.start();
+    btn.textContent = "⏹ стоп";
+    st.textContent = "пишу… расшифрую после остановки";
+  }}catch(e){{ st.textContent = "микрофон недоступен — напиши текстом"; }}
+}}
+
+/* Единственные два выхода из окна: причина или ИГНОР. Оба пишут запись. */
+function rjSend(reason){{
+  const ctx = _rjCtx; if(!ctx) return;
+  if(_rjSR){{ try{{ _rjSR.stop(); }}catch(e){{}} _rjSR = null; }}
+  if(_rjRec && _rjRec.state === "recording"){{
+    /* не теряем надиктованное: дожидаемся stop, он положит _rjAudio */
+    const rec = _rjRec;
+    rec.addEventListener("stop", function(){{ setTimeout(function(){{ rjSend(reason); }}, 120); }}, {{once:true}});
+    rec.stop();
+    return;
+  }}
+  const note = document.getElementById("rjnote").value || "";
+  document.getElementById("rjw").hidden = true;
+  _rjCtx = null;
+  rjCommit(ctx, reason, note);
+  if(typeof ctx.resolve === "function"){{
+    ctx.resolve({{reason: reason || "", note: note}});
+  }}
+}}
+function rjIgnore(){{ rjSend(""); }}
 </script>
-</body></html>"""
+</body>
+<div id="rjw" hidden>
+ <div id="rjbox">
+  <div id="rjttl"></div>
+  <div id="rjbtns"></div>
+  <div class="rjrow">
+   <button id="rjmic" onclick="rjMic()">🎤 надиктовать причину</button>
+   <span id="rjstat"></span>
+  </div>
+  <textarea id="rjnote" rows="2" placeholder="или напиши причину…"></textarea>
+  <div class="rjrow rjfoot">
+   <button class="rjign" onclick="rjIgnore()">ИГНОР</button>
+   <button class="rjok" onclick="rjSend('other')">готово</button>
+  </div>
+ </div>
+</div>
+<style>
+#rjw{{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9999;
+     display:flex;align-items:center;justify-content:center}}
+#rjw[hidden]{{display:none}}
+#rjbox{{background:#1b1b1b;color:#eee;padding:20px 22px;border-radius:10px;
+       width:min(580px,92vw);box-shadow:0 10px 50px rgba(0,0,0,.7)}}
+#rjttl{{font-size:17px;font-weight:600;margin-bottom:13px}}
+#rjbtns{{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}}
+.rjb{{background:#2e2e2e;color:#eee;border:1px solid #444;border-radius:6px;
+     padding:8px 11px;cursor:pointer;font-size:13px}}
+.rjb:hover{{background:#3a3a3a;border-color:#888}}
+.rjrow{{display:flex;align-items:center;gap:10px;margin:8px 0}}
+.rjfoot{{justify-content:space-between;margin-top:14px}}
+#rjmic{{background:#8a2d2d;color:#fff;border:0;border-radius:6px;
+       padding:9px 15px;cursor:pointer;font-size:14px}}
+#rjmic:hover{{background:#a33636}}
+#rjstat{{font-size:12px;color:#aaa}}
+#rjnote{{width:100%;background:#111;color:#eee;border:1px solid #444;
+        border-radius:6px;padding:8px;font-size:13px;box-sizing:border-box}}
+.rjign{{background:#333;color:#bbb;border:1px solid #4a4a4a;border-radius:6px;
+       padding:9px 22px;cursor:pointer;font-size:14px;letter-spacing:.5px}}
+.rjign:hover{{background:#444;color:#fff}}
+.rjok{{background:#2d6a3f;color:#fff;border:0;border-radius:6px;
+      padding:9px 22px;cursor:pointer;font-size:14px}}
+.rjok:hover{{background:#37804c}}
+</style>
+</html>"""
 
 
 # --------------------------------------------------------------------------
@@ -1944,6 +2300,17 @@ def run_live(scenes_path, images_dir, port):
     scenes = load_scenes(scenes_path)
     project = os.path.basename(os.getcwd())
     thumbs_dir = os.path.join(images_dir, ".rev")
+
+    # Греем whisper заранее, в фоне: иначе первая же диктовка ждёт лишние
+    # 2-3 секунды на загрузку модели, и это ровно тот момент, когда
+    # пользователь смотрит на пустое поле и думает, что сломалось.
+    def _warm():
+        try:
+            from voice_note import _load
+            _load()
+        except Exception:
+            pass
+    threading.Thread(target=_warm, daemon=True).start()
     os.makedirs(thumbs_dir, exist_ok=True)
     open("review.html", "w", encoding="utf-8").write(
         build_page(scenes, project, live=True, images_dir=images_dir))
@@ -2236,6 +2603,56 @@ def run_live(scenes_path, images_dir, port):
                 need_msg = (f"файл в бане на {days} дн., нужна замена" if days
                             else "файл забанен навсегда, нужна замена")
                 save_need(sid, reason or need_msg)
+                return self._reply(200)
+
+            if route == "voice":
+                # Синхронная расшифровка: текст возвращается в поле окна,
+                # чтобы пользователь поправил имена ДО отправки («Вэнс», а не
+                # «венз» — живой случай 2026-10-16). Ждать тут нормально:
+                # ждёт только тот, кто сам решил диктовать.
+                n = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    spec = json.loads(self.rfile.read(n) or b"{}")
+                except ValueError:
+                    spec = {}
+                text = ""
+                tmp = None
+                try:
+                    raw = base64.b64decode(spec.get("audio") or "")
+                    if raw:
+                        fd, tmp = tempfile.mkstemp(suffix=".webm")
+                        with os.fdopen(fd, "wb") as fh:
+                            fh.write(raw)
+                        from voice_note import transcribe
+                        text = transcribe(tmp)
+                except Exception:
+                    text = ""
+                finally:
+                    if tmp and os.path.exists(tmp):
+                        try:
+                            os.remove(tmp)
+                        except OSError:
+                            pass
+                body = json.dumps({"text": text}, ensure_ascii=False).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
+
+            if route == "reject":
+                # «Почему убрал» — фиксируется ВСЕГДА, даже если пользователь
+                # закрыл панель не выбрав причину (тогда reason=other): факт
+                # отказа с запросом уже полезен. Отвечаем сразу, расшифровка
+                # голоса и запись идут в фоне, карточка не ждёт.
+                n = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    spec = json.loads(self.rfile.read(n) or b"{}")
+                except ValueError:
+                    spec = {}
+                if sid:
+                    _log_reject_async(spec, sid, scenes, images_dir, project)
                 return self._reply(200)
 
             if route == "mirror":

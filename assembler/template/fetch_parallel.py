@@ -104,7 +104,15 @@ def run(scenes_path, images_dir, env_path, k):
     os.makedirs(pace, exist_ok=True)
     os.makedirs(sd, exist_ok=True)
     for f in glob.glob(os.path.join(pace, "*.lock")):
-        os.remove(f)
+        # ГОЧА 2026-10-16: два fetch_parallel.py, запущенные одновременно (например
+        # база в images/ и всплывашки в overlays/), делят ОДИН каталог пейсинга.
+        # Второй падал здесь с FileNotFoundError ещё до начала работы — файл уже
+        # снёс первый. Выглядело как «фетч отработал», а сцены оставались без
+        # кадра, потому что старые файлы к тому моменту уже удалены вызывающим.
+        try:
+            os.remove(f)
+        except FileNotFoundError:
+            pass
 
     parts = partition(scenes, k)
     print(f"[parallel] {len(scenes)} сцен -> {len(parts)} потоков "
