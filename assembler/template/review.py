@@ -1187,6 +1187,34 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         # при каждом ре-рендере дашборда (user, 2026-09-15, злился: «утвердил —
         # значит утвердил, не заставляй делать это по десять раз»)
         _ov_approved = bool(ov_cur.get("approved")) and _photo_active
+        # ТОТ ЖЕ НАБОР КНОПОК, ЧТО У ОСНОВНОГО КАДРА (user, 2026-10-17: «для
+        # превьюшек тоже эти кнопки — отзеркалить, масштаб, угол разворота,
+        # чёрно-белое, контрастность… чтобы функционал был такой же»).
+        # ВАЖНО: собирается ОТДЕЛЬНОЙ переменной. Если вклеивать это прямо в
+        # цепочку f-строк через `+ (...) if cond else ''`, условие по приоритету
+        # съедает ВСЮ цепочку до себя и всю после — панель разваливается, а
+        # дашборд показывает две карточки вместо восьмидесяти (поймано живьём
+        # пользователем 17.10, стоило ему сломанной страницы).
+        uniq_ov = (f'<div class="ovrow"><span>обработка</span>'
+            f'<span class="uniqwrap" id="uwov{sid}">'
+            f'<button class="uqbtn{" on" if _uov["flip"] else ""}" data-k="flip" '
+            f'onclick="uniqTog({sid},\'flip\',\'ov\')" title="зеркало">🔄</button>'
+            f'<button class="uqbtn{" on" if _uov["color"] else ""}" data-k="color" '
+            f'onclick="uniqTog({sid},\'color\',\'ov\')" title="контраст+цвет">🎨</button>'
+            f'<button class="uqbtn{" on" if _uov["bw"] else ""}" data-k="bw" '
+            f'onclick="uniqTog({sid},\'bw\',\'ov\')" title="чёрно-белое">⬜</button>'
+            f'<span class="uqgrp" data-k="rot">⟳'
+            + "".join(f'<button class="uqbtn{" on" if int(_uov["rot"])==r else ""}" '
+                      f'onclick="uniqSet({sid},\'rot\',{r},\'ov\')">{r}°</button>'
+                      for r in (1, 2, 3))
+            + f'</span>'
+            f'<span class="uqgrp" data-k="zoom">✂️'
+            + "".join(f'<button class="uqbtn{" on" if abs(float(_uov["zoom"])-z)<0.01 else ""}" '
+                      f'onclick="uniqSet({sid},\'zoom\',{z},\'ov\')">{z}×</button>'
+                      for z in (1.1, 1.2, 1.3))
+            + f'</span>'
+            f'<button class="uqbtn" onclick="uniqReset({sid},\'ov\')" title="снять всё">сброс</button>'
+            f'<i id="umov{sid}">{_uniq_summary(_uov)}</i></span></div>') if (live and ph) else ''
         ov_ui = (
             f'<div class="ovwrap{" ok" if _ov_approved else ""}" id="ovwrap{sid}"'
             f'{"" if _photo_active else " hidden"}>'
@@ -1197,31 +1225,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<div class="ovrow"><label class="ovup" id="ovphoto{sid}">⬆️ загрузить фото'
             f'<input type="file" accept="image/*" onchange="ovPhoto({sid},this)"></label>'
             f'<button type="button" class="mirbtn" id="mirov{sid}" onclick="mirrorOv({sid})">🔄 отзеркалить</button></div>'
-            # ТОТ ЖЕ НАБОР, ЧТО У ОСНОВНОГО КАДРА (user, 2026-10-17: «для
-            # превьюшек тоже эти кнопки — отзеркалить, масштаб, угол разворота,
-            # чёрно-белое, контрастность… чтобы функционал был такой же»).
-            # Роут uniq теперь умеет работать по папке overlays/ (параметр t=ov),
-            # состояние живёт в overlays/.uniq.json, исходник — в .uniq_orig/.
-            + (f'<div class="ovrow"><span>обработка</span>'
-               f'<span class="uniqwrap" id="uwov{sid}">'
-               f'<button class="uqbtn{" on" if _uov["flip"] else ""}" data-k="flip" '
-               f'onclick="uniqTog({sid},\'flip\',\'ov\')" title="зеркало">🔄</button>'
-               f'<button class="uqbtn{" on" if _uov["color"] else ""}" data-k="color" '
-               f'onclick="uniqTog({sid},\'color\',\'ov\')" title="контраст+цвет">🎨</button>'
-               f'<button class="uqbtn{" on" if _uov["bw"] else ""}" data-k="bw" '
-               f'onclick="uniqTog({sid},\'bw\',\'ov\')" title="чёрно-белое">⬜</button>'
-               f'<span class="uqgrp" data-k="rot">⟳'
-               + "".join(f'<button class="uqbtn{" on" if int(_uov["rot"])==r else ""}" '
-                         f'onclick="uniqSet({sid},\'rot\',{r},\'ov\')">{r}°</button>'
-                         for r in (1, 2, 3))
-               + f'</span>'
-               f'<span class="uqgrp" data-k="zoom">✂️'
-               + "".join(f'<button class="uqbtn{" on" if abs(float(_uov["zoom"])-z)<0.01 else ""}" '
-                         f'onclick="uniqSet({sid},\'zoom\',{z},\'ov\')">{z}×</button>'
-                         for z in (1.1, 1.2, 1.3))
-               + f'</span>'
-               f'<button class="uqbtn" onclick="uniqReset({sid},\'ov\')" title="снять всё">сброс</button>'
-               f'<i id="umov{sid}">{_uniq_summary(_uov)}</i></span></div>') if (live and ph) else ''
+            f'{uniq_ov}'
             f'<div class="ovrow ovfind">'
             f'<input type="text" id="ovq{sid}" placeholder="или найди в интернете — что именно, словами" '
             f'onfocus="if(/^[⚠🔴]/.test(this.value))this.value=\'\'" '
