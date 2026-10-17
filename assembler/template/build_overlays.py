@@ -167,7 +167,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
     ov = json.load(open(ov_path, encoding="utf-8"))
     # vertical anchor: "top" for non-Планета channels (user, 2026-09-05),
     # "bottom" (default) for Планета. Whole-file key, sibling to the scene ids.
-    anchor = str(ov.get("anchor", "bottom")).lower()
+    anchor = str(ov.get("anchor", "bottom")).lower()   # общий на ролик, его перебивает ключ сцены
     wc = int(os.environ.get("WORKER_COUNT", "1"))
     wk = int(os.environ.get("WORKER_ID", "0"))
     for sid_s, spec in ov.items():
@@ -176,6 +176,12 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         sid = int(sid_s)
         if wc > 1 and (sid % wc) != wk:
             continue
+        # ВЕРТИКАЛЬ ПОСЦЕННО (2026-10-17, просьба пользователя «я бы мог её
+        # менять… вверху в центре»): запись сцены может задать свой anchor,
+        # дашборд пишет его кнопкой «по вертикали». Нет ключа — общий на ролик.
+        sc_anchor = str(spec.get("anchor") or anchor).lower()
+        if sc_anchor not in ("top", "bottom"):
+            sc_anchor = anchor
         clip = os.path.join(clips_dir, f"clip_{sid:03d}.mp4")
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
         photo = spec.get("photo") or ""
@@ -264,7 +270,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             rest_x = f"W-w-{margin}"
         else:                                  # up-center
             rest_x = "(W-w)/2"
-        rest_y = f"{margin}" if anchor == "top" else f"H-h-{margin}"
+        rest_y = f"{margin}" if sc_anchor == "top" else f"H-h-{margin}"
 
         def _ramp(a, b, ta):                   # linear a->b over SLIDE starting at ta
             return f"({a})+(({b})-({a}))*((t-{ta})/{SLIDE})"
@@ -280,7 +286,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                      f"if(lt(t,{t2}),{rest_x},if(lt(t,{t3}),{_ramp(rest_x, off, t2)},{off}))))")
             yexpr = rest_y
         else:                                  # up-center / up-right / up-left: slide vertically
-            off = "-h-8" if anchor == "top" else "H+8"   # from above (top anchor) or below
+            off = "-h-8" if sc_anchor == "top" else "H+8"   # from above (top anchor) or below
             xexpr = rest_x
             yexpr = (f"if(lt(t,{t0}),{off},if(lt(t,{t1}),{_ramp(off, rest_y, t0)},"
                      f"if(lt(t,{t2}),{rest_y},if(lt(t,{t3}),{_ramp(rest_y, off, t2)},{off}))))")

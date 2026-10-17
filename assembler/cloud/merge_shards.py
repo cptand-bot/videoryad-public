@@ -97,6 +97,7 @@ def _collect_overlays(images_dir, proj):
                 moved += 1
     ovj = os.path.join(proj, "overlays.json")
     dropped = []
+    lost = {}
     if os.path.isfile(ovj):
         try:
             ov = json.load(open(ovj, encoding="utf-8"))
@@ -115,9 +116,43 @@ def _collect_overlays(images_dir, proj):
                 kept_text += 1
                 continue
             if not glob.glob(os.path.join(dst, f"scene_{int(k):03d}.*")):
+                lost[k] = e
                 ov.pop(k)
                 dropped.append(k)
         json.dump(ov, open(ovj, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        # ПЛАН НЕ ТЕРЯТЬ (2026-10-17, улов на planeta-svergnut-1810): раньше
+        # запись всплывашки, для которой облако не добыло фото, исчезала
+        # молча — вкладка заметила потерю только пересчётом «44 из 45» и
+        # восстанавливала запись руками, по памяти. Саму запись в overlays.json
+        # оставить нельзя (файла нет — ship.sh/сборка ругаются на сироту),
+        # поэтому выкладываем её рядом, вместе с запросом, по которому фото
+        # искали: вернуть всплывашку = скопировать запись назад и перезапросить.
+        if lost:
+            qmap = {}
+            ovs = os.path.join(proj, "overlays_fetch.scenes.json")
+            if os.path.isfile(ovs):
+                try:
+                    for s in json.load(open(ovs, encoding="utf-8")).get("scenes", []):
+                        qmap[str(s.get("id"))] = {"source": s.get("source"),
+                                                 "source_query": s.get("source_query"),
+                                                 "visual_prompt": s.get("visual_prompt")}
+                except Exception:
+                    pass
+            out = {k: {"entry": v, "reason": "облако не добыло фото (FAILED)",
+                       **({"fetch": qmap[k]} if k in qmap else {})}
+                   for k, v in lost.items()}
+            dpath = os.path.join(proj, "overlays.dropped.json")
+            try:
+                if os.path.isfile(dpath):
+                    out = {**json.load(open(dpath, encoding="utf-8")), **out}
+            except Exception:
+                pass
+            json.dump(out, open(dpath, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            for k, v in sorted(out.items(), key=lambda kv: int(kv[0])):
+                q = (v.get("fetch") or {}).get("source_query", "?")
+                print(f"[merge] ВСПЛЫВАШКА {k} ПОТЕРЯНА: фото не добыто, "
+                      f"запрос был '{q}'. План сохранён в overlays.dropped.json "
+                      f"— перезапроси и верни запись в overlays.json.", flush=True)
     print(f"[merge] всплывашки: {moved} фото с матрицы"
           + (f", сохранил текстовых: {kept_text}" if kept_text else "")
           + (f", убрал без фото: {dropped}" if dropped else ""), flush=True)

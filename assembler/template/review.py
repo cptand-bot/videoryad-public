@@ -1006,6 +1006,12 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     overlays = overlays or {}
     sfx = sfx if sfx is not None else sfx_list()
     ov_cur = overlays.get(str(sid), {})
+    # ВЕРТИКАЛЬ ВСПЛЫВАШКИ — ПОСЦЕННО (2026-10-17, прямая просьба пользователя:
+    # «если бы она стояла вверху в центре, это было бы как раз хорошо… я бы мог
+    # её менять»). Раньше верх/низ задавался ОДНИМ ключом anchor на весь ролик
+    # (top для всех каналов кроме ПЛАНЕТЫ) и на дашборде его не было вообще —
+    # менялась только горизонталь. Теперь запись сцены перебивает общий ключ.
+    _ov_anchor = str(ov_cur.get("anchor") or overlays.get("anchor", "bottom")).lower()
     is_vid = planned_is_video(s)
     label, cls = badge_for(s.get("source", ""), is_vid)
     q = s.get("source_query", "")
@@ -1179,6 +1185,11 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<select id="ovposn{sid}" onchange="ovSave({sid})">'
             + "".join(f'<option value="{v}"{" selected" if _ovpos_cur(ov_cur)==v else ""}>{lbl}</option>'
                       for v, lbl in (("left","влево"),("center","центр"),("right","вправо")))
+            + f'</select></div>'
+            f'<div class="ovrow"><span>по вертикали</span>'
+            f'<select id="ovanch{sid}" onchange="ovSave({sid})">'
+            + "".join(f'<option value="{v}"{" selected" if _ov_anchor==v else ""}>{lbl}</option>'
+                      for v, lbl in (("top","вверху"),("bottom","внизу")))
             + f'</select></div>'
             f'<div class="ovrow"><span>масштаб</span>'
             f'<input type="number" id="ovscale{sid}" min="0.4" max="2.4" step="0.1" '
@@ -1725,12 +1736,13 @@ async function ovSave(id){{
   const posEl = document.getElementById("ovposn"+id);
   const pos = posEl ? posEl.value : "";
   const scEl = document.getElementById("ovscale"+id);
+  const anEl = document.getElementById("ovanch"+id);
   const scale = scEl ? parseFloat(scEl.value || "1") : 1;
   const m = document.getElementById("ovmsg"+id); m.textContent = "…";
   try{{
     const r = await fetch("overlay?id="+id, {{method:"POST",
       headers:{{"Content-Type":"application/json"}},
-      body: JSON.stringify({{sound: snd, at: at, shape: shape, pos: pos, scale: scale}})}});
+      body: JSON.stringify({{sound: snd, at: at, shape: shape, pos: pos, scale: scale, anchor: (anEl ? anEl.value : "")}})}});
     m.textContent = r.ok ? "сохранено ✓" : "ошибка";
   }}catch(e){{ m.textContent = "ошибка"; }}
   setTimeout(()=>{{ m.textContent = ""; }}, 1800);
@@ -2446,7 +2458,8 @@ def run_live(scenes_path, images_dir, port):
                 # a real still (the video's own extracted frame, if photo is
                 # a video) gives overlay_geom an actual aspect ratio to read
                 # instead of silently falling back to the 1.4 default.
-                v["pos"] = overlay_geom(int(k), v, p_prev if p_prev and os.path.exists(p_prev) else None, _anchor)
+                v["pos"] = overlay_geom(int(k), v, p_prev if p_prev and os.path.exists(p_prev) else None,
+                                            str(v.get("anchor") or _anchor).lower())
             except Exception:
                 pass
             tb = v.get("text") if isinstance(v.get("text"), dict) else None
@@ -2538,6 +2551,8 @@ def run_live(scenes_path, images_dir, port):
                     patch["shape"] = sh if sh in ("rect", "rounded", "square", "circle") else "rect"
                 if spec.get("pos") in _POS2STYLE:
                     patch["style"] = _POS2STYLE[spec["pos"]]
+                if str(spec.get("anchor", "")).lower() in ("top", "bottom"):
+                    patch["anchor"] = str(spec["anchor"]).lower()
                 if "scale" in spec:
                     try:
                         patch["scale"] = max(0.4, min(2.4, round(float(spec["scale"]), 2)))

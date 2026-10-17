@@ -483,6 +483,9 @@ _STOCK_DOMAINS = (
     "planespotters.net", "abpic.co.uk", "airteamimages.com",
     # форумы/агрегаторы с вшитым знаком
     "yaplakal.com", "pixel-shot.com",
+    # агентства, у которых знак вшит В КАДР (не в угол) и OCR его не берёт:
+    # поймано глазами 2026-10-17 на planeta-svergnut-1810
+    "interfax.com.ua",
 )
 
 
@@ -589,6 +592,22 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         # already at the per-build cap (2 — leitmotifs allowed, no 3rd use).
         _blk = (blocked_md5 or set())
         if h and (h in _blk or _USE_COUNT[h] >= _MAX_PER_BUILD):
+            # ГРОМКО, а не молча (2026-10-17, улов рабочей вкладки на
+            # planeta-svergnut-1810): раньше пин, попавший в бан/кулдаун/лимит,
+            # тихо подменялся round-robin'ом по папке — вкладка была уверена,
+            # что в сцене стоит выбранный глазами кадр, а стоял случайный.
+            # Три забаненных пина за один ролик ловились только сверкой md5
+            # руками. Теперь причина подмены видна в логе фетча.
+            try:
+                _why = ("забанен" if h in load_banned_md5()
+                        else ("лимит на ролик" if _USE_COUNT[h] >= _MAX_PER_BUILD
+                              else "кулдаун последних видео"))
+            except Exception:
+                _why = "бан/кулдаун/лимит"
+            print(f"[{seq:03d}] ПИН ОТКЛОНЁН ({_why}): {tag_query} "
+                  f"[md5 {h[:8]}] → беру round-robin по папке "
+                  f"'{os.path.dirname(tag_query)}'. Если нужен именно кадр — "
+                  f"выбери другой файл или снимай бан.")
             tag_query = os.path.dirname(tag_query)
         else:
             out_path = out_base + os.path.splitext(direct)[1].lower()
@@ -752,6 +771,9 @@ def fetch_wikimedia(query, out_path):
             "action": "query", "generator": "search", "gsrsearch": query,
             "gsrnamespace": 6, "gsrlimit": 5, "prop": "imageinfo",
             "iiprop": "url|size", "format": "json",
+            # для КАРТ (ниже) нужен готовый растр из svg — Commons отдаёт его
+            # в thumburl, если попросить ширину
+            "iiurlwidth": 1600,
         }
     )
     try:
@@ -762,11 +784,26 @@ def fetch_wikimedia(query, out_path):
         return False
     pages = data.get("query", {}).get("pages", {})
     image_exts = (".jpg", ".jpeg", ".png", ".gif", ".webp")
+    # КАРТЫ — отдельный случай (2026-10-17). На Commons чистые контурные карты
+    # почти все в SVG, а этот цикл SVG всегда отбрасывал — поэтому «карта» как
+    # класс запроса не добывалась ВООБЩЕ (живой случай: «политическая карта
+    # Украины с областями», FAILED на двух формулировках, всплывашка потеряна).
+    # Для карт берём готовый растр из thumburl. Разрешаем это ТОЛЬКО когда
+    # запрос прямо про карту: иначе через SVG полезут схемы, диаграммы, флаги и
+    # логотипы, а инфографика и чужие логотипы запрещены правилом a1.
+    _map_q = any(w in query.lower() for w in
+                 ("карт", "map", "outline", "контурн", "очертани"))
     best = None
     for p in pages.values():
         for ii in p.get("imageinfo", []):
             url = ii.get("url", "")
-            if not url.lower().split("?")[0].endswith(image_exts):
+            low = url.lower().split("?")[0]
+            if low.endswith(".svg") and _map_q and ii.get("thumburl"):
+                w, h = ii.get("thumbwidth", 0), ii.get("thumbheight", 0)
+                if w * h > (best[1] if best else 0):
+                    best = (ii["thumburl"], w * h)
+                continue
+            if not low.endswith(image_exts):
                 continue  # Commons' File namespace also holds PDF/DjVu/SVG/audio - skip those
             w, h = ii.get("width", 0), ii.get("height", 0)
             if w * h > (best[1] if best else 0):
