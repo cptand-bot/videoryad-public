@@ -113,17 +113,26 @@ def report_same_file(assets, before):
     return same
 
 
-def prune_needs_upload(path="needs_upload.json"):
+def prune_needs_upload(path="needs_upload.json", only_ids=None):
     """Облако пишет сюда ненайденные сцены; после локального добора записи
-    остаются и дашборд рисует ложные жёлтые карточки при живых кадрах."""
+    остаются и дашборд рисует ложные жёлтые карточки при живых кадрах.
+
+    ТОЛЬКО ПО ЧИНИМЫМ id (2026-10-17). Раньше снимались ВСЕ записи, у которых
+    на диске есть файл, — и вместе с ними СОЗНАТЕЛЬНЫЕ жёлтые карточки вкладки
+    («кадр есть, но слабый — пусть заменит пользователь»). Круг правок по
+    двум другим сценам молча стирал их обе (5min-gerasimov-1810, сцены 37 и
+    46). Инструкция «ставить жёлтые карточки после последнего рефетча» не
+    спасает: пока круги идут, какой из них последний — неизвестно."""
     if not os.path.exists(path):
         return
     try:
         nu = json.load(open(path, encoding="utf-8"))
     except (OSError, ValueError):
         return
-    alive = [k for k in nu if [f for f in glob.glob("images/scene_%03d.*" % int(k))
-                               if not f.endswith(SKIP_EXT)]]
+    _ids = {str(i) for i in (only_ids or [])}
+    alive = [k for k in nu if (not _ids or str(k) in _ids)
+             and [f for f in glob.glob("images/scene_%03d.*" % int(k))
+                  if not f.endswith(SKIP_EXT)]]
     if alive:
         for k in alive:
             nu.pop(k, None)
@@ -277,9 +286,34 @@ def main():
         return 2
     jobs = []
     if scenes and fx_s:
-        jobs.append(apply_fix(scenes, json.loads(fx_s), False))
+        _fx = json.loads(fx_s)
+        # ПРОВЕРКА ФОРМАТА, А НЕ МОЛЧАЛИВЫЙ ПРОВАЛ (2026-10-17). Для СЦЕН
+        # значение обязано быть парой [source, query]. Если передать строку,
+        # фетчер брал её ПЕРВЫЙ СИМВОЛ как источник — печатал
+        # `ERROR: unknown source 'р'`, ставил сцене FAILED, но refetch
+        # возвращал 0 и бодро писал «--- рефетч images: [24, 41] ---».
+        # Круг правок выглядел успешным, а кадры не менялись; поймано только
+        # сверкой файлов на диске (5min-gerasimov-1810).
+        _bad = {k: v for k, v in _fx.items()
+                if not (isinstance(v, (list, tuple)) and len(v) == 2
+                        and all(isinstance(x, str) and x.strip() for x in v))}
+        if _bad:
+            print("СТОП: для сцен значение должно быть парой [source, query].")
+            for k, v in _bad.items():
+                print(f"  id {k}: {v!r}")
+            print("Пример: --fix-scenes '{\"24\": [\"press_photo\", \"...\"]}'."
+                  "\nДля всплывашек (--fix-overlays) значение — строка, источник там всегда press_photo.")
+            return 1
+        jobs.append(apply_fix(scenes, _fx, False))
     if overlays and fx_o:
-        jobs.append(apply_fix(overlays, json.loads(fx_o), True))
+        _fo = json.loads(fx_o)
+        _bado = {k: v for k, v in _fo.items() if not (isinstance(v, str) and v.strip())}
+        if _bado:
+            print("СТОП: для всплывашек значение должно быть СТРОКОЙ-запросом.")
+            for k, v in _bado.items():
+                print(f"  id {k}: {v!r}")
+            return 1
+        jobs.append(apply_fix(overlays, _fo, True))
 
     here = os.path.dirname(os.path.abspath(__file__))
     lint = os.path.join(here, "query_lint.py")
@@ -305,7 +339,7 @@ def main():
         subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
                         sub, assets, ".env", "5"])
         report_same_file(assets, before)
-    prune_needs_upload()
+    prune_needs_upload(only_ids=[sid for _, _, ids, _ in jobs for sid in ids])
     for sub, _, _, _ in jobs:
         if os.path.exists(sub):
             os.remove(sub)

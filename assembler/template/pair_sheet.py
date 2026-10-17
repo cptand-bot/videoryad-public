@@ -8,7 +8,16 @@
     python3 pair_sheet.py <project_dir> [out_dir]
 """
 import glob, json, os, subprocess, sys
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+
+# ПОДПИСИ ПО-РУССКИ ТРЕБУЮТ TTF (2026-10-17): без font= PIL берёт свой
+# битмап-шрифт без кириллицы, и «СЦЕНА 12 — слева КАДР…» рендерится
+# квадратиками-тофу. Проверяющий субагент читал только цифры и сверял
+# сцены вручную по scenes.json.
+try:
+    F = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 14)
+except OSError:
+    F = ImageFont.load_default()
 
 def frame(path, box):
     if path.lower().endswith(".mp4"):
@@ -43,13 +52,13 @@ def main():
              if ".text." not in p and ".wmcrop." not in p]
         y = row*CH
         dr.rectangle([0,y,CW,y+18], fill=(0,0,0))
-        dr.text((6,y+4), "СЦЕНА %d — слева КАДР, справа ВСПЛЫВАШКА" % sid, fill=(255,230,0))
+        dr.text((6,y+4), "СЦЕНА %d — слева КАДР, справа ВСПЛЫВАШКА" % sid, font=F, fill=(255,230,0))
         for i,src in enumerate((b,o)):
             if src:
                 im = frame(src[0], (370, CH-24))
                 if im: img.paste(im, (i*380+4, y+20))
             else:
-                dr.text((i*380+10, y+60), "нет файла", fill=(255,80,80))
+                dr.text((i*380+10, y+60), "нет файла", font=F, fill=(255,80,80))
         dr.line([(378,y+20),(378,y+CH-4)], fill=(90,90,90))
         row += 1
         if row == ROWS:

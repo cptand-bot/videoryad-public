@@ -254,6 +254,8 @@ _STOCK_WATERMARKS = (
     # non-stock sources that OCR-leaked into frames on 07.09-2 (photo-collector
     # sites, news-article screenshots, agency bugs). A single tile = reject.
     "pastvu", "violity", "fishki", "pngtree", "mycity", "akiro",
+    # 2026-10-17: споттерская база на русском запросе про Typhoon
+    "wings over europe",
     "bbc news", "kommersant", "коммерсант", "ria.ru", "риа новости",
     "sputnik", "1prime", "che line", "служба безпеки", "unian.",
     # 2026-10-12, cross-session (ds-8-mostov-1310): украинская городская и
