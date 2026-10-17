@@ -485,6 +485,10 @@ _STOCK_DOMAINS = (
     "planespotters.net", "abpic.co.uk", "airteamimages.com",
     # форумы/агрегаторы с вшитым знаком
     "yaplakal.com", "pixel-shot.com",
+    # личные блоги-травелоги: подпись автора строкой по нижней кромке
+    # («© Alexander Belenkiy | macos.livejournal.com»), OCR её не взял —
+    # поймано глазами на planeta-tri-bukvy-1810, 2026-10-17
+    "macos.livejournal.com", "macos.me", "livejournal.com/photo",
     # агентства, у которых знак вшит В КАДР (не в угол) и OCR его не берёт:
     # поймано глазами 2026-10-17 на planeta-svergnut-1810
     "interfax.com.ua",

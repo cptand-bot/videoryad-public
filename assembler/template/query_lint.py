@@ -232,12 +232,16 @@ def scan_pexels(q):
                          "детали: «brake lights red glow closeup», «truck "
                          "tyres rolling highway closeup», «traffic cone "
                          "closeup asphalt»"))
-    # валюта на стоке — ЧУЖАЯ (2026-10-17): «euro banknote macro» вернул
-    # британский FIVE POUNDS. Мягко: запрос переписывать не обязательно,
-    # но смотреть полный размер и сверять номинал — обязательно.
+    # ВАЛЮТА НА СТОКЕ — ЧУЖАЯ СТРАНА, А НЕ «ДРУГОЙ НОМИНАЛ» (поднято до мины
+    # 2026-10-17): «euro banknote macro» вернул британский FIVE POUNDS с
+    # надписью ENGLAND прямо в кадре, и это уже второй ролик подряд. Мягкого
+    # «проверь номинал» мало — переписывать запрос.
     if any(w in low for w in ("banknote", "bank note", "currency", "cash")):
-        soft.append("сток путает валюты («euro banknote macro» → британский "
-                    "FIVE POUNDS) — проверь номинал в полном размере")
+        hard.append(("валюта на стоке",
+                     "«euro banknote macro» → британский FIVE POUNDS с "
+                     "надписью ENGLAND → бери купюры через press_photo "
+                     "по-русски и с местом: «купюры евро на столе крупным "
+                     "планом»"))
     # ДВА ПРЕДМЕТА В ОДНОМ ЗАПРОСЕ = КОЛЛАЖ (2026-10-17): «electric plug
     # into wall socket closeup» вернул склейку двух фото с видимой границей,
     # на плитке читается как один кадр.

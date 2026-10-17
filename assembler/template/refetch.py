@@ -77,6 +77,39 @@ def wipe(d, sid):
     return gone
 
 
+def restore_missing(d, ids):
+    """Замена не нашлась — ВЕРНУТЬ старый кадр из `.trash`, а не оставить дыру.
+
+    2026-10-17, поймано дважды за один ролик: `wipe` сносит кадр ДО фетча, и
+    если фетч ничего не принёс, сцена остаётся совсем без картинки — в выводе
+    при этом только «снёс scene_021.mp4», никакой ошибки. Вкладка узнавала об
+    этом на сборке и делала бэкапы руками. Теперь старый кадр лежит в
+    `.trash` (правка того же дня), поэтому дыру можно закрыть автоматически:
+    кадр возвращается на место, а в лог идёт честная строка — заменить НЕ
+    удалось, стоит прежний.
+    """
+    trash = os.path.join(d, ".trash")
+    if not os.path.isdir(trash):
+        return
+    for sid in ids:
+        have = [f for f in glob.glob(os.path.join(d, "scene_%03d.*" % sid))
+                if not f.endswith(SKIP_EXT) and ".ovthumb." not in f]
+        if have:
+            continue
+        back = sorted(glob.glob(os.path.join(trash, "*.scene_%03d.*" % sid)))
+        if not back:
+            print("  !! сцена %d осталась БЕЗ кадра, вернуть нечего" % sid)
+            continue
+        src = back[-1]
+        dst = os.path.join(d, os.path.basename(src).split(".", 1)[1])
+        try:
+            os.replace(src, dst)
+            print("  ВЕРНУЛ прежний кадр сцены %d (замена не нашлась): %s"
+                  % (sid, os.path.basename(dst)))
+        except OSError as e:
+            print("  !! сцена %d без кадра, вернуть не вышло: %s" % (sid, e))
+
+
 def _md5(path):
     import hashlib
     try:
@@ -376,6 +409,7 @@ def main():
         print("\n--- рефетч %s: %s ---" % (assets, ids))
         subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
                         sub, assets, ".env", "5"])
+        restore_missing(assets, ids)
         report_same_file(assets, before)
     prune_needs_upload(only_ids=[sid for _, _, ids, _ in jobs for sid in ids])
     for sub, _, _, _ in jobs:
