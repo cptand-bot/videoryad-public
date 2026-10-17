@@ -2801,7 +2801,14 @@ def run_live(scenes_path, images_dir, port):
                     tblock["approved"] = bool(spec["approved"]) if "approved" in spec \
                         else bool(_prev_text.get("approved", False))
                     cur["text"] = tblock
-                    cur.setdefault("photo", cur.get("photo", ""))
+                    # ПУСТОЙ ключ `photo` текстовой всплывашке НЕ НУЖЕН
+                    # (2026-10-17): раньше он создавался тут же и запись
+                    # «чисто текст» выглядела как фото-всплывашка без файла.
+                    # Проверки это переживают (и ship.sh, и selfcheck считают
+                    # пустую строку отсутствием фото), но запись врала о себе
+                    # и вкладки тратили круг на «починку» утверждённых карточек.
+                    if not cur.get("photo"):
+                        cur.pop("photo", None)
                     ovs[str(sid)] = cur
                 return self._reply(200, json.dumps({"ok": True}).encode())
 
