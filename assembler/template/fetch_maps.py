@@ -50,6 +50,14 @@ REGIONS = {
     "МОЛДОВА":        ["Blank maps of Moldova"],
     "ВЕНГРИЯ":        ["Blank maps of Hungary"],
     "МИР":            ["Blank maps of the world"],
+    # дозаведено 17.10 по дырам, найденным в бою
+    "РУМЫНИЯ":        ["Blank maps of Romania"],
+    "СЛОВАКИЯ":       ["Blank maps of Slovakia"],
+    "ЧЕХИЯ":          ["Blank maps of the Czech Republic"],
+    "БОЛГАРИЯ":       ["Blank maps of Bulgaria"],
+    # у Молдовы и Израиля категории Blank maps на Commons НЕТ (проверено
+    # 17.10): Moldova — 0 файлов, Israel — 3 и все исторические (1947,
+    # двенадцать колен). Эти карты надо искать иначе или рисовать.
 }
 
 # что в категории не карта, а мусор для нас

@@ -103,8 +103,11 @@ def main():
             bad.append((sid, q, f"не читается: {exc}"))
             continue
         why = None
+        _is_map = "/КАРТЫ/" in ("/" + q.replace("\\", "/"))
         if h in banned:
             why = "ЗАБАНЕН"
+        elif _is_map:
+            pass          # карты вне кулдауна (2026-10-17), см. fetch_local_library
         elif h in cooled:
             why = f"КУЛДАУН (был в последних {COOLDOWN_VIDEOS} роликах)"
         elif h in seen:

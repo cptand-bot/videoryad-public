@@ -597,6 +597,17 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         # this exact file was used in the last COOLDOWN_VIDEOS videos, or is
         # already at the per-build cap (2 — leitmotifs allowed, no 3rd use).
         _blk = (blocked_md5 or set())
+        # КАРТЫ ЖИВУТ ВНЕ КУЛДАУНА (2026-10-17). Кулдаун в 3 ролика придуман
+        # против повторов ФУТАЖА: один и тот же кадр события в трёх роликах
+        # подряд виден и раздражает. Контурная карта — не футаж, а справочный
+        # объект: карта Украины везде одна и та же по смыслу, и «разнообразить»
+        # её нечем. По многим регионам у нас вообще ОДИН файл, и кулдаун делал
+        # карту недоступной почти всегда (живой случай: ролик дословно
+        # перечисляет пять областей Украины, а карту областей поставить нечем).
+        # Бан и лимит «один раз на ролик» для карт ОСТАЮТСЯ.
+        _is_map = "/КАРТЫ/" in ("/" + tag_query.replace("\\", "/"))
+        if _is_map and h:
+            _blk = {x for x in _blk if x in load_banned_md5()}
         if h and (h in _blk or _USE_COUNT[h] >= _MAX_PER_BUILD):
             # ГРОМКО, а не молча (2026-10-17, улов рабочей вкладки на
             # planeta-svergnut-1810): раньше пин, попавший в бан/кулдаун/лимит,
