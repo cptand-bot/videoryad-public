@@ -172,6 +172,17 @@ def _fx_layers(sid, duration):
                      f"[{cur}]format=gbrp[b{idx}];[b{idx}][fl]blend=all_mode=screen[{nxt}]")
         cur = nxt; idx += 1
 
+    # СЛОЙ НЕ НА КАЖДУЮ СЦЕНУ (user, 2026-10-17: «делаем примерно рандомно,
+    # каждая седьмая-восьмая сцена, не надо на каждую»). `layers_every: N` —
+    # слой ложится примерно на каждую N-ю сцену, выбор псевдослучайный, но
+    # ДЕТЕРМИНИРОВАННЫЙ по номеру сцены: пересборка, рефетч и повтор шарда
+    # дают тот же набор сцен, иначе ролик менял бы вид от прогона к прогону.
+    # 0 или ключа нет — поведение прежнее (слой на каждой сцене), на нём
+    # держится второй сборщик.
+    every_l = int(fx.get("layers_every") or 0)
+    if every_l > 1 and sid not in _layer_scenes(every_l):
+        return (ins, ";".join(steps), cur) if steps else ([], "", "vfx")
+
     for name in (fx.get("layers") or []):
         src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fx", f"{name}.mp4")
         if not os.path.isfile(src):
@@ -187,6 +198,26 @@ def _fx_layers(sid, duration):
     if not steps:
         return [], "", "vfx"
     return ins, ";".join(steps), cur
+
+def _layer_scenes(every, upto=400, _cache={}):
+    """Номера сцен, на которые ложится видеослой: шаг `every` с разбросом ±1.
+
+    Чистый хеш (первый подход) давал провалы по 20 сцен подряд, а ровный шаг
+    выглядит механически. Здесь шаг гуляет 6-8 при `every=7`, и набор
+    ДЕТЕРМИНИРОВАН: сид фиксирован, поэтому пересборка, рефетч и повтор
+    шарда дают те же сцены, и ролик не меняет вид от прогона к прогону.
+    """
+    key = (every, upto)
+    if key not in _cache:
+        import random
+        rnd = random.Random(20261017)
+        out, sid = set(), max(2, every - 1)
+        while sid <= upto:
+            out.add(sid)
+            sid += every + rnd.choice((-1, 0, 1))
+        _cache[key] = out
+    return _cache[key]
+
 
 def _caps(out_path):
     """Добавка фильтра субтитров к цепочке — ТОЛЬКО если они явно включены.
