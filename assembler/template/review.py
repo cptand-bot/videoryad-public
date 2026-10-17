@@ -199,6 +199,21 @@ def _overlays_txn():
 LAYOUT_LOG = "layout_journal.jsonl"
 
 
+def _banned_md5_now():
+    """Активные баны (с учётом срока `until`) — тот же файл и та же логика,
+    что в fetch_assets_news.load_banned_md5. Дашборд читает его на каждом
+    скачивании, чтобы замена не вернула уже выброшенный кадр."""
+    path = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.expanduser(
+        "~/projects/media-library/.banned_md5.json")
+    try:
+        log = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return set()
+    today = time.strftime("%Y-%m-%d")
+    return {m for m, e in log.items()
+            if not (isinstance(e, dict) and e.get("until")) or e["until"] >= today}
+
+
 def _layout_log(sid, kind, before, after, extra=None):
     try:
         rec = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -3307,6 +3322,19 @@ def run_live(scenes_path, images_dir, port):
                                 reason = "картинка слишком маленькая"
                         except Exception:
                             reason = "картинку не удалось прочитать"
+                    # БАН-ЛИСТ ПРОВЕРЯЕТСЯ И ЗДЕСЬ (2026-10-17). Фетчер его чтит,
+                    # а дашбордный «найти → выбрать вариант» качал файл напрямую,
+                    # мимо всякой проверки — забаненный кадр возвращался через
+                    # замену и ловился только финальной сверкой перед дашбордом
+                    # (живой случай на planeta-svergnut-1810, сцена 32).
+                    if not reason:
+                        try:
+                            import hashlib as _hl
+                            _h = _hl.md5(data).hexdigest()
+                            if _h in _banned_md5_now():
+                                reason = "этот кадр забанен — выбери другой вариант"
+                        except Exception:
+                            pass
                     if not reason:
                         for old in glob.glob(os.path.join(out_dir, f"scene_{sid:03d}.*")):
                             if not old.endswith(".json"):
