@@ -1,0 +1,10 @@
+{
+  "_комментарий": "То же, но с обоими слоями (пылинки + дымка). Дороже примерно на минуту облачной сборки.",
+  "vignette": false,
+  "breath": false,
+  "grain": 0,
+  "flare_every": 6,
+  "flare_opacity": 0.26,
+  "layers": ["particles", "haze"],
+  "layer_opacity": 0.5
+}
