@@ -32,6 +32,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 
 from PIL import Image
 
@@ -184,6 +185,46 @@ def _overlays_txn():
         os.replace(tmp, OVERLAY_FILE)
     finally:
         lock_f.close()
+
+
+# ---------------------------------------------------------------- журнал вёрстки
+# ЗАЧЕМ (user, 2026-10-17): «надеюсь, ты фиксировал, как я переставлял
+# всплывашки… заметил, почему я это сделал, и логику». Не фиксировал — дашборд
+# писал только снятия кадров (rejections), а перестановки терялись: в
+# overlays.json остаётся лишь КОНЕЧНОЕ состояние, без порядка и без контекста.
+# Теперь каждое движение пишется строкой: что было → что стало, по какой сцене,
+# с куском текста озвучки и именем файла. По этому журналу видно ЛОГИКУ (куда
+# он двигает всплывашку, когда на кадре лицо; какую форму выбирает для карт и
+# т.д.) — и дефолты можно будет подогнать под неё, а не спрашивать.
+LAYOUT_LOG = "layout_journal.jsonl"
+
+
+def _layout_log(sid, kind, before, after, extra=None):
+    try:
+        rec = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"),
+               "project": os.path.basename(os.path.abspath(".")),
+               "scene": int(sid), "kind": kind,
+               "before": before, "after": after}
+        if extra:
+            rec.update(extra)
+        with open(LAYOUT_LOG, "a", encoding="utf-8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    except Exception:
+        pass        # журнал никогда не должен ронять дашборд
+
+
+def _scene_hint(sid):
+    """Контекст сцены для журнала: кусок текста озвучки и запрос."""
+    try:
+        for pat in sorted(glob.glob("*.scenes.json")):
+            data = json.load(open(pat, encoding="utf-8"))
+            for s in (data.get("scenes") or []):
+                if int(s.get("id", -1)) == int(sid):
+                    return {"text": (s.get("text") or "")[:120],
+                            "query": s.get("source_query", "")}
+    except Exception:
+        pass
+    return {}
 
 
 def save_overlay(sid, patch, create=False):
@@ -2656,6 +2697,15 @@ def run_live(scenes_path, images_dir, port):
                         pass
                 if "approved" in spec:
                     patch["approved"] = bool(spec["approved"])
+                _watch = ("style", "anchor", "shape", "scale", "at")
+                if any(k in patch for k in _watch):
+                    _cur = load_overlays().get(str(sid), {}) or {}
+                    _before = {k: _cur.get(k) for k in _watch if k in patch}
+                    _after = {k: patch[k] for k in _watch if k in patch}
+                    if _before != _after:
+                        _layout_log(sid, "overlay", _before, _after,
+                                    {"photo": os.path.basename(_cur.get("photo") or ""),
+                                     **_scene_hint(sid)})
                 save_overlay(sid, patch, create=bool(spec.get("create")))
                 return self._reply(200)
 
@@ -3001,6 +3051,11 @@ def run_live(scenes_path, images_dir, port):
                         return self._reply(500, (r.stderr or b"")[-400:] or b"ffmpeg failed")
                     os.replace(tmp, src)
 
+                _st_before = dict(_UNIQ_DEFAULT)
+                _st_before.update(_uniq_load(_uqdir).get(str(sid), {}))
+                if _st_before != st:
+                    _layout_log(sid, "uniq_ov" if _uqdir == "overlays" else "uniq",
+                                _st_before, st, {"file": os.path.basename(src), **_scene_hint(sid)})
                 data[str(sid)] = st
                 if _uniq_is_default(st):
                     data.pop(str(sid), None)
