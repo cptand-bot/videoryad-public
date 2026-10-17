@@ -406,7 +406,11 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
             _add(sid, spec.get("sound", "whoosh"), spec.get("at", LEAD), "")
         ts = spec.get("text") if isinstance(spec.get("text"), dict) else None
         if ts and str(ts.get("words") or ts.get("text") or "").strip():
-            _add(sid, ts.get("sound", "whoosh"), ts.get("at", LEAD), "ТЕКСТ ")
+            # дефолт текстовой всплывашки — РАЗНЫЙ по сценам (2026-10-17,
+            # просьба пользователя: «нужно, чтобы с разными звуками выходил»)
+            _TXT_CYCLE = ("pop", "mashinka", "pshik", "zatvor", "whoosh")
+            _add(sid, ts.get("sound") or _TXT_CYCLE[sid % len(_TXT_CYCLE)],
+                 ts.get("at", LEAD), "ТЕКСТ ")
     if not mixn:
         print("нет звуков для наложения — просто копирую видео")
         subprocess.run([ffmpeg, "-y", "-i", in_mp4, "-c", "copy", out_mp4], capture_output=True)

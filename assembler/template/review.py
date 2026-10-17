@@ -94,7 +94,23 @@ def save_need(sid, reason):
 # video; the panel writes here, the build runs build_overlays.py.
 OVERLAY_FILE = "overlays.json"
 SFX_DIR = "sfx"
-SFX_LABELS = {"whoosh": "вжух", "zatvor": "затвор камеры", "pop": "поп"}
+SFX_LABELS = {"whoosh": "вжух", "zatvor": "затвор камеры", "pop": "поп",
+              "ding": "дзинь", "mashinka": "печатная машинка", "pshik": "пшик"}
+
+# ЗВУК ТЕКСТОВОЙ ВСПЛЫВАШКИ — РАЗНЫЙ, А НЕ ОДИН НА ВЕСЬ РОЛИК (user,
+# 2026-10-17: «он выскакивает с одним звуком, бульк, и всё. Нужно, чтобы с
+# разными — пшик, затвор камеры, печатная машинка»). До этого дефолт был
+# жёстко "pop", и в сданных роликах ВСЕ текстовые всплывашки шли с ним: 41 из
+# 41 и 16 из 16. Теперь дефолт считается от номера сцены — соседние надписи
+# звучат по-разному, а выбор на дашборде по-прежнему за пользователем.
+TEXT_SFX_CYCLE = ("pop", "mashinka", "pshik", "zatvor", "whoosh")
+
+
+def text_sound_for(sid):
+    try:
+        return TEXT_SFX_CYCLE[int(sid) % len(TEXT_SFX_CYCLE)]
+    except (TypeError, ValueError):
+        return "pop"
 
 
 def load_overlays():
@@ -1268,7 +1284,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         _tcol = _tw.get("color", "yellow")
         _tpos = _tw.get("pos", "bc")
         _topts = "".join(f'<option value="{x["name"]}"'
-                         f'{" selected" if x["name"] == _tw.get("sound","pop") else ""}>{x["label"]}</option>'
+                         f'{" selected" if x["name"] == _tw.get("sound", text_sound_for(sid)) else ""}>{x["label"]}</option>'
                          for x in sfx)
         # утверждено ли уже — держим ровно так, как оставил юзер, не сбрасывая
         # при каждом ре-рендере дашборда (user, 2026-09-15, злился: «утвердил —
@@ -1928,7 +1944,7 @@ async function ovTextSave(id, approvedVal){{
   const body = {{
     words: txt, color: _ovTcolor(id),
     pos: pb ? pb.getAttribute("title") : "bc",
-    sound: (document.getElementById("ovtsnd"+id)||{{}}).value || "pop",
+    sound: (document.getElementById("ovtsnd"+id)||{{}}).value || "",
     at: parseFloat((document.getElementById("ovtat"+id)||{{}}).value || "2"),
     scale: parseFloat((document.getElementById("ovtscale"+id)||{{}}).value || "1")
   }};
@@ -2792,7 +2808,7 @@ def run_live(scenes_path, images_dir, port):
                 if not (len(pos) == 2 and pos[0] in "tmb" and pos[1] in "lcr"):
                     pos = "bc"
                 tblock = {"words": words, "color": color, "pos": pos}
-                tblock["sound"] = str(spec.get("sound", "pop"))
+                tblock["sound"] = str(spec.get("sound") or "") or text_sound_for(sid)
                 try:
                     tblock["at"] = round(float(spec.get("at", 2.0)), 2)
                 except (TypeError, ValueError):
