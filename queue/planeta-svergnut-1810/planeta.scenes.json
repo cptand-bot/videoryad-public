@@ -1,0 +1,837 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 13.96,
+   "visual_prompt": "Анна Скороход депутат Верховной Рады выступление реальное фото",
+   "source": "press_photo",
+   "source_query": "Анна Скороход депутат Верховной Рады выступление реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 13.96,
+   "duration_sec": 12.75,
+   "visual_prompt": "Офис президента Украины на Банковой в Киеве реальное фото фасада",
+   "source": "press_photo",
+   "source_query": "Офис президента Украины на Банковой в Киеве реальное фото фасада",
+   "line": "L1"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 26.71,
+   "duration_sec": 14.05,
+   "visual_prompt": "Зеленский на совещании с министрами в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Зеленский на совещании с министрами в Киеве 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 40.76,
+   "duration_sec": 11.68,
+   "visual_prompt": "ПОЛИТИКА/ЗЕЛЕНСКИЙ",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗЕЛЕНСКИЙ/Screenshot_2.jpg",
+   "line": "L1"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 52.44,
+   "duration_sec": 13.68,
+   "visual_prompt": "Зеленский с чиновниками в Офисе президента Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Зеленский с чиновниками в Офисе президента Украины 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 66.12,
+   "duration_sec": 11.71,
+   "visual_prompt": "cash register drawer opening closeup no people",
+   "source": "pexels_video",
+   "source_query": "cash register drawer opening closeup no people",
+   "line": "L8"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 77.83,
+   "duration_sec": 11.92,
+   "visual_prompt": "панорама центра Киева с высоты 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "панорама центра Киева с высоты 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 89.75,
+   "duration_sec": 12.98,
+   "visual_prompt": "заседание Кабинета министров Украины в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "заседание Кабинета министров Украины в Киеве 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 102.73,
+   "duration_sec": 12.47,
+   "visual_prompt": "рабочий кабинет в Офисе президента Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "рабочий кабинет в Офисе президента Украины 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 115.19,
+   "duration_sec": 13.04,
+   "visual_prompt": "desk telephone receiver closeup no people",
+   "source": "pexels_video",
+   "source_query": "desk telephone receiver closeup no people",
+   "line": "L8"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 128.23,
+   "duration_sec": 12.96,
+   "visual_prompt": "ПОЛИТИКА/ЗЕЛЕНСКИЙ",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗЕЛЕНСКИЙ/зеля1 (7).jpg",
+   "line": "L1"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 141.19,
+   "duration_sec": 13.38,
+   "visual_prompt": "Зеленский выступает за кафедрой Верховной Рады 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Зеленский выступает за кафедрой Верховной Рады 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 154.58,
+   "duration_sec": 13.37,
+   "visual_prompt": "Белый дом в Вашингтоне фасад фотография здания 2026",
+   "source": "press_photo",
+   "source_query": "Белый дом в Вашингтоне фасад фотография здания 2026",
+   "line": "L3"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 167.94,
+   "duration_sec": 14.0,
+   "visual_prompt": "Трамп на брифинге в Белом доме 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Трамп на брифинге в Белом доме 2026 реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 181.94,
+   "duration_sec": 13.12,
+   "visual_prompt": "зал заседаний Верховной Рады Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "зал заседаний Верховной Рады Украины 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 195.06,
+   "duration_sec": 12.63,
+   "visual_prompt": "Пентагон здание в Арлингтоне фотография 2026",
+   "source": "press_photo",
+   "source_query": "Пентагон здание в Арлингтоне фотография 2026",
+   "line": "L3"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 207.69,
+   "duration_sec": 13.29,
+   "visual_prompt": "горнодобывающий карьер в Украине реальное фото",
+   "source": "press_photo",
+   "source_query": "горнодобывающий карьер в Украине реальное фото",
+   "line": "L7"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 220.98,
+   "duration_sec": 14.21,
+   "visual_prompt": "mining excavator loading ore truck quarry no people",
+   "source": "pexels_video",
+   "source_query": "mining excavator loading ore truck quarry no people",
+   "line": "L8"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 235.19,
+   "duration_sec": 14.24,
+   "visual_prompt": "bank vault steel door closing closeup no people",
+   "source": "pexels_video",
+   "source_query": "bank vault steel door closing closeup no people",
+   "line": "L8"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 249.43,
+   "duration_sec": 13.84,
+   "visual_prompt": "excavator demolishing concrete building rubble",
+   "source": "pexels_video",
+   "source_query": "excavator demolishing concrete building rubble",
+   "line": "L8"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 263.27,
+   "duration_sec": 13.76,
+   "visual_prompt": "строительные работы по восстановлению дома в Украине реальное фото",
+   "source": "press_photo",
+   "source_query": "строительные работы по восстановлению дома в Украине реальное фото",
+   "line": "L7"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 277.03,
+   "duration_sec": 14.61,
+   "visual_prompt": "терриконы промышленный пейзаж Донбасса реальное фото",
+   "source": "press_photo",
+   "source_query": "терриконы промышленный пейзаж Донбасса реальное фото",
+   "line": "L7"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 291.64,
+   "duration_sec": 13.27,
+   "visual_prompt": "ПОЛИТИКА/TRAMP",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/TRAMP/трамп (5).jpg",
+   "line": "L3"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 304.91,
+   "duration_sec": 12.4,
+   "visual_prompt": "улица Крещатик в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "улица Крещатик в Киеве 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 317.31,
+   "duration_sec": 8.59,
+   "visual_prompt": "construction crane building site no people",
+   "source": "pexels_video",
+   "source_query": "construction crane building site no people",
+   "line": "L8"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 325.9,
+   "duration_sec": 9.65,
+   "visual_prompt": "shop window glass night street no people",
+   "source": "pexels_video",
+   "source_query": "shop window glass night street no people",
+   "line": "L8"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 335.55,
+   "duration_sec": 7.58,
+   "visual_prompt": "Трамп говорит с журналистами у Белого дома 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Трамп говорит с журналистами у Белого дома 2026 реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 343.13,
+   "duration_sec": 14.1,
+   "visual_prompt": "вход в здание Офиса президента Украины на Банковой реальное фото",
+   "source": "press_photo",
+   "source_query": "вход в здание Офиса президента Украины на Банковой реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 357.23,
+   "duration_sec": 7.42,
+   "visual_prompt": "Алексей Гончаренко депутат Верховной Рады реальное фото",
+   "source": "press_photo",
+   "source_query": "Алексей Гончаренко депутат Верховной Рады реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 364.65,
+   "duration_sec": 10.06,
+   "visual_prompt": "Алексей Гончаренко выступает за кафедрой Верховной Рады реальное фото",
+   "source": "press_photo",
+   "source_query": "Алексей Гончаренко выступает за кафедрой Верховной Рады реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 374.72,
+   "duration_sec": 12.32,
+   "visual_prompt": "weather vane spinning wind rooftop sky",
+   "source": "pexels_video",
+   "source_query": "weather vane spinning wind rooftop sky",
+   "line": "L8"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 387.04,
+   "duration_sec": 12.24,
+   "visual_prompt": "Алексей Гончаренко на брифинге в Киеве реальное фото",
+   "source": "press_photo",
+   "source_query": "Алексей Гончаренко на брифинге в Киеве реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 399.28,
+   "duration_sec": 12.7,
+   "visual_prompt": "кулуары Верховной Рады Украины колоннада реальное фото",
+   "source": "press_photo",
+   "source_query": "кулуары Верховной Рады Украины колоннада реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 411.98,
+   "duration_sec": 6.1,
+   "visual_prompt": "мемориал с украинскими флагами на Майдане Независимости в Киеве реальное фото",
+   "source": "press_photo",
+   "source_query": "мемориал с украинскими флагами на Майдане Независимости в Киеве реальное фото",
+   "line": "L7"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 418.08,
+   "duration_sec": 14.0,
+   "visual_prompt": "разгрузка американской военной помощи Украине 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "разгрузка американской военной помощи Украине 2026 реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 432.08,
+   "duration_sec": 8.14,
+   "visual_prompt": "Капитолий в Вашингтоне реальное фото здания 2026",
+   "source": "press_photo",
+   "source_query": "Капитолий в Вашингтоне реальное фото здания 2026",
+   "line": "L3"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 440.21,
+   "duration_sec": 13.97,
+   "visual_prompt": "Алексей Гончаренко в зале Верховной Рады реальное фото",
+   "source": "press_photo",
+   "source_query": "Алексей Гончаренко в зале Верховной Рады реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 454.18,
+   "duration_sec": 12.09,
+   "visual_prompt": "Босфор в Стамбуле проход грузовых судов реальное фото",
+   "source": "press_photo",
+   "source_query": "Босфор в Стамбуле проход грузовых судов реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 466.27,
+   "duration_sec": 12.16,
+   "visual_prompt": "здание МАГАТЭ в Вене фотография 2026",
+   "source": "press_photo",
+   "source_query": "здание МАГАТЭ в Вене фотография 2026",
+   "line": "L4"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 478.43,
+   "duration_sec": 11.96,
+   "visual_prompt": "ПОЛИТИКА/Украина-РФ-Переговоры",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/Украина-РФ-Переговоры/Screenshot_3.jpg",
+   "line": "L5"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 490.39,
+   "duration_sec": 7.16,
+   "visual_prompt": "Анна Скороход в зале Верховной Рады реальное фото",
+   "source": "press_photo",
+   "source_query": "Анна Скороход в зале Верховной Рады реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 497.55,
+   "duration_sec": 8.8,
+   "visual_prompt": "Алексей Гончаренко у микрофонов в кулуарах парламента реальное фото",
+   "source": "press_photo",
+   "source_query": "Алексей Гончаренко у микрофонов в кулуарах парламента реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 506.35,
+   "duration_sec": 9.71,
+   "visual_prompt": "Верховная Рада Украины фасад здания в Киеве фотография",
+   "source": "press_photo",
+   "source_query": "Верховная Рада Украины фасад здания в Киеве фотография",
+   "line": "L1"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 516.06,
+   "duration_sec": 14.24,
+   "visual_prompt": "штаб-квартира НАТО в Брюсселе реальное фото здания 2026",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО в Брюсселе реальное фото здания 2026",
+   "line": "L4"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 530.3,
+   "duration_sec": 14.4,
+   "visual_prompt": "closed door corridor empty building no people",
+   "source": "pexels_video",
+   "source_query": "closed door corridor empty building no people",
+   "line": "L8"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 544.7,
+   "duration_sec": 9.99,
+   "visual_prompt": "empty leather office chair desk room no people",
+   "source": "pexels_video",
+   "source_query": "empty leather office chair desk room no people",
+   "line": "L8"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 554.7,
+   "duration_sec": 13.53,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/Screenshot_19.jpg",
+   "line": "L6"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 568.22,
+   "duration_sec": 13.6,
+   "visual_prompt": "Госдепартамент США здание в Вашингтоне фотография 2026",
+   "source": "press_photo",
+   "source_query": "Госдепартамент США здание в Вашингтоне фотография 2026",
+   "line": "L3"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 581.82,
+   "duration_sec": 12.85,
+   "visual_prompt": "Трамп за рабочим столом в Белом доме 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Трамп за рабочим столом в Белом доме 2026 реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 594.67,
+   "duration_sec": 6.47,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/войска ураины1.jpg",
+   "line": "L6"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 601.14,
+   "duration_sec": 14.82,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/всу (20).jpg",
+   "line": "L6"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 615.96,
+   "duration_sec": 12.61,
+   "visual_prompt": "МИД России здание на Смоленской площади в Москве фотография",
+   "source": "press_photo",
+   "source_query": "МИД России здание на Смоленской площади в Москве фотография",
+   "line": "L5"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 628.58,
+   "duration_sec": 10.79,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/всу (18).jpg",
+   "line": "L6"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 639.36,
+   "duration_sec": 12.43,
+   "visual_prompt": "военнослужащие ВСУ на построении 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "военнослужащие ВСУ на построении 2026 реальное фото",
+   "line": "L6"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 651.79,
+   "duration_sec": 13.33,
+   "visual_prompt": "штабное помещение украинской воинской части реальное фото",
+   "source": "press_photo",
+   "source_query": "штабное помещение украинской воинской части реальное фото",
+   "line": "L6"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 665.12,
+   "duration_sec": 7.28,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/украина солдаты на фронте3.jpg",
+   "line": "L6"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 672.4,
+   "duration_sec": 12.21,
+   "visual_prompt": "Андрей Билецкий командир украинский политик реальное фото",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/билецкий.MP4",
+   "line": "L6"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 684.61,
+   "duration_sec": 12.59,
+   "visual_prompt": "флаги США у входа в Белый дом реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги США у входа в Белый дом реальное фото",
+   "line": "L3"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 697.2,
+   "duration_sec": 6.22,
+   "visual_prompt": "здание Еврокомиссии Берлемон в Брюсселе фотография 2026",
+   "source": "press_photo",
+   "source_query": "здание Еврокомиссии Берлемон в Брюсселе фотография 2026",
+   "line": "L4"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 703.42,
+   "duration_sec": 14.02,
+   "visual_prompt": "ПОЛИТИКА/ЗЕЛЕНСКИЙ",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗЕЛЕНСКИЙ/зеля1 (29).jpg",
+   "line": "L1"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 717.44,
+   "duration_sec": 10.62,
+   "visual_prompt": "Зеленский на пресс-конференции в Киеве 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Зеленский на пресс-конференции в Киеве 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 728.06,
+   "duration_sec": 9.89,
+   "visual_prompt": "флаги стран Евросоюза у здания Еврокомиссии в Брюсселе реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги стран Евросоюза у здания Еврокомиссии в Брюсселе реальное фото",
+   "line": "L4"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 737.95,
+   "duration_sec": 15.04,
+   "visual_prompt": "здание Европейского парламента в Брюсселе фотография 2026",
+   "source": "press_photo",
+   "source_query": "здание Европейского парламента в Брюсселе фотография 2026",
+   "line": "L4"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 752.99,
+   "duration_sec": 6.27,
+   "visual_prompt": "Урсула фон дер Ляйен на брифинге Еврокомиссии 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен на брифинге Еврокомиссии 2026 реальное фото",
+   "line": "L4"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 759.26,
+   "duration_sec": 15.41,
+   "visual_prompt": "купол здания Верховной Рады Украины снизу реальное фото",
+   "source": "press_photo",
+   "source_query": "купол здания Верховной Рады Украины снизу реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 774.67,
+   "duration_sec": 12.36,
+   "visual_prompt": "здание Министерства внутренних дел Украины в Киеве фотография",
+   "source": "press_photo",
+   "source_query": "здание Министерства внутренних дел Украины в Киеве фотография",
+   "line": "L1"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 787.02,
+   "duration_sec": 8.76,
+   "visual_prompt": "пустая площадь в центре Киева ранним утром реальное фото",
+   "source": "press_photo",
+   "source_query": "пустая площадь в центре Киева ранним утром реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 795.78,
+   "duration_sec": 13.12,
+   "visual_prompt": "television camera tripod studio no people",
+   "source": "pexels_video",
+   "source_query": "television camera tripod studio no people",
+   "line": "L8"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 808.91,
+   "duration_sec": 9.17,
+   "visual_prompt": "здание Национального банка Украины в Киеве фотография",
+   "source": "press_photo",
+   "source_query": "здание Национального банка Украины в Киеве фотография",
+   "line": "L1"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 818.08,
+   "duration_sec": 13.88,
+   "visual_prompt": "многоэтажные дома спального района Киева реальное фото",
+   "source": "press_photo",
+   "source_query": "многоэтажные дома спального района Киева реальное фото",
+   "line": "L7"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 831.96,
+   "duration_sec": 14.68,
+   "visual_prompt": "Анна Скороход в телевизионном эфире реальное фото",
+   "source": "press_photo",
+   "source_query": "Анна Скороход в телевизионном эфире реальное фото",
+   "line": "L2"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 846.64,
+   "duration_sec": 14.08,
+   "visual_prompt": "пустой кабинет в правительственном здании Киева реальное фото",
+   "source": "press_photo",
+   "source_query": "пустой кабинет в правительственном здании Киева реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 860.72,
+   "duration_sec": 13.84,
+   "visual_prompt": "пустой зал заседаний украинского правительства 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "пустой зал заседаний украинского правительства 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 874.56,
+   "duration_sec": 13.16,
+   "visual_prompt": "ПОЛИТИКА/ПУТИН",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН/п (8).jpg",
+   "line": "L5"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "start_sec": 887.72,
+   "duration_sec": 13.35,
+   "visual_prompt": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов/всу (9).jpg",
+   "line": "L6"
+  },
+  {
+   "id": 76,
+   "text": "",
+   "start_sec": 901.07,
+   "duration_sec": 10.58,
+   "visual_prompt": "украинские военные с шевронами на построении 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "украинские военные с шевронами на построении 2026 реальное фото",
+   "line": "L6"
+  },
+  {
+   "id": 77,
+   "text": "",
+   "start_sec": 911.66,
+   "duration_sec": 12.78,
+   "visual_prompt": "ПОЛИТИКА/ЗЕЛЕНСКИЙ",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗЕЛЕНСКИЙ/зеля1 (22).jpg",
+   "line": "L1"
+  },
+  {
+   "id": 78,
+   "text": "",
+   "start_sec": 924.43,
+   "duration_sec": 13.98,
+   "visual_prompt": "brake lights red glow traffic night closeup",
+   "source": "pexels_video",
+   "source_query": "brake lights red glow traffic night closeup",
+   "line": "L8"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "start_sec": 938.41,
+   "duration_sec": 12.9,
+   "visual_prompt": "Сергей Лавров на пресс-конференции МИД России 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров на пресс-конференции МИД России 2026 реальное фото",
+   "line": "L5"
+  },
+  {
+   "id": 80,
+   "text": "",
+   "start_sec": 951.31,
+   "duration_sec": 12.56,
+   "visual_prompt": "turnstile access gate closeup no people",
+   "source": "pexels_video",
+   "source_query": "turnstile access gate closeup no people",
+   "line": "L8"
+  },
+  {
+   "id": 81,
+   "text": "",
+   "start_sec": 963.87,
+   "duration_sec": 14.32,
+   "visual_prompt": "Зеленский в коридоре Офиса президента Украины 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Зеленский в коридоре Офиса президента Украины 2026 реальное фото",
+   "line": "L1"
+  },
+  {
+   "id": 82,
+   "text": "",
+   "start_sec": 978.19,
+   "duration_sec": 3.7,
+   "visual_prompt": "fountain pen on desk closeup no people",
+   "source": "pexels_video",
+   "source_query": "fountain pen on desk closeup no people",
+   "line": "L8"
+  }
+ ],
+ "channel": "ПЛАНЕТА",
+ "library": "YES (ПЛАНЕТА, потолок 20%)",
+ "context": "О чём: о возможной замене Зеленского — кто из ближайшего окружения готов его сдать и кто придёт после. Стороны: Зеленский и круг Банковой; депутаты Анна Скороход и Алексей Гончаренко; Трамп и Вашингтон (подписанное соглашение по ресурсам Украины); Брюссель; Москва (требование денацификации); украинское правое военное крыло («Азов», Билецкий). Где: Киев (Банковая, Верховная Рада), Вашингтон (Белый дом, Капитолий, Госдеп), Брюссель, Москва, украинские недра и разрушенные города. Узел: ослабление центра власти превращает верность окружения в борьбу за доступ к деньгам и потокам; США защищают вложения в ресурсную сделку; радикалам любое соглашение с Москвой грозит самим их существованием. Время: октябрь 2026, открытый конфликт Трампа с Зеленским, требование выборов, спор об ударах по российской нефтянке. Чем кончается: вопросом — найдётся ли после Зеленского человек, чья подпись будет что-то значить. Чувство: закулисный торг, цинизм политической верности, шатающийся центр власти.",
+ "lines": [
+  "L1 УКРАИНСКАЯ ВЛАСТЬ (Банковая): Офис президента Украины на Банковой, Зеленский, зал и фасад Верховной Рады, Кабмин Украины, украинские госучреждения в Киеве",
+  "L2 УКРАИНСКИЕ ДЕПУТАТЫ-ФИГУРЫ: Анна Скороход, Алексей Гончаренко — трибуна и кулуары Верховной Рады, эфиры",
+  "L3 АМЕРИКАНСКАЯ ВЛАСТЬ: Трамп, Белый дом, Капитолий, Госдеп США, Пентагон, американская военная помощь Украине",
+  "L4 ЕВРОПЕЙСКИЕ ИНСТИТУТЫ: Еврокомиссия (Берлемон) и флаги ЕС в Брюсселе, фон дер Ляйен, штаб-квартира НАТО",
+  "L5 РОССИЙСКАЯ СТОРОНА: Кремль, МИД России на Смоленской, Путин, Лавров — требования и условия Москвы",
+  "L6 УКРАИНСКОЕ ПРАВОЕ ВОЕННОЕ КРЫЛО: «Азов», Билецкий, военные ВСУ, шевроны, построения",
+  "L7 УКРАИНСКИЕ РЕСУРСЫ И ВОССТАНОВЛЕНИЕ: горные карьеры и недра Украины, энергетика, разрушенные дома, стройка восстановления",
+  "L8 ПРЕДМЕТНЫЙ СЛОЙ (сток, только видео, только предмет, названный самим текстом, без людей): касса, телефон, сейф, экскаватор, витрина, флюгер, пустое кресло, камера, пробка, турникет, перо"
+ ]
+}
