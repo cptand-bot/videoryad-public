@@ -294,11 +294,30 @@ def main():
         # возвращал 0 и бодро писал «--- рефетч images: [24, 41] ---».
         # Круг правок выглядел успешным, а кадры не менялись; поймано только
         # сверкой файлов на диске (5min-gerasimov-1810).
-        _bad = {k: v for k, v in _fx.items()
-                if not (isinstance(v, (list, tuple)) and len(v) == 2
-                        and all(isinstance(x, str) and x.strip() for x in v))}
+        # СЛОВАРНАЯ ФОРМА ТОЖЕ ГОДИТСЯ (2026-10-17): вкладка естественно пишет
+        # {"source": ..., "source_query": ...} — теми же именами, что в
+        # scenes.json — и теряла на отбивке целый круг правок. Форма
+        # однозначна, молчаливого провала с «первым символом» в ней нет,
+        # поэтому приводим её к паре, а не отбиваем.
+        def _as_pair(v):
+            if isinstance(v, dict):
+                src = v.get("source")
+                qry = v.get("source_query", v.get("query"))
+                if (isinstance(src, str) and src.strip()
+                        and isinstance(qry, str) and qry.strip()):
+                    return [src, qry]
+                return None
+            if (isinstance(v, (list, tuple)) and len(v) == 2
+                    and all(isinstance(x, str) and x.strip() for x in v)):
+                return list(v)
+            return None
+        _norm = {k: _as_pair(v) for k, v in _fx.items()}
+        _bad = {k: _fx[k] for k, v in _norm.items() if v is None}
+        if not _bad:
+            _fx = _norm
         if _bad:
-            print("СТОП: для сцен значение должно быть парой [source, query].")
+            print("СТОП: для сцен значение должно быть парой [source, query] "
+                  "или словарём {\"source\": ..., \"source_query\": ...}.")
             for k, v in _bad.items():
                 print(f"  id {k}: {v!r}")
             print("Пример: --fix-scenes '{\"24\": [\"press_photo\", \"...\"]}'."

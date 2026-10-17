@@ -592,28 +592,67 @@ _TEXT_FONTS = [
     "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
     "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
 ]
-TEXT_COLORS = {"white": (255, 255, 255), "yellow": (255, 232, 0), "red": (255, 34, 28)}
+# Пять цветов в один ряд (user, 2026-10-17: «белый, жёлтый, красный, зелёный,
+# оранжевый»). Значения подобраны так, чтобы читаться на любом кадре с чёрной
+# обводкой: зелёный — травяной, не кислотный; оранжевый — сигнальный.
+TEXT_COLORS = {"white": (255, 255, 255), "yellow": (255, 232, 0),
+               "red": (255, 34, 28), "green": (46, 214, 94),
+               "orange": (255, 146, 10)}
+TEXT_COLOR_LABELS = (("white", "БЕЛЫЙ"), ("yellow", "ЖЁЛТЫЙ"), ("red", "КРАСНЫЙ"),
+                     ("green", "ЗЕЛЁНЫЙ"), ("orange", "ОРАНЖЕВЫЙ"))
+
+# ШРИФТЫ ТЕКСТОВОЙ ВСПЛЫВАШКИ (user, 2026-10-17: «сделай кнопочками внизу
+# несколько вариантов шрифтов — Arial, Times New Roman и ещё штуки три
+# современных»). Файлы лежат в `template/fonts/` И ЕДУТ В ОБЛАКО вместе с
+# template/: на раннере GitHub свой случайный набор шрифтов, и выбор молча
+# превращался бы в DejaVu. Arial/Times — метрические клоны Arimo/Tinos
+# (свободные лицензии, кириллица проверена).
+FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+TEXT_FONTS = (
+    ("default",    "ОБЫЧНЫЙ",    ""),
+    ("arial",      "ARIAL",       "Arimo-Bold.ttf"),
+    ("times",      "TIMES",       "Tinos-Bold.ttf"),
+    ("oswald",     "OSWALD",      "Oswald-Bold.ttf"),
+    ("montserrat", "MONTSERRAT",  "Montserrat-Bold.ttf"),
+    ("roboto",     "ROBOTO",      "RobotoCondensed-Bold.ttf"),
+)
+TEXT_FONT_FILES = {k: f for k, _l, f in TEXT_FONTS}
 
 
-def render_text_png(text, tcolor, out_path):
+def load_text_font(fkey, size):
+    """Шрифт для слова: сначала выбранный файл из template/fonts, потом
+    системный дефолт. Переменные (variable) файлы переводим в Bold."""
+    from PIL import ImageFont
+    cand = []
+    fn = TEXT_FONT_FILES.get(str(fkey or "default").lower(), "")
+    if fn:
+        cand.append(os.path.join(FONT_DIR, fn))
+    cand += _TEXT_FONTS
+    for fp in cand:
+        if not os.path.exists(fp):
+            continue
+        try:
+            font = ImageFont.truetype(fp, size)
+        except Exception:
+            continue
+        try:
+            font.set_variation_by_name("Bold")
+        except Exception:
+            pass          # статический файл или FreeType без variable — ок
+        return font
+    return ImageFont.load_default()
+
+
+def render_text_png(text, tcolor, out_path, fkey="default"):
     """Слово капсом, жирный, чёрная обводка, прозрачный фон. Рисуем крупно —
     build_overlays масштабирует под кадр. Возвращает True при успехе."""
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
     txt = " ".join((text or "").split()).upper()
     if not txt:
         return False
     fill = TEXT_COLORS.get(str(tcolor).lower(), TEXT_COLORS["white"]) + (255,)
     fs = 220
-    font = None
-    for fp in _TEXT_FONTS:
-        if os.path.exists(fp):
-            try:
-                font = ImageFont.truetype(fp, fs)
-                break
-            except Exception:
-                pass
-    if font is None:
-        font = ImageFont.load_default()
+    font = load_text_font(fkey, fs)
     sw = max(4, int(fs * 0.11))
     d0 = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
     bb = d0.textbbox((0, 0), txt, font=font, stroke_width=sw)
@@ -1068,6 +1107,21 @@ figcaption{padding:10px 13px 13px}
 .ovcolrow button.on{border-color:#fff;box-shadow:0 0 0 2px #7b4dd6}
 .ovcol-white{background:#fff}.ovcol-yellow{background:#ffe800}
 .ovcol-red{background:#ff2620;color:#fff}
+.ovcol-green{background:#2ed65e}.ovcol-orange{background:#ff920a}
+@font-face{font-family:ovArial;src:url("_font/Arimo-Bold.ttf")format("truetype");font-weight:700}
+@font-face{font-family:ovTimes;src:url("_font/Tinos-Bold.ttf")format("truetype");font-weight:700}
+@font-face{font-family:ovOswald;src:url("_font/Oswald-Bold.ttf")format("truetype");font-weight:700}
+@font-face{font-family:ovMontserrat;src:url("_font/Montserrat-Bold.ttf")format("truetype");font-weight:700}
+@font-face{font-family:ovRoboto;src:url("_font/RobotoCondensed-Bold.ttf")format("truetype");font-weight:700}
+.ovfontrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.ovfontrow button{flex:1 1 60px;cursor:pointer;border-radius:5px;padding:5px 2px;
+  font-size:12px;border:2px solid #555;background:#2a2f3a;color:#dfe4ee;line-height:1.1}
+.ovfontrow button.on{background:#7b4dd6;border-color:#a583e8;color:#fff}
+.ovf-arial{font-family:ovArial,Arial,sans-serif;font-weight:700}
+.ovf-times{font-family:ovTimes,"Times New Roman",serif;font-weight:700}
+.ovf-oswald{font-family:ovOswald,Impact,sans-serif;font-weight:700}
+.ovf-montserrat{font-family:ovMontserrat,Verdana,sans-serif;font-weight:700}
+.ovf-roboto{font-family:ovRoboto,"Arial Narrow",sans-serif;font-weight:700}
 .ovshapes{display:flex;gap:4px}
 .ovshapes button{width:30px;height:26px;padding:0;background:#2a2f3a;border:1px solid #444a58;
   border-radius:5px;color:#c9cedb;font-size:15px;cursor:pointer;line-height:1}
@@ -1282,6 +1336,9 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         prev = (f'<img class="ovprev" id="ovprev{sid}" src="{ph_prev}?v={int(os.path.getmtime(ph))}" alt="">'
                 if ph and os.path.exists(ph) else f'<img class="ovprev" id="ovprev{sid}" alt="" hidden>')
         _tcol = _tw.get("color", "yellow")
+        _tfont = str(_tw.get("font") or "default").lower()
+        if _tfont not in TEXT_FONT_FILES:
+            _tfont = "default"
         _tpos = _tw.get("pos", "bc")
         _topts = "".join(f'<option value="{x["name"]}"'
                          f'{" selected" if x["name"] == _tw.get("sound", text_sound_for(sid)) else ""}>{x["label"]}</option>'
@@ -1391,7 +1448,12 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<div class="ovcolrow" id="ovcol{sid}">'
             + "".join(f'<button class="ovcol-{c}{" on" if _tcol==c else ""}" '
                       f'onclick="ovTextColor({sid},\'{c}\')">{lbl}</button>'
-                      for c, lbl in (("white", "БЕЛЫЙ"), ("yellow", "ЖЁЛТЫЙ"), ("red", "КРАСНЫЙ")))
+                      for c, lbl in TEXT_COLOR_LABELS)
+            + f'</div>'
+            f'<div class="ovfontrow" id="ovfont{sid}">'
+            + "".join(f'<button class="ovf-{k}{" on" if _tfont==k else ""}" '
+                      f'data-f="{k}" onclick="ovTextFont({sid},\'{k}\')">{lbl}</button>'
+                      for k, lbl, _fn in TEXT_FONTS)
             + f'</div>'
             f'<div class="ovrow"><span>место</span><div class="ovgrid" id="ovgrid{sid}">'
             + "".join(f'<button class="{"on" if _tpos==p else ""}" '
@@ -1928,9 +1990,18 @@ async function ovSave(id){{
 function _ovTcolor(id){{
   const b = document.querySelector("#ovcol"+id+" button.on");
   if(!b) return "white";
-  if(b.classList.contains("ovcol-yellow")) return "yellow";
-  if(b.classList.contains("ovcol-red")) return "red";
+  for(const c of ["yellow","red","green","orange","white"])
+    if(b.classList.contains("ovcol-"+c)) return c;
   return "white";
+}}
+function _ovTfont(id){{
+  const b = document.querySelector("#ovfont"+id+" button.on");
+  return (b && b.dataset.f) ? b.dataset.f : "default";
+}}
+function ovTextFont(id,f){{
+  document.querySelectorAll("#ovfont"+id+" button").forEach(b=>
+    b.classList.toggle("on", b.dataset.f===f));
+  ovTextSave(id);
 }}
 function txtAdd(id){{
   const w=document.getElementById("txtwrap"+id); if(w){{ w.hidden=false; w.dataset.touched="1"; }}
@@ -1942,7 +2013,7 @@ async function ovTextSave(id, approvedVal){{
   if(!txt) return;
   const pb = document.querySelector("#ovgrid"+id+" button.on");
   const body = {{
-    words: txt, color: _ovTcolor(id),
+    words: txt, color: _ovTcolor(id), font: _ovTfont(id),
     pos: pb ? pb.getAttribute("title") : "bc",
     sound: (document.getElementById("ovtsnd"+id)||{{}}).value || "",
     at: parseFloat((document.getElementById("ovtat"+id)||{{}}).value || "2"),
@@ -2698,6 +2769,23 @@ def run_live(scenes_path, images_dir, port):
                 self.end_headers()
                 self.wfile.write(body)
                 return
+            # ШРИФТЫ КНОПОК: отдаём из template/fonts, чтобы кнопка была
+            # подписана тем самым шрифтом, которым слово ляжет на кадр
+            # (2026-10-17). Папка ролика их не содержит и содержать не должна.
+            if path.startswith("/_font/") or path.startswith("_font/"):
+                fn = os.path.basename(path)
+                fp = os.path.join(FONT_DIR, fn)
+                if fn in TEXT_FONT_FILES.values() and os.path.exists(fp):
+                    data = open(fp, "rb").read()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "font/ttf")
+                    self.send_header("Cache-Control", "max-age=86400")
+                    self.send_header("Content-Length", str(len(data)))
+                    self.end_headers()
+                    self.wfile.write(data)
+                else:
+                    self.send_error(404)
+                return
             return super().do_GET()
 
         def end_headers(self):
@@ -2807,7 +2895,11 @@ def run_live(scenes_path, images_dir, port):
                 pos = str(spec.get("pos", "bc")).lower()
                 if not (len(pos) == 2 and pos[0] in "tmb" and pos[1] in "lcr"):
                     pos = "bc"
-                tblock = {"words": words, "color": color, "pos": pos}
+                fkey = str(spec.get("font") or "default").lower()
+                if fkey not in TEXT_FONT_FILES:
+                    fkey = "default"
+                tblock = {"words": words, "color": color, "pos": pos,
+                          "font": fkey}
                 tblock["sound"] = str(spec.get("sound") or "") or text_sound_for(sid)
                 try:
                     tblock["at"] = round(float(spec.get("at", 2.0)), 2)
@@ -2818,7 +2910,7 @@ def run_live(scenes_path, images_dir, port):
                 except (TypeError, ValueError):
                     tblock["scale"] = 1.0
                 os.makedirs("overlays", exist_ok=True)
-                render_text_png(words, color, png)     # для превью дашборда
+                render_text_png(words, color, png, fkey)  # для превью дашборда
                 with _overlays_txn() as ovs:
                     cur = ovs.get(str(sid), {})
                     _prev_text = cur.get("text") if isinstance(cur.get("text"), dict) else {}

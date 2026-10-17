@@ -54,13 +54,49 @@ _TXT_FONTS = [
     "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
     os.path.expanduser("~/.local/share/fonts/DejaVuSans-Bold.ttf"),
 ]
-_TXT_RGB = {"white": (255, 255, 255), "yellow": (255, 232, 0), "red": (255, 34, 28)}
+_TXT_RGB = {"white": (255, 255, 255), "yellow": (255, 232, 0),
+            "red": (255, 34, 28), "green": (46, 214, 94),
+            "orange": (255, 146, 10)}
+
+# ВЫБРАННЫЙ ШРИФТ ЕДЕТ ФАЙЛОМ (2026-10-17): файлы лежат рядом, в
+# `template/fonts/`, и уходят в облако вместе с template/. Раннер GitHub
+# несёт свой случайный набор системных шрифтов, поэтому имя семейства там
+# ничего не гарантирует — только файл. Ключи совпадают с кнопками дашборда
+# (review.py: TEXT_FONTS).
+_FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+_TXT_FONT_FILES = {
+    "default": "", "arial": "Arimo-Bold.ttf", "times": "Tinos-Bold.ttf",
+    "oswald": "Oswald-Bold.ttf", "montserrat": "Montserrat-Bold.ttf",
+    "roboto": "RobotoCondensed-Bold.ttf",
+}
 
 
-def _render_text_png(words, color, out_path):
+def _load_txt_font(fkey, size):
+    from PIL import ImageFont
+    cand = []
+    fn = _TXT_FONT_FILES.get(str(fkey or "default").lower(), "")
+    if fn:
+        cand.append(os.path.join(_FONT_DIR, fn))
+    cand += _TXT_FONTS
+    for fp in cand:
+        if not os.path.exists(fp):
+            continue
+        try:
+            font = ImageFont.truetype(fp, size)
+        except Exception:
+            continue
+        try:
+            font.set_variation_by_name("Bold")
+        except Exception:
+            pass
+        return font
+    return ImageFont.load_default()
+
+
+def _render_text_png(words, color, out_path, fkey="default"):
     """Слово капсом, жирный, чёрная обводка, прозрачный фон."""
     try:
-        from PIL import Image, ImageDraw, ImageFont
+        from PIL import Image, ImageDraw
     except ImportError:
         return False
     txt = " ".join(str(words or "").split()).upper()
@@ -68,15 +104,7 @@ def _render_text_png(words, color, out_path):
         return False
     fill = _TXT_RGB.get(str(color).lower(), _TXT_RGB["white"]) + (255,)
     fs = 220
-    font = None
-    for fp in _TXT_FONTS:
-        if os.path.exists(fp):
-            try:
-                font = ImageFont.truetype(fp, fs); break
-            except Exception:
-                pass
-    if font is None:
-        font = ImageFont.load_default()
+    font = _load_txt_font(fkey, fs)
     sw = max(4, int(fs * 0.11))
     bb = ImageDraw.Draw(Image.new("RGBA", (8, 8))).textbbox((0, 0), txt, font=font, stroke_width=sw)
     pad = sw + 14
@@ -109,7 +137,8 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     png = out_mp4 + ".txt.png"
-    if not _render_text_png(words, ts.get("color", "white"), png):
+    if not _render_text_png(words, ts.get("color", "white"), png,
+                            ts.get("font", "default")):
         return False
     pw, ph = _img_wh(ffprobe, png)
     th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
