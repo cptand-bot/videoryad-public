@@ -188,7 +188,11 @@ else:
 # 5. видео-лид (SKILL.md rule 7) — ПРЕДУПРЕЖДЕНИЕ, не блокер: пользователь
 # может сознательно наменять фото в первой трети на дашборде (его правки =
 # финал). Флагаем, чтобы он знал, но сборку не держим.
-r = subprocess.run(["python3", "check_lead.py", scenes_path, images],
+# Соседний скрипт — ПО ПОЛНОМУ ПУТИ ОТ СЕБЯ, а не по имени из cwd
+# (2026-10-17): selfcheck теперь гоняется из template при cwd = папка
+# проекта, и голое имя искалось бы в проекте, где копии может не быть.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+r = subprocess.run(["python3", os.path.join(_HERE, "check_lead.py"), scenes_path, images],
                    capture_output=True, text=True)
 if r.returncode != 0:
     WARN.append("видео-лид не выполнен (см. ниже) — ок, если это твои правки на дашборде:\n     "
