@@ -401,10 +401,27 @@ def main():
                     os.remove(sub)
             return 1
 
+    # --ban: СНЯТЫЙ КАДР — В БАН, А НЕ ПРОСТО ИЗ СЦЕНЫ (2026-10-17).
+    # Живой случай: архивное фото АЗС с ценами 2015 года забраковали на
+    # сцене 45, сцену заменили — и на следующем рефетче тот же файл пришёл
+    # на сцену 41. Замена сцены не выводит файл из выдачи, он переезжает.
+    # Флаг для случаев, когда кадр плох САМ ПО СЕБЕ (водяной знак, архив,
+    # чужая страна, датировка), а не «не подошёл по смыслу».
+    _ban = "--ban" in sys.argv
     for _, assets, ids, _ in jobs:   # удаляем только теперь, линт прошёл
         for sid in ids:
+            _md5s = []
+            if _ban:
+                for f in glob.glob(os.path.join(assets, "scene_%03d.*" % sid)):
+                    if not f.endswith(SKIP_EXT) and ".ovthumb." not in f:
+                        h = _md5(f)
+                        if h:
+                            _md5s.append(h)
             for f in wipe(assets, sid):
                 print("  снёс %s" % f)
+            for h in _md5s:
+                subprocess.run(["python3", os.path.join(here, "ban_file.py"),
+                                "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
     for sub, assets, ids, before in jobs:
         print("\n--- рефетч %s: %s ---" % (assets, ids))
         subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
