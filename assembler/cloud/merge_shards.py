@@ -158,6 +158,50 @@ def _collect_overlays(images_dir, proj):
           + (f", убрал без фото: {dropped}" if dropped else ""), flush=True)
 
 
+def _sweep_banned(proj, images_dir):
+    """Выбросить забаненные кадры ПРЯМО В ОБЛАКЕ, сразу после матрицы.
+
+    Зачем, хотя фетчер баны и так чтит (2026-10-17): за один день дважды
+    забаненный md5 оказался в готовой папке — на ПЛАНЕТЕ (путь восстановить
+    не удалось) и на 5 МИНУТ (кадр приехал из облачного забора, локальный
+    фетч поймал его только кэш-проверкой: «кэш забанен — удалил, качаю
+    заново»). Бан-лист в шардах был на месте — в логе 28 строк «бан-лист:
+    142 md5». Значит дыра где-то между скачиванием и папкой, и искать её по
+    горячим следам нечем. Поэтому ставим сито В КОНЦЕ облачной фазы: файл с
+    забаненным md5 удаляется, сцена остаётся без кадра и доберётся локально.
+    """
+    ban_path = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.join(proj, ".banned_md5.json")
+    try:
+        raw = json.load(open(ban_path, encoding="utf-8"))
+    except (OSError, ValueError):
+        print("[merge] бан-листа нет — сито не работает", flush=True)
+        return
+    today = time.strftime("%Y-%m-%d")
+    ban = {m for m, e in raw.items()
+           if not (isinstance(e, dict) and e.get("until")) or e["until"] >= today}
+    if not ban:
+        return
+    hit, seen = [], 0
+    for d in (images_dir, os.path.join(proj, "overlays")):
+        for f in sorted(glob.glob(os.path.join(d, "scene_*.*"))):
+            if f.endswith((".json", ".ovthumb.jpg", ".revframe.jpg")):
+                continue
+            try:
+                h = hashlib.md5(open(f, "rb").read()).hexdigest()
+            except OSError:
+                continue
+            seen += 1
+            if h in ban:
+                try:
+                    os.remove(f)
+                    hit.append(os.path.basename(f))
+                except OSError:
+                    pass
+    print(f"[merge] сито бан-листа: {seen} файлов против {len(ban)} активных банов"
+          + (f" — УДАЛЕНО {len(hit)}: {hit} (сцены доберутся локально)" if hit else " — чисто"),
+          flush=True)
+
+
 def _placeholder(path, sid):
     """A neutral dark slug so a missing scene keeps its slot (video length
     stays right) and the dashboard shows it — needs_upload.json paints it
@@ -195,6 +239,7 @@ def main():
     # overlays.json entries the matrix couldn't find (no yellow card for a
     # missing pop-up; the user re-adds on the dashboard if he wants one).
     _collect_overlays(images_dir, proj)
+    _sweep_banned(proj, images_dir)
 
     shard_manifests = sorted(glob.glob(os.path.join(images_dir, "manifest.shard*.json")))
     print(f"[merge] {len(shard_manifests)} shard-манифестов, "

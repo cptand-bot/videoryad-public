@@ -273,6 +273,29 @@ def drop_overlay(sid):
                 os.remove(p)
             except OSError:
                 pass
+        # И ВЫРЕЗАТЬ СЦЕНУ ИЗ `*_fetch.scenes.json` (2026-10-17). Запись и файл
+        # удалялись, а задание на ФЕТЧ оставалось — и облако на следующей фазе
+        # добывало кадр заново, воскрешая снятую пользователем всплывашку. Это
+        # тот же инцидент 2026-09-16 («ship вернул убранную всплывашку»), но с
+        # другой стороны: сверка сирот его не видит, потому что ни записи, ни
+        # файла нет — расхождение живёт только между fetch-файлом и
+        # overlays.json. Поймано на 5min-ze-isterika-1810 новым гейтом selfcheck.
+        for _fp in glob.glob(os.path.join(os.path.dirname(OVERLAY_FILE) or ".",
+                                          "*_fetch.scenes.json")):
+            try:
+                _d = json.load(open(_fp, encoding="utf-8"))
+                _sc = _d.get("scenes") if isinstance(_d, dict) else None
+                if not _sc:
+                    continue
+                _left = [s for s in _sc if int(s.get("id", -1)) != int(sid)]
+                if len(_left) != len(_sc):
+                    _d["scenes"] = _left
+                    _tmp = _fp + ".tmp"
+                    json.dump(_d, open(_tmp, "w", encoding="utf-8"),
+                              ensure_ascii=False, indent=1)
+                    os.replace(_tmp, _fp)
+            except (OSError, ValueError, TypeError):
+                pass
 
 
 # --- running headline ticker ("бегущая строка") — FULLY SEPARATE FEATURE --
@@ -2316,15 +2339,14 @@ function rjAsk(id, kind, action){{
   return new Promise(function(resolve){{
     _rjCtx = {{id:id, kind:kind, action:action, resolve:resolve}};
     _rjAudio = ""; _rjChunks = [];
+    // КНОПКИ-ПРИЧИНЫ УБРАНЫ (user, 2026-10-17, прямая просьба): «я даже их не
+    // читаю, даже не понимаю, зачем они нужны… я буду вводить голосовым. Если
+    // не буду ничего менять — оставлю пустое поле или нажму игнор. Это только
+    // загромождение нашего интерфейса». Остались: 🎤, поле, ИГНОР, готово.
+    // Списки RJ_REASONS/RJ_GOOD нарочно оставлены в коде — по их кодам
+    // подписаны старые записи журнала, и `rejections.py --summary` их читает.
     const box = document.getElementById("rjbtns");
     box.innerHTML = "";
-    const list = (action === "keep") ? RJ_GOOD : RJ_REASONS;
-    list.forEach(function(r){{
-      const b = document.createElement("button");
-      b.className = "rjb"; b.textContent = r[1];
-      b.onclick = function(){{ rjSend(r[0]); }};
-      box.appendChild(b);
-    }});
     document.getElementById("rjnote").value = "";
     document.getElementById("rjstat").textContent = "";
     document.getElementById("rjmic").textContent = "🎤 надиктовать причину";
@@ -2487,7 +2509,7 @@ function rjIgnore(){{ rjSend(""); }}
   <textarea id="rjnote" rows="2" placeholder="или напиши причину…"></textarea>
   <div class="rjrow rjfoot">
    <button class="rjign" onclick="rjIgnore()">ИГНОР</button>
-   <button class="rjok" onclick="rjSend('other')">готово</button>
+   <button class="rjok" onclick="rjSend('')">готово</button>
   </div>
  </div>
 </div>
