@@ -280,6 +280,20 @@ def drop_ticker(sid):
 
 _POS2STYLE = {"left": "left", "right": "right", "center": "up-center"}
 
+def _ovcell_cur(spec, anchor="bottom"):
+    """Клетка схемы 3×3 для ФОТО-всплывашки: горизонталь из style,
+    вертикаль из anchor записи (или общего ключа ролика).
+    Кнопочная схема вместо выпадающих списков — прямая просьба пользователя
+    17.10: «тык нажал — центр, тык нажал — слева… а не списки, в которых я
+    должен ковыряться». Такая же сетка уже была у всплывашки-СЛОВА."""
+    h = _ovpos_cur(spec)                      # left | center | right
+    v = str((spec or {}).get("anchor") or anchor).lower()
+    if v not in ("top", "middle", "bottom"):
+        v = "bottom"
+    return {"top": "t", "middle": "m", "bottom": "b"}[v] + \
+           {"left": "l", "center": "c", "right": "r"}[h]
+
+
 def _ovpos_cur(spec):
     st = (spec or {}).get("style", "") or ""
     if "left" in st:
@@ -342,8 +356,9 @@ def overlay_geom(sid, spec, photo_path=None, anchor="bottom"):
         x = W - dw - margin
     else:
         x = (W - dw) // 2
-    y = margin if str(anchor).lower() == "top" else H - dh - margin
-    _v = "сверху" if str(anchor).lower() == "top" else "снизу"
+    _a = str(anchor).lower()
+    y = margin if _a == "top" else ((H - dh) // 2 if _a == "middle" else H - dh - margin)
+    _v = "сверху" if _a == "top" else ("по середине" if _a == "middle" else "снизу")
     ru = {"left": f"{_v} слева", "right": f"{_v} справа", "up-center": f"{_v} по центру",
           "up-right": f"{_v} справа", "up-left": f"{_v} слева"}
     pos = "left" if "left" in style else ("right" if "right" in style else "center")
@@ -578,6 +593,20 @@ def _uniq_save(images_dir, data):
     tmp = p + ".tmp"
     json.dump(data, open(tmp, "w"), ensure_ascii=False, indent=1)
     os.replace(tmp, p)
+
+
+def _uniq_forget(images_dir, sid):
+    """Забыть обработку сцены: состояние + сохранённый исходник. Нужно, когда
+    файл ЗАМЕНИЛИ (другое фото всплывашки, новый поиск) — иначе «сброс» вернёт
+    кадр от ПРЕДЫДУЩЕЙ картинки, а подсветка кнопок соврёт (2026-10-17)."""
+    data = _uniq_load(images_dir)
+    if data.pop(str(sid), None) is not None:
+        _uniq_save(images_dir, data)
+    for p in glob.glob(os.path.join(images_dir, ".uniq_orig", f"scene_{sid:03d}.*")):
+        try:
+            os.remove(p)
+        except OSError:
+            pass
 
 
 def _uniq_state(images_dir, sid):
@@ -936,6 +965,10 @@ figcaption{padding:10px 13px 13px}
 .ovcolrow button.on{border-color:#fff;box-shadow:0 0 0 2px #7b4dd6}
 .ovcol-white{background:#fff}.ovcol-yellow{background:#ffe800}
 .ovcol-red{background:#ff2620;color:#fff}
+.ovshapes{display:flex;gap:4px}
+.ovshapes button{width:30px;height:26px;padding:0;background:#2a2f3a;border:1px solid #444a58;
+  border-radius:5px;color:#c9cedb;font-size:15px;cursor:pointer;line-height:1}
+.ovshapes button.on{background:#7b4dd6;border-color:#a583e8;color:#fff}
 .ovgrid{display:grid;grid-template-columns:repeat(3,26px);gap:3px}
 .ovgrid button{width:26px;height:26px;padding:0;background:#2a2f3a;border:1px solid #444a58;
   color:#9aa2b4;border-radius:4px;font-size:13px;line-height:1}
@@ -1141,6 +1174,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
                        for x in sfx)
         at_val = ov_cur.get("at", 0.4)   # появляется сразу после старта сцены, держится до конца
         ph = ov_cur.get("photo", "")
+        _uov = _uniq_state("overlays", sid)
         ph_prev = overlay_preview_path(ph) if ph and os.path.exists(ph) else ph
         prev = (f'<img class="ovprev" id="ovprev{sid}" src="{ph_prev}?v={int(os.path.getmtime(ph))}" alt="">'
                 if ph and os.path.exists(ph) else f'<img class="ovprev" id="ovprev{sid}" alt="" hidden>')
@@ -1163,6 +1197,31 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<div class="ovrow"><label class="ovup" id="ovphoto{sid}">⬆️ загрузить фото'
             f'<input type="file" accept="image/*" onchange="ovPhoto({sid},this)"></label>'
             f'<button type="button" class="mirbtn" id="mirov{sid}" onclick="mirrorOv({sid})">🔄 отзеркалить</button></div>'
+            # ТОТ ЖЕ НАБОР, ЧТО У ОСНОВНОГО КАДРА (user, 2026-10-17: «для
+            # превьюшек тоже эти кнопки — отзеркалить, масштаб, угол разворота,
+            # чёрно-белое, контрастность… чтобы функционал был такой же»).
+            # Роут uniq теперь умеет работать по папке overlays/ (параметр t=ov),
+            # состояние живёт в overlays/.uniq.json, исходник — в .uniq_orig/.
+            + (f'<div class="ovrow"><span>обработка</span>'
+               f'<span class="uniqwrap" id="uwov{sid}">'
+               f'<button class="uqbtn{" on" if _uov["flip"] else ""}" data-k="flip" '
+               f'onclick="uniqTog({sid},\'flip\',\'ov\')" title="зеркало">🔄</button>'
+               f'<button class="uqbtn{" on" if _uov["color"] else ""}" data-k="color" '
+               f'onclick="uniqTog({sid},\'color\',\'ov\')" title="контраст+цвет">🎨</button>'
+               f'<button class="uqbtn{" on" if _uov["bw"] else ""}" data-k="bw" '
+               f'onclick="uniqTog({sid},\'bw\',\'ov\')" title="чёрно-белое">⬜</button>'
+               f'<span class="uqgrp" data-k="rot">⟳'
+               + "".join(f'<button class="uqbtn{" on" if int(_uov["rot"])==r else ""}" '
+                         f'onclick="uniqSet({sid},\'rot\',{r},\'ov\')">{r}°</button>'
+                         for r in (1, 2, 3))
+               + f'</span>'
+               f'<span class="uqgrp" data-k="zoom">✂️'
+               + "".join(f'<button class="uqbtn{" on" if abs(float(_uov["zoom"])-z)<0.01 else ""}" '
+                         f'onclick="uniqSet({sid},\'zoom\',{z},\'ov\')">{z}×</button>'
+                         for z in (1.1, 1.2, 1.3))
+               + f'</span>'
+               f'<button class="uqbtn" onclick="uniqReset({sid},\'ov\')" title="снять всё">сброс</button>'
+               f'<i id="umov{sid}">{_uniq_summary(_uov)}</i></span></div>') if (live and ph) else ''
             f'<div class="ovrow ovfind">'
             f'<input type="text" id="ovq{sid}" placeholder="или найди в интернете — что именно, словами" '
             f'onfocus="if(/^[⚠🔴]/.test(this.value))this.value=\'\'" '
@@ -1176,21 +1235,22 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'<div class="ovrow"><span>звук</span>'
             f'<select id="ovsnd{sid}" onchange="ovSave({sid})">{opts}</select></div>'
             f'<div class="ovrow"><span>форма</span>'
-            f'<select id="ovshape{sid}" onchange="ovSave({sid})">'
-            + "".join(f'<option value="{v}"{" selected" if ov_cur.get("shape","rect")==v else ""}>{lbl}</option>'
-                      for v, lbl in (("rect","прямоугольник"),("rounded","скруглённый"),
-                                     ("square","квадрат"),("circle","круг")))
-            + f'</select></div>'
-            f'<div class="ovrow"><span>позиция</span>'
-            f'<select id="ovposn{sid}" onchange="ovSave({sid})">'
-            + "".join(f'<option value="{v}"{" selected" if _ovpos_cur(ov_cur)==v else ""}>{lbl}</option>'
-                      for v, lbl in (("left","влево"),("center","центр"),("right","вправо")))
-            + f'</select></div>'
-            f'<div class="ovrow"><span>по вертикали</span>'
-            f'<select id="ovanch{sid}" onchange="ovSave({sid})">'
-            + "".join(f'<option value="{v}"{" selected" if _ov_anchor==v else ""}>{lbl}</option>'
-                      for v, lbl in (("top","вверху"),("bottom","внизу")))
-            + f'</select></div>'
+            f'<input type="hidden" id="ovshape{sid}" value="{ov_cur.get("shape","rect")}">'
+            f'<div class="ovshapes" id="ovsh{sid}">'
+            + "".join(f'<button type="button" class="{"on" if ov_cur.get("shape","rect")==v else ""}" '
+                      f'onclick="ovShape({sid},\'{v}\')" title="{lbl}">{sym}</button>'
+                      for v, lbl, sym in (("rect", "прямоугольник", "▭"),
+                                          ("rounded", "скруглённые углы", "▢"),
+                                          ("square", "квадрат", "◼"),
+                                          ("circle", "круг", "●")))
+            + f'</div></div>'
+            f'<div class="ovrow"><span>место</span><div class="ovgrid" id="ovpgrid{sid}">'
+            + "".join(f'<button type="button" class="{"on" if _ovcell_cur(ov_cur, _ov_anchor)==c else ""}" '
+                      f'onclick="ovPhotoPos({sid},\'{c}\')" title="{c}">{sym}</button>'
+                      for c, sym in (("tl", "↖"), ("tc", "↑"), ("tr", "↗"),
+                                     ("ml", "←"), ("mc", "•"), ("mr", "→"),
+                                     ("bl", "↙"), ("bc", "↓"), ("br", "↘")))
+            + f'</div></div>'
             f'<div class="ovrow"><span>масштаб</span>'
             f'<input type="number" id="ovscale{sid}" min="0.4" max="2.4" step="0.1" '
             f'value="{ov_cur.get("scale",1.0)}" onchange="ovSave({sid})"> ×</div>'
@@ -1644,17 +1704,23 @@ async function zoomImg(id, f){{
   }}catch(e){{ if(tag) tag.textContent = " ✗"; }}
   if(wrap) wrap.querySelectorAll("button").forEach(x=>x.disabled=false);
 }}
-async function uniqApply(id, params){{
-  const wrap = document.getElementById("uw"+id);
-  const tag = document.getElementById("um"+id);
+async function uniqApply(id, params, t){{
+  // t === "ov" — та же обработка, но для фото всплывашки (папка overlays/)
+  const sfx = (t === "ov") ? "ov" : "";
+  const wrap = document.getElementById("uw"+sfx+id);
+  const tag = document.getElementById("um"+sfx+id);
   if(wrap) wrap.querySelectorAll("button").forEach(x=>x.disabled=true);
   const prev = tag ? tag.textContent : "";
   if(tag) tag.textContent = " …";
   try{{
-    const r = await fetch("uniq?id="+id+"&"+params, {{method:"POST"}});
+    const r = await fetch("uniq?id="+id+((t==="ov")?"&t=ov":"")+"&"+params, {{method:"POST"}});
     const j = r.ok ? await r.json() : null;
     if(j){{
       if(tag) tag.textContent = j.summary || "";
+      if(t === "ov"){{                       // перерисовать превьюшку всплывашки
+        const pv = document.getElementById("ovprev"+id);
+        if(pv && pv.src) pv.src = pv.src.split("?")[0] + "?v=" + Date.now();
+      }}
       // подсветить активные кнопки по факту серверного состояния
       if(wrap){{
         wrap.querySelectorAll('button[data-k]').forEach(b=>{{
@@ -1674,9 +1740,17 @@ async function uniqApply(id, params){{
   }}catch(e){{ if(tag) tag.textContent = prev + " ✗"; }}
   if(wrap) wrap.querySelectorAll("button").forEach(x=>x.disabled=false);
 }}
-function uniqTog(id, key){{ uniqApply(id, "toggle="+key); }}
-function uniqSet(id, key, val){{ uniqApply(id, key+"="+val); }}
-function uniqReset(id){{ uniqApply(id, "reset=1"); }}
+function uniqTog(id, key, t){{ uniqApply(id, "toggle="+key, t); }}
+function uniqSet(id, key, val, t){{ uniqApply(id, key+"="+val, t); }}
+function uniqReset(id, t){{ uniqApply(id, "reset=1", t); }}
+// ФОРМА ВСПЛЫВАШКИ КНОПКАМИ (user, 17.10: «не хочу этими списками морочиться»)
+function ovShape(id, v){{
+  const inp = document.getElementById("ovshape"+id);
+  if(inp) inp.value = v;
+  document.querySelectorAll("#ovsh"+id+" button").forEach(b=>
+    b.classList.toggle("on", b.getAttribute("onclick").indexOf("'"+v+"'")>0));
+  ovSave(id);
+}}
 async function previewScene(id, ev){{
   if(ev) ev.stopPropagation();
   const b=document.getElementById("pvbtn"+id);
@@ -1733,16 +1807,13 @@ async function ovSave(id){{
   const at  = parseFloat(document.getElementById("ovat"+id).value || "0");
   const shEl = document.getElementById("ovshape"+id);
   const shape = shEl ? shEl.value : "rect";
-  const posEl = document.getElementById("ovposn"+id);
-  const pos = posEl ? posEl.value : "";
   const scEl = document.getElementById("ovscale"+id);
-  const anEl = document.getElementById("ovanch"+id);
   const scale = scEl ? parseFloat(scEl.value || "1") : 1;
   const m = document.getElementById("ovmsg"+id); m.textContent = "…";
   try{{
     const r = await fetch("overlay?id="+id, {{method:"POST",
       headers:{{"Content-Type":"application/json"}},
-      body: JSON.stringify({{sound: snd, at: at, shape: shape, pos: pos, scale: scale, anchor: (anEl ? anEl.value : "")}})}});
+      body: JSON.stringify({{sound: snd, at: at, shape: shape, scale: scale}})}});
     m.textContent = r.ok ? "сохранено ✓" : "ошибка";
   }}catch(e){{ m.textContent = "ошибка"; }}
   setTimeout(()=>{{ m.textContent = ""; }}, 1800);
@@ -1788,6 +1859,22 @@ function ovTextColor(id,c){{
   document.querySelectorAll("#ovcol"+id+" button").forEach(b=>
     b.classList.toggle("on", b.classList.contains("ovcol-"+c)));
   ovTextSave(id);
+}}
+async function ovPhotoPos(id,c){{
+  // КЛЕТКА СХЕМЫ: первая буква — верх/середина/низ, вторая — лево/центр/право.
+  // Одно нажатие = и горизонталь, и вертикаль, без списков (user, 17.10).
+  document.querySelectorAll("#ovpgrid"+id+" button").forEach(b=>
+    b.classList.toggle("on", b.getAttribute("title")===c));
+  const V = {{t:"top", m:"middle", b:"bottom"}}[c[0]];
+  const H = {{l:"left", c:"center", r:"right"}}[c[1]];
+  const m = document.getElementById("ovmsg"+id); if(m) m.textContent = "…";
+  try{{
+    const r = await fetch("overlay?id="+id, {{method:"POST",
+      headers:{{"Content-Type":"application/json"}},
+      body: JSON.stringify({{pos: H, anchor: V}})}});
+    if(m) m.textContent = r.ok ? "сохранено ✓" : "ошибка";
+  }}catch(e){{ if(m) m.textContent = "ошибка"; }}
+  setTimeout(()=>{{ if(m) m.textContent = ""; }}, 1800);
 }}
 function ovTextPos(id,p){{
   document.querySelectorAll("#ovgrid"+id+" button").forEach(b=>
@@ -2551,7 +2638,7 @@ def run_live(scenes_path, images_dir, port):
                     patch["shape"] = sh if sh in ("rect", "rounded", "square", "circle") else "rect"
                 if spec.get("pos") in _POS2STYLE:
                     patch["style"] = _POS2STYLE[spec["pos"]]
-                if str(spec.get("anchor", "")).lower() in ("top", "bottom"):
+                if str(spec.get("anchor", "")).lower() in ("top", "middle", "bottom"):
                     patch["anchor"] = str(spec["anchor"]).lower()
                 if "scale" in spec:
                     try:
@@ -2854,22 +2941,27 @@ def run_live(scenes_path, images_dir, port):
                 # поворота = размытая подложка той же картинки.
                 if not sid:
                     return self._reply(400, b"no")
+                # t=ov — та же механика, но по ФОТО ВСПЛЫВАШКИ (user, 2026-10-17:
+                # «чтобы функционал был такой же, как и на основной картинке»).
+                # Состояние и исходники лежат рядом с файлом: overlays/.uniq.json
+                # и overlays/.uniq_orig/, то есть две обработки не мешают друг другу.
+                _uqdir = "overlays" if (qs.get("t", [""])[0] == "ov") else images_dir
                 src = None
-                for p in glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*")):
-                    if not p.endswith((".json", ".revframe.jpg")):
+                for p in glob.glob(os.path.join(_uqdir, f"scene_{sid:03d}.*")):
+                    if not p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg")):
                         src = p
                         break
                 if not src:
                     return self._reply(404, b"no")
                 ext = os.path.splitext(src)[1]
                 is_v = src.lower().endswith(VID_EXT)
-                odir = os.path.join(images_dir, ".uniq_orig")
+                odir = os.path.join(_uqdir, ".uniq_orig")
                 os.makedirs(odir, exist_ok=True)
                 orig = os.path.join(odir, f"scene_{sid:03d}{ext}")
                 if not os.path.exists(orig):
                     shutil.copyfile(src, orig)      # первый клик — сохраняем исходник
 
-                data = _uniq_load(images_dir)
+                data = _uniq_load(_uqdir)
                 st = dict(_UNIQ_DEFAULT)
                 st.update(data.get(str(sid), {}))
                 if qs.get("reset"):
@@ -2908,10 +3000,19 @@ def run_live(scenes_path, images_dir, port):
                 data[str(sid)] = st
                 if _uniq_is_default(st):
                     data.pop(str(sid), None)
-                _uniq_save(images_dir, data)
-                tp = os.path.join(thumbs_dir, f"{sid:03d}.jpg")
-                if os.path.exists(tp):
-                    os.remove(tp)
+                _uniq_save(_uqdir, data)
+                if _uqdir == "overlays":
+                    # кэш превьюшки всплывашки — иначе дашборд покажет старую
+                    for _c in glob.glob(os.path.join("overlays", f"scene_{sid:03d}.*.ovthumb.jpg")) \
+                            + glob.glob(os.path.join("overlays", f"scene_{sid:03d}*.ovthumb.jpg")):
+                        try:
+                            os.remove(_c)
+                        except OSError:
+                            pass
+                else:
+                    tp = os.path.join(thumbs_dir, f"{sid:03d}.jpg")
+                    if os.path.exists(tp):
+                        os.remove(tp)
                 body = json.dumps({"state": st, "summary": _uniq_summary(st)}).encode()
                 return self._reply(200, body)
 
@@ -2964,6 +3065,7 @@ def run_live(scenes_path, images_dir, port):
                 path = os.path.join("overlays", f"scene_{sid:03d}{ext}")
                 with open(path, "wb") as fh:
                     fh.write(data)
+                _uniq_forget("overlays", sid)      # фото новое — обработка старого не его
                 save_overlay(sid, {"photo": path})
                 return self._reply(200)
 
@@ -3005,6 +3107,7 @@ def run_live(scenes_path, images_dir, port):
                         found = hits[0]
                         break
                 if found:
+                    _uniq_forget("overlays", sid)      # фото заменили — старую обработку забыть
                     save_overlay(sid, {"photo": found})
                     body = json.dumps({"photo": found}).encode()
                 else:
@@ -3153,6 +3256,7 @@ def run_live(scenes_path, images_dir, port):
                         with open(dest, "wb") as fh:
                             fh.write(data)
                         if target == "overlay":
+                            _uniq_forget("overlays", sid)      # фото заменили — старую обработку забыть
                             save_overlay(sid, {"photo": dest})
                         else:
                             tp = os.path.join(thumbs_dir, f"{sid:03d}.jpg")

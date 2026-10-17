@@ -180,7 +180,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         # менять… вверху в центре»): запись сцены может задать свой anchor,
         # дашборд пишет его кнопкой «по вертикали». Нет ключа — общий на ролик.
         sc_anchor = str(spec.get("anchor") or anchor).lower()
-        if sc_anchor not in ("top", "bottom"):
+        if sc_anchor not in ("top", "middle", "bottom"):
             sc_anchor = anchor
         clip = os.path.join(clips_dir, f"clip_{sid:03d}.mp4")
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
@@ -270,7 +270,8 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             rest_x = f"W-w-{margin}"
         else:                                  # up-center
             rest_x = "(W-w)/2"
-        rest_y = f"{margin}" if sc_anchor == "top" else f"H-h-{margin}"
+        rest_y = (f"{margin}" if sc_anchor == "top"
+                  else ("(H-h)/2" if sc_anchor == "middle" else f"H-h-{margin}"))
 
         def _ramp(a, b, ta):                   # linear a->b over SLIDE starting at ta
             return f"({a})+(({b})-({a}))*((t-{ta})/{SLIDE})"
