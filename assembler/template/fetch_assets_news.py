@@ -430,6 +430,22 @@ def _accept(ok, out_path):
     return ok
 
 
+# АДРЕС ИСТОЧНИКА ДЛЯ МАНИФЕСТА (2026-10-17, заявка вкладки-разработчика):
+# в `images/manifest.json` стояло только «web_search / ok», и проверить,
+# ОТКУДА приехало фото персоны, можно было лишь глазами. Теперь каждый
+# успешный скачанный файл запоминает свой адрес, и он попадает в манифест —
+# сверка становится проверяемой, а повторный брак с одного домена видно
+# сразу, без OCR.
+LAST_SRC_URL = {}
+
+
+def _remember_src(out_path, url):
+    try:
+        LAST_SRC_URL[os.path.abspath(out_path)] = url
+    except Exception:
+        pass
+
+
 def _download_as_jpeg(url, out_path, timeout=20):
     try:
         host = url.split("/")
@@ -454,6 +470,7 @@ def _download_as_jpeg(url, out_path, timeout=20):
             os.remove(tmp); return False
         im.convert("RGB").save(out_path, "JPEG", quality=90)
         os.remove(tmp)
+        _remember_src(out_path, url)
         return True
     except Exception:
         try: os.remove(tmp)
@@ -1206,7 +1223,12 @@ def main():
             ok = False
 
         print(f"[{sid:03d}] {used_source} -> {'ok' if ok else 'FAILED'}")
-        manifest.append({"id": sid, "file": os.path.basename(out_path) if ok else None, "source": used_source, "status": "ok" if ok else "FAILED"})
+        _src = LAST_SRC_URL.get(os.path.abspath(out_path), "")
+        if not _src and used_source == "local_library":
+            _src = str(locals().get("local_out") or "")
+        manifest.append({"id": sid, "file": os.path.basename(out_path) if ok else None,
+                         "source": used_source, "status": "ok" if ok else "FAILED",
+                         "url": _src})
         # write manifest after EVERY scene so `review.py --live` can show
         # thumbnails as they arrive, not only once the whole fetch is done
         _mtmp = manifest_path + ".tmp"
