@@ -194,6 +194,41 @@ if r.returncode != 0:
     WARN.append("видео-лид не выполнен (см. ниже) — ок, если это твои правки на дашборде:\n     "
                 + (r.stdout + r.stderr).strip().replace("\n", "\n     ")[:400])
 
+# 5b. СВЕРКА ВСЕЙ СБОРКИ С АКТИВНЫМ БАН-ЛИСТОМ (2026-10-17). Фетчер баны
+# чтит на всех путях (скачивание, кэш, библиотека, дашбордная замена), и всё
+# же на `planeta-svergnut-1810` забаненный девять дней назад кадр (чужое лицо,
+# выдаваемое поиском за Гончаренко) оказался в готовой сборке. Поймала его
+# только ручная сверка перед ship — ни фетчер, ни selfcheck, ни четыре
+# субагента не увидели: лицо похожее, на плитке не отличить. Путь, которым он
+# прошёл, по логам восстановить не удалось — значит нужен ПОСЛЕДНИЙ рубеж,
+# который не зависит от того, каким путём файл попал в папку.
+_ban_path = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.expanduser(
+    "~/projects/media-library/.banned_md5.json")
+try:
+    import time as _t
+    _ban_raw = json.load(open(_ban_path, encoding="utf-8"))
+    _today = _t.strftime("%Y-%m-%d")
+    _ban = {m for m, e in _ban_raw.items()
+            if not (isinstance(e, dict) and e.get("until")) or e["until"] >= _today}
+except (OSError, ValueError):
+    _ban_raw, _ban = {}, set()
+if _ban:
+    _checked = 0
+    for _p in sorted(glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*")):
+        if _p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg")):
+            continue
+        try:
+            _h = hashlib.md5(open(_p, "rb").read()).hexdigest()
+        except OSError:
+            continue
+        _checked += 1
+        if _h in _ban:
+            _why = (_ban_raw.get(_h) or {}).get("reason", "")
+            FAIL.append(f"ЗАБАНЕННЫЙ КАДР В СБОРКЕ: {_p} (md5 {_h[:10]}) — "
+                        f"бан от {(_ban_raw.get(_h) or {}).get('date','?')}: {_why or 'без причины'}. "
+                        f"Заменить до сборки.")
+    print(f"[selfcheck] сверка с бан-листом: {_checked} файлов против {len(_ban)} активных банов")
+
 # 6. сцена 1 = видео — БЫЛО hard FAIL, РАЗЖАЛОВАНО В WARN (user, 2026-10-08,
 # зло: "исключаем из правила первый кадр видео... топчетесь на одном месте и
 # какую-то ерунду явную подсовываете" — после того как search-only канал
