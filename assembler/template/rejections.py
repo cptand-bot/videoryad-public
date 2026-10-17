@@ -72,7 +72,7 @@ REASON_LABEL[UNSPECIFIED] = "без причины (снято молча)"
 
 def log_rejection(scene=None, kind="scene", action="clear", reason="other",
                   note="", query="", source="", md5="", file="",
-                  project="", channel="", base_query="", log=LOG):
+                  project="", channel="", base_query="", words="", log=LOG):
     """Дописать одну запись. Никогда не бросает — отказ пользователя важнее
     журнала, и сбой записи не должен ронять дашборд."""
     rec = {
@@ -89,6 +89,11 @@ def log_rejection(scene=None, kind="scene", action="clear", reason="other",
         # для всплывашки — запрос её БАЗОВОГО кадра: пользователь оценивает
         # пару целиком («что оно иллюстрирует»), и без базы запись немая
         "base_query": (base_query or "").strip(),
+        # САМ ТЕКСТ снятой текстовой всплывашки (2026-10-17). Без него journal
+        # не отвечает на главный вопрос: ЧЕМ снятая надпись отличается от
+        # оставленной. За два дня 39 снятых текстов — и ни одной сохранённой
+        # формулировки, учиться было не на чем.
+        "words": (words or "").strip(),
         "source": source or "",
         "md5": md5 or "",
         "file": file or "",

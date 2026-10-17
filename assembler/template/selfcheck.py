@@ -198,6 +198,27 @@ if r.returncode != 0:
     WARN.append("видео-лид не выполнен (см. ниже) — ок, если это твои правки на дашборде:\n     "
                 + (r.stdout + r.stderr).strip().replace("\n", "\n     ")[:400])
 
+# 5a. ВСПЛЫВАШКА С ТЕМ ЖЕ ЗАПРОСОМ, ЧТО И БАЗОВЫЙ КАДР (2026-10-17).
+# Найдено прямо в журнале отказов: на 5min-gerasimov сцена 7 — и база, и
+# всплывашка «Московский Кремль Спасская башня флаг России», пользователь
+# снял со словами «не понимаю наличие этой всплывашки». Это механическая
+# ошибка классификации, глазами её ловить незачем.
+try:
+    _ovq = {}
+    for _cand in glob.glob("*overlays_fetch*.json") + glob.glob("*overlay*fetch*.scenes.json"):
+        try:
+            for _o in json.load(open(_cand, encoding="utf-8")).get("scenes", []):
+                _ovq[int(_o.get("id", -1))] = (_o.get("source_query") or "").strip().lower()
+        except (OSError, ValueError, TypeError):
+            continue
+    for _s in scenes:
+        _q = (_s.get("source_query") or "").strip().lower()
+        if _q and _ovq.get(_s["id"]) == _q:
+            FAIL.append(f"всплывашка {_s['id']}: запрос ТОТ ЖЕ, что у базового кадра "
+                        f"(«{_q[:50]}») — она ничего не добавляет, переписать или снять")
+except Exception:
+    pass
+
 # 5b. СВЕРКА ВСЕЙ СБОРКИ С АКТИВНЫМ БАН-ЛИСТОМ (2026-10-17). Фетчер баны
 # чтит на всех путях (скачивание, кэш, библиотека, дашбордная замена), и всё
 # же на `planeta-svergnut-1810` забаненный девять дней назад кадр (чужое лицо,

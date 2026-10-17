@@ -831,7 +831,15 @@ def load_scenes(scenes_path):
 def _scene_meta(sid, scenes, images_dir, kind):
     """Запрос, источник и md5 того, что сняли, — чтобы отказ был привязан к
     запросу, а не к одному файлу."""
-    meta = {"query": "", "source": "", "md5": "", "file": "", "base_query": ""}
+    meta = {"query": "", "source": "", "md5": "", "file": "", "base_query": "",
+            "words": ""}
+    if kind == "text":
+        try:
+            _e = load_overlays().get(str(sid)) or {}
+            _tb = _e.get("text") if isinstance(_e.get("text"), dict) else {}
+            meta["words"] = str(_tb.get("words") or _tb.get("text") or "")
+        except Exception:
+            pass
     for s in scenes:
         if s.get("id") == sid:
             meta["base_query"] = s.get("source_query") or ""
