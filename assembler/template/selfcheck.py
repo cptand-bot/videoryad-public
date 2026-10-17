@@ -198,6 +198,31 @@ if r.returncode != 0:
     WARN.append("видео-лид не выполнен (см. ниже) — ок, если это твои правки на дашборде:\n     "
                 + (r.stdout + r.stderr).strip().replace("\n", "\n     ")[:400])
 
+# 4c. ВИДЕО КОРОЧЕ СВОЕЙ СЦЕНЫ = ВИДИМАЯ ПЕТЛЯ (2026-10-17). build_clips
+# добивает короткий источник `-stream_loop -1`, то есть клип 6,0 с на сцене
+# 10,0 с проигрывается полтора раза подряд — зритель видит повтор движения.
+# В логе фетча при этом честный `ok`: файл скачан, он просто короткий.
+# Ловится только сверкой длительности файла с `duration_sec` сцены.
+_short = []
+for _s in scenes:
+    _a = asset(_s["id"])
+    if not _a or not _a[0].lower().endswith((".mp4", ".mov")):
+        continue
+    try:
+        _pr = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                              "format=duration", "-of", "csv=p=0", _a[0]],
+                             capture_output=True, text=True)
+        _d = float((_pr.stdout or "0").strip() or 0)
+    except Exception:
+        continue
+    _need = float(_s.get("duration_sec") or 0)
+    if _d and _need and _d < _need - 0.25:
+        _short.append(f"сцена {_s['id']}: клип {_d:.1f}с на сцену {_need:.1f}с "
+                      f"(петля ×{_need/_d:.1f})")
+if _short:
+    WARN.append("видео КОРОЧЕ своей сцены — будет видимый повтор движения, "
+                "заменить или укоротить сцену:\n     " + "\n     ".join(_short[:10]))
+
 # 5a. ВСПЛЫВАШКА С ТЕМ ЖЕ ЗАПРОСОМ, ЧТО И БАЗОВЫЙ КАДР (2026-10-17).
 # Найдено прямо в журнале отказов: на 5min-gerasimov сцена 7 — и база, и
 # всплывашка «Московский Кремль Спасская башня флаг России», пользователь
