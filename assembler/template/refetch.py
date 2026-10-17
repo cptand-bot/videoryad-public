@@ -39,6 +39,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 SKIP_EXT = (".json", ".text.png", ".lock")
 
@@ -50,11 +51,29 @@ def arg(name, default=None):
 
 
 def wipe(d, sid):
+    """Снятый кадр не удаляем, а УВОДИМ В `.trash/` папки ролика.
+
+    2026-10-17, предложение рабочей вкладки, принято: образцы брака терялись
+    именно здесь. Кадр с кнопкой PLAY и подписью агентства попадался
+    шестой-седьмой раз, фильтра на него нет, а настроить фильтр не на чем —
+    `os.remove` стирал файл за секунду до фетча замены. Теперь он лежит в
+    `.trash/` до конца работы над роликом: диагностика есть, а из фетча,
+    дедупа и `ship.sh` папка исключена (имя с точки — скрытая, в облако не
+    едет, сироты по ней не считаются).
+    """
     gone = []
+    trash = os.path.join(d, ".trash")
     for f in glob.glob(os.path.join(d, "scene_%03d.*" % sid)):
-        if not f.endswith(SKIP_EXT) and ".ovthumb." not in f:
-            os.remove(f)
-            gone.append(os.path.basename(f))
+        if f.endswith(SKIP_EXT) or ".ovthumb." in f:
+            continue
+        bn = os.path.basename(f)
+        try:
+            os.makedirs(trash, exist_ok=True)
+            dst = os.path.join(trash, "%s.%s" % (time.strftime("%H%M%S"), bn))
+            os.replace(f, dst)
+        except OSError:
+            os.remove(f)          # не вышло — ведём себя как раньше
+        gone.append(bn)
     return gone
 
 
