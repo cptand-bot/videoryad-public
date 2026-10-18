@@ -41,7 +41,19 @@ def main():
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(proj, "pair_sheet")
     os.makedirs(out, exist_ok=True)
     ov = json.load(open(os.path.join(proj, "overlays.json"), encoding="utf-8"))
-    ids = sorted(int(k) for k in ov if k.isdigit())
+    # ТОЛЬКО СЦЕНЫ С ФОТО-ВСПЛЫВАШКОЙ (2026-10-18). Раньше пары строились по
+    # ВСЕМ записям `overlays.json`, включая текстовые, у которых правой
+    # половины не существует: на 6 фото и 29 текстовых вышло ВОСЕМЬ листов, и
+    # оба проверяющих честно отчитались «18 из 20 пар пустые» — половина их
+    # работы ушла в никуда. Лист предназначен для сверки пары «база ↔ фото
+    # поверх неё», текстовые проверяются иначе (`check_overlay_overlap.py`
+    # с 18.10 рисует их настоящим рендером).
+    ids = sorted(int(k) for k in ov
+                 if k.isdigit() and isinstance(ov[k], dict) and ov[k].get("photo"))
+    _skipped = sum(1 for k in ov if k.isdigit() and isinstance(ov[k], dict)
+                   and not ov[k].get("photo"))
+    if _skipped:
+        print("пропущено записей без фото (текстовые): %d" % _skipped)
     CW, CH, ROWS = 760, 300, 5          # пара в строке: 2 кадра по 380
     sheets, row, sheet_no = [], 0, 1
     img = Image.new("RGB", (CW, CH*ROWS), (12,12,12)); dr = ImageDraw.Draw(img)

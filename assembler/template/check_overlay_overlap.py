@@ -103,6 +103,53 @@ def cover_crop(im, w, h):
     return im2.crop((x0, y0, x0 + w, y0 + h))
 
 
+
+# --- ТЕКСТОВЫЕ ВСПЛЫВАШКИ: ГЕОМЕТРИЯ ИЗ `build_overlays` (2026-10-18) ---
+# До этого схема их НЕ МОДЕЛИРОВАЛА ВООБЩЕ и для текстовой записи рисовала
+# рамку по геометрии ФОТО-всплывашки. При преобладании текста схема не молчит,
+# а ЛЖЁТ: на ролике с 33 текстовыми из 39 проверяющий выдал 12 вердиктов о
+# перекрытии лиц, которые физически не могли быть верными. Вкладка написала
+# разовый рендер, им и вскрыла правду — встраиваем, чтобы не писать заново.
+# Числа повторяют `_apply_text_overlay`: th = H/6 * scale (клампы 60 и H/2),
+# tw = th * пропорция PNG (клампы W*0.92), поле 60, сетка 9 позиций,
+# и `force_original_aspect_ratio=decrease` — то есть картинка ВПИСЫВАЕТСЯ в
+# tw x th с сохранением пропорций, реальный размер меньше.
+def text_geom(sid, spec, tmp_dir):
+    ts = spec.get("text") or {}
+    words = str(ts.get("words") or "").strip()
+    if not words:
+        return None
+    try:
+        from build_overlays import _render_text_png
+    except Exception:
+        return None
+    png = os.path.join(tmp_dir, "ovl_%03d.png" % sid)
+    try:
+        if not _render_text_png(words, ts.get("color", "white"), png,
+                                ts.get("font", "default")):
+            return None
+        from PIL import Image as _I
+        with _I.open(png) as _im:
+            pw, ph = _im.size
+    except Exception:
+        return None
+    try:
+        msc = max(0.4, min(2.4, float(ts.get("scale", 1.0))))
+    except (TypeError, ValueError):
+        msc = 1.0
+    pos = str(ts.get("pos", "bc")).lower()
+    yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
+    xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
+    th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
+    tw = min(int(th * (pw / ph if ph else 6)), int(W * 0.92))
+    k = min(tw / pw, th / ph) if pw and ph else 1.0
+    rw, rh = max(1, int(pw * k)), max(1, int(ph * k))
+    mg = 60
+    x = mg if xk == "l" else (W - rw) // 2 if xk == "c" else W - rw - mg
+    y = mg if yk == "t" else (H - rh) // 2 if yk == "m" else H - rh - mg
+    return x, y, rw, rh, png
+
+
 def main():
     from PIL import Image, ImageDraw
 
@@ -111,6 +158,9 @@ def main():
     images_dir = os.path.join(proj, "images")
     out_dir = os.path.join(proj, "overlap_check")
 
+    import tempfile
+    _tmp = tempfile.mkdtemp(prefix="ovlchk_")
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     ov = json.load(open(ov_path, encoding="utf-8"))
     anchor = ov.get("anchor", "bottom")
 
@@ -123,9 +173,25 @@ def main():
             continue
         base_im = Image.open(bp).convert("RGB")
         frame = cover_crop(base_im, W, H)
-        x, y, dw, dh = overlay_geom(sid, spec, spec.get("photo"), anchor)
         draw = ImageDraw.Draw(frame)
-        draw.rectangle([x, y, x + dw, y + dh], outline=(255, 0, 0), width=8)
+        # ФОТО-всплывашка — красная рамка, как было
+        if spec.get("photo"):
+            x, y, dw, dh = overlay_geom(sid, spec, spec.get("photo"), anchor)
+            draw.rectangle([x, y, x + dw, y + dh], outline=(255, 0, 0), width=8)
+        # ТЕКСТОВАЯ — кладём НАСТОЯЩИЙ отрендеренный текст, а не рамку:
+        # проверяющий должен видеть ровно то, что ляжет на кадр
+        tg = text_geom(sid, spec, _tmp)
+        if tg:
+            tx, ty, tw_, th_, tpng = tg
+            try:
+                with Image.open(tpng) as _t:
+                    _t = _t.convert("RGBA").resize((tw_, th_))
+                    frame.paste(_t, (tx, ty), _t)
+            except Exception:
+                pass
+            draw.rectangle([tx, ty, tx + tw_, ty + th_], outline=(0, 220, 255), width=5)
+        if not spec.get("photo") and not tg:
+            continue
         thumb = frame.resize((480, 270))
         d2 = ImageDraw.Draw(thumb)
         d2.rectangle([0, 0, 60, 24], fill=(0, 0, 0))
@@ -143,7 +209,11 @@ def main():
             r, c = divmod(i, cols)
             sh.paste(th, (c * 480, r * 270))
         sh.save(os.path.join(out_dir, f"check_{s + 1}.jpg"), quality=85)
+    import shutil as _sh
+    _sh.rmtree(_tmp, ignore_errors=True)
     print(f"tiles: {len(tiles)}  sheets: {n_sheets}  anchor: {anchor}  ->  {out_dir}/")
+    print("  красная рамка = фото-всплывашка, голубая = ТЕКСТОВАЯ "
+          "(показан настоящий рендер, не схема)")
 
 
 if __name__ == "__main__":
