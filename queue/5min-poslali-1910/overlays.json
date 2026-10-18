@@ -1,0 +1,411 @@
+{
+  "anchor": "top",
+  "6": {
+    "photo": "overlays/scene_006.jpg",
+    "sound": "whoosh",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "12": {
+    "photo": "overlays/scene_012.jpg",
+    "sound": "zatvor",
+    "at": 4.2,
+    "shape": "rounded",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "16": {
+    "photo": "overlays/scene_016.jpg",
+    "sound": "pop",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "22": {
+    "photo": "overlays/scene_022.jpg",
+    "sound": "zatvor",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "38": {
+    "photo": "overlays/scene_038.jpg",
+    "sound": "pop",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "48": {
+    "photo": "overlays/scene_048.jpg",
+    "sound": "whoosh",
+    "at": 5.2,
+    "shape": "rounded",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "1": {
+    "text": {
+      "words": "СЛОВАКИЯ. ВЕНГРИЯ. ИТАЛИЯ. США",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "3": {
+    "text": {
+      "words": "70 МЛРД ЕВРО НА ГОД",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "zatvor",
+      "at": 2.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "7": {
+    "text": {
+      "words": "ВЕНГРИЯ — ТА ЖЕ ПОЗИЦИЯ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "9": {
+    "text": {
+      "words": "ПРОШЛЫЙ КРЕДИТ: 90 МЛРД",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "10": {
+    "text": {
+      "words": "БЕЗ ПОДПИСИ ТРЁХ СТРАН",
+      "color": "white",
+      "pos": "tr",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 3.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "ИТАЛИЯ: ЕВРОПА — НЕ БАНКОМАТ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "text": {
+      "words": "«ОПЕРАЦИЯ ОТКЛОНЕНА»",
+      "color": "red",
+      "pos": "mc",
+      "font": "arial",
+      "sound": "zatvor",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "17": {
+    "text": {
+      "words": "ФЛИНН: НИ ЦЕНТА БОЛЬШЕ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "26": {
+    "text": {
+      "words": "НОРВЕГИЯ. ЯПОНИЯ. БРИТАНИЯ. ШВЕЙЦАРИЯ",
+      "color": "green",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "27": {
+    "text": {
+      "words": "С 2022: БОЛЬШЕ 200 МЛРД",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "text": {
+      "words": "ФОНД УКРАИНЫ: 50 МЛРД",
+      "color": "white",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "zatvor",
+      "at": 2.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "text": {
+      "words": "ЭСТОНИЯ: ЕЩЁ ОДИН КРЕДИТ",
+      "color": "orange",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "pop",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "32": {
+    "text": {
+      "words": "ДЛЯ КРЕДИТА НУЖНЫ ГАРАНТИИ",
+      "color": "white",
+      "pos": "tl",
+      "font": "montserrat",
+      "sound": "pshik",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "33": {
+    "text": {
+      "words": "ОБХОД ДОЛГОВОГО ТОРМОЗА",
+      "color": "orange",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "34": {
+    "text": {
+      "words": "ДОЛГОВОЙ ТОРМОЗ ФРГ: С 2009",
+      "color": "white",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "whoosh",
+      "at": 4.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "40": {
+    "text": {
+      "words": "ЗАМОРОЖЕННЫЕ АКТИВЫ РФ",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "42": {
+    "text": {
+      "words": "EUROCLEAR, БРЮССЕЛЬ",
+      "color": "white",
+      "pos": "mc",
+      "font": "arial",
+      "sound": "pshik",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "text": {
+      "words": "ДОХОДЫ — ДА, КАПИТАЛ — НЕТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "zatvor",
+      "at": 3.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "50": {
+    "text": {
+      "words": "США: НАГРУЗКУ НА ЕВРОПУ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "58": {
+    "text": {
+      "words": "ИСКЛЮЧЕНИЯ. КРЕДИТЫ. АКТИВЫ. ОТКАЗЫ",
+      "color": "white",
+      "pos": "tr",
+      "font": "montserrat",
+      "sound": "zatvor",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "text": {
+      "words": "СЛОВАКИЯ. ВЕНГРИЯ. ГЕРМАНИЯ",
+      "color": "white",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "63": {
+    "text": {
+      "words": "70 МЛРД — НЕ ПОСЛЕДНИЕ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "65": {
+    "text": {
+      "words": "ЕЩЁ 50? ЕЩЁ 90?",
+      "color": "white",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "66": {
+    "text": {
+      "words": "ВРЕМЕННЫЕ РАСХОДЫ — НАВСЕГДА",
+      "color": "red",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "mashinka",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "67": {
+    "text": {
+      "words": "БЮДЖЕТ ЕС: ЕДИНОГЛАСИЕ",
+      "color": "white",
+      "pos": "mc",
+      "font": "arial",
+      "sound": "pshik",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "70": {
+    "text": {
+      "words": "НЕ НАШ БАНКОМАТ. НЕ НАШИ ДЕНЬГИ",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 3.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "72": {
+    "text": {
+      "words": "RHEINMETALL: ОГРОМНЫЕ ЗАКАЗЫ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "73": {
+    "text": {
+      "words": "УКРАИНСКИЙ СЧЁТ ПРОТИВ ОСТАЛЬНЫХ",
+      "color": "white",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "zatvor",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "75": {
+    "text": {
+      "words": "«НЕТ» БОЛЬШЕ НЕ НЕПРИЛИЧНО",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
