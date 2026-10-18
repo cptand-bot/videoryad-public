@@ -25,9 +25,23 @@ already placed in an open project's images/ or overlays/. A --days entry
 stops being enforced automatically once it expires (checked by date, no
 cleanup step needed).
 """
+import os
 import sys
 
-from fetch_assets_news import ban_md5, file_md5
+# ИМПОРТ НЕ ДОЛЖЕН ЗАВИСЕТЬ ОТ ТОГО, ОТКУДА ЗАПУСТИЛИ (2026-10-18, улов usuario-42).
+# С 17.10 `fetch_assets_news.py` в папку ролика НЕ копируется (запускается из
+# template), а `ban_file.py` в списке копируемых остался — и копия в папке
+# проекта падала с ModuleNotFoundError. Коварно тем, что цикл по девяти файлам
+# отработал «успешно» и напечатал девять трейсбеков подряд: на бегу читается
+# как «забанено», а не забанено ничего.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from fetch_assets_news import ban_md5, file_md5
+except ImportError:                      # устаревшая копия рядом с проектом
+    _tpl = os.path.expanduser("~/.claude/skills/news-video/template")
+    if _tpl not in sys.path:
+        sys.path.insert(0, _tpl)
+    from fetch_assets_news import ban_md5, file_md5
 
 
 def _take_days(argv):
