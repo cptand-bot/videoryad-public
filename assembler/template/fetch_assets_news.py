@@ -1232,7 +1232,13 @@ def main():
     # собирает почти пустой лист; вкладки пересобирали манифест руками по
     # четыре раза за ролик. Теперь прежние записи сохраняются, если их файл
     # ещё лежит на диске и сцены нет в текущем прогоне.
-    _cur_ids = {s["id"] for s in scenes}
+    # ВНИМАНИЕ: в main() переменной `scenes` НЕТ, сцены лежат в data["scenes"].
+    # Утренняя версия этой правки обращалась к `scenes` и роняла ЛЮБОЙ фетч
+    # NameError'ом (18.10, поймала рабочая вкладка). Коварство в том, что
+    # fetch_parallel печатал «готово: 0/45 FAILED=[]» — пустой список FAILED
+    # выглядит как успех, а падение видно только в .shardN.log.
+    _scenes = data["scenes"] if isinstance(data, dict) else data
+    _cur_ids = {s["id"] for s in _scenes}
     manifest = []
     try:
         with open(manifest_path, encoding="utf-8") as _mf:
