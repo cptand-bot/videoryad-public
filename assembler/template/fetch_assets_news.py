@@ -575,27 +575,90 @@ def fetch_web_search(query, out_path, env=None):
         q_en = _so.translate_to_en(query) if any(ord(c) > 127 for c in query) else query
         cands += _so.ddg_images(q_en, n=14)
     except Exception: pass
+    # --- РАЗМЕР УЧАСТВУЕТ В ОТБОРЕ (2026-10-18, улов usuario-18) ---
+    # Было: брался ПЕРВЫЙ кандидат, который скачался и прошёл проверки. Размер
+    # не смотрели вообще — ни порога, ни сортировки. Живой замер: 23 кадра из
+    # 45 оказались уже 1600 px (в основном 1200-1300), на выводе 1920x1080 их
+    # растягивает, и пользователь увидел это сразу: «много фотографий сратого
+    # качества… Яндекс — бери хорошее». При этом КРУПНЫЕ версии в выдаче ЕСТЬ:
+    # те же сцены дали 1199x674 → 2560x1060 и 1200x675 → 8256x5504, мы их
+    # просто не выбирали (`isize=large` есть, но ширина/высота в выдаче
+    # приходят нулями и в отбор не попадали).
+    # Теперь: качаем кандидатов подряд, меряем, держим ЛУЧШЕГО, выходим рано
+    # на действительно крупном. Порог — не жёсткий отказ: если крупнее ничего
+    # нет, берём лучшее из найденного, иначе сцена осталась бы пустой.
+    # Вертикальные НЕ отбрасываем (для портретов есть blur-fill), но при
+    # равном размере горизонтальный выигрывает.
+    _MIN_W = int(os.environ.get("MIN_IMG_W", "1600"))
+    _MIN_H = int(os.environ.get("MIN_IMG_H", "900"))
+    _EARLY_W = int(os.environ.get("IMG_EARLY_W", "2400"))
+    _TRY_MAX = int(os.environ.get("IMG_TRY_MAX", "6"))
+
+    def _measure(path):
+        try:
+            from PIL import Image as _I
+            with _I.open(path) as im:
+                return im.size
+        except Exception:
+            return (0, 0)
+
     _BAD = (".svg", ".pdf", ".tif", ".tiff", ".djvu")
     seen = set()
+    best = None            # (score, w, h, tmp_path, md5)
+    tried = 0
+    tmp = out_path + ".cand"
     for c in cands:
+        if tried >= _TRY_MAX:
+            break
         u = c.get("full") or c.get("thumb") or ""
         if not u or u in seen: continue
         seen.add(u)
         if u.split("?")[0].lower().endswith(_BAD): continue
         if _is_stock_domain(u): continue   # reject by domain, before ever downloading
-        if _download_as_jpeg(u, out_path):
-            try:
-                h = file_md5(out_path)
-            except OSError:
-                h = None
-            if h and h in _WEB_USED_MD5:
-                try: os.remove(out_path)
+        if not _download_as_jpeg(u, tmp):
+            continue
+        tried += 1
+        try:
+            h5 = file_md5(tmp)
+        except OSError:
+            h5 = None
+        if h5 and h5 in _WEB_USED_MD5:
+            try: os.remove(tmp)
+            except OSError: pass
+            continue        # этот кадр уже стоит в другой сцене этой сборки
+        w, h = _measure(tmp)
+        # счёт: площадь, горизонтальный при равенстве выигрывает
+        score = w * h * (1.0 if w >= h else 0.75)
+        if best is None or score > best[0]:
+            if best is not None:
+                try: os.remove(best[3])
                 except OSError: pass
-                continue            # same image already used elsewhere this build — keep looking
-            if h:
-                _WEB_USED_MD5.add(h)
-            return True
-    return False
+            keep = tmp + ".best"
+            try:
+                os.replace(tmp, keep)
+            except OSError:
+                keep = tmp
+            best = (score, w, h, keep, h5)
+        else:
+            try: os.remove(tmp)
+            except OSError: pass
+        if best and best[1] >= _EARLY_W and best[1] >= best[2]:
+            break           # крупный горизонтальный — дальше не ищем
+    if not best:
+        return False
+    score, w, h, keep, h5 = best
+    try:
+        os.replace(keep, out_path)
+    except OSError:
+        return False
+    if h5:
+        _WEB_USED_MD5.add(h5)
+    if w < _MIN_W or h < _MIN_H:
+        print(f"  [web_search] лучшее, что нашлось: {w}x{h} — НИЖЕ порога "
+              f"{_MIN_W}x{_MIN_H}, на 1920x1080 будет растянуто", flush=True)
+    else:
+        print(f"  [web_search] взят кадр {w}x{h} (из {tried} кандидатов)", flush=True)
+    return True
 
 
 # --- НАСТОЯЩИЙ ИСТОЧНИК КАДРА, ОТДЕЛЬНО ОТ ЗАЯВЛЕННОГО (2026-10-18) ---
