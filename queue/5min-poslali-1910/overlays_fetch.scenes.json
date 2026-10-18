@@ -1,0 +1,60 @@
+{
+ "scenes": [
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 12.58,
+   "source": "local_library",
+   "source_query": "КАРТЫ/СЛОВАКИЯ/Slovakia map blank.jpg",
+   "visual_prompt": "КАРТЫ/СЛОВАКИЯ/Slovakia map blank.jpg"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "duration_sec": 11.96,
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на пресс-конференции в Киеве октябрь 2026 реальное фото",
+   "visual_prompt": "Владимир Зеленский на пресс-конференции в Киеве октябрь 2026 реальное фото"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "duration_sec": 13.05,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА/Blank Europe Map.jpg",
+   "visual_prompt": "КАРТЫ/ЕВРОПА/Blank Europe Map.jpg"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "duration_sec": 14.24,
+   "source": "press_photo",
+   "source_query": "Дональд Трамп выступает за кафедрой 2026 реальное фото",
+   "visual_prompt": "Дональд Трамп выступает за кафедрой 2026 реальное фото"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "duration_sec": 13.19,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Ukraine blank silhouette.jpg",
+   "visual_prompt": "КАРТЫ/УКРАИНА/Ukraine blank silhouette.jpg"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "duration_sec": 13.39,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ВЕНГРИЯ/Hungary map blank.jpg",
+   "visual_prompt": "КАРТЫ/ВЕНГРИЯ/Hungary map blank.jpg"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "duration_sec": 14.8,
+   "source": "press_photo",
+   "source_query": "Париж Елисейский дворец фасад фотография здания реальное фото",
+   "visual_prompt": "Париж Елисейский дворец фасад фотография здания реальное фото"
+  }
+ ]
+}
