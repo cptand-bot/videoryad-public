@@ -567,6 +567,61 @@ def fetch_web_search(query, out_path, env=None):
     return False
 
 
+# --- НАСТОЯЩИЙ ИСТОЧНИК КАДРА, ОТДЕЛЬНО ОТ ЗАЯВЛЕННОГО (2026-10-18) ---
+# `images/.sources.json` = {"<id сцены>": "<источник, который реально отдал файл>"}.
+# Нужен затем, что инкрементальный проход видит готовый файл и не знает, откуда
+# он взялся; без этого «cached» писал заявленный в сцене source и врал (разбор
+# в ветке cached ниже). Пишется после каждого удачного скачивания, параллельным
+# воркерам не мешает: файл свой на каждый images_dir, запись атомарная.
+def _true_sources_path(images_dir):
+    # Имя привязано к манифесту: в облаке 20 шардов пишут в ОДНУ папку и каждый
+    # ведёт свой manifest.<N>.json (MANIFEST_NAME). Общий .sources.json они бы
+    # перетирали друг другу (read-modify-write), поэтому у каждого свой файл.
+    mn = os.environ.get("MANIFEST_NAME", "manifest.json")
+    return os.path.join(images_dir, "." + mn.replace("manifest", "sources"))
+
+
+def _load_true_sources(images_dir):
+    """Склейка своего журнала и всех пошардовых — на кэш-проходе важно видеть,
+    что нашли ОСТАЛЬНЫЕ шарды прошлого прогона, а не только свой."""
+    data = {}
+    try:
+        for name in sorted(os.listdir(images_dir)):
+            if not (name.startswith(".sources") and name.endswith(".json")):
+                continue
+            try:
+                with open(os.path.join(images_dir, name), encoding="utf-8") as f:
+                    part = json.load(f)
+                if isinstance(part, dict):
+                    data.update(part)
+            except (OSError, ValueError):
+                continue
+    except OSError:
+        return {}
+    return data
+
+
+def _load_own_true_sources(images_dir):
+    try:
+        with open(_true_sources_path(images_dir), encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_true_source(images_dir, sid, used_source):
+    try:
+        data = _load_own_true_sources(images_dir)   # свой шард, без чужих записей
+        data[str(sid)] = used_source
+        tmp = _true_sources_path(images_dir) + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, _true_sources_path(images_dir))
+    except OSError:
+        pass          # журнал источников — удобство, пайплайн из-за него не рвём
+
+
 def _press_waterfall(query, out_path, env):
     """The 'real photo' waterfall for `press_photo` / `wikimedia` scenes AND
     for a local_library tag folder that turned up empty. Order (user rule,
@@ -1107,6 +1162,13 @@ def main():
     os.makedirs(images_dir, exist_ok=True)
     env = load_env(env_path)
     media_library_dir = env.get("MEDIA_LIBRARY_DIR", os.path.expanduser("~/projects/media-library"))
+    # ПУТЬ МЕДИАТЕКИ НОРМАЛИЗУЕМ (2026-10-18). Все живые .env держат абсолютный
+    # путь, но форма «MEDIA_LIBRARY_DIR=media-library-2» описана в заметках как
+    # рабочая — а она бы ломала и пин (os.path.join с cwd = папка ролика), и
+    # сверку пина ниже. Та же логика, что в check_pins.py, чтобы не разъехались.
+    media_library_dir = os.path.expanduser(media_library_dir)
+    if not os.path.isabs(media_library_dir):
+        media_library_dir = os.path.expanduser(os.path.join("~/projects", media_library_dir))
     local_usage = {}
 
     this_project = os.path.basename(os.path.dirname(os.path.abspath(images_dir)))
@@ -1172,7 +1234,28 @@ def main():
                 _kept.append(_p)
             existing = _kept
         if existing:
-            manifest.append({"id": sid, "file": os.path.basename(existing[0]), "source": source, "status": "cached"})
+            # МАНИФЕСТ НЕ ДОЛЖЕН ВРАТЬ ПРО ИСТОЧНИК (2026-10-18, улов usuario-b7).
+            # Было: «cached» писал ЗАЯВЛЕННЫЙ в сцене `source`. На провалившемся
+            # пине («ПОЛИТИКА/КАРТЫ/РОССИЯ/<опечатка>.jpg») фетч честно уходит в
+            # веб-водопад и кладёт веб-картинку, но СЛЕДУЮЩИЙ инкрементальный
+            # проход видел готовый файл и переписывал запись как
+            # `source: local_library / status: cached` — манифест утверждал, что
+            # пин сработал. А переносить кадры из облачного забора в проект
+            # предписано ровно по манифесту, то есть ложь ехала дальше.
+            # Теперь настоящий источник пишется в `.sources.json` при каждом
+            # удачном скачивании и оттуда же читается на кэш-проходе.
+            _true = _load_true_sources(images_dir).get(str(sid))
+            if not _true and source == "local_library":
+                _pin = os.path.join(media_library_dir, (query or "").strip())
+                _folder = os.path.join(media_library_dir,
+                                       (query or "").strip().split(":", 1)[0])
+                if not os.path.isfile(_pin) and not os.path.isdir(_folder):
+                    _true = "НЕ library (пин не существует)"
+                    print(f"[{sid:03d}] ВНИМАНИЕ: пин '{query}' не существует — "
+                          f"кадр в сцене НЕ из медиатеки, манифест помечен честно",
+                          flush=True)
+            manifest.append({"id": sid, "file": os.path.basename(existing[0]),
+                             "source": _true or source, "status": "cached"})
             _mt = manifest_path + ".tmp"
             with open(_mt, "w", encoding="utf-8") as f:
                 json.dump(manifest, f, ensure_ascii=False, indent=2)
@@ -1229,6 +1312,8 @@ def main():
         manifest.append({"id": sid, "file": os.path.basename(out_path) if ok else None,
                          "source": used_source, "status": "ok" if ok else "FAILED",
                          "url": _src})
+        if ok:
+            _save_true_source(images_dir, sid, used_source)
         # write manifest after EVERY scene so `review.py --live` can show
         # thumbnails as they arrive, not only once the whole fetch is done
         _mtmp = manifest_path + ".tmp"
