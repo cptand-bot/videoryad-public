@@ -147,6 +147,13 @@ def _atomic_write_json(path, data):
 
 import contextlib  # noqa: E402
 
+# когда этот файл был прочитан в память — см. «СЕРВЕР ЗАМЕЧАЕТ, ЧТО ЕГО КОД
+# УСТАРЕЛ» ниже
+try:
+    _SRC_MTIME = os.path.getmtime(os.path.abspath(__file__))
+except OSError:
+    _SRC_MTIME = 0.0
+
 
 @contextlib.contextmanager
 def _overlays_txn():
@@ -1609,6 +1616,15 @@ async function poll(){
   try{
     const r = await fetch('state?_='+Date.now());
     const j = await r.json();
+    if(j.stale_code && !document.getElementById("staleban")){
+      const b = document.createElement("div");
+      b.id = "staleban";
+      b.style.cssText = "position:sticky;top:0;z-index:9998;background:#c60;color:#fff;"
+        + "padding:9px 14px;font:bold 15px system-ui;text-align:center";
+      b.textContent = "⚠ дашборд поднят на СТАРОМ коде — скрипт правили после запуска. "
+        + "Перезапусти сервер, иначе свежие кнопки и исправления не появятся.";
+      document.body.insertBefore(b, document.body.firstChild);
+    }
     let done = 0;
     const need = j.needs || {};
     j.scenes.forEach(sc => {
@@ -2812,8 +2828,20 @@ def run_live(scenes_path, images_dir, port):
                     v["_tpos"] = overlay_text_geom(tb, tpng if os.path.exists(tpng) else None)
                 except Exception:
                     pass
+        # СЕРВЕР ЗАМЕЧАЕТ, ЧТО ЕГО КОД УСТАРЕЛ (2026-10-18, диагноз usuario-70).
+        # Python читает скрипт в память ПРИ СТАРТЕ: правка `template/review.py`
+        # до уже работающего дашборда не доезжает НИКОГДА. Правило «не копируй
+        # review.py в проект» закрывает устаревшую копию на ДИСКЕ, а устаревший
+        # образ В ПАМЯТИ не закрывало ничто — и бьёт тем сильнее, чем чаще
+        # правится код (18.10 — двадцать раз за смену). Живой случай: сервер
+        # поднят в 13:42, файл правился в 13:46, пользователь час считал, что
+        # сломан голосовой ввод, хотя в файле уже лежало объяснение причины.
+        try:
+            _stale = os.path.getmtime(os.path.abspath(__file__)) > _SRC_MTIME + 1
+        except OSError:
+            _stale = False
         return json.dumps({"scenes": out, "failed": failed, "fetch_done": fetch_done,
-                           "needs": load_needs(), "overlays": ovs})
+                           "needs": load_needs(), "overlays": ovs, "stale_code": _stale})
 
     class H(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a):
