@@ -1307,7 +1307,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
                   f'onfocus="if(/^[⚠🔴]/.test(this.value))this.value=\'\'" '
                   f'onkeydown="if(event.key===\'Enter\')imgOpts({sid})">'
                   f'<button type="button" onclick="imgOpts({sid})">🔎 найти</button>'
-                  f'<button type="button" class="mic" data-mic="imgq{sid}" title="держи и говори" '
+                  f'<button type="button" class="mic" data-mic="imgq{sid}" title="держи и говори — или нажми один раз, второе нажатие закончит" '
                   f'onpointerdown="micStart(event,\'imgq{sid}\',\'imgmsg{sid}\',()=>imgOpts({sid}))" '
                   f'onpointerup="micStop()" onpointercancel="micStop()">🎤</button>'
                   f'<span class="ovfile" id="imgmsg{sid}"></span>'
@@ -1391,7 +1391,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'onfocus="if(/^[⚠🔴]/.test(this.value))this.value=\'\'" '
             f'onkeydown="if(event.key===\'Enter\')ovOpts({sid})">'
             f'<button type="button" onclick="ovOpts({sid})">🔎 найти</button>'
-            f'<button type="button" class="mic" data-mic="ovq{sid}" title="держи и говори" '
+            f'<button type="button" class="mic" data-mic="ovq{sid}" title="держи и говори — или нажми один раз, второе нажатие закончит" '
             f'onpointerdown="micStart(event,\'ovq{sid}\',\'ovfile{sid}\',()=>ovOpts({sid}))" '
             f'onpointerup="micStop()" onpointercancel="micStop()">🎤</button></div>'
             f'<div class="opts" id="opts_ov{sid}" hidden></div>'
@@ -2220,6 +2220,46 @@ function ovOpts(id){{ _opts(id, document.getElementById("ovq"+id).value, "opts_o
 // push-to-talk: держишь кнопку и говоришь -> текст в поле вживую; отпустил ->
 // стоп, текст применён, поиск сам. Статус и ошибки пишутся ПРЯМО В ПОЛЕ.
 let _mic = null, _micRec = null, _micChunks = [], _micWantStop = false;
+/* ПОЧЕМУ МИКРОФОН МОЖЕТ НЕ РАБОТАТЬ ВО ВСЕХ ТРЁХ МЕСТАХ СРАЗУ (2026-10-18).
+   Браузер отдаёт `navigator.mediaDevices` ТОЛЬКО в защищённом контексте:
+   это https или localhost/127.0.0.1. Если страница открыта по IP
+   (сервер сам печатает такой адрес запасным: http://172.x.x.x:порт), то
+   mediaDevices просто НЕТ — не работает ни поиск по кадру, ни поиск по
+   всплывашке, ни «почему убрал», и выглядит это как «сломался голосовой
+   ввод». Раньше в поле появлялось глухое «микрофон недоступен», из которого
+   причина не читалась. Теперь страница говорит её прямо и шлёт свой адрес в
+   лог сервера, чтобы причину было видно и с нашей стороны. */
+function micEnvBad(){{
+  return (!window.isSecureContext || !navigator.mediaDevices || !window.MediaRecorder);
+}}
+function micEnvHint(){{
+  const port = location.port || "8794";
+  return "⚠ браузер запретил микрофон: страница открыта как " + location.origin +
+         ". Открой http://localhost:" + port + "/review.html — по IP микрофон не работает нигде.";
+}}
+window.addEventListener("load", function(){{
+  try{{
+    fetch("micdiag", {{method:"POST", headers:{{"Content-Type":"application/json"}},
+      body: JSON.stringify({{origin: location.origin, secure: !!window.isSecureContext,
+                            media: !!navigator.mediaDevices, rec: !!window.MediaRecorder}})}});
+  }}catch(e){{}}
+  if(micEnvBad()){{
+    const b = document.createElement("div");
+    b.style.cssText = "position:sticky;top:0;z-index:9999;background:#b00;color:#fff;"
+      + "padding:10px 14px;font:bold 15px system-ui;text-align:center";
+    b.textContent = micEnvHint();
+    document.body.insertBefore(b, document.body.firstChild);
+  }}
+}});
+/* КОРОТКИЙ КЛИК ПО МИКРОФОНУ НЕ ДОЛЖЕН ДАВАТЬ ПУСТУЮ ЗАПИСЬ (2026-10-18).
+   Поисковая кнопка была «держи и говори», а кнопка причин отказа — обычным
+   нажатием. Пользователь, привыкший ко второй, кликал по первой — запись
+   длилась миллисекунды, whisper честно возвращал пустоту, и это читается
+   как «голосовой ввод не работает, не пишет ни хрена». Теперь работают ОБА
+   способа: подержал и отпустил — как раньше; коротко нажал — запись идёт
+   дальше до следующего нажатия. */
+let _micDownAt = 0, _micToggle = false;
+const MIC_HOLD_MS = 500;
 function micSrBad(){{ try{{ return localStorage.getItem("mic_sr_bad") === "1"; }}catch(e){{ return false; }} }}
 function micMarkSrBad(){{ try{{ localStorage.setItem("mic_sr_bad", "1"); }}catch(e){{}} }}
 
@@ -2237,7 +2277,7 @@ function micFileStart(inpId, msgId, findFn){{
   const msg = msgId ? document.getElementById(msgId) : null;
   const show = (t) => {{ if(inp) inp.value = t; if(msg) msg.textContent = t; }};
   _micWantStop = false;
-  if(!navigator.mediaDevices || !window.MediaRecorder){{ show("⚠ микрофон недоступен — напиши текстом"); return; }}
+  if(!navigator.mediaDevices || !window.MediaRecorder){{ show(micEnvBad() ? micEnvHint() : "⚠ микрофон недоступен — напиши текстом"); return; }}
   navigator.mediaDevices.getUserMedia({{audio:true}}).then(function(stream){{
     const rec = new MediaRecorder(stream);
     _micRec = rec; _micChunks = [];
@@ -2261,20 +2301,26 @@ function micFileStart(inpId, msgId, findFn){{
             if(inp) inp.value = txt;
             if(msg) msg.textContent = "ищу: " + txt;
             if(findFn) findFn();
-          }} else show("не разобрал — скажи ещё раз или напиши");
+          }} else show("не разобрал — держи кнопку дольше или нажми один раз и говори");
         }}catch(e){{ show("расшифровка не ответила — напиши текстом"); }}
       }};
       fr.readAsDataURL(blob);
     }};
     rec.start();
     if(btn) btn.textContent = "🔴";
-    show("🔴 говори, потом отпусти кнопку");
+    show("🔴 говори — отпусти кнопку или нажми ещё раз");
     if(_micWantStop){{ try{{ rec.stop(); }}catch(e){{}} }}   // отпустили раньше, чем включился микрофон
-  }}).catch(function(){{ show("⚠ микрофон недоступен — напиши текстом"); }});
+  }}).catch(function(e){{ show(micEnvBad() ? micEnvHint() : "⚠ микрофон не дали: " + (e && e.name || "")); }});
 }}
 
 function micStart(ev, inpId, msgId, findFn){{
   if(ev){{ try{{ ev.preventDefault(); ev.target.setPointerCapture(ev.pointerId); }}catch(e){{}} }}
+  if(_micToggle && (_micRec || _mic)){{      // второе нажатие в режиме тумблера
+    _micToggle = false;
+    if(_micRec){{ _micWantStop = true; try{{ _micRec.stop(); }}catch(e){{}} return; }}
+    if(_mic){{ try{{ _mic.stop(); }}catch(e){{}} return; }}
+  }}
+  _micDownAt = Date.now(); _micToggle = false;
   const inp = document.getElementById(inpId);
   const btn = document.querySelector('[data-mic="'+inpId+'"]');
   const msg = msgId ? document.getElementById(msgId) : null;
@@ -2340,6 +2386,19 @@ function micStart(ev, inpId, msgId, findFn){{
   }}, 2500);
 }}
 function micStop(){{
+  /* отпустили быстрее, чем за MIC_HOLD_MS — значит это был клик, а не
+     удержание: не останавливаем, переходим в режим тумблера */
+  if(!_micToggle && _micDownAt && (Date.now() - _micDownAt) < MIC_HOLD_MS){{
+    if(_micRec || _mic){{
+      _micToggle = true;
+      const b = document.querySelector('.mic[data-mic]');
+      document.querySelectorAll('.mic').forEach(function(x){{
+        if(x.textContent === "🔴") x.title = "нажми ещё раз, чтобы закончить";
+      }});
+      return;
+    }}
+  }}
+  _micToggle = false;
   if(_micRec){{ _micWantStop = true; try{{ _micRec.stop(); }}catch(e){{}} return; }}
   if(!_mic){{ _micWantStop = true; return; }}
   if(!_mic._started){{ _mic._stopWanted = true; return; }}   // stop once it starts
@@ -3025,6 +3084,22 @@ def run_live(scenes_path, images_dir, port):
                 save_need(sid, reason or need_msg)
                 return self._reply(200)
 
+            if route == "micdiag":
+                n = int(self.headers.get("Content-Length", 0) or 0)
+                try:
+                    d = json.loads(self.rfile.read(n) or b"{}")
+                except ValueError:
+                    d = {}
+                print("[micdiag] страница открыта как %s | защищённый контекст: %s | "
+                      "mediaDevices: %s | MediaRecorder: %s"
+                      % (d.get("origin"), d.get("secure"), d.get("media"), d.get("rec")),
+                      flush=True)
+                if not d.get("secure") or not d.get("media"):
+                    print("[micdiag] ВОТ ПРИЧИНА: по этому адресу браузер "
+                          "микрофон не даёт. Нужен http://localhost:<порт>/review.html",
+                          flush=True)
+                return self._reply(200)
+
             if route == "voice":
                 # Синхронная расшифровка: текст возвращается в поле окна,
                 # чтобы пользователь поправил имена ДО отправки («Вэнс», а не
@@ -3045,7 +3120,20 @@ def run_live(scenes_path, images_dir, port):
                             fh.write(raw)
                         from voice_note import transcribe
                         text = transcribe(tmp)
-                except Exception:
+                        if not text:
+                            print("[voice] расшифровка вернула пустой текст "
+                                  "(запись %d байт) — скорее всего слишком "
+                                  "короткая запись" % len(raw), flush=True)
+                    else:
+                        print("[voice] пришла ПУСТАЯ запись — кнопку отпустили "
+                              "раньше, чем включился микрофон", flush=True)
+                except Exception as exc:
+                    # НЕ глотать молча (2026-10-18): раньше любая поломка
+                    # распознавателя возвращала пустой текст, и для пользователя
+                    # это выглядело как «голосовой ввод не пишет ни хрена».
+                    import traceback
+                    print("[voice] ОШИБКА расшифровки: %r" % (exc,), flush=True)
+                    traceback.print_exc()
                     text = ""
                 finally:
                     if tmp and os.path.exists(tmp):
@@ -3580,7 +3668,15 @@ def run_live(scenes_path, images_dir, port):
     # умершего сервера остаётся живая оболочка процесса).
     print(f"    проект: {os.path.basename(os.path.abspath('.'))}", flush=True)
     if ip:
-        print(f"    (если localhost не открывается:  http://{ip[0]}:{port}/review.html )", flush=True)
+        # НЕ предлагать IP как равноценный адрес (2026-10-18). По IP браузер
+        # не даёт микрофон ВООБЩЕ (нет защищённого контекста → нет
+        # navigator.mediaDevices), и отказывают сразу все три кнопки 🎤 —
+        # поиск кадра, поиск всплывашки и «почему убрал». Пользователь взял
+        # этот адрес из подсказки и час считал, что сломано распознавание.
+        print(f"    запасной адрес (ТОЛЬКО если localhost не открывается): "
+              f"http://{ip[0]}:{port}/review.html", flush=True)
+        print(f"    ВНИМАНИЕ: по IP НЕ РАБОТАЕТ МИКРОФОН — ни в поиске, ни в "
+              f"причинах отказа. Голос есть только на localhost.", flush=True)
     print(f"\n  Кадры подгружаются по мере скачивания. Отмечай/пиши правки прямо сейчас.", flush=True)
     print(f"  Ctrl-C чтобы остановить сервер.\n", flush=True)
     try:
