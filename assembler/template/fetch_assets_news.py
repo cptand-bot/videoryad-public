@@ -500,6 +500,17 @@ def _download_as_jpeg(url, out_path, timeout=20):
 # in depth for a re-host on a different domain), but this domain check is
 # now the primary defense for the agencies it covers.
 _STOCK_DOMAINS = (
+    # ШЕДЕВРУМ — AI-КАРТИНКА, ДОМЕН НАДЁЖНЕЕ ЛЮБОГО ГЛАЗА (2026-10-18).
+    # `avatars.mds.yandex.net/get-shedevrum/...` приезжает на БЫТОВЫЕ
+    # предметные запросы («пустое кресло за столом»), всегда квадрат
+    # 1024x1024, и выглядит как обычное фото. Фабрикация запрещена жёстко,
+    # поэтому режем по url, не дожидаясь аудита.
+    "get-shedevrum", "/shedevrum",
+    # каталожные товарные фото магазинов: стерильная съёмка на белом там,
+    # где нужен кадр с события
+    "img.tehnomaks.ru", "/img/prod/",
+    # замощённая по всему полю вотермарка крипто-канала, OCR не берёт
+    "public.bnbstatic.com",
     "alamy.com", "dreamstime.com", "shutterstock.com", "gettyimages.",
     "istockphoto.com", "depositphotos.com", "123rf.com", "adobe.com/stock",
     "stock.adobe.com", "bigstockphoto.com", "canstockphoto.com",
@@ -526,11 +537,18 @@ _STOCK_DOMAINS = (
 
 
 def _is_stock_domain(url):
+    """Сверяем ХОСТ И ПУТЬ (расширено 2026-10-18).
+    Раньше смотрели только netloc, и признак, живущий в пути, не срабатывал
+    никогда: `avatars.mds.yandex.net/get-shedevrum/...` — AI-картинка
+    Шедеврума на обычном яндексовом хосте, по хосту её не отличить. В списке
+    уже лежали такие записи («adobe.com/stock», «livejournal.com/photo»),
+    и они тоже не работали — поймано тестом, а не в бою."""
     try:
-        host = urllib.parse.urlparse(url).netloc.lower()
+        u = urllib.parse.urlparse(url)
+        hay = (u.netloc + u.path).lower()
     except Exception:
         return False
-    return any(d in host for d in _STOCK_DOMAINS)
+    return any(d in hay for d in _STOCK_DOMAINS)
 
 
 def fetch_web_search(query, out_path, env=None):
