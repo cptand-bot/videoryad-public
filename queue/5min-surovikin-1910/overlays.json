@@ -1,0 +1,363 @@
+{
+ "anchor": "top",
+ "14": {
+  "photo": "overlays/scene_014.jpg",
+  "sound": "whoosh",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "16": {
+  "photo": "overlays/scene_016.jpg",
+  "sound": "zatvor",
+  "at": 5.1,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "17": {
+  "photo": "overlays/scene_017.jpg",
+  "sound": "pop",
+  "at": 2.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "20": {
+  "photo": "overlays/scene_020.jpg",
+  "sound": "whoosh",
+  "at": 2.2,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "33": {
+  "photo": "overlays/scene_033.jpg",
+  "sound": "zatvor",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "47": {
+  "photo": "overlays/scene_047.jpg",
+  "sound": "pop",
+  "at": 3.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "50": {
+  "photo": "overlays/scene_050.jpg",
+  "sound": "whoosh",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "55": {
+  "photo": "overlays/scene_055.jpg",
+  "sound": "zatvor",
+  "at": 4.8,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "66": {
+  "photo": "overlays/scene_066.jpg",
+  "sound": "pop",
+  "at": 5.1,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "69": {
+  "photo": "overlays/scene_069.jpg",
+  "sound": "whoosh",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "3": {
+  "text": {
+   "words": "ОСЕНЬ 2022: УДАРЫ ПО ЭНЕРГЕТИКЕ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.2,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "6": {
+  "text": {
+   "words": "ДНЕПР: 1000 КМ ПО УКРАИНЕ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.1,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "12": {
+  "text": {
+   "words": "ТОК ИЗ ЕС ИДЁТ С 2022 ГОДА",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.1,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "13": {
+  "text": {
+   "words": "ЗИМОЙ В КИЕВЕ ДО МИНУС 15",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "19": {
+  "text": {
+   "words": "ЧЕТЫРЕ ОБЛАСТИ У ГРАНИЦЫ ЕС",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.5,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "24": {
+  "text": {
+   "words": "ВСЁ ЭТО — ЗА ДЕСЯТЬ ДНЕЙ",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.6,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "29": {
+  "text": {
+   "words": "ГЕРМАНИЯ — ВТОРОЙ ДОНОР УКРАИНЫ",
+   "color": "white",
+   "pos": "mc",
+   "at": 4.7,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "34": {
+  "text": {
+   "words": "RHEINMETALL: СНАРЯДЫ ДЛЯ КИЕВА",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 4.7,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "38": {
+  "text": {
+   "words": "АРМИЯ БРИТАНИИ: 73 ТЫСЯЧИ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.7,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "42": {
+  "text": {
+   "words": "БУНДЕСВЕР СЕГОДНЯ: 182 ТЫСЯЧИ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.7,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "45": {
+  "text": {
+   "words": "ПРИЗЫВ ОТМЕНЁН В 2011 ГОДУ",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.8,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "46": {
+  "text": {
+   "words": "ПОКА — ДОБРОВОЛЬНО",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "53": {
+  "text": {
+   "words": "LEOPARD 2: 11 МЛН ЕВРО ЗА ШТУКУ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.7,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "57": {
+  "text": {
+   "words": "ПЕРЕХВАТЧИК PATRIOT: 4 МЛН ДОЛЛАРОВ",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.3,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "58": {
+  "text": {
+   "words": "PATRIOT ПРИКРЫВАЕТ КИЕВ С 2023",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.0,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "59": {
+  "text": {
+   "words": "НОРМА НАТО — 2 ПРОЦЕНТА ВВП",
+   "color": "white",
+   "pos": "mc",
+   "at": 4.5,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "60": {
+  "text": {
+   "words": "США — ГЛАВНЫЙ ПОСТАВЩИК ПВО",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.3,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "64": {
+  "text": {
+   "words": "2022: ДО ПОЛОВИНЫ ЭНЕРГОСИСТЕМЫ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.7,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "9": {
+  "text": {
+   "words": "ГЕРАНЬ-2 — КОПИЯ SHAHED-136",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.3,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "10": {
+  "text": {
+   "words": "ИСКАНДЕР-М: ДАЛЬНОСТЬ 500 КМ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.3,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "11": {
+  "text": {
+   "words": "ОДНА ПОДСТАНЦИЯ — ДО 100 ТЫСЯЧ ЛЮДЕЙ",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "31": {
+  "text": {
+   "words": "УСЛОВИЯ МОСКВЫ — С ИЮНЯ 2024",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.9,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "37": {
+  "text": {
+   "words": "БРИТАНИЯ НЕ ВОЕВАЛА В ЕВРОПЕ С 1945",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.3,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "43": {
+  "text": {
+   "words": "АНКЕТА ОБЯЗАТЕЛЬНА, СЛУЖБА — НЕТ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.8,
+   "scale": 1.0,
+   "font": "montserrat"
+  }
+ },
+ "56": {
+  "text": {
+   "words": "США СОКРАТИЛИ ПОМОЩЬ КИЕВУ",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ },
+ "68": {
+  "text": {
+   "words": "УКРЫТИЕ ДЕРЖИТ ОСКОЛКИ, НЕ РАКЕТУ",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.9,
+   "scale": 1.0,
+   "font": "roboto"
+  }
+ },
+ "71": {
+  "text": {
+   "words": "ЕС СОВЕТУЕТ ЗАПАС НА 72 ЧАСА",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0,
+   "font": "oswald"
+  }
+ }
+}
