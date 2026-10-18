@@ -246,6 +246,11 @@ def _tesseract_env():
 # heavy-text filter misses them because a single "alamy" tile is only 1 word.
 # Hit live on ukraincy-begut-0709: alamy (scene 120), dreamstime (73, 78).
 _STOCK_WATERMARKS = (
+    # фотобанки ОБОЕВ на русских запросах про панораму города (2026-10-18):
+    # «телебашня на Александерплац Берлин реальное фото 2026» → плашка
+    # «УЮТНАЯ СТЕНА» в углу; tesseract не поймал (0 подозрений на 82 файлах),
+    # знак нашёл глаз на парном листе.
+    "уютная стена", "уютнаястена",
     # телеграм-паблики Донбасса на русских запросах про восстановление/стройку
     # (2026-10-18): знак во весь кадр, дважды подряд, пул один, переформулировка
     # не помогает; tesseract не поймал ни одного — ловим по подписи.
@@ -1219,7 +1224,31 @@ def main():
     manifest_name = os.environ.get("MANIFEST_NAME", "manifest.json")
     manifest_path = os.path.join(images_dir, manifest_name)
 
+    # МАНИФЕСТ ДОПИСЫВАЕТСЯ, А НЕ ЗАТИРАЕТСЯ (2026-10-18, улов usuario-70).
+    # Было: фетч по ПОДМНОЖЕСТВУ сцен (любой рефетч, дофетч трёх кадров)
+    # переписывал `images/manifest.json` целиком и оставлял в нём только эти
+    # id — после дофетча трёх сцен манифест стал из 3 записей вместо 75.
+    # Ошибки при этом НЕТ, а `contact_sheet.py` читает именно его и молча
+    # собирает почти пустой лист; вкладки пересобирали манифест руками по
+    # четыре раза за ролик. Теперь прежние записи сохраняются, если их файл
+    # ещё лежит на диске и сцены нет в текущем прогоне.
+    _cur_ids = {s["id"] for s in scenes}
     manifest = []
+    try:
+        with open(manifest_path, encoding="utf-8") as _mf:
+            _old = json.load(_mf)
+        if isinstance(_old, list):
+            for _e in _old:
+                if not isinstance(_e, dict) or _e.get("id") in _cur_ids:
+                    continue
+                _f = _e.get("file")
+                if _f and os.path.exists(os.path.join(images_dir, _f)):
+                    manifest.append(_e)
+            if manifest:
+                print(f"манифест: сохранил {len(manifest)} прежних записей "
+                      f"(фетч идёт по {len(_cur_ids)} сценам)", flush=True)
+    except (OSError, ValueError):
+        pass
     for scene in data["scenes"]:
         sid = scene["id"]
         source = scene["source"]  # "local_library" | "wikimedia" | "press_photo" | "pexels_photo" | "pexels_video"
