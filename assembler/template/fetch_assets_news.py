@@ -246,6 +246,10 @@ def _tesseract_env():
 # heavy-text filter misses them because a single "alamy" tile is only 1 word.
 # Hit live on ukraincy-begut-0709: alamy (scene 120), dreamstime (73, 78).
 _STOCK_WATERMARKS = (
+    # телеграм-паблики Донбасса на русских запросах про восстановление/стройку
+    # (2026-10-18): знак во весь кадр, дважды подряд, пул один, переформулировка
+    # не помогает; tesseract не поймал ни одного — ловим по подписи.
+    "kulemzin", "donetskmedia", "донецкmedia",
     "recommend.ru",   # отзывный сайт, логотип в правом нижнем углу (2026-10-16)
     "alamy", "dreamstime", "shutterstock", "getty", "gettyimages",
     "depositphotos", "123rf", "istock", "istockphoto", "adobestock",
@@ -1108,8 +1112,16 @@ def fetch_pixabay_video(query, api_key, out_path, target_width=1280):
 def fetch_stock_photo(query, env, out_path):
     """Pexels first, Pixabay as fallback - either one satisfies pexels_photo."""
     try:
-        if env.get("PEXELS_API_KEY") and _accept(fetch_pexels_photo(query, env["PEXELS_API_KEY"], out_path), out_path):
-            return True
+        if not env.get("PEXELS_API_KEY"):
+            print("  [pexels_photo] ключа PEXELS_API_KEY нет в .env")
+        else:
+            _raw = fetch_pexels_photo(query, env["PEXELS_API_KEY"], out_path)
+            if not _raw:
+                print("  [pexels_photo] ключ ответил, по запросу ничего подходящего — пробую pixabay")
+            elif _accept(_raw, out_path):
+                return True
+            else:
+                print("  [pexels_photo] кадр найден, но ОТКЛОНЁН (знак/текст/бан) — пробую pixabay")
     except Exception as e:
         print(f"  [pexels_photo error, trying pixabay] {e}")
     if env.get("PIXABAY_API_KEY"):
@@ -1141,9 +1153,24 @@ def _accept_video(ok, out_path):
 
 def fetch_stock_video(query, env, out_path):
     """Pexels first, Pixabay as fallback - either one satisfies pexels_video."""
+    # ПОЧЕМУ ЗДЕСЬ ПЕЧАТЬ ПРИЧИНЫ (2026-10-18): молчаливый `return False`
+    # заставил вкладку решить, что «Pexels локально мёртв, а в облаке живой»,
+    # и увести сцену в press_photo по правилу про 403. Проверка ключа curl'ом
+    # показала HTTP 200 и остаток 14414 из 25000 — то есть ключ был жив, а
+    # сцена падала по другой причине (ничего не нашлось либо кадр отклонён
+    # бан-листом/фильтром). Отличать эти три случая теперь обязана сама строка
+    # лога, иначе каждый раз диагностируют не то.
     try:
-        if env.get("PEXELS_API_KEY") and _accept_video(fetch_pexels_video(query, env["PEXELS_API_KEY"], out_path), out_path):
-            return True
+        if not env.get("PEXELS_API_KEY"):
+            print("  [pexels_video] ключа PEXELS_API_KEY нет в .env")
+        else:
+            _raw = fetch_pexels_video(query, env["PEXELS_API_KEY"], out_path)
+            if not _raw:
+                print("  [pexels_video] ключ ответил, по запросу ничего подходящего — пробую pixabay")
+            elif _accept_video(_raw, out_path):
+                return True
+            else:
+                print("  [pexels_video] клип найден, но ОТКЛОНЁН (бан-лист) — пробую pixabay")
     except Exception as e:
         print(f"  [pexels_video error, trying pixabay] {e}")
     if env.get("PIXABAY_API_KEY"):
