@@ -79,7 +79,7 @@ def main():
     banned = load_banned_md5()
     cooled, recent = cooldown_md5(project)
 
-    pins, bad, seen = [], [], {}
+    pins, bad, seen, missing = [], [], {}, []
     for path in argv:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
@@ -87,15 +87,34 @@ def main():
             q = sc.get("source_query") or ""
             if sc.get("source") != "local_library" or not q:
                 continue
-            direct = os.path.join(lib, q)
-            if not os.path.isfile(direct):
-                continue            # папка, не пин — не наше дело
-            pins.append((path, sc.get("id"), q, direct))
+            qq = q.strip()
+            direct = os.path.join(lib, qq)
+            if os.path.isfile(direct):
+                pins.append((path, sc.get("id"), qq, direct))
+                continue
+            # «папка:keyword» (кусок индексированного видео) — это папка
+            folder = qq.split(":", 1)[0] if ":" in qq else qq
+            if os.path.isdir(os.path.join(lib, folder)):
+                continue            # папка — round-robin, не пин, не наше дело
+            # НИ ФАЙЛА, НИ ПАПКИ — БИТЫЙ ПИН (2026-10-18, улов usuario-b7).
+            # Раньше такой путь попадал в ветку «папка, не наше дело» и
+            # check_pins печатал «все пины чистые». Фетч при этом молча уходит
+            # в веб-водопад, ставит кадр с отметкой ok, а в manifest.json
+            # остаётся source: local_library / status: cached — то есть манифест
+            # ВРЁТ, будто пин сработал, и подмену нечем заметить даже потом.
+            # Живой случай: всплывашка 17 на planeta-usloviya-1910, пин
+            # «ПОЛИТИКА/КАРТЫ/РОССИЯ/Blank Map of Russia With Borders of
+            # Subjects.jpg» — в медиатеке файл называется иначе.
+            missing.append((path, sc.get("id"), qq))
 
     print(f"проект: {project}   медиатека: {lib}")
     print(f"бан-лист: {BANNED_LOG} ({len(banned)} активных md5)")
     print("кулдаун: " + (", ".join(f"{p} ({d})" for p, d in recent) or "журнала нет"))
     print(f"пинов найдено: {len(pins)}")
+    for src, sid, q in missing:
+        bad.append((sid, q, "НЕТ ТАКОГО ФАЙЛА И НЕТ ТАКОЙ ПАПКИ в медиатеке — "
+                            "фетч молча уйдёт в веб-водопад, а манифест оставит "
+                            "source: local_library (ложь)"))
     for src, sid, q, direct in pins:
         try:
             h = file_md5(direct)
