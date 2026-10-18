@@ -1,0 +1,374 @@
+{
+  "anchor": "top",
+  "14": {
+    "photo": "overlays/scene_014.jpg",
+    "sound": "whoosh",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "33": {
+    "photo": "overlays/scene_033.jpg",
+    "sound": "zatvor",
+    "at": 4.3,
+    "shape": "circle",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "47": {
+    "photo": "overlays/scene_047.jpg",
+    "sound": "pop",
+    "at": 3.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "50": {
+    "photo": "overlays/scene_050.jpg",
+    "sound": "whoosh",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "55": {
+    "photo": "overlays/scene_055.jpg",
+    "sound": "zatvor",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "middle",
+    "approved": true
+  },
+  "66": {
+    "sound": "pop",
+    "at": 5.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ГРАНИЦА С БЕЛАРУСЬЮ — 1084 КМ",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "mashinka",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "69": {
+    "sound": "pop",
+    "at": 4.4,
+    "text": {
+      "words": "ОБОРУДОВАНИЕ ЗАПАСАЮТ ВПРОК",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "3": {
+    "text": {
+      "words": "ОСЕНЬ 2022: УДАРЫ ПО ЭНЕРГЕТИКЕ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "6": {
+    "text": {
+      "words": "ДНЕПР: 1000 КМ ПО УКРАИНЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "12": {
+    "text": {
+      "words": "ТОК ИЗ ЕС ИДЁТ С 2022 ГОДА",
+      "color": "white",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 3.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "text": {
+      "words": "ЗИМОЙ В КИЕВЕ ДО МИНУС 15",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "19": {
+    "text": {
+      "words": "ЧЕТЫРЕ ОБЛАСТИ У ГРАНИЦЫ ЕС",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "24": {
+    "text": {
+      "words": "ВСЁ ЭТО — ЗА ДЕСЯТЬ ДНЕЙ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "29": {
+    "text": {
+      "words": "ГЕРМАНИЯ — ВТОРОЙ ДОНОР УКРАИНЫ",
+      "color": "white",
+      "pos": "mc",
+      "font": "roboto",
+      "sound": "whoosh",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "34": {
+    "text": {
+      "words": "СНАРЯДЫ ДЛЯ КИЕВА",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "38": {
+    "text": {
+      "words": "АРМИЯ БРИТАНИИ: 73 ТЫСЯЧИ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 2.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "42": {
+    "text": {
+      "words": "БУНДЕСВЕР СЕГОДНЯ: 182 ТЫСЯЧИ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "45": {
+    "text": {
+      "words": "ПРИЗЫВ ОТМЕНЁН В 2011 ГОДУ",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "46": {
+    "text": {
+      "words": "ПОКА — ДОБРОВОЛЬНО",
+      "color": "red",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "53": {
+    "text": {
+      "words": "LEOPARD 2: 11 МЛН ЕВРО ЗА ШТУКУ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 3.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "57": {
+    "text": {
+      "words": "ПЕРЕХВАТЧИК PATRIOT: 4 МЛН ДОЛЛАРОВ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "58": {
+    "text": {
+      "words": "PATRIOT ПРИКРЫВАЕТ КИЕВ С 2023",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "59": {
+    "text": {
+      "words": "НОРМА НАТО — 2 ПРОЦЕНТА ВВП",
+      "color": "white",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "text": {
+      "words": "США — ГЛАВНЫЙ ПОСТАВЩИК ПВО",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "9": {
+    "text": {
+      "words": "ГЕРАНЬ-2",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "whoosh",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "10": {
+    "text": {
+      "words": "ИСКАНДЕР-М: ДАЛЬНОСТЬ 500 КМ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "ПОДСТАНЦИЯ — 100 ТЫСЯЧ ЛЮДЕЙ",
+      "color": "white",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "31": {
+    "text": {
+      "words": "УСЛОВИЯ МОСКВЫ — С ИЮНЯ 2024",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "mashinka",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "37": {
+    "text": {
+      "words": "БРИТАНИЯ НЕ ВОЕВАЛА В ЕВРОПЕ С 1945",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "56": {
+    "text": {
+      "words": "США СОКРАТИЛИ ПОМОЩЬ КИЕВУ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "71": {
+    "text": {
+      "words": "ЕС СОВЕТУЕТ ЗАПАС НА 72 ЧАСА",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}

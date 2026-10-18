@@ -1,0 +1,44 @@
+{
+ "scenes": [
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 12.53,
+   "visual_prompt": "карта региона",
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Map of Ukraine Oblasts simple 4 colors.jpg"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "duration_sec": 12.39,
+   "visual_prompt": "лицо, которое это говорит",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц портрет крупным планом фотография 2026"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "duration_sec": 9.35,
+   "visual_prompt": "карта региона",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА/Borders Europe Map HD.jpg"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "duration_sec": 12.16,
+   "visual_prompt": "второй названный город",
+   "source": "press_photo",
+   "source_query": "Лондон Сити панорама с Темзы фотография"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "duration_sec": 13.82,
+   "visual_prompt": "сторона конфликта с США",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на пресс-конференции реальное фото 2026"
+  }
+ ]
+}
