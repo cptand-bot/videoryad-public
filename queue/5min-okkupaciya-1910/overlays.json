@@ -1,0 +1,616 @@
+{
+  "anchor": "top",
+  "2": {
+    "sound": "pop",
+    "at": 3.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "НИКАКИХ ВОЙСК НАТО",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "3": {
+    "sound": "whoosh",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "МАРТ 2014: ПИСЬМО В ПОЛЬШУ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "4": {
+    "sound": "zatvor",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ЗАМПРЕД ГОСДУМЫ, ЛИДЕР ЛДПР",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "sound": "pop",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "АДРЕСАТ — МИД ПОЛЬШИ",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "6": {
+    "sound": "whoosh",
+    "at": 3.9,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_006.jpg",
+    "approved": true
+  },
+  "7": {
+    "sound": "zatvor",
+    "at": 2.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_007.jpg",
+    "approved": true
+  },
+  "8": {
+    "sound": "pop",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ВАРШАВА ПОДТВЕРДИЛА ПОЛУЧЕНИЕ",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "10": {
+    "sound": "zatvor",
+    "at": 3.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ФЕВРАЛЬ 2014: СМЕНА ВЛАСТИ",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "sound": "pop",
+    "at": 1.9,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ГРАНИЦА ПОЛЬША-УКРАИНА: 535 КМ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "12": {
+    "sound": "whoosh",
+    "at": 2.9,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "МАРТ 2014: КРЫМ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 3.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "14": {
+    "sound": "pop",
+    "at": 5.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ВЕНГРИИ — ЗАКАРПАТЬЕ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 6.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "sound": "whoosh",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "РУМЫНИИ — ЧЕРНОВИЦКАЯ ОБЛАСТЬ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "17": {
+    "sound": "pop",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "РУДОЛЬФ ГЕСС, МАЙ 1941",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 6.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "20": {
+    "sound": "pop",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "НОЯБРЬ 2026: 1500 ВОЕННЫХ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 6.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "sound": "whoosh",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "БРИТАНИЯ · ФРАНЦИЯ · ГЕРМАНИЯ · ПОЛЬША",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 6.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "sound": "zatvor",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ОТ ГРАНИЦЫ ДО ЛЬВОВА — 70 КМ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "23": {
+    "sound": "pop",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ПОЛИГОН ДРАВСКО-ПОМОРСКЕ",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "24": {
+    "sound": "whoosh",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "СВОИ ВОЙСКА ПОЛЬША НЕ ПОШЛЁТ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "27": {
+    "sound": "whoosh",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ИНОСТРАННОЕ ВМЕШАТЕЛЬСТВО",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 6.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "sound": "zatvor",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ЗАКОННЫЕ ВОЕННЫЕ ЦЕЛИ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "33": {
+    "sound": "whoosh",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ПРЕЗИДЕНТ С 2019 ГОДА",
+      "color": "white",
+      "pos": "ml",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 6.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "42": {
+    "sound": "whoosh",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_042.jpg",
+    "approved": true
+  },
+  "44": {
+    "sound": "zatvor",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_044.jpg",
+    "anchor": "top",
+    "approved": true
+  },
+  "46": {
+    "sound": "whoosh",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_046.jpg",
+    "anchor": "top",
+    "approved": true
+  },
+  "47": {
+    "sound": "pop",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ВОСТОЧНЫЕ КРЕСЫ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "48": {
+    "sound": "whoosh",
+    "at": 3.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ДО 1939 ГОДА — ПОЛЬША",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "49": {
+    "sound": "zatvor",
+    "at": 5.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ДО 1940 ГОДА — РУМЫНИЯ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 6.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "50": {
+    "sound": "pop",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_050.jpg",
+    "approved": true
+  },
+  "53": {
+    "sound": "pop",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "РОВЕНСКАЯ АЭС: 4 БЛОКА",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "54": {
+    "sound": "whoosh",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ОТ ВАРШАВЫ ДО ЛЬВОВА — 390 КМ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "55": {
+    "sound": "zatvor",
+    "at": 5.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "КОНСТАНЦА — КРУПНЕЙШИЙ ПОРТ ЧЁРНОГО МОРЯ",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 6.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "61": {
+    "sound": "zatvor",
+    "at": 4.9,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "СМЯГЧЕНИЕ САНКЦИЙ, АКТИВЫ РФ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 6.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "64": {
+    "sound": "zatvor",
+    "at": 4.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ЛИТВА ВСПОМИНАЕТ КАЛИНИНГРАД",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "65": {
+    "sound": "pop",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ЛАТВИЯ: ПИТЬ МЕНЬШЕ ПИВА",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 6.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "73": {
+    "sound": "zatvor",
+    "at": 2.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "ЗАКАРПАТЬЕ: 1,25 МЛН ЧЕЛОВЕК",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 3.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "80": {
+    "sound": "pop",
+    "at": 3.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "text": {
+      "words": "КАРТА ОДНА, ЖИЗНЬ ДРУГАЯ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "40": {
+    "sound": "whoosh",
+    "at": 2.7,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "photo": "overlays/scene_040.jpg",
+    "anchor": "top",
+    "approved": true
+  }
+}
