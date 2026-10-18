@@ -422,16 +422,41 @@ def main():
             for h in _md5s:
                 subprocess.run(["python3", os.path.join(here, "ban_file.py"),
                                 "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
+    # --- КЛЮЧИ ПРОВЕРЯЕМ ДО ФЕТЧА (2026-10-18, улов usuario-42) ---
+    # В папке ЗАБОРА (`<ролик>-cloud`) нет `.env`: ship.sh его не отправляет
+    # (ключи живут в GitHub Secrets), get.sh не восстанавливал. Фетч при этом
+    # падает на `FileNotFoundError: '.env'`, но код возврата здесь не
+    # проверялся — и рефетч честно докладывал «ВЕРНУЛ прежний кадр сцены N
+    # (замена не нашлась)». Читается как «объект в принципе не находится»,
+    # хотя дело в ключах: вкладка дважды переписала формулировку впустую.
+    if not os.path.exists(".env"):
+        print("\nОСТАНОВ: в этой папке нет `.env` — ключи поиска не заданы, "
+              "фетч упадёт, а рефетч доложит «замена не нашлась».")
+        print("Лечение: cp ~/projects/<ролик>/.env .   (в папке ЗАБОРА .env "
+              "не бывает — ship.sh его не отправляет, ключи в GitHub Secrets)")
+        return 1
+
+    failed_runs = []
     for sub, assets, ids, before in jobs:
         print("\n--- рефетч %s: %s ---" % (assets, ids))
-        subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
-                        sub, assets, ".env", "5"])
+        rc = subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
+                             sub, assets, ".env", "5"]).returncode
+        if rc != 0:
+            # НЕ путать «не нашлось» с «фетч не работал» (см. разбор выше)
+            print("  ФЕТЧ УПАЛ (код %d) — замены НЕ искались. Ниже строки "
+                  "«ВЕРНУЛ прежний кадр» означают откат, а НЕ то, что объект "
+                  "не находится. Разберись с причиной и повтори." % rc)
+            failed_runs.append((assets, rc))
         restore_missing(assets, ids)
         report_same_file(assets, before)
     prune_needs_upload(only_ids=[sid for _, _, ids, _ in jobs for sid in ids])
     for sub, _, _, _ in jobs:
         if os.path.exists(sub):
             os.remove(sub)
+    if failed_runs:
+        print("\nИТОГ: фетч падал на %s — результат рефетча недействителен."
+              % ", ".join("%s (код %d)" % fr for fr in failed_runs))
+        return 1
     return 0
 
 

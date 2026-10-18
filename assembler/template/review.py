@@ -2651,6 +2651,24 @@ CT_EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp",
           "video/webm": ".webm"}
 
 
+def _touch_dashboard():
+    """След «пользователь живьём трогает дашборд» — для ватчдога повторных
+    напоминаний (2026-10-18, прямая просьба пользователя: «если в течение
+    15 минут я не правлю и не прикасаюсь к этому дашборду и не отправляю его
+    на сборку — пришли повторное оповещение»).
+
+    Пишется на КАЖДЫЙ POST, то есть на любое действие руками: утверждение,
+    замена кадра, бан, поиск, загрузка своего фото, превью, причина отказа.
+    Опрос состояния (`poll()` раз в 2,5 с) идёт GET'ом и сюда НЕ попадает —
+    иначе след был бы всегда свежим и напоминание не пришло бы никогда.
+    """
+    try:
+        with open(".dashboard_touch", "w") as f:
+            f.write(str(time.time()))
+    except OSError:
+        pass          # след — удобство, дашборд из-за него не роняем
+
+
 def run_live(scenes_path, images_dir, port):
     import http.server
     import socketserver
@@ -2805,6 +2823,7 @@ def run_live(scenes_path, images_dir, port):
             self.wfile.write(body)
 
         def do_POST(self):
+            _touch_dashboard()      # любой POST = пользователь работает руками
             base = self.path.split("?", 1)
             route = base[0].rstrip("/").lstrip("/")
             qs = urllib.parse.parse_qs(base[1] if len(base) > 1 else "")
