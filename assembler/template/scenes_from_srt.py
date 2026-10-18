@@ -24,7 +24,15 @@ import subprocess
 import sys
 
 SENT_END = tuple(".!?»")
-MIN_SCENE = 5.0       # don't cut a scene shorter than this on a sentence end —
+# РИТМ НАРЕЗКИ — ПАРАМЕТР, А НЕ КОНСТАНТА (2026-10-18). Новостному конвейеру
+# нужен частый ритм (5-12 с), второму сборщику — вдвое спокойнее (20-25 с):
+# на 17:52 дефолт дал 89 сцен вместо нужных ~45, и вкладка клеила их своим
+# пост-мержем в папке проекта. Чтобы это не расползлось копипастой по
+# вкладкам, пороги читаются из окружения:
+#     SCENE_MIN=20 SCENE_MAX=30 python3 scenes_from_srt.py ...
+# Дефолты прежние, на новостной конвейер правка не влияет никак.
+import os as _os
+MIN_SCENE = float(_os.environ.get("SCENE_MIN", "5.0"))       # don't cut a scene shorter than this on a sentence end —
                       # raised from 3.2 (user, 2026-09-28: too many cuts, short
                       # connective one-liners ("Совпадение? Возможно.") don't
                       # need their own image — a held/zoomed photo is enough,
@@ -32,7 +40,7 @@ MIN_SCENE = 5.0       # don't cut a scene shorter than this on a sentence end �
                       # these into the neighbouring beat cuts total scene
                       # count ~20% (measured on 3 same-day scripts: 139->112,
                       # 98->77, 58->45) without touching dashboard/schema.
-MAX_SCENE = 12.0      # force a cut here even mid-sentence — raised from 9.0
+MAX_SCENE = float(_os.environ.get("SCENE_MAX", "12.0"))      # force a cut here even mid-sentence — raised from 9.0
                       # to match: at MIN_SCENE=5.0 a 9s cap fired mid-sentence
                       # far more often (26x on a test script vs 9x at 12.0)
                       # for no reduction in scene count (the natural sentence
