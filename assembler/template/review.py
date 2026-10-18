@@ -2253,7 +2253,22 @@ function micEnvHint(){{
   return "⚠ браузер запретил микрофон: страница открыта как " + location.origin +
          ". Открой http://localhost:" + port + "/review.html — по IP микрофон не работает нигде.";
 }}
+/* САМ УВОЖУ С НЕБЕЗОПАСНОГО АДРЕСА НА localhost (2026-10-18, третий заход).
+   Баннер и предупреждение в консоли — это подсказки, а подсказку можно не
+   прочитать: пользователь уже потерял час на мёртвом микрофоне. Поэтому если
+   страница открыта по IP, СНАЧАЛА проверяем, отвечает ли localhost, и только
+   тогда уходим туда сами. Если localhost не отвечает — остаёмся и показываем
+   красную полосу, тупика не создаём. Переход однократный (sessionStorage). */
 window.addEventListener("load", function(){{
+  const host = location.hostname;
+  const isLocal = (host === "localhost" || host === "127.0.0.1" || host === "[::1]");
+  if(!isLocal && !sessionStorage.getItem("micRedirected")){{
+    const target = "http://localhost:" + (location.port || "8794") + location.pathname + location.search;
+    fetch("http://localhost:" + (location.port || "8794") + "/state?_probe=1",
+          {{mode:"no-cors", cache:"no-store"}})
+      .then(function(){{ sessionStorage.setItem("micRedirected","1"); location.replace(target); }})
+      .catch(function(){{ /* localhost не отвечает — остаёмся, покажем полосу */ }});
+  }}
   try{{
     fetch("micdiag", {{method:"POST", headers:{{"Content-Type":"application/json"}},
       body: JSON.stringify({{origin: location.origin, secure: !!window.isSecureContext,
@@ -3701,10 +3716,14 @@ def run_live(scenes_path, images_dir, port):
         # navigator.mediaDevices), и отказывают сразу все три кнопки 🎤 —
         # поиск кадра, поиск всплывашки и «почему убрал». Пользователь взял
         # этот адрес из подсказки и час считал, что сломано распознавание.
-        print(f"    запасной адрес (ТОЛЬКО если localhost не открывается): "
-              f"http://{ip[0]}:{port}/review.html", flush=True)
-        print(f"    ВНИМАНИЕ: по IP НЕ РАБОТАЕТ МИКРОФОН — ни в поиске, ни в "
-              f"причинах отказа. Голос есть только на localhost.", flush=True)
+        # IP БОЛЬШЕ НЕ ПЕЧАТАЕМ ПО УМОЛЧАНИЮ (2026-10-18). Именно отсюда адрес
+        # попадал в браузер, а по IP браузер не даёт микрофон вообще. Кому он
+        # реально нужен (localhost не открывается) — поднимет с
+        # VIDEORYAD_SHOW_IP=1 и увидит адрес вместе с предупреждением.
+        if os.environ.get("VIDEORYAD_SHOW_IP") == "1":
+            print(f"    запасной адрес: http://{ip[0]}:{port}/review.html", flush=True)
+            print(f"    ВНИМАНИЕ: по IP НЕ РАБОТАЕТ МИКРОФОН нигде — ни в поиске, "
+                  f"ни в причинах отказа. Голос есть только на localhost.", flush=True)
     print(f"\n  Кадры подгружаются по мере скачивания. Отмечай/пиши правки прямо сейчас.", flush=True)
     print(f"  Ctrl-C чтобы остановить сервер.\n", flush=True)
     try:
