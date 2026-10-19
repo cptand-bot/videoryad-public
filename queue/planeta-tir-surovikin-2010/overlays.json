@@ -1,0 +1,489 @@
+{
+ "anchor": "bottom",
+ "7": {
+  "photo": "overlays/scene_007.jpg",
+  "sound": "whoosh",
+  "at": 4.7,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "15": {
+  "photo": "overlays/scene_015.jpg",
+  "sound": "zatvor",
+  "at": 5.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "21": {
+  "photo": "overlays/scene_021.jpg",
+  "sound": "pop",
+  "at": 4.7,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "25": {
+  "photo": "overlays/scene_025.jpg",
+  "sound": "whoosh",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "37": {
+  "photo": "overlays/scene_037.jpg",
+  "sound": "zatvor",
+  "at": 5.1,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "43": {
+  "photo": "overlays/scene_043.jpg",
+  "sound": "pop",
+  "at": 5.2,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "48": {
+  "photo": "overlays/scene_048.jpg",
+  "sound": "whoosh",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "56": {
+  "photo": "overlays/scene_056.jpg",
+  "sound": "zatvor",
+  "at": 4.5,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "57": {
+  "photo": "overlays/scene_057.jpg",
+  "sound": "pop",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "66": {
+  "photo": "overlays/scene_066.jpg",
+  "sound": "whoosh",
+  "at": 4.5,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "2": {
+  "sound": "pshik",
+  "at": 3.3,
+  "text": {
+   "words": "БРИТАНИЯ ГОТОВИТ ГРАЖДАН К ЖЕРТВАМ",
+   "color": "white",
+   "pos": "mc",
+   "font": "",
+   "at": 3.3,
+   "scale": 1.0
+  }
+ },
+ "4": {
+  "sound": "whoosh",
+  "at": 4.4,
+  "text": {
+   "words": "МЕРЦ: РОССИЯ НЕ ДОЛЖНА ПОБЕДИТЬ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "arial",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "6": {
+  "sound": "mashinka",
+  "at": 4.9,
+  "text": {
+   "words": "УОКЕР: ОБЩЕСТВО ДОЛЖНО БЫТЬ ГОТОВО",
+   "color": "red",
+   "pos": "ml",
+   "font": "times",
+   "at": 4.9,
+   "scale": 1.0
+  }
+ },
+ "9": {
+  "sound": "whoosh",
+  "at": 4.3,
+  "text": {
+   "words": "БУНДЕСВЕР: 260 000 ВОЕННЫХ",
+   "color": "green",
+   "pos": "mr",
+   "font": "oswald",
+   "at": 4.3,
+   "scale": 1.0
+  }
+ },
+ "10": {
+  "sound": "pop",
+  "at": 4.8,
+  "text": {
+   "words": "СВЕДЕНИЯ О ПРИГОДНОСТИ — ОБЯЗАТЕЛЬНЫ",
+   "color": "orange",
+   "pos": "tl",
+   "font": "montserrat",
+   "at": 4.8,
+   "scale": 1.0
+  }
+ },
+ "11": {
+  "sound": "mashinka",
+  "at": 4.7,
+  "text": {
+   "words": "ПРОТЕСТЫ ПРОТИВ ВОЗВРАТА ПРИЗЫВА",
+   "color": "white",
+   "pos": "tr",
+   "font": "roboto",
+   "at": 4.7,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "sound": "zatvor",
+  "at": 3.8,
+  "text": {
+   "words": "СЛОВА — РОССИИ. СОЛДАТЫ — СЕБЕ",
+   "color": "yellow",
+   "pos": "mc",
+   "font": "",
+   "at": 3.8,
+   "scale": 1.0
+  }
+ },
+ "17": {
+  "sound": "pshik",
+  "at": 4.6,
+  "text": {
+   "words": "ОСЕНЬ 2022: УДАРЫ ПО ЭНЕРГЕТИКЕ",
+   "color": "red",
+   "pos": "tc",
+   "font": "arial",
+   "at": 4.6,
+   "scale": 1.0
+  }
+ },
+ "20": {
+  "sound": "pop",
+  "at": 4.4,
+  "text": {
+   "words": "УДАРЫ РАССЧИТАНЫ НА ЗИМУ",
+   "color": "green",
+   "pos": "ml",
+   "font": "times",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "23": {
+  "sound": "zatvor",
+  "at": 2.9,
+  "text": {
+   "words": "СЧИТАЮТ СРЕДСТВА НА КАЖДЫЙ ОБЪЕКТ",
+   "color": "orange",
+   "pos": "mr",
+   "font": "oswald",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "26": {
+  "sound": "mashinka",
+  "at": 4.6,
+  "text": {
+   "words": "БАЛЛИСТИКА ПО ЗАПАДУ УКРАИНЫ",
+   "color": "white",
+   "pos": "tl",
+   "font": "montserrat",
+   "at": 4.6,
+   "scale": 1.0
+  }
+ },
+ "27": {
+  "sound": "pshik",
+  "at": 4.4,
+  "text": {
+   "words": "ЗАПАД УКРАИНЫ БЫЛ ГЛУБОКИМ ТЫЛОМ",
+   "color": "yellow",
+   "pos": "tr",
+   "font": "roboto",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "29": {
+  "sound": "whoosh",
+  "at": 4.4,
+  "text": {
+   "words": "ПУТИН: РАБОТУ ПРОДОЛЖАТЬ",
+   "color": "red",
+   "pos": "mc",
+   "font": "",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "33": {
+  "sound": "zatvor",
+  "at": 4.6,
+  "text": {
+   "words": "ПВО НЕ ХВАТАЕТ",
+   "color": "green",
+   "pos": "tc",
+   "font": "arial",
+   "at": 4.6,
+   "scale": 1.0
+  }
+ },
+ "35": {
+  "sound": "pop",
+  "at": 4.9,
+  "text": {
+   "words": "ЭТО УСТАНОВКА, А НЕ ПРОГНОЗ",
+   "color": "orange",
+   "pos": "ml",
+   "font": "times",
+   "at": 4.9,
+   "scale": 1.0
+  }
+ },
+ "38": {
+  "sound": "zatvor",
+  "at": 3.6,
+  "text": {
+   "words": "ПЯТЬ ЛЕТ ПЛАТИЛИ, ЧТОБЫ НЕ ДОШЛО",
+   "color": "white",
+   "pos": "mr",
+   "font": "oswald",
+   "at": 3.6,
+   "scale": 1.0
+  }
+ },
+ "40": {
+  "sound": "pop",
+  "at": 4.4,
+  "text": {
+   "words": "ОБОРОННЫЕ РАСХОДЫ ЕС РАСТУТ",
+   "color": "yellow",
+   "pos": "tl",
+   "font": "montserrat",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "41": {
+  "sound": "mashinka",
+  "at": 4.3,
+  "text": {
+   "words": "ПРИЗЫВ СНОВА НА СТОЛЕ",
+   "color": "red",
+   "pos": "tr",
+   "font": "roboto",
+   "at": 4.3,
+   "scale": 1.0
+  }
+ },
+ "47": {
+  "sound": "pshik",
+  "at": 3.4,
+  "text": {
+   "words": "БЮДЖЕТ ЗАСТАВЛЯЕТ ВЫБИРАТЬ",
+   "color": "green",
+   "pos": "mc",
+   "font": "",
+   "at": 3.4,
+   "scale": 1.0
+  }
+ },
+ "51": {
+  "sound": "mashinka",
+  "at": 3.7,
+  "text": {
+   "words": "РАСЧЁТЫ. БЕЛАРУСЬ. ЗИМА",
+   "color": "orange",
+   "pos": "tc",
+   "font": "arial",
+   "at": 3.7,
+   "scale": 1.0
+  }
+ },
+ "53": {
+  "sound": "zatvor",
+  "at": 4.8,
+  "text": {
+   "words": "СТАВКА НЕ НА ПРОРЫВ",
+   "color": "white",
+   "pos": "ml",
+   "font": "times",
+   "at": 4.8,
+   "scale": 1.0
+  }
+ },
+ "55": {
+  "sound": "pop",
+  "at": 2.7,
+  "text": {
+   "words": "НЕ УДАР КУВАЛДОЙ, А МНОГО МОЛОТКОМ",
+   "color": "yellow",
+   "pos": "mr",
+   "font": "oswald",
+   "at": 2.7,
+   "scale": 1.0
+  }
+ },
+ "58": {
+  "sound": "zatvor",
+  "at": 4.3,
+  "text": {
+   "words": "УКРАИНА УПИРАЕТСЯ В ГРАНИЦУ ЕС",
+   "color": "red",
+   "pos": "tl",
+   "font": "montserrat",
+   "at": 4.3,
+   "scale": 1.0
+  }
+ },
+ "60": {
+  "sound": "pop",
+  "at": 2.8,
+  "text": {
+   "words": "АДРЕС УЖЕ ПО-ПОЛЬСКИ И НЕМЕЦКИ",
+   "color": "green",
+   "pos": "tr",
+   "font": "roboto",
+   "at": 2.8,
+   "scale": 1.0
+  }
+ },
+ "64": {
+  "sound": "whoosh",
+  "at": 4.2,
+  "text": {
+   "words": "200 БЕТОННЫХ УКРЫТИЙ",
+   "color": "orange",
+   "pos": "mc",
+   "font": "",
+   "at": 4.2,
+   "scale": 1.0
+  }
+ },
+ "65": {
+  "sound": "pop",
+  "at": 4.9,
+  "text": {
+   "words": "БЕТОН — ПЛОХОЙ ДИПЛОМАТ",
+   "color": "white",
+   "pos": "tc",
+   "font": "arial",
+   "at": 4.9,
+   "scale": 1.0
+  }
+ },
+ "67": {
+  "sound": "pshik",
+  "at": 2.0,
+  "text": {
+   "words": "ЦЕНА РАСТЁТ КАЖДЫЙ МЕСЯЦ",
+   "color": "yellow",
+   "pos": "ml",
+   "font": "times",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "68": {
+  "sound": "zatvor",
+  "at": 2.4,
+  "text": {
+   "words": "МОСКВА ПРОДОЛЖАЕТ ДАВИТЬ",
+   "color": "red",
+   "pos": "mr",
+   "font": "oswald",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "69": {
+  "sound": "whoosh",
+  "at": 4.8,
+  "text": {
+   "words": "СЧЁТ МОГУТ ОСТАВИТЬ ЕВРОПЕ",
+   "color": "green",
+   "pos": "tl",
+   "font": "montserrat",
+   "at": 4.8,
+   "scale": 1.0
+  }
+ },
+ "70": {
+  "sound": "pop",
+  "at": 4.9,
+  "text": {
+   "words": "ГОТОВЯТСЯ К ДЛИННОЙ КОНФРОНТАЦИИ",
+   "color": "orange",
+   "pos": "tr",
+   "font": "roboto",
+   "at": 4.9,
+   "scale": 1.0
+  }
+ },
+ "72": {
+  "sound": "pshik",
+  "at": 3.4,
+  "text": {
+   "words": "ЛЮДИ. ДЕНЬГИ. АРМИЯ. ЗАВОДЫ",
+   "color": "white",
+   "pos": "mc",
+   "font": "",
+   "at": 3.4,
+   "scale": 1.0
+  }
+ },
+ "74": {
+  "sound": "whoosh",
+  "at": 4.8,
+  "text": {
+   "words": "БОРЬБА НА ВЫНОСЛИВОСТЬ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "arial",
+   "at": 4.8,
+   "scale": 1.0
+  }
+ },
+ "75": {
+  "sound": "pop",
+  "at": 5.3,
+  "text": {
+   "words": "ЗРИТЕЛЯМИ ОНИ ОСТАНУТСЯ НЕ ВЕЧНО",
+   "color": "red",
+   "pos": "ml",
+   "font": "times",
+   "at": 5.3,
+   "scale": 1.0
+  }
+ }
+}
