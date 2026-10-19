@@ -1,0 +1,100 @@
+{
+ "scenes": [
+  {
+   "id": 5,
+   "text": "",
+   "duration_sec": 13.05,
+   "source": "press_photo",
+   "source_query": "публикация The Wall Street Journal о предложенном саммите реальное фото",
+   "visual_prompt": "публикация The Wall Street Journal о предложенном саммите реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "duration_sec": 13.44,
+   "source": "press_photo",
+   "source_query": "сборочная линия китайского автомобильного завода реальное фото",
+   "visual_prompt": "сборочная линия китайского автомобильного завода реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 12.64,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА/Borders Europe Map HD.jpg",
+   "visual_prompt": "КАРТЫ/ЕВРОПА/Borders Europe Map HD.jpg"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "duration_sec": 12.36,
+   "source": "press_photo",
+   "source_query": "химический завод BASF в Людвигсхафене Германия реальное фото",
+   "visual_prompt": "химический завод BASF в Людвигсхафене Германия реальное фото"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "duration_sec": 14.96,
+   "source": "press_photo",
+   "source_query": "ветряные электростанции в поле Германия реальное фото",
+   "visual_prompt": "ветряные электростанции в поле Германия реальное фото"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "duration_sec": 14.04,
+   "source": "press_photo",
+   "source_query": "нефтяной танкер теневого флота в открытом море реальное фото",
+   "visual_prompt": "нефтяной танкер теневого флота в открытом море реальное фото"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "duration_sec": 6.08,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ИРАН/Blank map of Iran.jpg",
+   "visual_prompt": "КАРТЫ/ИРАН/Blank map of Iran.jpg"
+  },
+  {
+   "id": 91,
+   "text": "",
+   "duration_sec": 12.88,
+   "source": "press_photo",
+   "source_query": "набережная Вайтань Шанхай панорама небоскрёбов реальное фото",
+   "visual_prompt": "набережная Вайтань Шанхай панорама небоскрёбов реальное фото"
+  },
+  {
+   "id": 99,
+   "text": "",
+   "duration_sec": 9.6,
+   "source": "press_photo",
+   "source_query": "истребитель военно-воздушных сил Китая в полёте реальное фото",
+   "visual_prompt": "истребитель военно-воздушных сил Китая в полёте реальное фото"
+  },
+  {
+   "id": 115,
+   "text": "",
+   "duration_sec": 12.08,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ГЕРМАНИЯ/Germany map blank.jpg",
+   "visual_prompt": "КАРТЫ/ГЕРМАНИЯ/Germany map blank.jpg"
+  },
+  {
+   "id": 118,
+   "text": "",
+   "duration_sec": 12.64,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg",
+   "visual_prompt": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg"
+  },
+  {
+   "id": 127,
+   "text": "",
+   "duration_sec": 12.93,
+   "source": "press_photo",
+   "source_query": "рукопожатие двух политиков крупным планом реальное фото",
+   "visual_prompt": "рукопожатие двух политиков крупным планом реальное фото"
+  }
+ ]
+}

@@ -1,0 +1,880 @@
+{
+  "anchor": "top",
+  "3": {
+    "text": {
+      "words": "ПЕКИН — ТРЕТИЙ ЗА СТОЛОМ",
+      "color": "green",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "whoosh",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "7": {
+    "text": {
+      "words": "КИТАЙ НЕ ЧЛЕН НАТО",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "9": {
+    "text": {
+      "words": "ОТ БАЛТИКИ ДО ТИХОГО ОКЕАНА",
+      "color": "orange",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "text": {
+      "words": "КИТАЙ СМОТРИТ ЧЕРЕЗ ТАЙВАНЬ",
+      "color": "green",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "zatvor",
+      "at": 3.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "text": {
+      "words": "ОРУЖИЕ ЕСТЬ, ГАРАНТИЙ НЕТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "16": {
+    "text": {
+      "words": "ГАРАНТИЙ УРОВНЯ НАТО У ТАЙВАНЯ НЕТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 3.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "18": {
+    "text": {
+      "words": "ТРИ ТРЕБОВАНИЯ, ОДИН СТОЛ",
+      "color": "green",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "20": {
+    "text": {
+      "words": "РАКЕТЫ НИКУДА НЕ ДЕНУТСЯ",
+      "color": "white",
+      "pos": "mc",
+      "font": "times",
+      "sound": "pop",
+      "at": 3.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "text": {
+      "words": "ТРИ ТЕАТРА СРАЗУ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 3.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "text": {
+      "words": "ИРАН, ИЗРАИЛЬ, БАЗЫ, МАРШРУТЫ",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "24": {
+    "text": {
+      "words": "КОРАБЛИ, РАКЕТЫ, СПУТНИКИ, ДЕНЬГИ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "25": {
+    "text": {
+      "words": "ПЕРЕХВАТЧИК ОДИН НА ДВА РЕГИОНА",
+      "color": "white",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "pop",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "26": {
+    "text": {
+      "words": "ЗАВОД НЕ УСКОРИТЬ УКАЗОМ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "times",
+      "sound": "mashinka",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "text": {
+      "words": "У КАЖДОГО СОЮЗНИКА СВОЁ ЧП",
+      "color": "green",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "zatvor",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "text": {
+      "words": "РАЗДЕЛИТЬ МОСКВУ И ПЕКИН НЕ ВЫЙДЕТ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "31": {
+    "photo": "overlays/scene_031.jpg",
+    "sound": "zatvor",
+    "at": 4.7,
+    "shape": "rounded",
+    "style": "right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "33": {
+    "text": {
+      "words": "КИТАЙЦЫ УМЕЮТ СЧИТАТЬ",
+      "color": "green",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "36": {
+    "text": {
+      "words": "ФЕВРАЛЬ 1945: ЯЛТА",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "37": {
+    "text": {
+      "words": "ГЕРМАНИЯ, ПОЛЬША, ООН, ЯПОНИЯ",
+      "color": "red",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "pshik",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "39": {
+    "text": {
+      "words": "ТОГДА СОЮЗНИКИ. СЕЙЧАС НЕТ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "41": {
+    "text": {
+      "words": "КЛЮЧ ОТ СЕЙФА КАЖДЫЙ ДЕРЖИТ У СЕБЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "mashinka",
+      "at": 5.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "42": {
+    "text": {
+      "words": "А ЕСЛИ УСЛОВИЕ НАРУШАТ?",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "photo": "overlays/scene_043.jpg",
+    "sound": "zatvor",
+    "at": 4.4,
+    "shape": "square",
+    "style": "up-left",
+    "size": "s",
+    "scale": 1.0,
+    "approved": true
+  },
+  "45": {
+    "text": {
+      "words": "ОБОРОНА ДЕШЕВЛЕ ПОД ЧУЖИМ ЗОНТИКОМ",
+      "color": "white",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 2.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "47": {
+    "text": {
+      "words": "ТРАМП ТРЕБУЕТ ПЛАТИТЬ БОЛЬШЕ",
+      "color": "red",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "49": {
+    "text": {
+      "words": "У ФРАНЦИИ СВОЁ ЯДЕРНОЕ ОРУЖИЕ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "whoosh",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "50": {
+    "photo": "overlays/scene_050.jpg",
+    "sound": "pop",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "51": {
+    "text": {
+      "words": "ВАРШАВА ВООРУЖАЕТСЯ БЫСТРЕЕ ВСЕХ",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "53": {
+    "text": {
+      "words": "ТРЕБОВАНИЯ МАЛО — НУЖНО ВЛИЯНИЕ",
+      "color": "green",
+      "pos": "tr",
+      "font": "roboto",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "54": {
+    "photo": "overlays/scene_054.jpg",
+    "sound": "whoosh",
+    "at": 5.2,
+    "shape": "rounded",
+    "style": "up-right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "55": {
+    "text": {
+      "words": "ПОВЕСТКУ ОПРЕДЕЛЯЮТ ТРОЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "57": {
+    "text": {
+      "words": "КИЕВ МОЖЕТ ОТКАЗАТЬСЯ",
+      "color": "red",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "59": {
+    "photo": "overlays/scene_059.jpg",
+    "sound": "pop",
+    "at": 4.9,
+    "shape": "rounded",
+    "style": "up-right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "61": {
+    "text": {
+      "words": "60 ДНЕЙ НА ОЦЕНКУ САНКЦИЙ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "mashinka",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "63": {
+    "text": {
+      "words": "БАНКИ, ЭНЕРГЕТИКА, ПЕРЕВОЗКИ",
+      "color": "green",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "65": {
+    "text": {
+      "words": "ЕВРОПА ПОТЕРЯЛА ДЕШЁВЫЙ ГАЗ",
+      "color": "white",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "66": {
+    "text": {
+      "words": "ИНДИЯ — КРУПНЫЙ ПОКУПАТЕЛЬ НЕФТИ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "69": {
+    "photo": "overlays/scene_069.jpg",
+    "sound": "whoosh",
+    "at": 2.1,
+    "shape": "rounded",
+    "style": "up-right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "70": {
+    "text": {
+      "words": "МОСКВА СДЕРЖИВАЕТ ПОМОЩЬ ИРАНУ",
+      "color": "white",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "pop",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "73": {
+    "text": {
+      "words": "ИЗРАИЛЬ СЧИТАЕТ ИРАН УГРОЗОЙ",
+      "color": "green",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "zatvor",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "77": {
+    "text": {
+      "words": "А ЧТО АМЕРИКА ДАСТ ВЗАМЕН?",
+      "color": "red",
+      "pos": "tr",
+      "font": "roboto",
+      "sound": "pshik",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "79": {
+    "text": {
+      "words": "КТО ПРОВЕРИТ ВЫПОЛНЕНИЕ?",
+      "color": "orange",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "whoosh",
+      "at": 3.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "80": {
+    "text": {
+      "words": "А ЕСЛИ ПРЕЗИДЕНТ СМЕНИТСЯ?",
+      "color": "white",
+      "pos": "mc",
+      "font": "times",
+      "sound": "pop",
+      "at": 2.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "83": {
+    "text": {
+      "words": "ДОГОВОР ПРО: 1972-2002",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "84": {
+    "text": {
+      "words": "ДОГОВОР РСМД: 1987-2019",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "85": {
+    "text": {
+      "words": "НЕТ ДОГОВОРА — НЕТ ОГРАНИЧЕНИЙ",
+      "color": "white",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "pop",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "86": {
+    "text": {
+      "words": "МЕНЬШЕ ВРЕМЕНИ НА РЕШЕНИЕ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "times",
+      "sound": "mashinka",
+      "at": 5.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "90": {
+    "text": {
+      "words": "ПОСЛЕ 1991 КОНКУРЕНТОВ НЕ БЫЛО",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "91": {
+    "photo": "overlays/scene_091.jpg",
+    "sound": "zatvor",
+    "at": 4.5,
+    "shape": "rounded",
+    "style": "left",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "92": {
+    "text": {
+      "words": "ЦЕПОЧКИ ПОСТАВОК ИДУТ ЧЕРЕЗ КНР",
+      "color": "red",
+      "pos": "mc",
+      "font": "times",
+      "sound": "pshik",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "94": {
+    "text": {
+      "words": "РАЗОЙТИСЬ НЕ ПОЛУЧАЕТСЯ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "99": {
+    "photo": "overlays/scene_099.jpg",
+    "sound": "whoosh",
+    "at": 3.4,
+    "shape": "rounded",
+    "style": "up-right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "100": {
+    "text": {
+      "words": "TSMC: ПЕРЕДОВЫЕ МИКРОСХЕМЫ МИРА",
+      "color": "white",
+      "pos": "tl",
+      "font": "montserrat",
+      "sound": "pop",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "101": {
+    "text": {
+      "words": "БЕЗ ЧИПОВ ВСТАНЕТ ВСЁ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "roboto",
+      "sound": "mashinka",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "103": {
+    "text": {
+      "words": "ГДЕ ГРАНИЦА СОПЕРНИЧЕСТВА?",
+      "color": "green",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "zatvor",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "105": {
+    "text": {
+      "words": "НАПИШИТЕ В КОММЕНТАРИЯХ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "106": {
+    "text": {
+      "words": "ПЕКИН: ТАЙВАНЬ — ВНУТРЕННИЙ ВОПРОС",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "mashinka",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "109": {
+    "text": {
+      "words": "ТРИ ЛИНИИ НА КАРТЕ НЕ ПРОВЕСТИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 5.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "111": {
+    "text": {
+      "words": "ПРАВИЛА ВМЕСТО КНОПКИ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "113": {
+    "text": {
+      "words": "КТО ОТВЕТИТ ЗА ЕВРОПУ?",
+      "color": "green",
+      "pos": "tc",
+      "font": "roboto",
+      "sound": "zatvor",
+      "at": 3.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "115": {
+    "photo": "overlays/scene_115.jpg",
+    "sound": "zatvor",
+    "at": 4.2,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "bottom",
+    "approved": true
+  },
+  "117": {
+    "text": {
+      "words": "БУМАГА, КОТОРУЮ НЕ ВЫПОЛНИТЬ",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "118": {
+    "photo": "overlays/scene_118.jpg",
+    "sound": "zatvor",
+    "at": 4.4,
+    "shape": "square",
+    "style": "up-left",
+    "size": "s",
+    "scale": 1.0,
+    "approved": true
+  },
+  "121": {
+    "text": {
+      "words": "МАСШТАБ РЕШЕНИЙ ДРУГОЙ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "arial",
+      "sound": "mashinka",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "123": {
+    "text": {
+      "words": "ПРОВЕРКА — СЛЕДУЮЩИМ КРИЗИСОМ",
+      "color": "green",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "124": {
+    "text": {
+      "words": "ЗАВТРА — ТАЙВАНЬ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "whoosh",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "125": {
+    "text": {
+      "words": "ПОТОМ — ИРАН",
+      "color": "white",
+      "pos": "tr",
+      "font": "roboto",
+      "sound": "pop",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "127": {
+    "photo": "overlays/scene_127.jpg",
+    "sound": "zatvor",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "up-center",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "128": {
+    "text": {
+      "words": "В 1945 ИСХОД ВОЙНЫ БЫЛ РЕШЁН",
+      "color": "green",
+      "pos": "mc",
+      "font": "times",
+      "sound": "zatvor",
+      "at": 5.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "129": {
+    "text": {
+      "words": "ВОЙНУ ЕЩЁ МОЖНО ПРЕДОТВРАТИТЬ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "130": {
+    "text": {
+      "words": "БЕЛЫЙ ДЫМ — ЗНАК СОГЛАСИЯ",
+      "color": "white",
+      "pos": "mc",
+      "font": "montserrat",
+      "sound": "pop",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "132": {
+    "text": {
+      "words": "НУЖЕН ПОРЯДОК, А НЕ ФОТОГРАФИЯ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "133": {
+    "text": {
+      "words": "СКОЛЬКО ЕЩЁ ТАКИХ САММИТОВ?",
+      "color": "green",
+      "pos": "tr",
+      "font": "arial",
+      "sound": "zatvor",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "6": {
+    "text": {
+      "words": "АТЭС: ШЭНЬЧЖЭНЬ, 18-19 НОЯБРЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
