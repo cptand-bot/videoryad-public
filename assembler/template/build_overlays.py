@@ -22,6 +22,20 @@ Usage:
 """
 import json, os, sys, subprocess, glob, random, shutil
 
+# ОГРАНИЧЕНИЕ ПОТОКОВ FFMPEG: ЛОКАЛЬНО — ДА, В ОБЛАКЕ — НЕТ (2026-10-19).
+# Повод: локальный прогон второго сборщика забрал 522% из восьми ядер
+# (load average 8,4) и подвесил дашборд рабочей вкладки. Снаружи не лечится:
+# `nice` понижает приоритет, но не число ядер, а скрипт зовёт ffmpeg САМ.
+# В облаке потолок не нужен — раннер и должен занимать все ядра, поэтому он
+# включается только ВНЕ GitHub Actions. Переопределяется переменной
+# VIDEORYAD_FFMPEG_THREADS (0 = без ограничения).
+def _threads_args():
+    v = os.environ.get("VIDEORYAD_FFMPEG_THREADS")
+    if v is None:
+        v = "0" if os.environ.get("GITHUB_ACTIONS") else "2"
+    return ["-threads", v] if v not in (None, "", "0") else []
+
+
 _VID_EXT = (".mp4", ".mov", ".webm", ".mkv")
 
 W, H, FPS = 1920, 1080, 30
@@ -154,7 +168,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
         f"eval=init,format=yuv420p[v]"
     )
     tmp = out_mp4 + ".ttmp.mp4"
-    cmd = [ffmpeg, "-y", "-i", base_mp4, "-loop", "1", "-i", png,
+    cmd = [ffmpeg, "-y", *_threads_args(), "-i", base_mp4, "-loop", "1", "-i", png,
            "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
            "-pix_fmt", "yuv420p", "-t", f"{dur:.3f}", tmp]
@@ -354,7 +368,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                 f"[0:v][ov]overlay=x='{xexpr}':y='{yexpr}':eval=frame,format=yuv420p[v]"
             )
         print(f"[{sid:03d}]  {cls}-size {bw}x{bh}  стиль={style} форма={shape} масштаб={msc}", flush=True)
-        cmd = [ffmpeg, "-y", "-i", orig, "-loop", "1", "-i", photo,
+        cmd = [ffmpeg, "-y", *_threads_args(), "-i", orig, "-loop", "1", "-i", photo,
                "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
                "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                "-pix_fmt", "yuv420p", "-t", f"{_dur:.3f}", _text_target]
@@ -445,7 +459,7 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
         subprocess.run([ffmpeg, "-y", "-i", in_mp4, "-c", "copy", out_mp4], capture_output=True)
         return
     fc = ";".join(filters) + f";[1:a]{''.join(mixn)}amix=inputs={len(mixn)+1}:normalize=0[a]"
-    cmd = [ffmpeg, "-y", "-i", in_mp4] + inputs + [
+    cmd = [ffmpeg, "-y", *_threads_args(), "-i", in_mp4] + inputs + [
         "-filter_complex", fc, "-map", "0:v", "-map", "[a]",
         "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", out_mp4]
     r = subprocess.run(cmd, capture_output=True, text=True)

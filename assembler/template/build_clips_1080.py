@@ -14,6 +14,22 @@ import sys
 import subprocess
 import random
 
+
+# ОГРАНИЧЕНИЕ ПОТОКОВ FFMPEG: ЛОКАЛЬНО — ДА, В ОБЛАКЕ — НЕТ (2026-10-19).
+# Повод: вкладка второго сборщика гоняла локальный прогон, ffmpeg забрал
+# 522% из восьми ядер (load average 8,4), дашборд рабочей вкладки и соседние
+# сессии встали. Снаружи это не лечится: `nice` понижает приоритет, но не
+# число ядер, а эти скрипты зовут ffmpeg САМИ и потолок не выставляли —
+# сколько ни ограничивай снаружи, внутрь не действует.
+# В облаке ограничивать нельзя — там раннер и должен занимать все ядра,
+# поэтому потолок включается только ВНЕ GitHub Actions. Переопределяется
+# переменной VIDEORYAD_FFMPEG_THREADS (0 = без ограничения).
+def _threads_args():
+    v = os.environ.get("VIDEORYAD_FFMPEG_THREADS")
+    if v is None:
+        v = "0" if os.environ.get("GITHUB_ACTIONS") else "2"
+    return ["-threads", v] if v not in (None, "", "0") else []
+
 W, H, FPS = 1920, 1080, 30
 
 
@@ -79,7 +95,7 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
         vf = f"{core},format=yuv420p{_caps(out_path)}[final]"
     out_map = ["-map", "[final]"]
 
-    cmd = [ffmpeg, "-y", "-loop", "1", "-i", src, *fx_in,
+    cmd = [ffmpeg, "-y", *_threads_args(), "-loop", "1", "-i", src, *fx_in,
            "-filter_complex", vf, *out_map, "-t", str(duration),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
