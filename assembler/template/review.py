@@ -220,6 +220,17 @@ def _overlays_txn():
 # он двигает всплывашку, когда на кадре лицо; какую форму выбирает для карт и
 # т.д.) — и дефолты можно будет подогнать под неё, а не спрашивать.
 LAYOUT_LOG = "layout_journal.jsonl"
+# ЖУРНАЛ ВЁРСТКИ УМИРАЛ ВМЕСТЕ С ПАПКОЙ РОЛИКА (найдено 2026-10-19).
+# Симптом: 19.10 на машине нашёлся РОВНО ОДИН layout_journal.jsonl — за
+# текущий ролик; записи 17-18.10 исчезли при плановой чистке сданных папок.
+# То есть «журнал накапливается, через 3-4 ролика подвинем дефолты» не
+# работало физически: копился один файл на ролик и удалялся вместе с ним,
+# а срезы приходилось делать по памяти. Журнал ОТКАЗОВ (rejections.py) с
+# самого начала лежит в media-library и чистку переживает — приводим
+# вёрстку к тому же месту. Пишем в ОБА файла: локальный остаётся для
+# разбора текущего ролика, накопительный живёт между роликами.
+LAYOUT_LOG_KEEP = os.path.expanduser(
+    "~/projects/media-library/layout_journal.jsonl")
 
 
 def _banned_md5_now():
@@ -245,8 +256,16 @@ def _layout_log(sid, kind, before, after, extra=None):
                "before": before, "after": after}
         if extra:
             rec.update(extra)
+        line = json.dumps(rec, ensure_ascii=False) + "\n"
         with open(LAYOUT_LOG, "a", encoding="utf-8") as f:
-            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            f.write(line)
+        try:    # накопитель между роликами — отдельный try: если media-library
+                # не смонтирована, локальная запись уже сделана и не теряется
+            os.makedirs(os.path.dirname(LAYOUT_LOG_KEEP), exist_ok=True)
+            with open(LAYOUT_LOG_KEEP, "a", encoding="utf-8") as f:
+                f.write(line)
+        except Exception:
+            pass
     except Exception:
         pass        # журнал никогда не должен ронять дашборд
 
