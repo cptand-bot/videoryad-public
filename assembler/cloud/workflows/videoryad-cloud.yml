@@ -323,7 +323,11 @@ jobs:
     # testing — 60 wasted compute-minutes against the free 2000/mo cap). Never
     # overlaps the fetch matrix (needs: fetch), so this stays well under the
     # account's 20-concurrent-job ceiling on its own.
-    timeout-minutes: 20
+    timeout-minutes: 25   # было 20 (2026-10-19): при идентичной нагрузке
+    # разброс раннеров доходит до 14x — самый медленный шард занял 11,4 мин,
+    # то есть 57% прежнего лимита. Машина вдвое медленнее уронила бы шард по
+    # таймауту, и assemble резал бы клипы в одиночку (+8 мин). Разбор —
+    # references/gotchas.md, «РАЗБРОС ОБЛАЧНЫХ РАННЕРОВ ДО 14x».
     strategy:
       fail-fast: false
       max-parallel: 12
