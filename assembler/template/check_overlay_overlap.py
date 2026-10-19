@@ -23,6 +23,8 @@ overlays.json fresh every run.
 """
 import json
 import os
+
+BADGE_H = 22          # поле под плиткой для номера сцены (2026-10-19)
 import random
 import subprocess
 import sys
@@ -192,10 +194,17 @@ def main():
             draw.rectangle([tx, ty, tx + tw_, ty + th_], outline=(0, 220, 255), width=5)
         if not spec.get("photo") and not tg:
             continue
-        thumb = frame.resize((480, 270))
+        # НОМЕР СЦЕНЫ — ПОД КАДРОМ, А НЕ ПОВЕРХ НЕГО (2026-10-19).
+        # Чёрная плашка в левом верхнем углу налезала на начало надписи, и та
+        # читалась как обрезанная: два субагента независимо начали аудит с этой
+        # ложной тревоги и потратили по кропу на её опровержение. Подпись
+        # вынесена в поле высотой BADGE_H под плиткой — кадр больше ничем не
+        # закрыт, а номер по-прежнему виден.
+        _img = frame.resize((480, 270))
+        thumb = Image.new("RGB", (480, 270 + BADGE_H), (0, 0, 0))
+        thumb.paste(_img, (0, 0))
         d2 = ImageDraw.Draw(thumb)
-        d2.rectangle([0, 0, 60, 24], fill=(0, 0, 0))
-        d2.text((4, 4), str(sid), fill=(255, 255, 0))
+        d2.text((4, 270 + 4), str(sid), fill=(255, 255, 0))
         tiles.append((sid, thumb))
 
     os.makedirs(out_dir, exist_ok=True)
@@ -204,10 +213,10 @@ def main():
     for s in range(n_sheets):
         chunk = tiles[s * 20:(s + 1) * 20]
         rows = (len(chunk) + cols - 1) // cols
-        sh = Image.new("RGB", (480 * cols, 270 * rows), (20, 20, 20))
+        sh = Image.new("RGB", (480 * cols, (270 + BADGE_H) * rows), (20, 20, 20))
         for i, (sid, th) in enumerate(chunk):
             r, c = divmod(i, cols)
-            sh.paste(th, (c * 480, r * 270))
+            sh.paste(th, (c * 480, r * (270 + BADGE_H)))
         sh.save(os.path.join(out_dir, f"check_{s + 1}.jpg"), quality=85)
     import shutil as _sh
     _sh.rmtree(_tmp, ignore_errors=True)
