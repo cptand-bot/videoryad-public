@@ -1,0 +1,52 @@
+{
+ "scenes": [
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 13.47,
+   "visual_prompt": "Фридрих Мерц в Бундестаге на трибуне 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц в Бундестаге на трибуне 2026 реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "duration_sec": 13.36,
+   "visual_prompt": "оперативно-тактический комплекс Искандер пуск ракеты реальное фото",
+   "source": "press_photo",
+   "source_query": "оперативно-тактический комплекс Искандер пуск ракеты реальное фото"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 13.28,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/БЕЛАРУСЬ/Belarus blank.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/БЕЛАРУСЬ/Belarus blank.jpg"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 14.73,
+   "visual_prompt": "терминал сжиженного природного газа в США реальное фото",
+   "source": "press_photo",
+   "source_query": "терминал сжиженного природного газа в США реальное фото"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 12.16,
+   "visual_prompt": "складской ангар с ящиками военной помощи в Польше реальное фото",
+   "source": "press_photo",
+   "source_query": "складской ангар с ящиками военной помощи в Польше реальное фото"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "duration_sec": 12.32,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/УКРАИНА/Europe-Ukraine.jpg",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/УКРАИНА/Europe-Ukraine.jpg"
+  }
+ ]
+}
