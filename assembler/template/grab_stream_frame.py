@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """
+НЕ РАБОТАЕТ С 2026-08-23: YouTube требует PoToken, yt-dlp без него
+получает отказ. Скрипт оставлен как заготовка — если понадобится кадр из
+официальной трансляции, искать другой путь, а не чинить этот.
+
 Grab a single clean frame from a specific YouTube video at a specific
 timestamp - for pulling a real frame out of an official press conference/
 briefing livestream or its VOD (Kremlin, White House, EU Council, TASS,

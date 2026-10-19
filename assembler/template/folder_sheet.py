@@ -6,7 +6,30 @@ Usage: python3 folder_sheet.py "ПОЛИТИКА/VenesuelA" [out_prefix]
 import glob, os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
 
-LIB = os.path.expanduser("~/projects/media-library")
+def _media_library_dir():
+    """Медиатека канала из .env, а не зашитая библиотека-1 (2026-10-19).
+    Та же правка, что сделана в check_lead.py 03.10: на каналах, сидящих на
+    media-library-2 (5 МИНУТ / ДИПЛОМАТИЯ СИЛЫ / ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО),
+    этот скрипт смотрел в ЧУЖУЮ медиатеку и тихо находил ноль файлов —
+    молча, без единой ошибки в выводе. Нормализуем и форму
+    `MEDIA_LIBRARY_DIR=media-library-2` (имя папки без пути), она описана в
+    рабочих заметках и встречается в живых .env."""
+    val = None
+    if os.path.exists(".env"):
+        with open(".env", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("MEDIA_LIBRARY_DIR="):
+                    val = line.split("=", 1)[1].strip()
+                    break
+    if not val:
+        return os.path.expanduser("~/projects/media-library")
+    val = os.path.expanduser(val)
+    if not os.path.isabs(val):
+        val = os.path.expanduser(os.path.join("~/projects", val))
+    return val
+
+LIB = _media_library_dir()
 tag = sys.argv[1]
 prefix = sys.argv[2] if len(sys.argv) > 2 else "fs_" + os.path.basename(tag)
 outdir = "folder_sheets"
