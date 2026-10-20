@@ -15,7 +15,29 @@
 """
 import glob, hashlib, json, os, subprocess, sys
 
-scenes_path = sys.argv[1] if len(sys.argv) > 1 else sorted(glob.glob("*.scenes.json"))[0]
+# ГОЛЫЙ ВЫЗОВ БРАЛ ФАЙЛ ВСПЛЫВАШЕК И СРАВНИВАЛ ЕГО САМ С СОБОЙ (2026-10-20,
+# улов `usuario-40`). В папке ролика лежат ДВА `*.scenes.json`, и `sorted()`
+# ставит `overlays_fetch.scenes.json` первым по алфавиту почти всегда. Итог:
+# на все 24 всплывашки разом печаталось «запрос ТОТ ЖЕ, что у базового кадра»
+# — выглядит как настоящая находка, сигнала ноль, и вкладка чуть не переписала
+# весь слой всплывашек. Теперь файл всплывашек из автовыбора исключён (как это
+# давно делает облачный `setup`), а если после отбора кандидатов не осталось —
+# скрипт честно просит имя файла, а не берёт что попало.
+def _pick_scenes():
+    cands = [p for p in sorted(glob.glob("*.scenes.json"))
+             if "overlays_fetch" not in os.path.basename(p)
+             and "overlay" not in os.path.basename(p).split(".")[0]]
+    if not cands:
+        print("selfcheck: в папке нет основного *.scenes.json (только файл "
+              "всплывашек?) — передай имя файла первым аргументом")
+        sys.exit(2)
+    if len(cands) > 1:
+        print(f"selfcheck: основных файлов сцен несколько {cands} — беру "
+              f"{cands[0]}; если нужен другой, передай его первым аргументом")
+    return cands[0]
+
+
+scenes_path = sys.argv[1] if len(sys.argv) > 1 else _pick_scenes()
 images = sys.argv[2] if len(sys.argv) > 2 else "images"
 proj = os.path.dirname(os.path.abspath(scenes_path)) or "."
 os.chdir(proj)

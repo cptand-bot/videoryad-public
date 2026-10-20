@@ -1438,7 +1438,50 @@ def _direct_save_image(blob, out_base):
     return out
 
 
-def fetch_direct_url(query, out_base, ffmpeg="ffmpeg"):
+def _accept_direct_photo(path, allow_text):
+    """Сито для фото, приехавшего по ГОТОВОМУ адресу из досье.
+
+    Отличие от `_accept()` ровно одно и оно важное: для ВСПЛЫВАШКИ порог
+    «тяжёлый текст» не применяется. Повод (2026-10-20, улов `usuario-40`):
+    из трёх вложений доехало одно, а ДВА СКРИНШОТА ПУБЛИКАЦИЙ (Axios про
+    встречу с сенаторами, Washington Post про задержку Patriot) сито
+    зарезало — у них плотный текст во весь кадр. То есть главный годный
+    актив телеграм-постов через `direct_url` не проходил в принципе.
+    Порог на текст существует против СЛУЧАЙНОЙ веб-картинки (скриншот
+    страницы вместо фото), а вложение из досье выбрано человеком и адрес
+    вписан руками — там это сито лишнее.
+
+    Что остаётся включённым всегда, и для всплывашки тоже: бан-лист по md5
+    и стоковые клейма. От них послабления нет.
+
+    Для БАЗОВОГО кадра порог сохранён: скриншот издания во весь экран сцены
+    — это ровно то, что пользователь запретил («никаких документов и
+    бумаг с текстом»), всплывашка же для цитаты издания и предназначена.
+    """
+    try:
+        if file_md5(path) in load_banned_md5():
+            os.remove(path)
+            return False, "бан-лист"
+    except OSError:
+        pass
+    words, blob = _ocr_words(path)
+    if any(w in blob for w in _STOCK_WATERMARKS):
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+        return False, "стоковое клеймо"
+    if not allow_text and words > 8:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+        return False, ("тяжёлый текст — для БАЗОВОГО кадра не годится; "
+                       "если это скриншот публикации, ставь его всплывашкой")
+    return True, ""
+
+
+def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", allow_text=False):
     """Готовый адрес медиа (вложение телеграм-поста, файл на сайте источника).
 
     Возвращает путь к файлу или "" — НИКОГДА не подменяет кадр чем-то другим:
@@ -1474,9 +1517,10 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg"):
             if not path:
                 print(f"  [direct_url] фото мелкое или битое: {url[:110]}", flush=True)
                 continue
-            if not _accept(True, path):
-                print(f"  [direct_url] фото ОТКЛОНЕНО (бан-лист / тяжёлый текст / "
-                      f"стоковое клеймо): {url[:110]}", flush=True)
+            okp, why = _accept_direct_photo(path, allow_text)
+            if not okp:
+                print(f"  [direct_url] фото ОТКЛОНЕНО ({why}): {url[:110]}",
+                      flush=True)
                 continue
         _remember_src(path, url)
         print(f"  [direct_url] {kind}: {os.path.basename(path)} <- {url[:110]}",
@@ -1649,8 +1693,13 @@ def main():
                 # файл на сайте источника). Промах НЕ уводится в водопад:
                 # адрес выбран руками по досье, и подмена случайным веб-фото
                 # скрыла бы, что именно не доехало.
+                # ВСПЛЫВАШКА ли это: в облаке сцена помечена `_dest`, локально
+                # всплывашки фетчатся в свой каталог `overlays/`.
+                _is_ov = (scene.get("_dest") == "overlays"
+                          or os.path.basename(os.path.normpath(images_dir)) == "overlays")
                 direct_out = fetch_direct_url(
-                    query, os.path.join(images_dir, f"scene_{sid:03d}"))
+                    query, os.path.join(images_dir, f"scene_{sid:03d}"),
+                    allow_text=_is_ov)
                 if direct_out:
                     ok, out_path = True, direct_out
                 else:
