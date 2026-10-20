@@ -14,14 +14,26 @@ def _media_library_dir():
     молча, без единой ошибки в выводе. Нормализуем и форму
     `MEDIA_LIBRARY_DIR=media-library-2` (имя папки без пути), она описана в
     рабочих заметках и встречается в живых .env."""
-    val = None
-    if os.path.exists(".env"):
-        with open(".env", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line.startswith("MEDIA_LIBRARY_DIR="):
-                    val = line.split("=", 1)[1].strip()
+    val = os.environ.get("MEDIA_LIBRARY_DIR")
+    if not val:
+        # .env ищем не только в текущей папке, но и выше по дереву: скрипт
+        # часто зовут из подпапки проекта, и тогда он молча брал библиотеку-1
+        d = os.path.abspath(".")
+        for _ in range(4):
+            cand = os.path.join(d, ".env")
+            if os.path.exists(cand):
+                with open(cand, encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("MEDIA_LIBRARY_DIR="):
+                            val = line.split("=", 1)[1].strip()
+                            break
+                if val:
                     break
+            nd = os.path.dirname(d)
+            if nd == d:
+                break
+            d = nd
     if not val:
         return os.path.expanduser("~/projects/media-library")
     val = os.path.expanduser(val)
@@ -30,6 +42,7 @@ def _media_library_dir():
     return val
 
 LIB = _media_library_dir()
+print("медиатека:", LIB, "" if os.path.isdir(LIB) else "— ПАПКИ НЕТ", flush=True)
 tag = sys.argv[1]
 prefix = sys.argv[2] if len(sys.argv) > 2 else "fs_" + os.path.basename(tag)
 outdir = "folder_sheets"

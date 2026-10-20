@@ -24,6 +24,7 @@ Source badge on each thumbnail (top-right), colour-coded:
 """
 import base64
 import glob
+import html
 import io
 import json
 import os
@@ -94,6 +95,22 @@ def save_need(sid, reason):
 # video; the panel writes here, the build runs build_overlays.py.
 OVERLAY_FILE = "overlays.json"
 SFX_DIR = "sfx"
+
+
+def _h(v):
+    """Экранирование для подстановки в HTML (включая АТРИБУТЫ).
+
+    Повод (2026-10-20, нашёл пользователь, подтвердила вкладка `usuario-3f`):
+    `text.words` подставлялся в `value="..."` БЕЗ экранирования, и прямая
+    двойная кавычка обрывала атрибут. Надпись, НАЧИНАЮЩАЯСЯ с кавычки,
+    рендерилась пустой; `ПЕСКОВ: "КТО-ТО ИЗ КИЕВА"` обрезалась до `ПЕСКОВ:`.
+    В `overlays.json` данные при этом целы — ломалось только отображение, и
+    это худший вид поломки: пользователь видит пустые надписи и считает, что
+    их не поставили. Задето 5 из 48 надписей — ровно все, где была цитата.
+    Цитата в надписи — ШТАТНЫЙ приём для 5 МИНУТ, в SKILL.md примеры прямо с
+    кавычками, так что теряло надписи у каждого, кто их ставит.
+    """
+    return html.escape("" if v is None else str(v), quote=True)
 # ЗВУКИ БЕРЁМ ИЗ СКИЛЛА, ЕСЛИ В ПАПКЕ РОЛИКА ИХ НЕТ (2026-10-20, улов `usuario-40`).
 # Корень вот в чём: `SFX_DIR` относительный, то есть каталог `sfx/` ищется в
 # папке проекта, а у свежего проекта (`scenes_from_srt.py` + свои файлы) его
@@ -1259,7 +1276,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     need_hidden = "" if need_reason else " hidden"
     need_badge = f'<span class="needb" id="need{sid}"{need_hidden}>⚠️ НУЖНО ТВОЁ ФОТО</span>'
     need_row = (f'<p class="needr" id="needr{sid}"{need_hidden}>'
-               f'⬆️ загрузи: {need_reason or ""}</p>')
+               f'⬆️ загрузи: {_h(need_reason or "")}</p>')
 
     if live:
         thumb_inner = (f'<img id="i{sid}" alt="">'
@@ -1491,7 +1508,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             f'Своя всплывашка, работает вместе с фото.</div>'
             f'<div class="ovpanel"{" hidden" if _txt_approved else ""}>'
             f'<input class="ovtxtin" id="ovtxt{sid}" placeholder="СЛОВО: БЕГИТЕ, КАРАУЛ…" '
-            f'value="{_twords}" oninput="this.value=this.value.toUpperCase()" '
+            f'value="{_h(_twords)}" oninput="this.value=this.value.toUpperCase()" '
             f'onkeydown="if(event.key===\'Enter\')ovTextSave({sid})" onchange="ovTextSave({sid})">'
             f'<div class="ovcolrow" id="ovcol{sid}">'
             + "".join(f'<button class="ovcol-{c}{" on" if _tcol==c else ""}" '
@@ -1552,7 +1569,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
                 f'(отдельно от всплывашек, может не входить в финал — смотря что решишь).</div>'
                 f'<div class="ovpanel" id="tkp{sid}"{" hidden" if tk_approved else ""}>'
                 f'<input class="ovtxtin" id="tktxt{sid}" placeholder="короткий заголовок…" '
-                f'value="{tk_text}" oninput="this.value=this.value.toUpperCase()" '
+                f'value="{_h(tk_text)}" oninput="this.value=this.value.toUpperCase()" '
                 f'onkeydown="if(event.key===\'Enter\')tkSave({sid})" onchange="tkSave({sid})">'
                 f'<div class="ovbtns">'
                 f'<button class="ovok" id="tkok{sid}" onclick="tkApprove({sid})">✓ Утвердить</button>'
@@ -1572,9 +1589,9 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
   <div class="{thumb_cls}" id="t{sid}">{thumb_inner}{ov_badge}<div class="ovmark" id="ovmark{sid}" hidden><img id="ovmarkimg{sid}" alt=""></div><div class="txtmark" id="txtmark{sid}" hidden><img id="txtmarkimg{sid}" alt=""></div><div class="pvbox" id="pvbox{sid}" hidden></div></div>
   <figcaption>
     <div class="meta">СЦЕНА {sid:02d} · {fmt(t)}–{fmt(t + d)} · {d:.1f}с</div>
-    <div class="srcq">{srcq}</div>
+    <div class="srcq">{_h(srcq)}</div>
     {need_row}
-    <p class="txt">{s['text']}</p>
+    <p class="txt">{_h(s['text'])}</p>
     <div class="acts">
       {keep_btn}
       {mirror_btn}
@@ -1633,7 +1650,7 @@ def build_page(scenes, project, live, images_dir):
   <span class="num">{sid:02d}</span></div>
   <figcaption>
     <div class="meta">СЦЕНА {sid:02d} · {fmt(t)}–{fmt(t + d)} · {d:.1f}с</div>
-    <p class="txt">{s.get('text','')}</p>
+    <p class="txt">{_h(s.get('text',''))}</p>
     <div class="acts">{pv}{up}{ovadd}</div>
     {search}
     <textarea class="note" id="n{sid}" placeholder="что поставить в этой сцене"></textarea>
