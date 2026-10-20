@@ -1324,6 +1324,8 @@ def fetch_stock_video(query, env, out_path):
 # ffprobe на декодируемость (видео). Адрес запоминается в манифесте.
 _DIRECT_MAX_BYTES = 120 * 1024 * 1024   # телеграм-видео бывает крупным
 _DIRECT_MIN_VIDEO = 150 * 1024          # меньше — почти наверняка заглушка/превью
+_DIRECT_MIN_BASE_H = 700                # базовому кадру нужно ≥720p, см. SKILL.md
+_DIRECT_LAST_WH = {}                    # путь -> (ширина, высота) последнего видео
 
 
 def _direct_split(query):
@@ -1395,15 +1397,25 @@ def _direct_save_video(blob, out_base, ffmpeg="ffmpeg"):
             pass
         if not okr:
             return ""
-    # ffprobe — последнее сито: битый или обрезанный файл дальше не едет
+    # ffprobe — последнее сито: битый или обрезанный файл дальше не едет.
+    # Попутно снимаем РАЗМЕР КАДРА: по описи `media_type` в георадаре его не
+    # видно, а вложение бывает 640x352 (2026-10-20, улов `usuario-3f`) — такое
+    # в базовую сцену означает апскейл втрое, то есть мыло во весь экран.
     try:
-        pr = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
-                             "format=duration", "-of",
-                             "default=nw=1:nk=1", out],
+        pr = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0",
+                             "-show_entries", "stream=width,height",
+                             "-show_entries", "format=duration",
+                             "-of", "default=nw=1:nk=1", out],
                             capture_output=True, text=True, timeout=60)
-        if pr.returncode != 0 or float((pr.stdout or "0").strip() or 0) < 0.5:
+        vals = [x.strip() for x in (pr.stdout or "").splitlines() if x.strip()]
+        if pr.returncode != 0 or len(vals) < 3:
             os.remove(out)
             return ""
+        w, h, dur = int(float(vals[0])), int(float(vals[1])), float(vals[2])
+        if dur < 0.5:
+            os.remove(out)
+            return ""
+        _DIRECT_LAST_WH[os.path.abspath(out)] = (w, h)
     except Exception:
         try:
             os.remove(out)
@@ -1481,7 +1493,10 @@ def _accept_direct_photo(path, allow_text):
     return True, ""
 
 
-def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", allow_text=False):
+def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
+    # `for_overlay` снимает ДВА ограничения базового кадра: порог «тяжёлый
+    # текст» (скриншот публикации — законная всплывашка) и минимальное
+    # разрешение (мелкое видео во всплывашке приемлемо, во весь экран нет).
     """Готовый адрес медиа (вложение телеграм-поста, файл на сайте источника).
 
     Возвращает путь к файлу или "" — НИКОГДА не подменяет кадр чем-то другим:
@@ -1508,6 +1523,15 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", allow_text=False):
                 print(f"  [direct_url] видео не читается/слишком мелкое: {url[:110]}",
                       flush=True)
                 continue
+            _w, _h = _DIRECT_LAST_WH.get(os.path.abspath(path), (0, 0))
+            if _w:
+                print(f"  [direct_url] размер кадра {_w}x{_h}", flush=True)
+            if not for_overlay and _h and _h < _DIRECT_MIN_BASE_H:
+                os.remove(path)
+                print(f"  [direct_url] видео {_w}x{_h} ОТКЛОНЕНО для БАЗОВОЙ сцены "
+                      f"(нужно ≥720p, иначе апскейл во весь экран); во всплывашку "
+                      f"такое годится: {url[:110]}", flush=True)
+                continue
             if not _accept_video(True, path):
                 print(f"  [direct_url] видео ОТКЛОНЕНО бан-листом: {url[:110]}",
                       flush=True)
@@ -1517,7 +1541,7 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", allow_text=False):
             if not path:
                 print(f"  [direct_url] фото мелкое или битое: {url[:110]}", flush=True)
                 continue
-            okp, why = _accept_direct_photo(path, allow_text)
+            okp, why = _accept_direct_photo(path, for_overlay)
             if not okp:
                 print(f"  [direct_url] фото ОТКЛОНЕНО ({why}): {url[:110]}",
                       flush=True)
@@ -1699,7 +1723,7 @@ def main():
                           or os.path.basename(os.path.normpath(images_dir)) == "overlays")
                 direct_out = fetch_direct_url(
                     query, os.path.join(images_dir, f"scene_{sid:03d}"),
-                    allow_text=_is_ov)
+                    for_overlay=_is_ov)
                 if direct_out:
                     ok, out_path = True, direct_out
                 else:
