@@ -120,7 +120,7 @@ def main():
             "start_sec": round(start, 2),
             "duration_sec": round(nxt - start, 2),
             "visual_prompt": "",
-            "source": "TODO",       # Claude fills: local_library / wikimedia / press_photo / pexels_photo / pexels_video
+            "source": "TODO",       # Claude fills: local_library / direct_url / wikimedia / press_photo / pexels_photo / pexels_video
             "source_query": "",
         })
 

@@ -17,6 +17,11 @@ choice. Waterfall per scene's `source` field:
                  aggregator over many CC sources (Europeana, museum/gallery
                  collections, Flickr, Wikimedia and more) via one API, free,
                  no key required for light use.
+  direct_url  -> готовый адрес медиа: вложение телеграм-поста из досье
+                 георадара, файл на сайте источника. Качается как есть,
+                 расширение по СОДЕРЖИМОМУ (телеграм отдаёт файлы без
+                 расширения), сита те же — бан-md5, OCR/клейма для фото,
+                 ffprobe для видео. Промах НЕ подменяется водопадом.
   pexels_photo / pexels_video -> Pexels stock - ONLY for generic, non-specific
                  cutaways (a city skyline, a courtroom, a stock market ticker,
                  weather) where showing a real person/place isn't the point.
@@ -1299,6 +1304,187 @@ def fetch_stock_video(query, env, out_path):
     return False
 
 
+# ГОТОВЫЙ МЕДИА-АДРЕС — ИСТОЧНИК `direct_url` (2026-10-20, диспетчер `andrey-b8`)
+#
+# Зачем: досье георадара приносит ссылки на посты источников, и к постам
+# ПРИКРЕПЛЕНЫ фото И ВИДЕО — это готовые кадры события, а не поисковая
+# лотерея. До сих пор вкладка качала их руками `curl`, и такой кадр
+# проходил МИМО всех сит: ни бан-листа, ни OCR, ни манифеста, ни адреса
+# источника. Видео-лид при этом провален семь роликов подряд, и лечение
+# пользователь назвал прямым словом — брать видео из постов источников,
+# норму не трогать.
+#
+# Теперь это обычный источник сцены: в `source` ставится `direct_url`, в
+# `source_query` — один адрес или несколько через пробел/`|` (пробуются по
+# порядку, первый годный выигрывает). Расширение выбирается по СОДЕРЖИМОМУ,
+# а не по ссылке: телеграм отдаёт файлы без расширения вовсе.
+#
+# Сита те же, что у остальных источников: бан-md5 (фото и видео), OCR на
+# тяжёлый текст и стоковые клейма (фото), минимальный размер кадра, проверка
+# ffprobe на декодируемость (видео). Адрес запоминается в манифесте.
+_DIRECT_MAX_BYTES = 120 * 1024 * 1024   # телеграм-видео бывает крупным
+_DIRECT_MIN_VIDEO = 150 * 1024          # меньше — почти наверняка заглушка/превью
+
+
+def _direct_split(query):
+    out = []
+    for chunk in (query or "").replace("|", " ").replace(",", " ").split():
+        c = chunk.strip().strip("<>\u00ab\u00bb\"'")
+        if c.startswith(("http://", "https://")):
+            out.append(c)
+    return out
+
+
+def _direct_download(url):
+    """Качает адрес целиком в память с потолком. Возвращает (blob, ctype)."""
+    host = url.split("/")
+    ref = host[0] + "//" + host[2] + "/" if len(host) > 2 else url
+    req = urllib.request.Request(url, headers={"User-Agent": DEFAULT_UA,
+                                               "Referer": ref})
+    with urllib.request.urlopen(req, timeout=40) as resp:
+        ctype = (resp.headers.get("Content-Type") or "").lower()
+        blob = resp.read(_DIRECT_MAX_BYTES + 1)
+    if len(blob) > _DIRECT_MAX_BYTES:
+        raise ValueError(f"файл больше {_DIRECT_MAX_BYTES // (1024*1024)} МБ")
+    return blob, ctype
+
+
+def _direct_kind(blob, ctype):
+    head = blob[:16]
+    if (head[:3] == b"\xff\xd8\xff" or head[:8] == b"\x89PNG\r\n\x1a\n"
+            or head[:6] in (b"GIF87a", b"GIF89a") or head[8:12] == b"WEBP"):
+        return "image"
+    if head[4:8] == b"ftyp" or head[:4] == b"\x1a\x45\xdf\xa3":
+        return "video"
+    if ctype.startswith("image/"):
+        return "image"
+    if ctype.startswith("video/"):
+        return "video"
+    return ""
+
+
+def _direct_save_video(blob, out_base, ffmpeg="ffmpeg"):
+    """Кладёт видео как .mp4. Matroska/WebM перепаковывает (контейнер .webm
+    в конвейере нигде не ждут), mp4/mov оставляет как есть."""
+    if len(blob) < _DIRECT_MIN_VIDEO:
+        return ""
+    out = out_base + ".mp4"
+    if blob[4:8] == b"ftyp":
+        with open(out, "wb") as f:
+            f.write(blob)
+    else:
+        tmp = out_base + ".src"
+        with open(tmp, "wb") as f:
+            f.write(blob)
+        okr = False
+        for args in (["-c", "copy"], ["-c:v", "libx264", "-preset", "veryfast",
+                                      "-crf", "22", "-c:a", "aac"]):
+            try:
+                subprocess.run([ffmpeg, "-y", "-v", "error", "-i", tmp]
+                               + args + [out],
+                               check=True, stdout=subprocess.DEVNULL,
+                               stderr=subprocess.DEVNULL, timeout=600)
+                okr = os.path.isfile(out) and os.path.getsize(out) > _DIRECT_MIN_VIDEO
+            except Exception:
+                okr = False
+            if okr:
+                break
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        if not okr:
+            return ""
+    # ffprobe — последнее сито: битый или обрезанный файл дальше не едет
+    try:
+        pr = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                             "format=duration", "-of",
+                             "default=nw=1:nk=1", out],
+                            capture_output=True, text=True, timeout=60)
+        if pr.returncode != 0 or float((pr.stdout or "0").strip() or 0) < 0.5:
+            os.remove(out)
+            return ""
+    except Exception:
+        try:
+            os.remove(out)
+        except OSError:
+            pass
+        return ""
+    return out
+
+
+def _direct_save_image(blob, out_base):
+    tmp = out_base + ".raw"
+    with open(tmp, "wb") as f:
+        f.write(blob)
+    out = out_base + ".jpg"
+    try:
+        from PIL import Image
+        im = Image.open(tmp); im.load()
+        if im.width < 500 or im.height < 320:
+            os.remove(tmp)
+            return ""
+        im.convert("RGB").save(out, "JPEG", quality=90)
+    except Exception:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        return ""
+    try:
+        os.remove(tmp)
+    except OSError:
+        pass
+    return out
+
+
+def fetch_direct_url(query, out_base, ffmpeg="ffmpeg"):
+    """Готовый адрес медиа (вложение телеграм-поста, файл на сайте источника).
+
+    Возвращает путь к файлу или "" — НИКОГДА не подменяет кадр чем-то другим:
+    промах здесь должен быть видно в логе, чтобы сцену переписали руками.
+    """
+    urls = _direct_split(query)
+    if not urls:
+        print("  [direct_url] в source_query нет http-адреса", flush=True)
+        return ""
+    for url in urls:
+        try:
+            blob, ctype = _direct_download(url)
+        except Exception as e:
+            print(f"  [direct_url] не скачалось ({e}): {url[:110]}", flush=True)
+            continue
+        kind = _direct_kind(blob, ctype)
+        if not kind:
+            print(f"  [direct_url] не фото и не видео (Content-Type '{ctype}', "
+                  f"{len(blob)} Б): {url[:110]}", flush=True)
+            continue
+        if kind == "video":
+            path = _direct_save_video(blob, out_base, ffmpeg)
+            if not path:
+                print(f"  [direct_url] видео не читается/слишком мелкое: {url[:110]}",
+                      flush=True)
+                continue
+            if not _accept_video(True, path):
+                print(f"  [direct_url] видео ОТКЛОНЕНО бан-листом: {url[:110]}",
+                      flush=True)
+                continue
+        else:
+            path = _direct_save_image(blob, out_base)
+            if not path:
+                print(f"  [direct_url] фото мелкое или битое: {url[:110]}", flush=True)
+                continue
+            if not _accept(True, path):
+                print(f"  [direct_url] фото ОТКЛОНЕНО (бан-лист / тяжёлый текст / "
+                      f"стоковое клеймо): {url[:110]}", flush=True)
+                continue
+        _remember_src(path, url)
+        print(f"  [direct_url] {kind}: {os.path.basename(path)} <- {url[:110]}",
+              flush=True)
+        return path
+    return ""
+
+
 def main():
     if len(sys.argv) < 4:
         print("usage: fetch_assets_news.py <scenes.json> <output-images-dir> <.env>")
@@ -1370,7 +1556,7 @@ def main():
         pass
     for scene in data["scenes"]:
         sid = scene["id"]
-        source = scene["source"]  # "local_library" | "wikimedia" | "press_photo" | "pexels_photo" | "pexels_video"
+        source = scene["source"]  # "local_library" | "wikimedia" | "press_photo" | "pexels_photo" | "pexels_video" | "direct_url"
         query = scene["source_query"]
         ext = "mp4" if source == "pexels_video" else "jpg"
         out_path = os.path.join(images_dir, f"scene_{sid:03d}.{ext}")
@@ -1458,6 +1644,19 @@ def main():
                     # tag folder missing/empty - fall through to the press
                     # waterfall (never generate), per SKILL.md
                     ok, used_source = _press_waterfall(query, out_path, env)
+            elif source == "direct_url":
+                # ГОТОВЫЙ АДРЕС (вложение телеграм-поста из досье георадара,
+                # файл на сайте источника). Промах НЕ уводится в водопад:
+                # адрес выбран руками по досье, и подмена случайным веб-фото
+                # скрыла бы, что именно не доехало.
+                direct_out = fetch_direct_url(
+                    query, os.path.join(images_dir, f"scene_{sid:03d}"))
+                if direct_out:
+                    ok, out_path = True, direct_out
+                else:
+                    print(f"[{sid:03d}] FAILED: ни один адрес из source_query не "
+                          f"дал годного кадра — перепиши сцену или дай другую ссылку")
+                    ok = False
             elif source in ("wikimedia", "press_photo"):
                 ok, used_source = _press_waterfall(query, out_path, env)
             elif source in ("pexels_photo", "pexels_video"):

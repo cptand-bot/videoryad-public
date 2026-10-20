@@ -547,8 +547,10 @@ def lint(paths, strict=False):
         for s in data.get("scenes", []):
             src = s.get("source", "")
             q = s.get("source_query", "")
-            if src == "local_library":
-                continue  # путь к файлу, не поисковый запрос
+            if src in ("local_library", "direct_url"):
+                continue  # путь к файлу или готовый http-адрес, не поисковый запрос
+                # (direct_url добавлен 2026-10-20: адрес латиницей, и правило
+                #  «запросы только по-русски» ловило бы его как нарушение)
             if src in PEXELS:
                 hard, soft_hits = scan_pexels(q)
                 for w, fix in hard:
