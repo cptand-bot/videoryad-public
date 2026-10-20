@@ -133,6 +133,28 @@ else:
     if snd and not any(snd):
         FAIL.append("у ВСЕХ всплывашек sound='' — видеоряд соберётся БЕЗ звука "
                     "всплывашек. Переприсвоить sound в overlays.json.")
+    # ЗВУКИ НАЗНАЧЕНЫ, А САМИХ ФАЙЛОВ В ПАПКЕ НЕТ (2026-10-20, улов `usuario-40`:
+    # готовый видеоряд приехал с ОДНИМ потоком, без звуковой дорожки вовсе).
+    # Проверка поля `sound` этого не видела: поле заполнено, exit 0. Каталог
+    # `sfx/` есть только у проектов, унаследованных копированием от прошлых
+    # роликов; свежая папка (`scenes_from_srt.py` + свои файлы) его не получает,
+    # и раннер молча собирает немое видео — в логе это тонет среди двух десятков
+    # строк «звук 'whoosh' не найден».
+    if any(snd):
+        _proj_sfx = glob.glob("sfx/*.mp3") + glob.glob("sfx/*.wav")
+        _skill_sfx = glob.glob(os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "sfx", "*.mp3"))
+        if not _proj_sfx and _skill_sfx:
+            WARN.append("звуки всплывашкам назначены, а каталога sfx/ в папке "
+                        "ролика НЕТ. Для облака не страшно — ship.sh дольёт "
+                        "штатные из скилла; но ЛОКАЛЬНАЯ сборка выйдет НЕМОЙ. "
+                        "Хочешь наверняка: cp -r ~/.claude/skills/news-video/"
+                        "template/sfx .")
+        elif not _proj_sfx and not _skill_sfx:
+            FAIL.append("звуки всплывашкам назначены, но файлов нет НИ в папке "
+                        "ролика, ни в скилле — видеоряд будет немым. Восстанови "
+                        "~/.claude/skills/news-video/template/sfx/ (оригиналы: "
+                        "D:\\YouTube\\МЕДИОТЕКА\\Звуки).")
     ch = (meta.get("channel") or "").upper()
     want = "bottom" if "ПЛАНЕТА" in ch or "ПЛАНЕТА" == ch else "top"
     if ch and ov.get("anchor", "bottom") != want:
