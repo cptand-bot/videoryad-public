@@ -103,7 +103,12 @@ h = {}
 for f in glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*"):
     if f.endswith((".json", ".text.png")):   # .text.png — рендер слова, дубли норм
         continue
-    h.setdefault(hashlib.md5(open(f, "rb").read()).hexdigest(), []).append(os.path.basename(f))
+    # ПУТЬ ЦЕЛИКОМ, А НЕ ОДНО ИМЯ (2026-10-20, улов `usuario-40`). Было
+    # `os.path.basename(f)`, и дубль «images/scene_044.jpg + overlays/scene_073.jpg»
+    # читался как «две базовые сцены» — вкладка искала совпадение не в том слое.
+    # Имена файлов в `images/` и `overlays/` нумеруются независимо, так что без
+    # каталога сообщение не просто неполное, а уводит в сторону.
+    h.setdefault(hashlib.md5(open(f, "rb").read()).hexdigest(), []).append(f)
 for k, v in h.items():
     if len(v) > 1:
         FAIL.append(f"одинаковый файл в: {sorted(v)}")
