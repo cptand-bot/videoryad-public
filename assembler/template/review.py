@@ -94,6 +94,16 @@ def save_need(sid, reason):
 # video; the panel writes here, the build runs build_overlays.py.
 OVERLAY_FILE = "overlays.json"
 SFX_DIR = "sfx"
+# ЗВУКИ БЕРЁМ ИЗ СКИЛЛА, ЕСЛИ В ПАПКЕ РОЛИКА ИХ НЕТ (2026-10-20, улов `usuario-40`).
+# Корень вот в чём: `SFX_DIR` относительный, то есть каталог `sfx/` ищется в
+# папке проекта, а у свежего проекта (`scenes_from_srt.py` + свои файлы) его
+# нет. Тогда `sfx_list()` возвращает ПУСТО, `<select>` звука рисуется БЕЗ
+# ОПЦИЙ, его `.value` — пустая строка, и первое же сохранение карточки (смена
+# формы, масштаба, позиции — что угодно, оно шлёт весь набор полей) затирает
+# `sound` у всплывашки. Так у пользователя обнулился звук сразу у 22
+# утверждённых всплывашек. Тот же пустой каталог в тот же день дал немой
+# видеоряд в облаке — одна причина, два разных симптома.
+_SKILL_SFX_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sfx")
 SFX_LABELS = {"whoosh": "вжух", "zatvor": "затвор камеры", "pop": "поп",
               "ding": "дзинь", "mashinka": "печатная машинка", "pshik": "пшик"}
 
@@ -525,7 +535,10 @@ def overlay_text_geom(tspec, png_path=None):
 
 def sfx_list():
     out = []
-    for p in sorted(glob.glob(os.path.join(SFX_DIR, "*"))):
+    base = SFX_DIR
+    if not glob.glob(os.path.join(SFX_DIR, "*.mp3")) and os.path.isdir(_SKILL_SFX_DIR):
+        base = _SKILL_SFX_DIR
+    for p in sorted(glob.glob(os.path.join(base, "*"))):
         stem, ext = os.path.splitext(os.path.basename(p))
         if ext.lower() in (".mp3", ".wav", ".m4a", ".ogg"):
             out.append({"name": stem, "label": SFX_LABELS.get(stem, stem)})
@@ -2974,7 +2987,13 @@ def run_live(scenes_path, images_dir, port):
                 except ValueError:
                     return self._reply(400, b"no")
                 patch = {}
-                if "sound" in spec:
+                # ПУСТОЙ `sound` НЕ ЗАПИСЫВАЕМ (2026-10-20). Опция «без звука» в
+                # списке не предусмотрена вовсе — он собирается из файлов, —
+                # поэтому пустая строка означает не выбор пользователя, а
+                # пустой `<select>` (каталога `sfx/` в папке ролика не было).
+                # Второе сито к починке `sfx_list()`: даже со старым дашбордом
+                # в браузере звук больше не обнулить.
+                if "sound" in spec and str(spec["sound"]).strip():
                     patch["sound"] = str(spec["sound"])
                 if "shape" in spec:
                     sh = str(spec["shape"]).lower()
