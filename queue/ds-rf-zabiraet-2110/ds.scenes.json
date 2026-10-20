@@ -1,0 +1,574 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 14.44,
+   "visual_prompt": "Лукашенко предупреждает: берите сейчас",
+   "source": "press_photo",
+   "source_query": "Александр Лукашенко выступление октябрь 2026 реальное фото"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 14.44,
+   "duration_sec": 7.47,
+   "visual_prompt": "Герасимов показывает карту",
+   "source": "press_photo",
+   "source_query": "Валерий Герасимов доклад с картой 2026 реальное фото"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 21.91,
+   "duration_sec": 7.24,
+   "visual_prompt": "ведомство, откуда идут доклады",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны России Фрунзенская набережная реальное фото"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 29.16,
+   "duration_sec": 13.2,
+   "visual_prompt": "приказ продолжать работу",
+   "source": "press_photo",
+   "source_query": "Путин на командном пункте октябрь 2026 реальное фото"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 42.36,
+   "duration_sec": 13.12,
+   "visual_prompt": "доклад на совещании",
+   "source": "press_photo",
+   "source_query": "совещание Путина с военным командованием 2026 реальное фото"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 55.48,
+   "duration_sec": 13.2,
+   "visual_prompt": "карточка: что доложил Генштаб",
+   "source": "local_library",
+   "source_query": "ELEMENT:e006"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 68.68,
+   "duration_sec": 11.31,
+   "visual_prompt": "командование докладывает о расширении",
+   "source": "press_photo",
+   "source_query": "Генеральный штаб Вооружённых сил России оперативное совещание 2026"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 79.99,
+   "duration_sec": 12.96,
+   "visual_prompt": "полоса вдоль границы",
+   "source": "press_photo",
+   "source_query": "российско-украинская граница Сумская область укрепления 2026 реальное фото"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 92.95,
+   "duration_sec": 13.52,
+   "visual_prompt": "картограмма: сколько осталось у Киева",
+   "source": "local_library",
+   "source_query": "ELEMENT:e009"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 106.47,
+   "duration_sec": 6.53,
+   "visual_prompt": "оперативная карта, а не один участок",
+   "source": "pexels_video",
+   "source_query": "military situation map on table closeup no people"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 113.01,
+   "duration_sec": 9.8,
+   "visual_prompt": "давление в нескольких точках",
+   "source": "press_photo",
+   "source_query": "артиллерийская батарея российской армии на позиции 2026 реальное фото"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 122.81,
+   "duration_sec": 14.39,
+   "visual_prompt": "откуда взялась зона",
+   "source": "press_photo",
+   "source_query": "Курская область приграничное село разрушенный дом 2026 реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 137.2,
+   "duration_sec": 12.92,
+   "visual_prompt": "глубина безопасности",
+   "source": "press_photo",
+   "source_query": "блокпост на въезде в приграничный район Курской области 2026"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 150.12,
+   "duration_sec": 12.8,
+   "visual_prompt": "дальность и приграничье",
+   "source": "press_photo",
+   "source_query": "расчёт российской артиллерии в приграничье 2026 реальное фото"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 162.92,
+   "duration_sec": 8.81,
+   "visual_prompt": "из обмена в сохранение",
+   "source": "press_photo",
+   "source_query": "пограничный знак на российско-украинской границе реальное фото"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 171.73,
+   "duration_sec": 13.11,
+   "visual_prompt": "Сумская и Харьковская области",
+   "source": "press_photo",
+   "source_query": "Сумская область приграничное село после обстрела 2026 реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 184.84,
+   "duration_sec": 14.0,
+   "visual_prompt": "карта: полоса безопасности на Сумском направлении",
+   "source": "local_library",
+   "source_query": "ELEMENT:e017"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 198.84,
+   "duration_sec": 11.88,
+   "visual_prompt": "даже если фронт встанет",
+   "source": "press_photo",
+   "source_query": "окопы и позиции российских военных Харьковское направление 2026"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 210.72,
+   "duration_sec": 13.03,
+   "visual_prompt": "новая категория территорий",
+   "source": "press_photo",
+   "source_query": "центр Донецка улица 2026 реальное фото"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 223.75,
+   "duration_sec": 12.89,
+   "visual_prompt": "зону двигают дальше",
+   "source": "press_photo",
+   "source_query": "грунтовая дорога в приграничной зоне Сумской области 2026"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 236.64,
+   "duration_sec": 14.0,
+   "visual_prompt": "хронология: старый список уходит",
+   "source": "local_library",
+   "source_query": "ELEMENT:e021"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 250.64,
+   "duration_sec": 12.72,
+   "visual_prompt": "диаграмма: цели 12 ударов",
+   "source": "local_library",
+   "source_query": "ELEMENT:e022"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 263.36,
+   "duration_sec": 12.32,
+   "visual_prompt": "14 объектов инфраструктуры",
+   "source": "press_photo",
+   "source_query": "горящий резервуар нефтебазы на Украине октябрь 2026 реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 275.68,
+   "duration_sec": 11.1,
+   "visual_prompt": "территория и тыл одновременно",
+   "source": "pexels_video",
+   "source_query": "high voltage power line pylon dusk no people"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 286.77,
+   "duration_sec": 12.23,
+   "visual_prompt": "подвоз и ремонт дорожают",
+   "source": "press_photo",
+   "source_query": "тягач с бронетехникой на дороге Украина 2026 реальное фото"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 299.0,
+   "duration_sec": 12.8,
+   "visual_prompt": "дальнобойное производство",
+   "source": "press_photo",
+   "source_query": "цех завода по производству ракет Украина 2026 реальное фото"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 311.81,
+   "duration_sec": 10.79,
+   "visual_prompt": "способность держать темп",
+   "source": "pexels_video",
+   "source_query": "empty industrial workshop machinery no people"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 322.6,
+   "duration_sec": 8.64,
+   "visual_prompt": "подпись спикера: Лукашенко",
+   "source": "local_library",
+   "source_query": "ELEMENT:e028"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 331.24,
+   "duration_sec": 6.08,
+   "visual_prompt": "дальше будет сложнее",
+   "source": "press_photo",
+   "source_query": "Лукашенко на трибуне Минск октябрь 2026 реальное фото"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 337.32,
+   "duration_sec": 13.36,
+   "visual_prompt": "Минск давно говорит о сделке",
+   "source": "press_photo",
+   "source_query": "Дворец Независимости в Минске реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 350.69,
+   "duration_sec": 13.49,
+   "visual_prompt": "перечень новых территорий",
+   "source": "press_photo",
+   "source_query": "зал коллегии Министерства обороны России 2026 реальное фото"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 364.17,
+   "duration_sec": 14.96,
+   "visual_prompt": "лента: как накапливаются последствия",
+   "source": "local_library",
+   "source_query": "ELEMENT:e032"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 379.13,
+   "duration_sec": 14.56,
+   "visual_prompt": "ценник меняют не рукой",
+   "source": "pexels_video",
+   "source_query": "price tag on market counter closeup no people"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 393.69,
+   "duration_sec": 12.72,
+   "visual_prompt": "вложение первоисточника: версия про Суровикина",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/ApHrCtKHrzhVUV2LSb2AEdGRhJaMrdhQUMhYQx7qPFKaFqcsOjjn9x8btzBEnmF4XJbnP1CLEUaua9h5-rvf9GkXyEcoo5i8GuOp1MK2xaazFRrQol74GZA1yVINJ31FKp7eJv6hc1XCvxr6A28WBrIl0jMVDoblDn5hAxhGe0zq8a4Brt5Sa4wJsCurs-P2o8RFhvyFUvi61tDJm2V2wqgR33AHuCojOt1sdYz3gCVXws_DX5ONK_jbdoxfHUoXGu5ijjZlGQA7olzQzieaajVxQkXPXKOx_9Rrk1jdNCxAlFuq3DnDNyRoGU-IEU8oaJj9kehHe3Gfb1iZuJz_WQ.jpg",
+   "src_post": "https://t.me/odessa_typical/82448",
+   "note_asset": "вложение первоисточника, уже лежит в images/ (кроп клейма)"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 406.41,
+   "duration_sec": 13.74,
+   "visual_prompt": "вложение: удары по мостам через Днепр",
+   "source": "press_photo",
+   "source_query": "мост Патона через Днепр в Киеве реальное фото",
+   "src_post": "https://t.me/Media_Post_UA/34343"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 420.15,
+   "duration_sec": 12.29,
+   "visual_prompt": "график: когда перекрывали переправы",
+   "source": "local_library",
+   "source_query": "ELEMENT:e036"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 432.44,
+   "duration_sec": 10.32,
+   "visual_prompt": "вложение: Южный мост после удара",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/Dy9miRhEQTbpiOP-t5l1LWxmUFIbCInGfQ0h1k9ghMZkyjYUBNQPxAxFPVTeSxGYDUJmn4n7xDLSuc88YmdQQ2NBLI-k-wQrAMoE1ViePI0q2hR6fQrJm7_peJB8YqVg0_xhY_F9L48-rhCYRwlXwOmr-lN7Tz4Gp3AaAaZbGwgnHxeLjqHH_-6VnAIkCb8i3gazogjqANnIP9PYi7_l3i4UDhLoOCPtHNHQW4XhheygyJ5f9uv7S7k1a6BopCiU8q4KBumqTFPORf2qCRTShSYdWxPAGqf5ZxTXyZvyxwECsZw_UeSdmDj0fKdTAb-iutV2vsqUAWbaSkkDXN_H_g.jpg",
+   "src_post": "https://t.me/XU_kraine/101057",
+   "note_asset": "вложение первоисточника, уже лежит в images/ (кроп клейма)"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 442.76,
+   "duration_sec": 13.04,
+   "visual_prompt": "вложение-ВИДЕО: Северный мост перекрыт",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/75bd80e2fb.mp4?token=FE1uf4eBtzaSUGIZP7_Tj6nP8mAYBEWGLGJ9KHPOrR6jqac2bVZJTCPEUgvQRjHN8NbP5bt_6ZoQtm-maRLUbM4zOVrKwgWwDFDCt2rWr3vZyNazJmhhmEoEs_GwJc3NO9fgkF5cvoeJjMmHdtK2S1fEdajTdEf-LEKgxOwuqbHE7ulxYnnKJlh8ahyls0U3W1BpmYWybs5teUSIs-E-genyjluioERb0zlf0N-0qrdleTt38wV8Xk7qe-yRbYsEfkmQWYs_K0YmI9sFDbw9yNq_6Y9S7LUH_cjkjvpNPYngVsHxbmoCGW8wHD4D62SXeO1gMhVPPwsMLQcIdHm4hA https://cdn4.telesco.pe/file/GGwSJLwOp86qB6OtzXAD9BQ8ZZil2D539SmBxX5UlctIExkal9JpEV8CinhNzv0ASB6h-pY2Olm1rGAdTEoWKz-vXZVM4FaX_1J6YSqak00gWmEovDw5EgbHR3l5_0jvC28A4s62CBVWH6l_vGTBYIp9efkSFVjDRS-bEUAC7A-zwWCInABv1bv1uP9_zF6-4mIKF37ZPxrvlQk8BYqqH85CJVw7uool34MuxJzPBsM8S5RKhv_1Sh0rKD_VQSRuOQGG38nRz3MS1MaJuc3glXCfw86dHGuiO7CL-hI_eCmyjnoWcKJ9criC4NAjBMEm4SxAkMm0zZJsl5pe5ePyZg.jpg https://cdn4.telesco.pe/file/kDTanvFrVYaRriQ02ik2XIBcSE4yoz7yccrX64qi22VBaklHL5fp-uZleS4DvFgsO8_4jeN0BrDHd1a8bSOwnag20QsA54XhEervhIw9BvcjTLpe5njteK23EgwKKEvJhkiK8gCctfBb-KvPysmDiMyYrX20WVlRE4lK1nlokA6ehODsHaE8abKr6g3se6vmMkGhFjqNHlrmR-E3P_LxSW6ol16N6qVm8neecMP3cUbB7WTMyRbXYW9NtcoSfzadE9s8ntKmc_J1iRdE587xQd_OBGoRtBp95RX6OfD_5dhCURoCaU30RaEO0WOrRroNrJtcOPjI53ctcLt8L5AuQA",
+   "src_post": "https://t.me/OstashkoNews/225480",
+   "note_asset": "вложение первоисточника, уже лежит в images/ (кроп клейма)"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 455.81,
+   "duration_sec": 9.68,
+   "visual_prompt": "город разрезан рекой",
+   "source": "press_photo",
+   "source_query": "Южный мост в Киеве через Днепр реальное фото 2026"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 465.48,
+   "duration_sec": 12.71,
+   "visual_prompt": "круговая: 90% транзита через один мост",
+   "source": "local_library",
+   "source_query": "ELEMENT:e040"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 478.19,
+   "duration_sec": 15.98,
+   "visual_prompt": "поток уходит на соседние",
+   "source": "pexels_video",
+   "source_query": "brake lights red glow traffic jam night closeup"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 494.17,
+   "duration_sec": 6.24,
+   "visual_prompt": "объезды и лишние часы",
+   "source": "pexels_video",
+   "source_query": "truck tyres rolling highway closeup no people"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 500.41,
+   "duration_sec": 14.32,
+   "visual_prompt": "вложение: повторный удар по мосту",
+   "source": "press_photo",
+   "source_query": "ремонтная бригада на автомобильном мосту Киев 2026 реальное фото",
+   "src_post": "https://t.me/politrazgon/4620"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 514.73,
+   "duration_sec": 14.0,
+   "visual_prompt": "линия ударов по транспорту",
+   "source": "press_photo",
+   "source_query": "склад логистического центра после удара Украина 2026 реальное фото"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 528.73,
+   "duration_sec": 14.64,
+   "visual_prompt": "тогда/сейчас: энергетика и мосты",
+   "source": "local_library",
+   "source_query": "ELEMENT:e045"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 543.37,
+   "duration_sec": 12.48,
+   "visual_prompt": "дата-карта: куда сходится давление",
+   "source": "local_library",
+   "source_query": "ELEMENT:e046"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 555.85,
+   "duration_sec": 7.4,
+   "visual_prompt": "стоимость каждого месяца",
+   "source": "pexels_video",
+   "source_query": "fuel storage tanks pipes industrial closeup no people"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 563.26,
+   "duration_sec": 13.76,
+   "visual_prompt": "постер: новый ценник",
+   "source": "local_library",
+   "source_query": "ELEMENT:e048"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 577.02,
+   "duration_sec": 12.32,
+   "visual_prompt": "давление на перемещение",
+   "source": "press_photo",
+   "source_query": "мост через Днепр в Киеве вид с воздуха 2026 реальное фото"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 589.34,
+   "duration_sec": 12.8,
+   "visual_prompt": "важнее самой фамилии",
+   "source": "press_photo",
+   "source_query": "транспортная развязка с грузовиками Украина 2026 реальное фото"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 602.14,
+   "duration_sec": 13.44,
+   "visual_prompt": "способность продолжать",
+   "source": "press_photo",
+   "source_query": "эшелон с военной техникой Россия 2026 реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 615.58,
+   "duration_sec": 13.36,
+   "visual_prompt": "цитата Лукашенко",
+   "source": "local_library",
+   "source_query": "ELEMENT:e052"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 628.94,
+   "duration_sec": 8.12,
+   "visual_prompt": "обсуждать будут не те условия",
+   "source": "press_photo",
+   "source_query": "Кремлёвская стена и Спасская башня днём реальное фото"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 637.06,
+   "duration_sec": 12.96,
+   "visual_prompt": "круговая: 98% по заявлению ПВО",
+   "source": "local_library",
+   "source_query": "ELEMENT:e054"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 650.02,
+   "duration_sec": 8.96,
+   "visual_prompt": "прикрытие объектов",
+   "source": "press_photo",
+   "source_query": "радиолокационная станция российской ПВО на позиции 2026 реальное фото"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 658.98,
+   "duration_sec": 12.56,
+   "visual_prompt": "выдерживать ответ",
+   "source": "press_photo",
+   "source_query": "зенитный ракетный комплекс Панцирь на позиции Россия 2026 реальное фото"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 671.54,
+   "duration_sec": 13.04,
+   "visual_prompt": "снижать эффективность ударов",
+   "source": "press_photo",
+   "source_query": "обломки беспилотника на земле в России 2026 реальное фото"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 684.58,
+   "duration_sec": 15.12,
+   "visual_prompt": "расстановка сил: кто чего ждёт от времени",
+   "source": "local_library",
+   "source_query": "ELEMENT:e058"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 699.7,
+   "duration_sec": 9.64,
+   "visual_prompt": "зона не торгуется",
+   "source": "press_photo",
+   "source_query": "Путин выступает с заявлением октябрь 2026 реальное фото"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 709.34,
+   "duration_sec": 10.16,
+   "visual_prompt": "предмет разговора сменился",
+   "source": "press_photo",
+   "source_query": "флаг России у здания МИД на Смоленской площади реальное фото"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 719.5,
+   "duration_sec": 7.64,
+   "visual_prompt": "пункт в счёте",
+   "source": "press_photo",
+   "source_query": "Путин и Лукашенко переговоры октябрь 2026 реальное фото"
+  }
+ ],
+ "channel": "ДИПЛОМАТИЯ СИЛЫ",
+ "library": "NO (search-only, кроме КАРТЫ во всплывашках)",
+ "production_id": "PROD_20261020_PUTIN_GERASIMOV_SUROVIKIN_V3",
+ "context": "О чём: как военное давление Москвы меняет будущие условия переговоров — «ценник» растёт. Стороны: Москва (Путин, Генштаб) · Киев · Минск (Лукашенко предупреждает) · западная пресса (версия The Telegraph). Где: командный пункт РФ, Сумское/Харьковское/Донецкое/Запорожское направления, приграничье Курской области, Киев и переправы через Днепр, порты Чёрного моря. Узел: территория впереди плюс способность тыла воевать; зона безопасности выведена из торга. Время: 16–20 октября 2026, после доклада Генштаба и октябрьских ударов по киевским мостам. Чем кончается: обе стороны ставят на время и ждут от него противоположного. Чувство: счёт растёт, прежние условия уходят.",
+ "lines": [
+  "власть и Генштаб РФ: командный пункт, Минобороны РФ на Фрунзенской, зал коллегии, оперативные совещания",
+  "фронт и приграничье: Сумское и Харьковское направления, полоса безопасности, Курская область",
+  "киевские переправы и Днепр: Южный и Северный мосты, метро, транспортный поток",
+  "украинский тыл: заводы ВПК, энергетика, топливные склады, железнодорожные узлы, порты Чёрного моря",
+  "Минск: Лукашенко, Дворец Независимости",
+  "западная пресса как ВЕРСИЯ: публикация The Telegraph (только всплывашкой)",
+  "ПВО и БПЛА: расчёты российской ПВО, радары, обломки дронов"
+ ]
+}
