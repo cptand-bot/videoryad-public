@@ -1,0 +1,148 @@
+{
+ "scenes": [
+  {
+   "id": 3,
+   "duration_sec": 13.86,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Московский Кремль вид с Москвы-реки вечером",
+   "visual_prompt": "Московский Кремль вид с Москвы-реки вечером"
+  },
+  {
+   "id": 5,
+   "duration_sec": 12.47,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "разведывательный спутник США на орбите реальное фото",
+   "visual_prompt": "разведывательный спутник США на орбите реальное фото"
+  },
+  {
+   "id": 10,
+   "duration_sec": 13.44,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Марко Рубио госсекретарь США на брифинге 2026",
+   "visual_prompt": "Марко Рубио госсекретарь США на брифинге 2026"
+  },
+  {
+   "id": 11,
+   "duration_sec": 13.92,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Зеленский крупный план серьёзное лицо октябрь 2026",
+   "visual_prompt": "Зеленский крупный план серьёзное лицо октябрь 2026"
+  },
+  {
+   "id": 16,
+   "duration_sec": 14.16,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Зеленский за рабочим столом в кабинете Офиса президента 2026",
+   "visual_prompt": "Зеленский за рабочим столом в кабинете Офиса президента 2026"
+  },
+  {
+   "id": 19,
+   "duration_sec": 13.66,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Белый дом южный фасад с лужайкой",
+   "visual_prompt": "Белый дом южный фасад с лужайкой"
+  },
+  {
+   "id": 23,
+   "duration_sec": 13.19,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО в Брюсселе здание",
+   "visual_prompt": "штаб-квартира НАТО в Брюсселе здание"
+  },
+  {
+   "id": 24,
+   "duration_sec": 13.83,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/g47Kg7RqvvVR-kFPuKCpPm8OjSF3jTGutqkSzfCpyppZ1j2OnuVqJJTlEUf19R3NwWj2irmGdRSzbKLrFOo4EVb8qyH4b4c0aZ8SR0F4c3MwcvaQiiI9Sv0jedbCJiaySwefhidrJfG1POoxkcRfhsH8gJovbrPEDSlr-seHy97psUCG3WM19KIZbA-Ydodtt2F_mz1Iy6E1tzSxnnIsPRR5FRAhrATtf6g9kMZxgXUIpoCbjocYFmYS1YPgu11MDqkl-yd4W3JoJ4Vuxk5RSFeVvJ4xAEcs34ELfOu13GPfemfwOifgtK4PB3aTdYfaW7aXpdI8mi6vGjQ_qMN_Xg.jpg",
+   "visual_prompt": "https://cdn4.telesco.pe/file/g47Kg7RqvvVR-kFPuKCpPm8OjSF3jTGutqkSzfCpyppZ1j2OnuVqJJTlEUf19R3NwWj2irmGdRSzbKLrFOo4EVb8qyH4b4c0aZ8SR0F4c3MwcvaQiiI9Sv0jedbCJiaySwefhidrJfG1POoxkcRfhsH8gJovbrPEDSlr-seHy97psUCG3WM19KIZbA-Ydodtt2F_mz1Iy6E1tzSxnnIsPRR5FRAhrATtf6g9kMZxgXUIpoCbjocYFmYS1YPgu11MDqkl-yd4W3JoJ4Vuxk5RSFeVvJ4xAEcs34ELfOu13GPfemfwOifgtK4PB3aTdYfaW7aXpdI8mi6vGjQ_qMN_Xg.jpg"
+  },
+  {
+   "id": 26,
+   "duration_sec": 13.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Овальный кабинет Белого дома пустой рабочий стол",
+   "visual_prompt": "Овальный кабинет Белого дома пустой рабочий стол"
+  },
+  {
+   "id": 29,
+   "duration_sec": 12.44,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Пентагон здание с высоты Вашингтон",
+   "visual_prompt": "Пентагон здание с высоты Вашингтон"
+  },
+  {
+   "id": 41,
+   "duration_sec": 6.72,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пачки долларов на столе изъятые в Украине реальное фото",
+   "visual_prompt": "пачки долларов на столе изъятые в Украине реальное фото"
+  },
+  {
+   "id": 51,
+   "duration_sec": 13.82,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "жители Украины смотрят телеобращение президента реальное фото",
+   "visual_prompt": "жители Украины смотрят телеобращение президента реальное фото"
+  },
+  {
+   "id": 55,
+   "duration_sec": 12.48,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Зеленский отвечает журналистам жёстко октябрь 2026",
+   "visual_prompt": "Зеленский отвечает журналистам жёстко октябрь 2026"
+  },
+  {
+   "id": 59,
+   "duration_sec": 12.24,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "цех европейского завода боеприпасов снаряды",
+   "visual_prompt": "цех европейского завода боеприпасов снаряды"
+  },
+  {
+   "id": 63,
+   "duration_sec": 13.84,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Трамп крупный план смотрит в сторону 2026",
+   "visual_prompt": "Трамп крупный план смотрит в сторону 2026"
+  },
+  {
+   "id": 66,
+   "duration_sec": 14.48,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "украинская делегация переговорщиков за столом 2026",
+   "visual_prompt": "украинская делегация переговорщиков за столом 2026"
+  },
+  {
+   "id": 69,
+   "duration_sec": 8.57,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "украинцы с чемоданами на вокзале возвращение домой реальное фото",
+   "visual_prompt": "украинцы с чемоданами на вокзале возвращение домой реальное фото"
+  },
+  {
+   "id": 73,
+   "duration_sec": 13.68,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "фасад здания Верховной Рады Украины в Киеве реальное фото",
+   "visual_prompt": "фасад здания Верховной Рады Украины в Киеве реальное фото"
+  }
+ ]
+}
