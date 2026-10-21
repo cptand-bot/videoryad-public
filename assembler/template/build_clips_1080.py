@@ -255,6 +255,12 @@ def _caps(out_path):
     if not os.path.isfile(f):
         return ""
     esc = f.replace("\\", "/").replace(":", r"\:").replace(",", r"\,")
+    # папку со шрифтами отдаём явно: на раннере GitHub своего Roboto
+    # Condensed нет, и без fontsdir субтитры падали бы на системный Arial
+    fd = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+    if os.path.isdir(fd):
+        fde = fd.replace("\\", "/").replace(":", r"\:").replace(",", r"\,")
+        return f",ass='{esc}':fontsdir='{fde}'"
     return f",ass='{esc}'"
 
 

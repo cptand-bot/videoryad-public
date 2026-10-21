@@ -33,6 +33,14 @@
 
 Перед фетчем гоняет query_lint.py на новых запросах — мина в замене
 означает, что следующий круг аудита найдёт то же самое, что и прошлый.
+
+ГЕЙТ КРУГОВ (2026-10-21). Ведёт журнал `.refetch_rounds.json` в папке ролика
+и отбивает два самых дорогих сценария (замер по 20.10 — см. комментарий у
+round_gate): переформулировку запроса на уже заменённой сцене и третий круг
+правок. Отказ происходит ДО любых изменений: запросы не переписаны, кадры на
+месте. Настоять — `--force`. Сводка по кругам: `refetch.py --rounds`
+(печатает круги, доборы и долю повторных замен — для замера по фазам).
+Добор пустых сцен после облака круг НЕ расходует: там нечего заменять.
 """
 import glob
 import json
@@ -314,11 +322,231 @@ def verify(path):
     return 1 if broken else 0
 
 
+# ============================================================================
+# ГЕЙТ КРУГОВ ПРАВОК (2026-10-21, по замеру двух роликов 20.10)
+# ============================================================================
+# Замер по журналам сессий: на planeta-kapitulyaciya-2110 было 7 вызовов
+# --fix, на 5min-isterika-2110 — 13, при правиле «максимум два круга».
+# Главное, что показал замер: ЦЕНА КРУГА ПОЧТИ НЕ ЗАВИСИТ ОТ ЧИСЛА КАДРОВ.
+# 8 кадров в одном вызове — 2,5 мин до следующего шага; 1 кадр — 3,3-3,9 мин.
+# Платим за круг (перечитать лист, сформулировать, дождаться, проверить), а
+# не за фетч. Отсюда вывод: сокращать надо ЧИСЛО кругов, а не время фетча.
+#
+# Вторая половина потерь — ПОВТОРНЫЕ замены одной и той же сцены: 6 из 24
+# (25%) на ПЛАНЕТЕ и 19 из 42 (45%) на 5 МИНУТ. Сцены 31 и 32 правились по
+# ЧЕТЫРЕ раза, 7/21/48/55/61/64/71 — по три. Причина механическая: refetch
+# был БЕЗ ПАМЯТИ, каждый вызов начинался с чистого листа, и четвёртая правка
+# сцены выглядела как первая. Запрос при этом переписывался словами, хотя в
+# скилле прямо сказано менять ОБЪЕКТ или ТИП кадра.
+#
+# Текстом это правило не работает (проверено, см. память про «класс брака →
+# мина в тот же час»), поэтому оно здесь, в коде:
+#   • журнал кругов на ролик (`.refetch_rounds.json`, рядом с проектом);
+#   • повтор сцены → печатаем ВСЕ прошлые запросы по ней;
+#   • новый запрос похож на прошлый (пересечение значимых слов ≥ 0.45) →
+#     ОТКАЗ, пока не сменишь объект или не настоишь через --force;
+#   • третий круг и дальше → ОТКАЗ без --force (бюджет два круга).
+# Отказ происходит ДО apply_fix: запросы в scenes.json не переписываются,
+# кадры не удаляются, терять нечего.
+ROUNDS = ".refetch_rounds.json"
+SIM_LIMIT = 0.45      # пересечение слов, выше которого это «та же фраза»
+ROUND_BUDGET = 2      # кругов на ролик без --force
+
+_STOP = {
+    "реальное", "фото", "фотография", "фотографии", "снимок", "кадр",
+    "крупным", "планом", "крупный", "план", "общий", "вид", "сверху",
+    "closeup", "close", "detail", "macro", "texture", "aerial", "shot",
+    "people", "nobody", "empty", "the", "and", "for", "with", "without",
+    "его", "это", "там", "как", "или", "над", "под", "при", "около",
+}
+
+
+def _tokens(q):
+    """Значимые слова запроса: без служебных и без коротких."""
+    import re
+    out = set()
+    for t in re.split(r"[^0-9A-Za-zА-Яа-яЁё]+", (q or "").lower()):
+        if len(t) > 2 and t not in _STOP:
+            out.add(t[:6] if len(t) > 6 else t)   # грубая нормализация окончаний
+    return out
+
+
+def _similar(a, b):
+    ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / float(len(ta | tb))
+
+
+def _has_asset(kind, sid):
+    """Есть ли сейчас у сцены кадр на диске (без мусорных расширений)."""
+    return bool([f for f in glob.glob(os.path.join(kind, "scene_%03d.*" % int(sid)))
+                 if not f.endswith(SKIP_EXT) and ".ovthumb." not in f])
+
+
+def _is_fill(pend):
+    """ДОБОР пустых сцен (облако не нашло) против ПРАВКИ готового кадра.
+
+    На planeta-kapitulyaciya-2110 первым вызовом --fix был именно добор
+    8 сцен, которые матрица не закрыла, — это не круг правок, и съедать им
+    бюджет нельзя: иначе на настоящий аудит остаётся один круг вместо двух.
+    Признак прямой: у сцены НЕТ файла, значит заменять нечего.
+    """
+    have = miss = 0
+    for _p, fx, is_ov in pend:
+        kind = "overlays" if is_ov else "images"
+        for sid in fx:
+            if _has_asset(kind, sid):
+                have += 1
+            else:
+                miss += 1
+    return miss > 0 and have == 0
+
+
+def _load_rounds():
+    try:
+        return json.load(open(ROUNDS, encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"rounds": [], "tried": {}}
+
+
+def round_gate(pend, force):
+    """pend: список (путь, {id: значение}, is_overlay). Возврат: 0 / 1."""
+    jr = _load_rounds()
+    fill = _is_fill(pend)
+    done = [r for r in jr.get("rounds", []) if not r.get("fill")]
+    rnd = len(done) + (0 if fill else 1)
+    tried = jr.get("tried", {})
+    repeats, resays = [], []
+    for _path, fx, is_ov in pend:
+        kind = "overlays" if is_ov else "images"
+        for sid, val in fx.items():
+            q = val if isinstance(val, str) else val[1]
+            prev = tried.get("%s:%s" % (kind, sid), [])
+            if not prev:
+                continue
+            repeats.append((kind, sid, len(prev) + 1, prev, q))
+            for p in prev:
+                if _similar(p.get("query", ""), q) >= SIM_LIMIT:
+                    resays.append((kind, sid, p.get("query", ""), q,
+                                   _similar(p.get("query", ""), q)))
+                    break
+    if fill:
+        print("\n--- ДОБОР пустых сцен (в бюджет кругов не идёт) ---")
+    else:
+        print("\n--- круг правок №%d (бюджет %d) ---" % (rnd, ROUND_BUDGET))
+    if jr.get("rounds"):
+        was = ", ".join("%s: %d кадр(ов)"
+                        % ("добор" if r.get("fill") else "№%d" % r["n"],
+                           len(r["ids"]))
+                        for r in jr["rounds"])
+        print("  прошлые вызовы — %s" % was)
+    n_now = sum(len(fx) for _p, fx, _o in pend)
+    print("  в этом круге кадров: %d" % n_now)
+    if repeats:
+        print("\n  ПОВТОРНАЯ правка тех же сцен (прошлая замена оказалась брак):")
+        for kind, sid, n, prev, q in repeats:
+            print("    %s сцена %s — правка №%d" % (kind, sid, n))
+            for p in prev:
+                print("        круг %d пробовал: %s" % (p.get("round", 0),
+                                                        p.get("query", "")))
+            print("        теперь просишь:  %s" % q)
+    bad = False
+    if resays and not force:
+        bad = True
+        print("\nСТОП: это ПЕРЕФОРМУЛИРОВКА, а не новый запрос.")
+        for kind, sid, old, new, s in resays:
+            print("  %s сцена %s — совпадение слов %.0f%%" % (kind, sid, s * 100))
+            print("     было:  %s" % old)
+            print("     стало: %s" % new)
+        print("\nИсточник отдаёт на этот смысл один и тот же кадр — замер "
+              "20.10: так ушло 25-45% всех замен и по 3 минуты на каждую.")
+        print("Меняй не слова, а ОДНО ИЗ ТРЁХ:")
+        print("  • объект съёмки (лицо → место, где это решают; предмет → "
+              "помещение, где он стоит);")
+        print("  • тип кадра (портрет → фасад здания → деталь → общий план);")
+        print("  • источник (pexels_video → press_photo по-русски, и наоборот).")
+        print("Настаиваешь на этой формулировке — добавь --force.")
+    if not fill and rnd > ROUND_BUDGET and not force:
+        bad = True
+        print("\nСТОП: это круг №%d, а бюджет — %d." % (rnd, ROUND_BUDGET))
+        print("Замер 20.10: 7 и 13 кругов вместо двух дали 22 и 37 минут "
+              "правок. Круг стоит ~3 минуты независимо от числа кадров в нём, "
+              "поэтому дешевле собрать ВСЕ находки в один список.")
+        print("Что делать: догнать остаток находок и позвать ОДНИМ вызовом; "
+              "пограничное — жёлтой карточкой в needs_upload.json (не больше "
+              "2-3 на ролик); если правка действительно нужна сейчас — --force.")
+    if bad:
+        print("\nНичего не тронуто: запросы в scenes.json не переписаны, "
+              "кадры на месте.")
+        return 1
+    if force and (resays or rnd > ROUND_BUDGET):
+        print("  --force: иду дальше, круг и повторы записаны в журнал.")
+    return 0
+
+
+def round_record(pend):
+    """Записать круг в журнал — ПОСЛЕ того как все проверки пройдены."""
+    jr = _load_rounds()
+    fill = _is_fill(pend)
+    n_fix = len([r for r in jr.get("rounds", []) if not r.get("fill")])
+    ids_all, tried = [], jr.setdefault("tried", {})
+    for _path, fx, is_ov in pend:
+        kind = "overlays" if is_ov else "images"
+        for sid, val in fx.items():
+            q = val if isinstance(val, str) else val[1]
+            src = "press_photo" if isinstance(val, str) else val[0]
+            key = "%s:%s" % (kind, sid)
+            tried.setdefault(key, []).append(
+                {"round": 0 if fill else n_fix + 1, "source": src,
+                 "query": q, "fill": fill})
+            ids_all.append(key)
+    jr["rounds"].append({"n": 0 if fill else n_fix + 1, "fill": fill,
+                         "ts": time.strftime("%Y-%m-%d %H:%M:%S"),
+                         "ids": ids_all})
+    try:
+        json.dump(jr, open(ROUNDS, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    except OSError:
+        pass
+
+
+def rounds_report():
+    """`--rounds` — сводка по кругам этого ролика (для замера по фазам)."""
+    jr = _load_rounds()
+    if not jr.get("rounds"):
+        print("кругов правок пока не было (%s нет)" % ROUNDS)
+        return 0
+    n_fix = len([r for r in jr["rounds"] if not r.get("fill")])
+    n_fill = len(jr["rounds"]) - n_fix
+    print("кругов правок: %d (плюс доборов пустых сцен: %d)" % (n_fix, n_fill))
+    for r in jr["rounds"]:
+        print("  %-6s %s  кадров: %-3d  %s"
+              % ("добор" if r.get("fill") else "круг %d" % r["n"],
+                 r.get("ts", "?"), len(r["ids"]),
+                 ", ".join(r["ids"][:14])))
+    rep = {k: v for k, v in jr.get("tried", {}).items() if len(v) > 1}
+    total = sum(len(v) for v in jr.get("tried", {}).values())
+    if rep:
+        extra = sum(len(v) - 1 for v in rep.values())
+        print("\nповторных замен: %d из %d (%.0f%%)"
+              % (extra, total, 100.0 * extra / total if total else 0))
+        for k, v in sorted(rep.items(), key=lambda x: -len(x[1])):
+            print("  %s — %d раз(а):" % (k, len(v)))
+            for p in v:
+                print("      круг %d: %s" % (p.get("round", 0), p.get("query", "")))
+    else:
+        print("повторных замен нет")
+    return 0
+
+
 def main():
     if "--snapshot" in sys.argv:
         return snapshot(arg("--snapshot"))
     if "--verify" in sys.argv:
         return verify(arg("--verify"))
+    if "--rounds" in sys.argv:
+        return rounds_report()
     scenes, overlays = arg("--scenes"), arg("--overlays")
     # ОТДЕЛЬНЫЕ наборы правок на файл. Общий --fix на оба файла был
     # ошибкой дизайна (поймано живьём 2026-10-12): формат значений разный
@@ -336,7 +564,7 @@ def main():
     if not (fx_s or fx_o) or not (scenes or overlays):
         print(__doc__)
         return 2
-    jobs = []
+    jobs, pend = [], []
     if scenes and fx_s:
         _fx = json.loads(fx_s)
         # ПРОВЕРКА ФОРМАТА, А НЕ МОЛЧАЛИВЫЙ ПРОВАЛ (2026-10-17). Для СЦЕН
@@ -375,7 +603,7 @@ def main():
             print("Пример: --fix-scenes '{\"24\": [\"press_photo\", \"...\"]}'."
                   "\nДля всплывашек (--fix-overlays) значение — строка, источник там всегда press_photo.")
             return 1
-        jobs.append(apply_fix(scenes, _fx, False))
+        pend.append((scenes, _fx, False))
     if overlays and fx_o:
         _fo = json.loads(fx_o)
         _bado = {k: v for k, v in _fo.items() if not (isinstance(v, str) and v.strip())}
@@ -384,7 +612,14 @@ def main():
             for k, v in _bado.items():
                 print(f"  id {k}: {v!r}")
             return 1
-        jobs.append(apply_fix(overlays, _fo, True))
+        pend.append((overlays, _fo, True))
+
+    # ГЕЙТ КРУГОВ — строго ДО apply_fix: отказ не должен оставлять за собой
+    # переписанные запросы и снесённые кадры (на этом уже обжигались с линтом).
+    if round_gate(pend, "--force" in sys.argv):
+        return 1
+    for _p, _fx2, _ov in pend:
+        jobs.append(apply_fix(_p, _fx2, _ov))
 
     here = os.path.dirname(os.path.abspath(__file__))
     lint = os.path.join(here, "query_lint.py")
@@ -400,6 +635,20 @@ def main():
                 if os.path.exists(sub):
                     os.remove(sub)
             return 1
+
+    # --- КЛЮЧИ ПРОВЕРЯЕМ ДО ФЕТЧА (2026-10-18, улов usuario-42) ---
+    # В папке ЗАБОРА (`<ролик>-cloud`) нет `.env`: ship.sh его не отправляет
+    # (ключи живут в GitHub Secrets), get.sh не восстанавливал. Фетч при этом
+    # падает на `FileNotFoundError: '.env'`, но код возврата здесь не
+    # проверялся — и рефетч честно докладывал «ВЕРНУЛ прежний кадр сцены N
+    # (замена не нашлась)». Читается как «объект в принципе не находится»,
+    # хотя дело в ключах: вкладка дважды переписала формулировку впустую.
+    if not os.path.exists(".env"):
+        print("\nОСТАНОВ: в этой папке нет `.env` — ключи поиска не заданы, "
+              "фетч упадёт, а рефетч доложит «замена не нашлась».")
+        print("Лечение: cp ~/projects/<ролик>/.env .   (в папке ЗАБОРА .env "
+              "не бывает — ship.sh его не отправляет, ключи в GitHub Secrets)")
+        return 1
 
     # --ban: СНЯТЫЙ КАДР — В БАН, А НЕ ПРОСТО ИЗ СЦЕНЫ (2026-10-17).
     # Живой случай: архивное фото АЗС с ценами 2015 года забраковали на
@@ -422,19 +671,8 @@ def main():
             for h in _md5s:
                 subprocess.run(["python3", os.path.join(here, "ban_file.py"),
                                 "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
-    # --- КЛЮЧИ ПРОВЕРЯЕМ ДО ФЕТЧА (2026-10-18, улов usuario-42) ---
-    # В папке ЗАБОРА (`<ролик>-cloud`) нет `.env`: ship.sh его не отправляет
-    # (ключи живут в GitHub Secrets), get.sh не восстанавливал. Фетч при этом
-    # падает на `FileNotFoundError: '.env'`, но код возврата здесь не
-    # проверялся — и рефетч честно докладывал «ВЕРНУЛ прежний кадр сцены N
-    # (замена не нашлась)». Читается как «объект в принципе не находится»,
-    # хотя дело в ключах: вкладка дважды переписала формулировку впустую.
-    if not os.path.exists(".env"):
-        print("\nОСТАНОВ: в этой папке нет `.env` — ключи поиска не заданы, "
-              "фетч упадёт, а рефетч доложит «замена не нашлась».")
-        print("Лечение: cp ~/projects/<ролик>/.env .   (в папке ЗАБОРА .env "
-              "не бывает — ship.sh его не отправляет, ключи в GitHub Secrets)")
-        return 1
+
+    round_record(pend)   # круг засчитан: проверки пройдены, фетч идёт
 
     failed_runs = []
     for sub, assets, ids, before in jobs:

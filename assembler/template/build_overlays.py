@@ -107,27 +107,93 @@ def _load_txt_font(fkey, size):
     return ImageFont.load_default()
 
 
-def _render_text_png(words, color, out_path, fkey="default"):
-    """Слово капсом, жирный, чёрная обводка, прозрачный фон."""
+def _render_text_png(words, color, out_path, fkey="default", style="plate"):
+    """Текстовая всплывашка в СОВРЕМЕННОЙ подаче.
+
+    Было до 20.10.2026: жёлтый капс с толстой чёрной обводкой — тот самый
+    вид дешёвых роликов, который пользователь назвал колхозным. Обводка
+    убрана совсем; вместо неё текст живёт на тёмной пластине, а цвет
+    работает узкой акцентной чертой слева. Шрифт по умолчанию — узкий
+    RobotoCondensed Bold, с разрядкой: он и читается крупнее при той же
+    высоте, и выглядит как экранная графика, а не как подпись в Paint.
+
+    style:
+      plate  — тёмная пластина + акцентная черта слева (по умолчанию);
+      bar    — текст на сплошной акцентной полосе (цвет = фон, текст тёмный);
+      bare   — только текст с мягкой тенью, без плашки.
+    """
     try:
-        from PIL import Image, ImageDraw
+        from PIL import Image, ImageDraw, ImageFilter
     except ImportError:
         return False
     txt = " ".join(str(words or "").split()).upper()
     if not txt:
         return False
-    fill = _TXT_RGB.get(str(color).lower(), _TXT_RGB["white"]) + (255,)
-    fs = 220
+    accent = _TXT_RGB.get(str(color).lower(), _TXT_RGB["white"])
+    fs = 200
+    fkey = str(fkey or "default").lower()
+    if fkey == "default":
+        fkey = "roboto"                      # узкий гротеск вместо DejaVu
     font = _load_txt_font(fkey, fs)
-    sw = max(4, int(fs * 0.11))
-    bb = ImageDraw.Draw(Image.new("RGBA", (8, 8))).textbbox((0, 0), txt, font=font, stroke_width=sw)
-    pad = sw + 14
-    w, h = bb[2] - bb[0] + pad * 2, bb[3] - bb[1] + pad * 2
-    img = Image.new("RGBA", (max(w, 8), max(h, 8)), (0, 0, 0, 0))
-    ImageDraw.Draw(img).text((pad - bb[0], pad - bb[1]), txt, font=font, fill=fill,
-                             stroke_width=sw, stroke_fill=(0, 0, 0, 255))
+    track = max(2, int(fs * 0.022))          # разрядка
+
+    def _w(t):
+        return sum(font.getlength(c) + track for c in t) - track
+
+    tw = _w(txt)
+    probe = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+    bb = probe.textbbox((0, 0), txt, font=font)
+    th = bb[3] - bb[1]
+
+    pad_x, pad_y = int(fs * 0.34), int(fs * 0.20)
+    bar_w = int(fs * 0.075)
+    shadow = int(fs * 0.10)
+    style = str(style or "plate").lower()
+
+    W_ = int(tw + pad_x * 2 + (bar_w + pad_x * 0.5 if style == "plate" else 0)) + shadow * 2
+    H_ = int(th + pad_y * 2) + shadow * 2
+    img = Image.new("RGBA", (max(W_, 8), max(H_, 8)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+
+    x0, y0 = shadow, shadow
+    x1, y1 = W_ - shadow, H_ - shadow
+    if style in ("plate", "bar"):
+        # мягкая тень под плашкой — отделяет надпись от любого кадра
+        sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rectangle((x0, y0 + shadow * 0.3, x1, y1 + shadow * 0.3),
+                                     fill=(0, 0, 0, 150))
+        img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(shadow * 0.8)))
+        d = ImageDraw.Draw(img)
+
+    if style == "bar":
+        d.rectangle((x0, y0, x1, y1), fill=accent + (248,))
+        ink = (16, 16, 18, 255)
+        tx = x0 + pad_x
+    elif style == "bare":
+        ink = (255, 255, 255, 255)
+        tx = x0 + pad_x
+        glow = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        gx = tx
+        for ch in txt:
+            gd.text((gx, y0 + pad_y - bb[1]), ch, font=font, fill=(0, 0, 0, 190))
+            gx += font.getlength(ch) + track
+        img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(fs * 0.055)))
+        d = ImageDraw.Draw(img)
+    else:                                     # plate
+        d.rectangle((x0, y0, x1, y1), fill=(12, 12, 14, 214))
+        d.rectangle((x0, y0, x0 + bar_w, y1), fill=accent + (255,))
+        ink = (255, 255, 255, 255)
+        tx = x0 + bar_w + pad_x * 0.5 + pad_x * 0.5
+
+    x = tx
+    for ch in txt:
+        d.text((x, y0 + pad_y - bb[1]), ch, font=font, fill=ink)
+        x += font.getlength(ch) + track
+
     try:
-        img.save(out_path); return True
+        img.save(out_path)
+        return True
     except OSError:
         return False
 
@@ -152,7 +218,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     png = out_mp4 + ".txt.png"
     if not _render_text_png(words, ts.get("color", "white"), png,
-                            ts.get("font", "default")):
+                            ts.get("font", "default"), ts.get("style", "plate")):
         return False
     pw, ph = _img_wh(ffprobe, png)
     th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
@@ -160,10 +226,14 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
     mg = 60
     rx = {"l": f"{mg}", "c": "(W-w)/2", "r": f"W-w-{mg}"}[xk]
     ry = {"t": f"{mg}", "m": "(H-h)/2", "b": f"H-h-{mg}"}[yk]
+    # ПОЯВЛЕНИЕ МГНОВЕННОЕ (user, 20.10: «просто надпись, бабах и всё»):
+    # полсекунды наплыва делали подачу вялой. Уход чуть мягче, чтобы
+    # надпись не «отрубалась» на полуслове.
+    f_in, f_out = 0.05, 0.16
     fc = (
         f"[1:v]scale={tw}:{th}:force_original_aspect_ratio=decrease,format=rgba,"
-        f"fade=t=in:st={t0:.3f}:d={SLIDE}:alpha=1,"
-        f"fade=t=out:st={t2:.3f}:d={SLIDE}:alpha=1[t];"
+        f"fade=t=in:st={t0:.3f}:d={f_in}:alpha=1,"
+        f"fade=t=out:st={t2 + SLIDE - f_out:.3f}:d={f_out}:alpha=1[t];"
         f"[0:v][t]overlay=x='{rx}':y='{ry}':enable='between(t,{t0:.3f},{t3:.3f})':"
         f"eval=init,format=yuv420p[v]"
     )
@@ -229,20 +299,30 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
         photo = spec.get("photo") or ""
         photo_ok = bool(photo) and os.path.exists(photo)
-        # a popup must be a STILL photo — a local_library overlay pick can
-        # land on a video file (the folder mixes both). Feeding `-loop 1`
-        # into a video stream below doesn't make it a still and can break
-        # the overlay ffmpeg call outright (2026-09-14: silently orphaned
-        # clip_005.mp4 — see the restore-on-failure fix a few lines down for
-        # the other half of this incident). Grab one frame instead.
-        if photo_ok and photo.lower().endswith(_VID_EXT):
-            frame_path = os.path.join(clips_dir, f".ov_frame_{sid:03d}.jpg")
-            fr = subprocess.run([ffmpeg, "-y", "-ss", "1", "-i", photo, "-frames:v", "1",
-                                 frame_path], capture_output=True)
-            if fr.returncode == 0 and os.path.exists(frame_path):
-                photo = frame_path
-            else:
-                photo_ok = False
+        # ВСПЛЫВАШКА МОЖЕТ БЫТЬ ВИДЕО (2026-10-21, просьба пользователя: «а
+        # давай сделаем, чтобы поддерживал, будет веселее»).
+        # Раньше тут видео принудительно сводилось к ОДНОМУ КАДРУ. Причина
+        # была не в принципе, а в том, что путь всплывашки писался вокруг
+        # неподвижной картинки: вход подавался как `-loop 1 -i photo.jpg`, и
+        # видеопоток в этой конструкции ломал вызов ffmpeg целиком
+        # (2026-09-14: так осиротел clip_005.mp4 и весь видеоряд уехал
+        # растянутым в 21 раз — см. страховку в конце функции).
+        # Теперь видео ведётся КАК ВИДЕО: вход `-stream_loop -1` (короткий
+        # источник доигрывает по кругу, пока коробка на экране), выход
+        # ограничен `-t` по длине клипа. Звук из всплывашки НЕ берётся —
+        # маппинг `0:a?` ниже тянет дорожку только из основного клипа, то
+        # есть железное правило «видеоряд немой» не нарушается.
+        ov_is_video = bool(photo_ok) and photo.lower().endswith(_VID_EXT)
+        if ov_is_video:
+            # geq (круг/скругление) считается НА КАЖДЫЙ кадр и на видео
+            # обойдётся вдвое-втрое дороже самой нарезки, поэтому форму
+            # приводим к дешёвой. Маска одним статическим PNG — отдельная
+            # работа, пока не делаем.
+            _shape_req = (spec.get("shape") or "rect").lower()
+            if _shape_req in ("circle", "rounded"):
+                print(f"[{sid:03d}] видео-всплывашка: форма «{_shape_req}» пока "
+                      f"только для фото, беру прямоугольник", flush=True)
+                spec = dict(spec); spec["shape"] = "rect"
         tspec = spec.get("text") if isinstance(spec.get("text"), dict) else None
         if tspec and not str(tspec.get("words") or tspec.get("text") or "").strip():
             tspec = None
@@ -368,13 +448,15 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                 f"[0:v][ov]overlay=x='{xexpr}':y='{yexpr}':eval=frame,format=yuv420p[v]"
             )
         print(f"[{sid:03d}]  {cls}-size {bw}x{bh}  стиль={style} форма={shape} масштаб={msc}", flush=True)
-        cmd = [ffmpeg, "-y", *_threads_args(), "-i", orig, "-loop", "1", "-i", photo,
+        _in2 = ["-stream_loop", "-1", "-i", photo] if ov_is_video else ["-loop", "1", "-i", photo]
+        cmd = [ffmpeg, "-y", *_threads_args(), "-i", orig, *_in2,
                "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
                "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                "-pix_fmt", "yuv420p", "-t", f"{_dur:.3f}", _text_target]
         r = subprocess.run(cmd, capture_output=True, text=True)
         ph_ok = os.path.exists(_text_target) and r.returncode == 0
-        print(f"[{sid:03d}] всплывашка @ {at}s ({os.path.basename(photo)}) -> "
+        print(f"[{sid:03d}] всплывашка{' ВИДЕО' if ov_is_video else ''} @ {at}s "
+              f"({os.path.basename(photo)}) -> "
               + ("ok" if ph_ok else "FAIL\n" + r.stderr[-400:]))
         # --- вторая, независимая всплывашка: СЛОВО (spec["text"]) ---------
         if tspec:
