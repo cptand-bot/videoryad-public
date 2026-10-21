@@ -1,0 +1,76 @@
+{
+ "scenes": [
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 14.0,
+   "source": "press_photo",
+   "source_query": "простаивающий танкер у причала реальное фото",
+   "visual_prompt": "простаивающий танкер у причала реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "duration_sec": 12.32,
+   "source": "press_photo",
+   "source_query": "нефтеналивной рукав на причале реальное фото",
+   "visual_prompt": "нефтеналивной рукав на причале реальное фото"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "duration_sec": 13.12,
+   "source": "press_photo",
+   "source_query": "Крис Райт выступление на энергетической конференции реальное фото",
+   "visual_prompt": "Крис Райт выступление на энергетической конференции реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "duration_sec": 13.37,
+   "source": "press_photo",
+   "source_query": "танкер с американской нефтью в открытом море реальное фото",
+   "visual_prompt": "танкер с американской нефтью в открытом море реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "duration_sec": 14.16,
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО Брюссель фасад реальное фото",
+   "visual_prompt": "штаб-квартира НАТО Брюссель фасад реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "duration_sec": 10.64,
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/VaUDtg3RRng4uDTcbk1KcVti_RNEdmyYXaaLdj1TsoZ_1N6ZMzwjz_rWPUZbmDgSPD7UJteMoAjylkEeXUvFB-d3TMeL5qXzTDIpcq6lWTbeGjguwU__ri9NsTCV0c-zF5oN8SunQZFKSdEU-HLy_tQ5MjBpU_A0IbPkeBmH099xH4v0aSAvvFJ8lR3tYFy2844YEoZYuHu5gOfvliTZ3O_BY3ND-pFSJh1P_Cm4lqlinNu5ymPAUIAQPl6d5mASbP21ebCqvT6zXTvvF2Mk3RLw4lSbMuhkVOPVZLxC5RzZ8HPdLWPMUJj46hLTJGM5kZBIAEfPeDv7fAikaZwWPQ.jpg",
+   "visual_prompt": "https://cdn4.telesco.pe/file/VaUDtg3RRng4uDTcbk1KcVti_RNEdmyYXaaLdj1TsoZ_1N6ZMzwjz_rWPUZbmDgSPD7UJteMoAjylkEeXUvFB-d3TMeL5qXzTDIpcq6lWTbeGjguwU__ri9NsTCV0c-zF5oN8SunQZFKSdEU-HLy_tQ5MjBpU_A0IbPkeBmH099xH4v0aSAvvFJ8lR3tYFy2844YEoZYuHu5gOfvliTZ3O_BY3ND-pFSJh1P_Cm4lqlinNu5ymPAUIAQPl6d5mASbP21ebCqvT6zXTvvF2Mk3RLw4lSbMuhkVOPVZLxC5RzZ8HPdLWPMUJj46hLTJGM5kZBIAEfPeDv7fAikaZwWPQ.jpg"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 13.07,
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/oFSWVGc4QgsHaAc3ptrYMtDUHeuPYMT1G76GaiB8AdlwTVcST_8tU0NLdAseIrrLzj9ShnRqsPuiBFx7sTG4uUOJlghpuMQBdJ8tUbzS6ilHmWBwNs0cYBCLv1xBKLcPTpONLYREmw36erswIXbY_sCX137mHzF_5IBhJNErOYoMt9UKABSz_HLD9syfhD2_0S2aVOhJDNk3US7Av3HfStaGMz5UMnX7ZPIxcFvYlLjorJGMrC0tZpbI5f8P8AOWK6XvDnvJ4BeuMbL9K0Gzk-Vk9dacTDkeKyRMZvtqMRwyftDH216r6g-eV3U-1Y4u68XfAxwEqhxAAiQkwmNPUg.jpg",
+   "visual_prompt": "https://cdn4.telesco.pe/file/oFSWVGc4QgsHaAc3ptrYMtDUHeuPYMT1G76GaiB8AdlwTVcST_8tU0NLdAseIrrLzj9ShnRqsPuiBFx7sTG4uUOJlghpuMQBdJ8tUbzS6ilHmWBwNs0cYBCLv1xBKLcPTpONLYREmw36erswIXbY_sCX137mHzF_5IBhJNErOYoMt9UKABSz_HLD9syfhD2_0S2aVOhJDNk3US7Av3HfStaGMz5UMnX7ZPIxcFvYlLjorJGMrC0tZpbI5f8P8AOWK6XvDnvJ4BeuMbL9K0Gzk-Vk9dacTDkeKyRMZvtqMRwyftDH216r6g-eV3U-1Y4u68XfAxwEqhxAAiQkwmNPUg.jpg"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 13.52,
+   "source": "press_photo",
+   "source_query": "газокомпрессорная станция магистрального газопровода реальное фото",
+   "visual_prompt": "газокомпрессорная станция магистрального газопровода реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 12.94,
+   "source": "press_photo",
+   "source_query": "здание Lloyd's of London реальное фото",
+   "visual_prompt": "здание Lloyd's of London реальное фото"
+  }
+ ]
+}
