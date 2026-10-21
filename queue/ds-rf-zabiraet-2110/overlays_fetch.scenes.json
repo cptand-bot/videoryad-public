@@ -1,0 +1,76 @@
+{
+ "scenes": [
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 13.2,
+   "source": "press_photo",
+   "source_query": "цех предприятия после попадания повреждённое оборудование Украина 2026 реальное фото",
+   "visual_prompt": "о чём именно приказ"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "duration_sec": 14.39,
+   "source": "press_photo",
+   "source_query": "колонна украинской бронетехники в Курской области 2024 реальное фото",
+   "visual_prompt": "что именно случилось на границе"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 12.8,
+   "source": "press_photo",
+   "source_query": "квадрокоптер-разведчик на земле перед запуском 2026 реальное фото",
+   "visual_prompt": "что перестаёт доставать"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "duration_sec": 13.03,
+   "source": "press_photo",
+   "source_query": "флаг России на здании городской администрации в Мелитополе 2026 реальное фото",
+   "visual_prompt": "как выглядит включение в состав"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "duration_sec": 12.8,
+   "source": "press_photo",
+   "source_query": "Валерий Герасимов начальник Генштаба портрет 2026 реальное фото",
+   "visual_prompt": "кто это заявил"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "duration_sec": 13.74,
+   "source": "direct_url",
+   "visual_prompt": "публикация, на которую ссылаются",
+   "source_query": "https://cdn4.telesco.pe/file/ApHrCtKHrzhVUV2LSb2AEdGRhJaMrdhQUMhYQx7qPFKaFqcsOjjn9x8btzBEnmF4XJbnP1CLEUaua9h5-rvf9GkXyEcoo5i8GuOp1MK2xaazFRrQol74GZA1yVINJ31FKp7eJv6hc1XCvxr6A28WBrIl0jMVDoblDn5hAxhGe0zq8a4Brt5Sa4wJsCurs-P2o8RFhvyFUvi61tDJm2V2wqgR33AHuCojOt1sdYz3gCVXws_DX5ONK_jbdoxfHUoXGu5ijjZlGQA7olzQzieaajVxQkXPXKOx_9Rrk1jdNCxAlFuq3DnDNyRoGU-IEU8oaJj9kehHe3Gfb1iZuJz_WQ.jpg"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "duration_sec": 13.04,
+   "source": "press_photo",
+   "source_query": "вестибюль станции метро в Киеве 2026 реальное фото",
+   "visual_prompt": "что встало вместе с мостом"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "duration_sec": 12.32,
+   "source": "press_photo",
+   "source_query": "Сергей Суровикин генерал реальное фото",
+   "visual_prompt": "кому приписывают поручение"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "duration_sec": 9.64,
+   "source": "press_photo",
+   "source_query": "противотанковые надолбы и бетонные блоки на дороге в приграничье 2026 реальное фото",
+   "visual_prompt": "что именно не торгуется"
+  }
+ ]
+}
