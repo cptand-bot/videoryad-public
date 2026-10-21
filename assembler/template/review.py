@@ -746,6 +746,49 @@ BADGES = {
 }
 
 
+_OV_SRC = None
+
+
+def overlay_sources():
+    """{id всплывашки: source} из overlays_fetch — для бейджа на карточке.
+
+    Просьба пользователя 2026-10-21: «как у нас помечается пресс-фото,
+    видеосток, так же самое пускай помечается и на всплывашках». До этого
+    бейдж рисовался только у базового кадра, и понять, откуда взялась
+    всплывашка — из поиска, со стока или из вложения статьи, — было нельзя.
+    """
+    global _OV_SRC
+    if _OV_SRC is None:
+        _OV_SRC = {}
+        for cand in (glob.glob("*overlays_fetch*.json")
+                     + glob.glob("*overlay*fetch*.scenes.json")):
+            try:
+                for o in json.load(open(cand, encoding="utf-8"))["scenes"]:
+                    if o.get("id") is not None:
+                        _OV_SRC[int(o["id"])] = o.get("source") or ""
+            except (OSError, ValueError, KeyError, TypeError):
+                continue
+            break
+    return _OV_SRC
+
+
+def overlay_badge(sid, photo_path):
+    """HTML бейджа источника для фото-всплывашки (пусто, если файла нет)."""
+    if not photo_path or not os.path.exists(photo_path):
+        return ""
+    src = overlay_sources().get(int(sid), "")
+    if not src:
+        # файл положили руками (загрузка с дашборда или вложение из досье,
+        # скачанное локально) — честно говорим «своё фото», а не врём «пресс»
+        src = "upload"
+    is_vid = photo_path.lower().endswith(VID_EXT)
+    if src == "upload":
+        label, cls = ("⬆️ СВОЁ ВИДЕО" if is_vid else "⬆️ СВОЁ ФОТО"), "b-other"
+    else:
+        label, cls = badge_for(src, is_vid)
+    return f'<span class="badge ovbadge {cls}">{label}</span>'
+
+
 def badge_for(source, is_video):
     return BADGES.get((source, is_video)) or BADGES.get((source, False)) or (f"{source}", "b-other")
 
@@ -1204,6 +1247,8 @@ figcaption{padding:10px 13px 13px}
 .pvbox video{width:100%;height:100%;object-fit:contain;background:#000}
 .pvclose{position:absolute;top:6px;right:6px;background:#000b;color:#fff;border:1px solid #777;
   border-radius:6px;padding:3px 10px;cursor:pointer;z-index:9;font-size:13px}
+.ovprevwrap{position:relative;display:inline-block;max-width:100%}
+.ovbadge{opacity:1 !important;right:6px;top:6px;font-size:10px;padding:2px 6px}
 .ovpanel{padding:0;display:flex;flex-direction:column;gap:7px}
 .ovpanel[hidden]{display:none}
 .ovbtns{display:flex;gap:8px;margin-top:2px}
@@ -1398,8 +1443,12 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         ph = ov_cur.get("photo", "")
         _uov = _uniq_state("overlays", sid)
         ph_prev = overlay_preview_path(ph) if ph and os.path.exists(ph) else ph
-        prev = (f'<img class="ovprev" id="ovprev{sid}" src="{ph_prev}?v={int(os.path.getmtime(ph))}" alt="">'
-                if ph and os.path.exists(ph) else f'<img class="ovprev" id="ovprev{sid}" alt="" hidden>')
+        _ovb = overlay_badge(sid, ph)
+        prev = ((f'<span class="ovprevwrap">'
+                 f'<img class="ovprev" id="ovprev{sid}" src="{ph_prev}?v={int(os.path.getmtime(ph))}" alt="">'
+                 f'{_ovb}</span>')
+                if ph and os.path.exists(ph)
+                else f'<img class="ovprev" id="ovprev{sid}" alt="" hidden>')
         _tcol = _tw.get("color", "yellow")
         _tfont = str(_tw.get("font") or "default").lower()
         if _tfont not in TEXT_FONT_FILES:
