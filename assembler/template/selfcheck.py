@@ -13,7 +13,7 @@
 Запуск:  python3 selfcheck.py <scenes.json> [images_dir]
 Код возврата 0 = всё чисто. !=0 = есть НАРУШЕНИЯ, чинить до отдачи дашборда.
 """
-import glob, hashlib, json, os, subprocess, sys
+import glob, hashlib, io, json, os, subprocess, sys
 
 # ГОЛЫЙ ВЫЗОВ БРАЛ ФАЙЛ ВСПЛЫВАШЕК И СРАВНИВАЛ ЕГО САМ С СОБОЙ (2026-10-20,
 # улов `usuario-40`). В папке ролика лежат ДВА `*.scenes.json`, и `sorted()`
@@ -169,6 +169,79 @@ else:
                         "~/.claude/skills/news-video/template/sfx/ (оригиналы: "
                         "D:\\YouTube\\МЕДИОТЕКА\\Звуки).")
     ch = (meta.get("channel") or "").upper()
+    # КАНАЛ ПО ИМЕНИ ПАПКИ, ЕСЛИ В ШАПКЕ ЕГО НЕТ. Поле `channel` ставит не
+    # каждая вкладка (вчера его не было ни в одном живом проекте), а проверки
+    # ниже без канала молча не выполняются — ровно так на ПЛАНЕТУ и приехали
+    # 30 запрещённых надписей.
+    if not ch:
+        # 1) путь к папке ролика на D: — там имя канала есть ВСЕГДА
+        #    (`.source_dir` кладёт ship.sh/вкладка). Имя папки проекта
+        #    ненадёжно: очередь зовётся `isterika-2210`, канал в ней потерян.
+        # Где искать `.source_dir`: в самой папке; в папке замера из кэша
+        # очереди (её пишет ship.sh); в соседней папке, чьё имя ЗАКАНЧИВАЕТСЯ
+        # именем очереди (`planeta-isterika-2210` против `isterika-2210-cloud`).
+        _cwd = os.path.abspath(".")
+        _q = os.path.basename(_cwd)
+        _q = _q[:-6] if _q.endswith("-cloud") else _q
+        _dirs = [_cwd, os.path.join(os.path.dirname(_cwd), _q)]
+        try:
+            _pd = io.open(os.path.expanduser(
+                "~/.cache/videoryad/%s.phasedir" % _q), encoding="utf-8").read().strip()
+            if _pd:
+                _dirs.append(_pd)
+        except Exception:
+            pass
+        try:
+            for _sib in os.listdir(os.path.dirname(_cwd)):
+                if _sib.endswith(_q) and _sib != os.path.basename(_cwd):
+                    _dirs.append(os.path.join(os.path.dirname(_cwd), _sib))
+        except Exception:
+            pass
+        _hay = ""
+        for _d in _dirs:
+            try:
+                _hay = io.open(os.path.join(_d, ".source_dir"),
+                               encoding="utf-8").read().upper()
+                if _hay.strip():
+                    break
+            except Exception:
+                continue
+        _hay += " " + os.path.abspath(".").upper()
+        for _key, _name in (("ПЛАНЕТА", "ПЛАНЕТА"), ("5 МИНУТ", "5 МИНУТ"),
+                            ("5МИНУТ", "5 МИНУТ"), ("ОЛЬКА", "ОЛЬКА"),
+                            ("ДИПЛОМАТИЯ", "ДИПЛОМАТИЯ СИЛЫ"),
+                            ("ПЕРЕВОД", "ПЕРЕВОД")):
+            if _key in _hay:
+                ch = _name
+                break
+        # 2) последний рубеж — префикс имени папки
+        if not ch:
+            _b = os.path.basename(os.path.abspath(".")).lower()
+            for _pref, _name in (("planeta", "ПЛАНЕТА"), ("5min", "5 МИНУТ"),
+                                 ("olka", "ОЛЬКА"), ("ds-", "ДИПЛОМАТИЯ СИЛЫ"),
+                                 ("perevod", "ПЕРЕВОД")):
+                if _b.startswith(_pref) or ("-" + _pref) in _b:
+                    ch = _name
+                    break
+
+    # ТЕКСТОВЫЕ ВСПЛЫВАШКИ — ТОЛЬКО ДЛЯ «5 МИНУТ» (2026-10-21, прямое слово
+    # пользователя: «Планете не применять надписи… без моей команды»).
+    # Правило было в SKILL.md с 2026-10-08 и всё равно нарушилось: вкладка
+    # поставила на ПЛАНЕТУ 30 надписей против 12 фото-всплывашек. Текстом
+    # такое не держится — держит только код.
+    # Разрешение на конкретный ролик: положить в папку файл `.text-overlays-ok`
+    # (пользователь попросил надписи явно). Пустой файл, содержимое не важно.
+    _texts = [k for k, v in ov.items()
+              if str(k).isdigit() and isinstance(v, dict) and v.get("text")]
+    if _texts and ch and "5 МИНУТ" not in ch and not os.path.exists(".text-overlays-ok"):
+        FAIL.append(
+            f"ТЕКСТОВЫЕ ВСПЛЫВАШКИ НА КАНАЛЕ {ch}: их {len(_texts)} "
+            f"(сцены {', '.join(sorted(_texts, key=int)[:10])}"
+            f"{'…' if len(_texts) > 10 else ''}). Надписи — фишка «5 МИНУТ»; "
+            f"на остальных каналах только по ПРЯМОЙ просьбе пользователя. "
+            f"Убрать их из overlays.json, либо — если он попросил явно — "
+            f"создать в папке ролика пустой файл .text-overlays-ok")
+
     want = "bottom" if "ПЛАНЕТА" in ch or "ПЛАНЕТА" == ch else "top"
     if ch and ov.get("anchor", "bottom") != want:
         FAIL.append(f"overlays anchor={ov.get('anchor','bottom')}, для канала {ch} нужен {want} (SKILL.md 3b)")

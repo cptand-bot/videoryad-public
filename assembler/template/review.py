@@ -700,8 +700,29 @@ def load_text_font(fkey, size):
 
 
 def render_text_png(text, tcolor, out_path, fkey="default"):
-    """Слово капсом, жирный, чёрная обводка, прозрачный фон. Рисуем крупно —
-    build_overlays масштабирует под кадр. Возвращает True при успехе."""
+    """Превью надписи для ДАШБОРДА — рисуем ТЕМ ЖЕ кодом, что и сборку.
+
+    ДО 2026-10-21 здесь жила СОБСТВЕННАЯ отрисовка: жёлтый капс с толстой
+    чёрной обводкой. 20.10 вид надписей переписали (тёмная пластина, узкая
+    цветная черта слева, белый Roboto Condensed без обводки) — но переписали
+    ТОЛЬКО в `build_overlays.py`. Дашборд остался на старом рисовальщике, и
+    пользователь видел на карточках одно, а в готовом видео получалось другое
+    («сейчас на дашборде не тот формат надписей, он старый… этот формат меня
+    не устраивает»). Два рисовальщика одного и того же — источник расхождения
+    по определению, поэтому дашборд теперь зовёт функцию сборщика.
+    Старый код оставлен ниже как запасной путь: если `build_overlays` почему-то
+    не импортируется, превью всё равно нарисуется, пусть и в прежнем виде.
+    """
+    try:
+        import importlib, os as _os, sys as _sys
+        _here = _os.path.dirname(_os.path.abspath(__file__))
+        if _here not in _sys.path:
+            _sys.path.insert(0, _here)
+        _bo = importlib.import_module("build_overlays")
+        if _bo._render_text_png(text, tcolor, out_path, fkey):
+            return True
+    except Exception:
+        pass
     from PIL import Image, ImageDraw
     txt = " ".join((text or "").split()).upper()
     if not txt:
