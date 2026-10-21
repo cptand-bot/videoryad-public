@@ -59,13 +59,28 @@ def report(proj):
     print("-" * 42)
     print("ИТОГО %s → %s: %.1f мин" % (rows[0]["phase"], rows[-1]["phase"], total))
     # отношение к хронометражу — потолок 3×
+    # ИЩЕМ scenes.json И В ПАПКЕ ЗАБОРА (2026-10-21): после get.sh работа идёт
+    # в `<ролик>-cloud`, а в основной папке остаётся ДОШИПОВАЯ копия. Наивный
+    # glob брал её и печатал чушь — «хронометраж 1,3 мин, 27,9×» на ролике
+    # 15:42. Берём ту копию, где сцен больше.
     import glob
-    sc = [f for f in glob.glob(os.path.join(os.path.expanduser(proj), "*.scenes.json"))
-          if "overlay" not in os.path.basename(f)]
+    base = os.path.expanduser(proj).rstrip("/")
+    cands = []
+    for d_ in (base, base + "-cloud", base[:-6] if base.endswith("-cloud") else base):
+        cands += [f for f in glob.glob(os.path.join(d_, "*.scenes.json"))
+                  if "overlay" not in os.path.basename(f)]
+    best, run = None, 0.0
+    for f in dict.fromkeys(cands):
+        try:
+            d = json.load(io.open(f, encoding="utf-8"))
+            r = sum(s.get("duration_sec", 0) for s in d.get("scenes", [])) / 60.0
+            if r > run:
+                best, run = f, r
+        except Exception:
+            continue
+    sc = [best] if best else []
     if sc:
         try:
-            d = json.load(io.open(sc[0], encoding="utf-8"))
-            run = sum(s.get("duration_sec", 0) for s in d.get("scenes", [])) / 60.0
             if run:
                 print("хронометраж ролика %.1f мин → потолок %.1f мин, факт %.1f мин (%.1f×)"
                       % (run, run * 3, total, total / run))

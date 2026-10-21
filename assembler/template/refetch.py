@@ -423,6 +423,35 @@ def _load_rounds():
         return {"rounds": [], "tried": {}}
 
 
+def force_reason():
+    """`--force` без ПРИЧИНЫ словами больше не принимается (2026-10-21).
+
+    Повод измерен в тот же день: соседняя вкладка прошла через --force дважды
+    и сделала круги №3 и №4 по ОДНОМУ кадру на одну и ту же сцену с разницей в
+    минуту — шесть минут за два кадра, при том что повторные замены в её же
+    журнале попадали в брак в 25% случаев. Запрещать --force нельзя (жёсткое
+    нарушение чинится всегда, сколько бы кругов ни потребовалось), но он
+    должен быть ОСОЗНАННЫМ и ВИДИМЫМ: причина пишется в журнал, и по ней потом
+    видно, на что реально уходят лишние круги.
+
+    Возврат: None (форса нет) | строка-причина | False (форс без причины).
+    """
+    if "--force" not in sys.argv:
+        return None
+    i = sys.argv.index("--force")
+    if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--"):
+        return sys.argv[i + 1].strip() or False
+    return False
+
+
+def yellow_cards():
+    """Сколько жёлтых карточек уже стоит — потолок пользователя 2-3 на ролик."""
+    try:
+        return len(json.load(open("needs_upload.json", encoding="utf-8")))
+    except (OSError, ValueError, TypeError):
+        return 0
+
+
 def round_gate(pend, force):
     """pend: список (путь, {id: значение}, is_overlay). Возврат: 0 / 1."""
     jr = _load_rounds()
@@ -486,9 +515,17 @@ def round_gate(pend, force):
         print("Замер 20.10: 7 и 13 кругов вместо двух дали 22 и 37 минут "
               "правок. Круг стоит ~3 минуты независимо от числа кадров в нём, "
               "поэтому дешевле собрать ВСЕ находки в один список.")
-        print("Что делать: догнать остаток находок и позвать ОДНИМ вызовом; "
-              "пограничное — жёлтой карточкой в needs_upload.json (не больше "
-              "2-3 на ролик); если правка действительно нужна сейчас — --force.")
+        _nc = yellow_cards()
+        print("ЖЁСТКОЕ нарушение (водяной знак, чужая страна, дети, документы, "
+              "забаненный кадр) чини ВСЕГДА: --force \"причина словами\".")
+        print("ПОГРАНИЧНОЕ после второго круга — жёлтой карточкой, пользователь "
+              "решит сам за секунду. Сейчас карточек: %d (его потолок 2-3; что "
+              "сверх — чинить самому)." % _nc)
+        if n_now <= 2:
+            print("И отдельно: в этом круге всего %d кадр(а) — круг стоит ~3 "
+                  "минуты независимо от объёма, а третий заход на ту же сцену "
+                  "попадает в брак в четверти случаев. Почти наверняка дешевле "
+                  "карточка." % n_now)
     if bad:
         print("\nНичего не тронуто: запросы в scenes.json не переписаны, "
               "кадры на месте.")
@@ -498,7 +535,7 @@ def round_gate(pend, force):
     return 0
 
 
-def round_record(pend, fill=None):
+def round_record(pend, fill=None, why=None):
     """Записать круг в журнал — ПОСЛЕ того как все проверки пройдены.
 
     `fill` ОБЯЗАН приходить снаружи, посчитанный ДО wipe() (2026-10-21,
@@ -522,9 +559,11 @@ def round_record(pend, fill=None):
                 {"round": 0 if fill else n_fix + 1, "source": src,
                  "query": q, "fill": fill})
             ids_all.append(key)
-    jr["rounds"].append({"n": 0 if fill else n_fix + 1, "fill": fill,
-                         "ts": time.strftime("%Y-%m-%d %H:%M:%S"),
-                         "ids": ids_all})
+    _rec = {"n": 0 if fill else n_fix + 1, "fill": fill,
+            "ts": time.strftime("%Y-%m-%d %H:%M:%S"), "ids": ids_all}
+    if why:
+        _rec["force"] = why
+    jr["rounds"].append(_rec)
     try:
         json.dump(jr, open(ROUNDS, "w", encoding="utf-8"),
                   ensure_ascii=False, indent=1)
@@ -542,10 +581,11 @@ def rounds_report():
     n_fill = len(jr["rounds"]) - n_fix
     print("кругов правок: %d (плюс доборов пустых сцен: %d)" % (n_fix, n_fill))
     for r in jr["rounds"]:
-        print("  %-6s %s  кадров: %-3d  %s"
+        print("  %-6s %s  кадров: %-3d  %s%s"
               % ("добор" if r.get("fill") else "круг %d" % r["n"],
                  r.get("ts", "?"), len(r["ids"]),
-                 ", ".join(r["ids"][:14])))
+                 ", ".join(r["ids"][:14]),
+                 ("   [--force: %s]" % r["force"]) if r.get("force") else ""))
     rep = {k: v for k, v in jr.get("tried", {}).items() if len(v) > 1}
     total = sum(len(v) for v in jr.get("tried", {}).values())
     if rep:
@@ -638,7 +678,14 @@ def main():
     # ГЕЙТ КРУГОВ — строго ДО apply_fix: отказ не должен оставлять за собой
     # переписанные запросы и снесённые кадры (на этом уже обжигались с линтом).
     _fill_now = _is_fill(pend)     # СЧИТАЕМ ДО wipe(), иначе всегда «добор»
-    if round_gate(pend, "--force" in sys.argv):
+    _why = force_reason()
+    if _why is False:
+        print("СТОП: `--force` теперь требует ПРИЧИНУ словами, она идёт в журнал.")
+        print('  Пример: --force "забаненный кадр в сборке, selfcheck не пустит"')
+        print("  Без причины не видно, на что уходят лишние круги — а это "
+              "главная статья времени на ролике.")
+        return 2
+    if round_gate(pend, bool(_why)):
         return 1
     for _p, _fx2, _ov in pend:
         jobs.append(apply_fix(_p, _fx2, _ov))
@@ -648,7 +695,7 @@ def main():
     if os.path.exists(lint):
         print("\n--- линт новых запросов ---")
         rc = subprocess.run(["python3", lint] + [j[0] for j in jobs]).returncode
-        if rc != 0 and "--force" not in sys.argv:
+        if rc != 0 and not _why:
             print("\nЗамена содержит мину — перепиши её от объекта "
                   "(или --force, если уверен). Фетч НЕ запускался, "
                   "СТАРЫЕ КАДРЫ НА МЕСТЕ (запросы в scenes.json уже "
@@ -694,7 +741,7 @@ def main():
                 subprocess.run(["python3", os.path.join(here, "ban_file.py"),
                                 "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
 
-    round_record(pend, _fill_now)   # круг засчитан: проверки пройдены, фетч идёт
+    round_record(pend, _fill_now, _why)   # круг засчитан, причина форса — в журнал
 
     failed_runs = []
     for sub, assets, ids, before in jobs:
