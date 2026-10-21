@@ -139,3 +139,29 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# --- АВТОЗАМЕР ФАЗ (2026-10-21) -------------------------------------------
+# Ставится отсюда, потому что это ПЕРВЫЙ скрипт конвейера: `srt_получен`
+# берём по времени изменения самого .srt (пользователь положил его в папку),
+# `сцены_готовы` — по факту записи scenes.json. Инструкции помнить не нужно.
+def _autophase():
+    try:
+        import os, sys
+        here = os.path.dirname(os.path.abspath(__file__))
+        sys.path.insert(0, here)
+        import phase
+        srt = next((a for a in sys.argv[1:] if a.lower().endswith(".srt")), None)
+        out = next((a for a in sys.argv[1:] if a.lower().endswith(".json")), None)
+        proj = os.path.dirname(os.path.abspath(out)) if out else os.getcwd()
+        if srt and os.path.exists(srt):
+            phase.auto(proj, "srt_получен", os.path.getmtime(srt))
+        phase.auto(proj, "сцены_готовы")
+    except Exception:
+        pass
+
+
+try:
+    _autophase()
+except Exception:
+    pass

@@ -3839,6 +3839,18 @@ def run_live(scenes_path, images_dir, port):
                   f"ни в причинах отказа. Голос есть только на localhost.", flush=True)
     print(f"\n  Кадры подгружаются по мере скачивания. Отмечай/пиши правки прямо сейчас.", flush=True)
     print(f"  Ctrl-C чтобы остановить сервер.\n", flush=True)
+    # АВТОЗАМЕР ФАЗЫ (2026-10-21): момент подъёма живого дашборда. Ставится
+    # отсюда, а не инструкцией — вкладка, до которой инструктаж не доехал,
+    # иначе собирает ролик без единой отметки, и сравнить его не с чем.
+    # Отметка одноразовая: перезапуск сервера её не сдвинет. Пишем в основную
+    # папку ролика, а не в забор (`-cloud` чистится при следующем get.sh).
+    try:
+        import phase as _phase
+        _cwd = os.getcwd().rstrip("/")
+        _dir = _cwd[:-6] if _cwd.endswith("-cloud") and os.path.isdir(_cwd[:-6]) else _cwd
+        _phase.auto(_dir, "дашборд_отдан")
+    except Exception:
+        pass
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
