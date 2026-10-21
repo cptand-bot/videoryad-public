@@ -379,9 +379,22 @@ def _similar(a, b):
 
 
 def _has_asset(kind, sid):
-    """Есть ли сейчас у сцены кадр на диске (без мусорных расширений)."""
-    return bool([f for f in glob.glob(os.path.join(kind, "scene_%03d.*" % int(sid)))
-                 if not f.endswith(SKIP_EXT) and ".ovthumb." not in f])
+    """Есть ли у сцены НАСТОЯЩИЙ кадр на диске.
+
+    ЗАГЛУШКА НЕ СЧИТАЕТСЯ КАДРОМ (2026-10-21, поймано на первом же ролике).
+    Облако кладёт «нет кадра» физическим файлом, поэтому наивная проверка
+    существования считала бы добор пустых сцен ПРАВКОЙ и сжигала круг из
+    бюджета впустую. Признак заглушки тот же, что у verify_assets: почти
+    однотонный тёмный кадр.
+    """
+    real = []
+    for f in glob.glob(os.path.join(kind, "scene_%03d.*" % int(sid))):
+        if f.endswith(SKIP_EXT) or ".ovthumb." in f:
+            continue
+        if os.path.getsize(f) in STUB_SIZES or _looks_like_stub(f):
+            continue
+        real.append(f)
+    return bool(real)
 
 
 def _is_fill(pend):
@@ -485,10 +498,18 @@ def round_gate(pend, force):
     return 0
 
 
-def round_record(pend):
-    """Записать круг в журнал — ПОСЛЕ того как все проверки пройдены."""
+def round_record(pend, fill=None):
+    """Записать круг в журнал — ПОСЛЕ того как все проверки пройдены.
+
+    `fill` ОБЯЗАН приходить снаружи, посчитанный ДО wipe() (2026-10-21,
+    поймано на первом же ролике). Пересчёт здесь давал всегда True: к моменту
+    записи кадры уже уехали в `.trash`, сцены выглядели пустыми, и круг правок
+    на 18 кадров записался «добором». Бюджет не уменьшался — гейт считал
+    правильно, а помнил неправильно.
+    """
     jr = _load_rounds()
-    fill = _is_fill(pend)
+    if fill is None:
+        fill = _is_fill(pend)
     n_fix = len([r for r in jr.get("rounds", []) if not r.get("fill")])
     ids_all, tried = [], jr.setdefault("tried", {})
     for _path, fx, is_ov in pend:
@@ -616,6 +637,7 @@ def main():
 
     # ГЕЙТ КРУГОВ — строго ДО apply_fix: отказ не должен оставлять за собой
     # переписанные запросы и снесённые кадры (на этом уже обжигались с линтом).
+    _fill_now = _is_fill(pend)     # СЧИТАЕМ ДО wipe(), иначе всегда «добор»
     if round_gate(pend, "--force" in sys.argv):
         return 1
     for _p, _fx2, _ov in pend:
@@ -672,7 +694,7 @@ def main():
                 subprocess.run(["python3", os.path.join(here, "ban_file.py"),
                                 "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
 
-    round_record(pend)   # круг засчитан: проверки пройдены, фетч идёт
+    round_record(pend, _fill_now)   # круг засчитан: проверки пройдены, фетч идёт
 
     failed_runs = []
     for sub, assets, ids, before in jobs:
