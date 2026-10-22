@@ -48,6 +48,12 @@ from collections import Counter
 # leitmotif"); the 3rd request for the same file is rerouted to a fresh one.
 _USE_COUNT = Counter()
 _WEB_USED_MD5 = set()   # md5 of every image web_search accepted this run (+ cross-video cooldown)
+# md5 -> человеческое «где он уже стоит» (2026-10-22, улов `usuario-5a`).
+# Без этого отказ по собственному дублю выглядел как «вернуть нечего»: вкладка
+# попросила во всплывашку тот же кадр, что стоит базой сцены 3, и получила
+# пустоту без причины — круг правок на ровном месте.
+_WEB_USED_WHERE = {}
+_DUP_SAID = set()        # о каком md5 уже сказали в этом прогоне
 # Rule 5 (user, 2026-08-31): every library file appears in a видеоряд at most
 # ONCE. No leitmotif exception — was 2, now 1. A folder that runs out of fresh
 # files fails the scene loudly (EXHAUSTED) instead of recycling.
@@ -658,6 +664,15 @@ def fetch_web_search(query, out_path, env=None):
         if h5 and h5 in _WEB_USED_MD5:
             try: os.remove(tmp)
             except OSError: pass
+            # ГРОМКО: причина отказа — СВОЙ ЖЕ кадр, а не «ничего не нашлось»
+            # (2026-10-22). Печатаем один раз на запрос, чтобы не залить лог.
+            _wh = _WEB_USED_WHERE.get(h5)
+            if _wh and h5 not in _DUP_SAID:
+                _DUP_SAID.add(h5)
+                print(f"      дубль: этот кадр УЖЕ СТОИТ {_wh} "
+                      f"[md5 {h5[:8]}] — одному файлу в ролике одна сцена. "
+                      f"Нужен он же во всплывашке? Копируй файл руками. "
+                      f"Нужен другой кадр? Перепиши запрос.")
             continue        # этот кадр уже стоит в другой сцене этой сборки
         w, h = _measure(tmp)
         # счёт: площадь, горизонтальный при равенстве выигрывает
@@ -686,6 +701,10 @@ def fetch_web_search(query, out_path, env=None):
         return False
     if h5:
         _WEB_USED_MD5.add(h5)
+        _m = re.search(r"scene_(\d+)", os.path.basename(out_path or ""))
+        _WEB_USED_WHERE.setdefault(
+            h5, ("сценой %d этой сборки" % int(_m.group(1))) if _m
+            else "в этой сборке")
     if w < _MIN_W or h < _MIN_H:
         print(f"  [web_search] лучшее, что нашлось: {w}x{h} — НИЖЕ порога "
               f"{_MIN_W}x{_MIN_H}, на 1920x1080 будет растянуто", flush=True)
@@ -1573,11 +1592,18 @@ def main():
     this_project = os.path.basename(os.path.dirname(os.path.abspath(images_dir)))
     blocked_md5, usage_log = load_blocked_md5(this_project)
     _WEB_USED_MD5.update(blocked_md5)
+    for _b in blocked_md5:
+        _WEB_USED_WHERE.setdefault(_b, "в бане или кулдауне прошлых роликов")
     # also block any image already sitting in images_dir (a kept/cached scene) so
     # web_search on a re-fetch can't pick the same photo for a different scene
     for _p in glob.glob(os.path.join(images_dir, 'scene_*.*')):
         if os.path.splitext(_p)[1].lower() in ('.jpg', '.jpeg', '.png', '.webp'):
-            try: _WEB_USED_MD5.add(file_md5(_p))
+            try:
+                _h = file_md5(_p)
+                _WEB_USED_MD5.add(_h)
+                _m = re.search(r"scene_(\d+)", os.path.basename(_p))
+                _WEB_USED_WHERE[_h] = ("сценой %d этой сборки" % int(_m.group(1))
+                                       if _m else "в этой сборке")
             except OSError: pass
     used_md5 = {}   # out_path -> md5, for this build
     print(f"project={this_project}  library shots on cooldown from last "
