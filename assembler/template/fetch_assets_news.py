@@ -1719,6 +1719,7 @@ def main():
 
         ok = False
         used_source = source
+        fail_why = ""        # причина отказа едет в манифест (2026-10-22)
         try:
             if source == "local_library":
                 local_out = fetch_local_library(
@@ -1728,6 +1729,8 @@ def main():
                     dur_hint=scene.get("duration_sec"), seq=sid,
                 )
                 if local_out == "EXHAUSTED":
+                    fail_why = ("папка медиатеки исчерпана: все файлы в "
+                                "кулдауне или уже в этом ролике")
                     print(f"[{sid:03d}] FAILED: папка '{query}' исчерпана — все файлы "
                           f"использованы в последних {COOLDOWN_VIDEOS} видео или уже в этом. "
                           f"Добери материал в папку или перепиши сцену.")
@@ -1753,6 +1756,8 @@ def main():
                 if direct_out:
                     ok, out_path = True, direct_out
                 else:
+                    fail_why = ("ни один адрес из source_query не дал годного "
+                                "кадра (сита: размер, клейма, тяжёлый текст)")
                     print(f"[{sid:03d}] FAILED: ни один адрес из source_query не "
                           f"дал годного кадра — перепиши сцену или дай другую ссылку")
                     ok = False
@@ -1762,6 +1767,7 @@ def main():
                 blob = (query + " " + scene.get("visual_prompt", "")).lower()
                 hit = next((w for w in PEXELS_BLOCK if w in blob), None)
                 if hit:
+                    fail_why = f"pexels запрещён для политики (слово '{hit}')"
                     print(f"[{sid:03d}] FAILED: pexels запрещён для политики "
                           f"(слово '{hit}' в запросе). Переклассифицируй сцену в "
                           f"local_library или press_photo — сток со случайными "
@@ -1786,6 +1792,7 @@ def main():
                 print(f"[{sid:03d}] ERROR: unknown source '{source}' - news-video never generates, "
                       f"fix the scene's source classification instead")
         except Exception as e:
+            fail_why = "ошибка фетча: %s" % e
             print(f"[{sid:03d}] ERROR: {e}")
             ok = False
 
@@ -1793,9 +1800,19 @@ def main():
         _src = LAST_SRC_URL.get(os.path.abspath(out_path), "")
         if not _src and used_source == "local_library":
             _src = str(locals().get("local_out") or "")
-        manifest.append({"id": sid, "file": os.path.basename(out_path) if ok else None,
-                         "source": used_source, "status": "ok" if ok else "FAILED",
-                         "url": _src})
+        # ПРИЧИНА ОТКАЗА ТЕПЕРЬ ХРАНИТСЯ (2026-10-22, улов `usuario-5a`): поля
+        # `reason` в схеме записи не существовало вовсе, поэтому FAILED молчал
+        # ПО УСТРОЙСТВУ, а не из-за потерянного лога — вкладка не могла
+        # отличить «фетч ходил и не добыл» от «сцену никто не фетчил, упал
+        # шард», хотя лечатся они по-разному (запрос против добора).
+        _rec = {"id": sid, "file": os.path.basename(out_path) if ok else None,
+                "source": used_source, "status": "ok" if ok else "FAILED",
+                "url": _src}
+        if not ok:
+            _rec["reason"] = fail_why or ("водопад press/web не дал годного "
+                                          "кадра (сита: клейма, тяжёлый текст, "
+                                          "размер, собственный дубль)")
+        manifest.append(_rec)
         if ok:
             _save_true_source(images_dir, sid, used_source)
         # write manifest after EVERY scene so `review.py --live` can show

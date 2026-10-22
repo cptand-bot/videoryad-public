@@ -68,6 +68,19 @@ _TXT_FONTS = [
     "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
     os.path.expanduser("~/.local/share/fonts/DejaVuSans-Bold.ttf"),
 ]
+# Цикл цветов ДУБЛИРУЕТ review.py (2026-10-22): сборке нужен тот же дефолт,
+# что видел пользователь на дашборде, иначе надпись в готовом ролике другого
+# цвета, чем на утверждённой карточке.
+TEXT_COLOR_CYCLE = ("white", "yellow", "red", "green", "orange")
+
+
+def text_color_for(sid):
+    try:
+        return TEXT_COLOR_CYCLE[int(sid) % len(TEXT_COLOR_CYCLE)]
+    except (TypeError, ValueError):
+        return "white"
+
+
 _TXT_RGB = {"white": (255, 255, 255), "yellow": (255, 232, 0),
             "red": (255, 34, 28), "green": (46, 214, 94),
             "orange": (255, 146, 10)}
@@ -198,7 +211,7 @@ def _render_text_png(words, color, out_path, fkey="default", style="plate"):
         return False
 
 
-def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
+def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     """Отдельная всплывашка-СЛОВО поверх клипа: сетка 9 позиций
     (pos = tl/tc/tr/ml/mc/mr/bl/bc/br), плавное появление/исчезновение,
     без рамки. `base_mp4` уже может нести фото-всплывашку — текст идёт сверху."""
@@ -217,7 +230,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur):
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     png = out_mp4 + ".txt.png"
-    if not _render_text_png(words, ts.get("color", "white"), png,
+    if not _render_text_png(words, ts.get("color") or text_color_for(sid), png,
                             ts.get("font", "default"), ts.get("style", "plate")):
         return False
     pw, ph = _img_wh(ffprobe, png)
@@ -342,7 +355,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         if not photo_ok:
             # только текст — база = чистый orig
             if _apply_text_overlay(ffmpeg, "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1)),
-                                   orig, clip, tspec, _dur):
+                                   orig, clip, tspec, _dur, sid):
                 print(f"[{sid:03d}] ТЕКСТ «{tspec.get('words') or tspec.get('text')}» "
                       f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','bc')} -> ok", flush=True)
             else:
@@ -462,7 +475,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         if tspec:
             base = _text_target if ph_ok else orig
             if _apply_text_overlay(ffmpeg, "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1)),
-                                   base, clip, tspec, _dur):
+                                   base, clip, tspec, _dur, sid):
                 print(f"[{sid:03d}] + ТЕКСТ «{tspec.get('words') or tspec.get('text')}» "
                       f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','bc')} -> ok", flush=True)
             elif ph_ok:

@@ -141,6 +141,22 @@ else:
     # у всех всплывашек пустой sound -> видеоряд выйдет без звука всплывашек
     # (feedback_overlays_sound_field_lost, 2026-09-08). Переприсвоить sound
     # (['whoosh','zatvor','pop'][i%3]) и локально прогнать build_overlays.py sfx.
+    # ЦВЕТ НАДПИСЕЙ — ОДИН НА ВЕСЬ РОЛИК (2026-10-22, прямое наблюдение
+    # пользователя на дашборде 8793: «все записи пришли одинакового цвета»).
+    # Дефолт теперь считается по кругу от номера сцены, но вкладка может
+    # проставить один цвет РУКАМИ всем подряд — ровно это и случилось, 21 из 21
+    # белых. Это предупреждение, а не блокер: один цвет бывает и осознанным.
+    _tcols = [str((v.get("text") or {}).get("color") or "").lower()
+              for k, v in ov.items() if k != "anchor" and isinstance(v.get("text"), dict)
+              and ((v.get("text") or {}).get("words") or (v.get("text") or {}).get("text"))]
+    _tcols = [c for c in _tcols if c]
+    if len(_tcols) >= 5 and len(set(_tcols)) < 3:
+        WARN.append(
+            "надписей %d, а цветов всего %d (%s) — пользователь просил РАЗНЫЕ "
+            "(белый/жёлтый/красный/зелёный/оранжевый). Пустое поле color дашборд "
+            "и сборка теперь заполняют по кругу от номера сцены сами: проще "
+            "убрать color из overlays.json, чем расставлять руками."
+            % (len(_tcols), len(set(_tcols)), ", ".join(sorted(set(_tcols)))))
     snd = [v.get("sound") or (v.get("text", {}).get("sound", "") if isinstance(v.get("text"), dict) else "")
            for k, v in ov.items() if k != "anchor"]
     if snd and not any(snd):

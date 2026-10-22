@@ -766,11 +766,22 @@ jobs:
           mkdir -p "$proj/_cloud"
           n_img=$(ls "$proj"/images/scene_* 2>/dev/null | wc -l)
           n_ov=$(ls "$proj"/overlays/scene_* 2>/dev/null | wc -l)
+          # ЧЕСТНЫЙ ОТЧЁТ О ПОТЕРЯХ (2026-10-22, улов `usuario-5a`): прежние
+          # две строки считали ФАЙЛЫ и ничего не знали ни про сценарий, ни про
+          # манифесты шардов — отчёт был зелёный при девяти пустых сценах.
+          # fetch_report.py различает три природы потери: шард не отработал
+          # (записи нет вовсе), фетч ходил и не добыл (FAILED + причина),
+          # заглушка облака (файл есть, кадр почти чёрный).
+          python3 assembler/cloud/fetch_report.py "$proj" \
+            --md "$proj/_cloud/FETCH-report.md" || true
           {
             echo "# FETCH-ONLY — кадры собраны на матрице, сборка НЕ запускалась"
             echo
             echo "- картинок сцен:   $n_img"
             echo "- фото всплывашек: $n_ov"
+            echo
+            echo "ЧТО НЕ ДОЕХАЛО — в \`_cloud/FETCH-report.md\` (сверка со"
+            echo "сценарием и манифестами шардов, а не счёт файлов)."
             echo
             echo "Дальше в сессии: get.sh <name> -> локальный дашборд (review.py --live)"
             echo "-> правки/«собирай» -> ship.sh <dir> <name>  (БЕЗ --fetch-only) -> облако собирает."

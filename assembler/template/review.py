@@ -132,6 +132,23 @@ SFX_LABELS = {"whoosh": "вжух", "zatvor": "затвор камеры", "pop"
 # звучат по-разному, а выбор на дашборде по-прежнему за пользователем.
 TEXT_SFX_CYCLE = ("pop", "mashinka", "pshik", "zatvor", "whoosh")
 
+# ЦВЕТ ТЕКСТОВОЙ ВСПЛЫВАШКИ — ТОЖЕ РАЗНЫЙ (user, 2026-10-22, при утверждении
+# дашборда 8793: «все записи пришли одинакового цвета, не было там поменено ни
+# на белый, рандомно, красный, оранжевый, там зелёный — все одного цвета»).
+# Это ТОТ ЖЕ класс, что звук 17.10: дефолт был жёстко "white", и две
+# независимые вкладки проставили белый подряд — 21 из 21 и до того 41 из 41 на
+# "pop". Значит лечится не дисциплиной, а дефолтом. Считается от номера сцены,
+# то есть детерминированно: пересборка даёт тот же набор, вид ролика от
+# прогона к прогону не пляшет. Ручной выбор на дашборде — как был.
+TEXT_COLOR_CYCLE = ("white", "yellow", "red", "green", "orange")
+
+
+def text_color_for(sid):
+    try:
+        return TEXT_COLOR_CYCLE[int(sid) % len(TEXT_COLOR_CYCLE)]
+    except (TypeError, ValueError):
+        return "white"
+
 
 def text_sound_for(sid):
     try:
@@ -516,7 +533,7 @@ def overlay_geom(sid, spec, photo_path=None, anchor="bottom"):
             "shape": shape, "scale": round(msc, 2), "pos": pos}
 
 
-def overlay_text_geom(tspec, png_path=None):
+def overlay_text_geom(tspec, png_path=None, sid=None):
     """Прямоугольник текст-всплывашки в кадре 1920x1080 — зеркалит
     build_overlays._apply_text_overlay (сетка 9, без seeded-раскладки)."""
     W, H = 1920, 1080
@@ -547,7 +564,8 @@ def overlay_text_geom(tspec, png_path=None):
             "wf": round(tw / W, 4), "hf": round(th / H, 4),
             "pos": pos, "pos_ru": f"{ru_y} {ru_x}",
             "words": tspec.get("words") or tspec.get("text") or "",
-            "color": tspec.get("color", "white")}
+            "color": tspec.get("color") or (text_color_for(sid) if sid is not None
+                                            else "white")}
 
 
 def sfx_list():
@@ -3144,9 +3162,10 @@ def run_live(scenes_path, images_dir, port):
                 words = " ".join(str(spec.get("words") or spec.get("text") or "").split()).strip()
                 if not words:
                     return self._reply(400, b"empty")
-                color = str(spec.get("color") or spec.get("tcolor") or "white").lower()
+                color = str(spec.get("color") or spec.get("tcolor")
+                            or text_color_for(sid)).lower()
                 if color not in TEXT_COLORS:
-                    color = "white"
+                    color = text_color_for(sid)
                 pos = str(spec.get("pos", "bc")).lower()
                 if not (len(pos) == 2 and pos[0] in "tmb" and pos[1] in "lcr"):
                     pos = "bc"
