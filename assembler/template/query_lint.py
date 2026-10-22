@@ -21,11 +21,15 @@
 Использование:
     python3 query_lint.py <scenes.json> [<overlays_fetch.scenes.json> ...]
     python3 query_lint.py --strict ...   # exit 1 при любом попадании
+    python3 query_lint.py --no-net ...   # без промера вложений по сети
 
 Exit 0 — чисто (или только мягкие замечания), exit 1 — есть мины.
 """
+import concurrent.futures
 import json
+import os
 import re
+import subprocess
 import sys
 
 # Слова, которые тянут задержание/насилие/документ/детей.
@@ -642,7 +646,105 @@ def scan_query(q, source):
     return mines, charts, has_object, is_real
 
 
-def lint(paths, strict=False):
+# --- ПРОМЕР ВЛОЖЕНИЙ ДО ФЕТЧА (2026-10-22, улов `usuario-5a`) ---------------
+# Видео из телеграм-вложений георадара СИСТЕМАТИЧЕСКИ бывает ниже 720p, и это
+# не исключение: аналитический сюжет про чужую внутреннюю политику цитируют
+# репост-паблики, а они жмут видео сильнее первоисточника. На ролике 5 МИНУТ
+# «Украина ссорится с Польшей» все ТРИ видео досье оказались 854x480 / 854x480
+# / 480x852 — ни одно не годится базовой сценой (апскейл 2,25x на 1920), и
+# узнаётся это только после фетча, когда план видео-лида уже построен.
+# Поэтому промер делает линтер: ffprobe читает ТОЛЬКО заголовок по сети, без
+# скачивания файла (~1-3 с на адрес, потоками). Порог тот же, что у фетчера
+# (`_DIRECT_MIN_BASE_H` в fetch_assets_news.py), чтобы код не разъезжался.
+_PROBE_MIN_BASE_H = 700          # базовой сцене нужно >=720p
+_PROBE_MIN_IMG = (500, 320)      # картинке — как в фетчере
+_PROBE_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+             "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+_PROBE_CACHE = {}
+
+
+def _probe_urls_of(query):
+    out = []
+    for chunk in (query or "").replace("|", " ").replace(",", " ").split():
+        c = chunk.strip().strip("<>\u00ab\u00bb\"'")
+        if c.startswith(("http://", "https://")):
+            out.append(c)
+    return out
+
+
+def _probe_one(url, timeout=25):
+    """(ширина, высота, длительность) или None, если промер не удался."""
+    if url in _PROBE_CACHE:
+        return _PROBE_CACHE[url]
+    res = None
+    try:
+        pr = subprocess.run(["ffprobe", "-v", "error",
+                             "-user_agent", _PROBE_UA,
+                             "-select_streams", "v:0",
+                             "-show_entries", "stream=width,height",
+                             "-show_entries", "format=duration",
+                             "-of", "default=nw=1:nk=1", url],
+                            capture_output=True, text=True, timeout=timeout)
+        vals = [x.strip() for x in (pr.stdout or "").splitlines() if x.strip()]
+        if pr.returncode == 0 and len(vals) >= 2:
+            w, h = int(float(vals[0])), int(float(vals[1]))
+            dur = 0.0
+            if len(vals) > 2:
+                try:
+                    dur = float(vals[2])
+                except ValueError:
+                    dur = 0.0
+            res = (w, h, dur)
+    except Exception:
+        res = None
+    _PROBE_CACHE[url] = res
+    return res
+
+
+def _probe_all(urls, workers=6):
+    todo = [u for u in dict.fromkeys(urls) if u not in _PROBE_CACHE]
+    if not todo:
+        return
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        list(ex.map(_probe_one, todo))
+
+
+def _probe_verdicts(sid, query, for_overlay):
+    """Печатает вердикты по вложениям сцены. Возвращает (мины, мягкие)."""
+    hard = soft = 0
+    for url in _probe_urls_of(query):
+        wh = _PROBE_CACHE.get(url)
+        tail = url[-48:]
+        if wh is None:
+            print("  [%3s] вложение не промерено (сеть/403) — проверь размер "
+                  "кадра после фетча: ...%s" % (sid, tail))
+            soft += 1
+            continue
+        w, h, dur = wh
+        is_video = dur >= 0.5
+        if is_video and not for_overlay and h < _PROBE_MIN_BASE_H:
+            print("  [%3s] МИНА: вложение %dx%d — базовой сцене нужно >=720p "
+                  "(иначе апскейл во весь экран) → во всплывашку либо ищи "
+                  "кадр иначе, в план видео-лида НЕ закладывать" % (sid, w, h))
+            print("        адрес: ...%s" % tail)
+            hard += 1
+        elif is_video and for_overlay and h < 360:
+            print("  [%3s] всплывашка-видео %dx%d — мелко даже для врезки: "
+                  "...%s" % (sid, w, h, tail))
+            soft += 1
+        elif not is_video and (w < _PROBE_MIN_IMG[0] or h < _PROBE_MIN_IMG[1]):
+            print("  [%3s] МИНА: вложение-картинка %dx%d — фетчер отклонит "
+                  "(<%dx%d): ...%s" % (sid, w, h, _PROBE_MIN_IMG[0],
+                                       _PROBE_MIN_IMG[1], tail))
+            hard += 1
+        else:
+            print("  [%3s] вложение %dx%d%s — годится%s" % (
+                sid, w, h, (", %.1f с" % dur) if is_video else "",
+                " базовой сценой" if is_video and not for_overlay else ""))
+    return hard, soft
+
+
+def lint(paths, strict=False, no_net=False):
     problems = 0
     soft = 0
     for p in paths:
@@ -653,6 +755,11 @@ def lint(paths, strict=False):
             problems += 1
             continue
         print("\n=== %s ===" % p)
+        for_overlay = "overlay" in os.path.basename(p).lower()
+        if not no_net:
+            _probe_all([u for sc in data.get("scenes", [])
+                        if sc.get("source") == "direct_url"
+                        for u in _probe_urls_of(sc.get("source_query", ""))])
         for s in data.get("scenes", []):
             src = s.get("source", "")
             q = s.get("source_query", "")
@@ -660,8 +767,17 @@ def lint(paths, strict=False):
                 continue  # карточка арсенала (card:quote и соседи, 2026-10-22):
                 # у неё вместо запроса ТЕКСТ ЦИТАТЫ, и линтер ловил бы в нём
                 # свои же мины («снос», «поезд») — кадр при этом рисуем мы сами
-            if src in ("local_library", "direct_url"):
-                continue  # путь к файлу или готовый http-адрес, не поисковый запрос
+            if src == "direct_url":
+                # адрес, а не запрос: мин в нём не ищем, но ПРОМЕРЯЕМ кадр —
+                # иначе план видео-лида строится на 854x480 (см. выше)
+                if not no_net:
+                    h_, s_ = _probe_verdicts(s.get("id"),
+                                             q, for_overlay)
+                    problems += h_
+                    soft += s_
+                continue
+            if src == "local_library":
+                continue  # путь к файлу, не поисковый запрос
                 # (direct_url добавлен 2026-10-20: адрес латиницей, и правило
                 #  «запросы только по-русски» ловило бы его как нарушение)
             if src in PEXELS:
@@ -718,4 +834,5 @@ if __name__ == "__main__":
     if not args:
         print(__doc__)
         sys.exit(2)
-    sys.exit(lint(args, strict="--strict" in sys.argv))
+    sys.exit(lint(args, strict="--strict" in sys.argv,
+                  no_net="--no-net" in sys.argv))
