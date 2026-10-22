@@ -1,0 +1,136 @@
+{
+  "anchor": "bottom",
+  "2": {
+    "photo": "overlays/scene_002.jpg",
+    "sound": "whoosh",
+    "at": 2.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "zatvor",
+    "at": 3.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "6": {
+    "photo": "overlays/scene_006.jpg",
+    "sound": "pop",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "25": {
+    "photo": "overlays/scene_025.jpg",
+    "sound": "whoosh",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "26": {
+    "photo": "overlays/scene_026.jpg",
+    "sound": "zatvor",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "30": {
+    "photo": "overlays/scene_030.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "top",
+    "approved": true
+  },
+  "42": {
+    "photo": "overlays/scene_042.jpg",
+    "sound": "zatvor",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "43": {
+    "photo": "overlays/scene_043.jpg",
+    "sound": "pop",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "bottom",
+    "approved": true
+  },
+  "47": {
+    "photo": "overlays/scene_047.jpg",
+    "sound": "whoosh",
+    "at": 5.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "57": {
+    "photo": "overlays/scene_057.jpg",
+    "sound": "pop",
+    "at": 5.2,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "70": {
+    "photo": "overlays/scene_070.jpg",
+    "sound": "whoosh",
+    "at": 5.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "78": {
+    "photo": "overlays/scene_078.jpg",
+    "sound": "zatvor",
+    "at": 3.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "83": {
+    "photo": "overlays/scene_083.jpg",
+    "sound": "zatvor",
+    "at": 4.1,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "top",
+    "approved": true
+  }
+}
