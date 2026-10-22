@@ -31,7 +31,17 @@
 (bullets, forces, timeline, карта) хватит своей рисовалки — сита править уже
 не придётся.
 """
-import argparse, json, os, shutil, subprocess, sys, time
+import argparse, fcntl, json, os, shutil, subprocess, sys, time
+
+# ПОЧЕМУ У КАРТОЧКИ НЕПУСТОЙ `source_query` (2026-10-22, улов `usuario-ec`):
+# гард облака «Check classification» считает scenes.json НЕклассифицированным,
+# если у сцены пусто в `source_query`, и прогон падал на setup за 5 секунд с
+# «scenes.json не классифицирован и секрета CLAUDE_CODE_OAUTH_TOKEN нет» —
+# то есть выглядело как проблема с токеном. Гард в .yml тоже научен
+# пропускать `card:*`, но данные держим самодостаточными: любое чужое сито,
+# проверяющее «пусто ли», на карточке больше не спотыкается. Содержимое не
+# читает никто: фетч и линтер смотрят только на `source.startswith("card")`.
+_CARD_QUERY = "карточка цитаты — кадр рисуется локально, фетч не нужен"
 
 SKILL = os.path.dirname(os.path.abspath(__file__))
 FULLCYCLE = os.path.join(os.path.dirname(SKILL), "fullcycle")
@@ -256,19 +266,41 @@ def main():
             moved.append(os.path.basename(p))
 
     # --- сцена и журнал ----------------------------------------------------
-    scene["source"] = "card:quote"
-    scene["source_query"] = ""
-    scene["card"] = {k: v for k, v in dict(
+    # ПЕРЕЧИТЫВАЕМ ФАЙЛ ПЕРЕД ЗАПИСЬЮ И ПРАВИМ ТОЛЬКО СВОЮ СЦЕНУ (2026-10-22,
+    # улов `usuario-ec`). Раньше писался объект, прочитанный при СТАРТЕ рендера:
+    # карточка держит его 30-60 секунд, и всё, что вкладка исправила в
+    # scenes.json за это время (переписанные по линтеру запросы соседних сцен),
+    # молча откатывалось. Живой случай: откатились 9 починенных мин, в облако
+    # уехали запросы с минами, ошибки не было ни одной — заметили только по
+    # тому, что линт вдруг снова дал те же 9 мин. Та же гонка между двумя
+    # карточками, запущенными фоном пачкой, поэтому ещё и замок на файл.
+    card = {k: v for k, v in dict(
         kind="quote_paper", text=a.text, accent=a.accent, kick=a.kick,
         title=a.title, author=a.author, src=a.source, watermark=watermark,
         anim=a.anim, seed=a.seed).items() if v not in ("", None)}
-    tmp = a.scenes + ".tmp"
-    json.dump(data, open(tmp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    os.replace(tmp, a.scenes)
+    scene["source"] = "card:quote"
+    scene["source_query"] = _CARD_QUERY
+    scene["card"] = card
 
-    journal[str(a.sid)] = dict(scene["card"], duration=dur, file=out_mp4,
-                               rendered=time.strftime("%Y-%m-%d %H:%M"))
-    json.dump(journal, open(jpath, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    lockp = os.path.join("cards", ".scenes.lock")
+    with open(lockp, "w") as lf:
+        fcntl.flock(lf, fcntl.LOCK_EX)
+        fresh = json.load(open(a.scenes, encoding="utf-8"))
+        fscenes = fresh["scenes"] if isinstance(fresh, dict) else fresh
+        tgt = next((x for x in fscenes if int(x.get("id", -1)) == a.sid), None)
+        if tgt is None:
+            _fail(2, f"сцена {a.sid} исчезла из {a.scenes}, пока шёл рендер")
+        tgt["source"] = "card:quote"
+        tgt["source_query"] = _CARD_QUERY
+        tgt["card"] = card
+        tmp = a.scenes + ".tmp"
+        json.dump(fresh, open(tmp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        os.replace(tmp, a.scenes)
+
+        journal = json.load(open(jpath, encoding="utf-8")) if os.path.isfile(jpath) else {}
+        journal[str(a.sid)] = dict(card, duration=dur, file=out_mp4,
+                                   rendered=time.strftime("%Y-%m-%d %H:%M"))
+        json.dump(journal, open(jpath, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
     print(f"готово за {took:.1f} с: {out_mp4} ({got:.2f} с), постер {poster}")
     if moved:

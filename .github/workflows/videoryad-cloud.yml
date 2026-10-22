@@ -111,9 +111,14 @@ jobs:
           # most scenes = the real script (ignore leftover retry*/r2.scenes.json)
           sc.sort(key=lambda q: (-len(json.load(open(q)).get("scenes", [])), len(os.path.basename(q))))
           d = json.load(open(sc[0]))
+          # card:* — кадр нарисован у нас локально (цитата-лоскут и соседи,
+          # 2026-10-22): запроса у него нет и быть не должно. Без этого
+          # исключения гард считал готовый scenes.json неклассифицированным и
+          # прогон падал на setup за 5 с, жалуясь на отсутствие токена Claude.
           bad = [s for s in d["scenes"]
-                 if not s.get("source") or not s.get("source_query")
-                 or str(s.get("source_query")).startswith("TODO")]
+                 if not str(s.get("source") or "").startswith("card")
+                 and (not s.get("source") or not s.get("source_query")
+                      or str(s.get("source_query")).startswith("TODO"))]
           print("no" if bad else "yes")
           PY
           )
