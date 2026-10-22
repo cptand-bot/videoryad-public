@@ -1,0 +1,100 @@
+{
+ "scenes": [
+  {
+   "id": 16,
+   "duration_sec": 12.16,
+   "text": "",
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Map of Ukraine Oblasts simple 4 colors.jpg",
+   "visual_prompt": "всплывашка к сцене 16"
+  },
+  {
+   "id": 21,
+   "duration_sec": 10.48,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Специализированной антикоррупционной прокуратуры Киев фотография здания",
+   "visual_prompt": "всплывашка к сцене 21"
+  },
+  {
+   "id": 22,
+   "duration_sec": 10.08,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/S3-G6itATMj81oZn_A2MgFSI2CRDlGIiDosCoDkHFKcRJXMVv9sICbcIiMTN_7qvwOsHZoT9zbQGo5fmVYH1hGVL_XEr8eOR0mpFJCym_V8mo5zWcW-OdMkaAaG-q8EHg0gIYB6wl7yyDxhXvyYaRXLJslhyZ7ftiDyYjlnVI1E280-GBmoXdRqoqywo5v04ILb2n7n5nyKC5OnMUrt_wLFf5H8oDMTs-Z0sM96MbTwIhcWrK_MPEmSR1uIaiJTtSByfCiXaVRGXSsqpgfhSQBRteQzhuEoHUTkJk_WyrEypai9g1ekJS0xE1FKfsLkOyJcQ9-OejM2FTvL-B9bPyQ.jpg",
+   "visual_prompt": "всплывашка к сцене 22"
+  },
+  {
+   "id": 32,
+   "duration_sec": 5.73,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп портрет 2026 реальное фото",
+   "visual_prompt": "всплывашка к сцене 32"
+  },
+  {
+   "id": 33,
+   "duration_sec": 9.43,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "колонна российской военной техники на марше реальное фото",
+   "visual_prompt": "всплывашка к сцене 33"
+  },
+  {
+   "id": 36,
+   "duration_sec": 12.65,
+   "text": "",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ИРАН/Iran locator in region (red on cream).png",
+   "visual_prompt": "карта Ирана с Ормузским проливом"
+  },
+  {
+   "id": 42,
+   "duration_sec": 12.96,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/coPPwal5W2afz1lFOSmq3y5EUSb0fO4qmSKt3zOq5Lv5myLmmJxpFku_dlFgJTS5wy5tn-lfRjhHo6RsU081Lm2x7A4g_96-FBKkGYMehwWRuQNjNH8ISQTNdSAPy43NNt9SmqgoBz42hFVcrmgUcx-Wz7EjfRwPrkSZhoxezU7syLevztq_REjuwvcbXtBOUna-SLXVYYvgbncS_40GIrPeZHILBJZAY2LhzogCbdxgdDoiFgE49TVWegfGLv1FyrFNbyQw6crcQDo9ERU1cQMQHaQ3-3YgWdWhcoX3fytx5mIETmqlqNLpv5fkE1YLHpdYjBiCm6XGH6ye0HhMEg.jpg",
+   "visual_prompt": "всплывашка к сцене 42"
+  },
+  {
+   "id": 47,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп в Белом доме за столом 2026 реальное фото",
+   "visual_prompt": "всплывашка к сцене 47"
+  },
+  {
+   "id": 59,
+   "duration_sec": 8.51,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Путин портрет 2026 реальное фото",
+   "visual_prompt": "всплывашка к сцене 59"
+  },
+  {
+   "id": 65,
+   "duration_sec": 8.24,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пограничный переход Украина Польша шлагбаум реальное фото",
+   "visual_prompt": "всплывашка к сцене 65"
+  },
+  {
+   "id": 70,
+   "duration_sec": 13.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Верховной Рады Украины фотография здания",
+   "visual_prompt": "всплывашка к сцене 70"
+  },
+  {
+   "id": 75,
+   "duration_sec": 12.32,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Стив Уиткофф на встрече в Москве реальное фото",
+   "visual_prompt": "всплывашка к сцене 75"
+  }
+ ]
+}
