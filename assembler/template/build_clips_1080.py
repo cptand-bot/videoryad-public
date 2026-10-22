@@ -32,6 +32,13 @@ def _threads_args():
 
 W, H, FPS = 1920, 1080, 30
 
+# Сцены-карточки арсенала (source «card:...»). На нарисованный нами кадр
+# эффекты НЕ КЛАДУТСЯ (2026-10-22): блик-пролёт по листу бумаги, зерно и
+# «дыхание» яркости на ровном бумажном поле читаются как брак печати, а не
+# как приём. Набор заполняется в main() из scenes.json; пустой — поведение
+# ровно прежнее.
+CARD_SIDS = set()
+
 
 def find_source(images_dir, sid):
     for ext in ("mp4", "mov", "png", "jpg", "jpeg", "webp"):
@@ -147,7 +154,7 @@ def _fx_dir():
 def _fx_chain(sid):
     """Фильтры эффектов для ОДНОЙ сцены, без ведущей запятой."""
     fx = _fx()
-    if not fx:
+    if not fx or sid in CARD_SIDS:
         return ""
     parts = []
     if fx.get("vignette"):
@@ -173,7 +180,7 @@ def _fx_layers(sid, duration):
     кадр уезжает в маджента (поймано 2026-10-16).
     """
     fx = _fx()
-    if sid < 0 or not fx:
+    if sid < 0 or not fx or sid in CARD_SIDS:
         return [], "", "vfx"
     ins, steps, cur = [], [], "vfx"
     idx = 1                                   # 0 — сам кадр
@@ -318,6 +325,12 @@ def main():
 
     with open(scenes_path, encoding="utf-8") as f:
         data = json.load(f)
+
+    CARD_SIDS.update(s["id"] for s in data["scenes"]
+                     if str(s.get("source", "")).startswith("card"))
+    if CARD_SIDS:
+        print("карточки арсенала (без эффектов): "
+              + ", ".join(str(i) for i in sorted(CARD_SIDS)))
 
     _wc = int(os.environ.get("WORKER_COUNT", "1"))
     _wk = int(os.environ.get("WORKER_ID", "0"))

@@ -656,6 +656,10 @@ def lint(paths, strict=False):
         for s in data.get("scenes", []):
             src = s.get("source", "")
             q = s.get("source_query", "")
+            if src.startswith("card"):
+                continue  # карточка арсенала (card:quote и соседи, 2026-10-22):
+                # у неё вместо запроса ТЕКСТ ЦИТАТЫ, и линтер ловил бы в нём
+                # свои же мины («снос», «поезд») — кадр при этом рисуем мы сами
             if src in ("local_library", "direct_url"):
                 continue  # путь к файлу или готовый http-адрес, не поисковый запрос
                 # (direct_url добавлен 2026-10-20: адрес латиницей, и правило

@@ -1745,6 +1745,17 @@ def main():
                     ok = fetch_stock_photo(query, env, out_path)
                 else:
                     ok = fetch_stock_video(query, env, out_path)
+            elif source.startswith("card"):
+                # ШТАТНАЯ ДВЕРЬ ДЛЯ АРСЕНАЛА ВТОРОГО СБОРЩИКА (2026-10-22).
+                # Источник вида «card:<вид>» означает: кадр рисуется У НАС
+                # (template/quote_card.py и будущие соседи), в сеть за ним
+                # ходить не надо и нечего. Файла нет — значит карточку просто
+                # ещё не отрисовали; это не ошибка классификации, и сцену не
+                # надо переклассифицировать в press_photo.
+                print(f"[{sid:03d}] {source}: кадр рисуется локально, фетч пропущен"
+                      + ("" if os.path.exists(out_path) else
+                         " — ФАЙЛА НЕТ, карточка ещё не нарисована"))
+                ok = os.path.exists(out_path)
             else:
                 print(f"[{sid:03d}] ERROR: unknown source '{source}' - news-video never generates, "
                       f"fix the scene's source classification instead")

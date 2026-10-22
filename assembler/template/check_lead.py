@@ -61,6 +61,12 @@ def _folder_video_ratio(rel):
 
 
 def is_video(s):
+    # КАРТОЧКА АРСЕНАЛА — НЕ ВИДЕО-ВСТАВКА (2026-10-22). Она приезжает готовым
+    # mp4 (так её берёт сборщик клипов), но норма видео-лида про ЖИВЫЕ кадры с
+    # места события. Нарисованный нами лоскут бумаги закрывал бы норму
+    # формально: «видео в первой трети есть» — а на экране статика.
+    if str(s.get("source", "")).startswith("card"):
+        return False
     hits = [p for p in glob.glob(os.path.join(img, f"scene_{s['id']:03d}.*"))
             if os.path.getsize(p) > 0 and not p.endswith(".json")]
     if hits:                                    # real asset on disk — authoritative
