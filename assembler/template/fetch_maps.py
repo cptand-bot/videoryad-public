@@ -19,6 +19,7 @@ of Ukraine») и кладём в медиатеку один раз, глаза�
 Использование:
     python3 fetch_maps.py <куда> [регион ...]     # по умолчанию все известные
     python3 fetch_maps.py --list                  # какие регионы знаю
+    python3 fetch_maps.py --check [папка КАРТЫ]   # проверить, что уже лежит
 """
 import json
 import os
@@ -42,20 +43,56 @@ UA = {"User-Agent": "news-video/0.1 (personal project)"}
 # равно за человеком, но смотреть он будет уже подсказанное.
 SAT_MIN = float(os.environ.get("MAPS_SAT_MIN", "1.0"))
 
+# ПОРОГ ПО ВСЕМУ КАДРУ ДАЁТ ЛОЖНОПОЛОЖИТЕЛЬНЫЕ (2026-10-22, улов `usuario-ad`:
+# из пяти библиотечных карт порог прошли четыре, глазами годны ДВЕ). Причина:
+# насыщенность набирают ГОЛУБАЯ ВОДА и цветные границы по всему кадру, а
+# решает подсветка САМОЙ СТРАНЫ. «Ближний Восток» 1,35% и «Китай» 1,98%
+# набрали проценты морем — страна на них не выделена вовсе.
+# Меряем два признака, карта годна, если сработал ХОТЬ ОДИН:
+#   центр кадра (средние 50%) насыщен — страна-герой всегда в центре;
+#   есть заметное КРАСНОЕ пятно — стандартная заливка локаторных карт.
+# Проверено на 25 файлах медиатеки: оба ложноположительных отсекаются,
+# все утверждённые пользователем карты проходят (включая 4-цветную
+# украинскую, у которой красного нет вовсе, но центр насыщен на 43%).
+CENTER_MIN = float(os.environ.get("MAPS_CENTER_MIN", "2.5"))
+RED_MIN = float(os.environ.get("MAPS_RED_MIN", "0.8"))
+
+
+def map_metrics(path):
+    """(насыщенность всего кадра, насыщенность центра, доля красного), %."""
+    from PIL import Image
+    im = Image.open(path).convert("HSV").resize((400, 225))
+    W, H = im.size
+    hb = im.split()[0].tobytes()
+    sb = im.split()[1].tobytes()
+    vb = im.split()[2].tobytes()
+    n = len(sb) or 1
+    sat = sum(1 for x in sb if x >= 100) / n * 100
+    red = sum(1 for i in range(n)
+              if (hb[i] <= 14 or hb[i] >= 241) and sb[i] >= 90 and vb[i] >= 70) / n * 100
+    c = im.crop((int(W * .25), int(H * .25), int(W * .75), int(H * .75)))
+    cs = c.split()[1].tobytes()
+    cn = len(cs) or 1
+    center = sum(1 for x in cs if x >= 100) / cn * 100
+    return sat, center, red
+
+
 def _flat_map_warning(path):
     """Вернуть текст предупреждения, если карта плоская (нет подсветки)."""
     try:
-        from PIL import Image
+        from PIL import Image  # noqa: F401
     except ImportError:
         return ""
     try:
-        h = Image.open(path).convert("HSV").split()[1].histogram()
-        n = sum(h) or 1
-        sat = sum(h[100:]) / n * 100
+        sat, center, red = map_metrics(path)
     except Exception:
         return ""
-    if sat < SAT_MIN:
-        return "  ВНИМАНИЕ: %s — насыщенных %.2f%% (< %.1f%%): похоже на плоский контур «светлое на светлом», во всплывашке не читается" % (os.path.basename(path), sat, SAT_MIN)
+    if center < CENTER_MIN and red < RED_MIN:
+        return ("  ВНИМАНИЕ: %s — центр %.2f%%, красного %.2f%% (нужно %.1f%% "
+                "или %.1f%%): страна на карте НЕ ПОДСВЕЧЕНА, это «светлое на "
+                "светлом». Общая насыщенность %.2f%% тут обманывает — её дают "
+                "вода и границы." % (os.path.basename(path), center, red,
+                                     CENTER_MIN, RED_MIN, sat))
     return ""
 
 WIDTH = 1600          # ширина растра, в который Commons рендерит svg
@@ -189,8 +226,37 @@ def rasters(titles):
     return out
 
 
+def check_dir(root):
+    """Прогнать метрики по готовой папке КАРТЫ и сказать, что снимать."""
+    bad = 0
+    for reg in sorted(os.listdir(root)):
+        d = os.path.join(root, reg)
+        if not os.path.isdir(d) or reg.startswith("_"):
+            continue
+        print("== %s" % reg)
+        for f in sorted(os.listdir(d)):
+            p = os.path.join(d, f)
+            if os.path.isdir(p):
+                continue
+            try:
+                sat, center, red = map_metrics(p)
+            except Exception as e:
+                print("   ? %s (%s)" % (f[:50], e))
+                continue
+            ok = center >= CENTER_MIN or red >= RED_MIN
+            if not ok:
+                bad += 1
+            print("   %s центр %6.2f%%  красного %5.2f%%  (весь %6.2f%%)  %s"
+                  % ("OK " if ok else "СНЯТЬ", center, red, sat, f[:46]))
+    print("\nплоских (снять): %d" % bad)
+    return 1 if bad else 0
+
+
 def main():
     argv = sys.argv[1:]
+    if argv and argv[0] == "--check":
+        return check_dir(argv[1] if len(argv) > 1
+                         else os.path.expanduser("~/projects/media-library/КАРТЫ"))
     if not argv or argv[0] == "--list":
         print("регионы:", ", ".join(REGIONS))
         return 0
