@@ -270,8 +270,23 @@ else:
         if not ph and has_txt:
             continue                       # чисто текст-всплывашка — фото не нужно
         if not os.path.exists(ph):
-            FAIL.append(f"всплывашка {k}: файла нет ({ph})")
-            continue
+            # ФАЙЛ МОЖЕТ ЛЕЖАТЬ С ДРУГИМ РАСШИРЕНИЕМ (2026-10-22, улов
+            # `usuario-92`): карта из медиатеки приезжает .png, а в
+            # overlays.json записан привычный .jpg. Сборка теперь такой путь
+            # разрешает сама, но сказать об этом надо — иначе разойдутся
+            # дашборд (показывает по записанному пути) и готовый ролик.
+            _alt = [c for c in sorted(glob.glob(os.path.splitext(ph)[0] + ".*"))
+                    if not c.endswith((".text.png", ".json")) and os.path.getsize(c) > 0]
+            if _alt:
+                WARN.append(f"всплывашка {k}: в overlays.json записан "
+                            f"{os.path.basename(ph)}, а на диске "
+                            f"{os.path.basename(_alt[0])} — сборка возьмёт "
+                            f"файл с диска, но на дашборде всплывашка может "
+                            f"не показаться. Поправь путь в overlays.json")
+                ph = _alt[0]
+            else:
+                FAIL.append(f"всплывашка {k}: файла нет ({ph})")
+                continue
         oh = hashlib.md5(open(ph, "rb").read()).hexdigest()
         bf = asset(int(k))
         if bf and hashlib.md5(open(bf[0], "rb").read()).hexdigest() == oh:

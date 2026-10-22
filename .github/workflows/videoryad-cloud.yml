@@ -168,9 +168,15 @@ jobs:
           python3 - "$sc" <<'PY'
           import json, sys
           d = json.load(open(sys.argv[1]))
+          # card:* — кадр рисуется у нас локально (цитата-лоскут и соседи):
+          # запроса у него нет и быть не должно. ВТОРАЯ такая проверка в этом
+          # файле (первая — «Check classification»), и 22.10 она роняла прогон
+          # на setup за 6 секунд: «still not classified: [9, 24, 42, 55, 67, 84]»
+          # — ровно шесть карточек. Чинить надо БЫЛО ОБЕ сразу.
           bad = [s["id"] for s in d["scenes"]
-                 if not s.get("source") or not s.get("source_query")
-                 or str(s.get("source_query")).startswith("TODO")]
+                 if not str(s.get("source") or "").startswith("card")
+                 and (not s.get("source") or not s.get("source_query")
+                      or str(s.get("source_query")).startswith("TODO"))]
           if bad:
               sys.exit(f"still not classified: {bad[:20]}")
           PY

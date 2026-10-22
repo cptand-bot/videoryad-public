@@ -85,7 +85,13 @@ REGIONS = {
     "ИРАН":           ["file:Iran in its region.svg", "file:Iran in Asia.svg"],
     "ИЗРАИЛЬ":        ["Blank maps of Israel"],
     "ГЕРМАНИЯ":       ["Blank maps of Germany"],
-    "ПОЛЬША":         ["Blank maps of Poland"],
+    # ПОЛЬША и ЧЕХИЯ — ТОЧЕЧНО, как Иран (2026-10-22, улов `usuario-92`):
+    # в обеих папках ВСЕ файлы оказались плоскими (0,00-0,38% насыщенности),
+    # то есть по правилу 19.10 карта не ставилась вовсе, хотя география в
+    # сценарии названа. Добраны локаторные «страна красным на кремовом»:
+    # Польша 7,02% (регион) и 3,47% (Европа), Чехия 4,15% и 2,33%.
+    "ПОЛЬША":         ["file:Poland in its region.svg",
+                       "file:Poland in Europe.svg"],
     "КИТАЙ":          ["Blank maps of China"],
     "БЕЛАРУСЬ":       ["Blank maps of Belarus"],
     "ВЕНЕСУЭЛА":      ["Blank maps of Venezuela"],
@@ -109,7 +115,8 @@ REGIONS = {
     # дозаведено 17.10 по дырам, найденным в бою
     "РУМЫНИЯ":        ["Blank maps of Romania"],
     "СЛОВАКИЯ":       ["Blank maps of Slovakia"],
-    "ЧЕХИЯ":          ["Blank maps of the Czech Republic"],
+    "ЧЕХИЯ":          ["file:Czech Republic in its region.svg",
+                       "file:Czechia in Europe.svg"],
     "БОЛГАРИЯ":       ["Blank maps of Bulgaria"],
     # --- ЗАПАДНЫЕ ЗЕМЛИ УКРАИНЫ, дозаведено 18.10 по дыре, найденной в бою ---
     # Повод (5min-okkupaciya-1910): четыре сцены подряд про исторические границы

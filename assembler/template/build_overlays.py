@@ -269,6 +269,32 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     return False
 
 
+def resolve_photo(path):
+    """Путь из overlays.json → реально лежащий файл.
+
+    ПОЛЕ В JSON НЕ РАВНО ФАЙЛУ НА ДИСКЕ (2026-10-22, улов `usuario-92`;
+    четвёртый случай этого класса за месяц). Карта из медиатеки приезжает с
+    РОДНЫМ расширением — `overlays/scene_033.png`, — а в `overlays.json`
+    вкладка пишет привычный `.jpg`. Файл есть, всплывашка пропадает молча:
+    `os.path.exists` даёт False, и сборка просто не рисует её.
+    Разрешаем по тому же имени с любым расширением (кроме служебного
+    `.text.png`, который рисует дашборд как свой предпросмотр).
+    """
+    if not path:
+        return ""
+    if os.path.exists(path):
+        return path
+    stem = os.path.splitext(path)[0]
+    for cand in sorted(glob.glob(stem + ".*")):
+        if cand.endswith(".text.png") or cand.endswith(".json"):
+            continue
+        if os.path.getsize(cand) > 0:
+            print(f"    всплывашка: в overlays.json указан {os.path.basename(path)}, "
+                  f"а на диске лежит {os.path.basename(cand)} — беру его", flush=True)
+            return cand
+    return ""
+
+
 def _src(images_dir, sid):
     for e in ("mp4", "png", "jpg"):
         p = os.path.join(images_dir, f"scene_{sid:03d}.{e}")
@@ -310,8 +336,8 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             sc_anchor = anchor
         clip = os.path.join(clips_dir, f"clip_{sid:03d}.mp4")
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
-        photo = spec.get("photo") or ""
-        photo_ok = bool(photo) and os.path.exists(photo)
+        photo = resolve_photo(spec.get("photo") or "")
+        photo_ok = bool(photo)
         # ВСПЛЫВАШКА МОЖЕТ БЫТЬ ВИДЕО (2026-10-21, просьба пользователя: «а
         # давай сделаем, чтобы поддерживал, будет веселее»).
         # Раньше тут видео принудительно сводилось к ОДНОМУ КАДРУ. Причина
@@ -540,7 +566,7 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
         sid = int(sid_s)
         if sid not in starts:
             continue
-        if spec.get("photo") and os.path.exists(spec["photo"]):
+        if resolve_photo(spec.get("photo") or ""):
             _add(sid, spec.get("sound", "whoosh"), spec.get("at", LEAD), "")
         ts = spec.get("text") if isinstance(spec.get("text"), dict) else None
         if ts and str(ts.get("words") or ts.get("text") or "").strip():

@@ -43,7 +43,14 @@ def _has_image(images_dir, sid):
 
 
 def needs_web_fetch(scene, images_dir):
-    if str(scene.get("source")) == "local_library":
+    src = str(scene.get("source") or "")
+    if src == "local_library":
+        return False
+    # card:* — кадр рисуем мы сами (цитата-лоскут и соседи по арсеналу,
+    # 2026-10-22). В шард такая сцена попадала и молча пропускалась уже в
+    # фетчере: шард тратился впустую, а в манифесте появлялась запись FAILED
+    # «карточка ещё не нарисована» — хотя mp4 лежит рядом и едет в сборку.
+    if src.startswith("card"):
         return False
     return not _has_image(images_dir, scene["id"])
 
