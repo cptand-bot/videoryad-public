@@ -1513,6 +1513,52 @@ def _accept_direct_photo(path, allow_text):
     return True, ""
 
 
+# --- ДВЕ БЕДЫ ВЛОЖЕНИЙ, КОТОРЫХ НЕ ВИДНО ПО РАЗРЕШЕНИЮ (2026-10-22, улов
+# `usuario-f1` на `ze-soglasen-2310`) ------------------------------------
+# 1. ТЕЛЕГРАМ ОТДАЁТ ОДИН И ТОТ ЖЕ ФАЙЛ НА РАЗНЫЕ ПОСТЫ. Адреса разные, md5
+#    один — в ролике получаются две сцены с одинаковым видео (сцены 1 и 17).
+#    Ловится только сверкой md5 между сценами, глазами на контактном листе
+#    видно уже поздно.
+# 2. ПЯТЬ ИЗ ШЕСТИ ВЛОЖЕНИЙ ОКАЗАЛИСЬ ЭФИРОМ FOX NEWS с плашкой «FOX NEWS
+#    ALERT» на весь низ и «LIVE» вверху. По правилу 19.10 эфирная плашка —
+#    брак (газета можно, эфир нет). Промер разрешения её не видит: на
+#    репост-пабликах такая плашка ровно такая же норма, как низкое качество.
+#    Лечится кропом, поэтому печатаем ГОТОВУЮ команду, а не просто ругань.
+_BROADCAST_TOKENS = ("live", "breaking", "alert", "news alert", "fox news",
+                     "cnn", "msnbc", "sky news", "bbc news", "прямой эфир",
+                     "срочно", "в эфире")
+_DIRECT_CROP_HINT = ("crop=in_w*0.72:in_h*0.72:in_w*0.14:in_h*0.08"
+                     ",scale=1920:-2")
+
+
+def _broadcast_banner(path, ffmpeg="ffmpeg"):
+    """Слова телевизионной плашки на кадре, или ''. Видео — по стоп-кадру."""
+    probe = path
+    tmp = ""
+    if os.path.splitext(path)[1].lower() in (".mp4", ".mov", ".webm"):
+        tmp = path + ".banner.jpg"
+        try:
+            subprocess.run([ffmpeg, "-y", "-v", "error", "-ss", "1", "-i", path,
+                            "-frames:v", "1", tmp],
+                           check=True, stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL, timeout=60)
+            probe = tmp
+        except Exception:
+            return ""
+    try:
+        _n, text = _ocr_words(probe)
+    except Exception:
+        text = ""
+    finally:
+        if tmp:
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
+    hits = [t for t in _BROADCAST_TOKENS if t in (text or "")]
+    return ", ".join(sorted(set(hits)))
+
+
 def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
     # `for_overlay` снимает ДВА ограничения базового кадра: порог «тяжёлый
     # текст» (скриншот публикации — законная всплывашка) и минимальное
@@ -1566,6 +1612,33 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
                 print(f"  [direct_url] фото ОТКЛОНЕНО ({why}): {url[:110]}",
                       flush=True)
                 continue
+        # ДУБЛЬ ПО СОДЕРЖИМОМУ: адреса разные, файл один и тот же
+        try:
+            _h5 = file_md5(path)
+        except OSError:
+            _h5 = ""
+        if _h5 and _h5 in _WEB_USED_MD5:
+            _wh = _WEB_USED_WHERE.get(_h5, "в этой сборке")
+            os.remove(path)
+            print(f"  [direct_url] ТОТ ЖЕ ФАЙЛ уже стоит {_wh} [md5 {_h5[:8]}] — "
+                  f"телеграм отдаёт одно вложение на разные посты. Беру "
+                  f"следующий адрес: {url[:110]}", flush=True)
+            continue
+        if _h5:
+            _WEB_USED_MD5.add(_h5)
+            _m = re.search(r"scene_(\d+)", os.path.basename(out_base or ""))
+            _WEB_USED_WHERE.setdefault(
+                _h5, ("сценой %d этой сборки" % int(_m.group(1))) if _m
+                else "в этой сборке")
+        # ПЛАШКА ЭФИРА: разрешение в порядке, а кадр всё равно брак
+        _ban = _broadcast_banner(path, ffmpeg)
+        if _ban:
+            print(f"  [direct_url] ВНИМАНИЕ: на кадре плашка эфира ({_ban}) — "
+                  f"по правилу 19.10 эфирный титр брак, газетный нет. Лечится "
+                  f"кропом, кадр НЕ отклоняю:", flush=True)
+            print(f"      ffmpeg -y -i {path} -vf \"{_DIRECT_CROP_HINT}\" "
+                  f"-c:a copy {path}.crop.mp4 && mv {path}.crop.mp4 {path}",
+                  flush=True)
         _remember_src(path, url)
         print(f"  [direct_url] {kind}: {os.path.basename(path)} <- {url[:110]}",
               flush=True)
