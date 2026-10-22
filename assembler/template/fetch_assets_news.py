@@ -1445,7 +1445,13 @@ def _direct_save_video(blob, out_base, ffmpeg="ffmpeg"):
     return out
 
 
-def _direct_save_image(blob, out_base):
+def _direct_save_image(blob, out_base, for_overlay=False):
+    # ПОРОГ РАЗМЕРА — ТОЛЬКО ДЛЯ БАЗОВОГО КАДРА (2026-10-22, улов `usuario-82`:
+    # потеряно 2 годных вложения из досье). Телеграм отдаёт картинки 500-800 px
+    # по длинной стороне, и для ВСПЛЫВАШКИ это норма: она занимает четверть
+    # экрана. Порог 500x320 от 18.10 считался под кадр во весь экран. Это тот
+    # же случай, что уже разобран с «тяжёлым текстом»: всплывашке свои мерки.
+    lim_w, lim_h = (300, 200) if for_overlay else (500, 320)
     tmp = out_base + ".raw"
     with open(tmp, "wb") as f:
         f.write(blob)
@@ -1453,7 +1459,7 @@ def _direct_save_image(blob, out_base):
     try:
         from PIL import Image
         im = Image.open(tmp); im.load()
-        if im.width < 500 or im.height < 320:
+        if im.width < lim_w or im.height < lim_h:
             os.remove(tmp)
             return ""
         im.convert("RGB").save(out, "JPEG", quality=90)
@@ -1603,9 +1609,11 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
                       flush=True)
                 continue
         else:
-            path = _direct_save_image(blob, out_base)
+            path = _direct_save_image(blob, out_base, for_overlay=for_overlay)
             if not path:
-                print(f"  [direct_url] фото мелкое или битое: {url[:110]}", flush=True)
+                print(f"  [direct_url] фото мелкое или битое "
+                      f"(порог {'300x200 для всплывашки' if for_overlay else '500x320 для базовой сцены'}): "
+                      f"{url[:110]}", flush=True)
                 continue
             okp, why = _accept_direct_photo(path, for_overlay)
             if not okp:
