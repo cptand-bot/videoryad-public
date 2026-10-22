@@ -34,6 +34,7 @@ Usage:
 import glob
 import json
 import os
+import re
 import shutil
 import sys
 import time
@@ -1648,7 +1649,28 @@ def main():
                       f"(фетч идёт по {len(_cur_ids)} сценам)", flush=True)
     except (OSError, ValueError):
         pass
+    # МЯГКИЙ ДЕДЛАЙН ШАРДА (2026-10-22, улов `usuario-ec` + разбор диспетчера).
+    # Облачный джоб фетча режется `timeout-minutes`, и при этом ТЕРЯЕТСЯ ВЕСЬ
+    # манифест шарда: сцены приезжают заглушками, а в отчёте их нет вовсе —
+    # отличить «фетч не добыл» от «шард не успел» было нечем. Замер живьём
+    # (olga-pub, прогон 39769452005): 6 шардов из 20 убиты ровно на 918 с =
+    # 15 минут таймаута, самый долгий успешный — 652 с. Теперь шард сам
+    # останавливается чуть раньше таймаута, ЗАПИСЫВАЕТ манифест и помечает
+    # недоделанные сцены честной причиной. Ноль = без дедлайна (локальный фетч).
+    _deadline = 0.0
+    try:
+        _dl = float(os.environ.get("FETCH_DEADLINE_SEC", "0") or 0)
+        if _dl > 0:
+            _deadline = time.time() + _dl
+            print(f"дедлайн шарда: {_dl:.0f} с — что не успеем, попадёт в "
+                  f"манифест как 'не успели до дедлайна'", flush=True)
+    except ValueError:
+        pass
+    _skipped_by_deadline = []
     for scene in data["scenes"]:
+        if _deadline and time.time() > _deadline:
+            _skipped_by_deadline.append(scene["id"])
+            continue
         sid = scene["id"]
         source = scene["source"]  # "local_library" | "wikimedia" | "press_photo" | "pexels_photo" | "pexels_video" | "direct_url"
         query = scene["source_query"]
@@ -1833,6 +1855,23 @@ def main():
         record_usage(usage_log, this_project, used_relpaths)
         print(f"usage log: recorded {len(used_relpaths)} library shots for '{this_project}'")
 
+    if _skipped_by_deadline:
+        _known = {m.get("id") for m in manifest}
+        for _sid in _skipped_by_deadline:
+            if _sid not in _known:
+                manifest.append({"id": _sid, "file": None, "source": "?",
+                                 "status": "FAILED", "url": "",
+                                 "reason": "не успели до дедлайна шарда — "
+                                           "запрос, скорее всего, в порядке, "
+                                           "нужен добор этой сцены"})
+        print("ДЕДЛАЙН ШАРДА: не дошли до %d сцен — %s. Запросы тут ни при чём, "
+              "нужен добор." % (len(_skipped_by_deadline),
+                                ", ".join(str(x) for x in _skipped_by_deadline)),
+              flush=True)
+        _mt = manifest_path + ".tmp"
+        with open(_mt, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, ensure_ascii=False, indent=2)
+        os.replace(_mt, manifest_path)
     failed = [m for m in manifest if m["status"] == "FAILED"]
     print(f"\nDone. {len(manifest)-len(failed)}/{len(manifest)} ok.")
     if failed:

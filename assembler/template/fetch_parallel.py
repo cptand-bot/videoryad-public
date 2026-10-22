@@ -137,8 +137,29 @@ def run(scenes_path, images_dir, env_path, k):
         done = len(glob.glob(os.path.join(images_dir, "scene_*.*")))
         print(f"[parallel] {time.strftime('%H:%M:%S')} кадры ~{done}/{total}", flush=True)
         time.sleep(20)
-    for p in procs:
-        p.wait()
+    # ПАДЕНИЕ ВОРКЕРА — ГРОМКО (2026-10-22, улов `usuario-ec`; тот же класс
+    # ловился 18.10 и вернулся). Коды возврата не проверялись вовсе: воркер
+    # падал с трейсбеком в свой `.shardN.log`, манифеста шарда не появлялось, и
+    # итоговая строка печатала «готово: 0/28 FAILED=[]» — пустой список провалов
+    # при нулевом коде читается как «всё уже на месте». Живой случай: добор на
+    # 28 сцен отработал за секунду и не скачал НИЧЕГО (NameError на `re`),
+    # поймано только сверкой числа файлов глазами.
+    _dead = []
+    for i, p in enumerate(procs):
+        rc = p.wait()
+        if rc != 0:
+            _dead.append((i, rc))
+    for i, rc in _dead:
+        lg = os.path.join(images_dir, f".shard{i}.log")
+        print(f"[parallel] !! ВОРКЕР shard{i} УПАЛ, код {rc} — его сцены НЕ "
+              f"фетчились. Хвост {lg}:", flush=True)
+        try:
+            with open(lg, encoding="utf-8", errors="replace") as f:
+                tail = f.read().splitlines()[-15:]
+            for ln in tail:
+                print("        " + ln, flush=True)
+        except OSError as e:
+            print(f"        (лог не прочитать: {e})", flush=True)
 
     merge_manifests(images_dir, scenes)
     repaired = repair_collisions(scenes_path, images_dir, env_path)
@@ -148,6 +169,18 @@ def run(scenes_path, images_dir, env_path, k):
     m = json.load(open(os.path.join(images_dir, "manifest.json"), encoding="utf-8"))
     failed = sorted(x["id"] for x in m if x["status"] == "FAILED")
     print(f"[parallel] готово: {len(m)}/{total}  FAILED={failed}", flush=True)
+    # СЦЕНЫ, ПО КОТОРЫМ НЕТ ЗАПИСИ ВОВСЕ — это не «не нашлось», а «не фетчили»
+    _no_rec = sorted({s["id"] for s in scenes} - {x.get("id") for x in m})
+    if _no_rec:
+        print(f"[parallel] !! БЕЗ ЗАПИСИ В МАНИФЕСТЕ {len(_no_rec)} сцен: "
+              f"{_no_rec} — их воркер не обработал (упал или не успел). "
+              f"Запросы тут ни при чём, нужен добор именно этих сцен.",
+              flush=True)
+    if _dead or _no_rec:
+        print(f"[parallel] итог: НЕУСПЕХ — упавших воркеров {len(_dead)}, "
+              f"сцен без записи {len(_no_rec)}", flush=True)
+        return 1
+    return 0
 
 
 def merge_manifests(images_dir, scenes):
@@ -211,4 +244,6 @@ if __name__ == "__main__":
         print("usage: fetch_parallel.py <scenes.json> <images-dir> <.env> [K=5]")
         sys.exit(1)
     K = int(sys.argv[4]) if len(sys.argv) > 4 else 5
-    run(sys.argv[1], sys.argv[2], sys.argv[3], K)
+    # код возврата ненулевой при упавшем воркере — `refetch.py` его УЖЕ
+    # проверяет и печатает «ФЕТЧ УПАЛ», просто получать было нечего
+    sys.exit(run(sys.argv[1], sys.argv[2], sys.argv[3], K) or 0)
