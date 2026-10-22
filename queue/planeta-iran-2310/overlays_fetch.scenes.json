@@ -1,0 +1,124 @@
+{
+ "scenes": [
+  {
+   "id": 2,
+   "text": "",
+   "duration_sec": 7.98,
+   "source": "local_library",
+   "source_query": "КАРТЫ/ИРАН/Iran locator in region (red on cream).png",
+   "visual_prompt": "всплывашка к сцене 2"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "duration_sec": 10.16,
+   "source": "press_photo",
+   "source_query": "иранский ударный беспилотник Шахед на пусковой установке реальное фото",
+   "visual_prompt": "всплывашка к сцене 5"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 14.99,
+   "source": "press_photo",
+   "source_query": "Дональд Трамп в Белом доме октябрь 2026 реальное фото",
+   "visual_prompt": "всплывашка к сцене 6"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 12.95,
+   "source": "press_photo",
+   "source_query": "Муаммар Каддафи лидер Ливии реальное фото",
+   "visual_prompt": "всплывашка к сцене 25"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "duration_sec": 14.96,
+   "source": "press_photo",
+   "source_query": "Саддам Хусейн президент Ирака реальное фото",
+   "visual_prompt": "всплывашка к сцене 26"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 14.92,
+   "source": "local_library",
+   "source_query": "КАРТЫ/БЛИЖНИЙ ВОСТОК/Western Asia location map.jpg",
+   "visual_prompt": "всплывашка к сцене 29"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "duration_sec": 8.71,
+   "source": "press_photo",
+   "source_query": "автомобильный мост через реку в Иране реальное фото",
+   "visual_prompt": "всплывашка к сцене 30"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 13.84,
+   "source": "press_photo",
+   "source_query": "израильский танк Меркава на позиции реальное фото",
+   "visual_prompt": "всплывашка к сцене 42"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 13.36,
+   "source": "press_photo",
+   "source_query": "американский ракетный эсминец в Персидском заливе реальное фото",
+   "visual_prompt": "всплывашка к сцене 43"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "duration_sec": 14.22,
+   "source": "press_photo",
+   "source_query": "нефтеперерабатывающий завод Абкаик Саудовская Аравия реальное фото",
+   "visual_prompt": "всплывашка к сцене 47"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 8.81,
+   "source": "local_library",
+   "source_query": "КАРТЫ/США/Blank map of the United States.jpg",
+   "visual_prompt": "всплывашка к сцене 52"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 14.8,
+   "source": "press_photo",
+   "source_query": "наследный принц Саудовской Аравии Мохаммед бин Салман реальное фото",
+   "visual_prompt": "всплывашка к сцене 57"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "duration_sec": 14.36,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg",
+   "visual_prompt": "всплывашка к сцене 70"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "duration_sec": 13.84,
+   "source": "press_photo",
+   "source_query": "украинский ударный беспилотник дальнего радиуса реальное фото",
+   "visual_prompt": "всплывашка к сцене 75"
+  },
+  {
+   "id": 78,
+   "text": "",
+   "duration_sec": 10.22,
+   "source": "local_library",
+   "source_query": "КАРТЫ/КИТАЙ/China-equirect.jpg",
+   "visual_prompt": "всплывашка к сцене 78"
+  }
+ ]
+}

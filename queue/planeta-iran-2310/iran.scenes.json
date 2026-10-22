@@ -1,0 +1,808 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 14.75,
+   "visual_prompt": "грабли как сквозной образ текста",
+   "source": "pexels_video",
+   "source_query": "garden rake on dry ground autumn leaves no people"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 14.75,
+   "duration_sec": 7.98,
+   "visual_prompt": "парад КСИР",
+   "source": "press_photo",
+   "source_query": "военный парад Корпуса стражей исламской революции Тегеран реальное фото"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 22.73,
+   "duration_sec": 12.43,
+   "visual_prompt": "авианосец США",
+   "source": "press_photo",
+   "source_query": "американский авианосец в Персидском заливе реальное фото"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 35.16,
+   "duration_sec": 13.92,
+   "visual_prompt": "Пентагон",
+   "source": "press_photo",
+   "source_query": "здание Пентагона Вашингтон реальное фото"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 49.08,
+   "duration_sec": 10.16,
+   "visual_prompt": "ядерный объект Ирана",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИРАН/иран (1).jpg"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 59.24,
+   "duration_sec": 14.99,
+   "visual_prompt": "авиация Израиля",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИЗРАИЛЬ/Screenshot_12.jpg"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 74.23,
+   "duration_sec": 6.61,
+   "visual_prompt": "Конгресс США",
+   "source": "press_photo",
+   "source_query": "Капитолий здание Конгресса США Вашингтон реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 80.84,
+   "duration_sec": 13.51,
+   "visual_prompt": "радарный экран",
+   "source": "pexels_video",
+   "source_query": "military command center screens dark room no people"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 94.36,
+   "duration_sec": 12.75,
+   "visual_prompt": "ракета Ирана",
+   "source": "press_photo",
+   "source_query": "иранская баллистическая ракета на пусковой установке реальное фото"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 107.11,
+   "duration_sec": 12.32,
+   "visual_prompt": "карточка разбора: официальная логика",
+   "source": "card:bullets",
+   "source_query": ""
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 119.43,
+   "duration_sec": 13.53,
+   "visual_prompt": "Хаменеи",
+   "source": "press_photo",
+   "source_query": "Али Хаменеи верховный лидер Ирана портрет реальное фото"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 132.96,
+   "duration_sec": 10.67,
+   "visual_prompt": "ПВО Ирана",
+   "source": "press_photo",
+   "source_query": "иранская зенитная установка на позиции в пустыне 2026 реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 143.62,
+   "duration_sec": 10.49,
+   "visual_prompt": "правительство Ирана",
+   "source": "press_photo",
+   "source_query": "здание правительства Ирана в Тегеране реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 154.11,
+   "duration_sec": 14.11,
+   "visual_prompt": "строй КСИР",
+   "source": "press_photo",
+   "source_query": "военнослужащие Корпуса стражей исламской революции строй реальное фото"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 168.22,
+   "duration_sec": 14.69,
+   "visual_prompt": "Тегеран",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИРАН/Screenshot_4 (2).jpg"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 182.91,
+   "duration_sec": 13.08,
+   "visual_prompt": "ЦРУ",
+   "source": "press_photo",
+   "source_query": "штаб-квартира ЦРУ Лэнгли здание реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 195.99,
+   "duration_sec": 6.58,
+   "visual_prompt": "флаг Ирана",
+   "source": "press_photo",
+   "source_query": "иранский флаг на здании в Тегеране реальное фото"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 202.58,
+   "duration_sec": 6.2,
+   "visual_prompt": "Белый дом",
+   "source": "press_photo",
+   "source_query": "Белый дом западное крыло вход флаги реальное фото"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 208.78,
+   "duration_sec": 12.14,
+   "visual_prompt": "центрифуги",
+   "source": "press_photo",
+   "source_query": "центрифуги обогащения урана на иранском заводе реальное фото"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 220.91,
+   "duration_sec": 15.33,
+   "visual_prompt": "парад КНДР",
+   "source": "press_photo",
+   "source_query": "военный парад в Пхеньяне ракеты реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 236.24,
+   "duration_sec": 6.48,
+   "visual_prompt": "Ким Чен Ын",
+   "source": "press_photo",
+   "source_query": "Ким Чен Ын руководитель КНДР реальное фото"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 242.72,
+   "duration_sec": 14.96,
+   "visual_prompt": "ракета КНДР",
+   "source": "press_photo",
+   "source_query": "северокорейская баллистическая ракета на пусковой установке реальное фото"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 257.68,
+   "duration_sec": 12.9,
+   "visual_prompt": "ДМЗ Кореи",
+   "source": "press_photo",
+   "source_query": "демилитаризованная зона между Кореями Пханмунджом реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 270.58,
+   "duration_sec": 9.91,
+   "visual_prompt": "МАГАТЭ",
+   "source": "press_photo",
+   "source_query": "здание МАГАТЭ в Вене реальное фото"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 280.5,
+   "duration_sec": 12.95,
+   "visual_prompt": "Ирак 2003",
+   "source": "press_photo",
+   "source_query": "американские танки в Багдаде 2003 реальное фото"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 293.44,
+   "duration_sec": 14.96,
+   "visual_prompt": "Ливия 2011",
+   "source": "press_photo",
+   "source_query": "разрушенное здание в Триполи Ливия 2011 реальное фото"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 308.4,
+   "duration_sec": 12.75,
+   "visual_prompt": "Меджлис",
+   "source": "press_photo",
+   "source_query": "зал заседаний парламента Ирана Меджлис Тегеран реальное фото"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 321.15,
+   "duration_sec": 5.58,
+   "visual_prompt": "карточка цитаты",
+   "source": "card:quote",
+   "source_query": ""
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 326.73,
+   "duration_sec": 14.92,
+   "visual_prompt": "Трамп",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп выступление в Белом доме 2026 реальное фото"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 341.65,
+   "duration_sec": 8.71,
+   "visual_prompt": "ЛЭП",
+   "source": "pexels_video",
+   "source_query": "high voltage power transmission lines sunset no people"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 350.36,
+   "duration_sec": 12.01,
+   "visual_prompt": "мечеть Тегерана",
+   "source": "press_photo",
+   "source_query": "мечеть в Тегеране минареты реальное фото"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 362.37,
+   "duration_sec": 14.64,
+   "visual_prompt": "мавзолей Мешхед",
+   "source": "press_photo",
+   "source_query": "мавзолей имама Резы в Мешхеде Иран реальное фото"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 377.01,
+   "duration_sec": 13.15,
+   "visual_prompt": "мемориал",
+   "source": "press_photo",
+   "source_query": "мемориальный монумент павшим воинам в Тегеране реальное фото"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 390.15,
+   "duration_sec": 12.56,
+   "visual_prompt": "купол мечети",
+   "source": "press_photo",
+   "source_query": "золотой купол мечети в Иране реальное фото"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 402.71,
+   "duration_sec": 13.2,
+   "visual_prompt": "командование Ирана",
+   "source": "press_photo",
+   "source_query": "заседание военного командования Ирана реальное фото"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 415.91,
+   "duration_sec": 13.68,
+   "visual_prompt": "минобороны Ирана",
+   "source": "press_photo",
+   "source_query": "здание министерства обороны Ирана Тегеран реальное фото"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 429.59,
+   "duration_sec": 7.68,
+   "visual_prompt": "Тегеран и горы",
+   "source": "press_photo",
+   "source_query": "панорама Тегерана с горами Эльбурс реальное фото"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 437.27,
+   "duration_sec": 14.4,
+   "visual_prompt": "Пезешкиан",
+   "source": "press_photo",
+   "source_query": "Масуд Пезешкиан президент Ирана реальное фото"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 451.67,
+   "duration_sec": 14.03,
+   "visual_prompt": "кварталы Тегерана",
+   "source": "press_photo",
+   "source_query": "жилые кварталы Тегерана с высоты реальное фото"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 465.7,
+   "duration_sec": 8.01,
+   "visual_prompt": "карточка расстановки сил",
+   "source": "card:forces",
+   "source_query": ""
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 473.71,
+   "duration_sec": 12.31,
+   "visual_prompt": "палуба авианосца",
+   "source": "press_photo",
+   "source_query": "палуба американского авианосца самолёты реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 486.02,
+   "duration_sec": 13.84,
+   "visual_prompt": "B-2",
+   "source": "press_photo",
+   "source_query": "американский стратегический бомбардировщик B-2 в полёте реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 499.86,
+   "duration_sec": 13.36,
+   "visual_prompt": "катер Ирана",
+   "source": "press_photo",
+   "source_query": "иранский военный катер в Персидском заливе реальное фото"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 513.22,
+   "duration_sec": 14.84,
+   "visual_prompt": "танкер в Ормузе",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИРАН/Screenshot_8.jpg"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 528.06,
+   "duration_sec": 12.48,
+   "visual_prompt": "нефтяная качалка",
+   "source": "pexels_video",
+   "source_query": "oil pump jack silhouette sunset no people"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 540.54,
+   "duration_sec": 11.54,
+   "visual_prompt": "танкер в море",
+   "source": "pexels_video",
+   "source_query": "oil tanker ship sailing open sea aerial no people"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 552.08,
+   "duration_sec": 14.22,
+   "visual_prompt": "Резаи",
+   "source": "press_photo",
+   "source_query": "Мохсен Резаи секретарь Высшего совета национальной безопасности Ирана реальное фото"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 566.3,
+   "duration_sec": 14.88,
+   "visual_prompt": "ЦОД",
+   "source": "press_photo",
+   "source_query": "серверные стойки в дата-центре реальное фото"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 581.18,
+   "duration_sec": 14.59,
+   "visual_prompt": "салон автомобиля",
+   "source": "pexels_video",
+   "source_query": "luxury car interior dashboard closeup no people"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 595.77,
+   "duration_sec": 13.57,
+   "visual_prompt": "деталь двигателя",
+   "source": "pexels_video",
+   "source_query": "car engine bay metal parts closeup no people"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 609.34,
+   "duration_sec": 13.72,
+   "visual_prompt": "пусковая Ирана",
+   "source": "press_photo",
+   "source_query": "пусковая установка иранской ракеты в пустыне реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 623.06,
+   "duration_sec": 8.81,
+   "visual_prompt": "порт Ирана",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИРАН/иран (4).jpg"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 631.87,
+   "duration_sec": 12.5,
+   "visual_prompt": "оптоволокно",
+   "source": "pexels_video",
+   "source_query": "fiber optic cables glowing data transfer no people"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 644.37,
+   "duration_sec": 6.85,
+   "visual_prompt": "подводный кабель",
+   "source": "press_photo",
+   "source_query": "прокладка подводного кабеля связи судно реальное фото"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 651.22,
+   "duration_sec": 6.48,
+   "visual_prompt": "база США Катар",
+   "source": "press_photo",
+   "source_query": "американская военная база Аль-Удейд в Катаре реальное фото"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 657.7,
+   "duration_sec": 13.13,
+   "visual_prompt": "контейнерный порт",
+   "source": "pexels_video",
+   "source_query": "container ship port crane loading no people"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 670.82,
+   "duration_sec": 14.8,
+   "visual_prompt": "Нетаньяху",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИЗРАИЛЬ/Screenshot_17.jpg"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 685.62,
+   "duration_sec": 9.4,
+   "visual_prompt": "группа кораблей США",
+   "source": "press_photo",
+   "source_query": "американская авианосная ударная группа USS Theodore Roosevelt в море реальное фото"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 695.03,
+   "duration_sec": 14.08,
+   "visual_prompt": "флаги США и Израиля",
+   "source": "press_photo",
+   "source_query": "флаги США и Израиля на официальной встрече реальное фото"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 709.11,
+   "duration_sec": 12.35,
+   "visual_prompt": "карточка разбора: чего добиваются",
+   "source": "card:bullets",
+   "source_query": ""
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 721.46,
+   "duration_sec": 6.68,
+   "visual_prompt": "Кнессет",
+   "source": "press_photo",
+   "source_query": "здание Кнессета в Иерусалиме реальное фото"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 728.14,
+   "duration_sec": 13.61,
+   "visual_prompt": "Иерусалим",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ИЗРАИЛЬ/иерусалим (2).jpg"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 741.75,
+   "duration_sec": 14.8,
+   "visual_prompt": "ВВС Израиля",
+   "source": "press_photo",
+   "source_query": "израильские истребители в небе над авиабазой реальное фото"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 756.55,
+   "duration_sec": 15.72,
+   "visual_prompt": "разрушенный цех",
+   "source": "press_photo",
+   "source_query": "разрушенный промышленный объект в Иране 2026 реальное фото"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 772.27,
+   "duration_sec": 9.89,
+   "visual_prompt": "техника КСИР",
+   "source": "press_photo",
+   "source_query": "парад Корпуса стражей исламской революции военная техника реальное фото"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 782.16,
+   "duration_sec": 10.5,
+   "visual_prompt": "Госдеп",
+   "source": "press_photo",
+   "source_query": "здание Госдепартамента США Вашингтон реальное фото"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 792.66,
+   "duration_sec": 13.19,
+   "visual_prompt": "Кремль",
+   "source": "press_photo",
+   "source_query": "Московский Кремль Спасская башня реальное фото"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 805.85,
+   "duration_sec": 12.66,
+   "visual_prompt": "саммит СНГ",
+   "source": "press_photo",
+   "source_query": "саммит СНГ в Ашхабаде Туркменистан 2026 реальное фото"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 818.51,
+   "duration_sec": 6.76,
+   "visual_prompt": "Путин и Пезешкиан",
+   "source": "press_photo",
+   "source_query": "Владимир Путин и Масуд Пезешкиан встреча реальное фото"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 825.27,
+   "duration_sec": 14.36,
+   "visual_prompt": "НПЗ России",
+   "source": "press_photo",
+   "source_query": "российский нефтеперерабатывающий завод установки реальное фото"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 839.63,
+   "duration_sec": 9.39,
+   "visual_prompt": "Трамп и пресса",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп общается с прессой в Белом доме 2026 реальное фото"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 849.02,
+   "duration_sec": 11.71,
+   "visual_prompt": "Лавров",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров МИД России пресс-конференция 2026 реальное фото"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 860.73,
+   "duration_sec": 13.97,
+   "visual_prompt": "С-400",
+   "source": "press_photo",
+   "source_query": "российская зенитная установка С-400 на позиции реальное фото"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 874.7,
+   "duration_sec": 5.76,
+   "visual_prompt": "цистерны",
+   "source": "press_photo",
+   "source_query": "нефтеналивные цистерны на эстакаде реальное фото"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "start_sec": 880.46,
+   "duration_sec": 13.84,
+   "visual_prompt": "пожар на НПЗ",
+   "source": "press_photo",
+   "source_query": "пожар на нефтеперерабатывающем заводе в России реальное фото"
+  },
+  {
+   "id": 76,
+   "text": "",
+   "start_sec": 894.3,
+   "duration_sec": 12.64,
+   "visual_prompt": "Путин",
+   "source": "press_photo",
+   "source_query": "Владимир Путин на совещании в Кремле 2026 реальное фото"
+  },
+  {
+   "id": 77,
+   "text": "",
+   "start_sec": 906.94,
+   "duration_sec": 6.7,
+   "visual_prompt": "транспортник РФ",
+   "source": "press_photo",
+   "source_query": "российский военно-транспортный самолёт на аэродроме реальное фото"
+  },
+  {
+   "id": 78,
+   "text": "",
+   "start_sec": 913.64,
+   "duration_sec": 10.22,
+   "visual_prompt": "Си Цзиньпин",
+   "source": "press_photo",
+   "source_query": "Си Цзиньпин председатель КНР реальное фото"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "start_sec": 923.86,
+   "duration_sec": 12.48,
+   "visual_prompt": "карточка хронологии",
+   "source": "card:timeline",
+   "source_query": ""
+  },
+  {
+   "id": 80,
+   "text": "",
+   "start_sec": 936.34,
+   "duration_sec": 14.4,
+   "visual_prompt": "нефтяной терминал",
+   "source": "press_photo",
+   "source_query": "нефтяной терминал в порту Персидского залива реальное фото"
+  },
+  {
+   "id": 81,
+   "text": "",
+   "start_sec": 950.74,
+   "duration_sec": 13.76,
+   "visual_prompt": "учения Ирана",
+   "source": "press_photo",
+   "source_query": "иранские военные учения пуск ракеты реальное фото"
+  },
+  {
+   "id": 82,
+   "text": "",
+   "start_sec": 964.5,
+   "duration_sec": 14.24,
+   "visual_prompt": "офицеры Ирана",
+   "source": "press_photo",
+   "source_query": "иранские офицеры на командном пункте реальное фото"
+  },
+  {
+   "id": 83,
+   "text": "",
+   "start_sec": 978.74,
+   "duration_sec": 11.81,
+   "visual_prompt": "B-52",
+   "source": "press_photo",
+   "source_query": "американский бомбардировщик B-52 на авиабазе реальное фото"
+  },
+  {
+   "id": 84,
+   "text": "",
+   "start_sec": 990.55,
+   "duration_sec": 13.57,
+   "visual_prompt": "корабль Ирана в Ормузе",
+   "source": "press_photo",
+   "source_query": "иранский военный корабль в Ормузском проливе реальное фото"
+  },
+  {
+   "id": 85,
+   "text": "",
+   "start_sec": 1004.13,
+   "duration_sec": 14.03,
+   "visual_prompt": "юбилейная медаль",
+   "source": "pexels_video",
+   "source_query": "military medal on dark fabric closeup no people"
+  },
+  {
+   "id": 86,
+   "text": "",
+   "start_sec": 1018.15,
+   "duration_sec": 13.2,
+   "visual_prompt": "минобороны Израиля",
+   "source": "press_photo",
+   "source_query": "здание министерства обороны Израиля Тель-Авив реальное фото"
+  },
+  {
+   "id": 87,
+   "text": "",
+   "start_sec": 1031.35,
+   "duration_sec": 13.04,
+   "visual_prompt": "карточка цитаты финал",
+   "source": "card:quote",
+   "source_query": ""
+  },
+  {
+   "id": 88,
+   "text": "",
+   "start_sec": 1044.39,
+   "duration_sec": 7.96,
+   "visual_prompt": "корабли в Заливе",
+   "source": "press_photo",
+   "source_query": "военные корабли в Персидском заливе на закате реальное фото"
+  }
+ ],
+ "channel": "ПЛАНЕТА",
+ "context": "Ролик ПЛАНЕТЫ, октябрь 2026. США и Израиль готовят новый удар по Ирану. Стороны: США (Трамп, Пентагон, ЦРУ), Израиль (Нетаньяху), Иран (КСИР, президент Пезешкиан, секретарь СНБ Резаи; верховный лидер Хаменеи убит в кампании начала 2026), Россия (Путин, Лавров), Китай, Саудовская Аравия, КНДР как пример сравнения. Физически: Иран (Тегеран, ядерные объекты Натанз), Ормузский пролив и Персидский залив, Вашингтон, Тель-Авив и Иерусалим, Москва, Ашхабад (саммит СНГ 10.10.2026). Узел: цель операции не объекты, а смена статуса Ирана как самостоятельного центра силы; Иран после кампании 2026 стал жёстче, Ормуз и нефть - его рычаг (Brent выше 112 долл. 22.10.2026). Время: окно удара после 3 ноября 2026 (выборы в Конгресс США). Финал: одна сторона дожимает, другая не отступает - будет хуже. Чувство: тревожная предопределённость, повторяющиеся грабли.",
+ "lines": [
+  "американская военная машина (авианосцы ВМС США, B-2 и B-52, база Аль-Удейд в Катаре, Пентагон)",
+  "американская власть (Белый дом, Трамп, Капитолий и выборы в Конгресс, ЦРУ, Госдеп)",
+  "израильская власть и армия (Нетаньяху, Кнессет, ВВС Израиля F-35, Иерусалим, минобороны в Тель-Авиве)",
+  "иранская власть и военная система (КСИР и его парады, Пезешкиан, Резаи, Хаменеи только о прошлом, Меджлис, ядерные объекты, ПВО Ирана, Тегеран)",
+  "ормузско-нефтяной слой (Ормузский пролив, танкеры, Персидский залив, НПЗ Саудовской Аравии, порт Бендер-Аббас, нефтяные терминалы)",
+  "российская власть (Кремль, Путин, Лавров, саммит СНГ в Ашхабаде, российские НПЗ и дизель)",
+  "цифровая и морская инфраструктура как новые цели (кабели связи, ЦОД, оптоволокно, контейнерные порты)"
+ ],
+ "library": "ПЛАНЕТА (медиатека открыта, потолок 20%)"
+}
