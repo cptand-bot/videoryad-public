@@ -1,0 +1,76 @@
+{
+ "scenes": [
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 12.08,
+   "visual_prompt": "Владимир Зеленский выступление октябрь 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский выступление октябрь 2026 реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "duration_sec": 13.2,
+   "visual_prompt": "Спасская башня Московского Кремля реальное фото",
+   "source": "press_photo",
+   "source_query": "Спасская башня Московского Кремля реальное фото"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "duration_sec": 15.89,
+   "visual_prompt": "разрушенный заводской цех в Донбассе 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "разрушенный заводской цех в Донбассе 2026 реальное фото"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 6.79,
+   "visual_prompt": "Львов панорама города с высоты реальное фото",
+   "source": "press_photo",
+   "source_query": "Львов панорама города с высоты реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 14.18,
+   "visual_prompt": "пограничный переход Чоп Венгрия Украина реальное фото",
+   "source": "press_photo",
+   "source_query": "пограничный переход Чоп Венгрия Украина реальное фото"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "duration_sec": 5.99,
+   "visual_prompt": "КАРТЫ/ЗАКАРПАТЬЕ/Zakarpattia Oblast highlighted in Ukraine.jpg",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЗАКАРПАТЬЕ/Zakarpattia Oblast highlighted in Ukraine.jpg"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "duration_sec": 6.32,
+   "visual_prompt": "здание Европейской комиссии Берлемон Брюссель реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Европейской комиссии Берлемон Брюссель реальное фото"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "duration_sec": 13.36,
+   "visual_prompt": "здание Europa Европейский совет Брюссель реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Europa Европейский совет Брюссель реальное фото"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 13.68,
+   "visual_prompt": "Львовская ратуша с флагом Украины Львов реальное фото",
+   "source": "press_photo",
+   "source_query": "Львовская ратуша с флагом Украины Львов реальное фото"
+  }
+ ]
+}
