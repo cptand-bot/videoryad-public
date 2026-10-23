@@ -98,12 +98,18 @@ def _collect_overlays(images_dir, proj):
     ovj = os.path.join(proj, "overlays.json")
     dropped = []
     lost = {}
+    # kept_text ОБЪЯВЛЕНА ЗДЕСЬ, А НЕ ВНУТРИ `if` (23.10, блокер). Она лежала
+    # внутри блока «если есть overlays.json», а используется в итоговой строке
+    # отчёта снаружи — и на ролике БЕЗ всплывашек склейка падала
+    # `UnboundLocalError` в самом конце, после всей проделанной работы. Раньше
+    # не всплывало: у боевых роликов всплывашки есть всегда. Ролики целиком из
+    # элементов арсенала их не имеют, и таких будет больше.
+    kept_text = 0
     if os.path.isfile(ovj):
         try:
             ov = json.load(open(ovj, encoding="utf-8"))
         except Exception:
             ov = {}
-        kept_text = 0
         for k in [k for k in list(ov) if k.isdigit()]:
             e = ov.get(k) if isinstance(ov.get(k), dict) else {}
             # ТЕКСТОВАЯ ВСПЛЫВАШКА ФАЙЛА НЕ ИМЕЕТ И НЕ ДОЛЖНА ИМЕТЬ
