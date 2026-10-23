@@ -262,6 +262,18 @@ jobs:
           fail-on-cache-miss: true
       - run: tar xzf project-src.tgz
 
+      # FFMPEG ИЗ КЭША (23.10, вечер). По очереди отвалились apt, стороннее
+      # зеркало и даже pip: на тринадцати машинах ffmpeg вставал, на
+      # четырнадцатой нет — и ролик терялся на последнем шаге. Кэш убирает
+      # зависимость от внешних хостов: бинари скачиваются ОДИН раз на
+      # репозиторий, дальше восстанавливаются за секунды. Каскад ниже остаётся
+      # запасным путём на случай пустого кэша (первый прогон на новой цели).
+      - name: ffmpeg из кэша
+        uses: actions/cache@v4
+        with:
+          path: ~/ffbin
+          key: ffmpeg-static-v8-${{ runner.os }}
+
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
         # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
@@ -284,9 +296,16 @@ jobs:
           # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
           # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
           # десять минут в чужом джобе.
+          # кэш распаковываем ПЕРВЫМ делом и сразу кладём в PATH
+          mkdir -p "$HOME/ffbin"
+          echo "$HOME/ffbin" >> "$GITHUB_PATH"
+          export PATH="$HOME/ffbin:$PATH"
+          if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
+            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+          fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
-            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            && echo "ffmpeg на месте: $(ffmpeg -version 2>/dev/null | head -1)" \
             || need_apt=1
           command -v tesseract >/dev/null 2>&1 || need_apt=1
           if [ "$need_apt" = 1 ]; then
@@ -326,9 +345,14 @@ jobs:
               || echo "статическая сборка тоже не поехала" >&2
           fi
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            echo "::error::ffmpeg/ffprobe не добыт НИ ОДНИМ из четырёх путей (кэш, apt, pip static-ffmpeg, johnvansickle)"
             exit 1
           fi
+          # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          for b in ffmpeg ffprobe; do
+            src="$(command -v $b)"
+            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+          done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
@@ -472,6 +496,18 @@ jobs:
           path: queue/${{ needs.setup.outputs.name }}/images
           merge-multiple: true
 
+      # FFMPEG ИЗ КЭША (23.10, вечер). По очереди отвалились apt, стороннее
+      # зеркало и даже pip: на тринадцати машинах ffmpeg вставал, на
+      # четырнадцатой нет — и ролик терялся на последнем шаге. Кэш убирает
+      # зависимость от внешних хостов: бинари скачиваются ОДИН раз на
+      # репозиторий, дальше восстанавливаются за секунды. Каскад ниже остаётся
+      # запасным путём на случай пустого кэша (первый прогон на новой цели).
+      - name: ffmpeg из кэша
+        uses: actions/cache@v4
+        with:
+          path: ~/ffbin
+          key: ffmpeg-static-v8-${{ runner.os }}
+
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
         # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
@@ -494,9 +530,16 @@ jobs:
           # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
           # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
           # десять минут в чужом джобе.
+          # кэш распаковываем ПЕРВЫМ делом и сразу кладём в PATH
+          mkdir -p "$HOME/ffbin"
+          echo "$HOME/ffbin" >> "$GITHUB_PATH"
+          export PATH="$HOME/ffbin:$PATH"
+          if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
+            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+          fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
-            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            && echo "ffmpeg на месте: $(ffmpeg -version 2>/dev/null | head -1)" \
             || need_apt=1
           # tesseract этому джобу не нужен
           if [ "$need_apt" = 1 ]; then
@@ -536,9 +579,14 @@ jobs:
               || echo "статическая сборка тоже не поехала" >&2
           fi
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            echo "::error::ffmpeg/ffprobe не добыт НИ ОДНИМ из четырёх путей (кэш, apt, pip static-ffmpeg, johnvansickle)"
             exit 1
           fi
+          # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          for b in ffmpeg ffprobe; do
+            src="$(command -v $b)"
+            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+          done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
@@ -675,6 +723,18 @@ jobs:
           echo "клипов у этой машины: $n"
           echo "count=$n" >> "$GITHUB_OUTPUT"
 
+      # FFMPEG ИЗ КЭША (23.10, вечер). По очереди отвалились apt, стороннее
+      # зеркало и даже pip: на тринадцати машинах ffmpeg вставал, на
+      # четырнадцатой нет — и ролик терялся на последнем шаге. Кэш убирает
+      # зависимость от внешних хостов: бинари скачиваются ОДИН раз на
+      # репозиторий, дальше восстанавливаются за секунды. Каскад ниже остаётся
+      # запасным путём на случай пустого кэша (первый прогон на новой цели).
+      - name: ffmpeg из кэша
+        uses: actions/cache@v4
+        with:
+          path: ~/ffbin
+          key: ffmpeg-static-v8-${{ runner.os }}
+
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
         # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
@@ -696,9 +756,16 @@ jobs:
           # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
           # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
           # десять минут в чужом джобе.
+          # кэш распаковываем ПЕРВЫМ делом и сразу кладём в PATH
+          mkdir -p "$HOME/ffbin"
+          echo "$HOME/ffbin" >> "$GITHUB_PATH"
+          export PATH="$HOME/ffbin:$PATH"
+          if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
+            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+          fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
-            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            && echo "ffmpeg на месте: $(ffmpeg -version 2>/dev/null | head -1)" \
             || need_apt=1
           # tesseract этому джобу не нужен
           if [ "$need_apt" = 1 ]; then
@@ -738,9 +805,14 @@ jobs:
               || echo "статическая сборка тоже не поехала" >&2
           fi
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            echo "::error::ffmpeg/ffprobe не добыт НИ ОДНИМ из четырёх путей (кэш, apt, pip static-ffmpeg, johnvansickle)"
             exit 1
           fi
+          # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          for b in ffmpeg ffprobe; do
+            src="$(command -v $b)"
+            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+          done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
@@ -968,6 +1040,18 @@ jobs:
             echo "матрица всплывашек ничего не отдала — рисую здесь, как раньше"
           fi
 
+      # FFMPEG ИЗ КЭША (23.10, вечер). По очереди отвалились apt, стороннее
+      # зеркало и даже pip: на тринадцати машинах ffmpeg вставал, на
+      # четырнадцатой нет — и ролик терялся на последнем шаге. Кэш убирает
+      # зависимость от внешних хостов: бинари скачиваются ОДИН раз на
+      # репозиторий, дальше восстанавливаются за секунды. Каскад ниже остаётся
+      # запасным путём на случай пустого кэша (первый прогон на новой цели).
+      - name: ffmpeg из кэша
+        uses: actions/cache@v4
+        with:
+          path: ~/ffbin
+          key: ffmpeg-static-v8-${{ runner.os }}
+
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
         # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
@@ -990,9 +1074,16 @@ jobs:
           # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
           # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
           # десять минут в чужом джобе.
+          # кэш распаковываем ПЕРВЫМ делом и сразу кладём в PATH
+          mkdir -p "$HOME/ffbin"
+          echo "$HOME/ffbin" >> "$GITHUB_PATH"
+          export PATH="$HOME/ffbin:$PATH"
+          if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
+            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+          fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
-            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            && echo "ffmpeg на месте: $(ffmpeg -version 2>/dev/null | head -1)" \
             || need_apt=1
           command -v tesseract >/dev/null 2>&1 || need_apt=1
           if [ "$need_apt" = 1 ]; then
@@ -1032,9 +1123,14 @@ jobs:
               || echo "статическая сборка тоже не поехала" >&2
           fi
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            echo "::error::ffmpeg/ffprobe не добыт НИ ОДНИМ из четырёх путей (кэш, apt, pip static-ffmpeg, johnvansickle)"
             exit 1
           fi
+          # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          for b in ffmpeg ffprobe; do
+            src="$(command -v $b)"
+            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+          done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
