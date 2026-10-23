@@ -1,0 +1,1231 @@
+[
+ {
+  "scene": 1,
+  "no": 23,
+  "dur": 14.12,
+  "mode": "frame",
+  "view": "style_cards.bullets",
+  "kwargs": {
+   "kick": "о чём идёт спор",
+   "items": [
+    "территории",
+    "прекращение огня",
+    "гарантии безопасности",
+    "формат встречи"
+   ],
+   "note": "а подпись под всем этим — отдельный вопрос",
+   "source": "предмет переговоров",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 2,
+  "no": 57,
+  "dur": 14.24,
+  "mode": "frame",
+  "view": "cinematic.trailer_title",
+  "kwargs": {
+   "title": "ВОПРОС НЕ В ТЕКСТЕ",
+   "sub": "а в руке, которая подпишет",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.5
+ },
+ {
+  "scene": 3,
+  "no": 51,
+  "dur": 13.79,
+  "mode": "cli",
+  "script": "make_chapter_card.py",
+  "view": "make_chapter_card.py",
+  "argv": [
+   "ГЛАВА",
+   "КТО ПОДПИШЕТ",
+   "политика, где всё решает одна подпись"
+  ]
+ },
+ {
+  "scene": 4,
+  "no": 65,
+  "dur": 12.61,
+  "mode": "frame",
+  "view": "cinematic.cinema_look",
+  "kwargs": {
+   "photo": "images/scene_004.jpg",
+   "kick": "позиция Москвы",
+   "title": "разговаривать можно",
+   "sub": "подписывать — отдельный вопрос",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 5,
+  "no": 42,
+  "dur": 14.08,
+  "mode": "frame",
+  "view": "quote_variants.paper_typed",
+  "kwargs": {
+   "kick": "российская позиция",
+   "title": "что требуется от документа",
+   "text": "Окончательный документ должен подписывать человек, чьи полномочия Москва считает действительными",
+   "accent": "полномочия Москва считает действительными",
+   "source": "позиция Москвы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.8
+ },
+ {
+  "scene": 6,
+  "no": 37,
+  "dur": 9.97,
+  "mode": "frame",
+  "view": "quote_variants.quote_doc",
+  "kwargs": {
+   "kick": "юридическая арифметика",
+   "title": "срок полномочий",
+   "text": "Москва считает, что с полномочиями подписанта есть проблема, и именно она делает подпись уязвимой",
+   "mark": "проблема",
+   "stamp": "спорно",
+   "source": "позиция Москвы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.4
+ },
+ {
+  "scene": 7,
+  "no": 39,
+  "dur": 8.32,
+  "mode": "frame",
+  "view": "quote_variants.quote_duel",
+  "kwargs": {
+   "kick": "одно и то же событие · два правовых объяснения",
+   "title": "кто вправе поставить подпись",
+   "top": {
+    "who": "Москва",
+    "text": "Полномочия подписанта под вопросом, значит под вопросом и сама подпись",
+    "accent": "под вопросом и сама подпись",
+    "source": "позиция Москвы",
+    "speaker_idx": 0
+   },
+   "bottom": {
+    "who": "Киев",
+    "text": "Правовая конструкция продолжается, полномочия действуют, спорить тут не о чем",
+    "accent": "полномочия действуют",
+    "source": "позиция Киева",
+    "speaker_idx": 2
+   },
+   "source": "две позиции",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.2
+ },
+ {
+  "scene": 8,
+  "no": 45,
+  "dur": 5.36,
+  "mode": "frame",
+  "view": "style_cards.lower_third",
+  "kwargs": {
+   "base_photo": "images/scene_008.jpg",
+   "speaker": "ЕВРОПА И США",
+   "words": "работают с Зеленским как с главой государства",
+   "speaker_idx": 1,
+   "kick": "кто признаёт полномочия",
+   "kick_sub": "позиция западных столиц",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 9,
+  "no": 28,
+  "dur": 12.96,
+  "mode": "frame",
+  "view": "style_cards.person",
+  "kwargs": {
+   "name": "ДМИТРИЙ ПЕСКОВ",
+   "photo": "portraits/_peskov.jpg",
+   "facts": [
+    "пресс-секретарь президента России",
+    "обозначил развилку отдельно",
+    "переговоры и подпись — разные этапы"
+   ],
+   "kick": "кто обозначил развилку",
+   "source": "позиция Москвы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 10,
+  "no": 29,
+  "dur": 15.15,
+  "mode": "frame",
+  "view": "style_cards.timeline",
+  "kwargs": {
+   "kick": "как устроен процесс",
+   "title": "переговоры и подпись",
+   "events": [
+    {
+     "date": "этап 1",
+     "text": "разговор об условиях"
+    },
+    {
+     "date": "этап 2",
+     "text": "согласование документа"
+    },
+    {
+     "date": "этап 3",
+     "text": "подпись и признание её силы",
+     "hot": true
+    }
+   ],
+   "note": "политически это две разные вещи",
+   "source": "структура процесса",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.2
+ },
+ {
+  "scene": 11,
+  "no": 38,
+  "dur": 8.46,
+  "mode": "frame",
+  "view": "quote_variants.quote_strike",
+  "kwargs": {
+   "kick": "что говорят об этом человеке",
+   "text": "С ним можно обсуждать условия, но финальную подпись мы считаем действительной",
+   "struck": "мы считаем действительной",
+   "fix": "признавать не готовы",
+   "author": "суть российской развилки",
+   "source": "позиция Москвы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 12,
+  "no": 48,
+  "dur": 12.36,
+  "mode": "clip",
+  "view": "devices.device_clip",
+  "kwargs": {
+   "kind": "phone",
+   "screen": {
+    "kind": "post",
+    "channel": "СДЕЛКА",
+    "subs": "торг шёл два месяца",
+    "lines": [
+     "цена согласована",
+     "мебель остаётся",
+     "холодильник тоже",
+     "осталось подписать"
+    ],
+    "time": "у нотариуса"
+   },
+   "kick": "метафора",
+   "title": "продажа квартиры",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 13,
+  "no": 24,
+  "dur": 5.78,
+  "mode": "frame",
+  "view": "style_cards.quote",
+  "kwargs": {
+   "text": "Простите, а вы вообще имеете право это подписывать?",
+   "accent": "имеете право это подписывать",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 14,
+  "no": 67,
+  "dur": 14.54,
+  "mode": "frame",
+  "view": "cinematic.torn_burst",
+  "kwargs": {
+   "photo": "images/scene_014.jpg",
+   "pieces": 7,
+   "kick": "сделка рассыпается",
+   "title": "договорились о цене",
+   "subtitle": "и уперлись в подпись",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 15,
+  "no": 30,
+  "dur": 12.64,
+  "mode": "frame",
+  "view": "style_cards.forces",
+  "kwargs": {
+   "kick": "кто чего хочет",
+   "title": "разговор спускается к гарантиям",
+   "rows": [
+    {
+     "who": "Киев",
+     "want": "гарантии безопасности и процесс"
+    },
+    {
+     "who": "Москва",
+     "want": "действительную подпись"
+    },
+    {
+     "who": "Европа",
+     "want": "место за столом"
+    },
+    {
+     "who": "Вашингтон",
+     "want": "результат"
+    }
+   ],
+   "note": "у всех одно слово «мир», содержание разное",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 16,
+  "no": 52,
+  "dur": 8.88,
+  "mode": "cli",
+  "script": "make_concept_card.py",
+  "view": "make_concept_card.py",
+  "cfg": {
+   "background_photo": "images/scene_016.jpg",
+   "eyebrow": "ДВА ВОПРОСА",
+   "text": "КТО ГАРАНТИРУЕТ И КТО ПОДПИСЫВАЕТ",
+   "source": "суть спора",
+   "seconds": 8.88
+  }
+ },
+ {
+  "scene": 17,
+  "no": 3,
+  "dur": 12.96,
+  "mode": "clip",
+  "view": "torn_photo.torn_clip",
+  "kwargs": {
+   "old_path": "images/scene_017.jpg",
+   "new_path": "images/scene_040.jpg",
+   "title": "",
+   "subtitle": "власть меняется, обязательства остаются",
+   "year_old": "сегодня",
+   "year_new": "следующая власть",
+   "make_old_archival": true,
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 18,
+  "no": 44,
+  "dur": 8.6,
+  "mode": "frame",
+  "view": "style_cards.attrib_frame",
+  "kwargs": {
+   "photo": "images/scene_018.jpg",
+   "text": "Брюссель",
+   "sub": "Европа требует место за столом",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 19,
+  "no": 56,
+  "dur": 13.36,
+  "mode": "frame",
+  "view": "cinematic.evidence_wall",
+  "kwargs": {
+   "shots": [
+    [
+     "images/scene_019.jpg",
+     190,
+     230,
+     -4,
+     "встречи с американцами"
+    ],
+    [
+     "images/scene_020.jpg",
+     770,
+     330,
+     5,
+     "украинские предложения"
+    ],
+    [
+     "images/scene_021.jpg",
+     1330,
+     250,
+     -3,
+     "свои красные линии"
+    ]
+   ],
+   "back": "images/scene_019.jpg",
+   "kick": "что собрала Европа",
+   "title": "свои условия",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.4
+ },
+ {
+  "scene": 20,
+  "no": 49,
+  "dur": 12.56,
+  "mode": "clip",
+  "view": "devices.device_clip",
+  "kwargs": {
+   "kind": "tablet",
+   "screen": {
+    "kind": "image",
+    "path": "images/scene_020.jpg",
+    "zoom_to": 1.08
+   },
+   "kick": "платил за банкет",
+   "title": "а меню обсуждают без него",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 21,
+  "no": 46,
+  "dur": 8.64,
+  "mode": "frame",
+  "view": "style_cards.reply_frame",
+  "kwargs": {
+   "photo": "images/scene_021.jpg",
+   "speaker": "ЕВРОПА",
+   "words": "а нас спросить не хотите?",
+   "speaker_idx": 1,
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 22,
+  "no": 35,
+  "dur": 10.6,
+  "mode": "frame",
+  "view": "quote_variants.quote_split",
+  "kwargs": {
+   "photo": "images/scene_022.jpg",
+   "text": "Американское давление может довести дело до условий, которые Европе придётся исполнять",
+   "accent": "которые Европе придётся исполнять",
+   "author": "Кая Каллас",
+   "role": "глава евродипломатии",
+   "source": "заявление Брюсселя",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 23,
+  "no": 41,
+  "dur": 6.45,
+  "mode": "frame",
+  "view": "quote_variants.marker_glyph",
+  "kwargs": {
+   "kick": "перевод с брюссельского",
+   "text": "Без нас вы там такого наподписываете, что потом исполнять придётся нам",
+   "accent": "исполнять придётся нам",
+   "author": "суть европейской реплики",
+   "role": "",
+   "source": "позиция Брюсселя",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 24,
+  "no": 36,
+  "dur": 13.51,
+  "mode": "frame",
+  "view": "quote_variants.quote_tape",
+  "kwargs": {
+   "kick": "слово, которое обычно заворачивают в семь слоёв",
+   "text": "Такой исход был бы поражением не только Киева, но и всех его союзников",
+   "accent": "всех его союзников",
+   "author": "канцлер Германии",
+   "source": "заявление канцлера",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.4
+ },
+ {
+  "scene": 25,
+  "no": 25,
+  "dur": 10.36,
+  "mode": "frame",
+  "view": "style_cards.quote",
+  "kwargs": {
+   "text": "Это означало бы капитуляцию всех её союзников",
+   "accent": "капитуляцию всех её союзников",
+   "author": "канцлер Германии",
+   "source": "заявление канцлера",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 26,
+  "no": 65,
+  "dur": 5.36,
+  "mode": "frame",
+  "view": "cinematic.cinema_look",
+  "kwargs": {
+   "photo": "images/scene_026.jpg",
+   "kick": "заморозка фронта",
+   "title": "три разных желания",
+   "sub": "и один документ на всех",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 27,
+  "no": 26,
+  "dur": 7.04,
+  "mode": "frame",
+  "view": "style_cards.quote_marker",
+  "kwargs": {
+   "text": "Кто сможет поставить юридически приемлемую подпись",
+   "accent": "юридически приемлемую подпись",
+   "author": "вопрос, который ставит Москва",
+   "source": "позиция Москвы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 28,
+  "no": 63,
+  "dur": 14.72,
+  "mode": "clip",
+  "view": "torn_split.photo_seam_clip",
+  "kwargs": {
+   "photo": "images/scene_028.jpg",
+   "title": "",
+   "subtitle": "Берлин предупреждает",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 29,
+  "no": 60,
+  "dur": 13.23,
+  "mode": "clip",
+  "view": "torn_split.torn_split_clip",
+  "kwargs": {
+   "mode": "vertical",
+   "a_path": "images/scene_029.jpg",
+   "b_path": "images/scene_030.jpg",
+   "title": "",
+   "subtitle": "придётся объяснять своим избирателям",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 30,
+  "no": 27,
+  "dur": 12.93,
+  "mode": "frame",
+  "view": "quote_paper.quote_paper",
+  "kwargs": {
+   "kick": "о чём на самом деле спор",
+   "title": "суверенитет",
+   "text": "Одно дело — подписывать мир. Другое — когда тебе объясняют, какой мир подписывать разрешено",
+   "author": "",
+   "source": "формулировка спора",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.8
+ },
+ {
+  "scene": 31,
+  "no": 61,
+  "dur": 9.68,
+  "mode": "clip",
+  "view": "torn_split.torn_split_clip",
+  "kwargs": {
+   "mode": "diagonal",
+   "a_path": "images/scene_031.jpg",
+   "b_path": "images/scene_032.jpg",
+   "title": "",
+   "subtitle": "Европа боится, Америка торопится",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 32,
+  "no": 32,
+  "dur": 13.47,
+  "mode": "scroll",
+  "view": "style_cards.strip_canvas",
+  "canvas": "style_cards.strip_canvas",
+  "direction": "left",
+  "kwargs": {
+   "cards": [
+    {
+     "photo": "images/scene_032.jpg",
+     "name": "ВАШИНГТОН",
+     "note": "важен результат"
+    },
+    {
+     "photo": "images/scene_033.jpg",
+     "name": "КИЕВ",
+     "note": "сохранить государство"
+    },
+    {
+     "photo": "images/scene_034.jpg",
+     "name": "ЕВРОПА",
+     "note": "не выглядеть проигравшей"
+    }
+   ],
+   "kick": "одно слово «мир» — три содержания",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 33,
+  "no": 33,
+  "dur": 8.56,
+  "mode": "scroll",
+  "view": "style_cards.page_canvas",
+  "canvas": "style_cards.page_canvas",
+  "direction": "up",
+  "kwargs": {
+   "kick": "задача Киева",
+   "title": "остановить так, чтобы сохранить",
+   "blocks": [
+    {
+     "type": "head",
+     "text": "ЧТО НУЖНО УДЕРЖАТЬ"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "государство",
+      "армию",
+      "внешние гарантии"
+     ]
+    },
+    {
+     "type": "rule"
+    },
+    {
+     "type": "para",
+     "text": "Остановить конфликт — половина задачи. Вторая половина — остаться стороной, с которой продолжают считаться."
+    },
+    {
+     "type": "card",
+     "label": "вывод",
+     "text": "Поэтому вопрос о подписанте для Киева не технический."
+    }
+   ],
+   "meta": "разбор",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 34,
+  "no": 34,
+  "dur": 13.04,
+  "mode": "frame",
+  "view": "photo_card.photo_card",
+  "kwargs": {
+   "photo": "images/scene_034.jpg",
+   "kick": "цена для Европы",
+   "title": "политическая, а не только денежная",
+   "lines": [
+    "годы поддержки",
+    "собственные обещания избирателям",
+    "итог, который придётся объяснять"
+   ],
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 35,
+  "no": 55,
+  "dur": 14.64,
+  "mode": "frame",
+  "view": "cinematic.dossier",
+  "kwargs": {
+   "photo": "images/scene_035.jpg",
+   "case": "СЛОВА КАНЦЛЕРА",
+   "rows": [
+    "поражение не только Киева",
+    "но и всех его союзников",
+    "значит, речь уже не только об Украине"
+   ],
+   "stamp": "заявление",
+   "kick": "разбор формулировки",
+   "title": "про «нас всех»",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.2
+ },
+ {
+  "scene": 36,
+  "no": 50,
+  "dur": 13.84,
+  "mode": "clip",
+  "view": "devices.device_clip",
+  "kwargs": {
+   "kind": "desktop",
+   "screen": {
+    "kind": "page",
+    "path": "images/scene_036.jpg",
+    "url": "дипломатия-силы",
+    "tab": "разбор",
+    "scroll_to": 0.35,
+    "mark": {
+     "at": 0.45,
+     "x0": 0.18,
+     "x1": 0.72,
+     "y": 0.42
+    }
+   },
+   "kick": "если хотите разбираться",
+   "title": "что стоит за словами",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 37,
+  "no": 68,
+  "dur": 13.63,
+  "mode": "frame",
+  "view": "film.film_strip",
+  "kwargs": {
+   "shots": [
+    "images/scene_037.jpg",
+    "images/scene_038.jpg",
+    "images/scene_039.jpg"
+   ],
+   "captions": [
+    "переговоры идут",
+    "документ готовится",
+    "подпись"
+   ],
+   "kick": "процесс",
+   "title": "кадры сменяют друг друга",
+   "sub": "а вопрос остаётся",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 38,
+  "no": 69,
+  "dur": 14.0,
+  "mode": "frame",
+  "view": "film.film_single",
+  "kwargs": {
+   "photo": "images/scene_038.jpg",
+   "kick": "отдельный кадр",
+   "title": "вопрос о подписанте",
+   "sub": "становится самостоятельным",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 39,
+  "no": 70,
+  "dur": 12.56,
+  "mode": "frame",
+  "view": "film.film_contact",
+  "kwargs": {
+   "shots": [
+    "images/scene_039.jpg",
+    "images/scene_040.jpg",
+    "images/scene_041.jpg",
+    "images/scene_042.jpg",
+    "images/scene_043.jpg",
+    "images/scene_044.jpg"
+   ],
+   "kick": "перебор вариантов",
+   "title": "кто может подписать",
+   "sub": "и чью подпись признают",
+   "rows": 2,
+   "per_row": 3,
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.2
+ },
+ {
+  "scene": 40,
+  "no": 71,
+  "dur": 12.16,
+  "mode": "frame",
+  "view": "film.film_newsreel",
+  "kwargs": {
+   "photo": "images/scene_040.jpg",
+   "kick": "подписант становится частью сделки",
+   "title": "не внутренняя бюрократия",
+   "sub": "а условие соглашения",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 41,
+  "no": 64,
+  "dur": 12.64,
+  "mode": "frame",
+  "view": "cinematic.depth_of_field",
+  "kwargs": {
+   "photo": "images/scene_041.jpg",
+   "kick": "что действительно важно",
+   "title": "не собрать встречу",
+   "sub": "а обеспечить устойчивый результат",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 42,
+  "no": 40,
+  "dur": 9.4,
+  "mode": "frame",
+  "view": "quote_variants.quote_pull",
+  "kwargs": {
+   "kick": "о чём спор",
+   "text": "Это спор не о рейтингах и симпатиях, а о том, чья подпись будет иметь силу",
+   "accent": "чья подпись будет иметь силу",
+   "author": "",
+   "role": "",
+   "source": "суть вопроса",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 43,
+  "no": 43,
+  "dur": 10.48,
+  "mode": "frame",
+  "view": "quote_variants.paper_hand",
+  "kwargs": {
+   "kick": "три вопроса подряд",
+   "title": "право на подпись",
+   "text": "Кто получит право поставить подпись? На каком основании? И кто гарантирует, что её признают?",
+   "accent": "кто гарантирует, что её признают",
+   "source": "вопросы без ответа",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.8
+ },
+ {
+  "scene": 44,
+  "no": 31,
+  "dur": 8.24,
+  "mode": "scroll",
+  "view": "style_cards.tape_canvas",
+  "canvas": "style_cards.tape_canvas",
+  "direction": "left",
+  "kwargs": {
+   "kick": "вопрос зрителю",
+   "title": "что важнее Москве",
+   "events": [
+    {
+     "mark": "версия 1",
+     "text": "юридическая сила подписи"
+    },
+    {
+     "mark": "версия 2",
+     "text": "сам подписант как условие",
+     "hot": true
+    },
+    {
+     "mark": "версия 3",
+     "text": "и то и другое сразу"
+    }
+   ],
+   "kind": "rank",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 45,
+  "no": 40,
+  "dur": 9.68,
+  "mode": "frame",
+  "view": "quote_variants.quote_pull",
+  "kwargs": {
+   "kick": "Европе тоже отвечать",
+   "text": "Если условия называют капитуляцией, нужно показать, где проходит граница компромисса",
+   "accent": "где проходит граница компромисса",
+   "author": "",
+   "role": "",
+   "source": "вопрос к европейской позиции",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 46,
+  "no": 62,
+  "dur": 7.12,
+  "mode": "clip",
+  "view": "torn_split.torn_split_clip",
+  "kwargs": {
+   "mode": "horizontal",
+   "a_path": "images/scene_046.jpg",
+   "b_path": "images/scene_047.jpg",
+   "title": "",
+   "subtitle": "капитуляция или компромисс",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  }
+ },
+ {
+  "scene": 47,
+  "no": 53,
+  "dur": 14.8,
+  "mode": "cli",
+  "script": "build_profile_card.py",
+  "view": "build_profile_card.py",
+  "cfg": {
+   "title": "ГАРАНТИИ",
+   "subtitle": "кто, чем и на какой срок",
+   "main_photo": "images/scene_047.jpg",
+   "top_fields": [
+    {
+     "label": "КТО ДАЁТ",
+     "value": "НЕ НАЗВАНО"
+    },
+    {
+     "label": "ЧЕМ",
+     "value": "НЕ НАЗВАНО"
+    }
+   ],
+   "stats": [
+    {
+     "label": "СРОК",
+     "value": "НЕ НАЗВАН"
+    },
+    {
+     "label": "ФОРМА",
+     "value": "НЕ НАЗВАНА"
+    }
+   ],
+   "seconds": 14.8
+  }
+ },
+ {
+  "scene": 48,
+  "no": 66,
+  "dur": 10.31,
+  "mode": "frame",
+  "view": "cinematic.battle_flashback",
+  "kwargs": {
+   "photo": "images/scene_048.jpg",
+   "kick": "цена красивых лозунгов",
+   "title": "обязательства",
+   "subtitle": "которые придётся исполнять",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 49,
+  "no": 47,
+  "dur": 12.65,
+  "mode": "frame",
+  "view": "style_cards.attrib_frame",
+  "kwargs": {
+   "photo": "images/scene_049.jpg",
+   "text": "условия соглашения",
+   "sub": "европейцы хотят участвовать в их формировании",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 50,
+  "no": 46,
+  "dur": 13.4,
+  "mode": "frame",
+  "view": "style_cards.reply_frame",
+  "kwargs": {
+   "photo": "images/scene_050.jpg",
+   "speaker": "КИЕВ",
+   "words": "окончательное решение остаётся за нами",
+   "speaker_idx": 2,
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 51,
+  "no": 6,
+  "dur": 7.36,
+  "mode": "frame",
+  "view": "poster.poster",
+  "kwargs": {
+   "kick": "почему это сложнее одной сделки",
+   "title": "несколько сделок сразу",
+   "lead": "Каждая линия идёт своим темпом, а совпасть они должны хотя бы в финальной точке.",
+   "hero_photo": "images/scene_051.jpg",
+   "facts": [
+    {
+     "icon": "документ",
+     "label": "линия условий",
+     "value": "идёт отдельно"
+    },
+    {
+     "icon": "часы",
+     "label": "линия гарантий",
+     "value": "своим темпом"
+    },
+    {
+     "icon": "подпись",
+     "label": "линия подписи",
+     "value": "решает всё"
+    }
+   ],
+   "status": {
+    "label": "точка совпадения",
+    "color": "red"
+   },
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.4
+ },
+ {
+  "scene": 52,
+  "no": 23,
+  "dur": 12.52,
+  "mode": "frame",
+  "view": "style_cards.bullets",
+  "kwargs": {
+   "kick": "допустим, подписали",
+   "items": [
+    "подписанта нашли",
+    "полномочия признаны",
+    "бумага подписана",
+    "дальше начинается исполнение"
+   ],
+   "note": "и держит договор уже не рука, а государственная машина",
+   "source": "что дальше",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 53,
+  "no": 30,
+  "dur": 7.48,
+  "mode": "frame",
+  "view": "style_cards.forces",
+  "kwargs": {
+   "kick": "кто исполняет",
+   "title": "после подписи",
+   "rows": [
+    {
+     "who": "армия",
+     "want": "выполнять режим огня"
+    },
+    {
+     "who": "правительство",
+     "want": "исполнять обязательства"
+    },
+    {
+     "who": "парламент",
+     "want": "принимать решения"
+    }
+   ],
+   "note": "подпись держит не рука, а вся машина",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.8
+ },
+ {
+  "scene": 54,
+  "no": 29,
+  "dur": 12.24,
+  "mode": "frame",
+  "view": "style_cards.timeline",
+  "kwargs": {
+   "kick": "первый месяц после подписания",
+   "title": "что должно сработать",
+   "events": [
+    {
+     "date": "сразу",
+     "text": "режим прекращения огня"
+    },
+    {
+     "date": "недели",
+     "text": "политические обязательства"
+    },
+    {
+     "date": "месяц",
+     "text": "договор не развалился",
+     "hot": true
+    }
+   ],
+   "note": "иначе подпись остаётся бумагой",
+   "source": "этапы исполнения",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 55,
+  "no": 44,
+  "dur": 12.32,
+  "mode": "frame",
+  "view": "style_cards.attrib_frame",
+  "kwargs": {
+   "photo": "images/scene_055.jpg",
+   "text": "после подписания",
+   "sub": "те, кто останутся, должны не развалить договор",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 56,
+  "no": 39,
+  "dur": 11.71,
+  "mode": "frame",
+  "view": "quote_variants.quote_duel",
+  "kwargs": {
+   "kick": "внутри Европы тоже не одна позиция",
+   "title": "исполнять или не признавать",
+   "top": {
+    "who": "часть столиц",
+    "text": "Условия неприемлемы, признавать их мы не готовы",
+    "accent": "признавать их мы не готовы",
+    "source": "европейская позиция",
+    "speaker_idx": 1
+   },
+   "bottom": {
+    "who": "другая часть",
+    "text": "Договор придётся исполнять, как бы он ни выглядел",
+    "accent": "придётся исполнять",
+    "source": "европейская позиция",
+    "speaker_idx": 3
+   },
+   "source": "спор внутри Европы",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 57,
+  "no": 55,
+  "dur": 13.69,
+  "mode": "frame",
+  "view": "cinematic.dossier",
+  "kwargs": {
+   "photo": "images/scene_057.jpg",
+   "case": "ЧТО РЕШАЕТ ЕВРОПА",
+   "rows": [
+    "какие гарантии давать",
+    "какие программы продолжать",
+    "какую поддержку сохранять"
+   ],
+   "stamp": "исполнение",
+   "kick": "после документа",
+   "title": "решения остаются",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.2
+ },
+ {
+  "scene": 58,
+  "no": 70,
+  "dur": 13.35,
+  "mode": "frame",
+  "view": "film.film_contact",
+  "kwargs": {
+   "shots": [
+    "images/scene_058.jpg",
+    "images/scene_059.jpg",
+    "images/scene_060.jpg",
+    "images/scene_061.jpg",
+    "images/scene_062.jpg",
+    "images/scene_001.jpg"
+   ],
+   "kick": "что проверяют на деле",
+   "title": "выполняется ли то",
+   "sub": "ради чего документ подписывали",
+   "rows": 2,
+   "per_row": 3,
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 59,
+  "no": 34,
+  "dur": 8.99,
+  "mode": "frame",
+  "view": "photo_card.photo_card",
+  "kwargs": {
+   "photo": "images/scene_059.jpg",
+   "kick": "самая скучная часть",
+   "title": "реальное исполнение",
+   "lines": [
+    "за фотографией не спрятаться",
+    "за рукопожатием тоже",
+    "остаётся только выполнение"
+   ],
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 60,
+  "no": 44,
+  "dur": 12.53,
+  "mode": "frame",
+  "view": "style_cards.attrib_frame",
+  "kwargs": {
+   "photo": "images/scene_060.jpg",
+   "text": "«готов к миру»",
+   "sub": "готовы все — смотреть надо не на это",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 3.0
+ },
+ {
+  "scene": 61,
+  "no": 35,
+  "dur": 13.2,
+  "mode": "frame",
+  "view": "quote_variants.quote_split",
+  "kwargs": {
+   "photo": "images/scene_061.jpg",
+   "text": "Чья фамилия окажется внизу последней страницы — и признают ли её",
+   "accent": "признают ли её",
+   "author": "главный вопрос",
+   "role": "",
+   "source": "итог разбора",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ },
+ {
+  "scene": 62,
+  "no": 57,
+  "dur": 5.48,
+  "mode": "frame",
+  "view": "cinematic.trailer_title",
+  "kwargs": {
+   "title": "ДО СДЕЛКИ ЕЩЁ НЕ ДОШЛИ",
+   "sub": "пока подпись считают недействительной",
+   "watermark": "ДИПЛОМАТИЯ СИЛЫ"
+  },
+  "anim": 2.6
+ }
+]
