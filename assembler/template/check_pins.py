@@ -24,6 +24,7 @@ Exit 0 — все пины чистые (или пинов нет), exit 1 — �
 """
 import json
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -90,7 +91,8 @@ def main():
             qq = q.strip()
             direct = os.path.join(lib, qq)
             if os.path.isfile(direct):
-                pins.append((path, sc.get("id"), qq, direct))
+                pins.append((path, sc.get("id"), qq, direct,
+                             float(sc.get("duration_sec") or 0)))
                 continue
             # «папка:keyword» (кусок индексированного видео) — это папка
             folder = qq.split(":", 1)[0] if ":" in qq else qq
@@ -115,12 +117,32 @@ def main():
         bad.append((sid, q, "НЕТ ТАКОГО ФАЙЛА И НЕТ ТАКОЙ ПАПКИ в медиатеке — "
                             "фетч молча уйдёт в веб-водопад, а манифест оставит "
                             "source: local_library (ложь)"))
-    for src, sid, q, direct in pins:
+    for src, sid, q, direct, dur in pins:
         try:
             h = file_md5(direct)
         except OSError as exc:
             bad.append((sid, q, f"не читается: {exc}"))
             continue
+        # ВИДЕОПИН КОРОЧЕ СЦЕНЫ — ВИДИМАЯ ПЕТЛЯ (23.10, улов `usuario-fa`).
+        # Живой случай: пин «ПОЛИТИКА/ПУТИН/Нарезки - Путин2.mp4» 12,8 с встал
+        # на сцену 14,9 с. `selfcheck` такое ловит, но ПРЕДУПРЕЖДЕНИЕМ и уже
+        # ПОСЛЕ фетча — то есть после того, как за кадр заплачено. Здесь это
+        # стоит один ffprobe и видно ДО отправки.
+        if dur > 0 and direct.lower().endswith((".mp4", ".mov", ".webm", ".mkv", ".m4v")):
+            try:
+                _r = subprocess.run(
+                    ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                     "-of", "csv=p=0", direct],
+                    capture_output=True, text=True, timeout=30)
+                _have = float((_r.stdout or "0").strip() or 0)
+            except (OSError, ValueError, subprocess.SubprocessError):
+                _have = 0.0
+            if _have and _have + 0.15 < dur:
+                bad.append((sid, q, f"видео {_have:.1f} с КОРОЧЕ сцены {dur:.1f} с "
+                                    f"(не хватает {dur - _have:.1f} с) — в кадре будет "
+                                    "видимая петля; возьми другой файл или укороти сцену"))
+                continue
+
         why = None
         _is_map = "/КАРТЫ/" in ("/" + q.replace("\\", "/"))
         if h in banned:
