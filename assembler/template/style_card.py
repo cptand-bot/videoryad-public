@@ -72,6 +72,21 @@ LIMITS = {
     "timeline": {"items": (3, 6), "item_chars": 40, "kick_chars": 34},
 }
 
+# ШИРИНУ МЕРЯЕМ В ПИКСЕЛЯХ, А НЕ В ЗНАКАХ (23.10, улов `usuario-fa`).
+# `item_chars` выше — грубый потолок, он пропускал строки, которые физически
+# не влезают: у `bullets` стояло 62 знака, а в кадр помещается ~43 (замер:
+# F_HEAD 72, доступно 1596 px, средний знак 36,7 px). Строки на 50 и 54 знака
+# вышли ЗА ПРАВЫЙ КРАЙ карточки МОЛЧА — рисовалка не ругается, обрезку видно
+# только глазами на постере, а перерисовка в облаке стоит ~65 с. Знаки вообще
+# не годятся мерой: «ШШШ» и «ііі» при одной длине дают разную ширину.
+# Кегли взяты из самих рисовалок (`style_cards.py`), поле — MARGIN_L=264.
+PIX = {
+    "bullets":  ("F_HEAD", 72),
+    "forces":   ("F_ALT", 50),
+    "timeline": ("F_HEAD", 40),
+}
+PIX_AVAIL = 1920 - 264 - 60          # левое поле + правый запас
+
 # Расстановка по ролику. Норма карточек общая на ВСЕ виды (одна на 15 сцен,
 # 22.10), но у видов разная динамика, поэтому подряд одинаковые не ставим.
 PER_SCENES, MIN_GAP, MIN_GAP_SAME_KIND = 15, 8, 16
@@ -158,18 +173,37 @@ def main():
               "кадра и рисовалка об этом не скажет." if a.kind == "forces" else "")
 
     # --- ПРОВЕРКА 2: длина строк ------------------------------------------
-    # Рисовалка обрезает молча, поэтому меряем здесь.
+    # Рисовалка обрезает молча, поэтому меряем здесь. С 23.10 — в ПИКСЕЛЯХ
+    # фактическим шрифтом: счёт в знаках пропускал строки за правый край.
+    def _too_wide(text):
+        """Шире поля? Возвращает (ширина, предел) или None, если мерить нечем."""
+        try:
+            sys.path.insert(0, FULLCYCLE)
+            import style_cards as _sc
+            fname, size = PIX[a.kind]
+            fpath = getattr(_sc, fname, None) or _sc.F_HEAD
+            w = _sc._f(fpath, size).getlength(text)
+            return (w, PIX_AVAIL) if w > PIX_AVAIL else None
+        except Exception:
+            return None            # нет шрифтов — остаётся счёт в знаках ниже
+
     long_lines = []
     items, rows, events = [], [], []
     for r in raw:
         if a.kind == "bullets":
             items.append(r)
-            if len(r) > lim["item_chars"]:
+            _wide = _too_wide(r)
+            if _wide:
+                long_lines.append((r, f"{len(r)} зн., {_wide[0]:.0f} px при пределе {_wide[1]}"))
+            elif len(r) > lim["item_chars"]:
                 long_lines.append((r, len(r)))
         elif a.kind == "forces":
             who, want = _split_pair(r, "строка forces")
             rows.append({"who": who, "want": want})
-            if len(want) > lim["item_chars"]:
+            _wide = _too_wide(want)
+            if _wide:
+                long_lines.append((want, f"{len(want)} зн., {_wide[0]:.0f} px при пределе {_wide[1]}"))
+            elif len(want) > lim["item_chars"]:
                 long_lines.append((want, len(want)))
         else:
             when, what = _split_pair(r, "событие timeline")
@@ -185,9 +219,13 @@ def main():
             if len(what) > lim["item_chars"]:
                 long_lines.append((what, len(what)))
     if long_lines:
-        _fail(3, f"не влезает в карточку «{a.kind}» (потолок {lim['item_chars']} знаков):",
-              *[f"  {n} знаков: {t}" for t, n in long_lines],
-              "  рисовалка обрежет это МОЛЧА — сократи строку")
+        # `n` — либо число знаков (грубый потолок), либо готовая строка с
+        # замером в пикселях; поэтому склеиваем, а не форматируем как число
+        _fail(3, f"строка не влезает в карточку «{a.kind}»:",
+              *[f"  {n}{'' if isinstance(n, str) else ' зн.'} → {t}"
+                for t, n in long_lines],
+              "  рисовалка обрежет это МОЛЧА, обрезку видно только глазами "
+              "на постере — сократи строку")
     if len(a.kick) > lim["kick_chars"]:
         _fail(3, f"эпиграф длиннее {lim['kick_chars']} знаков ({len(a.kick)}): {a.kick}")
 
