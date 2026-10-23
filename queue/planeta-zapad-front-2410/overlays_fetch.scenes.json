@@ -1,0 +1,196 @@
+{
+ "scenes": [
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 13.52,
+   "visual_prompt": "карта Волынской области: где это",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ВОЛЫНЬ/Volyn Oblast highlighted in Ukraine.jpg"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 12.92,
+   "visual_prompt": "чем именно ударили",
+   "source": "press_photo",
+   "source_query": "реактивный беспилотник Герань в полёте реальное фото"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 12.14,
+   "visual_prompt": "кто восстанавливает",
+   "source": "press_photo",
+   "source_query": "работники Укрэнерго восстанавливают линию электропередачи реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "duration_sec": 12.57,
+   "visual_prompt": "карта Европы: куда ведёт логистика",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ЕВРОПА/Europe 2.jpg"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "duration_sec": 13.93,
+   "visual_prompt": "чем спасаются при отключении",
+   "source": "press_photo",
+   "source_query": "дизельный генератор на улице украинского города реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 9.12,
+   "visual_prompt": "предмет требования министра",
+   "source": "press_photo",
+   "source_query": "фасад здания Львовского областного совета с флагами реальное фото"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "duration_sec": 12.36,
+   "visual_prompt": "Шенген назван в тексте",
+   "source": "press_photo",
+   "source_query": "пограничный знак Шенгенской зоны на дороге реальное фото"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "duration_sec": 12.13,
+   "visual_prompt": "польский хаб помощи, другой слой",
+   "source": "press_photo",
+   "source_query": "грузовой самолёт разгружается в аэропорту Жешува Польша реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "duration_sec": 12.08,
+   "visual_prompt": "карта Польши",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ПОЛЬША/Poland locator in Europe (red on cream).png"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "duration_sec": 12.24,
+   "visual_prompt": "Донбасс назван в тексте, контраст со Львовом",
+   "source": "press_photo",
+   "source_query": "террикон угольной шахты в Донбассе реальное фото"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "duration_sec": 14.4,
+   "visual_prompt": "публикация WSJ о замедлении Starlink, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/JTJV1ab8eCmdj0Ey5Qxi4VH7N86wz4wjR7TMyI41zPOxG-ZZVMdhWWilxDnW41JDjmkoBfghFYAWoxrP9oNyKLlTDmQwCfH5d6SOVNSn3B2raLu_xSZ0RGxyobhRwt7L7K0FDjdpjR224NfiWJzITeyZwn9Z2j1Tz4AXDiEadY-qhl2peOrjYmi23oJA0IBupeEU8Xb5I3kqNt_nVLj6FMNUYejY3z7vsgF_qUbPMHzcc64pzEGH92s7nn4B3sQQajzW_Ff4u9QwUzaMVap3C8pxg_iEXRBnvenrEp5s15XOnLdTToPbc4Lxk2tWe6z98naxjoACHUAtWKhfJmGDcQ.jpg"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "duration_sec": 12.23,
+   "visual_prompt": "чем управляет оператор",
+   "source": "press_photo",
+   "source_query": "ударный беспилотник украинской армии на пусковой установке реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "duration_sec": 13.45,
+   "visual_prompt": "сообщение о требовании сенаторов, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/oGkmqPn5b4hjmh9FOkWo8P1vWvXriMXNz3L8KyaeeCjBOzaAKqnIFgnq_xQ9xXxHiT8NwKZUG6IXNgQ-1VGzGb1mWgqkXaamXo01hd6sXofHAP_kiFGhV3Kh9WCs1R-JkYEtnm_OIpAcNFnhNitvf3pOoY5RZooOXLx1v9vL4XgjYFMhOsPnTsmPOhNmpdOtMbFFeM_bdONAU39seR9OLC1yO29FYLVRKk-tYi1AAcritMnMhnemCBNMXAAGd0PnGoF9BnG46-OOS2irBaR9ub1x-8L4zLvOM7iWKAThM7-lX8wiaTuE-MQawIKiSmcEiwVmOorm414prFHPkc2uhA.jpg"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "duration_sec": 13.68,
+   "visual_prompt": "публикация WSJ о звонке Трампа Маску, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/P8_kq_6aA9E3zx3rke5wbZFMISJlbuAWVNI45YDYnuWPSvd0N6MeNVXdoA_UUeZAcoL0qm7GnTdKoP0hvHiX7YHyunNUumTwSs9yivnu9HXrG3feKv3-04qDUBO5AP9O3X5zRFVKm6OrZwMqz8V-0si1YNFJgpaXz_9IdwatHZlKHRGEKvxt6LqSRnNTzIwEw86SjFuTtckJWskt4PGobN90A5S3DDnuxujsx1BaxfDzPDYp9TDM-aLqTrMdpopg9_QUtjhKfvx-JJcMfO7IIIK4rM9LDKg_R6NJXAqh4it1zFIO9CpODrbjFSeTnaS0DS3o6rUSnvIcxYNCGjdIaQ.jpg"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "duration_sec": 12.97,
+   "visual_prompt": "публикация NYT о потерянных беспилотниках, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/WmGP2IHMkvN2q8lj_SbRGL8rOGrynHpjwGjsU6NQ3qylmc-A9pByKSrTP473v1IPRw3U6Tc9dSo4F9N3om6nPbn2mnOJLCfZWHWVMUhb6-YYno6nfsojod2QM7DClB1VfdUV5sWfxBY1x9H5r_Pwb3naxzfbeHngJclN7GfOuNuqx88IyYHBbRrcuIUblb111EsLUEFovHsgIV2j89gUe8R-Sh5Q0jywLaZ_-rGNqmxfHvIFcKWAsMm6P4gJcelSi_-vxVNEFw7LcImd-0sSL4xUR2BnaIm2L1V_VC4SbgHR1Ax0tpDFV_AyTbNUMVlGlBdKTlq9y-KZwOWlX1tfDQ.jpg"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "duration_sec": 13.61,
+   "visual_prompt": "сообщение о сохранении ограничений, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/qMAHNQOsgXv5sK_1T1acIgueTPCLOqdnqEuYlHvDcaqGe8mgXGKIyNzHDnTdpsi-q9AXKLun5wVuLO3XsKsdb2INkZZTNiHtJSkN3V7-zt_aYZ3mpiWAlP_0DqfqLaKmI9C3-McsVSemrfwQvYc6fKWw1Ch5GFodAUM4HFLRCBIR0bFEqeouQOEgKNfDXAR6Z7jkOpIPAHNgEoUYCUvMAhYtafwQ5c1duhTkRGQyG_fe_8APgTnaJG1JIN4E7Xgu3FrleuivFvXH3aRfe0w4ocE4i9-rcN_1Xb-kOH2bXLt6s8zvlnqwpEp7sOadIyNfDORKcc83KEBj5doXZ4Xgrw.jpg"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "duration_sec": 14.27,
+   "visual_prompt": "владелец спутника, назван смыслом сцены",
+   "source": "press_photo",
+   "source_query": "Илон Маск 2026 реальное фото"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "duration_sec": 8.94,
+   "visual_prompt": "склады названы в тексте",
+   "source": "press_photo",
+   "source_query": "складской логистический терминал в Закарпатье реальное фото"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "duration_sec": 10.21,
+   "visual_prompt": "распределительные узлы названы",
+   "source": "press_photo",
+   "source_query": "распределительная электрическая подстанция в Львовской области реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 12.72,
+   "visual_prompt": "собственные дроны названы в тексте",
+   "source": "press_photo",
+   "source_query": "украинский ударный беспилотник в полёте реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 12.83,
+   "visual_prompt": "опровержение Польши, вложение досье",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/gH636Io1iGhFGPxGzrgU2EUomzEIKBLHmjc67K3bcYHdzxvHd2Mwi5IRuKhZqhS2-mAtFIupogSLU164B2Y8XU2-9eS4NyiGLRihgeD5lN3uAQUsO16I4oZ3L4p-LzZrAMcIfBknx9rBv-1Mks7ugJeU7DNWnrdnAhdA5SLLBCnqO54psArJ5-jLdmy8Phmk0hsDiIJQjrWZXdDqL-Bl9ZwuKzlQoIPWadaPFDb7ptvU_iWgKXvGvd_YvqmSh6GBmptZqhWl0MM2XGg3ZSd3YPCPMuK80IgQlaDPjJL5SGCjXtomcKG7K-7punWcxzbGGqO33cBZix8m0rO7J_1ExA.jpg"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "duration_sec": 13.76,
+   "visual_prompt": "реакция на угрозы у границы",
+   "source": "press_photo",
+   "source_query": "польский истребитель F-16 в небе реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 14.24,
+   "visual_prompt": "Литва названа в тексте",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны Литвы в Вильнюсе реальное фото"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "duration_sec": 9.95,
+   "visual_prompt": "карта Львовской области",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ГАЛИЦИЯ/Lviv Oblast highlighted in Ukraine.jpg"
+  }
+ ]
+}
