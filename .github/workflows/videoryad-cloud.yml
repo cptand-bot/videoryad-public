@@ -57,6 +57,7 @@ jobs:
       shards:     ${{ steps.shard.outputs.shards }}
       has_token:  ${{ steps.facts.outputs.has_token }}
       fetch_only: ${{ steps.pick.outputs.fetch_only }}
+      has_overlays: ${{ steps.pick.outputs.has_overlays }}
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 1 }   # HEAD tree ~0.5 MB; full history = 3.5 GB of old queue/ blobs, never needed on a runner
@@ -81,7 +82,14 @@ jobs:
           echo "name=$(basename "$proj")" >> "$GITHUB_OUTPUT"
           fo=false; [ -f "$proj/.fetch-only" ] && fo=true
           echo "fetch_only=$fo" >> "$GITHUB_OUTPUT"
-          echo "Selected: $proj   (fetch-only: $fo)"
+          # ЕСТЬ ЛИ ВСПЛЫВАШКИ (23.10, улов вкладки-разработчика). Ролик целиком
+          # из элементов арсенала не имеет `overlays.json` вовсе — а джоб
+          # `overlays` всё равно поднимал ДВЕНАДЦАТЬ машин на работу, которой
+          # не существует, и они же давали «упало: 11» в статусе. Считаем здесь
+          # и пропускаем джоб целиком, как уже пропускается `fetch`.
+          ov=false; [ -s "$proj/overlays.json" ] && ov=true
+          echo "has_overlays=$ov" >> "$GITHUB_OUTPUT"
+          echo "Selected: $proj   (fetch-only: $fo, всплывашки: $ov)"
 
       - name: Assembler present
         if: steps.pick.outputs.have == 'true'
@@ -623,6 +631,7 @@ jobs:
       && needs.setup.outputs.have == 'true'
       && needs.setup.outputs.fetch_only != 'true'
       && needs.clips.result != 'skipped'
+      && needs.setup.outputs.has_overlays == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
