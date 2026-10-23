@@ -730,6 +730,25 @@ def kicker_overlay(out=None, text="", sub=None, watermark="ДО ПРИГОВОР
     return im
 
 
+def attrib_frame(out=None, photo="", text="", sub=None,
+                 watermark="ДО ПРИГОВОРА", t=None):
+    """КАДР СО СЛОЕМ АТРИБУЦИИ — дежурный вид, которым закрывается ЛЮБАЯ
+    сцена-фотография.
+
+    user, 23.10.2026: «никаких пустых фотографий вообще, блин. Вообще».
+    Поэтому голый кадр в ролик не попадает: либо на нём слой атрибуции,
+    либо плашка-кикер с живой красной точкой — здесь это одно и то же,
+    `kicker_overlay` поверх живого кадра (медленный зум + блик).
+    """
+    base = live_photo(photo, W, H, t=t)
+    ov = kicker_overlay(None, text=text, sub=sub, watermark=watermark, t=t)
+    im = Image.alpha_composite(base.convert("RGBA"), ov).convert("RGB")
+    if out:
+        im.save(out, quality=92)
+        return out
+    return im
+
+
 def reply_overlay(out, speaker, words, speaker_idx=0):
     """Реплика участника: имя его закреплённым цветом, слова белым, на
     мягком градиенте снизу. Не дорожка субтитров — именно чужая речь."""

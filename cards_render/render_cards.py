@@ -132,7 +132,15 @@ def render_jobs(jobs_path, outdir, fps=30):
     FN = {"quote": None, "split": qv.quote_split, "tape": qv.quote_tape,
           "doc": qv.quote_doc, "strike": qv.quote_strike, "duel": qv.quote_duel,
           "pull": qv.quote_pull, "marker_serif": qv.marker_glyph,
-          "paper_typed": qv.paper_typed, "paper_hand": qv.paper_hand}
+          "paper_typed": qv.paper_typed, "paper_hand": qv.paper_hand,
+          # КАРТОЧКИ РАЗБОРА — тоже в облако (2026-10-23). До этого дня у них
+          # облачного пути НЕ БЫЛО вообще: `template/style_card.py` рисовал их
+          # ТОЛЬКО на машине пользователя, а считать там нельзя ничего.
+          "bullets": sc.bullets, "forces": sc.forces, "timeline": sc.timeline,
+          # ОБЯЗАТЕЛЬНЫЙ СЛОЙ НА ФОТО (2026-10-23, его слово: «никаких
+          # пустых фотографий вообще»). `attrib` — кадр с кикером и живой
+          # красной точкой, `lower` — кадр с атрибуцией и репликой снизу.
+          "attrib": sc.attrib_frame, "lower": sc.lower_third}
     import quote_paper as _qp
     FN["quote"] = _qp.quote_paper
     jobs = json.load(open(jobs_path, encoding="utf-8"))
@@ -141,10 +149,14 @@ def render_jobs(jobs_path, outdir, fps=30):
     for job in jobs:
         view, sid = job["view"], int(job["scene"])
         kw = dict(job.get("kwargs") or {})
+        for seq in ("items", "rows", "events"):   # JSON отдаёт списки
+            if isinstance(kw.get(seq), list):
+                kw[seq] = tuple(kw[seq])
         # фото едет рядом с заданием: путь на машине пользователя раннеру не виден
-        if kw.get("photo"):
-            kw["photo"] = os.path.join(os.path.dirname(jobs_path),
-                                       os.path.basename(kw["photo"]))
+        for ph_key in ("photo", "base_photo", "old_path", "new_path"):
+            if kw.get(ph_key):
+                kw[ph_key] = os.path.join(os.path.dirname(jobs_path),
+                                          os.path.basename(kw[ph_key]))
         fn = FN[view]
         mp4 = os.path.join(outdir, f"scene_{sid:03d}.mp4")
         jpg = os.path.join(outdir, f"scene_{sid:03d}.jpg")
