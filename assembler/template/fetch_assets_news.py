@@ -40,6 +40,7 @@ import sys
 import time
 import hashlib
 import subprocess
+import socket
 import urllib.request
 import urllib.parse
 from collections import Counter
@@ -987,12 +988,52 @@ def load_env(env_path):
     return env
 
 
+# ПОТОЛОК НА ЧТЕНИЕ ОТВЕТА — ПО ОБЩЕМУ ВРЕМЕНИ, А НЕ ПО БЕЗДЕЙСТВИЮ (23.10).
+# Корень зависших шардов, найденный на `planeta-zapad-front-2410` (прогон
+# 39923281250, cptand-pub): 15 шардов из 20 отработали за 76-139 с, пять
+# висели до самого `timeout-minutes` — 28 минут. Причина НЕ в разбросе машин
+# (все 20 стартовали в одну секунду) и не в том, что таймаут не применился:
+# `timeout=N` у `urlopen` — это таймаут БЕЗДЕЙСТВИЯ сокета. Сервер, отдающий
+# тело по чуть-чуть, его не нарушает ни разу, и `resp.read()` висит сколько
+# угодно. Мягкий дедлайн шарда это не ловит: он проверяется МЕЖДУ сценами, а
+# зависание происходит ВНУТРИ одной. Поэтому читаем кусками и обрываем по
+# общему времени — тогда сцена честно падает в «не добыл», шард идёт дальше,
+# а дедлайн снова начинает работать.
+_READ_LIMIT_SEC = float(os.environ.get("FETCH_READ_LIMIT_SEC", "90") or 90)
+# Страховка для путей, где таймаут не передан явно: без неё такой сокет ждёт
+# бесконечно (настройка процесса, на уже открытые соединения не влияет).
+socket.setdefaulttimeout(60)
+
+
+def _read_capped(resp, max_bytes=None, limit_sec=None, what="ответ"):
+    limit = _READ_LIMIT_SEC if limit_sec is None else limit_sec
+    t0 = time.time()
+    parts, got = [], 0
+    while True:
+        if limit and time.time() - t0 > limit:
+            raise TimeoutError(
+                f"чтение дольше {limit:.0f} с, получено {got // 1024} КБ — обрываю ({what})")
+        # read1, а НЕ read: read(N) ждёт, пока наберётся весь кусок, и на
+        # медленной отдаче один такой вызов висит минутами — проверка времени
+        # до него просто не доходит (поймано стендом 23.10: сервер слал по
+        # 1 КБ в полсекунды, кусок 256 КБ читался бы 128 с). read1 отдаёт то,
+        # что уже пришло, поэтому потолок проверяется часто.
+        chunk = resp.read1(65536) if hasattr(resp, "read1") else resp.read(16384)
+        if not chunk:
+            break
+        parts.append(chunk)
+        got += len(chunk)
+        if max_bytes is not None and got > max_bytes:
+            break
+    return b"".join(parts)
+
+
 def http_get(url, headers=None, timeout=18):
     h = {"User-Agent": DEFAULT_UA}
     h.update(headers or {})
     req = urllib.request.Request(url, headers=h)
     with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+        return _read_capped(resp, what=url[:80])
 
 
 # --- Wikimedia is NEVER a blocking step (user, 2026-09-03, twice, angry) ---
@@ -1365,7 +1406,8 @@ def _direct_download(url):
                                                "Referer": ref})
     with urllib.request.urlopen(req, timeout=40) as resp:
         ctype = (resp.headers.get("Content-Type") or "").lower()
-        blob = resp.read(_DIRECT_MAX_BYTES + 1)
+        # вложения телеграма (cdn*.telesco.pe) — главный источник зависаний
+        blob = _read_capped(resp, _DIRECT_MAX_BYTES + 1, what="direct_url " + url[:60])
     if len(blob) > _DIRECT_MAX_BYTES:
         raise ValueError(f"файл больше {_DIRECT_MAX_BYTES // (1024*1024)} МБ")
     return blob, ctype
