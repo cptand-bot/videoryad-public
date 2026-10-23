@@ -22,7 +22,18 @@ except OSError:
     FONT = FONT_S = ImageFont.load_default()
 
 scenes = json.load(open(scenes_path, encoding="utf-8"))["scenes"]
-manifest = {m["id"]: m for m in json.load(open(os.path.join(images_dir, "manifest.json"), encoding="utf-8"))}
+# МАНИФЕСТА МОЖЕТ НЕ БЫТЬ — ЭТО НЕ ПОВОД ПАДАТЬ (2026-10-23, улов
+# `usuario-21`; гоча была известна и не чинилась). У `overlays/` манифеста не
+# бывает вовсе, и лист по всплывашкам приходилось строить, синтезируя манифест
+# руками. Лист — это картинки с подписями, он прекрасно строится по файлам на
+# диске; манифест лишь добавляет к подписи источник и статус.
+_mpath = os.path.join(images_dir, "manifest.json")
+try:
+    manifest = {m["id"]: m for m in json.load(open(_mpath, encoding="utf-8"))}
+except (OSError, ValueError, KeyError, TypeError):
+    manifest = {}
+    print("  (манифеста нет — лист строю по файлам на диске, без источника и "
+          "статуса в подписи)", flush=True)
 
 tiles = []
 for s in scenes:
