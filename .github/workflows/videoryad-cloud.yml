@@ -249,6 +249,7 @@ jobs:
       - run: tar xzf project-src.tgz
 
       - name: Set up tools
+        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
@@ -398,6 +399,7 @@ jobs:
           merge-multiple: true
 
       - name: Set up tools
+        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
@@ -531,6 +533,7 @@ jobs:
           echo "count=$n" >> "$GITHUB_OUTPUT"
 
       - name: Set up tools
+        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
         if: steps.have.outputs.count != '0'
         run: |
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
@@ -571,7 +574,13 @@ jobs:
     needs: [setup, fetch, clips, overlays]
     if: always() && needs.setup.result == 'success' && needs.setup.outputs.have == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    # 180 → 30 (23.10). На `planeta`-прогоне шаг «Set up tools» завис на 23
+    # минуты, и при трёхчасовом таймауте джоб висел бы дальше: все последующие
+    # шаги `pending`, релиз не создан, `get.sh` отвечает «release not found» —
+    # то есть зависший assemble ОБНУЛЯЕТ работу всех успевших шардов. Сам шаг
+    # теперь режется пятью минутами, но и джобу нужен честный потолок:
+    # измеренная сборка 58 сцен заняла 326 с.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 1 }
@@ -757,6 +766,7 @@ jobs:
           fi
 
       - name: Set up tools
+        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
