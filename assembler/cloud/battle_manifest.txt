@@ -96,3 +96,4 @@ template/sfx/whoosh.mp3
 template/sfx/zatvor.mp3
 template/style_card.py
 template/voice_note.py
+template/zoom.py
