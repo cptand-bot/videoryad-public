@@ -1,0 +1,85 @@
+{
+ "scenes": [
+  {
+   "id": 5,
+   "text": "",
+   "duration_sec": 13.04,
+   "start_sec": 36.36,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Map of Ukraine Oblasts simple 4 colors.jpg",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "duration_sec": 12.56,
+   "start_sec": 180.9,
+   "source": "press_photo",
+   "source_query": "Дональд Трамп за рабочим столом в Белом доме октябрь 2026 реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "duration_sec": 12.62,
+   "start_sec": 266.85,
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на совещании в Киеве октябрь 2026 реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "duration_sec": 13.4,
+   "start_sec": 324.18,
+   "source": "press_photo",
+   "source_query": "украинские военные на построении реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 13.84,
+   "start_sec": 400.45,
+   "source": "press_photo",
+   "source_query": "украинские военные в окопе 2026 реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 14.64,
+   "start_sec": 429.29,
+   "source": "press_photo",
+   "source_query": "Дональд Трамп на пресс-конференции октябрь 2026 реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "duration_sec": 8.78,
+   "start_sec": 443.93,
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на пресс-конференции в Киеве октябрь 2026 реальное фото",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "duration_sec": 13.05,
+   "start_sec": 562.5,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg",
+   "visual_prompt": "overlay"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "duration_sec": 14.0,
+   "start_sec": 588.32,
+   "source": "press_photo",
+   "source_query": "зенитный комплекс армии США на учениях в Европе 2026 реальное фото",
+   "visual_prompt": "overlay"
+  }
+ ]
+}

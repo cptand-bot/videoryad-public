@@ -1,0 +1,503 @@
+{
+  "anchor": "top",
+  "3": {
+    "text": {
+      "words": "ЧЕТЫРЕ ГОДА ТОРГА",
+      "color": "white",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "pop",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "6": {
+    "text": {
+      "words": "ЦЕЛЬ — ОКОНЧАТЕЛЬНЫЙ МИР",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "8": {
+    "text": {
+      "words": "ДВА ПУТИ К ОДНИМ ЦЕЛЯМ",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "9": {
+    "text": {
+      "words": "ВОЕННЫЙ ПУТЬ УЖЕ ИДЁТ",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "ПУТИН: В ВСУ ПОЛМИЛЛИОНА ДЕЗЕРТИРОВ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "12": {
+    "text": {
+      "words": "ДОНБАСС — НЕ ТЕРРИТОРИЯ УКРАИНЫ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "text": {
+      "words": "ГЕНШТАБ ПРОСИЛ СНЯТЬ БРОНЬ С 200 ТЫСЯЧ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "text": {
+      "words": "ВОПРОС СМЕНИЛСЯ: КАК ЗАКОНЧИТЬ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 2.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "16": {
+    "photo": "overlays/scene_016.jpg",
+    "sound": "zatvor",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "17": {
+    "text": {
+      "words": "СНОВА ТЕ ЖЕ ВОПРОСЫ 2021 ГОДА",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "18": {
+    "text": {
+      "words": "НАТО И ЯДЕРНАЯ ТЕМА — СНОВА",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "19": {
+    "text": {
+      "words": "17 ДЕКАБРЯ 2021: ПРОЕКТЫ ДОГОВОРОВ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "20": {
+    "text": {
+      "words": "НЕ РАСШИРЯТЬ НАТО НА ВОСТОК",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "text": {
+      "words": "ЗАПАД ОТВЕТИЛ ОТКАЗОМ",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "23": {
+    "photo": "overlays/scene_023.jpg",
+    "sound": "pop",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "s",
+    "scale": 1.0,
+    "approved": true
+  },
+  "26": {
+    "text": {
+      "words": "ОБЕЩАНИЕ: НИ ОДНОЙ УСТУПКИ",
+      "color": "white",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "photo": "overlays/scene_028.jpg",
+    "sound": "zatvor",
+    "at": 4.7,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "s",
+    "scale": 1.0,
+    "approved": true
+  },
+  "30": {
+    "text": {
+      "words": "ЧЕМ ЖЁСТЧЕ ПОЗИЦИЯ — ТЕМ ПРОЩЕ ЖДАТЬ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "34": {
+    "photo": "overlays/scene_034.jpg",
+    "sound": "zatvor",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "left",
+    "size": "l",
+    "scale": 1.0,
+    "anchor": "bottom",
+    "approved": true
+  },
+  "35": {
+    "text": {
+      "words": "БЕЗ АМЕРИКАНСКОЙ ПОМОЩИ — НЕ БЫЛО БЫ",
+      "color": "red",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "36": {
+    "photo": "overlays/scene_036.jpg",
+    "sound": "whoosh",
+    "at": 5.1,
+    "shape": "rect",
+    "style": "right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "37": {
+    "photo": "overlays/scene_037.jpg",
+    "sound": "zatvor",
+    "at": 3.1,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "38": {
+    "text": {
+      "words": "ПУТИН СВЯЗАЛ УКРАИНУ И ВСЮ ЕВРОПУ",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "39": {
+    "text": {
+      "words": "РАЗГОВОР СТАЛ ОБЩЕЕВРОПЕЙСКИМ",
+      "color": "white",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 3.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "text": {
+      "words": "10 000 УДАРНЫХ ДРОНОВ В МЕСЯЦ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "44": {
+    "text": {
+      "words": "СКОЛЬКО ВОЙСК У ЧУЖОЙ ГРАНИЦЫ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "47": {
+    "photo": "overlays/scene_047.jpg",
+    "sound": "pop",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "top",
+    "approved": true
+  },
+  "48": {
+    "text": {
+      "words": "ЗА СОСЕДЯМИ СТОИТ АЛЬЯНС",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "49": {
+    "photo": "overlays/scene_049.jpg",
+    "sound": "zatvor",
+    "at": 4.9,
+    "shape": "rect",
+    "style": "up-right",
+    "size": "l",
+    "scale": 1.0,
+    "approved": true
+  },
+  "51": {
+    "text": {
+      "words": "КЛАССИЧЕСКАЯ ЛОВУШКА БЕЗОПАСНОСТИ",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "52": {
+    "text": {
+      "words": "РЕШЕНИЕ СВОЁ — ПОСЛЕДСТВИЯ ОБЩИЕ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 4.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "55": {
+    "text": {
+      "words": "КТО ДЕЙСТВУЕТ, ЕСЛИ НАРУШЕНО",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pop",
+      "at": 3.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "57": {
+    "text": {
+      "words": "ПЕРЕМИРИЕ — ЕЩЁ НЕ МИР",
+      "color": "red",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 2.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "59": {
+    "text": {
+      "words": "ЧЕРЕЗ ТРИ ГОДА — НОВЫЙ КРИЗИС",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "61": {
+    "text": {
+      "words": "ЕВРОПЕ ТОЖЕ ПРИДЁТСЯ ОТВЕЧАТЬ",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "63": {
+    "text": {
+      "words": "РОССИЯ УЖЕ ВЕДЁТ БОЕВЫЕ ДЕЙСТВИЯ",
+      "color": "red",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "64": {
+    "text": {
+      "words": "ЗА СТОЛОМ СИДИТ ВРЕМЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "66": {
+    "text": {
+      "words": "ОКТЯБРЬ 2026: ЭВАКУАЦИЯ КРАМАТОРСКА",
+      "color": "white",
+      "pos": "mc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "67": {
+    "text": {
+      "words": "ЖДАЛИ ЛУЧШЕЙ СДЕЛКИ — СТАЛА ХУЖЕ",
+      "color": "red",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "pshik",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "69": {
+    "text": {
+      "words": "РЕАЛЬНОСТЬ НЕ ОБЯЗАНА ЖДАТЬ",
+      "color": "yellow",
+      "pos": "tr",
+      "font": "oswald",
+      "sound": "whoosh",
+      "at": 5.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "71": {
+    "text": {
+      "words": "СПОР НЕ ТОЛЬКО О ЛИНИИ ФРОНТА",
+      "color": "white",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "mashinka",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "73": {
+    "text": {
+      "words": "ЦЕЛИ ТЕ ЖЕ. МИР ВОКРУГ — ДРУГОЙ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "oswald",
+      "sound": "zatvor",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
