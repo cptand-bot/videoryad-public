@@ -396,10 +396,23 @@ def _corner_watermark_blob(image_path, tess_bin):
         (0, h - ch, w, h),                   # full bottom strip
     ]
     blob_parts = []
+    # ПОТОЛОК НА УВЕЛИЧЕНИЕ (23.10, улов `usuario-fa`). Кроп увеличивался
+    # ВТРОЕ безусловно, и на крупном кадре это давало чудовищный размер:
+    # у 6467×4311 нижняя полоса 6467×718 превращалась в 19401×2154 — сорок
+    # один мегапиксель. Процесс часами сидел в PIL, tesseract при этом даже
+    # не запускался, и снаружи это выглядело как «OCR завис»: выход нулевой,
+    # вывод пустой, процессов нет. Увеличиваем ровно настолько, насколько
+    # нужно мелкому клейму, и не больше 3000 px по длинной стороне.
+    _t0 = time.time()
     for box in regions:
+        if time.time() - _t0 > 60:
+            blob_parts.append("")      # дальше не идём: бюджет кадра вышел
+            break
         try:
             crop = im.crop(box)
-            crop = crop.resize((crop.width * 3, crop.height * 3))
+            _k = min(3.0, 3000.0 / max(crop.width, crop.height, 1))
+            if _k > 1.01:
+                crop = crop.resize((int(crop.width * _k), int(crop.height * _k)))
             tmp = image_path + f".wmcrop.jpg"
             crop.save(tmp, "JPEG", quality=90)
             _, blob = _ocr_raw(tmp, tess_bin)

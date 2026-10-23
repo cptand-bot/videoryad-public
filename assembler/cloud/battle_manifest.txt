@@ -79,6 +79,7 @@ template/grab_stream_frame.py
 template/grab_video_frame.py
 template/pair_sheet.py
 template/phase.py
+template/photo_quality.py
 template/query_lint.py
 template/quote_card.py
 template/refetch.py
