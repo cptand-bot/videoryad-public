@@ -10,9 +10,47 @@ concurrency:
   group: cards-render
   cancel-in-progress: false
 jobs:
-  render:
+  # СКОЛЬКО МАШИН — ПО ЧИСЛУ КАРТОЧЕК (диспетчер, 23.10, по предложению
+  # вкладки-разработчика). Матрица из шести нужна полному комплекту арсенала
+  # (62 клипа, 699 с экранного времени), но боевой новостной ролик несёт 4-5
+  # карточек: пять машин из шести простаивали бы впустую и писали warning
+  # «no files found», а лимит раннеров на аккаунте общий с фетчем — там уже
+  # 20 шардов. Считаем по 10 заданий на машину, потолок шесть.
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
+    outputs:
+      shards: ${{ steps.calc.outputs.shards }}
+      total: ${{ steps.calc.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: calc
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          try:
+              n = len(json.load(open("cards_render/jobs.json", encoding="utf-8")))
+          except Exception:
+              n = 1
+          parts = max(1, min(6, (n + 9) // 10))
+          print("total=%d" % parts)
+          print("shards=%s" % json.dumps(list(range(1, parts + 1))))
+          print("заданий: %d, машин: %d" % (n, parts), file=__import__("sys").stderr)
+          PY
+      - name: что решили
+        run: echo "заданий разложено на ${{ steps.calc.outputs.total }} машин"
+
+  render:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # ПОЛНЫЙ КОМПЛЕКТ АРСЕНАЛА (2026-10-23): 62 сцены одним потоком в таймаут
+    # не влезают — шесть машин берут по куску заданий, каждая кладёт свой
+    # артефакт. Минуты на публичном репозитории не считаются.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.shards) }}
     steps:
       - uses: actions/checkout@v4
       - name: системные пакеты
@@ -28,11 +66,11 @@ jobs:
         env:
           VIDEORYAD_FONTS: ${{ github.workspace }}/cards_render/fonts
           VIDEORYAD_PORTRAIT: ${{ github.workspace }}/cards_render/portrait.jpg
-        run: python3 cards_render/render_cards.py cards_out
+        run: python3 cards_render/render_cards.py cards_out --shard ${{ matrix.shard }}/${{ needs.plan.outputs.total }}
       - name: что получилось
         run: ls -la cards_out && cat cards_out/report.json
       - uses: actions/upload-artifact@v4
         with:
-          name: cards
+          name: cards-${{ matrix.shard }}
           path: cards_out
           retention-days: 1
