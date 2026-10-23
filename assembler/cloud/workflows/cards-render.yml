@@ -92,10 +92,21 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 10
+        timeout-minutes: 6
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          # не полагаемся на apt — см. разбор в videoryad-cloud.yml (23.10)
+          command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 || {
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu-core || true
+          }
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            curl -fsSL --retry 3 --max-time 180 \
+              https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+              -o /tmp/ff.tar.xz \
+              && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ || true
+          fi
+          command -v ffmpeg >/dev/null 2>&1 || { echo "::error::ffmpeg не установлен"; exit 1; }
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

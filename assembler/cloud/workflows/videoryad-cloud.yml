@@ -261,16 +261,45 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 20
+        timeout-minutes: 6    # внутри короткие попытки, висеть нечему (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
-          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
-          for _try in 1 2 3; do
-            timeout 240 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu && break
-            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
-          done
+          # НЕ ПОЛАГАЕМСЯ НА APT (23.10, блокер: три прогона подряд легли).
+          # Картина была двойная: `apt-get install ffmpeg` либо висел до
+          # таймаута (13-14 джобов с «Set up tools has timed out»), либо
+          # завершался УСПЕШНО, не поставив пакет — и сборка падала позже и
+          # непонятно, на `FileNotFoundError: 'ffprobe'`. Воспроизводилось на
+          # двух аккаунтах, то есть дело не в цели. Поэтому: сперва смотрим,
+          # нет ли ffmpeg уже в образе; потом короткая попытка apt; если и
+          # она не дала бинарей — тянем статическую сборку одним файлом, она
+          # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
+          # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
+          # десять минут в чужом джобе.
+          need_apt=0
+          command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
+            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            || need_apt=1
+          command -v tesseract >/dev/null 2>&1 || need_apt=1
+          if [ "$need_apt" = 1 ]; then
+            sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            curl -fsSL --retry 3 --max-time 180 \
+              https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+              -o /tmp/ff.tar.xz \
+              && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ \
+              || echo "статическая сборка тоже не поехала" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            exit 1
+          fi
+          echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
       - name: Ключи из Secrets (в репозиторий они не попадают никогда)
@@ -420,16 +449,45 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 20
+        timeout-minutes: 6    # внутри короткие попытки, висеть нечему (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
-          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
-          for _try in 1 2 3; do
-            timeout 240 sudo apt-get install -y -qq ffmpeg fonts-dejavu && break
-            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
-          done
+          # НЕ ПОЛАГАЕМСЯ НА APT (23.10, блокер: три прогона подряд легли).
+          # Картина была двойная: `apt-get install ffmpeg` либо висел до
+          # таймаута (13-14 джобов с «Set up tools has timed out»), либо
+          # завершался УСПЕШНО, не поставив пакет — и сборка падала позже и
+          # непонятно, на `FileNotFoundError: 'ffprobe'`. Воспроизводилось на
+          # двух аккаунтах, то есть дело не в цели. Поэтому: сперва смотрим,
+          # нет ли ffmpeg уже в образе; потом короткая попытка apt; если и
+          # она не дала бинарей — тянем статическую сборку одним файлом, она
+          # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
+          # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
+          # десять минут в чужом джобе.
+          need_apt=0
+          command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
+            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            || need_apt=1
+          # tesseract этому джобу не нужен
+          if [ "$need_apt" = 1 ]; then
+            sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            curl -fsSL --retry 3 --max-time 180 \
+              https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+              -o /tmp/ff.tar.xz \
+              && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ \
+              || echo "статическая сборка тоже не поехала" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            exit 1
+          fi
+          echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
       # No clip cache on the parallel path: a rebuild re-renders every clip
@@ -571,15 +629,44 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 20
+        timeout-minutes: 6    # внутри короткие попытки, висеть нечему (23.10)
         if: steps.have.outputs.count != '0'
         run: |
-          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
-          for _try in 1 2 3; do
-            timeout 240 sudo apt-get install -y -qq ffmpeg fonts-dejavu && break
-            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
-          done
+          # НЕ ПОЛАГАЕМСЯ НА APT (23.10, блокер: три прогона подряд легли).
+          # Картина была двойная: `apt-get install ffmpeg` либо висел до
+          # таймаута (13-14 джобов с «Set up tools has timed out»), либо
+          # завершался УСПЕШНО, не поставив пакет — и сборка падала позже и
+          # непонятно, на `FileNotFoundError: 'ffprobe'`. Воспроизводилось на
+          # двух аккаунтах, то есть дело не в цели. Поэтому: сперва смотрим,
+          # нет ли ffmpeg уже в образе; потом короткая попытка apt; если и
+          # она не дала бинарей — тянем статическую сборку одним файлом, она
+          # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
+          # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
+          # десять минут в чужом джобе.
+          need_apt=0
+          command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
+            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            || need_apt=1
+          # tesseract этому джобу не нужен
+          if [ "$need_apt" = 1 ]; then
+            sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            curl -fsSL --retry 3 --max-time 180 \
+              https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+              -o /tmp/ff.tar.xz \
+              && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ \
+              || echo "статическая сборка тоже не поехала" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            exit 1
+          fi
+          echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
       - name: Render this worker's pop-ups
@@ -813,16 +900,45 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 20
+        timeout-minutes: 6    # внутри короткие попытки, висеть нечему (23.10)
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
-          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
-          for _try in 1 2 3; do
-            timeout 240 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu && break
-            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
-          done
+          # НЕ ПОЛАГАЕМСЯ НА APT (23.10, блокер: три прогона подряд легли).
+          # Картина была двойная: `apt-get install ffmpeg` либо висел до
+          # таймаута (13-14 джобов с «Set up tools has timed out»), либо
+          # завершался УСПЕШНО, не поставив пакет — и сборка падала позже и
+          # непонятно, на `FileNotFoundError: 'ffprobe'`. Воспроизводилось на
+          # двух аккаунтах, то есть дело не в цели. Поэтому: сперва смотрим,
+          # нет ли ffmpeg уже в образе; потом короткая попытка apt; если и
+          # она не дала бинарей — тянем статическую сборку одним файлом, она
+          # приезжает за секунды и от зеркал не зависит. В конце ОБЯЗАТЕЛЬНАЯ
+          # проверка: нет ffmpeg/ffprobe — падаем здесь и понятно, а не через
+          # десять минут в чужом джобе.
+          need_apt=0
+          command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
+            && echo "ffmpeg уже в образе: $(ffmpeg -version 2>/dev/null | head -1)" \
+            || need_apt=1
+          command -v tesseract >/dev/null 2>&1 || need_apt=1
+          if [ "$need_apt" = 1 ]; then
+            sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            curl -fsSL --retry 3 --max-time 180 \
+              https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+              -o /tmp/ff.tar.xz \
+              && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ \
+              || echo "статическая сборка тоже не поехала" >&2
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "::error::ffmpeg/ffprobe поставить не удалось ни apt, ни статической сборкой"
+            exit 1
+          fi
+          echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
       - name: Ключи из Secrets (в репозиторий они не попадают никогда)
