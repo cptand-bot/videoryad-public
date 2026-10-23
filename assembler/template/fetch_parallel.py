@@ -176,10 +176,34 @@ def run(scenes_path, images_dir, env_path, k):
               f"{_no_rec} — их воркер не обработал (упал или не успел). "
               f"Запросы тут ни при чём, нужен добор именно этих сцен.",
               flush=True)
-    if _dead or _no_rec:
+    # ИТОГ СЧИТАЕМ ПО ФАЙЛАМ НА ДИСКЕ, А НЕ ПО МАНИФЕСТУ (23.10, улов
+    # `usuario-7b`). Сцена со статусом FAILED — это запись в манифесте, то есть
+    # для прежней проверки она «обработана»: воркеры не падали, записи есть,
+    # код возврата 0. Живой случай: фетч 17 всплывашек встал на 9 из 17, exit 0,
+    # ни ошибки, ни списка провалов — читается как «всё на месте». Теперь
+    # сверяем то единственное, что имеет значение, — ЕСТЬ ЛИ ФАЙЛ.
+    _skip_ext = (".json", ".text.png", ".lock", ".log")
+    _missing = []
+    for sc in scenes:
+        if str(sc.get("source", "")).startswith("card"):
+            continue            # карточки рисуются у нас, файла в фетче и не ждём
+        _sid = sc["id"]
+        _have = [f for f in glob.glob(os.path.join(images_dir, "scene_%03d.*" % _sid))
+                 if os.path.getsize(f) > 0 and not f.endswith(_skip_ext)]
+        if not _have:
+            _missing.append(_sid)
+    if _missing:
+        print(f"[parallel] !! НЕТ ФАЙЛА У {len(_missing)} СЦЕН из {total}: "
+              f"{_missing}", flush=True)
+        print("[parallel]    это итог ПО ДИСКУ, а не по манифесту: часть сцен "
+              "осталась без кадра, хотя воркеры не падали. Нужен повторный "
+              "проход именно по этим сценам.", flush=True)
+    if _dead or _no_rec or _missing:
         print(f"[parallel] итог: НЕУСПЕХ — упавших воркеров {len(_dead)}, "
-              f"сцен без записи {len(_no_rec)}", flush=True)
+              f"сцен без записи {len(_no_rec)}, сцен без файла {len(_missing)}",
+              flush=True)
         return 1
+    print(f"[parallel] итог: все {total} сцен имеют файл на диске", flush=True)
     return 0
 
 
