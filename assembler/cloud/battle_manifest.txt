@@ -43,6 +43,7 @@ cloud/workflows/videoryad-cloud.yml
 cloud/youtube_upload.py
 template/.env.example
 template/adopt_cloud.py
+template/ai_batch.py
 template/autodedup.py
 template/ban_file.py
 template/build_capcut_draft.py

@@ -719,6 +719,36 @@ def main():
               "не бывает — ship.sh его не отправляет, ключи в GitHub Secrets)")
         return 1
 
+def _from_library(assets, sid):
+    """Кадр сцены пришёл из медиатеки пользователя, а не из веба?
+
+    Нужно, чтобы `--ban` не хоронил НАВСЕГДА заготовку, которую пользователь
+    положил сам. Живой случай 23.10 (`planeta-zapad-front-2410`): пустая
+    карта `ПОЛИТИКА/КАРТЫ/ЕВРОПА/Blank Europe Map.jpg` забракована на одной
+    сцене — и вечный бан по md5 закрыл её для ВСЕХ будущих роликов, хотя
+    заготовка универсальная и на другой сцене подошла бы.
+
+    Смотрим честный журнал источников (`images/.sources*.json`, пишется при
+    каждом удачном скачивании с 22.10), потом манифест.
+    """
+    for jf in sorted(glob.glob(os.path.join(assets, ".sources*.json"))):
+        try:
+            d = json.load(open(jf, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        src = d.get(str(sid))
+        if src:
+            return "library" in str(src)
+    try:
+        man = json.load(open(os.path.join(assets, "manifest.json"), encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    for rec in (man if isinstance(man, list) else []):
+        if isinstance(rec, dict) and int(rec.get("id", -1)) == int(sid):
+            return "library" in str(rec.get("source", ""))
+    return False
+
+
     # --ban: СНЯТЫЙ КАДР — В БАН, А НЕ ПРОСТО ИЗ СЦЕНЫ (2026-10-17).
     # Живой случай: архивное фото АЗС с ценами 2015 года забраковали на
     # сцене 45, сцену заменили — и на следующем рефетче тот же файл пришёл
@@ -737,9 +767,22 @@ def main():
                             _md5s.append(h)
             for f in wipe(assets, sid):
                 print("  снёс %s" % f)
+            # БИБЛИОТЕЧНЫЙ ФАЙЛ — БАН ВРЕМЕННЫЙ (2026-10-23). Отказ на одной
+            # сцене не значит, что заготовка плоха всегда; вечный бан по md5
+            # закрывает её для всех будущих роликов. Веб-кадру по-прежнему
+            # вечный: он и правда плох сам по себе.
+            _lib = _from_library(assets, sid)
             for h in _md5s:
-                subprocess.run(["python3", os.path.join(here, "ban_file.py"),
-                                "--md5", h, "рефетч --ban: кадр забракован на сцене %d" % sid])
+                cmd = ["python3", os.path.join(here, "ban_file.py"), "--md5", h,
+                       "рефетч --ban: кадр забракован на сцене %d" % sid]
+                if _lib:
+                    cmd += ["--days", "2"]
+                subprocess.run(cmd)
+            if _lib and _md5s:
+                print("  кадр ИЗ МЕДИАТЕКИ — бан временный, на 2 дня, чтобы "
+                      "заготовка не выпала навсегда.")
+                print("  Плох всегда (водяной знак, чужая страна, архив)? "
+                      "Забань руками: python3 ban_file.py <путь> \"<причина>\"")
 
     round_record(pend, _fill_now, _why)   # круг засчитан, причина форса — в журнал
 
