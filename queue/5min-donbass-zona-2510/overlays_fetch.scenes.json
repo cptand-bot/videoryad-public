@@ -1,0 +1,76 @@
+{
+ "scenes": [
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 9.5,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Map of Ukraine Oblasts simple 4 colors.jpg",
+   "visual_prompt": "карта областей Украины — сцена про урегулирование вокруг Донбасса"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "duration_sec": 7.5,
+   "source": "press_photo",
+   "source_query": "российские военные на позиции 2026 реальное фото",
+   "visual_prompt": "база — украинская сторона отводит силы; всплывашка — вторая сторона той же линии"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "duration_sec": 8.5,
+   "source": "press_photo",
+   "source_query": "въездной знак города Донецк реальное фото",
+   "visual_prompt": "база — лицо МИД; всплывашка — территория, о которой речь"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "duration_sec": 7.0,
+   "source": "press_photo",
+   "source_query": "бинокль наблюдателя на позиции реальное фото",
+   "visual_prompt": "база — техника уходит; всплывашка — чем вторая сторона это видит"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "duration_sec": 7.5,
+   "source": "press_photo",
+   "source_query": "здание штаб-квартиры НАТО в Брюсселе реальное фото",
+   "visual_prompt": "Путин назвал безопасность Европы — всплывашка про Европу"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "duration_sec": 9.0,
+   "source": "press_photo",
+   "source_query": "смеситель в ванной крупным планом реальное фото",
+   "visual_prompt": "метафору кран назвал сам закадровый текст"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "duration_sec": 7.5,
+   "source": "press_photo",
+   "source_query": "флаги стран Евросоюза у здания Совета ЕС реальное фото",
+   "visual_prompt": "в сцене перечислены возможные контролёры, среди них европейцы"
+  },
+  {
+   "id": 90,
+   "text": "",
+   "duration_sec": 7.5,
+   "source": "press_photo",
+   "source_query": "украинский дальнобойный беспилотник на земле реальное фото",
+   "visual_prompt": "база — удар по Киеву; всплывашка — встречные удары, названные в этой же фразе"
+  },
+  {
+   "id": 96,
+   "text": "",
+   "duration_sec": 9.0,
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg",
+   "visual_prompt": "сцена дословно про «красивый вариант карты»"
+  }
+ ]
+}
