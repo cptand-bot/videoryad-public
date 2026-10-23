@@ -80,6 +80,22 @@ jobs:
           VIDEORYAD_FONTS: ${{ github.workspace }}/cards_render/fonts
           VIDEORYAD_PORTRAIT: ${{ github.workspace }}/cards_render/portrait.jpg
         run: python3 cards_render/render_cards.py cards_out --shard ${{ matrix.shard }}/${{ needs.plan.outputs.total }}
+      # СТРАЖ ПУСТОГО РЕЗУЛЬТАТА (23.10, предложение вкладки-разработчика).
+      # С тех пор как одно упавшее задание перестало валить всю часть, джоб
+      # завершается `success`, даже если УПАЛИ ВСЕ задания: наружу это
+      # выглядит нормальным прогоном с артефактом в 140 байт. Ровно так
+      # NameError съел 0 из 5 карточек у рабочей вкладки и 0 из 52 у
+      # разработки — и обе увидели это только по логу. Пусть пустой результат
+      # падает честно.
+      - name: страж — хотя бы один клип должен существовать
+        run: |
+          n=$(ls cards_out/*.mp4 2>/dev/null | wc -l)
+          if [ "$n" = "0" ]; then
+            echo "::error::ни одного клипа не отрисовано — все задания этой части упали; смотри строки «УПАЛО» выше"
+            exit 1
+          fi
+          echo "клипов в части: $n"
+
       - name: что получилось
         run: ls -la cards_out && cat cards_out/report.json
       - uses: actions/upload-artifact@v4
