@@ -489,12 +489,20 @@ jobs:
     needs: [setup, fetch, clips]
     # `always()` — та же мина, что ловили на clips 2026-10-12: GitHub скипает
     # джоб с пропущенной зависимостью, не читая его собственный `if`.
+    # 23.10: было `needs.clips.result == 'success'`, и ОДИН зависший шард из
+    # двенадцати (срублен таймаутом) делал результат всей матрицы не-success —
+    # `overlays` пропускался целиком, и ВСЕ всплывашки ролика пекла `assemble`
+    # в одиночку, последовательно. Замер на `evropa-stol-2410`: одиннадцать
+    # шардов отработали за минуту, двенадцатый висел 15 минут, и из-за него
+    # параллельная отрисовка всплывашек не состоялась вовсе. Теперь условие —
+    # «clips вообще запускался»: клипы отстающего шарда доделает assemble, а
+    # всплывашки на уже готовые клипы лягут параллельно, как и задумано.
     if: >-
       always()
       && needs.setup.result == 'success'
       && needs.setup.outputs.have == 'true'
       && needs.setup.outputs.fetch_only != 'true'
-      && needs.clips.result == 'success'
+      && needs.clips.result != 'skipped'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
