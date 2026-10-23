@@ -141,6 +141,7 @@ def main():
                  "тоже не видно. Передай --watermark ЯВНО, иначе в углу встанет "
                  "«ДИПЛОМАТИЯ СИЛЫ» (значение рисовалки по умолчанию).")
 
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(0, FULLCYCLE)
     sys.path.insert(0, SKILL)
     try:
@@ -234,6 +235,28 @@ def main():
     kwargs = dict(kick=a.kick, title=a.title, text=a.text, author=a.author,
                   source=a.source, accent=a.accent or None, watermark=watermark,
                   seed=a.seed)
+
+    # --- НА МАШИНЕ ПОЛЬЗОВАТЕЛЯ НЕ СЧИТАЕМ (его прямое слово 2026-10-23) ---
+    # Замер 22.10: лоскут на 7,4 с = 50,9 с счёта локально, ~6,9 с на секунду
+    # сцены. Штатный путь — задание в cards/queue/ и один облачный прогон на
+    # все карточки ролика (fullcycle/cards_cloud.py). Локальный рендер —
+    # крайний случай: только с явного VIDEORYAD_LOCAL_OK=1, с оповещением.
+    import cards_queue as cq
+    _card = {k: v for k, v in dict(
+        kind="quote", kick=a.kick, title=a.title, text=a.text, accent=a.accent,
+        author=a.author, src=a.source, watermark=watermark).items()
+        if v not in ("", None, [])}
+    if not cq.local_allowed():
+        _jq = cq.queue(a.scenes, a.sid, "quote", dur, watermark, channel,
+                       dict(kwargs), anim=a.anim, tail_zoom=a.tail_zoom,
+                       card=_card)
+        cq.report(_jq, a.sid, "quote", a.scenes)
+        return
+    cq.notify_local(f"рендер цитаты-лоскута на сцене {a.sid}, {dur:.0f} с видео "
+                    "(разрешено VIDEORYAD_LOCAL_OK=1)")
+    print("ВНИМАНИЕ: считаю НА ЭТОЙ МАШИНЕ — так делать нельзя без нужды. "
+          "Облачный путь: убери VIDEORYAD_LOCAL_OK и повтори команду.")
+
     t0 = time.time()
     qp.quote_paper(out=poster, **kwargs)         # постер — он же проверка глазами
     # ВАЖНО: fps БОЕВОЙ (30), а не 25 как по умолчанию у рисовалки — сборщик

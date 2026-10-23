@@ -258,6 +258,7 @@ def main():
         return
 
     # --- рендер ------------------------------------------------------------
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(0, FULLCYCLE)
     import style_cards as sc
 
@@ -277,6 +278,31 @@ def main():
         fn = sc.timeline
         kwargs = dict(common, title=a.title, events=tuple(events),
                       note=a.note or None)
+
+    # --- НА МАШИНЕ ПОЛЬЗОВАТЕЛЯ НЕ СЧИТАЕМ (его прямое слово 2026-10-23) ---
+    # «При сборке, неважно чего, ни в коем случае не использовать ресурсы
+    # компьютера; всё, что можно сделать на GitHub, отсылать в GitHub; только
+    # крайние случаи, и то оповещать мне». Замер 22.10: одна карточка 7,4 с =
+    # 50,9 с счёта на машине, 4-6 минут за ролик. Штатный путь — задание в
+    # cards/queue/ и один облачный прогон на все карточки ролика
+    # (fullcycle/cards_cloud.py). Локальный рендер остаётся КРАЙНИМ случаем:
+    # только с явного VIDEORYAD_LOCAL_OK=1, и тогда он сам оповещает.
+    import cards_queue as cq
+    _lines = items or [r["want"] for r in rows] or [e["text"] for e in events]
+    _card = {k: v for k, v in dict(
+        kind=a.kind, kick=a.kick, title=a.title, lines=_lines, note=a.note,
+        src=a.source, watermark=watermark, anim=a.anim).items()
+        if v not in ("", None, [])}
+    if not cq.local_allowed():
+        _jq = cq.queue(a.scenes, a.sid, a.kind, dur, watermark, channel,
+                       dict(kwargs), anim=a.anim, tail_zoom=a.tail_zoom,
+                       card=_card)
+        cq.report(_jq, a.sid, a.kind, a.scenes)
+        return
+    cq.notify_local(f"рендер карточки «{a.kind}» на сцене {a.sid}, "
+                    f"{dur:.0f} с видео (разрешено VIDEORYAD_LOCAL_OK=1)")
+    print("ВНИМАНИЕ: считаю НА ЭТОЙ МАШИНЕ — так делать нельзя без нужды. "
+          "Облачный путь: убери VIDEORYAD_LOCAL_OK и повтори команду.")
 
     t0 = time.time()
     fn(out=poster, **kwargs)                 # постер — он же проверка глазами
