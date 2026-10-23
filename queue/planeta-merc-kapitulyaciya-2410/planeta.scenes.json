@@ -1,0 +1,745 @@
+{
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 13.24,
+   "visual_prompt": "Л2 ВИДЕО: Мерц у трибуны саммита ЕС — хозяин переговорной комнаты",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС4.mp4"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 13.24,
+   "duration_sec": 9.29,
+   "visual_prompt": "Л1 место, где решает Мерц",
+   "source": "press_photo",
+   "source_query": "ведомство федерального канцлера в Берлине фасад здания реальное фото"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 22.53,
+   "duration_sec": 13.0,
+   "visual_prompt": "Л4 Уиткофф и Кушнер за столом в зале Кремля",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ВИТКОФФ-КУШНЕР/кушнеш и уитков в москве4.jpg"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 35.53,
+   "duration_sec": 14.9,
+   "visual_prompt": "Л2 зал саммитов без людей",
+   "source": "press_photo",
+   "source_query": "пустой зал заседаний Европейского совета в Брюсселе флаги стран реальное фото"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 50.44,
+   "duration_sec": 13.84,
+   "visual_prompt": "ДОСЬЕ видео 1280x720: Мерц требует участия Европы в переговорах",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/a6ed391699.mp4?token=U-GRLh70cEX1vlfG0LakxRKHjJ9Um8_pp1u38aEaITmKJOCSYkRB2axzukUQWF13hedGghAw4q4PJtVuWN1HaNNjba-9m01AY5YRbh5TESuCFnJ_n19-17tcTxlSaMycJ-zg49CPnL2jW935vCZxjx-5u-wSfoixRHD4gSbRnbICvX3ZFn36VrpobucGyvPsAnmtQEdUlUFg2bXgxPO5S4RLS5PjgPnm2YcAgadQ7Kh5puwFc1Z3cS7pMe3eX7K30Mi3Ud27XJZK-nrOPBpKug_nnaLNqf_HK69iHczYGYL9liMM6icFdEhxR-8UaVyTfU3J_870PT985BlX0w3n8A"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 64.28,
+   "duration_sec": 8.93,
+   "visual_prompt": "Л2 институт",
+   "source": "press_photo",
+   "source_query": "здание Еврокомиссии Берлемон в Брюсселе фасад реальное фото"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 73.21,
+   "duration_sec": 14.72,
+   "visual_prompt": "Л3 американская власть",
+   "source": "press_photo",
+   "source_query": "флаги у входа в Белый дом в Вашингтоне реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 87.93,
+   "duration_sec": 13.44,
+   "visual_prompt": "Л2 общий план",
+   "source": "press_photo",
+   "source_query": "панорама европейского квартала в Брюсселе с высоты реальное фото"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 101.37,
+   "duration_sec": 12.63,
+   "visual_prompt": "Л1 место, где звучат эти фразы",
+   "source": "press_photo",
+   "source_query": "зал заседаний Бундестага в Берлине 2026 реальное фото"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 114.0,
+   "duration_sec": 11.87,
+   "visual_prompt": "ДОСЬЕ видео 1280x720: Мерц — капитуляция, тем более безоговорочная, неприемлема",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/b1765c018f.mp4?token=K56XSJ5PPA7ZlJRr8FUQ2ZDGcPdQR_afDkXjQq7WVvto0-QekcpPvnOxajYEsvmvo5ilFIhUk2YrX4J3CrNIYrC6AiKK6tY2Qt_NNeJtzMst6DIPCMbMbnCCIOdBjD-YO076KO5EpUPzMczRjxybn35824r_U8TURemjelhzskBM2AhuDiKtQ3n_q2lMSgTN69I6BsLa1o9xbJgQuVSoLdtbfHgXk_pf4xWpsyrLsSJ2ntrR-1f_AUAYlLvFllFNQUxUl6scdet1pVL-5asIntt0XRr-CSKh4J0ixuq7_DNgZyVEL20S6s0SaUDrKODdq3bmisCYY7A213bnQzuOpw"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 125.86,
+   "duration_sec": 12.71,
+   "visual_prompt": "КАРТОЧКА цитата Мерца о капитуляции",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "quote",
+    "kick": "Берлин · 21.10.2026",
+    "title": "ЧТО СКАЗАЛ МЕРЦ",
+    "text": "Капитуляция — или даже безоговорочная капитуляция — Украины неприемлема, поскольку это означало бы капитуляцию всех нас",
+    "accent": "капитуляцию всех нас",
+    "author": "Фридрих Мерц",
+    "src": "канцлер Германии",
+    "watermark": "ПЛАНЕТА"
+   }
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 138.57,
+   "duration_sec": 8.04,
+   "visual_prompt": "Л1/Л2 деталь: Мерц переживает за всех",
+   "source": "press_photo",
+   "source_query": "флаг Германии и флаг Евросоюза вместе на здании в Берлине реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 146.61,
+   "duration_sec": 13.36,
+   "visual_prompt": "здание Федеральной разведывательной службы Германии БНД в Берлине реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Федеральной разведывательной службы Германии БНД в Берлине реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 159.97,
+   "duration_sec": 12.24,
+   "visual_prompt": "Л7 немецкая промышленность — предмет, топоним держит страну",
+   "source": "press_photo",
+   "source_query": "современный цех металлургического завода в Германии 2026 реальное фото"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 172.22,
+   "duration_sec": 12.56,
+   "visual_prompt": "Л2 конструкция",
+   "source": "press_photo",
+   "source_query": "флаги Евросоюза и Украины вместе у здания в Брюсселе реальное фото"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 184.78,
+   "duration_sec": 14.24,
+   "visual_prompt": "Л2 где объясняли курс",
+   "source": "press_photo",
+   "source_query": "трибуна для брифингов Еврокомиссии в Брюсселе реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 199.02,
+   "duration_sec": 12.24,
+   "visual_prompt": "Л7 перестройка энергетики (сток)",
+   "source": "pexels_video",
+   "source_query": "high voltage transmission towers power lines sunset no people"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 211.26,
+   "duration_sec": 15.24,
+   "visual_prompt": "Л4 Россия не развалилась",
+   "source": "press_photo",
+   "source_query": "Московский Кремль Спасская башня панорама реальное фото"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 226.5,
+   "duration_sec": 11.04,
+   "visual_prompt": "Л3 Вашингтон торгуется",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп за рабочим столом в Белом доме 2026 реальное фото"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 237.53,
+   "duration_sec": 13.84,
+   "visual_prompt": "Л2 легитимность",
+   "source": "press_photo",
+   "source_query": "пустой зал пленарных заседаний Европарламента Брюссель реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 251.38,
+   "duration_sec": 9.89,
+   "visual_prompt": "КАРТОЧКА тезисы: что обещали и что вышло",
+   "source": "card:bullets",
+   "source_query": "карточка «bullets» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bullets",
+    "kick": "ЧТО ОБЕЩАЛИ И ЧТО ВЫШЛО",
+    "lines": [
+     "Россия должна была развалиться — не развалилась",
+     "Европа должна была стать сильнее — не стала",
+     "Мир должен был наступить — не наступил",
+     "Украина должна была вернуть границы — не вернула"
+    ],
+    "note": "А Вашингтон уже торгуется с Москвой",
+    "watermark": "ПЛАНЕТА",
+    "anim": 2.5
+   }
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 261.26,
+   "duration_sec": 13.87,
+   "visual_prompt": "Л2 ВИДЕО: общий план зала саммита ЕС — та самая переговорная комната",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС3.mp4"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 275.14,
+   "duration_sec": 5.56,
+   "visual_prompt": "Л3/Л4 двое решают",
+   "source": "press_photo",
+   "source_query": "Владимир Путин и Дональд Трамп переговоры за столом 2026 реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 280.7,
+   "duration_sec": 13.64,
+   "visual_prompt": "Л4 переговорный канал",
+   "source": "press_photo",
+   "source_query": "Министерство иностранных дел России здание на Смоленской площади реальное фото"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 294.34,
+   "duration_sec": 12.04,
+   "visual_prompt": "freight train moving on tracks motion blur side view no people",
+   "source": "pexels_video",
+   "source_query": "freight train moving on tracks motion blur side view no people"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 306.38,
+   "duration_sec": 12.0,
+   "visual_prompt": "Л1 самое неприятное сидит дома",
+   "source": "press_photo",
+   "source_query": "Рейхстаг в Берлине вечером общий план реальное фото"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 318.38,
+   "duration_sec": 12.23,
+   "visual_prompt": "Л8 Алиса Вайдель на трибуне (названа в сцене)",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/АдГ/адг (10).jpg"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 330.62,
+   "duration_sec": 11.7,
+   "visual_prompt": "ДОСЬЕ видео 1280x720: Мерц про расходы на Украину",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/49446fea76.mp4?token=K7G8j4zA4lU5NbhFApHJnMwaCWjQZaAkPDVr4rCWMLeqncRUxuHL9WzGTLAoQeyiXvuN6KcOTHZytSJkVJyhlU9a7UFjmoEybyx1v-DrM7ou8WWmtWvrE9mzUUXPyqdOdJtc_Kh_RXzdK2mQtoRL_te6MckT32fz9XY3g5qialYBo1ODMnt2OjjAH7nGjEB_jLMag8JxFIPxYb4kRkntQvK5owUgNP692G-pOX4w5nUB77U23SqDwtt6sd273TztHT0cDOjZAyYoyofrb1C3imzYzGUlGke_sGx2ZVZn5Wro7sCxyh4lVDv5i9P9wenKw-QLWvtIj2GcytxzshfCZLtnBWJBYXO1IioTe_lnARPPhcdUb3oTvdlrxD71mBPR5wo-FVjV3S8wkRRYGOn6pzgae5tQzwtSvx6Ot4EG6B-qUYSeE_0a0rcPx2hUv8Qr7N2br-ZdSmQEK-izL-prDsKPxdmzCmC6pD1hdoGz-cnYz8ImcbbLIW3dxqqFQ8LU0wkyezzHRNRNj6J8keJq6QzkbX85bjy7Dg-sq6jDE2f04Rs7yNQDo153PGVxf61pE7TKFJwG8QWnMGLP0wE0J0d-ZvJEGJpR5BRiQcBe6_cyo2x6dOrrGIOe8GurSUHJz7BcpopC2UN-INCN0Yi5jafgsAOFS7mQ27haOiWTQVQ"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 342.32,
+   "duration_sec": 12.26,
+   "visual_prompt": "Л8 Фрауэнкирхе в Дрездене и флаг АдГ — вторая Германия",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/АдГ/адг (5).jpg"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 354.58,
+   "duration_sec": 5.6,
+   "visual_prompt": "стеклянный купол Рейхстага в Берлине изнутри реальное фото",
+   "source": "press_photo",
+   "source_query": "стеклянный купол Рейхстага в Берлине изнутри реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 360.18,
+   "duration_sec": 13.04,
+   "visual_prompt": "КАРТОЧКА тезис о двух философиях",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "quote",
+    "text": "Одна Германия говорит: проиграет Украина — проиграют все. Вторая спрашивает: почему немец платит первым?",
+    "accent": "платит первым",
+    "watermark": "ПЛАНЕТА"
+   }
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 373.23,
+   "duration_sec": 8.9,
+   "visual_prompt": "Л7 счета приходят каждый месяц (сток)",
+   "source": "pexels_video",
+   "source_query": "gas burner blue flame stove closeup no people"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 382.13,
+   "duration_sec": 14.06,
+   "visual_prompt": "Л6 Словакия",
+   "source": "press_photo",
+   "source_query": "Братислава панорама города с замком реальное фото"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 396.19,
+   "duration_sec": 8.5,
+   "visual_prompt": "Л6 межправкомиссия",
+   "source": "press_photo",
+   "source_query": "Дом правительства Словакии в Братиславе реальное фото"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 404.69,
+   "duration_sec": 13.98,
+   "visual_prompt": "газоперекачивающий агрегат в цехе реальное фото",
+   "source": "press_photo",
+   "source_query": "газоперекачивающий агрегат в цехе реальное фото"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 418.67,
+   "duration_sec": 13.12,
+   "visual_prompt": "Л4 встречи в Москве",
+   "source": "press_photo",
+   "source_query": "Дом правительства России в Москве фасад реальное фото"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 431.79,
+   "duration_sec": 15.2,
+   "visual_prompt": "Л6 свои интересы",
+   "source": "press_photo",
+   "source_query": "флаг Словакии на здании правительства в Братиславе реальное фото"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 446.99,
+   "duration_sec": 14.99,
+   "visual_prompt": "Л2 у каждого свой интерес",
+   "source": "press_photo",
+   "source_query": "флаги стран Евросоюза в ряд у здания в Брюсселе реальное фото"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 461.98,
+   "duration_sec": 14.88,
+   "visual_prompt": "Л5 настоящие деньги",
+   "source": "press_photo",
+   "source_query": "здание Национального банка Бельгии в Брюсселе реальное фото"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 476.86,
+   "duration_sec": 11.93,
+   "visual_prompt": "Л5 Евроклир",
+   "source": "press_photo",
+   "source_query": "офис депозитария Euroclear в Брюсселе здание реальное фото"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 488.79,
+   "duration_sec": 14.55,
+   "visual_prompt": "Барт Де Вевер премьер-министр Бельгии 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "Барт Де Вевер премьер-министр Бельгии 2026 реальное фото"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 503.34,
+   "duration_sec": 14.56,
+   "visual_prompt": "Л5 Бельгия решает",
+   "source": "press_photo",
+   "source_query": "здание федерального правительства Бельгии в Брюсселе реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 517.9,
+   "duration_sec": 14.75,
+   "visual_prompt": "пачки купюр евро на столе крупным планом реальное фото",
+   "source": "press_photo",
+   "source_query": "пачки купюр евро на столе крупным планом реальное фото"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 532.65,
+   "duration_sec": 12.4,
+   "visual_prompt": "Киев просит дальше",
+   "source": "press_photo",
+   "source_query": "здание Министерства финансов Украины в Киеве реальное фото"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 545.05,
+   "duration_sec": 6.4,
+   "visual_prompt": "КАРТОЧКА тезисы: щедрость чужой системой",
+   "source": "card:bullets",
+   "source_query": "карточка «bullets» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bullets",
+    "kick": "ЦЕНА КРАСИВОЙ ИДЕИ",
+    "lines": [
+     "185 млрд евро российских активов лежат в Бельгии",
+     "Депозитарий «Евроклир» — тоже в Бельгии",
+     "Иски и последствия придут в Бельгию",
+     "Желающих отвечать по счетам вместе с ней немного"
+    ],
+    "note": "Легко быть щедрым чужой банковской системой",
+    "watermark": "ПЛАНЕТА",
+    "anim": 2.5
+   }
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 551.45,
+   "duration_sec": 8.56,
+   "visual_prompt": "Л9 механизм поддержки",
+   "source": "press_photo",
+   "source_query": "погрузка военных контейнеров на транспортном терминале базы НАТО реальное фото"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 560.01,
+   "duration_sec": 13.36,
+   "visual_prompt": "штаб-квартира агентства НАТО по закупкам в Люксембурге реальное фото",
+   "source": "press_photo",
+   "source_query": "штаб-квартира агентства НАТО по закупкам в Люксембурге реальное фото"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 573.37,
+   "duration_sec": 11.12,
+   "visual_prompt": "Л9 инфраструктура",
+   "source": "press_photo",
+   "source_query": "военно-транспортный самолёт на авиабазе Рамштайн в Германии реальное фото"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 584.49,
+   "duration_sec": 12.27,
+   "visual_prompt": "Л2 общий курс",
+   "source": "press_photo",
+   "source_query": "флаг Евросоюза на флагштоке у здания в Брюсселе реальное фото"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 596.76,
+   "duration_sec": 7.13,
+   "visual_prompt": "Л7 сколько стоит нам",
+   "source": "press_photo",
+   "source_query": "здание Министерства экономики Германии в Берлине реальное фото"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 603.88,
+   "duration_sec": 12.3,
+   "visual_prompt": "Л1 Мерц на трибуне — говорит от имени Европы",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/МЕРЦ/мерц1122.jpg"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 616.18,
+   "duration_sec": 10.55,
+   "visual_prompt": "Л9 под одной крышей",
+   "source": "press_photo",
+   "source_query": "флаги государств-членов НАТО у штаб-квартиры в Брюсселе реальное фото"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 626.73,
+   "duration_sec": 14.51,
+   "visual_prompt": "Л3 Трамп ускорил",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп выступает в Белом доме 2026 реальное фото"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 641.24,
+   "duration_sec": 10.87,
+   "visual_prompt": "Л3 деньги оружие разведка",
+   "source": "press_photo",
+   "source_query": "здание Пентагона с воздуха реальное фото"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 652.1,
+   "duration_sec": 13.86,
+   "visual_prompt": "Л3 Уиткофф и Кушнер на лётном поле в Москве",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ВИТКОФФ-КУШНЕР/кушнеш и уитков в москве2.jpg"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 665.96,
+   "duration_sec": 12.58,
+   "visual_prompt": "КАРТОЧКА тезис: изменился способ, не цель",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "quote",
+    "text": "Цель получить экономические преимущества никуда не исчезла. Изменился только способ.",
+    "accent": "Изменился только способ",
+    "watermark": "ПЛАНЕТА"
+   }
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 678.54,
+   "duration_sec": 11.33,
+   "visual_prompt": "Л6/Л3 рынки сырьё энергия (сток)",
+   "source": "pexels_video",
+   "source_query": "oil tanker ship at sea aerial no people"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 689.87,
+   "duration_sec": 15.09,
+   "visual_prompt": "Л4 ядерная держава",
+   "source": "press_photo",
+   "source_query": "пусковая установка Ярс на параде на Красной площади в Москве реальное фото"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 704.96,
+   "duration_sec": 14.54,
+   "visual_prompt": "Л4 цена катастрофы",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны России на Фрунзенской набережной реальное фото"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 719.5,
+   "duration_sec": 8.34,
+   "visual_prompt": "Л3 система сделок",
+   "source": "press_photo",
+   "source_query": "здание Министерства финансов США в Вашингтоне реальное фото"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 727.84,
+   "duration_sec": 14.92,
+   "visual_prompt": "Л4 ВИДЕО Путин за рабочим столом — Россия сохранит контроль (15,5 с под сцену 14,9 с)",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН/Нарезки - Путин3.mp4"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 742.75,
+   "duration_sec": 13.12,
+   "visual_prompt": "Л1 объяснять цену",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц на пресс-конференции в Берлине отвечает на вопросы 2026 реальное фото"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 755.88,
+   "duration_sec": 12.32,
+   "visual_prompt": "Л1 Мерц у бундесвера — защита курса и оборонных расходов (замена партсъезда CDU)",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/МЕРЦ/Screenshot_3.jpg"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 768.19,
+   "duration_sec": 10.31,
+   "visual_prompt": "Л1 кто представляет континент",
+   "source": "press_photo",
+   "source_query": "панорама правительственного квартала Берлина с высоты реальное фото"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 778.5,
+   "duration_sec": 10.13,
+   "visual_prompt": "Берлин Брюссель Париж",
+   "source": "press_photo",
+   "source_query": "Елисейский дворец в Париже фасад реальное фото"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 788.63,
+   "duration_sec": 11.72,
+   "visual_prompt": "Л2 мы участвовали",
+   "source": "press_photo",
+   "source_query": "фасад здания Европейского совета Europa в Брюсселе реальное фото"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 800.36,
+   "duration_sec": 13.16,
+   "visual_prompt": "Л3 договорённости сформируют другие",
+   "source": "press_photo",
+   "source_query": "Белый дом общий план днём реальное фото"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 813.52,
+   "duration_sec": 10.66,
+   "visual_prompt": "Л1 придётся объяснять",
+   "source": "card:bullets",
+   "source_query": "карточка «bullets» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bullets",
+    "kick": "ЧТО ДУМАЮТ САМИ НЕМЦЫ",
+    "lines": [
+     "67% считают канцлерство Мерца провальным",
+     "58% — за его отставку",
+     "Против отставки — 11%"
+    ],
+    "note": "Опрос журнала Der Spiegel, 2002 человека",
+    "watermark": "ПЛАНЕТА",
+    "anim": 2.5
+   }
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 824.18,
+   "duration_sec": 10.45,
+   "visual_prompt": "Л1 Мерц на трибуне Бундестага — говорит от имени Европы (замена выставки)",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/МЕРЦ/Screenshot_8.jpg"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 834.64,
+   "duration_sec": 13.76,
+   "visual_prompt": "Л2 провода от микрофонов",
+   "source": "press_photo",
+   "source_query": "зал пресс-центра Евросовета в Брюсселе с рядами микрофонов реальное фото"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 848.4,
+   "duration_sec": 14.96,
+   "visual_prompt": "депутаты в зале пленарных заседаний Бундестага Берлин 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "депутаты в зале пленарных заседаний Бундестага Берлин 2026 реальное фото"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 863.36,
+   "duration_sec": 10.79,
+   "visual_prompt": "Л1 финальный портрет Мерца",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/МЕРЦ/Screenshot_1.jpg"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 874.15,
+   "duration_sec": 4.85,
+   "visual_prompt": "ключ в замочной скважине старой двери крупным планом реальное фото",
+   "source": "press_photo",
+   "source_query": "ключ в замочной скважине старой двери крупным планом реальное фото"
+  }
+ ],
+ "channel": "ПЛАНЕТА",
+ "production_id": "PROD_20261023_MERZ_CAPITULATION_PLANETA",
+ "library": "YES (ПЛАНЕТА, потолок 20% = не более 14 сцен, рассеивать по хронометражу)",
+ "context": [
+  "О чём: Европа в лице Мерца оказалась ВНЕ переговорного стола по Украине — Вашингтон говорит с Москвой напрямую, а внутри Европы единая позиция начала расслаиваться.",
+  "Кто стороны: Берлин (канцлер Мерц) и брюссельская конструкция — против них США (Трамп, посланник Уиткофф) и Россия (Путин); внутри Европы против Мерца — АдГ (Вайдель), Словакия (Братислава), Бельгия (премьер Де Вевер).",
+  "Где физически: Берлин (ведомство канцлера, Бундестаг), Брюссель (Еврокомиссия, Евросовет, депозитарий Евроклир), Москва (Кремль), Вашингтон (Белый дом), Братислава, Киев, Осло.",
+  "Узел: кто имеет право представлять интересы всей Европы и кто физически сидит за переговорным столом; и чьими деньгами (185 млрд замороженных активов, кредит 90 млрд) это оплачивается.",
+  "Время: конец октября 2026. Возврат к трёхстороннему формату — после 10 ноября; межправкомиссия Россия-Словакия в Москве — 26 октября.",
+  "Чем заканчивается: вопрос не о будущем Украины, а о том, кто определяет будущее самой Европы.",
+  "Чувство: наблюдение за трещащей конструкцией. Ирония и холодный расчёт, не драма и не сочувствие."
+ ],
+ "lines": [
+  "1. ГЕРМАНСКАЯ ВЛАСТЬ (Берлин): ведомство федерального канцлера, Бундестаг, Фридрих Мерц, правительство ФРГ.",
+  "2. БРЮССЕЛЬСКАЯ КОНСТРУКЦИЯ: Еврокомиссия (Берлемон), Евросовет (здание Europa), зал саммитов ЕС, флаги ЕС у зданий.",
+  "3. АМЕРИКАНСКАЯ ВЛАСТЬ: Белый дом, Трамп, посланник Стив Уиткофф (его визит в Москву и Киев).",
+  "4. РОССИЙСКАЯ ВЛАСТЬ: Кремль, Путин, приём американского посланника в Москве.",
+  "5. ДЕНЬГИ ЕВРОПЫ (Бельгия): депозитарий Евроклир в Брюсселе, премьер Барт Де Вевер, бельгийские институты.",
+  "6. СЛОВАЦКИЙ РАЗВОРОТ: Братислава, правительство Словакии, газ и нефть, межправкомиссия в Москве.",
+  "7. НЕМЕЦКАЯ ПРОМЫШЛЕННОСТЬ И ЦЕНА КУРСА: заводы ФРГ, энергетика Германии, сокращение производства, счёт за энергию.",
+  "8. НЕМЕЦКАЯ ОППОЗИЦИЯ: АдГ, Алиса Вайдель, фракция в Бундестаге.",
+  "9. ВОЕННАЯ ПОДДЕРЖКА КИЕВА: агентство НАТО по закупкам, склады боеприпасов, передача техники."
+ ],
+ "cards_plan": "5 карточек арсенала (73 сцены / 15 = 4,87 -> 5): сцена 11 quote, 21 bullets, 31 quote, 45 bullets, 56 quote. Между любыми >=8 сцен, между одного вида >=16."
+}

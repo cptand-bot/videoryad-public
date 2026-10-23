@@ -1,0 +1,116 @@
+{
+  "3": {
+    "photo": "overlays/scene_003.jpg",
+    "sound": "whoosh",
+    "at": 4.55,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "4": {
+    "photo": "overlays/scene_004.jpg",
+    "sound": "zatvor",
+    "at": 5.21,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "10": {
+    "photo": "overlays/scene_010.jpg",
+    "sound": "zatvor",
+    "at": 4.15,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "_why": "рамка села на лицо Мерца — уводим на тёмный фон слева",
+    "approved": true
+  },
+  "13": {
+    "photo": "overlays/scene_013.jpg",
+    "sound": "pop",
+    "at": 4.68,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "16": {
+    "photo": "overlays/scene_016.jpg",
+    "sound": "zatvor",
+    "at": 4.98,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "17": {
+    "photo": "overlays/scene_017.jpg",
+    "sound": "pop",
+    "at": 4.28,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "18": {
+    "photo": "overlays/scene_018.jpg",
+    "sound": "whoosh",
+    "at": 5.33,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "26": {
+    "photo": "overlays/scene_026.jpg",
+    "sound": "pop",
+    "at": 4.2,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "28": {
+    "photo": "overlays/scene_028.jpg",
+    "sound": "zatvor",
+    "at": 4.09,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "_why": "рамка села на лицо Мерца на трибуне — уводим влево",
+    "approved": true
+  },
+  "34": {
+    "photo": "overlays/scene_034.jpg",
+    "sound": "whoosh",
+    "at": 2.97,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "42": {
+    "photo": "overlays/scene_042.jpg",
+    "sound": "zatvor",
+    "at": 5.1,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "44": {
+    "photo": "overlays/scene_044.jpg",
+    "sound": "pop",
+    "at": 4.34,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  }
+}
