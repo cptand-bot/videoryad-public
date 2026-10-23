@@ -1,0 +1,372 @@
+{
+ "anchor": "top",
+ "4": {
+  "photo": "overlays/scene_004.jpg",
+  "sound": "zatvor",
+  "at": 4.7,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "11": {
+  "photo": "overlays/scene_011.jpg",
+  "sound": "pop",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "17": {
+  "photo": "overlays/scene_017.jpg",
+  "sound": "pop",
+  "at": 3.7,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "m",
+  "scale": 1.0
+ },
+ "22": {
+  "photo": "overlays/scene_022.jpg",
+  "sound": "zatvor",
+  "at": 5.0,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "m",
+  "scale": 1.0
+ },
+ "29": {
+  "photo": "overlays/scene_029.jpg",
+  "sound": "pop",
+  "at": 4.2,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "40": {
+  "photo": "overlays/scene_040.jpg",
+  "sound": "zatvor",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "48": {
+  "photo": "overlays/scene_048.jpg",
+  "sound": "whoosh",
+  "at": 5.0,
+  "shape": "rect",
+  "style": "up-left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "51": {
+  "photo": "overlays/scene_051.jpg",
+  "sound": "whoosh",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "52": {
+  "photo": "overlays/scene_052.jpg",
+  "sound": "zatvor",
+  "at": 2.5,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "m",
+  "scale": 1.0
+ },
+ "66": {
+  "photo": "overlays/scene_066.jpg",
+  "sound": "whoosh",
+  "at": 5.2,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "70": {
+  "photo": "overlays/scene_070.jpg",
+  "sound": "zatvor",
+  "at": 4.9,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "2": {
+  "text": {
+   "words": "ДВА ГОРОДА ОСТАВШЕГОСЯ ДОНБАССА",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.8,
+   "scale": 1.0
+  }
+ },
+ "6": {
+  "text": {
+   "words": "ПОЛИЦИЯ И ГСЧС ВЫВОЗЯТ СЕМЬИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.1,
+   "scale": 1.0
+  }
+ },
+ "8": {
+  "text": {
+   "words": "СЛЕДУЮЩАЯ КРУПНАЯ ЦЕЛЬ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "12": {
+  "text": {
+   "words": "ФРОНТ ПРИШЁЛ ПРЯМО В ГОРОД",
+   "color": "red",
+   "pos": "tc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "text": {
+   "words": "АВДЕЕВКА: ВЕСНА 2023",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.1,
+   "scale": 1.0
+  }
+ },
+ "14": {
+  "text": {
+   "words": "ФЕВРАЛЬ 2024: ГОРОД ОСТАВЛЕН",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.5,
+   "scale": 1.0
+  }
+ },
+ "15": {
+  "text": {
+   "words": "АВТОБУС — ПЛОХОЕ ОРУЖИЕ",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.9,
+   "scale": 1.0
+  }
+ },
+ "18": {
+  "text": {
+   "words": "НАСТУПЛЕНИЕ ИДЁТ МЕТРАМИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.5,
+   "scale": 1.0
+  }
+ },
+ "20": {
+  "text": {
+   "words": "ДРОНЫ ВИДЯТ ОТДЕЛЬНОГО ЧЕЛОВЕКА",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0
+  }
+ },
+ "23": {
+  "text": {
+   "words": "СКРЫТО ПО СОВЕТСКИМ ТРУБОПРОВОДАМ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 1.9,
+   "scale": 1.0
+  }
+ },
+ "24": {
+  "text": {
+   "words": "ПОД ЗЕМЛЁЙ, А НЕ ПО ПОЛЮ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.2,
+   "scale": 1.0
+  }
+ },
+ "25": {
+  "text": {
+   "words": "УКРАИНА ОТПРАВИЛА РОБОТОВ В ТРУБЫ",
+   "color": "white",
+   "pos": "mc",
+   "at": 4.5,
+   "scale": 1.0
+  }
+ },
+ "28": {
+  "text": {
+   "words": "ПОВЕРХНОСТЬ СТАЛА ПРОЗРАЧНОЙ",
+   "color": "white",
+   "pos": "mc",
+   "at": 4.3,
+   "scale": 1.0
+  }
+ },
+ "30": {
+  "text": {
+   "words": "ДО 700 БАЛЛИСТИЧЕСКИХ РАКЕТ",
+   "color": "red",
+   "pos": "tc",
+   "at": 4.6,
+   "scale": 1.0
+  }
+ },
+ "31": {
+  "text": {
+   "words": "6200 ДРОНОВ «ГЕРАНЬ» В РЕЗЕРВЕ",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.8,
+   "scale": 1.0
+  }
+ },
+ "32": {
+  "text": {
+   "words": "10 ТЫСЯЧ БЕСПИЛОТНИКОВ В МЕСЯЦ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.2,
+   "scale": 1.0
+  }
+ },
+ "33": {
+  "text": {
+   "words": "БОЛЕЕ 200 РАКЕТ В МЕСЯЦ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 4.5,
+   "scale": 1.0
+  }
+ },
+ "36": {
+  "text": {
+   "words": "МИНУС 200 ТЫСЯЧ БРОНИРОВАНИЙ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "37": {
+  "text": {
+   "words": "И ЕЩЁ 300 ТЫСЯЧ В 2027",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.7,
+   "scale": 1.0
+  }
+ },
+ "39": {
+  "text": {
+   "words": "ФРОНТУ НУЖНЫ ЛЮДИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 3.1,
+   "scale": 1.0
+  }
+ },
+ "43": {
+  "text": {
+   "words": "ГУМАНИТАРНАЯ ПРОБЛЕМА — ТОЛЬКО С ВИДУ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "45": {
+  "text": {
+   "words": "ИНОГДА БУКВАЛЬНО ПО МЕТРУ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.0,
+   "scale": 1.0
+  }
+ },
+ "47": {
+  "text": {
+   "words": "СОВПАДЕНИЕ СЛИШКОМ ДИСЦИПЛИНИРОВАННОЕ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "49": {
+  "text": {
+   "words": "200 ЧЕЛОВЕК В СУТКИ ИЗ ОБЛАСТИ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.0,
+   "scale": 1.0
+  }
+ },
+ "50": {
+  "text": {
+   "words": "ДРУЖКОВКА: ДОЕХАТЬ МОЖНО НЕ ВСЕГДА",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "55": {
+  "text": {
+   "words": "ГОРОДСКОЙ ТЫЛ ЛОМАЕТСЯ РАНЬШЕ БОЁВ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.0,
+   "scale": 1.0
+  }
+ },
+ "56": {
+  "text": {
+   "words": "ЖДУТ ОДНОГО БОЛЬШОГО СОБЫТИЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 4.3,
+   "scale": 1.0
+  }
+ },
+ "64": {
+  "text": {
+   "words": "РОССИЯ МОЖЕТ НЕ ТОРОПИТЬСЯ",
+   "color": "red",
+   "pos": "mc",
+   "at": 4.5,
+   "scale": 1.0
+  }
+ },
+ "68": {
+  "text": {
+   "words": "ДАВЛЕНИЕ СРАЗУ НА ПЯТИ УРОВНЯХ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.4,
+   "scale": 1.0
+  }
+ },
+ "71": {
+  "text": {
+   "words": "ВСЁ НАЧИНАЕТСЯ С ЭВАКУАЦИИ",
+   "color": "red",
+   "pos": "mc",
+   "at": 1.3,
+   "scale": 1.0
+  }
+ }
+}
