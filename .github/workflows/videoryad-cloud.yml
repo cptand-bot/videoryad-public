@@ -286,8 +286,30 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
           fi
+          # PIP — ВТОРОЙ ИСТОЧНИК И ТЕПЕРЬ ГЛАВНЫЙ ЗАПАСНОЙ (23.10, вечер).
+          # Днём отвалился apt, к вечеру отвалилось и стороннее зеркало
+          # johnvansickle: на одном прогоне 10 джобов из 23 легли уже на нашей
+          # собственной проверке. `static-ffmpeg` тянет бинари с github.com —
+          # то есть с хоста, который на раннере заведомо доступен, раз оттуда
+          # приехал сам код. Кладёт И ffmpeg, И ffprobe (imageio-ffmpeg не
+          # годится: там только ffmpeg).
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            echo "ставлю ffmpeg через pip (static-ffmpeg, бинари с github)"
+            python3 -m pip install --quiet --disable-pip-version-check static-ffmpeg || true
+            python3 - <<'PYFF' || true
+          import subprocess, sys
+          try:
+              import static_ffmpeg.run as r
+              a, b = r.get_or_fetch_platform_executables_else_raise()
+              for src in (a, b):
+                  subprocess.run(["sudo", "install", "-m755", src, "/usr/local/bin/"], check=False)
+              print("static-ffmpeg положил бинари в /usr/local/bin")
+          except Exception as e:
+              print("static-ffmpeg не дал бинарей: %s" % e, file=sys.stderr)
+          PYFF
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt и pip не дали бинарей)"
             curl -fsSL --retry 3 --max-time 180 \
               https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
               -o /tmp/ff.tar.xz \
@@ -474,8 +496,30 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
           fi
+          # PIP — ВТОРОЙ ИСТОЧНИК И ТЕПЕРЬ ГЛАВНЫЙ ЗАПАСНОЙ (23.10, вечер).
+          # Днём отвалился apt, к вечеру отвалилось и стороннее зеркало
+          # johnvansickle: на одном прогоне 10 джобов из 23 легли уже на нашей
+          # собственной проверке. `static-ffmpeg` тянет бинари с github.com —
+          # то есть с хоста, который на раннере заведомо доступен, раз оттуда
+          # приехал сам код. Кладёт И ffmpeg, И ffprobe (imageio-ffmpeg не
+          # годится: там только ffmpeg).
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            echo "ставлю ffmpeg через pip (static-ffmpeg, бинари с github)"
+            python3 -m pip install --quiet --disable-pip-version-check static-ffmpeg || true
+            python3 - <<'PYFF' || true
+          import subprocess, sys
+          try:
+              import static_ffmpeg.run as r
+              a, b = r.get_or_fetch_platform_executables_else_raise()
+              for src in (a, b):
+                  subprocess.run(["sudo", "install", "-m755", src, "/usr/local/bin/"], check=False)
+              print("static-ffmpeg положил бинари в /usr/local/bin")
+          except Exception as e:
+              print("static-ffmpeg не дал бинарей: %s" % e, file=sys.stderr)
+          PYFF
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt и pip не дали бинарей)"
             curl -fsSL --retry 3 --max-time 180 \
               https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
               -o /tmp/ff.tar.xz \
@@ -653,8 +697,30 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
           fi
+          # PIP — ВТОРОЙ ИСТОЧНИК И ТЕПЕРЬ ГЛАВНЫЙ ЗАПАСНОЙ (23.10, вечер).
+          # Днём отвалился apt, к вечеру отвалилось и стороннее зеркало
+          # johnvansickle: на одном прогоне 10 джобов из 23 легли уже на нашей
+          # собственной проверке. `static-ffmpeg` тянет бинари с github.com —
+          # то есть с хоста, который на раннере заведомо доступен, раз оттуда
+          # приехал сам код. Кладёт И ffmpeg, И ffprobe (imageio-ffmpeg не
+          # годится: там только ffmpeg).
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            echo "ставлю ffmpeg через pip (static-ffmpeg, бинари с github)"
+            python3 -m pip install --quiet --disable-pip-version-check static-ffmpeg || true
+            python3 - <<'PYFF' || true
+          import subprocess, sys
+          try:
+              import static_ffmpeg.run as r
+              a, b = r.get_or_fetch_platform_executables_else_raise()
+              for src in (a, b):
+                  subprocess.run(["sudo", "install", "-m755", src, "/usr/local/bin/"], check=False)
+              print("static-ffmpeg положил бинари в /usr/local/bin")
+          except Exception as e:
+              print("static-ffmpeg не дал бинарей: %s" % e, file=sys.stderr)
+          PYFF
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt и pip не дали бинарей)"
             curl -fsSL --retry 3 --max-time 180 \
               https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
               -o /tmp/ff.tar.xz \
@@ -925,8 +991,30 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
           fi
+          # PIP — ВТОРОЙ ИСТОЧНИК И ТЕПЕРЬ ГЛАВНЫЙ ЗАПАСНОЙ (23.10, вечер).
+          # Днём отвалился apt, к вечеру отвалилось и стороннее зеркало
+          # johnvansickle: на одном прогоне 10 джобов из 23 легли уже на нашей
+          # собственной проверке. `static-ffmpeg` тянет бинари с github.com —
+          # то есть с хоста, который на раннере заведомо доступен, раз оттуда
+          # приехал сам код. Кладёт И ffmpeg, И ffprobe (imageio-ffmpeg не
+          # годится: там только ffmpeg).
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            echo "ставлю статическую сборку ffmpeg (apt не дал бинарей)"
+            echo "ставлю ffmpeg через pip (static-ffmpeg, бинари с github)"
+            python3 -m pip install --quiet --disable-pip-version-check static-ffmpeg || true
+            python3 - <<'PYFF' || true
+          import subprocess, sys
+          try:
+              import static_ffmpeg.run as r
+              a, b = r.get_or_fetch_platform_executables_else_raise()
+              for src in (a, b):
+                  subprocess.run(["sudo", "install", "-m755", src, "/usr/local/bin/"], check=False)
+              print("static-ffmpeg положил бинари в /usr/local/bin")
+          except Exception as e:
+              print("static-ffmpeg не дал бинарей: %s" % e, file=sys.stderr)
+          PYFF
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "ставлю статическую сборку ffmpeg (apt и pip не дали бинарей)"
             curl -fsSL --retry 3 --max-time 180 \
               https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
               -o /tmp/ff.tar.xz \
