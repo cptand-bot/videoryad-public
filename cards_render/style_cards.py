@@ -792,6 +792,28 @@ import random as _random
 _NOISE_CACHE = {}
 
 
+def reply_frame(out=None, photo="", speaker="", words="", speaker_idx=0,
+                watermark="ДО ПРИГОВОРА", t=None):
+    """РЕПЛИКА-ОТВЕТ ПОВЕРХ ЖИВОГО КАДРА — чтобы элемент «реплика» можно
+    было поставить на сцену целиком, а не слоем без фона (2026-10-23)."""
+    base = live_photo(photo, W, H, t=t)
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    import tempfile as _tf
+    tmp = os.path.join(_tf.mkdtemp(), "ov.png")
+    reply_overlay(tmp, speaker, words, speaker_idx)
+    ov = Image.open(tmp).convert("RGBA")
+    im = Image.alpha_composite(base.convert("RGBA"), ov).convert("RGB")
+    if watermark:
+        d = ImageDraw.Draw(im)
+        fw = _f(F_HEAD, 21); wt = watermark.upper()
+        w = track_w(wt, fw, 3)
+        track(d, ((W - w) / 2, H - 46), wt, fw, (150, 150, 150), 3)
+    if out:
+        im.save(out, quality=92)
+        return out
+    return im
+
+
 def _noise1(seed, n=48):
     """Гладкий одномерный шум — ровное «дыхание», а не рывки."""
     if seed not in _NOISE_CACHE:

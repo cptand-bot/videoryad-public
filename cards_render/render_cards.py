@@ -127,7 +127,39 @@ def render(view, outdir, fps=30):
 # РЕЖИМ ЗАДАНИЙ: рисуем карточки КОНКРЕТНОГО ролика, а не демо витрины.
 # jobs.json кладёт `cards_cloud.py`, имена клипов — как ждёт сборщик.
 # ---------------------------------------------------------------------------
-def render_jobs(jobs_path, outdir, fps=30):
+# ===========================================================================
+# ПОЛНЫЙ КОМПЛЕКТ АРСЕНАЛА В ОБЛАКЕ (2026-10-23)
+# Задание может звать ЛЮБУЮ функцию арсенала, но только из этого реестра —
+# имя из `jobs.json` не исполняется как код, а ищется в разрешённых модулях.
+# Три режима:
+#   frame  — функция рисует один кадр (out=..., t=...), оживляем render_anim;
+#   clip   — функция сама пишет mp4 (первый позиционный аргумент — путь);
+#   scroll — полотно из *_canvas, затем style_cards.scroll_clip по нему.
+# ===========================================================================
+def _registry():
+    import cinematic, devices, film, photo_card, poster, torn_photo, torn_split
+    import transitions, quote_paper, quote_variants
+    return {"style_cards": sc, "cinematic": cinematic, "film": film,
+            "devices": devices, "torn_split": torn_split, "torn_photo": torn_photo,
+            "photo_card": photo_card, "poster": poster, "transitions": transitions,
+            "quote_paper": quote_paper, "quote_variants": quote_variants}
+
+
+def resolve(view, reg):
+    """«модуль.функция» → сама функция. Ничего, кроме реестра, не достать."""
+    if "." not in view:
+        return None
+    mod, fn = view.split(".", 1)
+    m = reg.get(mod)
+    if m is None or fn.startswith("_"):
+        return None
+    return getattr(m, fn, None)
+
+
+def render_jobs(jobs_path, outdir, fps=30, shard=None):
+    """shard = (i, n) — рисовать только i-ю часть из n (нумерация с 1).
+    Полный комплект арсенала на 62 сцены одним потоком в таймаут не влезает,
+    поэтому прогон идёт матрицей: n машин берут по куску заданий."""
     import quote_variants as qv
     FN = {"quote": None, "split": qv.quote_split, "tape": qv.quote_tape,
           "doc": qv.quote_doc, "strike": qv.quote_strike, "duel": qv.quote_duel,
@@ -144,6 +176,10 @@ def render_jobs(jobs_path, outdir, fps=30):
     import quote_paper as _qp
     FN["quote"] = _qp.quote_paper
     jobs = json.load(open(jobs_path, encoding="utf-8"))
+    if shard:
+        i, n = shard
+        jobs = [j for k, j in enumerate(jobs) if k % n == (i - 1)]
+        print(f"часть {i} из {n}: {len(jobs)} заданий", flush=True)
     os.makedirs(outdir, exist_ok=True)
     rep = []
     for job in jobs:
@@ -153,18 +189,73 @@ def render_jobs(jobs_path, outdir, fps=30):
             if isinstance(kw.get(seq), list):
                 kw[seq] = tuple(kw[seq])
         # фото едет рядом с заданием: путь на машине пользователя раннеру не виден
-        for ph_key in ("photo", "base_photo", "old_path", "new_path"):
-            if kw.get(ph_key):
-                kw[ph_key] = os.path.join(os.path.dirname(jobs_path),
-                                          os.path.basename(kw[ph_key]))
-        fn = FN[view]
+        # пути к кадрам на машине пользователя раннеру не видны: все файлы
+        # приехали рядом с заданием, поэтому любую строку-путь приводим к
+        # локальному имени — на любой глубине структуры
+        base_dir = os.path.dirname(jobs_path)
+
+        def _local(obj):
+            if isinstance(obj, str):
+                if obj.lower().endswith((".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")):
+                    return os.path.join(base_dir, os.path.basename(obj))
+                return obj
+            if isinstance(obj, dict):
+                return {k: _local(v) for k, v in obj.items()}
+            if isinstance(obj, list):
+                return [_local(v) for v in obj]
+            if isinstance(obj, tuple):
+                return tuple(_local(v) for v in obj)
+            return obj
+
+        kw = _local(kw)
+        if job.get("cfg"):
+            job["cfg"] = _local(job["cfg"])
         mp4 = os.path.join(outdir, f"scene_{sid:03d}.mp4")
         jpg = os.path.join(outdir, f"scene_{sid:03d}.jpg")
         t0 = time.time()
-        fn(out=jpg, **kw)
-        sc.render_anim(fn, kw, float(job["dur"]), mp4, fps=fps,
-                       anim_seconds=float(job.get("anim") or 2.6),
-                       tail_zoom=float(job.get("tail_zoom") or 0.045), sfx_out=True)
+        mode = job.get("mode") or "frame"
+        reg = _registry()
+        fn = FN.get(view) or resolve(view, reg)
+        if fn is None:
+            print(f"  сцена {sid}: вид «{view}» не разрешён — пропуск", file=sys.stderr,
+                  flush=True)
+            continue
+        if mode == "cli":
+            # КАРТОЧКИ ВТОРОГО СКИЛЛА (глава / факт / досье) — отдельные
+            # скрипты со своим языком оформления. Едут в облако папкой `stv`.
+            import subprocess as _sp
+            stv = os.path.join(os.path.dirname(jobs_path), "stv")
+            script = os.path.join(stv, job["script"])
+            argv = ["python3", script]
+            if job.get("cfg"):
+                cfgp = os.path.join(os.path.dirname(jobs_path), f"cfg_{sid:03d}.json")
+                json.dump(job["cfg"], open(cfgp, "w", encoding="utf-8"),
+                          ensure_ascii=False, indent=1)
+                argv += [cfgp, mp4]
+            else:
+                argv += [str(x) for x in job.get("argv", [])] + [mp4, str(job["dur"])]
+            r = _sp.run(argv, capture_output=True, text=True)
+            if r.returncode != 0 or not os.path.exists(mp4):
+                print(f"  сцена {sid}: {job['script']} упал — "
+                      f"{(r.stderr or r.stdout or '').strip()[:200]}",
+                      file=sys.stderr, flush=True)
+                continue
+        elif mode == "clip":
+            fn(mp4, seconds=float(job["dur"]), fps=fps, **kw)
+        elif mode == "scroll":
+            cf = resolve(job["canvas"], reg)
+            if cf is None:
+                print(f"  сцена {sid}: полотно «{job.get('canvas')}» не разрешено",
+                      file=sys.stderr, flush=True)
+                continue
+            page = cf(**kw)
+            sc.scroll_clip(page, mp4, seconds=float(job["dur"]),
+                           direction=job.get("direction", "up"), fps=fps)
+        else:
+            fn(out=jpg, **kw)
+            sc.render_anim(fn, kw, float(job["dur"]), mp4, fps=fps,
+                           anim_seconds=float(job.get("anim") or 2.6),
+                           tail_zoom=float(job.get("tail_zoom") or 0.045), sfx_out=True)
         took = time.time() - t0
         print(f"  сцена {sid} ({view}): {job['dur']} с, {took:.1f} с счёта", flush=True)
         rep.append({"scene": sid, "view": view, "dur": job["dur"],
@@ -175,14 +266,22 @@ def render_jobs(jobs_path, outdir, fps=30):
 
 
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else "cards_out"
+    argv = [a for a in sys.argv[1:]]
+    shard = None
+    for a in list(argv):
+        if a.startswith("--shard"):
+            val = a.split("=", 1)[1] if "=" in a else argv[argv.index(a) + 1]
+            i, n = val.split("/")
+            shard = (int(i), int(n))
+            argv = [x for x in argv if x != a and x != val]
+    out = argv[0] if argv else "cards_out"
     jobs = os.path.join(os.path.dirname(os.path.abspath(__file__)), "jobs.json")
     if os.path.exists(jobs):                 # есть задания ролика — рисуем их
-        rep = render_jobs(jobs, out)
+        rep = render_jobs(jobs, out, shard=shard)
         print("итого:", round(sum(r["seconds_spent"] for r in rep), 1), "с на",
               len(rep), "карточек")
         raise SystemExit(0)
-    views = sys.argv[2:] or list(VIEWS)
+    views = argv[1:] or list(VIEWS)
     rep = [render(v, out) for v in views]
     json.dump(rep, open(os.path.join(out, "report.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
