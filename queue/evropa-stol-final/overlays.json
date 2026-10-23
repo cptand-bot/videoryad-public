@@ -1,0 +1,487 @@
+{
+  "anchor": "top",
+  "4": {
+    "photo": "overlays/scene_004.jpg",
+    "sound": "whoosh",
+    "at": 2.09,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "12": {
+    "photo": "overlays/scene_012.jpg",
+    "sound": "whoosh",
+    "at": 3.01,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "20": {
+    "photo": "overlays/scene_020.jpg",
+    "sound": "pop",
+    "at": 4.9,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "56": {
+    "photo": "overlays/scene_056.jpg",
+    "sound": "whoosh",
+    "at": 3.45,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "middle",
+    "approved": true
+  },
+  "60": {
+    "photo": "overlays/scene_060.jpg",
+    "sound": "zatvor",
+    "at": 4.34,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "1": {
+    "text": {
+      "words": "ЕВРОПА ИЩЕТ ПЕРЕГОВОРЩИКА",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.33,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "3": {
+    "text": {
+      "words": "МЕРЦ: БЕЗ ЕВРОПЫ МИРА НЕ БУДЕТ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.65,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "5": {
+    "text": {
+      "words": "ЧЕТЫРЕ ФАМИЛИИ В СПИСКЕ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 4.6,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "10": {
+    "text": {
+      "words": "КОНТАКТ С ТРАМПОМ ЕСТЬ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 4.93,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "13": {
+    "text": {
+      "words": "КОГО МОСКВА НЕ РАЗВЕРНЁТ У ДВЕРИ",
+      "color": "green",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.56,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "15": {
+    "text": {
+      "words": "ОСЛО: ПЕРЕГОВОРЫ ТРЁХ СТОРОН",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 4.45,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "16": {
+    "text": {
+      "words": "ДМИТРИЕВ СНОВА В США",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.48,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "19": {
+    "text": {
+      "words": "ТАНКЕР УЖЕ В ПУТИ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.73,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "21": {
+    "text": {
+      "words": "СЕВЕРНЫЙ ПОТОК: УЦЕЛЕВШИЕ НИТКИ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.76,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "25": {
+    "text": {
+      "words": "ЗАКУПКИ РОССИЙСКОГО СПГ: +9,5%",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 4.1,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "27": {
+    "text": {
+      "words": "ЗАПРЕТ НА ЭКСПОРТ ДИЗЕЛЯ СНЯТ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "28": {
+    "text": {
+      "words": "ГАЗ ЧЕРЕЗ УКРАИНУ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "29": {
+    "text": {
+      "words": "ПАВЕЛ: Я БЫ НАЗВАЛ ЭТО ОШИБКОЙ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.18,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "30": {
+    "text": {
+      "words": "ПЕРЕМИРИЕ БЫЛО СОВСЕМ БЛИЗКО",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 3.37,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "32": {
+    "text": {
+      "words": "ТРАМП ДОГОВОРИЛСЯ О ДИЗЕЛЕ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 5.17,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "33": {
+    "text": {
+      "words": "ЧТО КОНКРЕТНО БЫЛО СОГЛАСОВАНО?",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.19,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "35": {
+    "text": {
+      "words": "230 ТЫСЯЧ БАРРЕЛЕЙ ДИЗЕЛЯ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.42,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "36": {
+    "text": {
+      "words": "РОССИЯ ДОГОВАРИВАЕТСЯ, ОБХОДЯ ЕВРОПУ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.26,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "38": {
+    "text": {
+      "words": "УШАКОВ: ДЕЛО ИДЁТ К ЗАВЕРШЕНИЮ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.43,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "41": {
+    "text": {
+      "words": "ТРЁХСТОРОННЯЯ ВСТРЕЧА — НОЯБРЬ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.68,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "42": {
+    "text": {
+      "words": "ДОГОВОРЁННОСТЬ УЖЕ ИСПОЛНЯЕТСЯ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.82,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "44": {
+    "text": {
+      "words": "ЕВРОКОМИССИЯ ЗАЩИЩАЕТ САНКЦИИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.26,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "47": {
+    "text": {
+      "words": "КАЛЛАС: США ТОЛКАЮТ КИЕВ К КАПИТУЛЯЦИИ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.2,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "48": {
+    "text": {
+      "words": "КОНСТРУКЦИЮ СОБИРАЮТ БЕЗ ЕВРОПЫ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 3.08,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "53": {
+    "text": {
+      "words": "РУБИО: УКРАИНА ЗАВИСИТ ОТ США",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.86,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "55": {
+    "sound": "pop",
+    "photo": "overlays/scene_055.jpg",
+    "at": 3.4,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "58": {
+    "sound": "whoosh",
+    "photo": "overlays/scene_058.jpg",
+    "at": 2.92,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "61": {
+    "text": {
+      "words": "ПЕСКОВ: НЕКОНСТРУКТИВНО",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 3.89,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "64": {
+    "sound": "zatvor",
+    "photo": "overlays/scene_064.jpg",
+    "at": 3.29,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "66": {
+    "text": {
+      "words": "САНКЦИИ. ЭНЕРГЕТИКА. ТОРГОВЛЯ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.27,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "69": {
+    "text": {
+      "words": "ГЛАВНЫЙ ЕВРОПЕЙСКИЙ ЭКЗАМЕН",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.37,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "70": {
+    "text": {
+      "words": "ВОЙТИ ДО ТОГО, КАК ВСЁ РЕШАТ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 4.43,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "71": {
+    "text": {
+      "words": "ЧЕТЫРЕ ГОДА В ЦЕНТРЕ СОБЫТИЙ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 4.45,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  },
+  "72": {
+    "text": {
+      "words": "ОТЛИЧНО, ЧТО ВЫ ПРИШЛИ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 3.96,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": ""
+  }
+}
