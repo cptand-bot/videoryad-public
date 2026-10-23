@@ -28,6 +28,7 @@
 """
 import argparse
 import glob
+import json
 import os
 import sys
 
@@ -100,6 +101,19 @@ def main():
         if why:
             bad.append((f, w, h, "; ".join(why)))
 
+    # ЖУРНАЛ ФЕТЧА: что он сам признал мелким, когда лучшего не нашлось
+    lowres = {}
+    for jf in glob.glob(os.path.join(a.images, ".lowres.*")):
+        try:
+            lowres.update(json.load(open(jf, encoding="utf-8")))
+        except (OSError, ValueError):
+            pass
+    if lowres:
+        print(f"фетч сам отметил как мелкие {len(lowres)} сцен: "
+              + ", ".join(f"{k} ({v})" for k, v in sorted(lowres.items(), key=lambda x: int(x[0]))[:8])
+              + ("…" if len(lowres) > 8 else ""))
+        print("  это значит «лучшего не нашлось» — тут нужен другой ЗАПРОС, "
+              "а не повторный фетч тем же.")
     print(f"проверено кадров: {len(rows)}")
     if rows:
         import statistics

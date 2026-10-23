@@ -723,6 +723,27 @@ def fetch_web_search(query, out_path, env=None):
     if w < _MIN_W or h < _MIN_H:
         print(f"  [web_search] лучшее, что нашлось: {w}x{h} — НИЖЕ порога "
               f"{_MIN_W}x{_MIN_H}, на 1920x1080 будет растянуто", flush=True)
+        # ЗАПИСЫВАЕМ, А НЕ ТОЛЬКО ПЕЧАТАЕМ (23.10, улов `usuario-98`). Строка
+        # выше уходит в лог шарда, а его никто не читает: в облаке двадцать
+        # шардов, и вкладка узнавала о растянутом кадре только из
+        # `photo_quality.py` ПОСЛЕ сборки. Живой случай: шесть кадров,
+        # дофетченных взамен брака, сами оказались 1280-1500 — замена вышла не
+        # лучше оригинала. Журнал едет вместе с кадрами и виден сразу.
+        try:
+            _lr = os.path.join(os.path.dirname(out_path or "."),
+                               ".lowres." + os.environ.get("MANIFEST_NAME", "manifest.json"))
+            _m2 = re.search(r"scene_(\d+)", os.path.basename(out_path or ""))
+            if _m2:
+                _d = {}
+                if os.path.exists(_lr):
+                    try:
+                        _d = json.load(open(_lr, encoding="utf-8"))
+                    except (OSError, ValueError):
+                        _d = {}
+                _d[str(int(_m2.group(1)))] = f"{w}x{h} при пороге {_MIN_W}x{_MIN_H}"
+                json.dump(_d, open(_lr, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        except Exception:
+            pass
     else:
         print(f"  [web_search] взят кадр {w}x{h} (из {tried} кандидатов)", flush=True)
     return True
