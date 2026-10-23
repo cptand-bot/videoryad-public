@@ -261,13 +261,16 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
-          sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu
+          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
+          for _try in 1 2 3; do
+            timeout 240 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu && break
+            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
+          done
           python3 -m pip install --quiet pillow
 
       - name: Ключи из Secrets (в репозиторий они не попадают никогда)
@@ -417,13 +420,16 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
-          sudo apt-get install -y -qq ffmpeg fonts-dejavu
+          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
+          for _try in 1 2 3; do
+            timeout 240 sudo apt-get install -y -qq ffmpeg fonts-dejavu && break
+            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
+          done
           python3 -m pip install --quiet pillow
 
       # No clip cache on the parallel path: a rebuild re-renders every clip
@@ -565,12 +571,15 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 10
+        timeout-minutes: 20
         if: steps.have.outputs.count != '0'
         run: |
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
-          sudo apt-get install -y -qq ffmpeg fonts-dejavu
+          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
+          for _try in 1 2 3; do
+            timeout 240 sudo apt-get install -y -qq ffmpeg fonts-dejavu && break
+            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
+          done
           python3 -m pip install --quiet pillow
 
       - name: Render this worker's pop-ups
@@ -804,13 +813,16 @@ jobs:
         # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
         # которого таймаут и ставился, длилось 23 минуты; десять минут
         # разделяют эти два случая надёжно.
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
-          sudo apt-get update -qq || sudo apt-get update -qq -o Acquire::Retries=3 || true
-          sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu
+          timeout 180 sudo apt-get update -qq || timeout 180 sudo apt-get update -qq -o Acquire::Retries=3 || true
+          for _try in 1 2 3; do
+            timeout 240 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu && break
+            echo "установка пакетов зависла или упала, попытка $_try — повторяю" >&2
+          done
           python3 -m pip install --quiet pillow
 
       - name: Ключи из Secrets (в репозиторий они не попадают никогда)
