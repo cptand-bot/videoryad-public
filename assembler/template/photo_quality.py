@@ -30,11 +30,42 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 
 SKIP = (".json", ".log", ".lock")
 VIDEO = (".mp4", ".mov", ".webm", ".mkv", ".m4v")
 MIN_W, MIN_DENS, MIN_RATIO = 1600, 0.08, 2.5
+# ВСПЛЫВАШКА РИСУЕТСЯ КОРОБКОЙ 330-700 px (классы s/m/l в build_overlays), и
+# мерить её порогом полного экрана — шум: 23.10 так помечались 5-7 штук на
+# ролик только за ширину 800-1500, то есть при двукратном запасе (улов
+# `usuario-fa`). Для них свой порог.
+MIN_W_OVERLAY = 800
+
+
+def _scene_sources(images_dir):
+    """{id сцены: (источник, путь-запрос)} — из scenes.json рядом с папкой.
+
+    Нужно для двух поправок 23.10: карты из медиатеки по определению имеют
+    низкую плотность (две заливки и линия границы), а библиотечные пины
+    пользователь запретил менять и банить по качеству (его слово 18.10) —
+    показывать их в общем списке значит давать вкладке работу, которой она
+    сделать НЕ МОЖЕТ.
+    """
+    out = {}
+    base = os.path.dirname(os.path.abspath(images_dir)) or "."
+    for sp in sorted(glob.glob(os.path.join(base, "*.scenes.json"))):
+        try:
+            data = json.load(open(sp, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for sc in (data.get("scenes") if isinstance(data, dict) else data) or []:
+            try:
+                out.setdefault(int(sc.get("id", -1)),
+                               (str(sc.get("source", "")), str(sc.get("source_query", ""))))
+            except (TypeError, ValueError):
+                pass
+    return out
 
 
 def detail_ratio(path):
@@ -78,7 +109,8 @@ def main():
     except Exception:
         sys.exit("нет PIL — проверить нечем")
 
-    rows, bad = [], []
+    srcs = _scene_sources(a.images)
+    rows, bad, lib_bad = [], [], []
     for f in sorted(glob.glob(os.path.join(a.images, "scene_*.*"))):
         low = f.lower()
         if low.endswith(SKIP) or low.endswith(VIDEO) or ".text." in low or ".ovthumb." in low:
@@ -91,15 +123,24 @@ def main():
         dens = os.path.getsize(f) / max(1, w * h)
         ratio = detail_ratio(f)
         rows.append((f, w, h, dens, ratio))
+
+        m = re.search(r"scene_(\d+)", os.path.basename(f))
+        sid = int(m.group(1)) if m else -1
+        src, sq = srcs.get(sid, ("", ""))
+        is_overlay = os.path.basename(os.path.dirname(os.path.abspath(f))) == "overlays"
+        is_map = "КАРТЫ/" in sq.replace("\\", "/") or "/КАРТЫ" in sq.replace("\\", "/")
+        is_lib = src == "local_library"
+
         why = []
-        if w < MIN_W:
-            why.append(f"ширина {w} < {MIN_W}")
-        if dens < MIN_DENS:
+        w_min = MIN_W_OVERLAY if is_overlay else MIN_W
+        if w < w_min:
+            why.append(f"ширина {w} < {w_min}")
+        if dens < MIN_DENS and not is_map:
             why.append(f"плотность {dens:.3f} < {MIN_DENS}")
         if 0 < ratio < MIN_RATIO:
             why.append(f"запас деталей {ratio:.2f} < {MIN_RATIO} (похоже на апскейл)")
         if why:
-            bad.append((f, w, h, "; ".join(why)))
+            (lib_bad if is_lib else bad).append((f, w, h, "; ".join(why)))
 
     # ЖУРНАЛ ФЕТЧА: что он сам признал мелким, когда лучшего не нашлось
     lowres = {}
@@ -119,6 +160,12 @@ def main():
         import statistics
         print(f"медианы: плотность {statistics.median(r[3] for r in rows):.3f}, "
               f"запас деталей {statistics.median(r[4] for r in rows):.2f}")
+    if lib_bad:
+        print(f"\nиз медиатеки, МЕНЯТЬ НЕЛЬЗЯ (его слово 18.10) — {len(lib_bad)}: "
+              + ", ".join(f"{os.path.basename(f)} ({w}x{h})" for f, w, h, _ in lib_bad[:6])
+              + ("…" if len(lib_bad) > 6 else ""))
+        print("  это к сведению, а не к работе: библиотечные пины по качеству "
+              "не бракуем и не баним.")
     if not bad:
         print("подозрительных нет — качество ровное")
         return 0
