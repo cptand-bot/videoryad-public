@@ -136,6 +136,33 @@ def render(view, outdir, fps=30):
 #   clip   — функция сама пишет mp4 (первый позиционный аргумент — путь);
 #   scroll — полотно из *_canvas, затем style_cards.scroll_clip по нему.
 # ===========================================================================
+def patch_fonts(mod, fonts_dir):
+    """Шрифты на раннере лежат в одной папке, а модули арсенала помнят путь
+    внутри скилла (`~/.claude/skills/.../template/fonts`), которого там нет.
+    Поэтому у КАЖДОГО модуля любую строку-путь к .ttf приводим к этой папке.
+
+    Повод (2026-10-23): четыре части прогона упали с `OSError: cannot open
+    resource` на `torn_photo._f` — подмена была написана только для цитат.
+    """
+    import types
+    for name in dir(mod):
+        if name.startswith("__"):
+            continue
+        val = getattr(mod, name, None)
+        if isinstance(val, str) and val.lower().endswith(".ttf"):
+            cand = os.path.join(fonts_dir, os.path.basename(val))
+            if os.path.exists(cand):
+                setattr(mod, name, cand)
+            elif not os.path.exists(val):
+                # шрифта нет ни там, ни там (Segoe Script в публичный
+                # репозиторий не кладётся) — берём рукописный свободный
+                alt = os.path.join(fonts_dir, "Caveat-Bold.ttf")
+                if os.path.exists(alt):
+                    setattr(mod, name, alt)
+        elif isinstance(val, str) and val.endswith("fonts"):
+            setattr(mod, name, fonts_dir)
+
+
 def _registry():
     import cinematic, devices, film, photo_card, poster, torn_photo, torn_split
     import transitions, quote_paper, quote_variants
@@ -213,13 +240,37 @@ def render_jobs(jobs_path, outdir, fps=30, shard=None):
         mp4 = os.path.join(outdir, f"scene_{sid:03d}.mp4")
         jpg = os.path.join(outdir, f"scene_{sid:03d}.jpg")
         t0 = time.time()
+        # ОДНО УПАВШЕЕ ЗАДАНИЕ НЕ ВАЛИТ ЧАСТЬ (2026-10-23): раньше исключение
+        # на одной сцене уносило все десять клипов своей машины.
+        try:
+            if not _render_one(job, sid, view, kw, mode, mp4, jpg, jobs_path, fps):
+                continue
+        except Exception as e:
+            print(f"  сцена {sid} ({view}): УПАЛО — {type(e).__name__}: {e}",
+                  file=sys.stderr, flush=True)
+            continue
+        took = time.time() - t0
+        print(f"  сцена {sid} ({view}): {job['dur']} с, {took:.1f} с счёта",
+              flush=True)
+        rep.append({"scene": sid, "view": view, "dur": job["dur"],
+                    "seconds_spent": round(took, 1)})
+    json.dump(rep, open(os.path.join(outdir, "report.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=1)
+    return rep
+
+
+def _render_one(job, sid, view, kw, mode, mp4, jpg, jobs_path, fps):
+    if True:
         mode = job.get("mode") or "frame"
         reg = _registry()
+        if FONTS:
+            for _m in reg.values():
+                patch_fonts(_m, FONTS)
         fn = FN.get(view) or resolve(view, reg)
         if fn is None:
             print(f"  сцена {sid}: вид «{view}» не разрешён — пропуск", file=sys.stderr,
                   flush=True)
-            continue
+            return False
         if mode == "cli":
             # КАРТОЧКИ ВТОРОГО СКИЛЛА (глава / факт / досье) — отдельные
             # скрипты со своим языком оформления. Едут в облако папкой `stv`.
@@ -239,7 +290,7 @@ def render_jobs(jobs_path, outdir, fps=30, shard=None):
                 print(f"  сцена {sid}: {job['script']} упал — "
                       f"{(r.stderr or r.stdout or '').strip()[:200]}",
                       file=sys.stderr, flush=True)
-                continue
+                return False
         elif mode == "clip":
             fn(mp4, seconds=float(job["dur"]), fps=fps, **kw)
         elif mode == "scroll":
@@ -247,7 +298,7 @@ def render_jobs(jobs_path, outdir, fps=30, shard=None):
             if cf is None:
                 print(f"  сцена {sid}: полотно «{job.get('canvas')}» не разрешено",
                       file=sys.stderr, flush=True)
-                continue
+                return False
             page = cf(**kw)
             sc.scroll_clip(page, mp4, seconds=float(job["dur"]),
                            direction=job.get("direction", "up"), fps=fps)
@@ -256,13 +307,7 @@ def render_jobs(jobs_path, outdir, fps=30, shard=None):
             sc.render_anim(fn, kw, float(job["dur"]), mp4, fps=fps,
                            anim_seconds=float(job.get("anim") or 2.6),
                            tail_zoom=float(job.get("tail_zoom") or 0.045), sfx_out=True)
-        took = time.time() - t0
-        print(f"  сцена {sid} ({view}): {job['dur']} с, {took:.1f} с счёта", flush=True)
-        rep.append({"scene": sid, "view": view, "dur": job["dur"],
-                    "seconds_spent": round(took, 1)})
-    json.dump(rep, open(os.path.join(outdir, "report.json"), "w", encoding="utf-8"),
-              ensure_ascii=False, indent=1)
-    return rep
+        return True
 
 
 if __name__ == "__main__":
