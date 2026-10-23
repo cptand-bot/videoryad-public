@@ -22,8 +22,10 @@
 кадров перенесено, по скольким кадра нет вовсе.
 """
 import glob
+import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -48,6 +50,54 @@ def _load(p):
         return {}
 
 
+
+# --- ДВЕ ПРОВЕРКИ ПЕРЕД ПЕРЕНОСОМ (2026-10-23, улов `usuario-a7`) -----------
+# Перенос сверялся ТОЛЬКО с манифестом облака и потому воскрешал кадры, которые
+# вкладка забанила минуту назад: проход уходил ДО круга правок, возвращался со
+# старыми кадрами, манифест честно показывал `status: ok`, и файлы ложились
+# обратно в проект молча. Это не редкий случай, а штатный ход конвейера —
+# отправил, пока считается провёл круг правок, забрал проход «из прошлой
+# редакции»; чем больше проходов, тем вернее совпадение (у вкладки их было
+# шесть). Фетчер обе проверки делает, но перенос идёт мимо него, это обычное
+# копирование. Обе стоят миллисекунды.
+def _banned_md5():
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from fetch_assets_news import load_banned_md5
+        return load_banned_md5()
+    except Exception:
+        return set()
+
+
+def _file_md5(path):
+    h = hashlib.md5()
+    try:
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except OSError:
+        return ""
+
+
+def _queries(path):
+    """{id сцены: source_query} из scenes.json, чтобы поймать «кадр из прошлой
+    редакции»: запрос переписан — значит кадр к нему уже не относится."""
+    out = {}
+    if not path or not os.path.isfile(path):
+        return out
+    try:
+        data = _load(path)
+    except Exception:
+        return out
+    for sc in (data.get("scenes") if isinstance(data, dict) else data) or []:
+        try:
+            out[int(sc.get("id", -1))] = str(sc.get("source_query", ""))
+        except (TypeError, ValueError):
+            pass
+    return out
+
+
 def _recs(d):
     if isinstance(d, list):
         return [r for r in d if isinstance(r, dict)]
@@ -64,7 +114,17 @@ def adopt(src, dst, dry=False, force=False):
         return 2
     os.makedirs(os.path.join(dst, "images"), exist_ok=True)
 
-    total_moved = total_skipped = missing = 0
+    total_moved = total_skipped = missing = rejected = 0
+    _banned = _banned_md5()
+    _q_src = _queries(_scenes_file(src))
+    _q_dst = _queries(_scenes_file(dst))
+    if _banned:
+        print("бан-лист: %d активных md5 — забаненное из забора не берём" % len(_banned))
+    if _q_src and _q_dst:
+        _diff = [k for k in _q_src if k in _q_dst and _q_src[k] != _q_dst[k]]
+        if _diff:
+            print("запросы переписаны после отправки у %d сцен: %s" % (
+                len(_diff), ", ".join(map(str, sorted(_diff)[:10]))))
     for sub in ("images", "overlays"):
         moved = skipped = 0
         s_dir = os.path.join(src, sub)
@@ -85,6 +145,20 @@ def adopt(src, dst, dry=False, force=False):
                 print("   НЕТ в заборе: %s" % n)
                 missing += 1
                 continue
+            _m = re.search(r"scene_(\d+)", n)
+            _sid = int(_m.group(1)) if _m else -1
+            if _banned and _file_md5(sp) in _banned:
+                print("   ЗАБАНЕН, НЕ БЕРУ: %s (сцена %d) — кадр из прошлой "
+                      "редакции, его забанили уже после отправки прохода" % (n, _sid))
+                rejected += 1
+                continue
+            _qs, _qd = _q_src.get(_sid), _q_dst.get(_sid)
+            if _qs is not None and _qd is not None and _qs != _qd:
+                print("   ЗАПРОС ПЕРЕПИСАН, НЕ БЕРУ: %s (сцена %d)" % (n, _sid))
+                print("      было: %s" % _qs[:90])
+                print("      стало: %s" % _qd[:90])
+                rejected += 1
+                continue
             dp = os.path.join(d_dir, n)
             if os.path.exists(dp) and not force:
                 skipped += 1
@@ -96,7 +170,9 @@ def adopt(src, dst, dry=False, force=False):
         total_moved += moved
         total_skipped += skipped
 
-    print("ИТОГО перенесено %d, пропущено %d" % (total_moved, total_skipped))
+    print("ИТОГО перенесено %d, пропущено %d%s" % (
+        total_moved, total_skipped,
+        (", ОТКЛОНЕНО %d (бан или переписанный запрос)" % rejected) if rejected else ""))
     sf = _scenes_file(dst) or _scenes_file(src)
     if sf:
         scenes = _load(sf).get("scenes", [])
