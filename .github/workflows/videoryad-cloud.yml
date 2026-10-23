@@ -255,7 +255,13 @@ jobs:
       - run: tar xzf project-src.tgz
 
       - name: Set up tools
-        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
+        # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
+        # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
+        # этом шаге и оставили 29 сцен пустыми — это инфраструктура раннера,
+        # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
+        # которого таймаут и ставился, длилось 23 минуты; десять минут
+        # разделяют эти два случая надёжно.
+        timeout-minutes: 10
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
@@ -405,7 +411,13 @@ jobs:
           merge-multiple: true
 
       - name: Set up tools
-        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
+        # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
+        # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
+        # этом шаге и оставили 29 сцен пустыми — это инфраструктура раннера,
+        # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
+        # которого таймаут и ставился, длилось 23 минуты; десять минут
+        # разделяют эти два случая надёжно.
+        timeout-minutes: 10
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
@@ -547,7 +559,13 @@ jobs:
           echo "count=$n" >> "$GITHUB_OUTPUT"
 
       - name: Set up tools
-        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
+        # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
+        # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
+        # этом шаге и оставили 29 сцен пустыми — это инфраструктура раннера,
+        # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
+        # которого таймаут и ставился, длилось 23 минуты; десять минут
+        # разделяют эти два случая надёжно.
+        timeout-minutes: 10
         if: steps.have.outputs.count != '0'
         run: |
           sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
@@ -780,7 +798,13 @@ jobs:
           fi
 
       - name: Set up tools
-        timeout-minutes: 5   # залипший apt не держит джоб (23.10)
+        # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
+        # жёстки: на `planeta-merc` семь шардов из двадцати легли именно на
+        # этом шаге и оставили 29 сцен пустыми — это инфраструктура раннера,
+        # не наши запросы. Обычная установка идёт 30-60 с, залипание, ради
+        # которого таймаут и ставился, длилось 23 минуты; десять минут
+        # разделяют эти два случая надёжно.
+        timeout-minutes: 10
         run: |
           # GitHub runners occasionally ship a broken 3rd-party apt repo (google-chrome
           # 'Hash Sum mismatch'); don't let that kill the build — drop those repos and retry.
