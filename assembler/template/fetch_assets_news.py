@@ -786,6 +786,10 @@ def _press_waterfall(query, out_path, env):
         ("web_search", lambda: fetch_web_search(query, out_path, env)),
     ]
     for name, fn in steps:
+        if _past_deadline():
+            print(f"  [дедлайн] бросаю водопад на шаге «{name}» — время шарда "
+                  "вышло, сцена уйдёт в манифест как недобранная", flush=True)
+            return False, "deadline"
         try:
             if _accept(fn(), out_path):
                 return True, name
@@ -1036,6 +1040,18 @@ def load_env(env_path):
 # общему времени — тогда сцена честно падает в «не добыл», шард идёт дальше,
 # а дедлайн снова начинает работать.
 _READ_LIMIT_SEC = float(os.environ.get("FETCH_READ_LIMIT_SEC", "90") or 90)
+
+# МЯГКИЙ ДЕДЛАЙН ВИДЕН НЕ ТОЛЬКО МЕЖДУ СЦЕНАМИ (23.10). Он проверялся ровно в
+# одном месте — в цикле по сценам, — и потому ни разу не сработал на живых
+# прогонах: время шард проводит ВНУТРИ сцены, в водопаде из шести источников.
+# Итог дважды за день: шарды доживали до жёсткого таймаута и теряли ВСЁ, хотя
+# должны были остановиться сами и записать манифест с пометкой «не успели».
+# Теперь дедлайн лежит в модуле, и водопад сверяется с ним перед каждым шагом.
+_DEADLINE_AT = 0.0
+
+
+def _past_deadline():
+    return bool(_DEADLINE_AT) and time.time() > _DEADLINE_AT
 # Страховка для путей, где таймаут не передан явно: без неё такой сокет ждёт
 # бесконечно (настройка процесса, на уже открытые соединения не влияет).
 socket.setdefaulttimeout(60)
@@ -1834,6 +1850,7 @@ def main():
         _dl = float(os.environ.get("FETCH_DEADLINE_SEC", "0") or 0)
         if _dl > 0:
             _deadline = time.time() + _dl
+            globals()["_DEADLINE_AT"] = _deadline   # водопад смотрит сюда же
             print(f"дедлайн шарда: {_dl:.0f} с — что не успеем, попадёт в "
                   f"манифест как 'не успели до дедлайна'", flush=True)
     except ValueError:
