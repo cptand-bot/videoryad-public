@@ -137,7 +137,12 @@ def main():
             why.append(f"ширина {w} < {w_min}")
         if dens < MIN_DENS and not is_map:
             why.append(f"плотность {dens:.3f} < {MIN_DENS}")
-        if 0 < ratio < MIN_RATIO:
+        # У ВСПЛЫВАШКИ АПСКЕЙЛ ВИДЕН ТОЛЬКО ЕСЛИ ЕЙ НЕЧЕГО УЖИМАТЬ (23.10,
+        # наблюдение `usuario-fa`): кадр 5700 px, нарисованный коробкой 500 px,
+        # ужимается в одиннадцать раз — растянутость туда просто не доживает.
+        # Поэтому для overlays меряем запас деталей, лишь когда ширина мала и
+        # запаса на ужатие нет.
+        if 0 < ratio < MIN_RATIO and (not is_overlay or w < 1200):
             why.append(f"запас деталей {ratio:.2f} < {MIN_RATIO} (похоже на апскейл)")
         if why:
             (lib_bad if is_lib else bad).append((f, w, h, "; ".join(why)))
