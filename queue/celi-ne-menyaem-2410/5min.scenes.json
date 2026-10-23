@@ -1,0 +1,682 @@
+{
+ "channel": "5 МИНУТ",
+ "library": "NO (search-only, кроме КАРТЫ во всплывашках)",
+ "context": "О чём: заявления Владимира Путина 23 октября 2026 — цели России не меняются, есть политический путь (договориться) и уже идущий военный; разбор переговорных позиций. Стороны: Москва (Путин), Вашингтон (Трамп, Рубио, Уиткофф), Киев (Зеленский), Европа и НАТО. Где физически: Кремль и Москва, Белый дом, Госдеп и Капитолий в Вашингтоне, Офис президента на Банковой и Верховная Рада в Киеве, штаб-квартира НАТО и институты ЕС в Брюсселе, линия фронта в Донбассе. Узел: за четыре года изменились карта, экономика, зависимость Киева от помощи и позиция США, а переговорная планка Киева осталась прежней; НАТО и ядерная тема снова на столе; спор разрастается до архитектуры безопасности всей Европы. Время: 23 октября 2026; отсылки к декабрю 2021 (проекты договоров о гарантиях безопасности) и февралю 2022. Чем заканчивается: затягивание ухудшает позицию Киева, главный спор о безопасности остался, и решать его теперь дороже. Чувство: неумолимость изменившейся реальности — торг по вчерашней цене.",
+ "lines": [
+  "РОССИЙСКАЯ ВЛАСТЬ: Путин, Кремль (Спасская башня, Сенатский дворец), МИД России на Смоленской, Совбез РФ, Дом Правительства",
+  "АМЕРИКАНСКАЯ ВЛАСТЬ: Трамп, Белый дом, Марко Рубио и Госдепартамент США, Стив Уиткофф, Капитолий",
+  "УКРАИНСКАЯ ВЛАСТЬ: Зеленский, Офис президента на Банковой, Верховная Рада, Кабмин, Минобороны Украины",
+  "ЕВРОПА И НАТО: штаб-квартира НАТО в Брюсселе, Берлемон и здание Europa, Европарламент в Страсбурге, ОБСЕ в Вене",
+  "ВООРУЖЕНИЕ С ХОЗЯИНОМ: американские HIMARS и ракеты средней дальности в Европе, российские С-400 и артиллерия, техника НАТО в Польше и Германии",
+  "ЛИНИЯ ФРОНТА И ЕЁ ПОСЛЕДСТВИЯ: позиции и блокпосты в Донбассе, Донецк, разрушенные промышленные объекты (материальное, без жести)",
+  "КВАРТИРА — СКВОЗНОЙ АВТОРСКИЙ ОБРАЗ (сцены 1, 40, 41, 68): пустая комната, подъезд многоэтажки, баллоны у общей стены, фасад дома"
+ ],
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 10.52,
+   "visual_prompt": "empty apartment interior",
+   "source": "pexels_video",
+   "source_query": "empty apartment room window daylight no people"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 10.52,
+   "duration_sec": 6.4,
+   "visual_prompt": "Bankova office building Kyiv",
+   "source": "press_photo",
+   "source_query": "Офис президента Украины на Банковой в Киеве здание реальное фото"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 16.92,
+   "duration_sec": 13.84,
+   "visual_prompt": "Zelensky speech Oct 2026",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский выступление октябрь 2026 реальное фото"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 30.76,
+   "duration_sec": 5.6,
+   "visual_prompt": "Kremlin Spasskaya tower",
+   "source": "press_photo",
+   "source_query": "Московский Кремль Спасская башня реальное фото"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 36.36,
+   "duration_sec": 13.04,
+   "visual_prompt": "Putin meeting Kremlin",
+   "source": "press_photo",
+   "source_query": "Владимир Путин совещание в Кремле октябрь 2026 реальное фото"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 49.4,
+   "duration_sec": 13.76,
+   "visual_prompt": "Russian MFA building Smolenskaya",
+   "source": "press_photo",
+   "source_query": "здание МИД России на Смоленской площади реальное фото"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 63.16,
+   "duration_sec": 9.95,
+   "visual_prompt": "White House facade",
+   "source": "press_photo",
+   "source_query": "Белый дом в Вашингтоне фасад реальное фото"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 73.11,
+   "duration_sec": 14.31,
+   "visual_prompt": "Russia US flags negotiation table",
+   "source": "press_photo",
+   "source_query": "флаги России и США на столе переговоров реальное фото"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 87.41,
+   "duration_sec": 13.85,
+   "visual_prompt": "Russian military column",
+   "source": "press_photo",
+   "source_query": "российская военная колонна бронетехники на марше реальное фото"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 101.27,
+   "duration_sec": 14.24,
+   "visual_prompt": "rails closeup motion",
+   "source": "pexels_video",
+   "source_query": "railway tracks rails closeup moving no people"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 115.51,
+   "duration_sec": 13.51,
+   "visual_prompt": "Putin press conference",
+   "source": "press_photo",
+   "source_query": "Владимир Путин пресс-конференция октябрь 2026 реальное фото"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 129.01,
+   "duration_sec": 16.77,
+   "visual_prompt": "Donetsk city centre street",
+   "source": "press_photo",
+   "source_query": "Донецк центр города улица реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 145.78,
+   "duration_sec": 14.39,
+   "visual_prompt": "front line fortified positions",
+   "source": "press_photo",
+   "source_query": "укреплённые позиции на линии фронта на Украине 2026 реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 160.17,
+   "duration_sec": 13.69,
+   "visual_prompt": "карточка разбора: что изменилось за четыре года",
+   "source": "card:bullets",
+   "source_query": ""
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 173.86,
+   "duration_sec": 7.04,
+   "visual_prompt": "US Capitol",
+   "source": "press_photo",
+   "source_query": "Капитолий США в Вашингтоне реальное фото"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 180.9,
+   "duration_sec": 12.56,
+   "visual_prompt": "Zelensky in office Kyiv",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский в Офисе президента Киев октябрь 2026 реальное фото"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 193.46,
+   "duration_sec": 13.6,
+   "visual_prompt": "NATO HQ Brussels",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО в Брюсселе здание реальное фото"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 207.06,
+   "duration_sec": 11.39,
+   "visual_prompt": "Verkhovna Rada building",
+   "source": "press_photo",
+   "source_query": "здание Верховной Рады Украины в Киеве реальное фото"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 218.45,
+   "duration_sec": 13.52,
+   "visual_prompt": "Russia NATO talks Brussels 2022",
+   "source": "press_photo",
+   "source_query": "переговоры России и НАТО в Брюсселе январь 2022 реальное фото"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 231.97,
+   "duration_sec": 14.4,
+   "visual_prompt": "Russia Estonia border crossing",
+   "source": "press_photo",
+   "source_query": "пограничный пункт пропуска на границе России и Эстонии реальное фото"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 246.37,
+   "duration_sec": 13.7,
+   "visual_prompt": "US intermediate range missile launcher",
+   "source": "press_photo",
+   "source_query": "американская ракета средней дальности на пусковой установке в Европе реальное фото"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 260.07,
+   "duration_sec": 6.78,
+   "visual_prompt": "цитата-лоскут: карта другая, цена другая",
+   "source": "card:quote",
+   "source_query": ""
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 266.85,
+   "duration_sec": 12.62,
+   "visual_prompt": "Kremlin Red Square evening",
+   "source": "press_photo",
+   "source_query": "Кремль и Красная площадь вечером реальное фото"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 279.47,
+   "duration_sec": 10.95,
+   "visual_prompt": "empty trench",
+   "source": "pexels_video",
+   "source_query": "empty trench fortification earth no people"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 290.42,
+   "duration_sec": 14.1,
+   "visual_prompt": "Zelensky address to nation",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский обращение к нации октябрь 2026 реальное фото"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 304.52,
+   "duration_sec": 13.39,
+   "visual_prompt": "Rada deputies voting",
+   "source": "press_photo",
+   "source_query": "депутаты Верховной Рады Украины голосуют реальное фото"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 317.91,
+   "duration_sec": 6.27,
+   "visual_prompt": "Maidan Nezalezhnosti wide",
+   "source": "press_photo",
+   "source_query": "Майдан Незалежности в Киеве общий план реальное фото"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 324.18,
+   "duration_sec": 13.4,
+   "visual_prompt": "memorial wall flags Kyiv",
+   "source": "press_photo",
+   "source_query": "стена памяти с флагами в Киеве реальное фото"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 337.57,
+   "duration_sec": 12.44,
+   "visual_prompt": "Ukraine cabinet building",
+   "source": "press_photo",
+   "source_query": "здание Кабинета министров Украины в Киеве реальное фото"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 350.02,
+   "duration_sec": 15.63,
+   "visual_prompt": "Zelensky at desk",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский за рабочим столом в Офисе президента реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 365.65,
+   "duration_sec": 11.27,
+   "visual_prompt": "карточка разбора: почему соглашение не подписано",
+   "source": "card:bullets",
+   "source_query": ""
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 376.92,
+   "duration_sec": 10.48,
+   "visual_prompt": "Zelensky at lectern",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский за кафедрой выступает реальное фото"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 387.4,
+   "duration_sec": 13.05,
+   "visual_prompt": "Trump talks to press",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп общается с прессой у Белого дома октябрь 2026 реальное фото"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 400.45,
+   "duration_sec": 13.84,
+   "visual_prompt": "Marco Rubio speaking",
+   "source": "press_photo",
+   "source_query": "Марко Рубио государственный секретарь США выступление 2026 реальное фото"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 414.29,
+   "duration_sec": 14.99,
+   "visual_prompt": "US State Department building",
+   "source": "press_photo",
+   "source_query": "здание Государственного департамента США в Вашингтоне реальное фото"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 429.29,
+   "duration_sec": 14.64,
+   "visual_prompt": "US oil refinery",
+   "source": "press_photo",
+   "source_query": "американский нефтеперерабатывающий завод реальное фото"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 443.93,
+   "duration_sec": 8.78,
+   "visual_prompt": "Rubio and Trump",
+   "source": "press_photo",
+   "source_query": "Марко Рубио и Дональд Трамп вместе в Белом доме 2026 реальное фото"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 452.7,
+   "duration_sec": 12.66,
+   "visual_prompt": "Putin security council",
+   "source": "press_photo",
+   "source_query": "Владимир Путин на заседании Совета безопасности России реальное фото"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 465.37,
+   "duration_sec": 9.25,
+   "visual_prompt": "Berlaymont building",
+   "source": "press_photo",
+   "source_query": "здание Европейской комиссии Берлемон в Брюсселе реальное фото"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 474.62,
+   "duration_sec": 14.59,
+   "visual_prompt": "empty stairwell",
+   "source": "pexels_video",
+   "source_query": "apartment building stairwell corridor empty no people"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 489.2,
+   "duration_sec": 14.35,
+   "visual_prompt": "gas cylinders by wall",
+   "source": "pexels_video",
+   "source_query": "gas cylinders standing against wall closeup no people"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 503.55,
+   "duration_sec": 10.16,
+   "visual_prompt": "European Parliament Strasbourg",
+   "source": "press_photo",
+   "source_query": "здание Европейского парламента в Страсбурге реальное фото"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 513.71,
+   "duration_sec": 15.2,
+   "visual_prompt": "US HIMARS launcher Europe",
+   "source": "press_photo",
+   "source_query": "пусковая установка HIMARS армии США в Европе реальное фото"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 528.91,
+   "duration_sec": 12.24,
+   "visual_prompt": "NATO drills Poland armour",
+   "source": "press_photo",
+   "source_query": "учения НАТО бронетехника в Польше 2026 реальное фото"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 541.15,
+   "duration_sec": 13.12,
+   "visual_prompt": "OSCE building Vienna",
+   "source": "press_photo",
+   "source_query": "здание ОБСЕ в Вене реальное фото"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 554.27,
+   "duration_sec": 8.23,
+   "visual_prompt": "Steve Witkoff",
+   "source": "press_photo",
+   "source_query": "Стив Уиткофф спецпредставитель президента США реальное фото"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 562.5,
+   "duration_sec": 13.05,
+   "visual_prompt": "Poland Ukraine border post",
+   "source": "press_photo",
+   "source_query": "пограничная застава на границе Польши и Украины реальное фото"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 575.55,
+   "duration_sec": 12.77,
+   "visual_prompt": "NATO base Germany",
+   "source": "press_photo",
+   "source_query": "военная база НАТО в Германии бронетехника реальное фото"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 588.32,
+   "duration_sec": 14.0,
+   "visual_prompt": "S-400 launcher position",
+   "source": "press_photo",
+   "source_query": "пусковая установка С-400 на боевой позиции в России 2026 реальное фото"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 602.32,
+   "duration_sec": 10.0,
+   "visual_prompt": "barbed wire closeup",
+   "source": "pexels_video",
+   "source_query": "barbed wire fence closeup no people"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 612.31,
+   "duration_sec": 14.72,
+   "visual_prompt": "NATO flagpoles Brussels",
+   "source": "press_photo",
+   "source_query": "флагштоки стран НАТО у штаб-квартиры в Брюсселе реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 627.04,
+   "duration_sec": 12.72,
+   "visual_prompt": "border marker post",
+   "source": "pexels_video",
+   "source_query": "border marker post concrete field closeup no people"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 639.76,
+   "duration_sec": 13.76,
+   "visual_prompt": "stacked crates depot",
+   "source": "pexels_video",
+   "source_query": "military equipment crates stacked storage depot no people"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 653.52,
+   "duration_sec": 7.97,
+   "visual_prompt": "Ukraine MoD building",
+   "source": "press_photo",
+   "source_query": "здание Министерства обороны Украины в Киеве реальное фото"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 661.49,
+   "duration_sec": 9.83,
+   "visual_prompt": "Palais des Nations Geneva",
+   "source": "press_photo",
+   "source_query": "Дворец Наций в Женеве здание реальное фото"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 671.32,
+   "duration_sec": 13.78,
+   "visual_prompt": "карточка расстановки сил",
+   "source": "card:forces",
+   "source_query": ""
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 685.09,
+   "duration_sec": 7.02,
+   "visual_prompt": "Kremlin Senate Palace",
+   "source": "press_photo",
+   "source_query": "Московский Кремль Сенатский дворец реальное фото"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 692.12,
+   "duration_sec": 13.21,
+   "visual_prompt": "cartridge casings ground",
+   "source": "pexels_video",
+   "source_query": "spent cartridge casings on ground closeup no people"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 705.33,
+   "duration_sec": 12.16,
+   "visual_prompt": "NATO airbase jets parked",
+   "source": "press_photo",
+   "source_query": "военный аэродром НАТО истребители на стоянке в Европе реальное фото"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 717.49,
+   "duration_sec": 14.37,
+   "visual_prompt": "Russian White House Moscow",
+   "source": "press_photo",
+   "source_query": "Дом Правительства России в Москве реальное фото"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 731.86,
+   "duration_sec": 14.08,
+   "visual_prompt": "Europa building Brussels",
+   "source": "press_photo",
+   "source_query": "здание Европейского совета Europa в Брюсселе реальное фото"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 745.94,
+   "duration_sec": 14.48,
+   "visual_prompt": "Ukraine EU flags",
+   "source": "press_photo",
+   "source_query": "флаги Украины и Евросоюза у здания Еврокомиссии реальное фото"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 760.42,
+   "duration_sec": 14.8,
+   "visual_prompt": "Russian artillery firing position",
+   "source": "press_photo",
+   "source_query": "российская артиллерия на огневой позиции реальное фото"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 775.22,
+   "duration_sec": 13.12,
+   "visual_prompt": "Ukrainian troops position",
+   "source": "press_photo",
+   "source_query": "украинские военные на позиции на линии фронта октябрь 2026 реальное фото"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 788.34,
+   "duration_sec": 13.4,
+   "visual_prompt": "карточка разбора: что меняется каждую неделю",
+   "source": "card:bullets",
+   "source_query": ""
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 801.74,
+   "duration_sec": 13.12,
+   "visual_prompt": "destroyed industrial plant Ukraine",
+   "source": "press_photo",
+   "source_query": "разрушенный промышленный объект на Украине реальное фото"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 814.86,
+   "duration_sec": 14.4,
+   "visual_prompt": "Kyiv city panorama",
+   "source": "press_photo",
+   "source_query": "Киев панорама центра города реальное фото"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 829.26,
+   "duration_sec": 14.66,
+   "visual_prompt": "apartment block facade",
+   "source": "pexels_video",
+   "source_query": "residential apartment block facade windows no people"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 843.93,
+   "duration_sec": 16.41,
+   "visual_prompt": "UN headquarters New York",
+   "source": "press_photo",
+   "source_query": "здание ООН в Нью-Йорке реальное фото"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 860.33,
+   "duration_sec": 13.36,
+   "visual_prompt": "Putin speech Oct 23",
+   "source": "press_photo",
+   "source_query": "Владимир Путин выступление 23 октября 2026 реальное фото"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 873.69,
+   "duration_sec": 12.64,
+   "visual_prompt": "checkpoint Donbass",
+   "source": "press_photo",
+   "source_query": "блокпост на линии разграничения в Донбассе реальное фото"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 886.33,
+   "duration_sec": 12.15,
+   "visual_prompt": "fence posts boundary",
+   "source": "pexels_video",
+   "source_query": "wooden fence posts boundary field closeup no people"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 898.48,
+   "duration_sec": 12.69,
+   "visual_prompt": "White House south lawn",
+   "source": "press_photo",
+   "source_query": "Белый дом Вашингтон вид с Южной лужайки реальное фото"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 911.17,
+   "duration_sec": 13.36,
+   "visual_prompt": "EU and NATO flags Brussels",
+   "source": "press_photo",
+   "source_query": "флаги Евросоюза и НАТО у здания в Брюсселе реальное фото"
+  }
+ ]
+}
