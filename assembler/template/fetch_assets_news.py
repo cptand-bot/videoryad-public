@@ -794,6 +794,44 @@ def _press_waterfall(query, out_path, env):
     return False, "press_photo"
 
 
+def _copy_from_library(src_path, out_base):
+    """Копия файла медиатеки в проект, КАРТИНКА — всегда в .jpg (23.10).
+
+    Баг, пойманный вкладкой `usuario-22` на `5min-evropa-stol-2310`: ветка
+    `local_library` клала файл С ИСХОДНЫМ расширением, а `overlays.json` по
+    соглашению ждёт `scene_NNN.jpg`. Пин карты из `КАРТЫ/ЧЕХИЯ` (там png)
+    давал `overlays/scene_011.png`, статус `ok`, манифест тоже `.png` — и
+    всплывашка просто не находилась на сборке, молча. Веб-ветка такого не
+    знает: `_accept()` давно нормализует скачанное в JPEG.
+
+    Прозрачность подкладываем БЕЛЫМ, а не чёрным: карты и схемы почти всегда
+    на прозрачном фоне, и `convert("RGB")` залил бы их чёрным.
+    """
+    ext = os.path.splitext(src_path)[1].lower()
+    if ext not in (".png", ".webp", ".gif", ".bmp", ".tif", ".tiff", ".jpeg"):
+        out_path = out_base + ext          # видео и уже готовый .jpg — как есть
+        shutil.copyfile(src_path, out_path)
+        return out_path
+    out_path = out_base + ".jpg"
+    try:
+        from PIL import Image
+        with Image.open(src_path) as im:
+            if im.mode in ("RGBA", "LA", "P"):
+                rgba = im.convert("RGBA")
+                flat = Image.new("RGB", rgba.size, (255, 255, 255))
+                flat.paste(rgba, mask=rgba.split()[-1])
+            else:
+                flat = im.convert("RGB")
+            flat.save(out_path, "JPEG", quality=92)
+        return out_path
+    except Exception as e:
+        print(f"  [library] {os.path.basename(src_path)}: не пересохранить в "
+              f"JPEG ({e}) — кладу как есть", flush=True)
+        out_path = out_base + ext
+        shutil.copyfile(src_path, out_path)
+        return out_path
+
+
 def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ffmpeg="ffmpeg",
                         blocked_md5=None, used_md5=None, dur_hint=None, seq=0):
     """Pull from the user's own pre-vetted local folder instead of the web.
@@ -851,8 +889,7 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
                   f"выбери другой файл или снимай бан.")
             tag_query = os.path.dirname(tag_query)
         else:
-            out_path = out_base + os.path.splitext(direct)[1].lower()
-            shutil.copyfile(direct, out_path)
+            out_path = _copy_from_library(direct, out_base)
             if h:
                 _USE_COUNT[h] += 1
             if used_md5 is not None and h:
@@ -963,8 +1000,7 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         return "EXHAUSTED"
 
     src_path = os.path.join(tag_dir, chosen)
-    out_path = out_base + os.path.splitext(src_path)[1].lower()
-    shutil.copyfile(src_path, out_path)
+    out_path = _copy_from_library(src_path, out_base)
     _USE_COUNT[chosen_md5] += 1
     if used_md5 is not None:
         used_md5[out_path] = chosen_md5
