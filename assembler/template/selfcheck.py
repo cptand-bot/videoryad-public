@@ -75,6 +75,13 @@ for i in ids:
 # готовом ролике. Поэтому: имя пропускаем, а исчезнувший файл не роняет прогон.
 TMP_SUFFIX = (".wmcrop.jpg", ".ocrcrop.jpg")
 
+# OCR МОГ НЕ РАБОТАТЬ ВО ВРЕМЯ ФЕТЧА (24.10). Метку кладёт fetch_assets_news,
+# когда tesseract не запускается: тогда «клейм не найдено» ничего не значит.
+if os.path.exists(os.path.join(images, ".ocr_dead")):
+    FAIL.append("OCR НЕ РАБОТАЛ во время фетча (метка images/.ocr_dead) — "
+                "проверка на клейма и текст в кадре НЕ ДЕЛАЛАСЬ. Почини "
+                "tesseract и прогони заново либо отдай кадры на просмотр")
+
 for f in glob.glob(f"{images}/scene_*.jpg"):
     if f.endswith(TMP_SUFFIX):
         continue

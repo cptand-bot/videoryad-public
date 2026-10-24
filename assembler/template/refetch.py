@@ -378,6 +378,27 @@ def _similar(a, b):
     return len(ta & tb) / float(len(ta | tb))
 
 
+_MANIFEST_CACHE = {}
+
+
+def _manifest_status(kind, sid):
+    """Статус кадра по манифесту облака, '' если манифеста нет."""
+    if kind not in _MANIFEST_CACHE:
+        data = {}
+        try:
+            for m in json.load(open(os.path.join(kind, "manifest.json"),
+                                   encoding="utf-8")):
+                if isinstance(m, dict) and m.get("id") is not None:
+                    data[int(m["id"])] = str(m.get("status", "")).lower()
+        except (OSError, ValueError, TypeError, KeyError):
+            data = {}
+        _MANIFEST_CACHE[kind] = data
+    try:
+        return _MANIFEST_CACHE[kind].get(int(sid), "")
+    except (TypeError, ValueError):
+        return ""
+
+
 def _has_asset(kind, sid):
     """Есть ли у сцены НАСТОЯЩИЙ кадр на диске.
 
@@ -387,6 +408,15 @@ def _has_asset(kind, sid):
     бюджета впустую. Признак заглушки тот же, что у verify_assets: почти
     однотонный тёмный кадр.
     """
+    # МАНИФЕСТ ЧЕСТНЕЕ ГЛАЗА (24.10, улов `usuario-dd`). Заглушка бывает НЕ
+    # тёмной и НЕ типового размера: на `5min-voennye-2510` сцена 47 пришла
+    # файлом 34 КБ, который не ловился ни по размеру, ни по яркости, — её
+    # нашли только по плотности в `photo_quality.py`. А в манифесте облака у
+    # неё честно стоял `status: placeholder`. Цена промаха высокая: такая
+    # сцена считается «кадр есть», добор превращается в ПРАВКУ и съедает круг
+    # из бюджета — на том ролике бюджет кончился до начала настоящего аудита.
+    if _manifest_status(kind, sid) in ("placeholder", "failed", "empty", "stub"):
+        return False
     real = []
     for f in glob.glob(os.path.join(kind, "scene_%03d.*" % int(sid))):
         if f.endswith(SKIP_EXT) or ".ovthumb." in f:
@@ -630,6 +660,66 @@ def _from_library(assets, sid):
     return False
 
 
+def sync_manifest(kind, ids):
+    """ПРИВЕСТИ МАНИФЕСТ К ДИСКУ ПОСЛЕ ФЕТЧА (24.10, улов `usuario-c9`).
+
+    Рефетч клал новый кадр на диск, а `images/manifest.json` оставался со
+    старым `status: placeholder`. Дальше `contact_sheet.py` честно выжигал
+    этот ярлык в подпись плитки, внешний агент читал ЯРЛЫК, а не картинку, и
+    браковал нормальные кадры: на `5min-tramp-ustupki-2510` так пришли три
+    фантомные находки из восемнадцати, две замены вернулись тем же файлом.
+    Чиним в корне: после успешного фетча запись в манифесте приводится к
+    тому, что реально лежит на диске.
+    """
+    path = os.path.join(kind, "manifest.json")
+    try:
+        man = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    if not isinstance(man, list):
+        return
+    fixed = 0
+    for rec in man:
+        if not isinstance(rec, dict):
+            continue
+        try:
+            sid = int(rec.get("id", -1))
+        except (TypeError, ValueError):
+            continue
+        if sid not in set(int(i) for i in ids):
+            continue
+        _MANIFEST_CACHE.pop(kind, None)          # чтобы _has_asset не врал
+        if _has_asset_on_disk(kind, sid):
+            if str(rec.get("status", "")).lower() != "ok":
+                rec["status"] = "ok"
+                fixed += 1
+            got = sorted(f for f in glob.glob(
+                os.path.join(kind, "scene_%03d.*" % sid))
+                if not f.endswith(SKIP_EXT) and ".ovthumb." not in f)
+            if got:
+                rec["file"] = os.path.basename(got[0])
+    if fixed:
+        try:
+            json.dump(man, open(path, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            print("  манифест приведён к диску: %d сцен сняли отметку "
+                  "«нет кадра»" % fixed)
+        except OSError as e:
+            print("  !! манифест не переписать: %s" % e)
+    _MANIFEST_CACHE.pop(kind, None)
+
+
+def _has_asset_on_disk(kind, sid):
+    """Как _has_asset, но БЕЗ оглядки на манифест — иначе круг в рассуждении."""
+    for f in glob.glob(os.path.join(kind, "scene_%03d.*" % int(sid))):
+        if f.endswith(SKIP_EXT) or ".ovthumb." in f:
+            continue
+        if os.path.getsize(f) in STUB_SIZES or _looks_like_stub(f):
+            continue
+        return True
+    return False
+
+
 def main():
     if "--snapshot" in sys.argv:
         return snapshot(arg("--snapshot"))
@@ -815,6 +905,7 @@ def main():
             failed_runs.append((assets, rc))
         restore_missing(assets, ids)
         report_same_file(assets, before)
+        sync_manifest(assets, ids)
     prune_needs_upload(only_ids=[sid for _, _, ids, _ in jobs for sid in ids])
     for sub, _, _, _ in jobs:
         if os.path.exists(sub):

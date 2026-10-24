@@ -86,9 +86,24 @@ def main():
     cards = [s["id"] for s in scenes if str(s.get("source", "")).startswith(CARD)]
     pins = pins_from_overlays(project)
 
-    sheets = sorted(glob.glob(os.path.join(a.thumbs, "sheet_*.jpg")))
-    pairs = sorted(glob.glob(os.path.join(a.thumbs, "pair_*.jpg")))
-    zam = os.path.join(a.thumbs, "sheet-zameny.jpg")
+    # ЛИСТЫ ЛЕЖАТ В ТРЁХ РАЗНЫХ ПАПКАХ (24.10, улов `usuario-dd`):
+    # `contact_sheet.py` кладёт в `sheet.html/`, `pair_sheet.py` — в
+    # `pair_sheet/`, а сюда их до сих пор копировали руками. Ищем во всех.
+    def _find(pat):
+        out = []
+        for d in (a.thumbs, "sheet.html", "pair_sheet", "thumbs"):
+            out += glob.glob(os.path.join(d, pat))
+        seen, uniq = set(), []
+        for f in sorted(out):
+            b = os.path.basename(f)
+            if b not in seen:
+                seen.add(b); uniq.append(f)
+        return uniq
+
+    sheets = _find("sheet_*.jpg")
+    pairs = _find("pair_*.jpg")
+    _z = _find("sheet-zameny.jpg")
+    zam = _z[0] if _z else os.path.join(a.thumbs, "sheet-zameny.jpg")
     if a.stage == "audit" and not sheets:
         sys.exit("листов нет — сначала contact_sheet.py (и pair_sheet.py)")
     if a.stage == "zamena" and not os.path.exists(zam):

@@ -23,6 +23,28 @@
 # начинает экономить внимание.
 set -euo pipefail
 
+# --json <путь>: вырезать JSON из ответа, проверить разбором и положить файлом.
+# Зачем: агент работает в песочнице только на чтение и записать сам не может
+# («запись заблокирована режимом read-only»). Поэтому запись делаем мы: он
+# отдаёт текст, мы проверяем разбором и кладём на диск.
+json_out=""
+if [ "${1:-}" = "--json" ]; then
+  json_out="${2:-}"; shift 2 || true
+fi
+
+# --attach <файл>: положить входной файл РЯДОМ С ЗАДАНИЕМ и сказать агенту, что
+# он в текущей папке. Зачем (24.10, улов `usuario-c9`, стоил холостого вызова):
+# инструкция агента писалась под ПРИЛОЖЕНИЕ Codex на Windows и оперирует путями
+# `D:\YouTube\...`. Через CLI он живёт в WSL, где такого пути НЕТ ВООБЩЕ, и
+# отвечает «приложите файл в чат» — ошибки нет, просто пустой круг с его лимита.
+# Файл не в UTF-8 (у нас тексты бывают в cp1251) перекодируем на месте.
+attach=()
+while [ "${1:-}" = "--attach" ]; do
+  src="${2:-}"; shift 2 || true
+  [ -f "$src" ] || { echo "нет файла: $src" >&2; exit 2; }
+  attach+=("$src")
+done
+
 brief="${1:-}"
 shift || true
 if [ -z "$brief" ] || [ ! -f "$brief" ]; then
@@ -40,6 +62,19 @@ if [ "${#imgs[@]}" -gt 16 ]; then
   exit 2
 fi
 
+workdir="$(cd "$(dirname "$brief")" && pwd)"
+for src in ${attach[@]+"${attach[@]}"}; do
+  base="$(basename "$src")"
+  if iconv -f UTF-8 -t UTF-8 "$src" >/dev/null 2>&1; then
+    cp -f "$src" "$workdir/$base"
+  else
+    iconv -f CP1251 -t UTF-8 "$src" > "$workdir/$base" 2>/dev/null \
+      || cp -f "$src" "$workdir/$base"
+    echo "перекодировал в UTF-8: $base"
+  fi
+  echo "  приложен: $base"
+done
+
 out="${brief%.txt}.ОТВЕТ.txt"
 {
   cat "$brief"
@@ -50,7 +85,12 @@ out="${brief%.txt}.ОТВЕТ.txt"
   if [ "${#imgs[@]}" -gt 0 ]; then
     echo "Листы приложены картинками к этому сообщению — смотри их, в папку ходить не надо."
   fi
-} | timeout "${CODEX_TIMEOUT:-900}" codex exec --skip-git-repo-check ${imgs[@]+"${imgs[@]}"} - \
+  echo
+  echo "ВАЖНО ПРО СРЕДУ: ты запущен в Linux (WSL), а не в приложении на Windows."
+  echo "Путей вида D:\\... здесь НЕ СУЩЕСТВУЕТ. Все нужные файлы лежат в ТЕКУЩЕЙ"
+  echo "папке, обращайся к ним по именам без пути. Ничего никуда не записывай:"
+  echo "результат верни текстом в ответе."
+} | (cd "$workdir" && timeout "${CODEX_TIMEOUT:-900}" codex exec --skip-git-repo-check ${imgs[@]+"${imgs[@]}"} - ) \
   2>&1 | tee "${out}.raw" >/dev/null
 
 # из полного лога берём только последний блок — сам ответ
@@ -60,6 +100,24 @@ awk '/^tokens used/{flag=1;next} flag&&!skipped{skipped=1;next} flag' "${out}.ra
   | sed '/^[[:space:]]*$/d' > "$out"
 [ -s "$out" ] || cp "${out}.raw" "$out"
 rm -f "${out}.raw"
+if [ -n "$json_out" ]; then
+  python3 - "$out" "$json_out" <<'PYJ'
+import json, re, sys
+raw = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+m = re.search(r"```(?:json)?\s*(.+?)```", raw, re.S) or re.search(r"(\{.*\})", raw, re.S)
+if not m:
+    sys.exit("в ответе нет JSON — класть нечего, смотри текст ответа")
+try:
+    data = json.loads(m.group(1))
+except ValueError as e:
+    sys.exit("JSON в ответе битый: %s" % e)
+sc = data.get("scenes") if isinstance(data, dict) else data
+if not sc:
+    sys.exit("в JSON нет сцен")
+json.dump(data, open(sys.argv[2], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+print("JSON принят и записан: %d сцен -> %s" % (len(sc), sys.argv[2]))
+PYJ
+fi
 echo "— ответ Codex ($(wc -l < "$out") строк), сохранён: $out"
 echo "────────────────────────────────────────────"
 cat "$out"

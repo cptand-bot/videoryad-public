@@ -349,10 +349,53 @@ def _is_stylized(fname, tags):
     return bool(_STYLIZED_TAGS & {str(t).lower() for t in (tags or ())})
 
 
+_OCR_ALIVE = {}
+
+
+def _ocr_alive(tess_bin):
+    """РАБОТАЕТ ЛИ OCR ВООБЩЕ — проверяем ЗАПУСКОМ, один раз на процесс.
+
+    24.10, улов `usuario-91`, тот же класс, что битый ffmpeg из кэша: бинарь
+    на месте и исполняемый, а запускаться не может
+    (`libtesseract.so.5: cannot open shared object file`) — цепочка библиотек
+    из-под `dpkg-deb -x` пропала. В облаке тот же исход даёт отвалившийся apt
+    (23.10: 10 джобов из 23). При этом `_ocr_raw` ловил любое исключение и
+    возвращал «текста не найдено», то есть «кадр ЧИСТЫЙ»: отличить «проверил
+    122 кадра» от «OCR не запустился» в логе было нельзя никак. Так 15.10
+    уехали четыре водяных знака, включая «ЕСПРЕСО» по центру кадра.
+    Теперь неработающий OCR говорит об этом вслух один раз и оставляет метку
+    `images/.ocr_dead`, которую видит `selfcheck`.
+    """
+    if tess_bin in _OCR_ALIVE:
+        return _OCR_ALIVE[tess_bin]
+    ok = False
+    try:
+        r = subprocess.run([tess_bin, "--version"], capture_output=True,
+                           text=True, timeout=20, env=_tesseract_env())
+        ok = r.returncode == 0
+    except Exception:
+        ok = False
+    _OCR_ALIVE[tess_bin] = ok
+    if not ok:
+        print("!! OCR НЕ РАБОТАЕТ (%s не запускается). Проверка кадров на "
+              "клейма и текст В ЭТОМ ПРОГОНЕ НЕ ДЕЛАЕТСЯ — «чисто» от неё "
+              "ничего не значит. Чинить tesseract, кадры смотреть глазами."
+              % tess_bin, flush=True)
+        for d in ("images", "overlays"):
+            try:
+                if os.path.isdir(d):
+                    open(os.path.join(d, ".ocr_dead"), "w").write(tess_bin)
+            except OSError:
+                pass
+    return ok
+
+
 def _ocr_raw(image_path, tess_bin):
     """One tesseract pass over whatever image is at `image_path`. Same
     parsing as before, split out so it can run over a cropped/upscaled
     region too, not just the full frame."""
+    if not _ocr_alive(tess_bin):
+        return 0, ""
     try:
         res = subprocess.run(
             [tess_bin, image_path, "-", "-l", "eng+rus", "tsv"],
