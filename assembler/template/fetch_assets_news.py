@@ -926,6 +926,46 @@ def _copy_from_library(src_path, out_base):
         return out_path
 
 
+_USAGE_LOG = {}
+
+
+def _usage_index():
+    """md5 -> (сколько роликов показывали, дата последнего показа)."""
+    if _USAGE_LOG:
+        return _USAGE_LOG
+    path = os.path.expanduser("~/projects/media-library/.usage_log.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    for h, rows in (data.items() if isinstance(data, dict) else []):
+        try:
+            dates = [str(r.get("date", "")) for r in rows if isinstance(r, dict)]
+            _USAGE_LOG[h] = (len(rows), max(dates) if dates else "")
+        except (TypeError, AttributeError):
+            continue
+    _USAGE_LOG.setdefault("__loaded__", (0, ""))
+    return _USAGE_LOG
+
+
+def _by_rarity(tag_dir, files):
+    """Папку обходим от самых редко показанных файлов к заезженным."""
+    idx = _usage_index()
+    if len(idx) <= 1:
+        return files
+    ranked = []
+    for f in files:
+        try:
+            h = file_md5(os.path.join(tag_dir, f))
+        except OSError:
+            ranked.append((10 ** 6, "", f))
+            continue
+        cnt, last = idx.get(h, (0, ""))
+        ranked.append((cnt, last, f))
+    ranked.sort()
+    return [f for _c, _d, f in ranked]
+
+
 def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ffmpeg="ffmpeg",
                         blocked_md5=None, used_md5=None, dur_hint=None, seq=0):
     """Pull from the user's own pre-vetted local folder instead of the web.
@@ -1099,8 +1139,15 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         return None
 
     blocked_md5 = blocked_md5 or set()
-    # rotate through the folder, but skip files used in the last N videos
-    # (rule 4) and files already used earlier in THIS video (rule 5).
+    # СНАЧАЛА РЕДКИЕ, ПОТОМ ЗАЕЗЖЕННЫЕ (24.10, улов `usuario-91`).
+    # Прежний порядок — алфавитный с круговым смещением — стабильно выдавал
+    # одни и те же кадры: `ПУТИН/Screenshot_1.jpg` стоял в 24 роликах,
+    # `ДРОНЫ/11_uav_atlon_avia.jpg` в 18, `TRAMP/25-03-трамп (10).jpg` в 15.
+    # Бан-лист такое не ловит — файлы не забанены, они просто вечно первые по
+    # имени. Это ровно та претензия пользователя 8.10 («примелькалось до такой
+    # степени»). Теперь кандидаты сортируются по журналу показов медиатеки:
+    # сперва те, что показывали реже и давнее.
+    files = _by_rarity(tag_dir, files)
     n = len(files)
     start = usage_counts.get(tag, 0)
     chosen = None
@@ -2093,7 +2140,19 @@ def main():
                     print(f"[{sid:03d}] FAILED: ни один адрес из source_query не "
                           f"дал годного кадра — перепиши сцену или дай другую ссылку")
                     ok = False
-            elif source in ("wikimedia", "press_photo"):
+            elif source in ("wikimedia", "press_photo", "web_search"):
+                # `web_search` НЕ БЫЛО В ЭТОЙ ЦЕПОЧКЕ ВООБЩЕ (24.10, найдено
+                # разбором улова `usuario-91`). Источник разрешён и в нашей
+                # инструкции внешнему агенту, и в приёмке (`OK_SOURCES`), и
+                # агент ставит его штатно — а здесь сцена проваливалась в
+                # `else` и печатала «unknown source 'web_search' — news-video
+                # never generates», что читается как ошибка КЛАССИФИКАЦИИ, а
+                # не как «источник не обслуживается». На `planeta-cru-2510`
+                # так молча легли все 13 сцен с этим источником; вкладка
+                # приняла это за «слишком длинный запрос» и переписала их в
+                # press_photo — после чего они нашлись с первого раза.
+                # Поиск по сети и так последний шаг водопада press_photo,
+                # поэтому обслуживаем тем же путём.
                 ok, used_source = _press_waterfall(query, out_path, env)
             elif source in ("pexels_photo", "pexels_video"):
                 blob = (query + " " + scene.get("visual_prompt", "")).lower()
@@ -2121,8 +2180,12 @@ def main():
                          " — ФАЙЛА НЕТ, карточка ещё не нарисована"))
                 ok = os.path.exists(out_path)
             else:
-                print(f"[{sid:03d}] ERROR: unknown source '{source}' - news-video never generates, "
-                      f"fix the scene's source classification instead")
+                print(f"[{sid:03d}] ОШИБКА: источник «{source}» не обслуживается "
+                      f"фетчером. Это НЕ «поиск ничего не нашёл» и не запрет "
+                      f"генерации — это неизвестное значение поля source. "
+                      f"Разрешены: press_photo, web_search, wikimedia, "
+                      f"pexels_photo, pexels_video, local_library, direct_url, "
+                      f"card:*")
         except Exception as e:
             fail_why = "ошибка фетча: %s" % e
             print(f"[{sid:03d}] ERROR: {e}")
