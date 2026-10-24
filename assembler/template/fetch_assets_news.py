@@ -2191,7 +2191,15 @@ def main():
             print(f"[{sid:03d}] ERROR: {e}")
             ok = False
 
-        print(f"[{sid:03d}] {used_source} -> {'ok' if ok else 'FAILED'}")
+        # ИМЯ ШАГА ВОДОПАДА СОВПАДАЕТ С ИМЕНЕМ ИСТОЧНИКА — ПИШЕМ ОБА (24.10).
+        # `web_search` это и значение поля source, и последний шаг водопада
+        # прессы. В логе строка «[023] web_search -> ok» относилась к сцене с
+        # source `press_photo`, и по логу их было не различить: вкладка на
+        # этом потеряла круг рассуждений, разбирая, почему «работающий»
+        # источник не находит кадров (он не работал вовсе, см. выше).
+        _tag = (used_source if used_source == source
+                else f"{source}→{used_source}")
+        print(f"[{sid:03d}] {_tag} -> {'ok' if ok else 'FAILED'}")
         _src = LAST_SRC_URL.get(os.path.abspath(out_path), "")
         if not _src and used_source == "local_library":
             _src = str(locals().get("local_out") or "")
