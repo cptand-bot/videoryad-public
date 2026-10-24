@@ -1,0 +1,377 @@
+{
+ "anchor": "top",
+ "2": {
+  "photo": "overlays/scene_002.jpg",
+  "sound": "whoosh",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "5": {
+  "photo": "overlays/scene_005.jpg",
+  "sound": "zatvor",
+  "at": 4.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "10": {
+  "photo": "overlays/scene_010.jpg",
+  "sound": "pop",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "up-left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "13": {
+  "photo": "overlays/scene_013.jpg",
+  "sound": "whoosh",
+  "at": 4.5,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "26": {
+  "photo": "overlays/scene_026.jpg",
+  "sound": "zatvor",
+  "at": 3.9,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "m",
+  "scale": 1.0
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "sound": "pop",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "36": {
+  "photo": "overlays/scene_036.jpg",
+  "sound": "whoosh",
+  "at": 4.8,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "42": {
+  "photo": "overlays/scene_042.jpg",
+  "sound": "zatvor",
+  "at": 4.9,
+  "shape": "rect",
+  "style": "up-left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "48": {
+  "photo": "overlays/scene_048.jpg",
+  "sound": "pop",
+  "at": 4.9,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "57": {
+  "photo": "overlays/scene_057.jpg",
+  "sound": "whoosh",
+  "at": 4.4,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "m",
+  "scale": 1.0
+ },
+ "66": {
+  "photo": "overlays/scene_066.jpg",
+  "sound": "zatvor",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "3": {
+  "text": {
+   "words": "ПЯТЫЙ ГОД БОЕВЫХ ДЕЙСТВИЙ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.0,
+   "scale": 1.0,
+   "sound": "zatvor",
+   "style": "plate"
+  }
+ },
+ "4": {
+  "text": {
+   "words": "ВОЕННЫЕ — ЗА МИРНЫЕ ДОГОВОРЁННОСТИ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.8,
+   "scale": 1.0,
+   "sound": "whoosh",
+   "style": "plate"
+  }
+ },
+ "11": {
+  "text": {
+   "words": "73 ТЫСЯЧИ ДЕТЕЙ ЗА ПОЛГОДА 2026",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "12": {
+  "text": {
+   "words": "0,8 РЕБЁНКА НА ЖЕНЩИНУ. БЫЛО 1,14",
+   "color": "red",
+   "pos": "tc",
+   "at": 4.9,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "16": {
+  "text": {
+   "words": "НОВАЯ ВОЛНА ОТЪЕЗДА — УЖЕ ПОСЛЕ МИРА",
+   "color": "orange",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "17": {
+  "text": {
+   "words": "МИЛЛИОНЫ УСТРОИЛИ ЖИЗНЬ ЗА ГРАНИЦЕЙ",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.2,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "21": {
+  "text": {
+   "words": "ЭКСПОРТ 15-20 МЛРД. ИМПОРТ — 70",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 5.4,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "22": {
+  "text": {
+   "words": "КУРС 150 ГРИВЕН — «БЕЗ ПАНИКИ»",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.3,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "23": {
+  "text": {
+   "words": "ДЫРА ВО ВНЕШНЕЙ ТОРГОВЛЕ — 50-60 МЛРД",
+   "color": "orange",
+   "pos": "mc",
+   "at": 4.8,
+   "scale": 1.0,
+   "sound": "zatvor",
+   "style": "plate"
+  }
+ },
+ "27": {
+  "text": {
+   "words": "90 МЛРД ЕВРО: 60 — ОБОРОНА, 30 — БЮДЖЕТ",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 4.7,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "30": {
+  "text": {
+   "words": "БОЕВЫЕ ВЫПЛАТЫ ИДУТ, ПОКА ИДУТ БОИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.0,
+   "scale": 1.0,
+   "sound": "pop",
+   "style": "plate"
+  }
+ },
+ "32": {
+  "text": {
+   "words": "1917: СОЛДАТЫ РАЗОШЛИСЬ С ФРОНТА",
+   "color": "orange",
+   "pos": "mc",
+   "at": 5.0,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "33": {
+  "text": {
+   "words": "АРМИЯ НА ДЕСЯТЬ ЛЕТ ВПЕРЁД",
+   "color": "red",
+   "pos": "tc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "zatvor",
+   "style": "plate"
+  }
+ },
+ "43": {
+  "text": {
+   "words": "«РАЗГОВОР БЫЛ КОНСТРУКТИВНЫМ»",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.1,
+   "scale": 1.0,
+   "sound": "zatvor",
+   "style": "plate"
+  }
+ },
+ "44": {
+  "text": {
+   "words": "МОСКВЕ НЕДОСТАТОЧНО ПЕРЕСТАТЬ СТРЕЛЯТЬ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 4.7,
+   "scale": 1.0,
+   "sound": "whoosh",
+   "style": "plate"
+  }
+ },
+ "45": {
+  "text": {
+   "words": "РАСШИРЕНИЕ НАТО И ВСТУПЛЕНИЕ УКРАИНЫ",
+   "color": "orange",
+   "pos": "tc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "pop",
+   "style": "plate"
+  }
+ },
+ "46": {
+  "text": {
+   "words": "ОФИЦИАЛЬНО МОСКВА НЕ ОТКАЗЫВАЛАСЬ",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.3,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "51": {
+  "text": {
+   "words": "ТОРГ: СРОКИ, ФОРМУЛИРОВКИ, ТЕРРИТОРИИ",
+   "color": "white",
+   "pos": "tc",
+   "at": 5.4,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "56": {
+  "text": {
+   "words": "ВЫШЕ УКРАИНЫ — НАТО",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "59": {
+  "text": {
+   "words": "ЕВРОПА НАРАЩИВАЕТ ВОЕННЫЕ БЮДЖЕТЫ",
+   "color": "orange",
+   "pos": "mc",
+   "at": 4.4,
+   "scale": 1.0,
+   "sound": "whoosh",
+   "style": "plate"
+  }
+ },
+ "60": {
+  "text": {
+   "words": "РОССИЯ — ЯДЕРНАЯ ДЕРЖАВА",
+   "color": "red",
+   "pos": "tc",
+   "at": 5.1,
+   "scale": 1.0,
+   "sound": "pop",
+   "style": "plate"
+  }
+ },
+ "61": {
+  "text": {
+   "words": "ЯДЕРНЫЙ ФАКТОР — ЧАСТЬ РАСЧЁТА",
+   "color": "red",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "mashinka",
+   "style": "plate"
+  }
+ },
+ "63": {
+  "text": {
+   "words": "СЛОВО «ПРОИГРАЛ» ТЕРЯЕТ СМЫСЛ",
+   "color": "white",
+   "pos": "tc",
+   "at": 4.8,
+   "scale": 1.0,
+   "sound": "zatvor",
+   "style": "plate"
+  }
+ },
+ "67": {
+  "text": {
+   "words": "ВОЕННУЮ СИСТЕМУ НЕ ВЫКЛЮЧИТЬ КНОПКОЙ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 5.2,
+   "scale": 1.0,
+   "sound": "pshik",
+   "style": "plate"
+  }
+ },
+ "70": {
+  "text": {
+   "words": "«СТОРОНЫ ДОГОВОРИЛИСЬ ПРОДОЛЖИТЬ ПЕРЕГОВОРЫ»",
+   "color": "white",
+   "pos": "mc",
+   "at": 5.5,
+   "scale": 1.0,
+   "sound": "pop",
+   "style": "plate"
+  }
+ }
+}
