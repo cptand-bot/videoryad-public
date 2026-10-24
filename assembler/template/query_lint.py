@@ -891,7 +891,48 @@ def lint(paths, strict=False, no_net=False):
     return 0
 
 
+def mines_brief():
+    """Список мин одной выжимкой — для вставки в задание внешнему агенту.
+
+    24.10: список запрещённых слов в инструкции агента я дописывал РУКАМИ, и
+    он отставал от линтера — замер `usuario-91`: 60 мин в коде против 18 у
+    агента, 42 он не знал вовсе. Каждый ролик это оборачивалось кругом «линт
+    снял N запросов, вкладка переписала их руками». Пусть список едет сам.
+    """
+    seen, out = set(), []
+    for item in MINES:
+        try:
+            word, why = item[0], item[1]
+        except (TypeError, IndexError):
+            continue
+        w = str(word).strip()
+        if not w or w in seen:
+            continue
+        seen.add(w)
+        short = str(why).split(":")[0].split("—")[0].strip()
+        out.append("%s — %s" % (w, short[:90]))
+    for item in PEXELS_MINES:
+        try:
+            word = str(item[0]).strip()
+        except (TypeError, IndexError):
+            continue
+        if word and word not in seen:
+            seen.add(word)
+            out.append("%s (в стоке) — даёт не то" % word)
+    return out
+
+
 if __name__ == "__main__":
+    # `--mines-brief`: печатает список мин и выходит. Его вклеивает
+    # `codex_brief.py` в задание на раскадровку.
+    if "--mines-brief" in sys.argv:
+        _lines = mines_brief()
+        print("НЕ ПИШИ В ЗАПРОСЕ ЭТИ СЛОВА — у нас они заведомо дают брак "
+              "(%d штук, список живой):" % len(_lines))
+        for _l in _lines:
+            print("  " + _l)
+        sys.exit(0)
+
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args:
         print(__doc__)

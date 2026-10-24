@@ -681,7 +681,27 @@ jobs:
           fi
           FX_DIR="$fxd" CAPTIONS_DIR="$caps" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
             python3 assembler/template/build_clips_1080.py "$sc" "$proj/images" "$proj/clips"
-          echo "shard ${{ matrix.shard }}: $(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l) clips"
+          made=$(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l)
+          echo "shard ${{ matrix.shard }}: $made clips"
+          # ЗАПРЕТ ЛОЖНОГО УСПЕХА (24.10). Шард, которому досталась работа, но
+          # не собравший НИ ОДНОГО клипа, обязан падать. Иначе джоб зелёный, и
+          # всю его работу молча переделывает `assemble` — так битый ffmpeg из
+          # кэша сутки стоил по 6-8 минут каждому ролику, а в отчёте было
+          # двенадцать «success» по 20 секунд.
+          mine=$(python3 - "$sc" ${{ matrix.shard }} <<'PYC'
+          import json, sys
+          sc = json.load(open(sys.argv[1], encoding="utf-8"))
+          scenes = sc["scenes"] if isinstance(sc, dict) else sc
+          shard = int(sys.argv[2])
+          print(sum(1 for i, s in enumerate(scenes)
+                    if i % 12 == shard
+                    and not str(s.get("source", "")).startswith("card")))
+          PYC
+          )
+          if [ "${mine:-0}" -gt 0 ] && [ "$made" = "0" ]; then
+            echo "::error::шард ${{ matrix.shard }}: на него пришлось $mine сцен, а клипов ноль — работа НЕ сделана. Смотри строки FAILED выше (чаще всего это неработающий ffmpeg)."
+            exit 1
+          fi
 
       - name: Stage this worker's clips
         id: stage
@@ -1302,6 +1322,31 @@ jobs:
         if: success() || failure()
         run: tar czf cloud-logs.tgz -C "queue/${{ needs.setup.outputs.name }}" _cloud progress.json 2>/dev/null || true
 
+      # КОНТАКТНЫЕ ЛИСТЫ СОБИРАЕТ ОБЛАКО (24.10, нулевой пункт OPEN-ITEMS).
+      # До этого листы были ЕДИНСТВЕННЫМ шагом аудита, который физически
+      # считался на машине пользователя, и нужны они КАЖДОМУ ролику — в
+      # отличие от доборов, карт и превью. Кадры у раннера уже есть, лист это
+      # один проход PIL; кладём рядом с отчётами, вкладка забирает готовым.
+      # Шаг никогда не роняет сборку: нет кадров или нет pillow — просто нет
+      # листов, ролик от этого не страдает.
+      - name: Контактные листы для аудита
+        if: success() || failure()
+        continue-on-error: true
+        env:
+          NAME: ${{ needs.setup.outputs.name }}
+        run: |
+          proj="queue/$NAME"
+          sc=$(ls "$proj"/*.scenes.json 2>/dev/null | grep -v overlays_fetch | head -1)
+          if [ -z "$sc" ] || [ ! -d "$proj/images" ]; then
+            echo "листы не собираю: нет файла сцен или папки кадров"; exit 0
+          fi
+          python3 -m pip install --quiet pillow 2>/dev/null || true
+          python3 assembler/template/contact_sheet.py "$sc" "$proj/images" "$proj/thumbs" \
+            || echo "contact_sheet не отработал — листов не будет, сборку не роняю"
+          n=$(ls "$proj"/thumbs/sheet_*.jpg 2>/dev/null | wc -l)
+          echo "контактных листов собрано: $n"
+          [ "$n" -gt 0 ] && tar czf "$NAME-thumbs.tgz" -C "$proj" thumbs || true
+
       - name: Publish result as a Release
         if: success() || failure()
         env:
@@ -1317,7 +1362,7 @@ jobs:
                    "$proj"/overlays.json "$proj"/_cloud/QA-report.md \
                    "$proj"/_cloud/pipeline.log "$proj"/_cloud/report.json \
                    "$proj"/_cloud/classify_report.md "$NAME-project.tgz" \
-                   cloud-logs.tgz; do
+                   "$NAME-thumbs.tgz" cloud-logs.tgz; do
             [ -f "$f" ] && assets+=("$f")
           done
           echo "attaching: ${assets[*]}"

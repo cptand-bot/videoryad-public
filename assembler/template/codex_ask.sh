@@ -84,6 +84,13 @@ fi
 workdir="$(cd "$(dirname "$brief")" && pwd)"
 for src in ${attach[@]+"${attach[@]}"}; do
   base="$(basename "$src")"
+  # ФАЙЛ МОЖЕТ УЖЕ ЛЕЖАТЬ РЯДОМ С ЗАДАНИЕМ (24.10, улов `usuario-91`):
+  # `cp` на самого себя ругается «are the same file», под `set -e` вызов
+  # умирал с пустым результатом и кодом 0 — опять «успех при нулевой работе».
+  if [ "$(readlink -f "$src")" = "$(readlink -f "$workdir/$base")" ]; then
+    echo "  уже на месте: $base"
+    continue
+  fi
   if iconv -f UTF-8 -t UTF-8 "$src" >/dev/null 2>&1; then
     cp -f "$src" "$workdir/$base"
   else

@@ -3837,6 +3837,39 @@ def run_live(scenes_path, images_dir, port):
             self.end_headers()
             self.wfile.write(b"ok" if ok else b"no")
 
+    # ВТОРОЙ ДАШБОРД ТОГО ЖЕ ПРОЕКТА НЕ ПОДНИМАЕМ (24.10).
+    # Живой случай: вкладка запустила сервер через nohup, следом `tail dash.log`
+    # упал («cwd между вызовами Bash сбрасывается»), она прочитала это как «не
+    # поднялся» и запустила второй. Два сервера одного ролика на 8793 и 8794 —
+    # 600-800 МБ впустую и риск, что пользователь правит на одном, а вкладка
+    # читает другой. Опознаём по рабочему каталогу процесса и аргументу с
+    # файлом сцен, а не `pgrep` по шаблону (на самосовпадении уже обжигались).
+    _mine = os.path.basename(os.path.abspath(scenes_path))
+    _cwd = os.path.realpath(os.getcwd())
+    for _pid in os.listdir("/proc"):
+        if not _pid.isdigit() or int(_pid) == os.getpid():
+            continue
+        try:
+            _cmd = open("/proc/%s/cmdline" % _pid, "rb").read().decode(
+                "utf-8", "replace").split("\0")
+            if not any("review.py" in c for c in _cmd):
+                continue
+            if _mine not in [os.path.basename(c) for c in _cmd if c]:
+                continue
+            if os.path.realpath(os.readlink("/proc/%s/cwd" % _pid)) != _cwd:
+                continue
+        except (OSError, ValueError, UnicodeDecodeError):
+            continue
+        _p = ""
+        for _c in _cmd:
+            if _c.isdigit() and 1024 < int(_c) < 65536:
+                _p = _c
+        print("  дашборд этого проекта УЖЕ ПОДНЯТ: PID %s%s. Второй не "
+              "запускаю — пользуйся тем, что работает (если он мёртв, сначала "
+              "kill %s)." % (_pid, (", порт " + _p) if _p else "", _pid),
+              flush=True)
+        return
+
     socketserver.TCPServer.allow_reuse_address = True
     # Порт берём СВОБОДНЫЙ, а не слепо запрошенный: на машине работают
     # несколько вкладок сборщика сразу, и 2026-10-11 это дало реальный

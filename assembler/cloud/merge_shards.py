@@ -95,6 +95,30 @@ def _collect_overlays(images_dir, proj):
             if os.path.getsize(p) > 0:
                 os.replace(p, os.path.join(dst, os.path.basename(p)))
                 moved += 1
+    # МАНИФЕСТ ВСПЛЫВАШЕК (24.10, хвост с 23.10). У базовых кадров манифест
+    # есть, и перенос из забора знает, что настоящее, а что заглушка. У
+    # всплывашек его не было ВООБЩЕ, и вкладки отделяли годные от заглушек на
+    # глаз — «меньше 60 КБ и яркость ниже 40». Это угадайка: на тёмной
+    # настоящей картинке она однажды выбросит годный кадр. Пишем такой же
+    # манифест рядом с файлами.
+    try:
+        ovrows = []
+        for f in sorted(glob.glob(os.path.join(dst, "scene_*"))):
+            b = os.path.basename(f)
+            try:
+                sid = int(b.split("_")[1].split(".")[0])
+            except (IndexError, ValueError):
+                continue
+            sz = os.path.getsize(f)
+            ovrows.append({"id": sid, "file": b, "bytes": sz,
+                           "status": "ok" if sz > 0 else "placeholder"})
+        if ovrows:
+            json.dump(ovrows, open(os.path.join(dst, "manifest.json"), "w",
+                                   encoding="utf-8"), ensure_ascii=False, indent=1)
+            print(f"[merge] манифест всплывашек: {len(ovrows)} записей", flush=True)
+    except OSError as e:
+        print(f"[merge] манифест всплывашек не записан: {e}", flush=True)
+
     ovj = os.path.join(proj, "overlays.json")
     dropped = []
     lost = {}

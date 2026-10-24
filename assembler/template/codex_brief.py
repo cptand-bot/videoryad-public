@@ -72,14 +72,83 @@ def plural(n, one, few, many):
     return one if n == 1 else few if 2 <= n <= 4 else many
 
 
+def srt_end_sec(path):
+    """Последний таймкод SRT в секундах."""
+    import re
+    try:
+        txt = open(path, encoding="utf-8-sig", errors="replace").read()
+    except OSError:
+        return 0.0
+    last = 0.0
+    for m in re.finditer(r"(\d\d):(\d\d):(\d\d)[,.](\d{1,3})\s*-->\s*"
+                         r"(\d\d):(\d\d):(\d\d)[,.](\d{1,3})", txt):
+        h, mi, s, ms = map(int, m.group(5, 6, 7, 8))
+        last = max(last, h * 3600 + mi * 60 + s + ms / 1000.0)
+    return last
+
+
+def mines_text():
+    """Живой список мин из линтера — не копия, которая отстаёт."""
+    import subprocess
+    lint = os.path.join(os.path.dirname(os.path.abspath(__file__)), "query_lint.py")
+    try:
+        r = subprocess.run(["python3", lint, "--mines-brief"],
+                           capture_output=True, text=True, timeout=60)
+        return r.stdout.strip() if r.returncode == 0 else ""
+    except (OSError, subprocess.SubprocessError):
+        return ""
+
+
+def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАДРОВКА.txt"):
+    """Задание на раскадровку: числа цифрами + ЖИВОЙ список мин линтера."""
+    total = srt_end_sec(srt)
+    want = total / 11.5 if total else 0
+    body = [
+        "Распиши этот ролик на сцены по своей постоянной инструкции.",
+        "",
+        "Канал: %s. Длительность озвучки: %.1f с." % (channel, total),
+        "ЧИСЛО СЦЕН: %d (допустимо %d-%d). Посчитай своё число ДО того, как"
+        % (round(want), round(want * 0.9), round(want * 1.1)),
+        "начнёшь писать сцены, и уложись в этот диапазон.",
+        "Сумма длительностей обязана сойтись с озвучкой: %.1f с ±1,5 с." % total,
+        "Карточек: %d (одна на 15 сцен), между соседними не меньше 8 сцен."
+        % max(1, round(want / 15)),
+        "Сток (pexels_video) 10-20% сцен, pexels_photo НЕ использовать.",
+        "",
+        "Субтитры приложены файлом в этой же папке, путей вида D:\\ здесь нет.",
+        "Результат верни ОДНИМ блоком ```json, на диск ничего не записывай.",
+        "Числами в ответе не отчитывайся — их проверит приёмка.",
+        "",
+    ]
+    mines = mines_text()
+    if mines:
+        body += [mines, ""]
+    path = os.path.join(dest, out_name)
+    open(path, "w", encoding="utf-8").write("\n".join(body))
+    return path, round(want), total
+
 def main():
     ap = argparse.ArgumentParser(description="бриф и материалы для Codex")
-    ap.add_argument("scenes")
+    ap.add_argument("scenes", nargs="?", default="")
     ap.add_argument("--dest", required=True, help="папка ролика на D:")
     ap.add_argument("--thumbs", default="thumbs")
-    ap.add_argument("--stage", default="audit", choices=("audit", "zamena"))
+    ap.add_argument("--stage", default="audit",
+                    choices=("audit", "zamena", "scenes"))
+    ap.add_argument("--srt", default="", help="для --stage scenes")
+    ap.add_argument("--channel", default="", help="для --stage scenes")
     ap.add_argument("--no-copy", action="store_true", help="не копировать листы")
     a = ap.parse_args()
+
+    # --stage scenes: задание на раскадровку, ещё ДО того как сцены есть.
+    # Первым аргументом в этом режиме передают любой путь-заглушку.
+    if a.stage == "scenes":
+        if not a.srt or not a.channel:
+            sys.exit("для --stage scenes нужны --srt и --channel")
+        path, want, total = write_scenes_task(a.dest, a.srt, a.channel)
+        print("задание на раскадровку: %s" % win(path))
+        print("  канал %s, озвучка %.1f с, просим %d сцен, "
+              "список мин линтера вклеен" % (a.channel, total, want))
+        return 0
 
     project = os.path.dirname(os.path.abspath(a.scenes)) or "."
     scenes = load(a.scenes)
@@ -110,12 +179,20 @@ def main():
         sys.exit("нет thumbs/sheet-zameny.jpg — сначала собери лист замен")
 
     dest_thumbs = os.path.join(a.dest, "thumbs")
-    if not a.no_copy:
+    # `--no-copy` НЕ ДОЛЖЕН ОСТАВЛЯТЬ БРИФ БЕЗ СПИСКА СЦЕН (24.10, улов
+    # `usuario-91`): бриф ссылается на `СПИСОК-СЦЕН.txt` всегда, а при
+    # `--no-copy` файл не создавался — агент получал указание на то, чего нет.
+    # Теперь список пишется В ПАПКУ ПРОЕКТА даже когда листы не копируем.
+    if a.no_copy:
+        os.makedirs(a.thumbs, exist_ok=True)
+        dest_thumbs = a.thumbs
+    if True:
         os.makedirs(dest_thumbs, exist_ok=True)
         n = 0
-        for f in sheets + pairs + ([zam] if os.path.exists(zam) else []):
-            shutil.copy2(f, dest_thumbs)
-            n += 1
+        if not a.no_copy:
+            for f in sheets + pairs + ([zam] if os.path.exists(zam) else []):
+                shutil.copy2(f, dest_thumbs)
+                n += 1
         # список сцен — он читает его вместо того, чтобы спрашивать запрос
         lst = [
             "СЦЕНЫ: sheet_1..sheet_%d.jpg — %d плиток, номер сцены выжжен в плитку."
