@@ -1,0 +1,402 @@
+{
+  "anchor": "top",
+  "2": {
+    "photo": "overlays/scene_002.jpg",
+    "sound": "whoosh",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "zatvor",
+    "at": 4.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "10": {
+    "photo": "overlays/scene_010.jpg",
+    "sound": "pop",
+    "at": 4.6,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "13": {
+    "photo": "overlays/scene_013.jpg",
+    "sound": "whoosh",
+    "at": 4.5,
+    "shape": "rect",
+    "style": "up-right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "26": {
+    "photo": "overlays/scene_026.jpg",
+    "sound": "zatvor",
+    "at": 3.9,
+    "shape": "rect",
+    "style": "up-center",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "34": {
+    "photo": "overlays/scene_034.jpg",
+    "sound": "pop",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "36": {
+    "photo": "overlays/scene_036.jpg",
+    "sound": "whoosh",
+    "at": 4.8,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "42": {
+    "photo": "overlays/scene_042.jpg",
+    "sound": "zatvor",
+    "at": 4.9,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "48": {
+    "photo": "overlays/scene_048.jpg",
+    "sound": "pop",
+    "at": 4.9,
+    "shape": "rect",
+    "style": "up-right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "57": {
+    "photo": "overlays/scene_057.jpg",
+    "sound": "whoosh",
+    "at": 4.4,
+    "shape": "rect",
+    "style": "up-center",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "66": {
+    "photo": "overlays/scene_066.jpg",
+    "sound": "zatvor",
+    "at": 4.3,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "anchor": "bottom",
+    "approved": true
+  },
+  "3": {
+    "text": {
+      "words": "ПЯТЫЙ ГОД БОЕВЫХ ДЕЙСТВИЙ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "4": {
+    "text": {
+      "words": "ВОЕННЫЕ — ЗА МИРНЫЕ ДОГОВОРЁННОСТИ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "73 ТЫСЯЧИ ДЕТЕЙ ЗА ПОЛГОДА 2026",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "12": {
+    "text": {
+      "words": "0,8 РЕБЁНКА НА ЖЕНЩИНУ. БЫЛО 1,14",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.9,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "16": {
+    "text": {
+      "words": "НОВАЯ ВОЛНА ОТЪЕЗДА — УЖЕ ПОСЛЕ МИРА",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "17": {
+    "text": {
+      "words": "МИЛЛИОНЫ УСТРОИЛИ ЖИЗНЬ ЗА ГРАНИЦЕЙ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "text": {
+      "words": "ЭКСПОРТ 15-20 МЛРД. ИМПОРТ — 70",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "text": {
+      "words": "КУРС 150 ГРИВЕН — «БЕЗ ПАНИКИ»",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "23": {
+    "text": {
+      "words": "ДЫРА ВО ВНЕШНЕЙ ТОРГОВЛЕ — 50-60 МЛРД",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "27": {
+    "text": {
+      "words": "90 МЛРД ЕВРО: 60 — ОБОРОНА, 30 — БЮДЖЕТ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "text": {
+      "words": "БОЕВЫЕ ВЫПЛАТЫ ИДУТ, ПОКА ИДУТ БОИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "33": {
+    "text": {
+      "words": "АРМИЯ НА ДЕСЯТЬ ЛЕТ ВПЕРЁД",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "text": {
+      "words": "«РАЗГОВОР БЫЛ КОНСТРУКТИВНЫМ»",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "44": {
+    "text": {
+      "words": "МОСКВЕ НЕДОСТАТОЧНО ПЕРЕСТАТЬ СТРЕЛЯТЬ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.7,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "45": {
+    "text": {
+      "words": "РАСШИРЕНИЕ НАТО И ВСТУПЛЕНИЕ УКРАИНЫ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "46": {
+    "text": {
+      "words": "ОФИЦИАЛЬНО МОСКВА НЕ ОТКАЗЫВАЛАСЬ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.3,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "51": {
+    "text": {
+      "words": "ТОРГ: СРОКИ, ФОРМУЛИРОВКИ, ТЕРРИТОРИИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "56": {
+    "text": {
+      "words": "ВЫШЕ УКРАИНЫ — НАТО",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "59": {
+    "text": {
+      "words": "ЕВРОПА НАРАЩИВАЕТ ВОЕННЫЕ БЮДЖЕТЫ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 4.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "text": {
+      "words": "РОССИЯ — ЯДЕРНАЯ ДЕРЖАВА",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.1,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "61": {
+    "text": {
+      "words": "ЯДЕРНЫЙ ФАКТОР — ЧАСТЬ РАСЧЁТА",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "63": {
+    "text": {
+      "words": "СЛОВО «ПРОИГРАЛ» ТЕРЯЕТ СМЫСЛ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 4.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "67": {
+    "text": {
+      "words": "ВОЕННУЮ СИСТЕМУ НЕ ВЫКЛЮЧИТЬ КНОПКОЙ",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 5.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "70": {
+    "text": {
+      "words": "«СТОРОНЫ ДОГОВОРИЛИСЬ ПРОДОЛЖИТЬ ПЕРЕГОВОРЫ»",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 5.5,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
