@@ -1,0 +1,126 @@
+{
+  "6": {
+    "photo": "overlays/scene_006.jpg",
+    "sound": "pop",
+    "at": 3.71,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true
+  },
+  "10": {
+    "photo": "overlays/scene_010.jpg",
+    "sound": "whoosh",
+    "at": 4.76,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "13": {
+    "photo": "overlays/scene_013.jpg",
+    "sound": "zatvor",
+    "at": 4.33,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "20": {
+    "photo": "overlays/scene_020.jpg",
+    "sound": "pop",
+    "at": 2.64,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "24": {
+    "photo": "overlays/scene_024.jpg",
+    "sound": "whoosh",
+    "at": 3.3,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "31": {
+    "photo": "overlays/scene_031.jpg",
+    "sound": "zatvor",
+    "at": 5.04,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "34": {
+    "photo": "overlays/scene_034.jpg",
+    "sound": "whoosh",
+    "at": 4.23,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true
+  },
+  "35": {
+    "photo": "overlays/scene_035.jpg",
+    "sound": "zatvor",
+    "at": 4.34,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true
+  },
+  "38": {
+    "photo": "overlays/scene_038.jpg",
+    "sound": "whoosh",
+    "at": 2.49,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "44": {
+    "photo": "overlays/scene_044.jpg",
+    "sound": "zatvor",
+    "at": 4.65,
+    "shape": "rect",
+    "scale": 1.0,
+    "anchor": "bottom",
+    "style": "up-center",
+    "approved": true
+  },
+  "47": {
+    "photo": "overlays/scene_047.jpg",
+    "sound": "whoosh",
+    "at": 4.77,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "55": {
+    "photo": "overlays/scene_055.jpg",
+    "sound": "zatvor",
+    "at": 4.66,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true
+  },
+  "36": {
+    "photo": "overlays/scene_036.jpg",
+    "sound": "pop",
+    "at": 4.34,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  },
+  "56": {
+    "photo": "overlays/scene_056.jpg",
+    "sound": "pop",
+    "at": 4.45,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true
+  }
+}
