@@ -272,7 +272,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/ffbin
-          key: ffmpeg-static-v8-${{ runner.os }}
+          key: ffmpeg-static-v9-${{ runner.os }}
 
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
@@ -300,8 +300,24 @@ jobs:
           mkdir -p "$HOME/ffbin"
           echo "$HOME/ffbin" >> "$GITHUB_PATH"
           export PATH="$HOME/ffbin:$PATH"
+          # КЭШ ПРОВЕРЯЕМ ЗАПУСКОМ, А НЕ НАЛИЧИЕМ ФАЙЛА (24.10, корень найден).
+          # В кэш клали бинарь, скопированный из apt, — он ДИНАМИЧЕСКИЙ, и на
+          # следующем прогоне восстанавливался без своих библиотек:
+          # «ffmpeg: error while loading shared libraries: libavdevice.so.60».
+          # Файл при этом есть и исполняемый, поэтому `command -v ffmpeg`
+          # проходил, каскад установки не включался, и КАЖДЫЙ клип падал
+          # FAILED. Джоб всё равно завершался success (сборщик клипов не роняет
+          # прогон), кэш клипов не сохранялся, и `assemble` переделывал всё в
+          # одиночку: 387 с на клипы и 70 с на всплывашки при 21-секундных
+          # «успешных» машинах. Теперь битую копию выбрасываем сразу.
           if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
-            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            if "$HOME/ffbin/ffmpeg" -version >/dev/null 2>&1 \
+               && "$HOME/ffbin/ffprobe" -version >/dev/null 2>&1; then
+              echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            else
+              echo "КЭШ ffmpeg БИТЫЙ (не запускается) — выбрасываю, ставлю заново" >&2
+              rm -f "$HOME/ffbin/ffmpeg" "$HOME/ffbin/ffprobe"
+            fi
           fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
@@ -349,9 +365,17 @@ jobs:
             exit 1
           fi
           # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          # В КЭШ — ТОЛЬКО СТАТИЧЕСКИЙ БИНАРЬ (24.10). Динамический (из apt)
+          # на чужой машине не запустится: библиотеки рядом не лежат.
           for b in ffmpeg ffprobe; do
             src="$(command -v $b)"
-            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            [ -n "$src" ] || continue
+            [ -x "$HOME/ffbin/$b" ] && continue
+            if ldd "$src" 2>&1 | grep -q "not a dynamic executable"; then
+              cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            else
+              echo "$b динамический ($src) — в кэш не кладу" >&2
+            fi
           done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
@@ -506,7 +530,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/ffbin
-          key: ffmpeg-static-v8-${{ runner.os }}
+          key: ffmpeg-static-v9-${{ runner.os }}
 
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
@@ -534,8 +558,24 @@ jobs:
           mkdir -p "$HOME/ffbin"
           echo "$HOME/ffbin" >> "$GITHUB_PATH"
           export PATH="$HOME/ffbin:$PATH"
+          # КЭШ ПРОВЕРЯЕМ ЗАПУСКОМ, А НЕ НАЛИЧИЕМ ФАЙЛА (24.10, корень найден).
+          # В кэш клали бинарь, скопированный из apt, — он ДИНАМИЧЕСКИЙ, и на
+          # следующем прогоне восстанавливался без своих библиотек:
+          # «ffmpeg: error while loading shared libraries: libavdevice.so.60».
+          # Файл при этом есть и исполняемый, поэтому `command -v ffmpeg`
+          # проходил, каскад установки не включался, и КАЖДЫЙ клип падал
+          # FAILED. Джоб всё равно завершался success (сборщик клипов не роняет
+          # прогон), кэш клипов не сохранялся, и `assemble` переделывал всё в
+          # одиночку: 387 с на клипы и 70 с на всплывашки при 21-секундных
+          # «успешных» машинах. Теперь битую копию выбрасываем сразу.
           if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
-            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            if "$HOME/ffbin/ffmpeg" -version >/dev/null 2>&1 \
+               && "$HOME/ffbin/ffprobe" -version >/dev/null 2>&1; then
+              echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            else
+              echo "КЭШ ffmpeg БИТЫЙ (не запускается) — выбрасываю, ставлю заново" >&2
+              rm -f "$HOME/ffbin/ffmpeg" "$HOME/ffbin/ffprobe"
+            fi
           fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
@@ -583,9 +623,17 @@ jobs:
             exit 1
           fi
           # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          # В КЭШ — ТОЛЬКО СТАТИЧЕСКИЙ БИНАРЬ (24.10). Динамический (из apt)
+          # на чужой машине не запустится: библиотеки рядом не лежат.
           for b in ffmpeg ffprobe; do
             src="$(command -v $b)"
-            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            [ -n "$src" ] || continue
+            [ -x "$HOME/ffbin/$b" ] && continue
+            if ldd "$src" 2>&1 | grep -q "not a dynamic executable"; then
+              cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            else
+              echo "$b динамический ($src) — в кэш не кладу" >&2
+            fi
           done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
@@ -733,7 +781,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/ffbin
-          key: ffmpeg-static-v8-${{ runner.os }}
+          key: ffmpeg-static-v9-${{ runner.os }}
 
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
@@ -760,8 +808,24 @@ jobs:
           mkdir -p "$HOME/ffbin"
           echo "$HOME/ffbin" >> "$GITHUB_PATH"
           export PATH="$HOME/ffbin:$PATH"
+          # КЭШ ПРОВЕРЯЕМ ЗАПУСКОМ, А НЕ НАЛИЧИЕМ ФАЙЛА (24.10, корень найден).
+          # В кэш клали бинарь, скопированный из apt, — он ДИНАМИЧЕСКИЙ, и на
+          # следующем прогоне восстанавливался без своих библиотек:
+          # «ffmpeg: error while loading shared libraries: libavdevice.so.60».
+          # Файл при этом есть и исполняемый, поэтому `command -v ffmpeg`
+          # проходил, каскад установки не включался, и КАЖДЫЙ клип падал
+          # FAILED. Джоб всё равно завершался success (сборщик клипов не роняет
+          # прогон), кэш клипов не сохранялся, и `assemble` переделывал всё в
+          # одиночку: 387 с на клипы и 70 с на всплывашки при 21-секундных
+          # «успешных» машинах. Теперь битую копию выбрасываем сразу.
           if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
-            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            if "$HOME/ffbin/ffmpeg" -version >/dev/null 2>&1 \
+               && "$HOME/ffbin/ffprobe" -version >/dev/null 2>&1; then
+              echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            else
+              echo "КЭШ ffmpeg БИТЫЙ (не запускается) — выбрасываю, ставлю заново" >&2
+              rm -f "$HOME/ffbin/ffmpeg" "$HOME/ffbin/ffprobe"
+            fi
           fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
@@ -809,9 +873,17 @@ jobs:
             exit 1
           fi
           # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          # В КЭШ — ТОЛЬКО СТАТИЧЕСКИЙ БИНАРЬ (24.10). Динамический (из apt)
+          # на чужой машине не запустится: библиотеки рядом не лежат.
           for b in ffmpeg ffprobe; do
             src="$(command -v $b)"
-            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            [ -n "$src" ] || continue
+            [ -x "$HOME/ffbin/$b" ] && continue
+            if ldd "$src" 2>&1 | grep -q "not a dynamic executable"; then
+              cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            else
+              echo "$b динамический ($src) — в кэш не кладу" >&2
+            fi
           done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
@@ -1050,7 +1122,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/ffbin
-          key: ffmpeg-static-v8-${{ runner.os }}
+          key: ffmpeg-static-v9-${{ runner.os }}
 
       - name: Set up tools
         # 5 → 10 (23.10, тем же вечером). Пять минут оказались СЛИШКОМ
@@ -1078,8 +1150,24 @@ jobs:
           mkdir -p "$HOME/ffbin"
           echo "$HOME/ffbin" >> "$GITHUB_PATH"
           export PATH="$HOME/ffbin:$PATH"
+          # КЭШ ПРОВЕРЯЕМ ЗАПУСКОМ, А НЕ НАЛИЧИЕМ ФАЙЛА (24.10, корень найден).
+          # В кэш клали бинарь, скопированный из apt, — он ДИНАМИЧЕСКИЙ, и на
+          # следующем прогоне восстанавливался без своих библиотек:
+          # «ffmpeg: error while loading shared libraries: libavdevice.so.60».
+          # Файл при этом есть и исполняемый, поэтому `command -v ffmpeg`
+          # проходил, каскад установки не включался, и КАЖДЫЙ клип падал
+          # FAILED. Джоб всё равно завершался success (сборщик клипов не роняет
+          # прогон), кэш клипов не сохранялся, и `assemble` переделывал всё в
+          # одиночку: 387 с на клипы и 70 с на всплывашки при 21-секундных
+          # «успешных» машинах. Теперь битую копию выбрасываем сразу.
           if [ -x "$HOME/ffbin/ffmpeg" ] && [ -x "$HOME/ffbin/ffprobe" ]; then
-            echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            if "$HOME/ffbin/ffmpeg" -version >/dev/null 2>&1 \
+               && "$HOME/ffbin/ffprobe" -version >/dev/null 2>&1; then
+              echo "ffmpeg взят из кэша: $("$HOME/ffbin/ffmpeg" -version 2>/dev/null | head -1)"
+            else
+              echo "КЭШ ffmpeg БИТЫЙ (не запускается) — выбрасываю, ставлю заново" >&2
+              rm -f "$HOME/ffbin/ffmpeg" "$HOME/ffbin/ffprobe"
+            fi
           fi
           need_apt=0
           command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1 \
@@ -1127,9 +1215,17 @@ jobs:
             exit 1
           fi
           # кладём рядом копию для кэша — следующий прогон возьмёт её за секунды
+          # В КЭШ — ТОЛЬКО СТАТИЧЕСКИЙ БИНАРЬ (24.10). Динамический (из apt)
+          # на чужой машине не запустится: библиотеки рядом не лежат.
           for b in ffmpeg ffprobe; do
             src="$(command -v $b)"
-            [ -n "$src" ] && [ ! -x "$HOME/ffbin/$b" ] && cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            [ -n "$src" ] || continue
+            [ -x "$HOME/ffbin/$b" ] && continue
+            if ldd "$src" 2>&1 | grep -q "not a dynamic executable"; then
+              cp "$src" "$HOME/ffbin/$b" && chmod +x "$HOME/ffbin/$b"
+            else
+              echo "$b динамический ($src) — в кэш не кладу" >&2
+            fi
           done
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow

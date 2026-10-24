@@ -67,7 +67,19 @@ for i in ids:
         FAIL.append(f"сцена {i}: нет ни картинки, ни записи в needs_upload.json")
 
 # 2. format sniff — не-JPEG под .jpg (SKILL.md 2d)
+# ВРЕМЕННЫЕ КРОПЫ OCR — НЕ ФАЙЛЫ РОЛИКА (24.10, улов `usuario-68`).
+# `has_heavy_text_overlay` создаёт и тут же удаляет `scene_NNN.jpg.wmcrop.jpg`
+# на каждом кадре. Если selfcheck идёт одновременно с OCR, он ловит такой файл
+# в glob, а к моменту чтения его уже нет — весь прогон падал
+# `FileNotFoundError`, exit 1, и это выглядело как сломанная самопроверка на
+# готовом ролике. Поэтому: имя пропускаем, а исчезнувший файл не роняет прогон.
+TMP_SUFFIX = (".wmcrop.jpg", ".ocrcrop.jpg")
+
 for f in glob.glob(f"{images}/scene_*.jpg"):
+    if f.endswith(TMP_SUFFIX):
+        continue
+    if not os.path.exists(f):
+        continue
     kind = subprocess.run(["file", "-b", f], capture_output=True, text=True).stdout
     if "JPEG" not in kind and "JFIF" not in kind:
         FAIL.append(f"{f}: не JPEG ({kind.strip()[:30]}) — build_clips подавится")
@@ -101,14 +113,18 @@ for i, s in ((s["id"], s) for s in scenes):
 # 3. дубли одного файла (no-repeat, SKILL.md rule 4/5)
 h = {}
 for f in glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*"):
-    if f.endswith((".json", ".text.png")):   # .text.png — рендер слова, дубли норм
+    if f.endswith((".json", ".text.png") + TMP_SUFFIX):  # .text.png — рендер слова, дубли норм
         continue
     # ПУТЬ ЦЕЛИКОМ, А НЕ ОДНО ИМЯ (2026-10-20, улов `usuario-40`). Было
     # `os.path.basename(f)`, и дубль «images/scene_044.jpg + overlays/scene_073.jpg»
     # читался как «две базовые сцены» — вкладка искала совпадение не в том слое.
     # Имена файлов в `images/` и `overlays/` нумеруются независимо, так что без
     # каталога сообщение не просто неполное, а уводит в сторону.
-    h.setdefault(hashlib.md5(open(f, "rb").read()).hexdigest(), []).append(f)
+    try:
+        _d = open(f, "rb").read()
+    except OSError:
+        continue          # файл исчез между glob и чтением — временный кроп
+    h.setdefault(hashlib.md5(_d).hexdigest(), []).append(f)
 for k, v in h.items():
     if len(v) > 1:
         FAIL.append(f"одинаковый файл в: {sorted(v)}")
@@ -571,7 +587,7 @@ except (OSError, ValueError):
 if _ban:
     _checked = 0
     for _p in sorted(glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*")):
-        if _p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg")):
+        if _p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg") + TMP_SUFFIX):
             continue
         try:
             _h = hashlib.md5(open(_p, "rb").read()).hexdigest()

@@ -51,6 +51,8 @@ def main():
     ap.add_argument("--srt", default="")
     ap.add_argument("--out", default="")
     ap.add_argument("--fix", action="store_true", help="починить дрейф start_sec")
+    ap.add_argument("--channel", default="5 МИНУТ",
+                    help="канал в шапку готового файла (ПЛАНЕТА / 5 МИНУТ / …)")
     a = ap.parse_args()
 
     try:
@@ -203,17 +205,31 @@ def main():
             sc["start_sec"] = round(t, 2)
             t += float(sc.get("duration_sec") or 0)
         print("  тайминг пересчитан подряд от нуля")
+        neg = [s.get("id") for s in scenes if float(s.get("duration_sec") or 0) <= 0]
+        if neg:
+            bad.append("после пересчёта остались неположительные длительности у сцен "
+                       + ", ".join(map(str, neg))
+                       + " — это не дрейф, а выдуманные числа: переделка")
 
-    if bad and not a.fix:
-        print("\nПРИНИМАТЬ НЕЛЬЗЯ — исправь перечисленное или попроси переделать.",
+    # `--fix` ЧИНИТ ТОЛЬКО ТАЙМИНГ И НЕ СНИМАЕТ ОСТАЛЬНЫЕ ОШИБКИ (24.10).
+    # Живой случай на `planeta-evak-2510`: без `--fix` приёмка честно отказывала
+    # («ПРИНИМАТЬ НЕЛЬЗЯ», код 1), а с `--fix` печатала «принято → …» и код 0,
+    # хотя в файле оставались отрицательная длительность −86,6 с у последней
+    # сцены и два шаблона запросов. Вкладка, доверившая `--fix`, уехала бы в
+    # фетч с мусором и ничего не заметила. Дыра была ровно в том месте, которое
+    # приёмка и должна закрывать.
+    if bad:
+        print("\nПРИНИМАТЬ НЕЛЬЗЯ — исправь перечисленное или попроси переделать."
+              + ("\n(`--fix` чинит только дрейф start_sec; перечисленное выше он "
+                 "не лечит — это переделка на его стороне.)" if a.fix else ""),
               file=sys.stderr)
         return 1
     if a.out:
         if isinstance(data, dict):
-            data.setdefault("channel", "5 МИНУТ")
+            data["channel"] = a.channel
             data["scenes"] = scenes
         else:
-            data = {"channel": "5 МИНУТ", "scenes": scenes}
+            data = {"channel": a.channel, "scenes": scenes}
         json.dump(data, open(a.out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"\nпринято → {a.out}")
     return 0

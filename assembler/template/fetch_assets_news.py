@@ -1002,9 +1002,40 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
             # so two scenes pulling one segment yield two distinct clips
             # (md5-dedup wants zero repeats). Cutting the whole segment instead
             # gave byte-identical clips + drift into the wrong shot.
+            # СЕГМЕНТ КОРОЧЕ СЦЕНЫ — ТЯНЕМ ДАЛЬШЕ, А НЕ ОТДАЁМ ОГРЫЗОК (24.10).
+            # Было `want = min(dur_hint, seg_len)`: пин `ПОЛИТИКА/ПУТИН:журналисты`
+            # на сцену 12,4 с отдавал клип 3,30 с, `…:совещание` на 13,0 с — 5,07 с,
+            # и оба с бодрым `ok` в логе и в манифесте. Дальше `build_clips`
+            # добивал это `-stream_loop -1`, и зритель видел одно движение
+            # четырежды (улов `usuario-29`). Правило 3 в SKILL.md обещало ровно
+            # обратное — «кусок ДЛИНОЙ СЦЕНЫ». Теперь так и есть: окно тянется до
+            # следующего ОБНАРУЖЕННОГО реза (чужой кадр не захватываем) либо до
+            # конца файла, и если всё равно не хватило — говорим об этом вслух.
             seg_len = max(0.5, seg["end"] - seg["start"])
-            want = min(dur_hint or seg_len, seg_len)
-            off = min(max(0.0, seg_len - want), (use_n - 1) * 2.0)
+            need = float(dur_hint or seg_len)
+            hard_end = seg["end"]
+            if need > seg_len + 0.05:
+                _later = sorted(s["start"] for s in index.get(fname, [])
+                                if s.get("start", 0) > seg["end"] + 0.05)
+                if _later:
+                    hard_end = _later[0]
+                else:
+                    try:
+                        _pr = subprocess.run(
+                            ["ffprobe", "-v", "error", "-show_entries",
+                             "format=duration", "-of", "csv=p=0", src_path],
+                            capture_output=True, text=True, timeout=20)
+                        hard_end = max(hard_end, float(_pr.stdout.strip() or 0))
+                    except (OSError, ValueError, subprocess.SubprocessError):
+                        pass
+            avail = max(0.5, hard_end - seg["start"])
+            want = min(need, avail)
+            if want < need - 0.3:
+                print(f"[{seq:03d}] КОРОТКИЙ БИБЛИОТЕЧНЫЙ КУСОК: {fname} даёт "
+                      f"{want:.2f} с на сцену {need:.2f} с — сборка зациклит его "
+                      f"×{need / max(want, 0.01):.1f}. Пинь ТОЧНЫЙ файл подлиннее "
+                      f"или смени сцену на поиск", flush=True)
+            off = min(max(0.0, avail - want), (use_n - 1) * 2.0)
             cmd = [ffmpeg, "-y", "-ss", f"{seg['start'] + off:.2f}", "-i", src_path,
                    "-t", f"{want:.2f}", "-c:v", "libx264",
                    "-preset", "veryfast", "-crf", "20", "-an", out_path]
