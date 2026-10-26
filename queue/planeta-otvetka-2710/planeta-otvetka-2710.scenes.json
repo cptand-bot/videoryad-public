@@ -1,0 +1,725 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 11.08,
+   "visual_prompt": "Накрытый ресторанный стол со счётом, без людей.",
+   "source": "pexels_video",
+   "source_query": "restaurant bill on table with coins closeup"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 11.08,
+   "duration_sec": 12.48,
+   "visual_prompt": "Украинский морской беспилотник у причала перед выходом в море.",
+   "source": "web_search",
+   "source_query": "украинский морской беспилотник-камикадзе на воде 2026"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 23.56,
+   "duration_sec": 12.16,
+   "visual_prompt": "Волны и след грузового судна в Чёрном море.",
+   "source": "pexels_video",
+   "source_query": "ship wake foam on water surface closeup"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 35.72,
+   "duration_sec": 11.04,
+   "visual_prompt": "Карточка с ключевой фразой о давлении на торговлю.",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 46.76,
+   "duration_sec": 9.76,
+   "visual_prompt": "Огромный танкер в открытом море — корабль, которому негде спрятаться.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/НЕФТЬ/Oil Tankers.jpg"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 56.52,
+   "duration_sec": 11.52,
+   "visual_prompt": "паром в Керченском проливе 2026",
+   "source": "press_photo",
+   "source_query": "паром в Керченском проливе 2026"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 68.04,
+   "duration_sec": 13.231,
+   "visual_prompt": "mooring rope on bollard closeup",
+   "source": "pexels_video",
+   "source_query": "mooring rope on bollard closeup"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 81.271,
+   "duration_sec": 11.76,
+   "visual_prompt": "Роберт Бровди во время официального выступления Сил беспилотных систем.",
+   "source": "web_search",
+   "source_query": "Роберт Бровди выступление Сил беспилотных систем Украина 2026"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 93.031,
+   "duration_sec": 12.4,
+   "visual_prompt": "Кадры из источника: российское торговое судно на Чёрном море после атаки.",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/260b8cad10.mp4?token=ay9okMFbXiw_Hx7hxdHB7R8NNwE14ttPg4FEakniTXopsqprUE5cBEANQ6BkG0PFfdGmfJry07B5lcsxcAS-Pd9rVR3nxUqgjWG4FGyQVzRkMQJkh49f9Pa4R86HsF65RroITetDDjh4DcfhXHzfuiIezeEzZkI1t4oxNHkGJXSndut4xz-td5X_cY3BgGmGRJVi4FAQbwse3mJ5A54D3Y8DrAAMKnTgBIlYdE6c1xFFGPIR_1Y6CRgieUjJPPjs6arAALL1etq_xz-CUV9R-zB4PDxtkvTaptw61F84jrymqWtyNaLM5cIn7zElgG5AFFO587Vm49tzs6-SzhYGTg"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 105.431,
+   "duration_sec": 11.92,
+   "visual_prompt": "Зерно поступает по погрузочному рукаву на судно в Новороссийске.",
+   "source": "pexels_video",
+   "source_query": "grain pouring from conveyor closeup"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 117.351,
+   "duration_sec": 13.2,
+   "visual_prompt": "Танкер с высоты на морском маршруте.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/НЕФТЬ/img_56443143cbb96-1.jpg"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 130.551,
+   "duration_sec": 12.16,
+   "visual_prompt": "Зерновой терминал Новороссийска с погрузочными башнями у причала.",
+   "source": "press_photo",
+   "source_query": "зерновой терминал Новороссийска погрузочные башни 2026"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 142.711,
+   "duration_sec": 11.871,
+   "visual_prompt": "Российский сухогруз готовится к выходу из порта Азовского моря.",
+   "source": "press_photo",
+   "source_query": "российский сухогруз на рейде Азовского моря 2026"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 154.582,
+   "duration_sec": 12.16,
+   "visual_prompt": "Балкер с российским зерном идёт через Чёрное море.",
+   "source": "press_photo",
+   "source_query": "балкер с российским зерном в Чёрном море октябрь 2026"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 166.742,
+   "duration_sec": 12.64,
+   "visual_prompt": "Открытое море — маршрут, ставший самым смертоносным.",
+   "source": "pexels_video",
+   "source_query": "stormy ocean waves aerial"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 179.382,
+   "duration_sec": 10.0,
+   "visual_prompt": "лоцманский катер у борта судна Чёрное море 2026",
+   "source": "press_photo",
+   "source_query": "лоцманский катер у борта судна Чёрное море 2026"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 189.382,
+   "duration_sec": 11.36,
+   "visual_prompt": "Ночной порт Одессы: краны над причалом без судов.",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 200.742,
+   "duration_sec": 13.04,
+   "visual_prompt": "Севастопольская бухта военные корабли с высоты 2026",
+   "source": "press_photo",
+   "source_query": "Севастопольская бухта военные корабли с высоты 2026"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 213.782,
+   "duration_sec": 12.046,
+   "visual_prompt": "кормовой флаг России на грузовом судне крупным планом 2026",
+   "source": "press_photo",
+   "source_query": "кормовой флаг России на грузовом судне крупным планом 2026"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 225.828,
+   "duration_sec": 10.8,
+   "visual_prompt": "Ночной порт Одессы: его собственные маршруты теперь живут в риске.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ODESSA-portiUKRAINI/1 (12).jpg"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 236.628,
+   "duration_sec": 10.08,
+   "visual_prompt": "Терминал оператора TIS с причалами и портовыми кранами.",
+   "source": "web_search",
+   "source_query": "контейнерный терминал TIS порт Пивденный 2026"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 246.708,
+   "duration_sec": 10.96,
+   "visual_prompt": "Контейнерная площадка Черноморска почти без движения.",
+   "source": "card:slope",
+   "source_query": "карточка «slope» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 257.668,
+   "duration_sec": 11.68,
+   "visual_prompt": "Пустой подъёмник в автосервисе — оборудование на месте, клиентов нет.",
+   "source": "pexels_video",
+   "source_query": "car lift in empty repair garage closeup"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 269.348,
+   "duration_sec": 11.04,
+   "visual_prompt": "Портальные краны порта днём над свободным причалом.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ODESSA-portiUKRAINI/1 (13).jpg"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 280.388,
+   "duration_sec": 10.96,
+   "visual_prompt": "Капитанский мостик балкера во время прохода по Чёрному морю.",
+   "source": "pexels_video",
+   "source_query": "cargo ship anchored open sea horizon"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 291.348,
+   "duration_sec": 11.004,
+   "visual_prompt": "Грузовое судно на морском подходе к Черноморску.",
+   "source": "web_search",
+   "source_query": "грузовое судно на подходе к Черноморску 25 октября 2026"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 302.352,
+   "duration_sec": 11.28,
+   "visual_prompt": "сгоревший складской ангар в Харькове октябрь 2026",
+   "source": "press_photo",
+   "source_query": "сгоревший складской ангар в Харькове октябрь 2026"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 313.632,
+   "duration_sec": 11.04,
+   "visual_prompt": "Зерновой силос Черноморска рядом с портовой железной дорогой.",
+   "source": "press_photo",
+   "source_query": "буксиры в порту Черноморск 2026"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 324.672,
+   "duration_sec": 11.2,
+   "visual_prompt": "Румынский буксир в районе торговых маршрутов Чёрного моря.",
+   "source": "press_photo",
+   "source_query": "порт Констанца Румыния торговые суда у причала 2026"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 335.872,
+   "duration_sec": 12.88,
+   "visual_prompt": "Болгарский патрульный катер сопровождает торговое судно у побережья.",
+   "source": "press_photo",
+   "source_query": "порт Варна Болгария грузовые причалы 2026"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 348.752,
+   "duration_sec": 11.52,
+   "visual_prompt": "Торговое судно идёт вдоль румынского побережья Чёрного моря.",
+   "source": "pexels_video",
+   "source_query": "navigation buoy floating in sea closeup"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 360.272,
+   "duration_sec": 11.402,
+   "visual_prompt": "Штаб-квартира НАТО в Брюсселе с подъездной площадью.",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО Брюссель внешний вид 2026"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 371.674,
+   "duration_sec": 11.76,
+   "visual_prompt": "Здание Lloyd's of London среди высотных офисов Сити.",
+   "source": "press_photo",
+   "source_query": "здание Lloyd's of London в квартале Сити 2026"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 383.434,
+   "duration_sec": 11.84,
+   "visual_prompt": "Деловой квартал Сити, где работают морские страховщики.",
+   "source": "press_photo",
+   "source_query": "танкеры на рейде Персидского залива 2026"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 395.274,
+   "duration_sec": 11.2,
+   "visual_prompt": "Штормовые облака над судоходным маршрутом Чёрного моря.",
+   "source": "pexels_video",
+   "source_query": "storm clouds over open sea horizon"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 406.474,
+   "duration_sec": 11.76,
+   "visual_prompt": "Карточка с цитатой о выборе более дешёвых судов.",
+   "source": "card:tape",
+   "source_query": "карточка «tape» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 418.234,
+   "duration_sec": 10.64,
+   "visual_prompt": "Машинное отделение старого сухогруза во время технического обслуживания.",
+   "source": "press_photo",
+   "source_query": "машинное отделение старого торгового судна 2026"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 428.874,
+   "duration_sec": 10.56,
+   "visual_prompt": "Сирийские моряки работают на палубе торгового судна.",
+   "source": "press_photo",
+   "source_query": "швартовый трос и рабочие рукавицы на палубе судна 2026"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 439.434,
+   "duration_sec": 11.486,
+   "visual_prompt": "Спасательная шлюпка закреплена на борту грузового судна.",
+   "source": "press_photo",
+   "source_query": "спасательная шлюпка на борту торгового судна 2026"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 450.92,
+   "duration_sec": 12.4,
+   "visual_prompt": "трап у борта торгового судна 2026",
+   "source": "press_photo",
+   "source_query": "трап у борта торгового судна 2026"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 463.32,
+   "duration_sec": 11.44,
+   "visual_prompt": "Ремонт двигателя сухогруза специалистами в украинском порту.",
+   "source": "press_photo",
+   "source_query": "руль и винт судна в сухом доке 2026"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 474.76,
+   "duration_sec": 11.52,
+   "visual_prompt": "Повреждённая надстройка торгового судна у украинского побережья.",
+   "source": "web_search",
+   "source_query": "капитанский мостик торгового судна изнутри 2026"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 486.28,
+   "duration_sec": 10.8,
+   "visual_prompt": "Зерновая баржа проходит по Дунаю возле порта Рени.",
+   "source": "card:slope",
+   "source_query": "карточка «slope» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 497.08,
+   "duration_sec": 11.84,
+   "visual_prompt": "Навигационный буй отмечает судоходный путь между Румынией и Болгарией.",
+   "source": "press_photo",
+   "source_query": "уборка пшеницы комбайном в Одесской области 2026"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 508.92,
+   "duration_sec": 10.846,
+   "visual_prompt": "Зерновые погрузочные рукава украинского порта ожидают судно.",
+   "source": "press_photo",
+   "source_query": "трактор на посевных работах в Одесской области 2026"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 519.766,
+   "duration_sec": 10.72,
+   "visual_prompt": "Владивосток — обходной маршрут российского зерна.",
+   "source": "press_photo",
+   "source_query": "порт Владивостока контейнерные причалы 2026"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 530.486,
+   "duration_sec": 10.0,
+   "visual_prompt": "портовый конвейер остановлен без погрузки 2026",
+   "source": "press_photo",
+   "source_query": "портовый конвейер остановлен без погрузки 2026"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 540.486,
+   "duration_sec": 12.4,
+   "visual_prompt": "Индонезийский порт принимает судно с зерном у разгрузочной эстакады.",
+   "source": "press_photo",
+   "source_query": "зерновой элеватор порта Джакарты Индонезия 2026"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 552.886,
+   "duration_sec": 12.0,
+   "visual_prompt": "Карточка с цитатой о приоритете своевременной доставки.",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 564.886,
+   "duration_sec": 12.0,
+   "visual_prompt": "Главный вход в Lloyd's of London на улице Сити.",
+   "source": "press_photo",
+   "source_query": "панорама делового квартала Сити Лондона с высоты 2026"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 576.886,
+   "duration_sec": 11.12,
+   "visual_prompt": "Фасад британского казначейства в правительственном квартале Лондона.",
+   "source": "press_photo",
+   "source_query": "здание Казначейства Великобритании Уайтхолл Лондон 2026"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 588.006,
+   "duration_sec": 12.912,
+   "visual_prompt": "Панорама украинского морского терминала сменяется энергетической инфраструктурой.",
+   "source": "press_photo",
+   "source_query": "пригород Житомира осенью вид с дороги 2026"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 600.918,
+   "duration_sec": 11.04,
+   "visual_prompt": "Трансформаторная подстанция Житомирской области после остановки работы.",
+   "source": "web_search",
+   "source_query": "трансформаторная подстанция Житомирская область 23 октября 2026"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 611.958,
+   "duration_sec": 13.04,
+   "visual_prompt": "Виталий Бунечко глава Житомирской областной военной администрации 2026",
+   "source": "web_search",
+   "source_query": "Виталий Бунечко глава Житомирской областной военной администрации 2026"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 624.998,
+   "duration_sec": 11.44,
+   "visual_prompt": "электрощитовая коммунального предприятия Украина реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "электрощитовая коммунального предприятия Украина реальное фото 2026"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 636.438,
+   "duration_sec": 11.6,
+   "visual_prompt": "Высоковольтные изоляторы энергосети Житомирской области.",
+   "source": "pexels_video",
+   "source_query": "high voltage ceramic insulators closeup"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 648.038,
+   "duration_sec": 11.76,
+   "visual_prompt": "Тёмный жилой квартал Житомира во время отключения электричества.",
+   "source": "press_photo",
+   "source_query": "тёмный квартал Житомира отключение электричества октябрь 2026"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 659.798,
+   "duration_sec": 11.571,
+   "visual_prompt": "Опора магистральной электросети между Луцком и Ковелем.",
+   "source": "web_search",
+   "source_query": "опора ЛЭП Волынская область Луцк Ковель октябрь 2026"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 671.369,
+   "duration_sec": 11.68,
+   "visual_prompt": "многоквартирный дом на западе Украины вечером 2026",
+   "source": "press_photo",
+   "source_query": "многоквартирный дом на западе Украины вечером 2026"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 683.049,
+   "duration_sec": 10.72,
+   "visual_prompt": "насосное оборудование в цехе водоканала Украина 2026",
+   "source": "press_photo",
+   "source_query": "насосное оборудование в цехе водоканала Украина 2026"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 693.769,
+   "duration_sec": 12.24,
+   "visual_prompt": "Гидроузел Новояворовска, обеспечивающий городскую подачу воды.",
+   "source": "web_search",
+   "source_query": "гидроузел Новояворовска подача воды Львовская область 2026"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 706.009,
+   "duration_sec": 12.4,
+   "visual_prompt": "оборудование подстанции Укрэнерго реальное фото октябрь 2026",
+   "source": "press_photo",
+   "source_query": "оборудование подстанции Укрэнерго реальное фото октябрь 2026"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 718.409,
+   "duration_sec": 11.04,
+   "visual_prompt": "Резервный генератор питает водопроводное оборудование Новояворовска.",
+   "source": "pexels_video",
+   "source_query": "diesel generator running exhaust pipe closeup"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 729.449,
+   "duration_sec": 11.554,
+   "visual_prompt": "Магистральная линия электропередачи пересекает Львовскую область.",
+   "source": "press_photo",
+   "source_query": "магистральная ЛЭП Львовской области запад Украины 2026"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 741.003,
+   "duration_sec": 9.76,
+   "visual_prompt": "высоковольтные провода над полем Ровенская область 2026",
+   "source": "press_photo",
+   "source_query": "высоковольтные провода над полем Ровенская область 2026"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 750.763,
+   "duration_sec": 11.6,
+   "visual_prompt": "Автотрансформатор энергосети Хмельницкой области перед восстановлением.",
+   "source": "web_search",
+   "source_query": "автотрансформатор Хмельницкой области восстановительные работы 2026"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 762.363,
+   "duration_sec": 11.2,
+   "visual_prompt": "Кабельная муфта энергосети Николаевской области во время ремонта.",
+   "source": "web_search",
+   "source_query": "кабельная муфта у энергосети Николаевская область ремонт 2026"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 773.563,
+   "duration_sec": 10.32,
+   "visual_prompt": "Украинский ударный морской аппарат движется по акватории Чёрного моря.",
+   "source": "press_photo",
+   "source_query": "российское торговое судно под охраной в Чёрном море 2026"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 783.883,
+   "duration_sec": 11.12,
+   "visual_prompt": "Российский военный корабль патрулирует торговый маршрут в Чёрном море.",
+   "source": "press_photo",
+   "source_query": "повреждённый портовый склад Одесской области октябрь 2026"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 795.003,
+   "duration_sec": 12.08,
+   "visual_prompt": "Зерновой терминал Санкт-Петербурга принимает перенаправленный российский груз.",
+   "source": "press_photo",
+   "source_query": "зерновой терминал Санкт-Петербурга российский экспорт октябрь 2026"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 807.083,
+   "duration_sec": 11.946,
+   "visual_prompt": "Электромонтажники восстанавливают городской энергоузел в Николаевской области.",
+   "source": "web_search",
+   "source_query": "электромонтажники восстанавливают энергоузел Николаевская область 2026"
+  },
+  {
+   "id": 72,
+   "text": "",
+   "start_sec": 819.029,
+   "duration_sec": 12.64,
+   "visual_prompt": "Насосное оборудование водоканала Полтавы, зависящее от электроснабжения.",
+   "source": "web_search",
+   "source_query": "водоканал Полтавы насосное оборудование электроснабжение 2026"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "start_sec": 831.669,
+   "duration_sec": 12.32,
+   "visual_prompt": "Ремонтная бригада Укрэнерго устанавливает новое силовое оборудование.",
+   "source": "web_search",
+   "source_query": "ремонтная бригада Укрэнерго устанавливает оборудование 2026"
+  },
+  {
+   "id": 74,
+   "text": "",
+   "start_sec": 843.989,
+   "duration_sec": 10.4,
+   "visual_prompt": "Силовой трансформатор украинской энергосети крупным планом.",
+   "source": "pexels_video",
+   "source_query": "power transformer cooling fins closeup"
+  },
+  {
+   "id": 75,
+   "text": "",
+   "start_sec": 854.389,
+   "duration_sec": 11.12,
+   "visual_prompt": "Панорама порта и причальной стенки Одессы.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ODESSA-portiUKRAINI/1 (14).jpg"
+  },
+  {
+   "id": 76,
+   "text": "",
+   "start_sec": 865.509,
+   "duration_sec": 13.52,
+   "visual_prompt": "Проходная порта — через неё идёт весь грузопоток.",
+   "source": "press_photo",
+   "source_query": "проходная морского порта Одессы 2026"
+  },
+  {
+   "id": 77,
+   "text": "",
+   "start_sec": 879.029,
+   "duration_sec": 11.868,
+   "visual_prompt": "Карточка с итоговой цитатой о повторяющейся цене решений.",
+   "source": "card:strike",
+   "source_query": "карточка «strike» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 78,
+   "text": "",
+   "start_sec": 890.897,
+   "duration_sec": 11.6,
+   "visual_prompt": "автокран поднимает опору линии электропередачи Украина 2026",
+   "source": "press_photo",
+   "source_query": "автокран поднимает опору линии электропередачи Украина 2026"
+  },
+  {
+   "id": 79,
+   "text": "",
+   "start_sec": 902.497,
+   "duration_sec": 12.56,
+   "visual_prompt": "Специалисты восстанавливают повреждённую надстройку торгового судна.",
+   "source": "press_photo",
+   "source_query": "ремонт судовой надстройки в порту Чёрного моря 2026"
+  },
+  {
+   "id": 80,
+   "text": "",
+   "start_sec": 915.057,
+   "duration_sec": 10.64,
+   "visual_prompt": "Танкер с высоты в открытом море — одинокое судно на маршруте.",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/НЕФТЬ/bf4bd769c4a9adf8c8ea3f9629a3f8ce.jpg"
+  }
+ ]
+}
