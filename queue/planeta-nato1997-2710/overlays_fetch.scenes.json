@@ -1,0 +1,85 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 11.47,
+   "visual_prompt": "текст: вернуть европейскую систему безопасности к состоянию до расширения на восток",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА/Europe 2.jpg"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "duration_sec": 10.8,
+   "visual_prompt": "база Киев → всплывашка Москва: «спор не только с Украиной»",
+   "source": "press_photo",
+   "source_query": "Спасская башня Московского Кремля 2026 реальное фото"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "duration_sec": 13.727,
+   "visual_prompt": "где именно «наконечник ближе всех к России»",
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА/Europe-Ukraine.jpg"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "duration_sec": 10.08,
+   "visual_prompt": "здание риксдага Стокгольм Швеция 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "здание риксдага Стокгольм Швеция 2026 реальное фото"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "duration_sec": 11.294,
+   "visual_prompt": "где Польша, названа текстом",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ПОЛЬША/Poland locator in Europe (red on cream).png"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 11.522,
+   "visual_prompt": "текст перечисляет базы и аэродромы, в базе их нет",
+   "source": "press_photo",
+   "source_query": "ангар военного аэродрома НАТО в Европе 2026 реальное фото"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "duration_sec": 8.99,
+   "visual_prompt": "«северный участок границы» — география",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ФИНЛЯНДИЯ/Finland in Europe.jpg"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 10.96,
+   "visual_prompt": "флаги Евросоюза у здания Еврокомиссии Брюссель 2026 реальное фото",
+   "source": "press_photo",
+   "source_query": "флаги Евросоюза у здания Еврокомиссии Брюссель 2026 реальное фото"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "duration_sec": 11.722,
+   "visual_prompt": "база Даунинг-стрит; текст: Лондон не в ЕС, но входит в НАТО — НАТО в базе нет",
+   "source": "press_photo",
+   "source_query": "эмблема НАТО на фасаде штаб-квартиры Брюссель 2026 реальное фото"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 9.92,
+   "visual_prompt": "«расширение на восток» — куда именно",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА/Borders Europe Map HD.jpg"
+  }
+ ]
+}
