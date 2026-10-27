@@ -304,6 +304,22 @@ def main():
             rows.append({"id": sid, "file": f,
                          "source": hint.get(sid, s.get("source", "?")),
                          "status": "ok"})
+        elif str(s.get("source", "")).startswith("card"):
+            # РИСОВАННЫЙ КАДР — НЕ НЕХВАТКА КАДРА (2026-10-27, улов `usuario-b5`
+            # на `planeta-vucic-2810`). Облако за `card:*` не фетчит и НЕ
+            # ДОЛЖНО: такую сцену рисует `cards-render` отдельным прогоном. А
+            # мерж записывал её как «кадра нет» → заглушка + `needs_upload`, и
+            # на дашборде появлялись ЖЁЛТЫЕ КАРТОЧКИ «нужно твоё фото» на
+            # ровном месте: пять сцен (11, 27, 43, 61, 75) при потолке 2-3,
+            # из-за чего и гейт кругов считал бюджет исчерпанным.
+            # Заглушку всё равно кладём — слот сцены должен остаться, иначе
+            # поедет хронометраж; но в `needs_upload` она не попадает.
+            ph = os.path.join(images_dir, f"scene_{sid:03d}.jpg")
+            _placeholder(ph, sid)
+            rows.append({"id": sid, "file": os.path.basename(ph),
+                         "source": s.get("source"), "status": "card_pending"})
+            print("[merge] сцена %s: источник %s — кадр рисует cards-render, "
+                  "в needs_upload НЕ вношу" % (sid, s.get("source")), flush=True)
         else:
             ph = os.path.join(images_dir, f"scene_{sid:03d}.jpg")
             _placeholder(ph, sid)
