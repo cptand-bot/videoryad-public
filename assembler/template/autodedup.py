@@ -66,6 +66,23 @@ def main():
     ap.add_argument("--overlays-json", default="overlays.json")
     ap.add_argument("--env", default=".env")
     ap.add_argument("--max-rounds", type=int, default=5)
+    # ПУЛ ЧУЖИХ ФРАЗ — ТОЛЬКО ПО ЯВНОМУ ФЛАГУ (2026-10-27, улов `usuario-31`
+    # на `planeta-ultimatum-2810`). Скрипт нашёл честный дубль (сцены 32 и 49,
+    # оба «steam/pipes») и правильно снёс проигравший файл — но ВМЕСТО нашего
+    # запроса вписал в сцену постороннюю фразу из `BIG_POOL`: «lighthouse
+    # coastline waves rocks», то есть маяк в ролике про переговоры, с
+    # source=pexels_video. Заметили только потому, что фетч в тот момент упал
+    # (не было ключа) и сцена осталась пустой; с живым ключом маяк встал бы в
+    # кадр МОЛЧА. Пул родился 10.10 для другого сценария — программной
+    # генерации 127 generic-сцен на ОЛЬКЕ, где абстрактный b-roll и был
+    # содержанием сцены. В новостном ролике запрос несёт факт, и подставлять
+    # вместо него случайную красоту нельзя. Поэтому по умолчанию дубль теперь
+    # только СНОСИТСЯ и НАЗЫВАЕТСЯ, а формулировку пишет человек (или
+    # `refetch.py`, где её видно и линтер её проверяет).
+    ap.add_argument("--pool-reassign", action="store_true",
+                    help="прежнее поведение: вписывать фразы из BIG_POOL и "
+                         "дорефетчивать самому. Годится ТОЛЬКО для сборок из "
+                         "абстрактного b-roll (ОЛЬКА), не для новостей")
     a = ap.parse_args()
 
     files_map = {a.main_scenes: a.images_dir}
@@ -89,6 +106,43 @@ def main():
             if os.path.normpath(sdir) == os.path.normpath(d):
                 return sfile, sdir, sid
         raise ValueError(f"unrecognized dir for {f}")
+
+    if not a.pool_reassign:
+        groups = dedup_groups()
+        if not groups:
+            print("дублей нет: ни один кадр не повторяется по md5")
+            return 0
+        print("ДУБЛИ ПО md5 — %d групп. Файлы проигравших снесены, ЗАПРОСЫ НЕ "
+              "ТРОНУТЫ." % len(groups))
+        print("Формулировку пишешь сама: подставлять фразу из пула нельзя, в "
+              "новостном ролике запрос несёт факт.")
+        print("")
+        dropped = []
+        for g in groups:
+            g_sorted = sorted(g)
+            keep = g_sorted[0]
+            print("  группа: оставлен %s" % os.path.basename(keep))
+            for loser in g_sorted[1:]:
+                sfile, sdir, sid = parse_path(loser)
+                q = ""
+                try:
+                    d = json.load(open(sfile, encoding="utf-8"))
+                    for sc in d["scenes"]:
+                        if sc.get("id") == sid:
+                            q = sc.get("source_query", "")
+                            break
+                except Exception:
+                    pass
+                os.remove(loser)
+                dropped.append((sfile, sid, q))
+                print("    снесён %s — сцена %s, запрос остался: «%s»"
+                      % (os.path.basename(loser), sid, q[:60]))
+        print("")
+        print("ДАЛЬШЕ: перепиши запросы этих сцен и дорефетчи ОДНИМ вызовом "
+              "refetch.py — он проверит новые формулировки линтером:")
+        for sfile, sid, _q in dropped:
+            print("  %s  сцена %s" % (os.path.basename(sfile), sid))
+        return 1
 
     for round_n in range(1, a.max_rounds + 1):
         groups = dedup_groups()
@@ -161,4 +215,4 @@ def main():
         print(" ", g)
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main() or 0)
