@@ -1357,6 +1357,16 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     srcq = q.split("/")[-1] if "." in q.split("/")[-1] else q
     needs = needs or {}
     need_reason = needs.get(str(sid), "")
+    # КАРТОЧКУ ЖЁЛТОЙ НЕ КРАСИМ — ЕЁ РИСУЕМ МЫ (27.10, прямое слово
+    # пользователя на дашборде `planeta-ultimatum-2810`: «цитаты сразу
+    # утверждаем»). Сцена с источником `card:*` не может требовать «твоего
+    # фото»: кадр ей рисует `cards-render`, браком он не бывает, а проход по
+    # жёлтой карточке стоит пользователю отдельного решения на дашборде.
+    # Запись в `needs_upload` для таких сцен я убрал в `merge_shards` в тот же
+    # день, но дашборд обязан быть устойчив и к старым проектам, где она уже
+    # лежит, — поэтому гасим и здесь.
+    if str(s.get("source", "")).startswith("card"):
+        need_reason = ""
     need_hidden = "" if need_reason else " hidden"
     need_badge = f'<span class="needb" id="need{sid}"{need_hidden}>⚠️ НУЖНО ТВОЁ ФОТО</span>'
     need_row = (f'<p class="needr" id="needr{sid}"{need_hidden}>'
