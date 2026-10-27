@@ -1,0 +1,304 @@
+{
+ "anchor": "top",
+ "23": {
+  "photo": "overlays/scene_023.jpg",
+  "at": 3.2,
+  "shape": "rect",
+  "style": "right",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "pshik",
+  "anchor": "top"
+ },
+ "29": {
+  "photo": "overlays/scene_029.jpg",
+  "at": 3.9,
+  "shape": "rect",
+  "style": "left",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "zatvor",
+  "anchor": "top"
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "mashinka",
+  "anchor": "top"
+ },
+ "39": {
+  "photo": "overlays/scene_039.jpg",
+  "at": 3.2,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "whoosh",
+  "anchor": "top"
+ },
+ "44": {
+  "photo": "overlays/scene_044.jpg",
+  "at": 3.9,
+  "shape": "rect",
+  "style": "up-left",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "pop",
+  "anchor": "top"
+ },
+ "46": {
+  "photo": "overlays/scene_046.jpg",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "right",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "pshik",
+  "anchor": "top"
+ },
+ "49": {
+  "photo": "overlays/scene_049.jpg",
+  "at": 3.2,
+  "shape": "rect",
+  "style": "left",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "zatvor",
+  "anchor": "top"
+ },
+ "52": {
+  "photo": "overlays/scene_052.jpg",
+  "at": 3.9,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "mashinka",
+  "anchor": "top"
+ },
+ "53": {
+  "photo": "overlays/scene_053.jpg",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "up-right",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "whoosh",
+  "anchor": "top"
+ },
+ "54": {
+  "photo": "overlays/scene_054.jpg",
+  "at": 3.2,
+  "shape": "rect",
+  "style": "up-left",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "pop",
+  "anchor": "top"
+ },
+ "60": {
+  "photo": "overlays/scene_060.jpg",
+  "at": 3.9,
+  "shape": "rect",
+  "style": "right",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "pshik",
+  "anchor": "top"
+ },
+ "70": {
+  "photo": "overlays/scene_070.jpg",
+  "at": 4.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "zatvor",
+  "anchor": "top"
+ },
+ "73": {
+  "photo": "overlays/scene_073.jpg",
+  "at": 3.2,
+  "shape": "rect",
+  "style": "up-center",
+  "size": "s",
+  "scale": 1.0,
+  "sound": "mashinka",
+  "anchor": "top"
+ },
+ "3": {
+  "text": {
+   "words": "КУРС 150 ГРИВЕН",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "11": {
+  "text": {
+   "words": "ЭКСПОРТ 15-20 МЛРД",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "text": {
+   "words": "ИМПОРТ 70 МЛРД",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "16": {
+  "text": {
+   "words": "52,6 МЛРД НА 2027 ГОД",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "17": {
+  "text": {
+   "words": "90 МЛРД ЕВРО",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "18": {
+  "text": {
+   "words": "30 МЛРД В ГОД",
+   "color": "orange",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "20": {
+  "text": {
+   "words": "ПЕРЕЧИСЛЕНО 20 МЛРД",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "25": {
+  "text": {
+   "words": "800 ТЫСЯЧ ВОЕННЫХ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "30": {
+  "text": {
+   "words": "МАСЛО МИНУС 48%",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "31": {
+  "text": {
+   "words": "ЗЕРНО МИНУС 54%",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "36": {
+  "text": {
+   "words": "ПЯТЬ ЛЕТ? ДЕСЯТЬ?",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "43": {
+  "text": {
+   "words": "КТО ПЛАТИТ ДАЛЬШЕ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "51": {
+  "text": {
+   "words": "ЦЕНТР НЕ ПЛАТИТ",
+   "color": "orange",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "58": {
+  "text": {
+   "words": "САММИТ ЕС 26-27 НОЯБРЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "62": {
+  "text": {
+   "words": "ОБЫЧНАЯ БУХГАЛТЕРИЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "65": {
+  "text": {
+   "words": "АРМИЯ ПОСЛЕ МИРА",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "72": {
+  "text": {
+   "words": "ПОЛЬША РУМЫНИЯ ВЕНГРИЯ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "75": {
+  "text": {
+   "words": "ПОРТЫ И ДОРОГИ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "79": {
+  "text": {
+   "words": "КТО ОТВЕЧАЕТ ЗА СТРАНУ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ }
+}
