@@ -33,13 +33,54 @@ _IMG = (".jpg", ".jpeg", ".png", ".webp")
 _VID = (".mp4", ".mov", ".webm")
 
 
-def _scenes_file(proj):
+# Имена, под которыми в папке ролика лежит СЫРОЙ файл внешнего агента или
+# черновик: по ним фетч никогда не шёл, и сверять с ними забор нельзя.
+_RAW_HINTS = ("codex", "agent", "raw", "draft", "orig", "_in", "syr")
+
+
+def _scenes_file(proj, quiet=False):
+    """Эталонный scenes.json папки.
+
+    2026-10-27, улов `usuario-2d`, стоило половины ролика при зелёном
+    FETCH-report: выбор шёл глобом с сортировкой «больше сцен, короче имя», и
+    рядом с принятым `<ролик>.scenes.json` лежал сырой `codex.scenes.json`
+    агента — столько же сцен, имя короче, значит побеждал он. Сверка «кадр под
+    переписанный запрос» шла с ПЕРВОНАЧАЛЬНЫМИ запросами агента, и перенос
+    отклонял 51 сцену из 87 как «переписанный запрос». Отчёт фетча при этом
+    честно говорил «БЕЗ КАДРА: 0» — класс «успех ≠ сделанная работа».
+
+    Порядок теперь по ИМЕНИ, а не по размеру:
+      1. `<имя папки ролика>.scenes.json` — принятый файл этого ролика;
+      2. любой, кроме черновиков агента (`_RAW_HINTS`): больше сцен, свежее;
+      3. если других нет вовсе — черновик, но с громкой строкой в выводе.
+    """
     cs = [x for x in glob.glob(os.path.join(proj, "*.scenes.json"))
           if "overlays_fetch" not in os.path.basename(x)]
     if not cs:
         return ""
-    cs.sort(key=lambda q: (-len(_load(q).get("scenes", [])), len(os.path.basename(q))))
-    return cs[0]
+
+    def _stem(q):
+        return os.path.basename(q)[:-len(".scenes.json")].lower()
+
+    want = os.path.basename(os.path.abspath(proj)).lower()
+    exact = [x for x in cs if _stem(x) == want]
+    if exact:
+        pick = exact[0]
+    else:
+        clean = [x for x in cs if not any(h in _stem(x) for h in _RAW_HINTS)]
+        pool = clean or cs
+        pool.sort(key=lambda q: (-len(_load(q).get("scenes", [])),
+                                 -os.path.getmtime(q)))
+        pick = pool[0]
+        if not clean and not quiet:
+            print("!! в папке только черновик агента (%s) — сверка пойдёт по нему; "
+                  "принятый <ролик>.scenes.json не найден"
+                  % os.path.basename(pick))
+    if len(cs) > 1 and not quiet:
+        others = [os.path.basename(x) for x in cs if x != pick]
+        print("сценариев в папке %d, взят %s (прочие: %s)" % (
+            len(cs), os.path.basename(pick), ", ".join(others)))
+    return pick
 
 
 def _load(p):
@@ -173,7 +214,7 @@ def adopt(src, dst, dry=False, force=False):
     print("ИТОГО перенесено %d, пропущено %d%s" % (
         total_moved, total_skipped,
         (", ОТКЛОНЕНО %d (бан или переписанный запрос)" % rejected) if rejected else ""))
-    sf = _scenes_file(dst) or _scenes_file(src)
+    sf = _scenes_file(dst, quiet=True) or _scenes_file(src, quiet=True)
     if sf:
         scenes = _load(sf).get("scenes", [])
         have = set()
