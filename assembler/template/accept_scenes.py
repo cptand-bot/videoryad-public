@@ -123,6 +123,35 @@ def main():
         elif n < want * 0.9:
             warn.append("сцен %d при норме %d (%.0f-%.0f) — кадры будут «застывать»"
                         % (n, round(want), want * 0.9, want * 1.1))
+    # ВИД КАРТОЧКИ СВЕРЯЕМ С РЕЕСТРОМ ДВЕРИ (2026-10-27, улов `usuario-54` на
+    # `5min-granica1997`). Приёмка проверяла только ПРЕФИКС `card:` — поэтому
+    # выдуманный агентом `card:bullets` прошёл с кодом 0. Дефект был бы поздним
+    # и немым: за `card:*` фетч не идёт, такой вид `card_put.py` не примет,
+    # карточку никто не нарисует — в сборке просто пустые сцены. Список берём
+    # из самого `card_put.py`, чтобы он не разъезжался с дверью: добавят вид
+    # туда — приёмка узнает о нём сама.
+    _known = set()
+    try:
+        _cp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "..", "fullcycle", "card_put.py")
+        _txt = open(_cp, encoding="utf-8").read()
+        _blk = re.search(r"VIEWS = \{(.*?)\n\}", _txt, re.S)
+        if _blk:
+            _known = set(re.findall(r'"([a-z_]+)":', _blk.group(1)))
+    except Exception:
+        _known = set()
+    for i in cards:
+        _view = str(scenes[i].get("source", ""))[len(CARD_PREFIX):].strip()
+        if not _view:
+            bad.append("сцена %s: источник «card:» без вида — карточку нечем "
+                       "рисовать" % scenes[i].get("id"))
+        elif _known and _view not in _known:
+            bad.append("сцена %s: вида карточки «%s» НЕ СУЩЕСТВУЕТ — "
+                       "`card_put.py` знает только: %s. За `card:*` фетч не "
+                       "идёт, значит сцена осталась бы пустой молча"
+                       % (scenes[i].get("id"), _view,
+                          ", ".join(sorted(_known))))
+
     norm = max(1, round(n / 15))
     if len(cards) > norm + 1:
         warn.append(f"карточек {len(cards)} при норме {norm} (+1 допуск)")
