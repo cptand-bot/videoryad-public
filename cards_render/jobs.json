@@ -1,0 +1,78 @@
+[
+ {
+  "scene": 10,
+  "view": "duel",
+  "dur": 13.36,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Экспортный потенциал — 15-20 млрд $",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Импорт — около 70 млрд $",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "quote",
+  "dur": 13.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Солдатам сказали, что война заканчивается, и люди с оружием начали возвращаться домой.",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "pull",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Британия вообще не способна взять на себя Украину целиком.",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "marker_serif",
+  "dur": 9.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Бесконечного мешка с деньгами тоже нет.",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 80,
+  "view": "quote",
+  "dur": 13.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Можно сохранить название государства — и обнаружить, что государства в прежнем виде уже нет.",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
