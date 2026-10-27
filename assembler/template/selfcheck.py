@@ -66,6 +66,25 @@ for i in ids:
     if not asset(i) and str(i) not in needs:
         FAIL.append(f"сцена {i}: нет ни картинки, ни записи в needs_upload.json")
 
+# 1b. ДВА ФАЙЛА НА ОДНУ СЦЕНУ — СБОРЩИК ВОЗЬМЁТ НЕ ТОТ (2026-10-27, улов
+# `usuario-31` на `planeta-ultimatum-2810`, одиннадцать пар). Облако кладёт
+# тёмную заглушку `scene_NNN.jpg` на сцены источников, которых оно не
+# обслуживает (карточки, медиатека), а потом поверх ложится настоящий
+# `scene_NNN.mp4` из локального добора — и в папке остаются ОБА. Сцена при
+# этом «с кадром», проверки молчат, а в сборку уезжает тот файл, который
+# первым попал в glob: на одиннадцати сценах это была бы чёрная заглушка.
+# Отличить можно только счётом файлов, поэтому проверка здесь.
+_TMP_SUF = (".wmcrop.jpg", ".ocrcrop.jpg", ".text.jpg", ".ovthumb.jpg")
+for i in ids:
+    _fs = [f for f in asset(i) if not f.endswith(_TMP_SUF)]
+    if len(_fs) > 1:
+        _sizes = ", ".join("%s (%d КБ)" % (os.path.basename(f),
+                                           os.path.getsize(f) // 1024)
+                           for f in sorted(_fs))
+        FAIL.append("сцена %s: в images/ ДВА файла — %s. Сборщик возьмёт "
+                    "первый по алфавиту, а не нужный: убери лишний (тёмные "
+                    "заглушки облака на 30-40 КБ — в .placeholders/)" % (i, _sizes))
+
 # 2. format sniff — не-JPEG под .jpg (SKILL.md 2d)
 # ВРЕМЕННЫЕ КРОПЫ OCR — НЕ ФАЙЛЫ РОЛИКА (24.10, улов `usuario-68`).
 # `has_heavy_text_overlay` создаёт и тут же удаляет `scene_NNN.jpg.wmcrop.jpg`
