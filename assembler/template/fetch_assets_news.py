@@ -229,10 +229,25 @@ def record_usage(log, this_project, used_md5_to_relpath):
         entries = log.setdefault(md5, [])
         if not any(e["project"] == this_project for e in entries):
             entries.append({"project": this_project, "date": today, "file": relpath})
-    tmp = USAGE_LOG + ".tmp"
+    # TMP-ИМЯ СВОЁ У КАЖДОГО ВОРКЕРА (2026-10-27, улов `usuario-54`). Имя было
+    # общим — `.usage_log.json.tmp`, — и на параллельном доборе медиатеки
+    # (`fetch_parallel.py … 3`) воркеры затирали его друг у друга: кто первым
+    # делал `os.replace`, у остальных файл исчезал, и они падали
+    # `FileNotFoundError: '.usage_log.json.tmp' -> '.usage_log.json'`. Все семь
+    # карт при этом скачивались («готово: 7/7 FAILED=[]»), но итог печатался как
+    # НЕУСПЕХ — легко принять за потерю кадров и пойти перефетчивать заново.
+    # Журнал оставался цел, терялась только запись последнего воркера.
+    tmp = "%s.%d.tmp" % (USAGE_LOG, os.getpid())
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=1)
-    os.replace(tmp, USAGE_LOG)
+    try:
+        os.replace(tmp, USAGE_LOG)
+    except OSError:
+        # кто-то успел раньше — его запись не хуже нашей, своё убираем
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
 
 # This machine has no apt/sudo, so tesseract was installed by hand-extracting
 # .debs (apt-get download + dpkg-deb -x) into ~/tools/tesseract - see SKILL.md
