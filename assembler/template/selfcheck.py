@@ -85,6 +85,30 @@ for i in ids:
                     "первый по алфавиту, а не нужный: убери лишний (тёмные "
                     "заглушки облака на 30-40 КБ — в .placeholders/)" % (i, _sizes))
 
+# 1c. ИСТОЧНИК СЦЕНЫ И ФАЙЛ НА ДИСКЕ РАСХОДЯТСЯ (2026-10-27, улов `usuario-31`
+# на `planeta-ultimatum-2810`, сцена 20). После кода 1 на фетче запрос был
+# переписан в `press_photo`, а в `images/` остался ПРЕЖНИЙ стоковый `.mp4` —
+# файл валидный, сцена «с кадром», и ни одна проверка этого не видела: сверить
+# можно только источник против расширения. Для `local_library`, `direct_url` и
+# карточек проверка не делается: там законны и фото, и видео.
+_PHOTO_SRC = ("press_photo", "web_search", "wikimedia", "pexels_photo")
+for s_ in scenes:
+    i = s_["id"]
+    src = str(s_.get("source", ""))
+    fs = [f for f in asset(i) if not f.endswith(_TMP_SUF)]
+    if len(fs) != 1:
+        continue          # ноль и дубли уже разобраны выше
+    ext = os.path.splitext(fs[0])[1].lower()
+    is_vid = ext in (".mp4", ".mov", ".webm")
+    if src.startswith("pexels_video") and not is_vid:
+        FAIL.append("сцена %s: источник %s, а на диске КАРТИНКА %s — фетч не "
+                    "заменил файл; сцена покажет не то, что в запросе"
+                    % (i, src, os.path.basename(fs[0])))
+    elif src in _PHOTO_SRC and is_vid:
+        FAIL.append("сцена %s: источник %s, а на диске ВИДЕО %s — остался "
+                    "прежний стоковый клип, запрос переписан впустую"
+                    % (i, src, os.path.basename(fs[0])))
+
 # 2. format sniff — не-JPEG под .jpg (SKILL.md 2d)
 # ВРЕМЕННЫЕ КРОПЫ OCR — НЕ ФАЙЛЫ РОЛИКА (24.10, улов `usuario-68`).
 # `has_heavy_text_overlay` создаёт и тут же удаляет `scene_NNN.jpg.wmcrop.jpg`

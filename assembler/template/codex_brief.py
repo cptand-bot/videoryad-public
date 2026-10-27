@@ -204,6 +204,15 @@ def main():
         n = 0
         if not a.no_copy:
             for f in sheets + pairs + ([zam] if os.path.exists(zam) else []):
+                # КОПИРОВАНИЕ ФАЙЛА В САМОГО СЕБЯ — НЕ ОШИБКА, А ПУСТАЯ РАБОТА
+                # (2026-10-27, улов `usuario-b5`): с тех пор как папку ролика на
+                # `D:` трогать нельзя, `--dest` указывает на сам проект, и
+                # листы копировались из `thumbs/` в тот же `thumbs/` —
+                # `shutil.SameFileError`, падение брифа на ровном месте.
+                _dst = os.path.join(dest_thumbs, os.path.basename(f))
+                if os.path.abspath(f) == os.path.abspath(_dst):
+                    n += 1
+                    continue
                 shutil.copy2(f, dest_thumbs)
                 n += 1
         # список сцен — он читает его вместо того, чтобы спрашивать запрос
