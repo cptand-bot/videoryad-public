@@ -27,6 +27,7 @@ cloud/fetch_shard.py
 cloud/get.sh
 cloud/merge_shards.py
 cloud/notify.sh
+cloud/preflight.sh
 cloud/run.sh
 cloud/setup_rezerv.sh
 cloud/shard_scenes.py
@@ -56,6 +57,7 @@ template/check_lead.py
 template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
+template/tg_media.py
 template/codex_ask.sh
 template/codex_brief.py
 template/contact_sheet.py

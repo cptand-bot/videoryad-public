@@ -89,7 +89,9 @@ PIX_AVAIL = 1920 - 264 - 60          # левое поле + правый зап
 
 # Расстановка по ролику. Норма карточек общая на ВСЕ виды (одна на 15 сцен,
 # 22.10), но у видов разная динамика, поэтому подряд одинаковые не ставим.
-PER_SCENES, MIN_GAP, MIN_GAP_SAME_KIND = 15, 8, 16
+# Порог одного вида приведён к норме плотности 26.10: при 16 выполнить
+# норму «одна на 15 сцен» одним видом было нельзя (улов `usuario-aa`).
+PER_SCENES, MIN_GAP, MIN_GAP_SAME_KIND = 15, 8, 15
 
 
 def _fail(code, *lines):
@@ -353,7 +355,13 @@ def main():
     # --- ПРОВЕРКА 5: длительность совпала со сценой ------------------------
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                         "-of", "csv=p=0", out_mp4], capture_output=True, text=True)
-    got = float((r.stdout or "0").strip() or 0)
+    # 27.10: на битом файле ffprobe отдаёт 'N/A' — float() ронял проверку
+    # трассировкой вместо понятного отказа.
+    try:
+        got = float((r.stdout or "").strip())
+    except ValueError:
+        _fail(4, "клип битый: ffprobe не дал длительности "
+                 f"({(r.stdout or '').strip() or 'пусто'!r}). Пересними: {out_mp4}")
     if abs(got - dur) > 0.2:
         _fail(4, f"длительность разошлась: клип {got:.2f} с, сцена {dur:.2f} с. "
                  "Разница больше 0,2 с — сборщик начнёт клип не с начала. Файл "

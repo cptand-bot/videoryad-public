@@ -72,6 +72,115 @@ def _brightness(path):
         return None
 
 
+
+def _overlay_block(proj):
+    """СВЕРКА ВСПЛЫВАШЕК СО ВТОРЫМ ФАЙЛОМ ФЕТЧА (2026-10-27, улов `usuario-c2`
+    на `evropa-shizofreniya`).
+
+    До этого дня отчёт сверял со сценарием только БАЗОВЫЕ кадры: `_scenes_file`
+    намеренно исключает `overlays_fetch.scenes.json`, а всплывашки попадали в
+    отчёт одной строкой «фото всплывашек: N» — числом файлов на диске, без
+    сверки с заданием. В тот прогон в файл ушло 15 всплывашек, вернулось 11, и
+    одна из пропавших (сцена 8, `direct_url` видео 1280x686, линтером
+    одобренное) отсутствовала в `overlays/manifest.json` ВООБЩЕ — ни `ok`, ни
+    `FAILED`, ни строки. Отчёт при этом был зелёный: ровно тот же класс «успех
+    ≠ сделанная работа», против которого писался сам файл, но на второй
+    половине ролика.
+
+    Природы потерь те же три, что у базовых кадров, и лечатся так же:
+    записи нет ни в одном манифесте → упал шард, нужен добор; `FAILED` →
+    переписать запрос; файл есть, но почти чёрный → заглушка облака.
+    Отдельно помечаются библиотечные всплывашки (`local_library`): в облаке
+    медиатеки нет, их отсутствие ожидаемо и чинится локально.
+    """
+    of = os.path.join(proj, "overlays_fetch.scenes.json")
+    if not os.path.exists(of):
+        return [], 0
+    scenes = _load(of).get("scenes", [])
+    if not scenes:
+        return [], 0
+    by_id = {s.get("id"): s for s in scenes}
+    ids = [s.get("id") for s in scenes]
+    odir = os.path.join(proj, "overlays")
+
+    have, dark = {}, []
+    for q in glob.glob(os.path.join(odir, "scene_*")):
+        ext = os.path.splitext(q)[1].lower()
+        if ext not in _IMG_EXT + _VID_EXT:
+            continue
+        try:
+            sid = int(os.path.basename(q).split("_")[1].split(".")[0])
+        except (IndexError, ValueError):
+            continue
+        have[sid] = q
+        if ext in _IMG_EXT and os.path.getsize(q) <= _PLACEHOLDER_MAX:
+            b = _brightness(q)
+            if b is not None and b < _DARK:
+                dark.append((sid, int(b), os.path.getsize(q) // 1024))
+
+    seen, failed = set(), {}
+    for m in sorted(glob.glob(os.path.join(odir, "manifest*.json"))):
+        tag = os.path.basename(m).replace("manifest.", "").replace(".json", "") or "merged"
+        for r in _recs(_load(m)):
+            sid = r.get("id")
+            if sid is None:
+                continue
+            seen.add(sid)
+            if str(r.get("status", "")).upper() == "FAILED":
+                failed[sid] = (tag, r.get("reason") or "причина не записана")
+
+    def _is_lib(sid):
+        src = str((by_id.get(sid) or {}).get("source", ""))
+        return "library" in src or "local" in src
+
+    missing = [i for i in ids if i not in have]
+    never = [i for i in missing if i not in seen and not _is_lib(i)]
+    tried = [i for i in missing if i in seen]
+    lib = [i for i in missing if _is_lib(i) and i not in seen]
+
+    lines = []
+    a = lines.append
+    a("## ВСПЛЫВАШКИ — СВЕРКА С `overlays_fetch.scenes.json`")
+    a("")
+    a("- в задании: %d   ·   на диске: %d   ·   НЕТ: %d"
+      % (len(ids), len(have), len(missing)))
+    if not missing:
+        a("")
+        a("Потерь нет: каждая заказанная всплывашка на диске.")
+        a("")
+        return lines, 0
+    if never:
+        a("")
+        a("### ИХ НИКТО НЕ ФЕТЧИЛ — записи нет ни в одном манифесте (%d)" % len(never))
+        a("")
+        a("Запросы ни при чём: упал или отменился шард. Нужен ДОБОР этих сцен.")
+        for i in never:
+            src = (by_id.get(i) or {}).get("source", "?")
+            q = ((by_id.get(i) or {}).get("source_query")
+                 or (by_id.get(i) or {}).get("visual_prompt") or "")
+            a("- сцена %s [%s] %s" % (i, src, q[:70]))
+    if tried:
+        a("")
+        a("### ФЕТЧ ХОДИЛ И НЕ ДОБЫЛ — status FAILED (%d)" % len(tried))
+        a("")
+        for i in tried:
+            tag, why = failed.get(i, ("?", "в манифесте нет FAILED, но файла нет"))
+            a("- сцена %s [%s] %s" % (i, tag, why))
+    if lib:
+        a("")
+        a("### БИБЛИОТЕЧНЫЕ — ожидаемо, медиатеки в облаке нет (%d)" % len(lib))
+        a("")
+        a("Это НЕ потеря: докладывать не нужно, положить локально и идти дальше.")
+        a("- сцены: %s" % ", ".join(map(str, lib)))
+    if dark:
+        a("")
+        a("### ПОХОЖИ НА ЗАГЛУШКУ ОБЛАКА — почти чёрная всплывашка (%d)" % len(dark))
+        a("")
+        for sid, b, kb in sorted(dark):
+            a("- сцена %s: яркость %d из 255, %d КБ" % (sid, b, kb))
+    a("")
+    return lines, len(never) + len(tried) + len(dark)
+
 def report(proj, md_path=""):
     sf = _scenes_file(proj)
     if not sf:
@@ -157,6 +266,10 @@ def report(proj, md_path=""):
         a("Потерь нет: у каждой сцены есть свой кадр, заглушек не видно.")
         a("")
 
+    ov_lines, ov_lost = _overlay_block(proj)
+    if ov_lines:
+        lines.extend(ov_lines)
+
     text = "\n".join(lines)
     print(text)
     if md_path:
@@ -166,7 +279,7 @@ def report(proj, md_path=""):
                 f.write(text + "\n")
         except OSError as e:
             print("!! не записать %s: %s" % (md_path, e))
-    return 1 if (never_fetched or tried_failed or dark) else 0
+    return 1 if (never_fetched or tried_failed or dark or ov_lost) else 0
 
 
 if __name__ == "__main__":

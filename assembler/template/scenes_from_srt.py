@@ -73,7 +73,14 @@ def media_duration(path):
     r = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration",
          "-of", "csv=p=0", path], capture_output=True, text=True)
-    return float(r.stdout.strip())
+    # 27.10: 'N/A' от ffprobe на битой озвучке давало трассировку вместо
+    # внятного отказа, а молчаливый ноль тут ещё хуже — сцен выйдет нуль.
+    try:
+        return float(r.stdout.strip())
+    except ValueError:
+        sys.exit(f"не читается длительность озвучки {path}: ffprobe отдал "
+                 f"{(r.stdout or '').strip() or 'пусто'!r}. Файл битый или не "
+                 "докачан — проверь его и повтори")
 
 
 def main():

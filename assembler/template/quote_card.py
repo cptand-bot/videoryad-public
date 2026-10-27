@@ -271,7 +271,13 @@ def main():
     # середины: пропадёт и появление лоскута, и прочерчивание маркера. Молча.
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                         "-of", "csv=p=0", out_mp4], capture_output=True, text=True)
-    got = float((r.stdout or "0").strip() or 0)
+    # 27.10: на битом файле ffprobe отдаёт 'N/A' — float() ронял проверку
+    # трассировкой вместо понятного отказа.
+    try:
+        got = float((r.stdout or "").strip())
+    except ValueError:
+        _fail(4, "клип битый: ffprobe не дал длительности "
+                 f"({(r.stdout or '').strip() or 'пусто'!r}). Пересними: {out_mp4}")
     if abs(got - dur) > 0.2:
         _fail(4, f"длительность разошлась: клип {got:.2f} с, сцена {dur:.2f} с. "
                  "Разница больше 0,2 с — сборщик начнёт клип не с начала. Файл оставлен, "

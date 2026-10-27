@@ -524,9 +524,18 @@ def round_gate(pend, force):
                                                         p.get("query", "")))
             print("        теперь просишь:  %s" % q)
     bad = False
+    # ОТКАЗ ПО ОДНОЙ СЦЕНЕ НЕ РОНЯЕТ ВЕСЬ ВЫЗОВ (25.10, улов `usuario-6f`).
+    # Было: одна переформулировка среди девяти правок отбивала ВСЕ девять, и
+    # вкладка пересобирала команду целиком — а остальные восемь честно меняли
+    # объект. Теперь виновные сцены просто ИСКЛЮЧАЮТСЯ из правок (их запросы
+    # не переписываются, кадры не трогаются), а чистые чинятся в этом же круге.
+    # Бюджет кругов — другое дело: там отказ по-прежнему общий, потому что
+    # круг стоит одинаково независимо от числа кадров в нём.
+    dropped = set()
     if resays and not force:
-        bad = True
-        print("\nСТОП: это ПЕРЕФОРМУЛИРОВКА, а не новый запрос.")
+        for kind, sid, _o, _n, _s in resays:
+            dropped.add("%s:%s" % (kind, sid))
+        print("\nПЕРЕФОРМУЛИРОВКА — эти сцены из круга ИСКЛЮЧЕНЫ (остальные чиню):")
         for kind, sid, old, new, s in resays:
             print("  %s сцена %s — совпадение слов %.0f%%" % (kind, sid, s * 100))
             print("     было:  %s" % old)
@@ -539,6 +548,9 @@ def round_gate(pend, force):
         print("  • тип кадра (портрет → фасад здания → деталь → общий план);")
         print("  • источник (pexels_video → press_photo по-русски, и наоборот).")
         print("Настаиваешь на этой формулировке — добавь --force.")
+        if len(dropped) == sum(len(fx) for _p, fx, _o in pend):
+            bad = True
+            print("\nВ круге не осталось ни одной чистой правки — вызов отменён.")
     if not fill and rnd > ROUND_BUDGET and not force:
         bad = True
         print("\nСТОП: это круг №%d, а бюджет — %d." % (rnd, ROUND_BUDGET))
@@ -562,6 +574,14 @@ def round_gate(pend, force):
         return 1
     if force and (resays or rnd > ROUND_BUDGET):
         print("  --force: иду дальше, круг и повторы записаны в журнал.")
+    if dropped:
+        # выкидываем виновные id из самих правок — дальше по коду их просто нет
+        for _path, fx, is_ov in pend:
+            kind = "overlays" if is_ov else "images"
+            for sid in [k for k in fx if "%s:%s" % (kind, k) in dropped]:
+                fx.pop(sid)
+        print("  исключено сцен: %d, чиню остальные: %d"
+              % (len(dropped), sum(len(fx) for _p, fx, _o in pend)))
     return 0
 
 
@@ -811,9 +831,15 @@ def main():
 
     here = os.path.dirname(os.path.abspath(__file__))
     lint = os.path.join(here, "query_lint.py")
-    if os.path.exists(lint):
+    # ЛИНТОВАТЬ НЕЧЕГО — НЕ ЛИНТУЕМ (26.10, улов `usuario-e8`): при
+    # `--fix-overlays` без `--fix-scenes` список файлов выходил пустым,
+    # `query_lint` без аргументов печатал СПРАВКУ и возвращал ненулевой код,
+    # а refetch читал это как «замена содержит мину» — причина не названа,
+    # фетч не шёл, вкладка теряла время и лезла в обход.
+    _lint_files = [j[0] for j in jobs if j and j[0] and os.path.exists(j[0])]
+    if os.path.exists(lint) and _lint_files:
         print("\n--- линт новых запросов ---")
-        rc = subprocess.run(["python3", lint] + [j[0] for j in jobs]).returncode
+        rc = subprocess.run(["python3", lint] + _lint_files).returncode
         if rc != 0 and not _why:
             print("\nЗамена содержит мину — перепиши её от объекта "
                   "(или --force, если уверен). Фетч НЕ запускался, "
