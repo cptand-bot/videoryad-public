@@ -1,0 +1,109 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 23,
+   "text": "",
+   "duration_sec": 8.253,
+   "visual_prompt": "Всплывашка",
+   "source": "press_photo",
+   "source_query": "гривневые купюры в руках у кассового окна Украина 2026"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 13.44,
+   "visual_prompt": "Всплывашка",
+   "source": "press_photo",
+   "source_query": "цистерна для перевозки растительного масла Украина 2026"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 10.778,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЕВРОПА"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "duration_sec": 12.839,
+   "visual_prompt": "Всплывашка",
+   "source": "press_photo",
+   "source_query": "зерно в трюме сухогруза насыпью 2026"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "duration_sec": 13.442,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ГАЛИЦИЯ"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "duration_sec": 8.921,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ПОЛЬША"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "duration_sec": 11.6,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/РУМЫНИЯ"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 12.188,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ВЕНГРИЯ"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "duration_sec": 8.737,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/РОССИЯ"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "duration_sec": 12.698,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/УКРАИНА"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "duration_sec": 11.287,
+   "visual_prompt": "Кадр из поста источника",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/WxiBxxPDxMgPwpFz-nZBMQOXc8CS5u0EoaHGnkyPE7zDStNckfpbzwGv19P6fJBnpWKt7YDzAFKMF27D82x6-9aW4sHeEgFfA27LlqqgN9x4tlZJ3STb5N1snhabZIM0-ohnAqXe0n8-vxj9tzI6vkSRfwlazq400uZtCUIPLN1rVhyigQ6USMPTJSdNNvszW0jCXIYdx7tprBivHuewiDRx72NnDyhhzDe5zetUFfyP7JFIr9ijdjQ36PZhGSSILvO3lAtYFgLj3GDPjH9RnxEIw2OfN8j58EkvanFwvKkM65hEYbm45ec5qA3mYQ0ZOyIlbMRmP4lmSVKUY8XZIQ.jpg"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "duration_sec": 13.597,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ВОЛЫНЬ"
+  },
+  {
+   "id": 73,
+   "text": "",
+   "duration_sec": 9.2,
+   "visual_prompt": "Карта",
+   "source": "local_library",
+   "source_query": "КАРТЫ/ЗАКАРПАТЬЕ"
+  }
+ ]
+}
