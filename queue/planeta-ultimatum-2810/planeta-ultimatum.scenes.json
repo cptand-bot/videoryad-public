@@ -1,0 +1,644 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0,
+   "duration_sec": 12.039,
+   "visual_prompt": "Пустые места за столом переговоров двух делегаций",
+   "source": "press_photo",
+   "source_query": "пустые места за столом переговоров двух делегаций 2026"
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 12.039,
+   "duration_sec": 12.641,
+   "visual_prompt": "Правительственный кортеж Украины прибывает к месту встречи",
+   "source": "press_photo",
+   "source_query": "правительственный кортеж Украины прибывает к месту встречи 2026"
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 24.68,
+   "duration_sec": 9.52,
+   "visual_prompt": "Зеленский у микрофонов обозначает условия",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский у микрофонов в тёмной рубашке Киев 2026"
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 34.2,
+   "duration_sec": 10.957,
+   "visual_prompt": "Штаб-квартира НАТО в Брюсселе",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО в Брюсселе осенью 2026"
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 45.157,
+   "duration_sec": 12.236,
+   "visual_prompt": "Закрытая кожаная папка на столе заседаний",
+   "source": "press_photo",
+   "source_query": "закрытая кожаная папка на столе заседаний 2026"
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 57.393,
+   "duration_sec": 11.544,
+   "visual_prompt": "Песков у микрофона отвечает на условия Киева",
+   "source": "press_photo",
+   "source_query": "Дмитрий Песков на брифинге у микрофона Москва 2026"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 68.937,
+   "duration_sec": 11.775,
+   "visual_prompt": "Бронетехника ВСУ на военном смотре",
+   "source": "press_photo",
+   "source_query": "бронетехника ВСУ на военном смотре Украина 2026"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 80.712,
+   "duration_sec": 10.972,
+   "visual_prompt": "Украинский министр иностранных дел на брифинге",
+   "source": "web_search",
+   "source_query": "министр иностранных дел Украины на брифинге Киев 2026"
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 91.684,
+   "duration_sec": 11.258,
+   "visual_prompt": "Путин за трибуной в кремлёвском зале",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН/Нарезки - Путин4.mp4"
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 102.942,
+   "duration_sec": 13.299,
+   "visual_prompt": "Диктофоны и блокноты журналистов в зале брифинга",
+   "source": "press_photo",
+   "source_query": "диктофоны и блокноты журналистов в зале брифинга 2026"
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 116.241,
+   "duration_sec": 10.08,
+   "visual_prompt": "Карточка с ключевой мыслью о красных линиях сторон",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 126.321,
+   "duration_sec": 11.354,
+   "visual_prompt": "Флаги на флагштоках в зале переговоров",
+   "source": "press_photo",
+   "source_query": "государственные флаги на флагштоках в зале переговоров 2026"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 137.675,
+   "duration_sec": 10.846,
+   "visual_prompt": "Вода и стаканы расставлены по столу заседаний",
+   "source": "press_photo",
+   "source_query": "бутылки воды и стаканы расставлены по столу заседаний 2026"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 148.521,
+   "duration_sec": 11.841,
+   "visual_prompt": "Правительственный самолёт делегации на стоянке",
+   "source": "press_photo",
+   "source_query": "правительственный самолёт делегации на стоянке аэропорта 2026"
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 160.362,
+   "duration_sec": 11.734,
+   "visual_prompt": "Пустая кабина синхронного перевода с наушниками и консолью",
+   "source": "pexels_video",
+   "source_query": "simultaneous translation console inside empty interpreter booth"
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 172.096,
+   "duration_sec": 11.29,
+   "visual_prompt": "Отглаженный деловой костюм висит в пустой комнате",
+   "source": "pexels_video",
+   "source_query": "pressed business suit hanging in empty hotel room"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 183.386,
+   "duration_sec": 10.176,
+   "visual_prompt": "Генераторы у входа в киевский магазин",
+   "source": "press_photo",
+   "source_query": "генераторы у входа в магазин Киев осень 2026"
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 193.562,
+   "duration_sec": 11.348,
+   "visual_prompt": "Опоры и изоляторы электросети под дождём",
+   "source": "pexels_video",
+   "source_query": "power line insulators and pylons during heavy rain"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 204.91,
+   "duration_sec": 11.069,
+   "visual_prompt": "Украинские энергетики восстанавливают трансформаторную подстанцию",
+   "source": "web_search",
+   "source_query": "ремонтная бригада восстанавливает трансформаторную подстанцию Украина 2026"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 215.979,
+   "duration_sec": 13.214,
+   "visual_prompt": "Цифры на электросчётчике медленно меняются крупным планом",
+   "source": "pexels_video",
+   "source_query": "electricity meter digits turning close up"
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 229.193,
+   "duration_sec": 11.602,
+   "visual_prompt": "Силовой трансформатор на украинской распределительной подстанции",
+   "source": "press_photo",
+   "source_query": "силовой трансформатор на украинской распределительной подстанции 2026"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 240.795,
+   "duration_sec": 10.454,
+   "visual_prompt": "Украинская пусковая установка ПВО на позиции",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПВО-укр/nasams.jpg"
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 251.249,
+   "duration_sec": 10.907,
+   "visual_prompt": "Российские дипломаты перед ноябрьской международной встречей",
+   "source": "press_photo",
+   "source_query": "российские дипломаты перед ноябрьской международной встречей 2026"
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 262.156,
+   "duration_sec": 11.2,
+   "visual_prompt": "Пустой цех с остановленным конвейером",
+   "source": "press_photo",
+   "source_query": "пустой заводской цех с остановленным конвейером Украина 2026"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 273.356,
+   "duration_sec": 12.16,
+   "visual_prompt": "Фон дер Ляйен на подиуме саммита ЕС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС3.mp4"
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 285.516,
+   "duration_sec": 11.869,
+   "visual_prompt": "Карточка о назначении европейского финансирования",
+   "source": "card:tape",
+   "source_query": "карточка «tape» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 297.385,
+   "duration_sec": 10.205,
+   "visual_prompt": "Зеленский жмёт руки на саммите ЕС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС2.mp4"
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 307.59,
+   "duration_sec": 13.073,
+   "visual_prompt": "Мерц на пресс-конференции саммита ЕС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС4.mp4"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 320.663,
+   "duration_sec": 11.123,
+   "visual_prompt": "Купюры евро на столе крупным планом",
+   "source": "press_photo",
+   "source_query": "купюры евро на столе крупным планом, реальное фото"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 331.786,
+   "duration_sec": 11.199,
+   "visual_prompt": "Промышленный генератор возле украинского торгового объекта",
+   "source": "press_photo",
+   "source_query": "промышленный генератор возле торгового объекта Украина 2026"
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 342.985,
+   "duration_sec": 10.721,
+   "visual_prompt": "Разрушенный пролёт украинского моста без людей",
+   "source": "press_photo",
+   "source_query": "разрушенный пролёт моста Украина 2026 вид с берега"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 353.706,
+   "duration_sec": 13.839,
+   "visual_prompt": "Пар выходит из труб промышленной инфраструктуры",
+   "source": "pexels_video",
+   "source_query": "steam rising from industrial pipes close up"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 367.545,
+   "duration_sec": 11.54,
+   "visual_prompt": "Европейский совет обсуждает помощь Украине",
+   "source": "web_search",
+   "source_query": "Европейский совет обсуждает дальнейшую помощь Украине Брюссель 2026"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 379.085,
+   "duration_sec": 9.452,
+   "visual_prompt": "Места министров финансов ЕС в зале Совета",
+   "source": "press_photo",
+   "source_query": "места министров финансов ЕС в зале Совета Брюссель 2026"
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 388.537,
+   "duration_sec": 10.641,
+   "visual_prompt": "Контейнеры с артиллерийскими боеприпасами стран НАТО",
+   "source": "press_photo",
+   "source_query": "контейнеры с артиллерийскими боеприпасами стран НАТО 2026"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 399.178,
+   "duration_sec": 12.525,
+   "visual_prompt": "Военно-транспортный самолёт союзников разгружают для Украины",
+   "source": "press_photo",
+   "source_query": "военно-транспортный самолёт союзников разгрузка помощи Украине 2026"
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 411.703,
+   "duration_sec": 10.675,
+   "visual_prompt": "Кабельные барабаны и опоры на складе энергетиков",
+   "source": "press_photo",
+   "source_query": "кабельные барабаны и запасные опоры на складе энергетиков Украина 2026"
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 422.378,
+   "duration_sec": 12.173,
+   "visual_prompt": "Депутатские ряды Верховной Рады во время работы",
+   "source": "press_photo",
+   "source_query": "депутатские ряды Верховной Рады Украина 2026"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 434.551,
+   "duration_sec": 12.268,
+   "visual_prompt": "Карточка о связи красных линий и времени",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 446.819,
+   "duration_sec": 9.69,
+   "visual_prompt": "Портовый кран грузит контейнеры в Одессе",
+   "source": "press_photo",
+   "source_query": "погрузка контейнеров портовым краном Одесса 2026"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 456.509,
+   "duration_sec": 13.44,
+   "visual_prompt": "Капли дождя на стальном рельсе крупным планом",
+   "source": "pexels_video",
+   "source_query": "wet steel rail surface closeup rain drops"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 469.949,
+   "duration_sec": 10.559,
+   "visual_prompt": "Путевые рабочие укладывают рельсы",
+   "source": "press_photo",
+   "source_query": "путевые рабочие укладывают рельсы на повреждённом участке Украина 2026"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 480.508,
+   "duration_sec": 10.393,
+   "visual_prompt": "Путин за столом крупным планом",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН/Нарезки - Путин3.mp4"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 490.901,
+   "duration_sec": 11.128,
+   "visual_prompt": "Владимир Мединский выступает на брифинге российской стороны",
+   "source": "web_search",
+   "source_query": "Владимир Мединский выступает на брифинге Москва 2026"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 502.029,
+   "duration_sec": 13.195,
+   "visual_prompt": "Гравюра Полтавской битвы в музейной витрине",
+   "source": "press_photo",
+   "source_query": "гравюра Полтавской битвы в музейной витрине, реальное фото"
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 515.224,
+   "duration_sec": 12.724,
+   "visual_prompt": "Европейские представители подписывают финансовую помощь Украине",
+   "source": "press_photo",
+   "source_query": "подписание европейской финансовой помощи Украине представителями ЕС 2026"
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 527.948,
+   "duration_sec": 10.595,
+   "visual_prompt": "Повреждённое оборудование украинской электрической подстанции",
+   "source": "press_photo",
+   "source_query": "повреждённое оборудование электрической подстанции Украина 2026"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 538.543,
+   "duration_sec": 11.602,
+   "visual_prompt": "Чемоданы пассажиров на киевском перроне",
+   "source": "press_photo",
+   "source_query": "чемоданы и сумки пассажиров на перроне Киев 2026"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 550.145,
+   "duration_sec": 11.118,
+   "visual_prompt": "Пар и конденсат движутся вдоль промышленных труб",
+   "source": "pexels_video",
+   "source_query": "condensation and steam moving along industrial pipes"
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 561.263,
+   "duration_sec": 9.76,
+   "visual_prompt": "Пустой кремлёвский коридор с охраной",
+   "source": "press_photo",
+   "source_query": "пустой кремлёвский коридор с сотрудником охраны 2026"
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 571.023,
+   "duration_sec": 12.013,
+   "visual_prompt": "Закрытая проходная украинского промышленного предприятия",
+   "source": "press_photo",
+   "source_query": "закрытая проходная промышленного предприятия Украина 2026"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 583.036,
+   "duration_sec": 10.227,
+   "visual_prompt": "Повреждённая мостовая опора над украинской рекой",
+   "source": "press_photo",
+   "source_query": "повреждённая мостовая опора над рекой Украина 2026"
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 593.263,
+   "duration_sec": 14.429,
+   "visual_prompt": "Ряды пустых стульев в зале для прессы",
+   "source": "press_photo",
+   "source_query": "ряды пустых стульев в зале для прессы 2026"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 607.692,
+   "duration_sec": 11.22,
+   "visual_prompt": "Шахматные часы и фигуры на столе крупным планом",
+   "source": "pexels_video",
+   "source_query": "chess clock and chess pieces on table closeup"
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 618.912,
+   "duration_sec": 10.557,
+   "visual_prompt": "Современная сборка российских беспилотников в 2026 году",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 629.469,
+   "duration_sec": 10.163,
+   "visual_prompt": "Контейнеры с боеприпасами на европейской базе НАТО",
+   "source": "press_photo",
+   "source_query": "контейнеры с боеприпасами на европейской базе НАТО 2026"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 639.632,
+   "duration_sec": 13.36,
+   "visual_prompt": "Бронемашины западного производства на трейлерах",
+   "source": "press_photo",
+   "source_query": "колонна бронемашин западного производства на трейлерах Украина 2026"
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 652.992,
+   "duration_sec": 10.4,
+   "visual_prompt": "Зенитная установка украинской ПВО на подготовленной позиции",
+   "source": "press_photo",
+   "source_query": "зенитная установка украинской ПВО на подготовленной позиции 2026"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 663.392,
+   "duration_sec": 10.108,
+   "visual_prompt": "Сессионные места Верховной Рады во время голосования",
+   "source": "press_photo",
+   "source_query": "сессионные места Верховной Рады во время голосования 2026"
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 673.5,
+   "duration_sec": 13.628,
+   "visual_prompt": "Делегаты европейского саммита в зале",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина/Павел Медведев 2.0 - Мерц саммит ЕС5.mp4"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 687.128,
+   "duration_sec": 10.537,
+   "visual_prompt": "Офис президента Украины на Банковой вечером",
+   "source": "press_photo",
+   "source_query": "Офис президента Украины на Банковой вечером октябрь 2026"
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 697.665,
+   "duration_sec": 11.681,
+   "visual_prompt": "Флаг над здание МИД России на Смоленской",
+   "source": "press_photo",
+   "source_query": "флаг России над зданием МИД на Смоленской площади Москва 2026"
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 709.346,
+   "duration_sec": 11.12,
+   "visual_prompt": "Именные таблички делегаций на столе",
+   "source": "press_photo",
+   "source_query": "именные таблички делегаций России и Украины на столе 2026"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 720.466,
+   "duration_sec": 10.56,
+   "visual_prompt": "Наушники переводчика лежат в пустой рабочей кабине",
+   "source": "pexels_video",
+   "source_query": "conference interpretation headphones inside empty work booth"
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 731.026,
+   "duration_sec": 13.12,
+   "visual_prompt": "Автоматическая сварка металлической конструкции крупным планом",
+   "source": "pexels_video",
+   "source_query": "automated welding steel structure close up sparks"
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 744.146,
+   "duration_sec": 11.647,
+   "visual_prompt": "Рабочие восстанавливают повреждённый украинский мост",
+   "source": "press_photo",
+   "source_query": "восстановление повреждённого моста Украина рабочие 2026"
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 755.793,
+   "duration_sec": 10.529,
+   "visual_prompt": "Телекамеры на штативах перед вечерним выступлением",
+   "source": "press_photo",
+   "source_query": "телекамеры на штативах перед вечерним выступлением в Киеве 2026"
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 766.322,
+   "duration_sec": 12.751,
+   "visual_prompt": "Карточка с финальным возвращением к образу продавца",
+   "source": "card:paper_typed",
+   "source_query": "карточка «paper_typed» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 69,
+   "text": "",
+   "start_sec": 779.073,
+   "duration_sec": 10.64,
+   "visual_prompt": "Охрана у входа в Мариинский дворец",
+   "source": "press_photo",
+   "source_query": "охрана у входа в Мариинский дворец Киев 2026"
+  },
+  {
+   "id": 70,
+   "text": "",
+   "start_sec": 789.713,
+   "duration_sec": 11.041,
+   "visual_prompt": "Сервировка дипломатического обеда",
+   "source": "press_photo",
+   "source_query": "сервировка дипломатического обеда 2026"
+  },
+  {
+   "id": 71,
+   "text": "",
+   "start_sec": 800.754,
+   "duration_sec": 11.446,
+   "visual_prompt": "Дверь пустого конференц-коридора медленно закрывается",
+   "source": "pexels_video",
+   "source_query": "conference corridor door slowly closing empty interior"
+  }
+ ]
+}
