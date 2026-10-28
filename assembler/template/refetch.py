@@ -173,6 +173,33 @@ def report_same_file(assets, before):
     return same
 
 
+def count_replaced(assets, before, ids):
+    """(заменено, осталось прежним, без файла) — ПО ФАКТУ НА ДИСКЕ.
+
+    ПРОВАЛ ФЕТЧА ≠ КРУГ ВПУСТУЮ (28.10, улов вкладки 2 на
+    `5min-kiev-obrechen-2810`). Круг на 34 сценах: две замены не нашлись, фетч
+    вернул код 1, и итог печатал «результат рефетча НЕДЕЙСТВИТЕЛЕН» — по этой
+    строке вкладка обязана переделывать весь круг, то есть выбросить 32
+    состоявшиеся замены и ещё три минуты. Вкладка не поверила и проверила
+    `stat`: 32 кадра обновлены, два остались от первого фетча. Это тот же
+    класс, что «успех ≠ сделанная работа», только наизнанку — и лечится так
+    же: итог считаем по ДИСКУ, а не по коду возврата.
+    """
+    replaced, kept, missing = [], [], []
+    for sid in ids:
+        files = [f for f in glob.glob(os.path.join(assets, "scene_%03d.*" % sid))
+                 if not f.endswith(SKIP_EXT) and ".ovthumb." not in f]
+        if not files:
+            missing.append(sid)
+            continue
+        old = before.get(sid)
+        if old and _md5(files[0]) == old:
+            kept.append(sid)
+        else:
+            replaced.append(sid)
+    return replaced, kept, missing
+
+
 def prune_needs_upload(path="needs_upload.json", only_ids=None):
     """Облако пишет сюда ненайденные сцены; после локального добора записи
     остаются и дашборд рисует ложные жёлтые карточки при живых кадрах.
@@ -937,7 +964,27 @@ def main():
         if os.path.exists(sub):
             os.remove(sub)
     if failed_runs:
-        print("\nИТОГ: фетч падал на %s — результат рефетча недействителен."
+        # ИТОГ СЧИТАЕМ ПО ДИСКУ, А НЕ ПО КОДУ ВОЗВРАТА (28.10, см.
+        # `count_replaced`): «фетч вернул 1» значит «часть сцен без кадра», а
+        # не «ничего не сделано». Круг объявляется недействительным ТОЛЬКО
+        # если не заменилась ни одна сцена.
+        rep, kept, miss = [], [], []
+        for _sub, _assets, _ids, _before in jobs:
+            r, k, m = count_replaced(_assets, _before, _ids)
+            rep += r; kept += k; miss += m
+        total = len(rep) + len(kept) + len(miss)
+        print("\nИТОГ ПО ДИСКУ: заменено %d из %d · осталось прежним %s · без "
+              "файла %s" % (len(rep), total,
+                            sorted(kept) or "нет", sorted(miss) or "нет"))
+        if rep:
+            print("КРУГ ЗАСЧИТАН, ПЕРЕДЕЛЫВАТЬ НЕ НАДО: %d замен состоялись и "
+                  "лежат на диске. Фетч возвращал код по незакрытым сценам "
+                  "(%s) — их веди в следующий круг СО СМЕНОЙ ОБЪЕКТА съёмки, "
+                  "а не формулировки."
+                  % (len(rep), ", ".join("%s код %d" % fr for fr in failed_runs)))
+            return 0
+        print("ИТОГ: не заменилась НИ ОДНА сцена — результат рефетча "
+              "недействителен (%s)."
               % ", ".join("%s (код %d)" % fr for fr in failed_runs))
         return 1
     return 0
