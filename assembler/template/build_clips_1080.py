@@ -83,7 +83,8 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
             f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
             f"[fg]scale={W}:{H}:force_original_aspect_ratio=decrease[fgs];"
             f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2[base];"
-            f"[base]zoompan=z='{z}':d={frames}:s={W}x{H}:fps={FPS}{tail}"
+            f"[base]zoompan=z='{z}':x='{_ZX}':y='{_ZY}':"
+            f"d={frames}:s={W}x{H}:fps={FPS}{tail}"
         )
     else:
         zoom_dir = random.choice(["in", "out"])
@@ -91,7 +92,8 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
                  else "if(eq(on,0),1.18,max(zoom-0.0006,1.0))")
         core = (
             f"[0:v]scale=2560:1440:force_original_aspect_ratio=increase,crop=2560:1440,"
-            f"zoompan=z='{zexpr}':d={frames}:s={W}x{H}:fps={FPS}{tail}"
+            f"zoompan=z='{zexpr}':x='{_ZX}':y='{_ZY}':"
+            f"d={frames}:s={W}x{H}:fps={FPS}{tail}"
         )
 
     # Субтитры всегда идут ПОСЛЕДНИМИ — поверх эффектов, иначе виньетка
@@ -149,6 +151,16 @@ def _fx_dir():
     запуск).
     """
     return os.environ.get("FX_DIR", "") or "."
+
+
+# ЗУМ ИДЁТ ИЗ ЦЕНТРА, А НЕ ОТ УГЛА (28.10, прямое наблюдение пользователя:
+# «какой-то странный зум, тянет всё вправо, не по центру зумит… особенно видно
+# на цитатах»). У фильтра `zoompan` координаты по умолчанию x=0, y=0 — то есть
+# окно зума прижато к ЛЕВОМУ ВЕРХНЕМУ УГЛУ, и кадр на глазах уезжает в
+# сторону. Центр надо задавать руками. На карточках-цитатах это било сильнее
+# всего: уезжающий текст виден сразу, в отличие от фотографии.
+_ZX = "iw/2-(iw/zoom/2)"
+_ZY = "ih/2-(ih/zoom/2)"
 
 
 def _fx_chain(sid):
