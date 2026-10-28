@@ -506,7 +506,12 @@ def _corner_watermark_blob(image_path, tess_bin):
             crop = im.crop(box)
             _k = min(3.0, 3000.0 / max(crop.width, crop.height, 1))
             if _k > 1.01:
-                crop = crop.resize((int(crop.width * _k), int(crop.height * _k)))
+                # ФИЛЬТР РЕСАЙЗА ЗАДАЁМ ЯВНО (28.10, инвентаризация): по
+                # умолчанию PIL берёт BICUBIC, а на старых версиях брал
+                # NEAREST — кроп получался «лесенкой» и это читалось как
+                # плохое качество исходника.
+                crop = crop.resize((int(crop.width * _k), int(crop.height * _k)),
+                                   Image.LANCZOS)
             tmp = image_path + f".wmcrop.jpg"
             crop.save(tmp, "JPEG", quality=90)
             _, blob = _ocr_raw(tmp, tess_bin)
@@ -1834,6 +1839,31 @@ def _direct_save_video(blob, out_base, ffmpeg="ffmpeg"):
             os.remove(out)
             return ""
         w, h, dur = int(float(vals[0])), int(float(vals[1])), float(vals[2])
+        # ПОВОРОТ В МЕТАДАННЫХ — АНАЛОГ EXIF, ТОЛЬКО ДЛЯ ВИДЕО (28.10,
+        # инвентаризация дефолтов после трёх дефектов этого же класса).
+        # `ffprobe` отдаёт ширину и высоту КАК ЛЕЖАТ В ФАЙЛЕ, без учёта флага
+        # поворота: телефонное видео 1080x1920 с rotate=-90 отвечает
+        # «1920x1080», то есть наши проверки считают его горизонтальным, хотя
+        # на экране оно вертикальное (и наоборот). Сам `ffmpeg` при сборке
+        # поворот применяет, поэтому расхождение вылезает не падением, а
+        # кадром на боку или пропущенной вертикалью. Читаем флаг и
+        # переставляем стороны САМИ.
+        try:
+            _rot = subprocess.run(
+                ["ffprobe", "-v", "error", "-select_streams", "v:0",
+                 "-show_entries", "stream_side_data=rotation",
+                 "-show_entries", "stream_tags=rotate",
+                 "-of", "default=nw=1:nk=1", out],
+                capture_output=True, text=True, timeout=30)
+            _angles = [abs(int(float(x))) % 360
+                       for x in (_rot.stdout or "").split() if x.strip()
+                       and x.strip().lstrip("-").replace(".", "").isdigit()]
+            if any(a in (90, 270) for a in _angles):
+                w, h = h, w
+                print(f"  [видео] поворот в метаданных {_angles[0]}° — "
+                      f"стороны переставлены, фактически {w}x{h}", flush=True)
+        except Exception:
+            pass
         if dur < 0.5:
             os.remove(out)
             return ""
