@@ -72,7 +72,16 @@ def is_video(s):
     if hits:                                    # real asset on disk — authoritative
         return hits[0].lower().endswith(VID)
     q = s.get("source_query", "")
-    if s.get("source") == "pexels_video" or ":" in q:   # :keyword = trimmed clip
+    if s.get("source") == "pexels_video":
+        return True
+    # ДВОЕТОЧИЕ — СИНТАКСИС МЕДИАТЕКИ (`ПАПКА:keyword` = подрезанный клип), А
+    # НЕ ЗНАК ПУНКТУАЦИИ В ТЕКСТЕ ЗАПРОСА (28.10, улов вкладки 1 на
+    # `planeta-raspad-ukrainy-2810`). `query_lint` мягким замечанием просит
+    # писать «реальное фото», вкладка написала «реальное фото: фасад…» — и
+    # семь ФОТО-сцен ушли в зачёт видео-лида: счёт показал 16 видео из 25
+    # вместо настоящих 14. Врал В ПЛЮС, то есть мог закрыть норму пустотой.
+    # Синтаксис папки живёт только у `local_library`, там и проверяем.
+    if ":" in q and s.get("source") == "local_library":
         return True
     if q.lower().endswith(VID):
         return True
