@@ -336,6 +336,38 @@ else:
             f"Убрать их из overlays.json, либо — если он попросил явно — "
             f"создать в папке ролика пустой файл .text-overlays-ok")
 
+    # НАДПИСИ АГЕНТА ПОТЕРЯЛИСЬ ПО ДОРОГЕ (28.10, улов Flamingo — пользователь
+    # поймал это САМ, двумя заходами). Codex кладёт надписи ВНУТРЬ сцен:
+    # `scenes[].overlays = [{"type":"text","text":{"words":…}}]`. Дашборд и
+    # сборка читают СОВСЕМ ДРУГОЙ файл — `overlays.json` вида
+    # `{"<id>": {"text": {...}}}`, и перенос делается руками. На
+    # `5min-flamingo-2810` в файле агента было 20 надписей, в `overlays.json` —
+    # НОЛЬ, и ролик уехал на дашборд без единой надписи на канале, где они
+    # разрешены и являются фишкой. Это тот же класс «поле в JSON ≠ то, что
+    # читает сборщик», и держать его можно только кодом.
+    _agent_texts = []
+    for _s in scenes:
+        for _o in (_s.get("overlays") or []):
+            if isinstance(_o, dict) and (_o.get("type") == "text"
+                                         or isinstance(_o.get("text"), dict)):
+                _agent_texts.append(_s["id"])
+                break
+    # ВАЖНО: гейт действует ТОЛЬКО там, где надписи РАЗРЕШЕНЫ. На ПЛАНЕТЕ они
+    # запрещены, агент всё равно их предлагает, и вкладка СОЗНАТЕЛЬНО не
+    # переносит — без этого условия гейт валил бы её зря (поймано на своей же
+    # проверке, до раскатки).
+    _texts_allowed = ("5 МИНУТ" in (ch or "")) or os.path.exists(".text-overlays-ok")
+    if _agent_texts and not _texts and _texts_allowed:
+        FAIL.append(
+            f"НАДПИСИ ЕСТЬ В СЦЕНАХ, НО НЕ ПЕРЕНЕСЕНЫ В `overlays.json`: "
+            f"в раскадровке их {len(_agent_texts)} (сцены "
+            f"{', '.join(map(str, _agent_texts[:10]))}"
+            f"{'…' if len(_agent_texts) > 10 else ''}), в overlays.json ноль. "
+            f"Дашборд и сборка читают ТОЛЬКО overlays.json — ролик уедет без "
+            f"надписей. Формат записи: \"<id>\": {{\"text\": {{\"words\": "
+            f"\"…\", \"at\": 3.0}}}}; на сцену, где уже есть фото-всплывашка "
+            f"или карточка, надпись не ставить — вторая запись затирает первую")
+
     want = "bottom" if "ПЛАНЕТА" in ch or "ПЛАНЕТА" == ch else "top"
     if ch and ov.get("anchor", "bottom") != want:
         FAIL.append(f"overlays anchor={ov.get('anchor','bottom')}, для канала {ch} нужен {want} (SKILL.md 3b)")
