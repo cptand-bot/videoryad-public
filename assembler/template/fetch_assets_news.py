@@ -906,6 +906,75 @@ def _save_true_source(images_dir, sid, used_source):
         pass          # журнал источников — удобство, пайплайн из-за него не рвём
 
 
+# ОБЛАЧНАЯ ЗАГЛУШКА НЕ КЭШ (28.10, улов вкладки 1 на `planeta-raspad-ukrainy-2810`,
+# стоило ДВУХ прогонов впустую). Облако кладёт на ненайденную сцену заглушку
+# `scene_NNN.jpg`; инкрементальный проход видел файл, считал сцену готовой и
+# печатал «итог: все 72 сцен имеют файл на диске», не скачав НИ ОДНОГО клипа
+# медиатеки. Совет `ship.sh` «добери локально и повтори» в таком виде не
+# работал — вкладка руками убирала заглушки в `.placeholders_bak`.
+# Числа ПОВТОРЯЮТ `refetch.py` (STUB_STDDEV/STUB_MEAN): почти однотонный тёмный
+# кадр. Точный вес не годится — у заглушек он плавает (33999…36864), и md5 у
+# каждой свой, потому что в подпись впечатан номер сцены.
+_STUB_STDDEV, _STUB_MEAN = 12.0, 60.0
+
+
+def _looks_like_cloud_stub(path):
+    if not path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+        return False
+    try:
+        from PIL import Image, ImageStat
+        st = ImageStat.Stat(Image.open(path).convert("L"))
+        return st.stddev[0] < _STUB_STDDEV and st.mean[0] < _STUB_MEAN
+    except Exception:
+        return False
+
+
+# ЖУРНАЛ ЗАПРОСОВ, ПО КОТОРЫМ ФАЙЛ СКАЧАН (28.10, тот же улов, второй капкан):
+# вкладка переписала библиотечный пин, а старый `scene_003.mp4` остался в слоте
+# и был принят как кэш — фетч не качал ничего, лог был зелёным. Теперь запрос
+# пишется рядом, и на кэш-проходе файл под ДРУГИМ запросом кэшем не считается.
+# Записи нет (старый проект) — ведём себя как раньше, молча.
+def _queries_path(images_dir):
+    mn = os.environ.get("MANIFEST_NAME", "manifest.json")
+    return os.path.join(images_dir, "." + mn.replace("manifest", "queries"))
+
+
+def _load_queries(images_dir):
+    data = {}
+    try:
+        for name in sorted(os.listdir(images_dir)):
+            if name.startswith(".queries") and name.endswith(".json"):
+                try:
+                    with open(os.path.join(images_dir, name), encoding="utf-8") as f:
+                        part = json.load(f)
+                    if isinstance(part, dict):
+                        data.update(part)
+                except (OSError, ValueError):
+                    pass
+    except OSError:
+        pass
+    return data
+
+
+def _save_query(images_dir, sid, query):
+    try:
+        path = _queries_path(images_dir)
+        data = {}
+        if os.path.exists(path):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    data = json.load(f) or {}
+            except (OSError, ValueError):
+                data = {}
+        data[str(sid)] = (query or "").strip()
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+    except OSError:
+        pass
+
+
 def _press_waterfall(query, out_path, env):
     """The 'real photo' waterfall for `press_photo` / `wikimedia` scenes AND
     for a local_library tag folder that turned up empty. Order (user rule,
@@ -2113,6 +2182,32 @@ def main():
                     pass
                 _kept.append(_p)
             existing = _kept
+        # ЗАГЛУШКА И СМЕНА ЗАПРОСА — НЕ КЭШ (28.10, см. `_looks_like_cloud_stub`)
+        if existing:
+            _prev_q = _load_queries(images_dir).get(str(sid))
+            _now_q = (query or "").strip()
+            _kept = []
+            for _p in existing:
+                if _looks_like_cloud_stub(_p):
+                    try:
+                        os.remove(_p)
+                        print(f"[{sid:03d}] в слоте ОБЛАЧНАЯ ЗАГЛУШКА — удалил "
+                              f"{os.path.basename(_p)}, качаю заново", flush=True)
+                        continue
+                    except OSError:
+                        pass
+                elif _prev_q and _now_q and _prev_q != _now_q:
+                    try:
+                        os.remove(_p)
+                        print(f"[{sid:03d}] запрос ИЗМЕНИЛСЯ с «{_prev_q[:40]}» "
+                              f"на «{_now_q[:40]}» — старый кадр "
+                              f"{os.path.basename(_p)} кэшем не считается, "
+                              f"качаю заново", flush=True)
+                        continue
+                    except OSError:
+                        pass
+                _kept.append(_p)
+            existing = _kept
         if existing:
             # МАНИФЕСТ НЕ ДОЛЖЕН ВРАТЬ ПРО ИСТОЧНИК (2026-10-18, улов usuario-b7).
             # Было: «cached» писал ЗАЯВЛЕННЫЙ в сцене `source`. На провалившемся
@@ -2292,6 +2387,7 @@ def main():
         manifest.append(_rec)
         if ok:
             _save_true_source(images_dir, sid, used_source)
+            _save_query(images_dir, sid, query)
         # write manifest after EVERY scene so `review.py --live` can show
         # thumbnails as they arrive, not only once the whole fetch is done
         _mtmp = manifest_path + ".tmp"

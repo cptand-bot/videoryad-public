@@ -449,7 +449,15 @@ def scan_pexels(q):
     # 2026-10-17): «euro banknote macro» вернул британский FIVE POUNDS с
     # надписью ENGLAND прямо в кадре, и это уже второй ролик подряд. Мягкого
     # «проверь номинал» мало — переписывать запрос.
-    if any(w in low for w in ("banknote", "bank note", "currency", "cash")):
+    # `cash` ЛОВИЛО КАССУ, А НЕ ДЕНЬГИ (28.10, улов вкладки 1): запрос
+    # `thermal receipt printing from cash register close up no people` получил
+    # мину «валюта на стоке», хотя денег в кадре нет вовсе — в кадре чековая
+    # лента. Снимаем по словам-носителям: касса, аппарат, ящик, терминал.
+    _CASH_NOT = ("cash register", "cash machine", "cash desk", "cash drawer",
+                 "cash counter", "cashier desk", "cash terminal", "till roll",
+                 "cashless")
+    if any(w in low for w in ("banknote", "bank note", "currency", "cash")) \
+            and not any(w in low for w in _CASH_NOT):
         hard.append(("валюта на стоке",
                      "«euro banknote macro» → британский FIVE POUNDS с "
                      "надписью ENGLAND → бери купюры через press_photo "
