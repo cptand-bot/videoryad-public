@@ -240,18 +240,43 @@ def main():
     _STOP = {"реальн", "фотогр", "крупны", "общий", "кадр", "съёмка", "съемка",
              "украин", "россий", "москва", "видео", "плане", "вид",
              "январ", "феврал", "марта", "апрел", "май", "июня", "июля",
-             "август", "сентяб", "октябр", "ноябр", "декабр"}
+             "август", "сентяб", "октябр", "ноябр", "декабр",
+             # РОДОВЫЕ СЛОВА КОМПОНОВКИ — НЕ ОБЪЕКТ (28.10, улов вкладки
+             # «Стубб»): у неё валились `перед…`, `фасад…`, `здани…`,
+             # `площад…`, `общий…`, `минист…`. «Фасад министерства обороны
+             # Польши» и «фасад министерства финансов Германии» — РАЗНЫЕ
+             # объекты, а проверка видела один: она группирует по
+             # шестисимвольным основам ВСЕХ значимых слов. Из-за этого приёмка
+             # валила круг за кругом на законной раскадровке.
+             "фасад", "здани", "площад", "перед", "интерь", "помещ",
+             "улица", "улице", "входа", "входе", "минист", "ведомс",
+             "комнат", "корпус", "террит", "снаруж", "внутри"}
+    # ИМЯ СОБСТВЕННОЕ РАЗЛИЧАЕТ ОБЪЕКТЫ (28.10, тот же улов). Если у сцен с
+    # одной основой РАЗНЫЕ имена собственные (страна, город, ведомство,
+    # фамилия), это разные объекты, а не повтор одного. Поэтому внутри группы
+    # считаем сцены по НАБОРУ имён: ругаемся только если один и тот же набор
+    # встречается больше трёх раз.
     roots = {}
     for sc in scenes:
         if str(sc.get("source", "")).startswith(CARD_PREFIX):
             continue
+        q_raw = str(sc.get("source_query", ""))
+        names = frozenset(w.lower()[:6] for w in re.findall(r"\b[А-ЯЁA-Z][а-яёa-z]{3,}", q_raw))
         seen = set()
-        for w in re.findall(r"[а-яёa-z]{5,}", str(sc.get("source_query", "")).lower()):
+        for w in re.findall(r"[а-яёa-z]{5,}", q_raw.lower()):
             r = w[:6]
             if r in _STOP or r in seen:
                 continue
             seen.add(r)
-            roots.setdefault(r, []).append(sc.get("id"))
+            roots.setdefault(r, []).append((sc.get("id"), names))
+    _by_root = {}
+    for r, items in roots.items():
+        from collections import Counter
+        cnt = Counter(n for _, n in items)
+        worst_names, worst_n = cnt.most_common(1)[0]
+        if worst_n > 3:
+            _by_root[r] = [sid for sid, n in items if n == worst_names]
+    roots = _by_root
     heavy = sorted((v for v in roots.values() if len(v) > 3), key=len, reverse=True)
     if heavy:
         named = sorted(((r, v) for r, v in roots.items() if len(v) > 3),
