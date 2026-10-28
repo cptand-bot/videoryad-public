@@ -156,6 +156,16 @@ def main():
     from PIL import Image, ImageDraw
 
     proj = sys.argv[1] if len(sys.argv) > 1 else "."
+    # ПРИНИМАЕМ И ПАПКУ, И `scenes.json` (28.10, улов вкладки «Круговая
+    # оборона»: споткнулась подряд на обоих — соседние инструменты берут
+    # scenes.json, а эти ждали ПАПКУ и падали `NotADirectoryError`).
+    if proj and not os.path.isdir(proj):
+        if proj.endswith(".json"):
+            proj = os.path.dirname(os.path.abspath(proj)) or "."
+        else:
+            print("ОШИБКА: %r — не папка и не scenes.json" % proj, file=sys.stderr)
+            sys.exit(2)
+
     ov_path = os.path.join(proj, "overlays.json")
     images_dir = os.path.join(proj, "images")
     out_dir = os.path.join(proj, "overlap_check")

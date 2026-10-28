@@ -38,6 +38,16 @@ def frame(path, box):
 
 def main():
     proj = sys.argv[1] if len(sys.argv) > 1 else "."
+    # ПРИНИМАЕМ И ПАПКУ, И `scenes.json` (28.10, улов вкладки «Круговая
+    # оборона»: споткнулась подряд на обоих — соседние инструменты берут
+    # scenes.json, а эти ждали ПАПКУ и падали `NotADirectoryError`).
+    if proj and not os.path.isdir(proj):
+        if proj.endswith(".json"):
+            proj = os.path.dirname(os.path.abspath(proj)) or "."
+        else:
+            print("ОШИБКА: %r — не папка и не scenes.json" % proj, file=sys.stderr)
+            sys.exit(2)
+
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(proj, "pair_sheet")
     os.makedirs(out, exist_ok=True)
     ov = json.load(open(os.path.join(proj, "overlays.json"), encoding="utf-8"))
