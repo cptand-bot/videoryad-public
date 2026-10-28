@@ -1355,7 +1355,15 @@ jobs:
         run: |
           shopt -s nullglob
           proj="queue/$NAME"
-          tar czf "$NAME-project.tgz" --exclude='clips' --exclude='_silent.mp4' --exclude='.env' -C queue "$NAME"
+          # ГОТОВОЕ ВИДЕО В АРХИВ НЕ КЛАДЁМ (28.10, улов вкладки «Круговая
+          # оборона»): оно уже едет в релиз ОТДЕЛЬНЫМ ассетом, а внутри
+          # архива уезжало ВТОРЫМ экземпляром — 297 МБ лишнего трафика на
+          # каждый ролик и два одинаковых mp4 в папке забора (проверено
+          # md5: байт в байт). При восьми роликах в день это 2,4 ГБ
+          # впустую, а у пользователя на диске свободно 146 ГБ.
+          tar czf "$NAME-project.tgz" --exclude='clips' --exclude='_silent.mp4' \
+            --exclude='.env' --exclude='*ВИДЕОРЯД.mp4' --exclude='*-.mp4' \
+            -C queue "$NAME"
           # only attach files that actually exist — gh release create errors on a missing asset
           assets=()
           for f in "$proj"/*ВИДЕОРЯД.mp4 "$proj"/*дашборд.html "$proj"/*.scenes.json \
