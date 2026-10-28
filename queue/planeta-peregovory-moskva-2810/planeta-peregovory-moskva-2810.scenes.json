@@ -1,0 +1,615 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 11.88,
+   "visual_prompt": "Вечерняя подсветка Дворца Наций в Женеве",
+   "source": "press_photo",
+   "source_query": "вечерняя подсветка Дворца Наций Женева 2026",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 11.88,
+   "duration_sec": 10.56,
+   "visual_prompt": "Фасад российского внешнеполитического ведомства",
+   "source": "press_photo",
+   "source_query": "фасад МИД России Смоленская площадь Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 22.44,
+   "duration_sec": 13.92,
+   "visual_prompt": "дорожный указатель с двумя стрелками в разные стороны Украина 2026",
+   "source": "press_photo",
+   "source_query": "дорожный указатель с двумя стрелками в разные стороны Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 36.36,
+   "duration_sec": 12.4,
+   "visual_prompt": "реальное фото стола с разложенной бумажной картой и карандашом 2026",
+   "source": "press_photo",
+   "source_query": "реальное фото стола с разложенной бумажной картой и карандашом 2026",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 48.76,
+   "duration_sec": 9.28,
+   "visual_prompt": "tank tracks rolling over dry ground closeup",
+   "source": "pexels_video",
+   "source_query": "tank tracks rolling over dry ground closeup",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 58.04,
+   "duration_sec": 12.16,
+   "visual_prompt": "Бетонные блоки перекрывают въезд в приграничный город",
+   "source": "press_photo",
+   "source_query": "бетонные блоки у въезда в приграничный город Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 70.2,
+   "duration_sec": 8.289,
+   "visual_prompt": "truck tyres rolling highway closeup",
+   "source": "pexels_video",
+   "source_query": "truck tyres rolling highway closeup",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 78.489,
+   "duration_sec": 13.2,
+   "visual_prompt": "реальное фото стены рабочего кабинета с настенной картой 2026",
+   "source": "press_photo",
+   "source_query": "реальное фото стены рабочего кабинета с настенной картой 2026",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 91.689,
+   "duration_sec": 12.32,
+   "visual_prompt": "Территориальная проблема должна стать одной из центральных тем будущего соглашения.",
+   "source": "card:quote",
+   "source_query": "Территориальная проблема должна стать одной из центральных тем будущего соглашения.",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 104.009,
+   "duration_sec": 8.16,
+   "visual_prompt": "Машины подъезжают к Дворцу Наций",
+   "source": "press_photo",
+   "source_query": "подъезд с машинами к Дворцу Наций Женева 2026",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 112.169,
+   "duration_sec": 14.96,
+   "visual_prompt": "Государственная Дума Москва 2026 вид с улицы",
+   "source": "press_photo",
+   "source_query": "Государственная Дума Москва 2026 вид с улицы",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 127.129,
+   "duration_sec": 10.56,
+   "visual_prompt": "Путин за кафедрой в Кремле Москва 2026",
+   "source": "press_photo",
+   "source_query": "Путин за кафедрой в Кремле Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 137.689,
+   "duration_sec": 9.36,
+   "visual_prompt": "бронированный лимузин у здания правительства Москва 2026",
+   "source": "press_photo",
+   "source_query": "бронированный лимузин у здания правительства Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 147.049,
+   "duration_sec": 12.442,
+   "visual_prompt": "Пограничная разметка возле сельских домов",
+   "source": "press_photo",
+   "source_query": "пограничная разметка у сельских домов Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 159.491,
+   "duration_sec": 10.96,
+   "visual_prompt": "Кремлёвский рабочий кабинет Владимира Путина Москва 2026",
+   "source": "press_photo",
+   "source_query": "Кремлёвский рабочий кабинет Владимира Путина Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 170.451,
+   "duration_sec": 11.76,
+   "visual_prompt": "barrier arm closing at checkpoint",
+   "source": "pexels_video",
+   "source_query": "barrier arm closing at checkpoint",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 182.211,
+   "duration_sec": 12.88,
+   "visual_prompt": "инженерное заграждение зубы дракона в поле Украина 2026",
+   "source": "press_photo",
+   "source_query": "инженерное заграждение зубы дракона в поле Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 195.091,
+   "duration_sec": 11.68,
+   "visual_prompt": "Река Северский Донец и противоположный берег",
+   "source": "press_photo",
+   "source_query": "река Северский Донец вид с берега 2026",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 206.771,
+   "duration_sec": 12.48,
+   "visual_prompt": "мешки с песком у входа в административное здание Украина 2026",
+   "source": "press_photo",
+   "source_query": "мешки с песком у входа в административное здание Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 219.251,
+   "duration_sec": 9.083,
+   "visual_prompt": "Песков идёт по коридору пресс-центра Москва 2026",
+   "source": "web_search",
+   "source_query": "Песков идёт по коридору пресс-центра Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 228.334,
+   "duration_sec": 13.04,
+   "visual_prompt": "Зеленский на брифинге в Киеве 2026",
+   "source": "press_photo",
+   "source_query": "Зеленский на брифинге в Киеве 2026",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 241.374,
+   "duration_sec": 8.88,
+   "visual_prompt": "Энергоблоки Запорожской атомной электростанции с земли",
+   "source": "press_photo",
+   "source_query": "Запорожская АЭС энергоблоки вид с земли 2026",
+   "overlays": []
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 250.254,
+   "duration_sec": 12.8,
+   "visual_prompt": "Береговая линия Кинбурнской косы",
+   "source": "press_photo",
+   "source_query": "Кинбурнская коса береговая линия вид с земли 2026",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 263.054,
+   "duration_sec": 12.24,
+   "visual_prompt": "Совсем другое дело — ответить на вопросы, кто там остаётся, кто оттуда уходит и кто следит за соблюдением режима.",
+   "source": "card:quote",
+   "source_query": "Совсем другое дело — ответить на вопросы, кто там остаётся, кто оттуда уходит и кто следит за соблюдением режима.",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 275.294,
+   "duration_sec": 11.066,
+   "visual_prompt": "Контрольно-пропускной пункт с подъёмным барьером",
+   "source": "press_photo",
+   "source_query": "контрольно-пропускной пункт с подъёмным барьером на дороге Донбасс 2026",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 286.36,
+   "duration_sec": 10.0,
+   "visual_prompt": "Пустые кресла возле длинного стола во дворце Долмабахче",
+   "source": "press_photo",
+   "source_query": "пустые кресла у длинного стола во дворце Долмабахче Стамбул",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 296.36,
+   "duration_sec": 13.36,
+   "visual_prompt": "Настенные часы в ситуационной комнате",
+   "source": "press_photo",
+   "source_query": "часы на стене ситуационной комнаты Белого дома 2026",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 309.72,
+   "duration_sec": 9.76,
+   "visual_prompt": "Стрелки механических часов быстро движутся",
+   "source": "pexels_video",
+   "source_query": "mechanical clock hands moving close up",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 319.48,
+   "duration_sec": 9.6,
+   "visual_prompt": "Чёрные чернила растекаются по чистому листу",
+   "source": "pexels_video",
+   "source_query": "black ink spreading across blank paper",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 329.08,
+   "duration_sec": 14.12,
+   "visual_prompt": "Военная техника закреплена на транспортных платформах",
+   "source": "press_photo",
+   "source_query": "транспортные платформы с военной техникой Европа 2026",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 343.2,
+   "duration_sec": 11.32,
+   "visual_prompt": "пленарная сессия с участием Путина Москва 22 октября 2026",
+   "source": "press_photo",
+   "source_query": "пленарная сессия с участием Путина Москва 22 октября 2026",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 354.52,
+   "duration_sec": 11.92,
+   "visual_prompt": "Фасад штаб-квартиры НАТО в Брюсселе",
+   "source": "press_photo",
+   "source_query": "штаб-квартира НАТО Брюссель фасад 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 366.44,
+   "duration_sec": 9.948,
+   "visual_prompt": "fighter jet taking off from runway",
+   "source": "pexels_video",
+   "source_query": "fighter jet taking off from runway",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 376.388,
+   "duration_sec": 14.88,
+   "visual_prompt": "Пустой коридор штаб-квартиры НАТО",
+   "source": "press_photo",
+   "source_query": "пустой коридор штаб-квартиры НАТО Брюссель 2026",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 391.268,
+   "duration_sec": 8.732,
+   "visual_prompt": "Кортеж Владимира Зеленского движется по Киеву",
+   "source": "press_photo",
+   "source_query": "кортеж Владимира Зеленского на улице Киева 2026",
+   "overlays": []
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 400.0,
+   "duration_sec": 14.308,
+   "visual_prompt": "нефтеперерабатывающий завод Рязань установка первичной переработки 2026",
+   "source": "press_photo",
+   "source_query": "нефтеперерабатывающий завод Рязань установка первичной переработки 2026",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 414.308,
+   "duration_sec": 9.68,
+   "visual_prompt": "Коммутационное оборудование подстанции работает крупным планом",
+   "source": "pexels_video",
+   "source_query": "electrical substation switches operating close up",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 423.988,
+   "duration_sec": 10.0,
+   "visual_prompt": "пуск ракеты зенитного комплекса армии США учения 2026",
+   "source": "press_photo",
+   "source_query": "пуск ракеты зенитного комплекса армии США учения 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 433.988,
+   "duration_sec": 11.877,
+   "visual_prompt": "Спор идёт не только о карте, но и о порядке действий.",
+   "source": "card:quote",
+   "source_query": "Спор идёт не только о карте, но и о порядке действий.",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 445.865,
+   "duration_sec": 12.08,
+   "visual_prompt": "Стив Уиткофф возле Белого дома",
+   "source": "web_search",
+   "source_query": "Стив Уиткофф Белый дом Вашингтон 2026",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 457.945,
+   "duration_sec": 8.92,
+   "visual_prompt": "Промышленные трубы выпускают пар",
+   "source": "pexels_video",
+   "source_query": "industrial pipes releasing steam close up",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 466.865,
+   "duration_sec": 13.32,
+   "visual_prompt": "газотранспортная станция Украины надземные трубы в поле 2026",
+   "source": "press_photo",
+   "source_query": "газотранспортная станция Украины надземные трубы в поле 2026",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 480.185,
+   "duration_sec": 12.8,
+   "visual_prompt": "Грузовой терминал морского порта Одессы",
+   "source": "press_photo",
+   "source_query": "морской порт Одессы грузовой терминал с земли 2026",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 492.985,
+   "duration_sec": 11.76,
+   "visual_prompt": "Надземный участок газопровода возле Дуная",
+   "source": "press_photo",
+   "source_query": "газопровод через Дунай надземный участок 2026",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 504.745,
+   "duration_sec": 11.28,
+   "visual_prompt": "Дональд Трамп в рабочем кабинете Белого дома",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп Белый дом Вашингтон 2026 рабочий кабинет",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 516.025,
+   "duration_sec": 11.95,
+   "visual_prompt": "Камин в официальной резиденции Кэмп-Дэвид",
+   "source": "press_photo",
+   "source_query": "камин в резиденции Кэмп-Дэвид официальный приём 2026",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 527.975,
+   "duration_sec": 8.025,
+   "visual_prompt": "freight train wheels on rails closeup",
+   "source": "pexels_video",
+   "source_query": "freight train wheels on rails closeup",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 536.0,
+   "duration_sec": 14.295,
+   "visual_prompt": "Георгиевский зал Кремля без крупных надписей",
+   "source": "press_photo",
+   "source_query": "Георгиевский зал Кремля общий вид 2026",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 550.295,
+   "duration_sec": 11.12,
+   "visual_prompt": "колонна грузовиков ВСУ на дороге у моста 2026",
+   "source": "press_photo",
+   "source_query": "колонна грузовиков ВСУ на дороге у моста 2026",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 561.415,
+   "duration_sec": 11.84,
+   "visual_prompt": "Дорожный указатель у въезда в Донбасс",
+   "source": "press_photo",
+   "source_query": "дорожный указатель у въезда в Донбасс 2026",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 573.255,
+   "duration_sec": 10.48,
+   "visual_prompt": "Автоколонна движется по трассе возле Киева",
+   "source": "press_photo",
+   "source_query": "автоколонна на трассе у Киева 2026 общий план",
+   "overlays": []
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 583.735,
+   "duration_sec": 12.16,
+   "visual_prompt": "Шлагбаум перекрывает въезд в приграничный город",
+   "source": "press_photo",
+   "source_query": "шлагбаум на въезде в приграничный город Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 595.895,
+   "duration_sec": 10.592,
+   "visual_prompt": "брифинг Дмитрия Пескова у кафедры Москва 2026",
+   "source": "press_photo",
+   "source_query": "брифинг Дмитрия Пескова у кафедры Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 606.487,
+   "duration_sec": 11.2,
+   "visual_prompt": "Сначала остановиться. Или сначала договориться.",
+   "source": "card:quote",
+   "source_query": "Сначала остановиться. Или сначала договориться.",
+   "overlays": []
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 617.687,
+   "duration_sec": 13.28,
+   "visual_prompt": "Бронированные машины пересекают понтонный мост",
+   "source": "press_photo",
+   "source_query": "бронированные машины пересекают понтонный мост Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 630.967,
+   "duration_sec": 12.4,
+   "visual_prompt": "Песков отвечает журналистам в Москве 2026",
+   "source": "press_photo",
+   "source_query": "Песков отвечает журналистам в Москве 2026",
+   "overlays": []
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 643.367,
+   "duration_sec": 10.4,
+   "visual_prompt": "Линия бетонных блоков вокруг дорожной развязки",
+   "source": "press_photo",
+   "source_query": "линия бетонных блоков вокруг дорожной развязки Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 653.767,
+   "duration_sec": 11.84,
+   "visual_prompt": "обращение Зеленского у микрофона Киев 2026",
+   "source": "press_photo",
+   "source_query": "обращение Зеленского у микрофона Киев 2026",
+   "overlays": []
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 665.607,
+   "duration_sec": 9.481,
+   "visual_prompt": "Стойка с микрофонами у входа в Мариинский дворец",
+   "source": "press_photo",
+   "source_query": "стойка с микрофонами у входа в Мариинский дворец Киев 2026",
+   "overlays": []
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 675.088,
+   "duration_sec": 11.44,
+   "visual_prompt": "Сенатский дворец Кремля вид с Красной площади Москва 2026",
+   "source": "press_photo",
+   "source_query": "Сенатский дворец Кремля вид с Красной площади Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 686.528,
+   "duration_sec": 11.272,
+   "visual_prompt": "Свежие гусеничные следы на грунте",
+   "source": "press_photo",
+   "source_query": "гусеничные следы на грунте Украина 2026 крупный план",
+   "overlays": []
+  }
+ ]
+}
