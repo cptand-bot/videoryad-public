@@ -58,10 +58,10 @@ def main():
     try:
         data = json.load(open(a.src, encoding="utf-8"))
     except (OSError, ValueError) as e:
-        sys.exit(f"не прочитать {a.src}: {e}")
+        sys.exit(f"ОШИБКА: не прочитать {a.src}: {e}")
     scenes = data.get("scenes") if isinstance(data, dict) else data
     if not scenes:
-        sys.exit("в файле нет сцен")
+        sys.exit("ОШИБКА: в файле нет сцен")
 
     bad, warn = [], []
     # --- поля ---
