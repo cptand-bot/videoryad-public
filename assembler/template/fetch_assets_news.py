@@ -617,8 +617,20 @@ def _download_as_jpeg(url, out_path, timeout=20):
     with open(tmp, "wb") as f:
         f.write(blob)
     try:
-        from PIL import Image
+        from PIL import Image, ImageOps
         im = Image.open(tmp); im.load()
+        # КАДР «ЛЕЖИТ НА БОКУ» — ЭТО EXIF, А НЕ БРАК КАДРА (28.10, прямое
+        # наблюдение пользователя: «иногда попадаются фотографии перевёрнутые,
+        # горизонтальное, но на 90 градусов»). В файле пиксели лежат повёрнуто,
+        # а флаг ориентации в EXIF мы игнорировали — на экране кадр на боку.
+        # `exif_transpose` разворачивает пиксели по флагу и снимает его, так
+        # что дальше все проверки (ширина, OCR, кроп, сборка) видят кадр уже
+        # правильно ориентированным. Делать это НАДО ДО проверки размеров:
+        # у повёрнутого кадра ширина и высота переставлены местами.
+        try:
+            im = ImageOps.exif_transpose(im) or im
+        except Exception:
+            pass
         if im.width < 500 or im.height < 320:
             os.remove(tmp); return False
         im.convert("RGB").save(out_path, "JPEG", quality=90)
@@ -1852,6 +1864,11 @@ def _direct_save_image(blob, out_base, for_overlay=False):
         if im.width < lim_w or im.height < lim_h:
             os.remove(tmp)
             return ""
+        try:
+            from PIL import ImageOps
+            im = ImageOps.exif_transpose(im) or im   # кадр на боку = EXIF (28.10)
+        except Exception:
+            pass
         im.convert("RGB").save(out, "JPEG", quality=90)
     except Exception:
         try:

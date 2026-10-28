@@ -226,7 +226,19 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     at = max(0.0, min(at, max(0.0, dur - 2 * SLIDE - 0.6)))
     hold = max(0.5, dur - at - 2 * SLIDE - TAIL)
     t0, t2, t3 = at, at + SLIDE + hold, at + 2 * SLIDE + hold
-    pos = str(ts.get("pos", "bc")).lower()
+    # ДЕФОЛТ НАДПИСИ — ВЕРХ, А НЕ НИЗ (28.10, прямое слово пользователя:
+    # «в нижней части на 5 минут канал никогда они не должны, там идут
+    # субтитры, и они друг друга перекрывают»). Было `bc` — низ по центру,
+    # ровно под субтитры: на `5min-stubb-2810` все 19 надписей уехали туда,
+    # потому что вкладка `pos` не указывала вовсе, а дефолт ставил низ.
+    # Вкладка правила не нарушала — нарушал дефолт.
+    pos = str(ts.get("pos", "tc")).lower()
+    # НИЗ ЗАПРЕЩЁН ВСЕГДА: там субтитры. Нижнюю позицию поднимаем в верх с
+    # тем же выравниванием по горизонтали и говорим об этом вслух.
+    if pos[:1] == "b":
+        print(f"  [надпись] pos={pos} — НИЗ ЗАПРЕЩЁН (субтитры), поднял в "
+              f"t{pos[1:] or 'c'}", flush=True)
+        pos = "t" + (pos[1:] or "c")
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     png = out_mp4 + ".txt.png"
@@ -383,7 +395,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             if _apply_text_overlay(ffmpeg, "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1)),
                                    orig, clip, tspec, _dur, sid):
                 print(f"[{sid:03d}] ТЕКСТ «{tspec.get('words') or tspec.get('text')}» "
-                      f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','bc')} -> ok", flush=True)
+                      f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','tc')} -> ok", flush=True)
             else:
                 print(f"[{sid:03d}] ТЕКСТ -> FAIL", flush=True)
             continue
@@ -503,7 +515,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             if _apply_text_overlay(ffmpeg, "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1)),
                                    base, clip, tspec, _dur, sid):
                 print(f"[{sid:03d}] + ТЕКСТ «{tspec.get('words') or tspec.get('text')}» "
-                      f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','bc')} -> ok", flush=True)
+                      f"@ {tspec.get('at', LEAD)}s pos={tspec.get('pos','tc')} -> ok", flush=True)
             elif ph_ok:
                 os.replace(_text_target, clip)     # текст упал — оставляем фото
             if _text_target != clip and os.path.exists(_text_target):

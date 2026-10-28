@@ -8,9 +8,38 @@ import glob, json, os, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
 
 import glob as _g
-scenes_path = sys.argv[1] if len(sys.argv) > 1 else (sorted(_g.glob("*.scenes.json")) or ["scenes.json"])[0]
-images_dir = sys.argv[2] if len(sys.argv) > 2 else "images"
-out_dir = sys.argv[3] if len(sys.argv) > 3 else "thumbs"
+
+# КЛЮЧИ РАЗБИРАЕМ, А НЕ ЕДИМ КАК ПУТЬ (28.10, улов вкладки «Переговоры
+# Москва»): `contact_sheet.py … --only 3,4 --out thumbs_zamena` создавал папку
+# с именем `--only` и клал туда листы ВСЕХ сцен — лист замен сделать было
+# нечем, хотя именно он нужен после каждого круга правок (замены грязнее
+# исходников, десять замеров). Теперь `--only` и `--out` работают по-настоящему.
+_argv = sys.argv[1:]
+if _argv and _argv[0] in ("--help", "-h"):
+    print("contact_sheet.py [scenes.json] [images_dir] [out_dir] "
+          "[--only 3,4,17] [--out <папка>]")
+    print("  --only  только эти сцены (через запятую) — лист замен")
+    print("  --out   куда писать листы (перебивает третий позиционный)")
+    raise SystemExit(0)
+_only, _out_key, _pos = set(), "", []
+_i = 0
+while _i < len(_argv):
+    a = _argv[_i]
+    if a == "--only" and _i + 1 < len(_argv):
+        _only = {int(x) for x in _argv[_i + 1].replace(" ", "").split(",") if x.strip().isdigit()}
+        _i += 2; continue
+    if a == "--out" and _i + 1 < len(_argv):
+        _out_key = _argv[_i + 1]; _i += 2; continue
+    if a.startswith("-"):
+        print("ОШИБКА: неизвестный ключ %r (есть --only, --out, --help)" % a,
+              file=sys.stderr)
+        raise SystemExit(2)
+    _pos.append(a); _i += 1
+
+scenes_path = _pos[0] if len(_pos) > 0 else (sorted(_g.glob("*.scenes.json")) or ["scenes.json"])[0]
+images_dir = _pos[1] if len(_pos) > 1 else "images"
+out_dir = _out_key or (_pos[2] if len(_pos) > 2 else "thumbs")
+ONLY = _only
 os.makedirs(out_dir, exist_ok=True)
 
 TW, TH, COLS, PER = 300, 205, 5, 20   # 2026-10-12: было 380x260 — ужато на 21% по стороне (-38% площади, -38% токенов на лист). Номер сцены и явный брак читаются так же; мелкие детали всё равно смотрят в полном файле.
@@ -22,6 +51,9 @@ except OSError:
     FONT = FONT_S = ImageFont.load_default()
 
 scenes = json.load(open(scenes_path, encoding="utf-8"))["scenes"]
+if ONLY:                      # лист замен: только названные сцены (28.10)
+    scenes = [s for s in scenes if s.get("id") in ONLY]
+    print("лист ТОЛЬКО по сценам: %s" % ", ".join(str(s["id"]) for s in scenes))
 # МАНИФЕСТА МОЖЕТ НЕ БЫТЬ — ЭТО НЕ ПОВОД ПАДАТЬ (2026-10-23, улов
 # `usuario-21`; гоча была известна и не чинилась). У `overlays/` манифеста не
 # бывает вовсе, и лист по всплывашкам приходилось строить, синтезируя манифест

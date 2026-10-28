@@ -368,6 +368,40 @@ else:
             f"\"…\", \"at\": 3.0}}}}; на сцену, где уже есть фото-всплывашка "
             f"или карточка, надпись не ставить — вторая запись затирает первую")
 
+    # ОДИН ФАЙЛ В СЦЕНЕ И ВО ВСПЛЫВАШКЕ — БАН ОДНОЙ ВАЛИТ ДРУГУЮ (28.10,
+    # улов вкладки «Переговоры Москва»): сцена 45 и её всплывашка приехали
+    # ОДНИМ кадром Овального кабинета; вкладка меняла всплывашку, `refetch`
+    # забанил md5 на два дня — и `selfcheck` свалил прогон на «ЗАБАНЕННЫЙ КАДР
+    # В СБОРКЕ: images/scene_045.jpg». Сказать об этом надо ДО замены, пока
+    # она дешёвая.
+    import hashlib as _hl
+    def _md5f(_p):
+        try:
+            with open(_p, "rb") as _f:
+                return _hl.md5(_f.read()).hexdigest()
+        except OSError:
+            return ""
+    _img_md5 = {}
+    for _p in glob.glob(os.path.join("images", "scene_*")):
+        if _p.endswith((".json", ".text.png", ".lock")) or ".ovthumb." in _p:
+            continue
+        _h = _md5f(_p)
+        if _h:
+            _img_md5.setdefault(_h, os.path.basename(_p))
+    _same = []
+    for _p in glob.glob(os.path.join("overlays", "scene_*")):
+        if _p.endswith((".json", ".text.png", ".lock")) or ".ovthumb." in _p:
+            continue
+        _h = _md5f(_p)
+        if _h and _h in _img_md5:
+            _same.append(f"{os.path.basename(_p)} = images/{_img_md5[_h]}")
+    if _same:
+        WARN.append("ОДИН И ТОТ ЖЕ ФАЙЛ в сцене и во всплывашке (%d): %s. "
+                    "Меняй — но помни: бан по md5 заденет ОБА места, и "
+                    "`selfcheck` свалит прогон на забаненном кадре в сборке. "
+                    "Сначала замени кадр сцены или всплывашки БЕЗ `--ban`, "
+                    "потом добивай." % (len(_same), "; ".join(_same[:5])))
+
     want = "bottom" if "ПЛАНЕТА" in ch or "ПЛАНЕТА" == ch else "top"
     if ch and ov.get("anchor", "bottom") != want:
         FAIL.append(f"overlays anchor={ov.get('anchor','bottom')}, для канала {ch} нужен {want} (SKILL.md 3b)")

@@ -280,6 +280,22 @@ def check_dir(root):
 
 def main():
     argv = sys.argv[1:]
+    # НЕИЗВЕСТНЫЙ КЛЮЧ НЕ ЕСТЬ ПУТЬ (28.10, улов вкладки «Переговоры Москва»):
+    # `fetch_maps.py --help` не распознавался, `--help` съедался как ПАПКА
+    # НАЗНАЧЕНИЯ — скрипт начинал РЕАЛЬНЫЙ прогон в викимедиа и создавал
+    # каталог с именем `--help` на 5,2 МБ, причём на диске C:, который трогать
+    # запрещено. Теперь любой нераспознанный ключ — остановка со словом ОШИБКА.
+    if argv and argv[0] in ("--help", "-h", "help"):
+        print("fetch_maps.py <папка-назначения> [РЕГИОН …]   — скачать карты")
+        print("fetch_maps.py --list                          — список регионов")
+        print("fetch_maps.py --check [папка]                 — промер того, что лежит")
+        print("Регион без папки назначения не работает: первый аргумент — КУДА.")
+        return 0
+    if argv and argv[0].startswith("-") and argv[0] not in ("--check", "--list"):
+        print("ОШИБКА: неизвестный ключ %r. Ключи: --list, --check, --help. "
+              "Первый позиционный аргумент — ПАПКА НАЗНАЧЕНИЯ, и ключом он "
+              "быть не может." % argv[0], file=sys.stderr)
+        return 2
     if argv and argv[0] == "--check":
         return check_dir(argv[1] if len(argv) > 1
                          else os.path.expanduser("~/projects/media-library/КАРТЫ"))
