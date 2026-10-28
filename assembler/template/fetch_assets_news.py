@@ -813,8 +813,10 @@ def fetch_web_search(query, out_path, env=None):
         score = w * h * (1.0 if w >= h else 0.75)
         if best is None or score > best[0]:
             if best is not None:
-                try: os.remove(best[3])
-                except OSError: pass
+                # прежний лучший стал кандидатом — не удаляем, а откладываем
+                if not _stash_candidate(out_path, best[3], best[1], best[2]):
+                    try: os.remove(best[3])
+                    except OSError: pass
             keep = tmp + ".best"
             try:
                 os.replace(tmp, keep)
@@ -822,8 +824,9 @@ def fetch_web_search(query, out_path, env=None):
                 keep = tmp
             best = (score, w, h, keep, h5)
         else:
-            try: os.remove(tmp)
-            except OSError: pass
+            if not _stash_candidate(out_path, tmp, w, h):
+                try: os.remove(tmp)
+                except OSError: pass
         if best and best[1] >= _EARLY_W and best[1] >= best[2]:
             break           # крупный горизонтальный — дальше не ищем
     if not best:
@@ -864,7 +867,13 @@ def fetch_web_search(query, out_path, env=None):
         except Exception:
             pass
     else:
-        print(f"  [web_search] взят кадр {w}x{h} (из {tried} кандидатов)", flush=True)
+        _m3 = re.search(r"(scene_\d+)", os.path.basename(out_path or ""))
+        _stash_n = 0
+        if _m3:
+            _dd = os.path.join(os.path.dirname(os.path.abspath(out_path)) or ".", "cands")
+            _stash_n = len(glob.glob(os.path.join(_dd, _m3.group(1) + "__*")))
+        print(f"  [web_search] взят кадр {w}x{h} (из {tried} кандидатов"
+              + (f", в запасе {_stash_n}" if _stash_n else "") + ")", flush=True)
     return True
 
 
@@ -990,6 +999,54 @@ def _save_query(images_dir, sid, query):
         os.replace(tmp, path)
     except OSError:
         pass
+
+
+# ПЯТЬ КАНДИДАТОВ НА СЦЕНУ ВМЕСТО ОДНОГО (28.10, решение пользователя).
+# `web_search` и так СКАЧИВАЕТ несколько кандидатов и выбирает лучшего по
+# площади — а остальных УДАЛЯЛ. Из-за этого каждый забракованный глазами кадр
+# стоил круга правок: 3 минуты, новый заход в облако, новое ожидание. Теперь
+# проигравшие складываются рядом, и замена берётся мгновенно из уже
+# скачанного. Замеры 28.10, которые это оправдывают: машинный брак 3-4%, а
+# глазами 28-48% — то есть почти весь брак виден только человеку, и он
+# неизбежен; дешевле держать запас, чем ходить за кадром заново.
+# Сколько держать — `VIDEORYAD_CANDIDATES`, по умолчанию 4 (кроме лучшего).
+# Ноль возвращает прежнее поведение полностью.
+def _cands_keep():
+    try:
+        return max(0, int(os.environ.get("VIDEORYAD_CANDIDATES", "4")))
+    except ValueError:
+        return 4
+
+
+def _cands_dir(out_path):
+    d = os.path.join(os.path.dirname(os.path.abspath(out_path)) or ".", "cands")
+    try:
+        os.makedirs(d, exist_ok=True)
+    except OSError:
+        return ""
+    return d
+
+
+def _stash_candidate(out_path, src_path, w, h):
+    """Отложить проигравшего кандидата рядом: images/cands/scene_NNN__k.jpg."""
+    keep = _cands_keep()
+    if keep <= 0:
+        return False
+    m = re.search(r"(scene_\d+)", os.path.basename(out_path or ""))
+    if not m:
+        return False
+    d = _cands_dir(out_path)
+    if not d:
+        return False
+    have = sorted(glob.glob(os.path.join(d, m.group(1) + "__*")))
+    if len(have) >= keep:
+        return False
+    dst = os.path.join(d, "%s__%d_%dx%d.jpg" % (m.group(1), len(have) + 1, w, h))
+    try:
+        os.replace(src_path, dst)
+        return True
+    except OSError:
+        return False
 
 
 def _press_waterfall(query, out_path, env):

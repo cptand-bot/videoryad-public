@@ -43,6 +43,7 @@ round_gate): переформулировку запроса на уже зам�
 Добор пустых сцен после облака круг НЕ расходует: там нечего заменять.
 """
 import glob
+import re
 import json
 import os
 import subprocess
@@ -180,6 +181,61 @@ def report_same_file(assets, before):
 # как долгая работа. Само требование причины правильное; плохо было только то,
 # что отказ НЕМОЙ для того, кто его ждёт. Правило: добавляешь новый ранний
 # выход — начинай строку с «ОШИБКА:» (или «ИТОГ:»), иначе он станет тихим.
+
+
+# МГНОВЕННАЯ ЗАМЕНА ИЗ ЗАПАСА — КРУГ ПЕРЕСТАЁТ БЫТЬ КРУГОМ (28.10, решение
+# пользователя «берём пять кандидатов»). Фетч теперь складывает проигравших
+# кандидатов в `images/cands/scene_NNN__k_WxH.jpg`. Если кадр забракован
+# ГЛАЗАМИ (а это 28-48% сцен по замерам 28.10, против 3-4% машинного брака),
+# менять его походом в облако незачем: берём следующего из запаса — секунды
+# вместо трёх минут и нового прогона.
+#     python3 refetch.py --scenes <json> --next 12,34,47
+# Использованный кандидат удаляется, прежний кадр уходит в бан на 2 дня
+# (иначе вернётся через поиск), запрос в scenes.json НЕ меняется — мы меняем
+# кадр, а не смысл сцены. Запас кончился — сцена называется числом, и по ней
+# идёт обычный круг с переписанным запросом.
+def replace_from_stash(scenes_path, ids, assets="images"):
+    here_ = os.path.dirname(os.path.abspath(__file__))
+    cands = os.path.join(assets, "cands")
+    done, empty = [], []
+    for sid in ids:
+        pool = sorted(glob.glob(os.path.join(cands, "scene_%03d__*" % sid)))
+        if not pool:
+            empty.append(sid)
+            continue
+        # лучший из запаса: по площади из имени файла (…__k_WxH.jpg)
+        def _area(f):
+            m = re.search(r"__\d+_(\d+)x(\d+)", os.path.basename(f))
+            return int(m.group(1)) * int(m.group(2)) if m else 0
+        pick = sorted(pool, key=_area, reverse=True)[0]
+        old = [f for f in glob.glob(os.path.join(assets, "scene_%03d.*" % sid))
+               if not f.endswith(SKIP_EXT) and ".ovthumb." not in f]
+        for f in old:
+            h = _md5(f)
+            if h:
+                subprocess.run(["python3", os.path.join(here_, "ban_file.py"),
+                                "--md5", h, "--days", "2",
+                                "замена из запаса на сцене %d" % sid])
+            try:
+                os.remove(f)
+            except OSError:
+                pass
+        dst = os.path.join(assets, "scene_%03d.jpg" % sid)
+        try:
+            os.replace(pick, dst)
+            done.append(sid)
+            print("  сцена %d: взят кадр из запаса (%s), осталось в запасе %d"
+                  % (sid, os.path.basename(pick), len(pool) - 1))
+        except OSError as e:
+            print("  сцена %d: не удалось взять из запаса (%s)" % (sid, e))
+            empty.append(sid)
+    print("\nИТОГ ПО ДИСКУ: заменено из запаса %d из %d%s"
+          % (len(done), len(ids),
+             ("; запаса нет у сцен: %s" % ", ".join(map(str, empty))) if empty else ""))
+    if empty:
+        print("По ним нужен обычный круг с ПЕРЕПИСАННЫМ запросом: "
+              "кадр из того же поиска уже исчерпан.")
+    return 0 if done else 1
 
 
 def count_replaced(assets, before, ids):
@@ -777,6 +833,24 @@ def _has_asset_on_disk(kind, sid):
 
 
 def main():
+    # --next <ids> — мгновенная замена из запаса кандидатов (28.10)
+    if "--next" in sys.argv:
+        _i = sys.argv.index("--next")
+        _ids = []
+        if _i + 1 < len(sys.argv):
+            _ids = [int(x) for x in sys.argv[_i + 1].replace(" ", "").split(",")
+                    if x.strip().isdigit()]
+        if not _ids:
+            print("ОШИБКА: --next нужен список сцен, например --next 12,34",
+                  file=sys.stderr)
+            return 2
+        _sc = ""
+        if "--scenes" in sys.argv:
+            _j = sys.argv.index("--scenes")
+            _sc = sys.argv[_j + 1] if _j + 1 < len(sys.argv) else ""
+        _assets = "overlays" if "--fix-overlays" in sys.argv else "images"
+        return replace_from_stash(_sc, _ids, _assets)
+
     if "--snapshot" in sys.argv:
         return snapshot(arg("--snapshot"))
     if "--verify" in sys.argv:
