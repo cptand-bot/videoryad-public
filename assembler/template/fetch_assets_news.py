@@ -2347,7 +2347,28 @@ def main():
     media_library_dir = os.path.expanduser(media_library_dir)
     if not os.path.isabs(media_library_dir):
         media_library_dir = os.path.expanduser(os.path.join("~/projects", media_library_dir))
-    local_usage = {}
+    # КРУГОВОЙ ПЕРЕБОР ПАПКИ — ОБЩИЙ НА ПРОЕКТ, А НЕ НА ПРОЦЕСС (2026-10-29).
+    # Сцены и всплывашки фетчатся РАЗНЫМИ запусками, и счётчик у каждого был
+    # свой: оба брали из одной папки ПЕРВЫЙ файл, и `selfcheck` в самом конце
+    # валил прогон «одинаковый файл в images/scene_014.jpg и
+    # overlays/scene_010.jpg». Ловилось на четырёх парах за один ролик, правка
+    # на этом шаге самая дорогая. Держим счётчик файлом рядом с кадрами: оба
+    # процесса читают и дописывают его, перебор продолжается там, где встал.
+    _usage_path = os.path.join(os.path.dirname(os.path.abspath(images_dir)),
+                               ".library_usage.json")
+    try:
+        local_usage = json.load(open(_usage_path, encoding="utf-8"))
+        if not isinstance(local_usage, dict):
+            local_usage = {}
+    except (OSError, ValueError):
+        local_usage = {}
+
+    def _save_usage():
+        try:
+            json.dump(local_usage, open(_usage_path, "w", encoding="utf-8"),
+                      ensure_ascii=False)
+        except OSError:
+            pass
 
     this_project = os.path.basename(os.path.dirname(os.path.abspath(images_dir)))
     blocked_md5, usage_log = load_blocked_md5(this_project)
@@ -2536,6 +2557,7 @@ def main():
                     blocked_md5=blocked_md5, used_md5=used_md5,
                     dur_hint=scene.get("duration_sec"), seq=sid,
                 )
+                _save_usage()      # счётчик виден второму процессу сразу
                 if local_out == "EXHAUSTED":
                     fail_why = ("папка медиатеки исчерпана: все файлы в "
                                 "кулдауне или уже в этом ролике")
