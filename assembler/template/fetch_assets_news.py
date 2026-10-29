@@ -1278,7 +1278,23 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
 
     tag_dir = os.path.join(media_library_dir, tag)
     if not os.path.isdir(tag_dir):
-        return None
+        # БАЗА ЛЕЖИТ В ОДНОЙ БИБЛИОТЕКЕ, А КАНАЛОВ ДВЕ (2026-10-29).
+        # `БАЗА/` физически в `media-library`, а 5 МИНУТ работает на
+        # `media-library-2` — путь `БАЗА/...` там не находился, и сцена молча
+        # уходила в обычный поиск. Ни ошибки, ни строки в логе. Ищем в
+        # соседней библиотеке, вместо того чтобы держать символическую ссылку:
+        # ссылка живёт на одной машине и в облако не уезжает.
+        alt = None
+        base = os.path.basename(os.path.normpath(media_library_dir))
+        if base.endswith("-2"):
+            alt = os.path.join(os.path.dirname(os.path.normpath(media_library_dir)),
+                               base[:-2])
+        elif base == "media-library":
+            alt = os.path.normpath(media_library_dir) + "-2"
+        if alt and os.path.isdir(os.path.join(alt, tag)):
+            tag_dir = os.path.join(alt, tag)
+        else:
+            return None
 
     if keyword:
         index_path = os.path.join(tag_dir, "index.json")
