@@ -546,6 +546,18 @@ else:
         lw = w.lower()
         return any(lw.startswith(st) for st in _GEO_STEMS)
 
+    # КЛИП КАРТОЧКИ СТАРШЕ СВОЕГО ЗАДАНИЯ = ПЕРЕВЫПУСК НЕ ОТРИСОВАН (29.10).
+    # `card_put.py` переписывает задание в `cards/queue`, но клип остаётся
+    # прежним до следующего прогона `cards_cloud.py`. Вкладка едва не отдала
+    # дашборд со старой карточкой, которую пользователь уже забраковал.
+    for _qj in sorted(glob.glob(os.path.join("cards", "queue", "scene_*.json"))):
+        _sid = os.path.basename(_qj)[6:9]
+        _clip = os.path.join("images", "scene_%s.mp4" % _sid)
+        if os.path.exists(_clip) and os.path.getmtime(_clip) < os.path.getmtime(_qj):
+            FAIL.append("карточка сцены %s НЕ ПЕРЕРИСОВАНА: задание новее клипа "
+                        "— прогони `cards_cloud.py`, иначе на экране старая "
+                        "версия" % int(_sid))
+
     _by_id = {s["id"]: s for s in scenes}
     _ovq_path = None
     for _cand in glob.glob("*overlays_fetch*.json") + glob.glob("*overlay*fetch*.scenes.json"):
