@@ -1,0 +1,575 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0,
+   "duration_sec": 9,
+   "visual_prompt": "Европейские чиновники входят в здание Еврокомиссии перед заседанием.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОКОМИССИЯ",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 9,
+   "duration_sec": 9.9,
+   "visual_prompt": "Российская государственная символика и официальные мероприятия в Москве.",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 18.9,
+   "duration_sec": 13.3,
+   "visual_prompt": "Досье с фотографией: Радослав Сикорский — министр иностранных дел Польши; заявления 27 и 28 октября 2026 года.",
+   "source": "card:dossier",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 32.2,
+   "duration_sec": 8,
+   "visual_prompt": "Современная российская военная техника движется по дороге.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/МИНОБОРОНЫ-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 40.2,
+   "duration_sec": 8,
+   "visual_prompt": "Брифинг европейских чиновников в Брюсселе перед рядом телекамер.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОКОМИССИЯ",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 48.2,
+   "duration_sec": 8,
+   "visual_prompt": "Депутаты Европарламента голосуют во время пленарной сессии.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 56.2,
+   "duration_sec": 8,
+   "visual_prompt": "Европейские депутаты выступают перед коллегами во время заседания.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 64.2,
+   "duration_sec": 8,
+   "visual_prompt": "Политические мероприятия и официальные выступления в современной Германии.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 72.2,
+   "duration_sec": 14,
+   "visual_prompt": "Потому что иногда достаточно задать один нормальный вопрос, и вся большая политическая конструкция начинает подозрительно шататься.",
+   "source": "card:marker_serif",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 86.2,
+   "duration_sec": 8,
+   "visual_prompt": "Политическая хроника Германии разных лет сменяется современными кадрами.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 94.2,
+   "duration_sec": 8,
+   "visual_prompt": "Выступление Радослава Сикорского, запись из поста источника.",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/e69134e04c.mp4?token=W02IjX89Ir7FMjuOodrAaTxF-JhBX0Q765Ro6CfyisecAJm8DIUwVFhf42J70o8DjgmvHnFGqkBHV2CIz4OzRxb-E4Fk1kacvc4nKD8x2oSy66UGhEMyN6zJbqjrMfROOlfXH0P5nKWdXq9XFsMvSX5dl6Fm44WGiHmpmb82DvhDVQAh7emgQrA17sOAkcdy6YsNtwB5MHYTVI_GMdypMH4rCV5wjYKq50UexNilRr-a-2fnaMNI_vsPq-pmvQbYvUzvnWhzXKF1Qha8Rc4zzgOetbgGTA4OdT4j-uoPx36gfAfSGyFKAvJ4hfRjJTG8oAxerJlhS5CxI9_N2p4FCpwNUnL9zTTGUGfhf81FOCRkLuBY56HiO3yGs5IbXXef9agElaWs3fhJhyNv0WrvraJQQn27lK-S3kwgSfX366NbI7r-BgyGDMSv-Zvg8olXw2bEKxlXkvYOEC44wyrQr1hzU7K_9KFzsA9PL_fqkml3rojdaSVT85pxs4IRQYiRm6ghOC5g86hKtDxKDSwZ7PLxr_ac29v_jK1gQ9RhsyxAq-0S1B8nc0HMpeGFtAK8OI4ATCM2fEa-lk2lQXjc4F1dGsQUS6dE1J2Dn5BVoYpxnS0LXwdmOsmBwVN5eS2kO7td8oZ6EHNE8lQf4DitYvr-TS8ART5q1qmfuDVa9TA",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 102.2,
+   "duration_sec": 8,
+   "visual_prompt": "Выступление Радослава Сикорского, второй фрагмент записи.",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/f615d220d2.mp4?token=meFFl-kPWaDGpYWxE14sDe6W2FNghlcdByaVLmWeDbiJf8gSxlHJLiCrTenMoaUJD7O8LUdVf44ePSijCedGuz-acNSPa4CVTrIs1WFk9bsacZm4W1bgnETUXx0u8o_fKqPBZ8EPa42iheqzzzBnI2vxRgPphMO6BzXsf-Od-373f6jsVDngx4gpoGaavDXZnUxBvpwmC3ZC4st7LbIt8I5ANRw6_VGysxmb-i2anVxh4osB5DbeXejwZGPFUElUdqqA6R02VBSjyIpTgSvWh6WTDrJaYChZC0BW9A2zsicRlYPQbktOjKWRzhTroev8_XwZlVDCrmXiKlsEc8MqwapcPvFz9I4a_FVLe-So2pm-VWr5oPCocEbHsLQiLobSWPOFITOODeIhYdeic5OkhtWKmbYAx0NP-CVCrZ3pelst04LZs9-oSKaB2UG8GExU8qrUCVhD9Lm15xFYK2fQrrYJsckL9TrIwmTS4TMrETOVO-8KCZbZGhqD0TflrXa6Xa8GqQJlICoxIeBL1Dhya93qVT2yKtiPKMPHF3tqBcQNiOi3rD6W6ZsBYrDVyxiTmYbAUTXJ51zZNgL3WtyPFD1i5Vb866qAYhfhVCFA4cp4MWcnKGg4mEngN_iARxZ_zmjnqxoB-5eE_Kb69BtyqwF608nhMnm96oB8WU3Bln8",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 110.2,
+   "duration_sec": 8,
+   "visual_prompt": "Американские вертолёты покидают площадку во время завершения кампании во Вьетнаме.",
+   "source": "press_photo",
+   "source_query": "вертолёты США на крыше посольства в Сайгоне, реальное архивное фото, 1975",
+   "overlays": []
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 118.2,
+   "duration_sec": 8,
+   "visual_prompt": "Церемония спуска британского знамени при передаче власти бывшей колонии.",
+   "source": "press_photo",
+   "source_query": "спуск британского флага на церемонии передачи Гонконга, реальное архивное фото, 1997",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 126.2,
+   "duration_sec": 12.4,
+   "visual_prompt": "Кинолента из четырёх архивных кадров: Крымская война, война с Японией, Афганистан и холодная война.",
+   "source": "card:film",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 138.6,
+   "duration_sec": 6,
+   "visual_prompt": "Здание МИД Польши в Варшаве в конце октября 2026 года.",
+   "source": "press_photo",
+   "source_query": "здание Министерства иностранных дел Польши, Варшава, октябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 144.6,
+   "duration_sec": 6,
+   "visual_prompt": "Польский фермер осматривает поле после первого осеннего снега.",
+   "source": "press_photo",
+   "source_query": "польский фермер осматривает заснеженное поле, Польша, 2026",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 150.6,
+   "duration_sec": 6,
+   "visual_prompt": "Пленарный зал польского Сейма во время заседания депутатов.",
+   "source": "press_photo",
+   "source_query": "пленарный зал Сейма Польши во время заседания, 2026",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 156.6,
+   "duration_sec": 14,
+   "visual_prompt": "Радослав Сикорский проводит брифинг польского Министерства иностранных дел.",
+   "source": "press_photo",
+   "source_query": "брифинг Министерства иностранных дел Польши с Радославом Сикорским, 2026",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 170.6,
+   "duration_sec": 13.2,
+   "visual_prompt": "Досье с фотографией: Пётр Порошенко — пятый президент Украины, автор мирного плана из шести пунктов.",
+   "source": "card:dossier",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 183.8,
+   "duration_sec": 14,
+   "visual_prompt": "Пётр Порошенко выступает перед журналистами в Киеве вечером 28 октября 2026 года.",
+   "source": "web_search",
+   "source_query": "Пётр Порошенко выступление в Киеве 28 октября 2026 года",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 197.8,
+   "duration_sec": 14,
+   "visual_prompt": "Здание Верховной Рады как центр обсуждения украинского политического плана.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ФАСАД-ЗДАНИЯ-ВЕРХОВНОЙ",
+   "overlays": []
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 211.8,
+   "duration_sec": 14,
+   "visual_prompt": "Офис президента Украины на Банковой за полицейским ограждением.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 225.8,
+   "duration_sec": 14,
+   "visual_prompt": "Сборочные столы с корпусами украинских беспилотников на оборонном предприятии.",
+   "source": "web_search",
+   "source_query": "сборка украинских беспилотников на оборонном предприятии, 2026",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 239.8,
+   "duration_sec": 14,
+   "visual_prompt": "Круговая диаграмма помощи Нидерландов: 500 миллионов евро военной помощи и 1,2 миллиарда евро невоенной поддержки.",
+   "source": "card:pie",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 253.8,
+   "duration_sec": 14,
+   "visual_prompt": "Парламент Нидерландов в Гааге перед обсуждением расходов на поддержку Украины.",
+   "source": "press_photo",
+   "source_query": "здание парламента Нидерландов в Гааге, фасад Бинненхоф, реальное фото, без людей",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 267.8,
+   "duration_sec": 14,
+   "visual_prompt": "Европейские руководители и украинская делегация собираются на общем форуме.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 281.8,
+   "duration_sec": 14,
+   "visual_prompt": "Готовые корпуса беспилотников проходят проверку на украинском предприятии.",
+   "source": "press_photo",
+   "source_query": "корпуса беспилотников на проверочных стендах Украины, 2026",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 295.8,
+   "duration_sec": 14,
+   "visual_prompt": "Здание Еврокомиссии во время обсуждения очередных ограничительных мер.",
+   "source": "press_photo",
+   "source_query": "здание Еврокомиссии во время обсуждения санкций, Брюссель, 2026",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 309.8,
+   "duration_sec": 14,
+   "visual_prompt": "Европейские дипломаты прибывают в комплекс Совета ЕС в Брюсселе.",
+   "source": "web_search",
+   "source_query": "дипломаты прибывают в Совет ЕС перед обсуждением санкций, 2026",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 323.8,
+   "duration_sec": 13.5,
+   "visual_prompt": "Что конкретно должен изменить следующий пакет — чего не сделали предыдущие ограничения?",
+   "source": "card:doc",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 337.3,
+   "duration_sec": 14,
+   "visual_prompt": "Нефтеперерабатывающий комплекс России с колоннами и факелом, 2026 год.",
+   "source": "press_photo",
+   "source_query": "нефтеперерабатывающий комплекс России с факелом, 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 351.3,
+   "duration_sec": 14,
+   "visual_prompt": "Корреспонденты ожидают выхода европейских чиновников из здания в Брюсселе.",
+   "source": "press_photo",
+   "source_query": "корреспонденты у здания европейского ведомства, Брюссель, 2026",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 365.3,
+   "duration_sec": 14,
+   "visual_prompt": "Российский Дом правительства как одна из площадок формирования официальной позиции.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ДОМ-ПРАВИТЕЛЬСТВА-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 379.3,
+   "duration_sec": 14,
+   "visual_prompt": "Спасская башня и кремлёвский комплекс в вечернем свете.",
+   "source": "press_photo",
+   "source_query": "Спасская башня Московского Кремля вечером, 2026",
+   "overlays": []
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 393.3,
+   "duration_sec": 14,
+   "visual_prompt": "Автомобили официальных делегаций въезжают на территорию российского МИДа.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 407.3,
+   "duration_sec": 13.5,
+   "visual_prompt": "Разделённый экран: слева прекращение огня, справа усиление армии, выпуск ракет, беспилотников, средств ПВО и боеприпасов.",
+   "source": "card:split",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 420.8,
+   "duration_sec": 13,
+   "visual_prompt": "Пусковые установки украинской противовоздушной обороны перед развёртыванием.",
+   "source": "press_photo",
+   "source_query": "пусковые установки ПВО Украины перед развёртыванием, 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 433.8,
+   "duration_sec": 13,
+   "visual_prompt": "Бронемашины для Украины закреплены на железнодорожных платформах.",
+   "source": "press_photo",
+   "source_query": "цех сборки бронемашин для украинской армии, реальное фото, 2026",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 446.8,
+   "duration_sec": 12.5,
+   "visual_prompt": "Пустые места украинских депутатов в сессионном помещении Верховной Рады.",
+   "source": "press_photo",
+   "source_query": "депутатские места Верховной Рады перед заседанием, Киев, 2026",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 459.3,
+   "duration_sec": 13,
+   "visual_prompt": "Повреждённый промышленный корпус на Украине без людей и тяжёлых сцен.",
+   "source": "press_photo",
+   "source_query": "повреждённый промышленный корпус Украины, восстановительные работы, 2026",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 472.3,
+   "duration_sec": 13,
+   "visual_prompt": "Правительственный квартал Москвы с административными зданиями и служебными автомобилями.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗАЛ-ЗАСЕДАНИЙ-ГОСУДАРСТВЕННОЙ",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 485.3,
+   "duration_sec": 13,
+   "visual_prompt": "Кто приходит в Москву со счётом и каким способом добивается оплаты?",
+   "source": "card:pull",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 498.3,
+   "duration_sec": 12,
+   "visual_prompt": "Вход в Дом правительства России во время прибытия официальных автомобилей.",
+   "source": "press_photo",
+   "source_query": "здание Министерства финансов России на Ильинке, фасад, реальное фото, 2026",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 510.3,
+   "duration_sec": 12,
+   "visual_prompt": "Городская трансформаторная подстанция Киева за защитной сеткой.",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ТРАНСФОРМАТОРНАЯ-ПОДСТАНЦИЯ-СЕТКОЙ",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 522.3,
+   "duration_sec": 12,
+   "visual_prompt": "Представители европейских стран входят в комплекс Еврокомиссии на совещание.",
+   "source": "press_photo",
+   "source_query": "представители стран ЕС входят в Еврокомиссию, Брюссель, 2026",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 534.3,
+   "duration_sec": 11.5,
+   "visual_prompt": "Главный вход польского внешнеполитического ведомства в Варшаве.",
+   "source": "press_photo",
+   "source_query": "здание Банка России на Неглинной улице, фасад, реальное фото, 2026",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 545.8,
+   "duration_sec": 12,
+   "visual_prompt": "Пётр Порошенко и Радослав Сикорский на двух отдельных публичных выступлениях.",
+   "source": "web_search",
+   "source_query": "Радослав Сикорский на пресс-конференции, реальное фото, октябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 557.8,
+   "duration_sec": 12.5,
+   "visual_prompt": "Карта с последовательно подсвеченными Россией, Украиной, Москвой, Киевом и Донбассом.",
+   "source": "card:map",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 570.3,
+   "duration_sec": 12,
+   "visual_prompt": "Фасад Кабинета министров Украины на улице Грушевского.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/КАБИНЕТ-МИНИСТРОВ-УКРАИНЫ",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 582.3,
+   "duration_sec": 10,
+   "visual_prompt": "Дорога и жилая застройка на въезде в город Донбасса.",
+   "source": "press_photo",
+   "source_query": "дорога на въезде в город Донбасса, жилая застройка, 2026",
+   "overlays": []
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 592.3,
+   "duration_sec": 12,
+   "visual_prompt": "Краны разгружают переданную Украине военную технику с грузового судна.",
+   "source": "press_photo",
+   "source_query": "разгрузка военной техники для Украины в европейском порту, 2026",
+   "overlays": []
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 604.3,
+   "duration_sec": 11.5,
+   "visual_prompt": "Микрофоны российских представителей перед официальным выступлением в Москве.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ",
+   "overlays": []
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 615.8,
+   "duration_sec": 11.4,
+   "visual_prompt": "Современная Москва под осенними облаками, вид на административный центр.",
+   "source": "press_photo",
+   "source_query": "административный центр Москвы в пасмурный осенний день, 2026",
+   "overlays": []
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 627.2,
+   "duration_sec": 10,
+   "visual_prompt": "Почему переговоры идут так тяжело? Потому что договориться можно о многом.",
+   "source": "card:quote",
+   "source_query": "",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 637.2,
+   "duration_sec": 8,
+   "visual_prompt": "Автомобили дипломатических делегаций останавливаются у здания российского МИДа.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО",
+   "overlays": []
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 645.2,
+   "duration_sec": 8,
+   "visual_prompt": "Панорамный вид дороги, городов и открытой местности Донбасса.",
+   "source": "press_photo",
+   "source_query": "панорамный вид Донбасса с дорогами и городской застройкой, 2026",
+   "overlays": []
+  }
+ ]
+}
