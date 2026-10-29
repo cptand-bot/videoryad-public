@@ -1,0 +1,92 @@
+{
+ "scenes": [
+  {
+   "id": 4,
+   "text": "",
+   "duration_sec": 8,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/ДОНБАСС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ДОНБАСС"
+  },
+  {
+   "id": 8,
+   "text": "",
+   "duration_sec": 8,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/ЕВРОПА",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ЕВРОПА"
+  },
+  {
+   "id": 12,
+   "text": "",
+   "duration_sec": 8,
+   "visual_prompt": "колонна 40-й армии СССР на марше при выводе из Афганистана, реальное архивное фото, 1989",
+   "source": "press_photo",
+   "source_query": "колонна 40-й армии СССР на марше при выводе из Афганистана, реальное архивное фото, 1989"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 8,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/ПОЛЬША",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ПОЛЬША"
+  },
+  {
+   "id": 19,
+   "text": "",
+   "duration_sec": 14,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/РОССИЯ",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/РОССИЯ"
+  },
+  {
+   "id": 22,
+   "text": "",
+   "duration_sec": 14,
+   "visual_prompt": "цех производства артиллерийских боеприпасов в Европе, реальное фото, 2026",
+   "source": "press_photo",
+   "source_query": "цех производства артиллерийских боеприпасов в Европе, реальное фото, 2026"
+  },
+  {
+   "id": 30,
+   "text": "",
+   "duration_sec": 14,
+   "visual_prompt": "танкер с российской нефтью в открытом море, реальное фото, 2026",
+   "source": "press_photo",
+   "source_query": "танкер с российской нефтью в открытом море, реальное фото, 2026"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 14,
+   "visual_prompt": "военный корабль в Чёрном море, реальное фото, 2026",
+   "source": "press_photo",
+   "source_query": "военный корабль в Чёрном море, реальное фото, 2026"
+  },
+  {
+   "id": 45,
+   "text": "",
+   "duration_sec": 12,
+   "visual_prompt": "здание Европейского инвестиционного банка в Люксембурге, фасад, реальное фото",
+   "source": "press_photo",
+   "source_query": "здание Европейского инвестиционного банка в Люксембурге, фасад, реальное фото"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "duration_sec": 12,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/УКРАИНА",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/УКРАИНА"
+  },
+  {
+   "id": 57,
+   "text": "",
+   "duration_sec": 8,
+   "visual_prompt": "ПОЛИТИКА/КАРТЫ/ДОНБАСС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ДОНБАСС"
+  }
+ ]
+}
