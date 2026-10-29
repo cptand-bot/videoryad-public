@@ -177,13 +177,27 @@ def main():
                        % (scenes[i].get("id"), _view,
                           ", ".join(sorted(_known))))
 
-    norm = max(1, round(n / 15))
-    if len(cards) > norm + 1:
-        warn.append(f"карточек {len(cards)} при норме {norm} (+1 допуск)")
-    for x, y in zip(cards, cards[1:]):
-        if y - x < 8:
-            warn.append(f"карточки на сценах {scenes[x]['id']} и {scenes[y]['id']} "
-                        f"ближе восьми сцен друг к другу")
+    # ДВЕ СЕМЬИ, КАЖДАЯ СО СВОЕЙ НОРМОЙ (2026-10-29, как в `card_put.py`).
+    # Единая норма «одна на 15» писалась под ТЕКСТОВЫЕ карточки и под запрет
+    # пользователя «не превращать в слайд-шоу»; изобразительные виды под неё
+    # попали заодно и ограничивались вкусом, хотя их ограничивает текст
+    # сценария. Здесь проверка считала по-старому и печатала ложное «карточек
+    # 11 при норме 5» плюс десяток ложных зазоров — вкладка разбирала их
+    # глазами на каждом ролике.
+    PICT = {"map", "map_regions", "bubbles", "pie", "film", "film_frame",
+            "dossier", "split"}
+    _view_of = lambda i: str(scenes[i].get("source", ""))[len(CARD_PREFIX):].strip()
+    picts = [i for i in cards if _view_of(i) in PICT]
+    texts = [i for i in cards if _view_of(i) not in PICT]
+    for name, group, per, gap in (("текстовых", texts, 15, 8),
+                                  ("изобразительных", picts, 9, 4)):
+        nrm = max(1, round(n / per))
+        if len(group) > nrm + 1:
+            warn.append(f"карточек {name} {len(group)} при норме {nrm} (+1 допуск)")
+        for x, y in zip(group, group[1:]):
+            if y - x < gap:
+                warn.append(f"карточки на сценах {scenes[x]['id']} и "
+                            f"{scenes[y]['id']} ближе {gap} сцен друг к другу")
 
     # --- ШАБЛОННОСТЬ: уникальность по СМЫСЛУ, а не по приписке (23.10) ---
     # Живой случай: агент получил замечание «запросы повторяются» и приписал к
@@ -218,14 +232,33 @@ def main():
     # строк, на деле 25 пар одинаковых запросов. Поисковик ранжирует по первым
     # словам, хвост игнорирует (правило h), так что на фетче это дало бы
     # ~26 дублей по md5 и круг правок на ровном месте.
+    # БИБЛИОТЕЧНЫЕ СЦЕНЫ ЭТА МИНА НЕ КАСАЕТСЯ (2026-10-29). У них
+    # `source_query` — ПУТЬ ПАПКИ, а не запрос: «БАЗА/ВЕДОМСТВА/НАТО» у двух
+    # сцен это не дубль, фетч отдаёт из папки РАЗНЫЕ файлы по кругу, и норма
+    # прямо разрешает до двух сцен на папку. Мина валила ровно то поведение,
+    # которое предписано правилами: вкладка развела 16 библиотечных сцен по 16
+    # папкам, и видео-лид просел с 14 сцен до 10 — видео-папок в базе всего 11.
+    # Свой счёт для библиотеки ниже: больше двух сцен из одной папки — брак.
+    lib_dirs = {}
     heads = {}
     for sc in scenes:
-        if str(sc.get("source", "")).startswith(CARD_PREFIX):
+        src = str(sc.get("source", ""))
+        if src.startswith(CARD_PREFIX):
+            continue
+        if src.strip() == "local_library":
+            d = str(sc.get("source_query", "")).strip().strip("/")
+            if d:
+                lib_dirs.setdefault(d, []).append(sc.get("id"))
             continue
         q = junk.sub("", str(sc.get("source_query", ""))).strip().lower()
         h = " ".join(q.split()[:3])
         if h:
             heads.setdefault(h, []).append(sc.get("id"))
+    for d, ids in sorted(lib_dirs.items()):
+        if len(ids) > 2:
+            bad.append("папка медиатеки «%s» стоит на %d сценах (%s) — больше "
+                       "двух на ролик нельзя, зритель увидит один двор трижды"
+                       % (d, len(ids), ", ".join(map(str, ids))))
     pairs = {k: v for k, v in heads.items() if len(v) > 1}
     if pairs:
         # ИМЯ ЗДЕСЬ НЕ `total` (27.10, улов `usuario-31`): этим именем выше, на
@@ -284,6 +317,13 @@ def main():
         if str(sc.get("source", "")).startswith(CARD_PREFIX):
             continue
         q_raw = str(sc.get("source_query", ""))
+        # У БИБЛИОТЕЧНОЙ СЦЕНЫ СМЫСЛ НЕСЁТ ПОСЛЕДНИЙ СЕГМЕНТ ПУТИ, А НЕ ПЕРВЫЙ
+        # (2026-10-29). Группировка по корням всего пути считала шесть РАЗНЫХ
+        # зданий в четырёх странах одним объектом, потому что все они лежат в
+        # `ВЛАСТЬ-...`: брифинг-зал Белого дома, МИД России, Кремль, Офис
+        # президента Украины, зал НАТО, Берлаймон. Берём только имя папки.
+        if str(sc.get("source", "")).strip() == "local_library" and "/" in q_raw:
+            q_raw = q_raw.rstrip("/").rsplit("/", 1)[-1].replace("-", " ")
         names = frozenset(w.lower()[:6] for w in re.findall(r"\b[А-ЯЁA-Z][а-яёa-z]{3,}", q_raw))
         seen = set()
         for w in re.findall(r"[а-яёa-z]{5,}", q_raw.lower()):
@@ -317,6 +357,12 @@ def main():
             continue
         q = str(sc.get("source_query", "")).strip()
         if not q:
+            continue
+        # СЛУЖЕБНАЯ ПОДПИСЬ КАРТОЧКИ — НЕ ЦИТАТА (2026-10-29). `card_put.py`
+        # сам кладёт в `source_query` строку вида «карточка «dossier» — кадр
+        # рисуется в облаке», и проверка ругалась на неё на КАЖДОЙ карточке
+        # каждого ролика: четыре ложных предупреждения на четыре карточки.
+        if q.lower().startswith("карточка "):
             continue
         first = q.split()[0] if q.split() else ""
         if first and first[:1].islower():
