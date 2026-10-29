@@ -75,28 +75,19 @@
  },
  {
   "scene": 25,
-  "view": "charts.pie",
+  "view": "charts.cartogram",
   "dur": 14.0,
   "anim": 14.0,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "x_labels": [
-    "Военная помощь",
-    "Невоенная поддержка"
+   "data": [
+    "Нидерланды",
+    "Украина"
    ],
-   "series": [
-    {
-     "name": "",
-     "values": [
-      500.0,
-      1200.0
-     ]
-    }
-   ],
-   "kick": "ПОМОЩЬ НИДЕРЛАНДОВ · 28 ОКТЯБРЯ",
-   "unit": "млн евро",
+   "kick": "КТО ПЛАТИТ ЗА ПОДДЕРЖКУ",
+   "mode": "bubble",
    "watermark": "5 МИНУТ"
   }
  },
