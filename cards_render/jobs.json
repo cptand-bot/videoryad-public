@@ -1,0 +1,82 @@
+[
+ {
+  "scene": 15,
+  "view": "cinematic.dossier",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "case": "FIRE POINT",
+   "rows": [
+    "Производит дальнобойные беспилотники и крылатые ракеты",
+    "Контракты на беспилотные системы: более 56 млрд грн в 2025",
+    "В 2026 — ещё более 50 млрд грн",
+    "Главное изделие: крылатая ракета «Фламинго»"
+   ],
+   "title": "FIRE POINT",
+   "photo": "images/scene_001.jpg",
+   "stamp": "ГОСЗАКАЗ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "duel",
+  "dur": 14.0,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "kick": "ОЦЕНКА FIRE POINT · 27.10.2026",
+   "source": "Денис Штилерман, главный конструктор",
+   "top": {
+    "who": "БАЛЛИСТИЧЕСКАЯ РАКЕТА",
+    "text": "200 кг на 300 км — 500-600 тысяч долларов",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "БЕСПИЛОТНИК",
+    "text": "та же нагрузка на 380 км — 40-50 тысяч",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "film.film_strip",
+  "dur": 13.44,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "images/scene_043.jpg",
+    "images/scene_048.jpg",
+    "images/scene_046.jpg"
+   ],
+   "kick": "ПЕРВЫЙ. ПОТОМ ЕЩЁ ОДИН ПЕРВЫЙ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "film.film_single",
+  "dur": 13.36,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/src/scene_901.jpg",
+   "kick": "БЕЛКА И СТРЕЛКА · 1960",
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
