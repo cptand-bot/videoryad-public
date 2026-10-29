@@ -1061,6 +1061,33 @@ def main():
         restore_missing(assets, ids)
         report_same_file(assets, before)
         sync_manifest(assets, ids)
+    # НИ ОДНА ЗАПРОШЕННАЯ СЦЕНА НЕ ИМЕЕТ ПРАВА ПРОПАСТЬ МОЛЧА (29.10, улов
+    # «Порох и Сикорский»): сцена 11 из `--fix` не обработалась вовсе —
+    # две соседние из того же вызова прошли, а она осталась со СТАРЫМ
+    # ЗАБАНЕННЫМ файлом, и `--rounds` её даже не показал. Поймалось только
+    # ручной сверкой md5. Сверяем список запрошенных с тем, что реально
+    # изменилось на диске, и называем пропавших вслух.
+    _asked, _untouched = [], []
+    for _sub, _assets, _ids, _before in jobs:
+        for sid in _ids:
+            _asked.append(sid)
+            _old = (_before or {}).get(sid)
+            _new = None
+            for f in glob.glob(os.path.join(_assets, "scene_%03d.*" % sid)):
+                if not f.endswith(SKIP_EXT) and ".ovthumb." not in f:
+                    _new = _md5(f)
+                    break
+            if _old and _new and _old == _new:
+                _untouched.append((sid, "файл не изменился"))
+            elif _new is None:
+                _untouched.append((sid, "файла нет вовсе"))
+    if _untouched:
+        print("\nОШИБКА: запрошено сцен %d, НЕ ИЗМЕНИЛИСЬ %d — проверь их "
+              "руками, замена не состоялась:" % (len(_asked), len(_untouched)),
+              flush=True)
+        for sid, why in _untouched:
+            print("  сцена %d: %s" % (sid, why), flush=True)
+
     prune_needs_upload(only_ids=[sid for _, _, ids, _ in jobs for sid in ids])
     for sub, _, _, _ in jobs:
         if os.path.exists(sub):

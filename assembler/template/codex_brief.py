@@ -23,6 +23,7 @@
 import argparse
 import glob
 import json
+import io
 import os
 import re
 import shutil
@@ -99,7 +100,31 @@ def mines_text():
         return ""
 
 
-def _base_catalog():
+def _media_library_dir(dest="."):
+    """КАКАЯ МЕДИАТЕКА У ЭТОГО КАНАЛА (2026-10-29, улов «Порох и Сикорский»).
+
+    Раньше бриф брал библиотеку из переменной окружения, а она в оболочке не
+    выставлена: канал задаёт её в `.env` ПАПКИ ПРОЕКТА. На 5 МИНУТ (там
+    `media-library-2`) бриф перечислял 12 тематических папок ПЕРВОЙ
+    библиотеки, которых у канала физически нет. Агент честно заказал пять
+    таких сцен, четыре из них в первой трети — и фетч МОЛЧА ушёл в веб-поиск:
+    ошибки нет, в манифесте `press_photo`, видно только по пропавшему
+    движению в лиде. Читаем `.env` проекта, как это делает сам фетч.
+    """
+    ml = ""
+    try:
+        for line in io.open(os.path.join(dest, ".env"), encoding="utf-8"):
+            if line.strip().startswith("MEDIA_LIBRARY_DIR"):
+                ml = line.split("=", 1)[1].strip().strip('"').strip("'")
+    except OSError:
+        pass
+    ml = ml or os.environ.get("MEDIA_LIBRARY_DIR") or os.path.expanduser("~/projects/media-library")
+    if not os.path.isabs(ml):
+        ml = os.path.expanduser(os.path.join("~/projects", ml))
+    return ml
+
+
+def _base_catalog(dest="."):
     """Блок каталога базы кадров для брифа; пусто, если база ещё не набрана."""
     try:
         import importlib.util
@@ -108,9 +133,7 @@ def _base_catalog():
         spec = importlib.util.spec_from_file_location("base_catalog", cat_py)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        ml = os.environ.get("MEDIA_LIBRARY_DIR") or os.path.expanduser("~/projects/media-library")
-        if not os.path.isabs(ml):
-            ml = os.path.expanduser(os.path.join("~/projects", ml))
+        ml = _media_library_dir(dest)
         # ТЕМАТИЧЕСКИЕ ПАПКИ МЕДИАТЕКИ ТОЖЕ (2026-10-29). Раньше здесь был
         # только `scan` по `БАЗА/`, и агент, обязанный чем-то закрыть
         # движение, видел ОДИН склад персон и ведомств: живой случай — ролик
@@ -203,7 +226,7 @@ def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАД�
         # раскадровку, а узнать о ней он может ТОЛЬКО отсюда. Без этого блока
         # собранная ночью база физически не попадает ни в один ролик — фетч не
         # найдёт папку по описанию и молча уйдёт в пресс-водопад.
-        _base_catalog(),
+        _base_catalog(dest),
         # РИСОВАННЫЕ КАДРЫ АРСЕНАЛА (28.10). Пользователь: «арсенал
         # разрабатывался, чтобы элементы внедрять в логику сборки». Это те
         # сцены, на которых поиск заведомо даёт брак: нет ни имени, ни места,
