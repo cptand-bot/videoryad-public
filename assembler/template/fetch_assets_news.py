@@ -775,6 +775,46 @@ def fetch_web_search(query, out_path, env=None):
         except Exception:
             return (0, 0)
 
+    # ЧЁРНО-БЕЛЫЙ АРХИВ НА СОВРЕМЕННЫЙ ЗАПРОС (2026-10-29, улов
+    # `planeta-stubb-3010`). Два кадра из 17 на круге правок приехали ч/б
+    # архивом — резиденция и аэродром, — причём ГОД В ЗАПРОСЕ СТОЯЛ: «аэродром
+    # бундесвера 2026» отдал, похоже, самолёты Второй мировой. Значит год от
+    # архива не спасает: поисковик ранжирует по словам, а не по эпохе кадра.
+    # Правим не запрос, а ОТБОР: цветность входит в счёт кандидата так же, как
+    # вошёл размер 18.10. Не жёсткий отказ — множитель: если по теме есть
+    # только ч/б (мемориал, исторический сюжет), лучший ч/б всё равно победит
+    # и сцена не останется пустой. Архив, заказанный НАРОЧНО, по словам
+    # запроса распознаётся и не наказывается.
+    _ARCH_WORDS = ("архив", "историч", "история", "ч/б", "чёрно-бел",
+                   "черно-бел", "старое фото", "хроника", "музей", "мемориал",
+                   "вторая мировая", "первая мировая", "ссср", "ретро")
+    _q_low = str(query or "").lower()
+    _arch_ok = any(w in _q_low for w in _ARCH_WORDS) or bool(
+        re.search(r"\b(18|19)\d{2}\b", _q_low))
+
+    def _chroma(path):
+        """Средняя насыщенность кадра, 0-255.
+
+        ПОРОГ ОТКАЛИБРОВАН ЗАМЕРОМ, А НЕ НА ГЛАЗ (2026-10-29): 60 случайных
+        реальных пресс-фото из `БАЗА/` дали медиану 30,1 и минимум 6,4;
+        ниже 5 не оказалось НИ ОДНОГО. Настоящий ч/б даёт 0-3 (проверено
+        переводом цветного кадра в `L`: 6,9 → 0,0). Поэтому порог 4,5 —
+        между этими облаками, ложных срабатываний на сером ночном кадре
+        (их в выборке было два: 6,4 и 6,5) он не даёт. Сепию порог НЕ
+        ловит и не должен: это уже тонировка, а не ч/б архив.
+        """
+        try:
+            from PIL import Image as _I
+            with _I.open(path) as im:
+                im = im.convert("RGB")
+                im.thumbnail((96, 96))
+                px = list(im.getdata())
+            if not px:
+                return 255.0
+            return sum(max(p) - min(p) for p in px) / float(len(px))
+        except Exception:
+            return 255.0
+
     _BAD = (".svg", ".pdf", ".tif", ".tiff", ".djvu")
     seen = set()
     best = None            # (score, w, h, tmp_path, md5)
@@ -811,6 +851,9 @@ def fetch_web_search(query, out_path, env=None):
         w, h = _measure(tmp)
         # счёт: площадь, горизонтальный при равенстве выигрывает
         score = w * h * (1.0 if w >= h else 0.75)
+        _ch = _chroma(tmp)
+        if _ch < 4.5 and not _arch_ok:
+            score *= 0.35          # ч/б на современный запрос — почти всегда архив
         if best is None or score > best[0]:
             if best is not None:
                 # прежний лучший стал кандидатом — не удаляем, а откладываем
@@ -842,6 +885,13 @@ def fetch_web_search(query, out_path, env=None):
         _WEB_USED_WHERE.setdefault(
             h5, ("сценой %d этой сборки" % int(_m.group(1))) if _m
             else "в этой сборке")
+    _ch_best = _chroma(out_path)
+    if _ch_best < 4.5 and not _arch_ok:
+        print(f"  [web_search] ВНИМАНИЕ: выбранный кадр ПОЧТИ ЧЁРНО-БЕЛЫЙ "
+              f"(насыщенность {_ch_best:.1f} из 255), а архив запросом не "
+              f"заказан — похоже на историческое фото вместо современного. "
+              f"Цветного по теме в выдаче не нашлось; проверь кадр глазами "
+              f"или перепиши запрос.", flush=True)
     if w < _MIN_W or h < _MIN_H:
         print(f"  [web_search] лучшее, что нашлось: {w}x{h} — НИЖЕ порога "
               f"{_MIN_W}x{_MIN_H}, на 1920x1080 будет растянуто", flush=True)
@@ -1340,6 +1390,59 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     n = len(files)
     start = usage_counts.get(tag, 0)
     chosen = None
+
+    # У БИБЛИОТЕЧНЫХ ФАЙЛОВ НЕ БЫЛО ПОРОГА НИ ПО ШИРИНЕ, НИ ПО ДЛИТЕЛЬНОСТИ
+    # (2026-10-29, два улова одного дня). Живой счёт: папка `ПОЛИТИКА/ДРОНЫ`
+    # отдала в сцену фото 554x403, а `ПОЛИТИКА/ЦЕНЫ-деньги` — клип 832x464
+    # на 5,2 с при сцене 10,0 с, то есть кадр пошёл бы ПЕТЛЁЙ. У поиска порог
+    # 1600 есть с 18.10, у библиотеки его не было вовсе: считалось, что
+    # отобранный руками файл проверять не нужно, — но с 28.10 медиатека стала
+    # главным источником (сток запрещён), и в `ПОЛИТИКА/` 85% клипов ниже
+    # 720p. Поэтому порог тот же, что у поиска, НО НЕ ЖЁСТКИЙ: мелкий файл
+    # уступает крупному внутри той же папки, а если крупных там нет — берём
+    # лучшее из мелких, говорим об этом вслух и пишем в журнал низкого
+    # разрешения. Пустая сцена хуже растянутого кадра (правило 4).
+    _lib_min_w = int(os.environ.get("MIN_IMG_W", "1600"))
+    _lib_min_vw = int(os.environ.get("MIN_LIB_VID_W", "1280"))
+    _scene_dur = 0.0
+    try:
+        _scene_dur = float(os.environ.get("VIDEORYAD_SCENE_DUR", "0") or 0)
+    except ValueError:
+        _scene_dur = 0.0
+
+    def _lib_fits(path):
+        """(годен, как_описать) — порог по типу файла."""
+        low = path.lower()
+        if low.endswith((".mp4", ".mov", ".webm", ".mkv")):
+            try:
+                pr = subprocess.run(
+                    ["ffprobe", "-v", "error", "-select_streams", "v:0",
+                     "-show_entries", "stream=width,duration",
+                     "-of", "csv=p=0:s=x", path],
+                    capture_output=True, text=True, timeout=20)
+                pp = (pr.stdout or "").strip().split("x")
+                w = int(float(pp[0])) if pp and pp[0] else 0
+                d = float(pp[1]) if len(pp) > 1 and pp[1] not in ("", "N/A") else 0.0
+            except Exception:
+                return True, ""          # не промерить — не повод отказывать
+            need = max(10.0, _scene_dur) if _scene_dur else 10.0
+            if w < _lib_min_vw:
+                return False, "%d px по ширине при пороге %d" % (w, _lib_min_vw)
+            if d and d + 0.2 < need:
+                return False, ("%.1f с при сцене %.1f с — пойдёт петлёй"
+                               % (d, need))
+            return True, ""
+        try:
+            from PIL import Image as _I2
+            with _I2.open(path) as _im2:
+                w = _im2.size[0]
+        except Exception:
+            return True, ""
+        if w < _lib_min_w:
+            return False, "%d px по ширине при пороге %d" % (w, _lib_min_w)
+        return True, ""
+
+    small = None                         # (путь, имя, md5, чем плох)
     for step in range(n):
         cand = files[(start + step) % n]
         cand_path = os.path.join(tag_dir, cand)
@@ -1351,9 +1454,37 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
             continue
         if _USE_COUNT[h] >= _MAX_PER_BUILD:
             continue
+        ok_sz, why = _lib_fits(cand_path)
+        if not ok_sz:
+            if small is None:
+                small = (cand, h, why, (start + step + 1))
+            continue
         chosen, chosen_md5 = cand, h
         usage_counts[tag] = (start + step + 1)
         break
+
+    if chosen is None and small is not None:
+        chosen, chosen_md5, _why, _pos = small
+        usage_counts[tag] = _pos
+        print("  [library] %s/%s: крупнее в папке нет, беру как есть — %s"
+              % (tag, chosen, _why), flush=True)
+        try:
+            _lr = os.path.join(os.path.dirname(out_base or "."),
+                               ".lowres." + os.environ.get("MANIFEST_NAME",
+                                                           "manifest.json"))
+            _m4 = re.search(r"scene_(\d+)", os.path.basename(out_base or ""))
+            if _m4:
+                _d4 = {}
+                if os.path.exists(_lr):
+                    try:
+                        _d4 = json.load(open(_lr, encoding="utf-8"))
+                    except (OSError, ValueError):
+                        _d4 = {}
+                _d4[str(int(_m4.group(1)))] = "медиатека %s: %s" % (chosen, _why)
+                json.dump(_d4, open(_lr, "w", encoding="utf-8"),
+                          ensure_ascii=False, indent=1)
+        except Exception:
+            pass
 
     if chosen is None:
         # every file in this folder is on cooldown / already used -> rule 4:

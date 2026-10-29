@@ -170,12 +170,19 @@ def ddg_images(q, n=14):
     return out
 
 
-def yandex_images(q, n=12):
+def yandex_images(q, n=12, isize="large"):
     """Scrape Yandex Images results HTML. May hit a captcha from some IPs — then
-    returns nothing and the other sources cover it."""
+    returns nothing and the other sources cover it.
+
+    `isize` — размерный фильтр выдачи: "large" (как было, он же дефолт) или
+    "exlarge" (только очень крупные). Нужен сбору базы кадров: там порог
+    ширины 1600 отбивал 127 из 186 скачанных (замер 28.10), а крупные версии
+    в выдаче есть — просто фильтр "large" пускает и 1200-1500.
+    Для роликов поведение не меняется: дефолт прежний."""
     out = []
     try:
-        url = "https://yandex.com/images/search?text=" + urllib.parse.quote(q) + "&isize=large"
+        url = ("https://yandex.com/images/search?text=" + urllib.parse.quote(q)
+               + "&isize=" + urllib.parse.quote(isize))
         html = _get(url, {"Accept-Language": "en,ru;q=0.9"}).decode("utf-8", "ignore")
         import html as _h
         # result tiles serialize their JSON with &quot; entities inside data-bem

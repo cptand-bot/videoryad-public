@@ -1,0 +1,103 @@
+name: base-video
+# СБОР КЛИПОВ ДЛЯ БАЗЫ С ОФИЦИАЛЬНЫХ КАНАЛОВ ВЕДОМСТВ (решение 28.10).
+# Отдельная труба от `base-harvest.yml`: у клипов своё железо (нужен ffmpeg с
+# кодированием), свои гейты и совсем другое время на объект. Боевой
+# `videoryad-cloud.yml` не трогается.
+on:
+  # РАСПИСАНИЯ ЗДЕСЬ НЕТ И НЕ БУДЕТ: YouTube не отдаёт файлы раннерам GitHub
+  # («Sign in to confirm you're not a bot», 12 джобов из 12 — замер 28.10).
+  # Клипы берутся на машине пользователя: `BASE_VIDEO_COPY=1` качает готовые
+  # куски без перекодирования, процессор при этом не работает. Этот workflow
+  # оставлен на случай, если YouTube когда-нибудь начнёт пускать раннеры.
+  workflow_dispatch:
+  push:
+    paths: ["harvest-video/**"]
+concurrency:
+  group: base-video-${{ github.sha }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      shards: ${{ steps.calc.outputs.shards }}
+      total:  ${{ steps.calc.outputs.total }}
+      dir:    ${{ steps.calc.outputs.dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - id: calc
+        run: |
+          d=$(ls -d harvest-video/*/ 2>/dev/null | sort | tail -1 | sed 's:/*$::')
+          if [ -z "$d" ] || [ ! -f "$d/plan.json" ]; then
+            echo "задания нет — закрываюсь"
+            echo "total=0" >> "$GITHUB_OUTPUT"; echo "shards=[]" >> "$GITHUB_OUTPUT"
+            echo "dir=" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "dir=$d" >> "$GITHUB_OUTPUT"
+          python3 - "$d/plan.json" <<'PY' >> "$GITHUB_OUTPUT"
+          import json, sys
+          items = [i for i in json.load(open(sys.argv[1], encoding="utf-8"))["items"]
+                   if i.get("need_video")]
+          # ОДИН ОБЪЕКТ НА МАШИНУ. Клип дороже фотографии на порядок: скачать
+          # кусок ролика, перекодировать, снять три кадра и прогнать OCR —
+          # это минуты, а не секунды.
+          parts = max(1, min(12, len(items)))
+          print("total=%d" % parts)
+          print("shards=%s" % json.dumps(list(range(1, parts + 1))))
+          print("объектов с клипами %d, машин %d" % (len(items), parts), file=sys.stderr)
+          PY
+
+  video:
+    needs: plan
+    if: needs.plan.outputs.total != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - name: Сборщик на месте
+        run: test -f assembler/cloud/base_video.py || { echo "::error::assembler/ не синхронизирован"; exit 1; }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Инструменты
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          timeout 120 sudo apt-get update -qq || true
+          timeout 240 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu-core || true
+          python3 -m pip install --quiet pillow numpy yt-dlp
+          ffmpeg -version >/dev/null 2>&1 || { echo "::error::ffmpeg не запускается"; exit 1; }
+          tesseract --version >/dev/null 2>&1 || { echo "::error::tesseract не запускается — клейма не отсеять"; exit 1; }
+          yt-dlp --version
+      - name: Сбор клипов
+        run: |
+          python3 assembler/cloud/base_video.py \
+            "${{ needs.plan.outputs.dir }}/plan.json" out \
+            --shard ${{ matrix.shard }}/${{ needs.plan.outputs.total }} \
+            --deadline 2400
+      - name: Что добыто
+        run: |
+          echo "клипов: $(find out/frames -name '*.mp4' | wc -l), листов: $(ls out/sheets/*.jpg 2>/dev/null | wc -l)"
+          cat out/report.video.shard${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-sheets-${{ matrix.shard }}
+          path: |
+            out/sheets
+            out/report.video.shard${{ matrix.shard }}.json
+          retention-days: 5
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-frames-${{ matrix.shard }}
+          path: out/frames
+          retention-days: 5
+          if-no-files-found: warn

@@ -979,14 +979,47 @@ def overlay_preview_path(photo):
     return cached
 
 
+def _thumb_seek(asset_path):
+    """С КАКОЙ СЕКУНДЫ БРАТЬ ПЛИТКУ (2026-10-29).
+
+    Брали ровно с первой — и это молча ломало показ ВСЕХ рисованных кадров.
+    Элементы арсенала анимированы по замыслу: строки досье печатаются как на
+    машинке (первая начинается на 0,9 с, каждая следующая через 0,55), страны
+    на карте загораются по очереди, маркер цитаты прочерчивается слева
+    направо, штамп «ПЕРВОИСТОЧНИК» приходит последним. На первой секунде из
+    всего этого нарисована ОДНА БУКВА.
+    Отсюда два живых случая 29.10, которые читались как разные баги: обе
+    вкладки сообщили «досье обрезает строку, на экране верхушка буквы», и
+    пользователь это увидел и ругался — а кадр был целый, просто плитка
+    снята в начале печати (воспроизведено рендером: на t=1,0 с видно
+    «должно», на t=9,5 с все четыре строки, фото и штамп на месте). Туда же
+    общее впечатление «мало задействовано арсенала»: карта на первой секунде
+    пустая.
+    Берём кадр ближе к концу: 80% длительности, но не ближе полусекунды к
+    краю. Длительность не читается — остаёмся на прежней секунде.
+    """
+    try:
+        r = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "csv=p=0", asset_path],
+            capture_output=True, text=True, timeout=20)
+        dur = float((r.stdout or "").strip() or 0)
+    except Exception:
+        dur = 0.0
+    if dur <= 1.5:
+        return "1"
+    return "%.2f" % min(dur - 0.5, max(1.0, dur * 0.8))
+
+
 def make_thumb_bytes(asset_path):
-    """480x270 cover-cropped JPEG bytes for a still or a video's ~1s frame."""
+    """480x270 cover-cropped JPEG bytes for a still or a late frame of a clip."""
     frame_src = asset_path
     tmp = None
     if asset_path.lower().endswith(VID_EXT):
         tmp = asset_path + ".revframe.jpg"
         subprocess.run(
-            ["ffmpeg", "-y", "-ss", "1", "-i", asset_path, "-vframes", "1",
+            ["ffmpeg", "-y", "-ss", _thumb_seek(asset_path), "-i", asset_path,
+             "-vframes", "1",
              "-vf", f"scale={TW}:{TH}:force_original_aspect_ratio=increase,crop={TW}:{TH}",
              tmp], capture_output=True)
         frame_src = tmp
@@ -1286,6 +1319,29 @@ figcaption{padding:10px 13px 13px}
 .pvbox video{width:100%;height:100%;object-fit:contain;background:#000}
 .pvclose{position:absolute;top:6px;right:6px;background:#000b;color:#fff;border:1px solid #777;
   border-radius:6px;padding:3px 10px;cursor:pointer;z-index:9;font-size:13px}
+/* РАССМОТРЕТЬ КАДР — ДВА СОСТОЯНИЯ, ПОЛОВИНА И ВЕСЬ ЭКРАН (2026-10-29).
+   Его заявка: «на каждой сцене кнопка предпросмотра, как мы делали сборщики
+   арсенала; разворачиваться не сразу на полный экран, а наполовину, но с
+   возможностью развернуть на полный». Повод: мелкие дефекты карточек на
+   плитке дашборда не видны вообще — обрезанную букву в заголовке досье он
+   разглядел, только всматриваясь. Окно показывает ИСХОДНЫЙ файл, а не плитку,
+   поэтому видно именно то, что уедет в ролик. */
+.lbx{position:fixed;inset:0;background:#000000d8;z-index:120;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:10px}
+.lbx.on{display:flex}
+.lbx .frame{background:#000;border:1px solid #3a3a42;border-radius:8px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  width:52vw;height:52vh;transition:width .14s ease,height .14s ease}
+.lbx.full .frame{width:96vw;height:90vh;border-radius:4px}
+.lbx .frame img,.lbx .frame video{width:100%;height:100%;object-fit:contain;background:#000}
+.lbx .bar{display:flex;gap:12px;align-items:center;color:#9a9aa0;font-size:13px;
+  flex-wrap:wrap;justify-content:center;max-width:96vw}
+.lbx .bar b{color:#e8e8ea;font-weight:600}
+.lbx .bar button,.lbx .bar a{color:#EABD23;background:#1b1b20;border:1px solid #4a4a4e;
+  border-radius:7px;padding:5px 12px;cursor:pointer;font:inherit;text-decoration:none}
+.lbx .bar button:hover,.lbx .bar a:hover{background:#2a2a31}
+.look{background:#1d2b3a;border:1px solid #3f5f80;color:#cfe3f5;cursor:pointer}
+.look:hover{background:#27405a}
 .ovprevwrap{position:relative;display:inline-block;max-width:100%}
 .ovbadge{opacity:1 !important;right:6px;top:6px;font-size:10px;padding:2px 6px}
 .ovpanel{padding:0;display:flex;flex-direction:column;gap:7px}
@@ -1452,6 +1508,14 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     preview_btn = (f'<button class="pvbtn" id="pvbtn{sid}" onclick="previewScene({sid},event)" '
                    f'title="собрать и посмотреть этот кусок как в финале">▶ превью</button>'
                    ) if live else ""
+    # «РАССМОТРЕТЬ» ЕСТЬ НА КАЖДОЙ СЦЕНЕ, И В ЖИВОМ, И В СТАТИЧНОМ ДАШБОРДЕ
+    # (2026-10-29, его заявка). Ничего не собирает и не считает — просто
+    # открывает уже готовый кадр крупно: половина экрана, по второму нажатию
+    # весь экран. В живом дашборде берётся ИСХОДНЫЙ файл (его путь приходит в
+    # state), в статичном — плитка со страницы: лучше неё там ничего нет.
+    look_btn = (f'<button class="look" id="look{sid}" onclick="lbxLook({sid},event)" '
+                f'title="посмотреть кадр крупно: половина экрана, потом весь">'
+                f'🔍 рассмотреть</button>')
     _tw0 = ov_cur.get("text") if isinstance(ov_cur.get("text"), dict) else {}
     _txt_on0 = bool(str(_tw0.get("words") or _tw0.get("text") or "").strip())
     _photo_on0 = bool(ov_cur.get("photo")) or (bool(ov_cur) and not _txt_on0)
@@ -1691,6 +1755,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     {need_row}
     <p class="txt">{_h(s['text'])}</p>
     <div class="acts">
+      {look_btn}
       {keep_btn}
       {mirror_btn}
       {zoom_btn}
@@ -1795,6 +1860,12 @@ async function poll(){
         t.className = 'thumb ready';
         const b = document.getElementById('b'+sc.id);
         if(b && sc.badge){ b.textContent = sc.badge_label; b.className = 'badge ' + sc.badge; }
+      }
+      if(sc.full){
+        window.__full = window.__full || {};
+        window.__full[sc.id] = {src: sc.full, vid: !!sc.is_video};
+        const lb = document.getElementById('look'+sc.id);
+        if(lb) lb.disabled = false;
       }
       // needs-your-photo flag (server drops the id the moment you upload one)
       const nb = document.getElementById('need'+sc.id);
@@ -2092,6 +2163,55 @@ function ovShape(id, v){{
     b.classList.toggle("on", b.getAttribute("onclick").indexOf("'"+v+"'")>0));
   ovSave(id);
 }}
+function lbxLook(id, ev){{
+  if(ev) ev.stopPropagation();
+  const rec=(window.__full||{{}})[id];
+  let src=rec && rec.src, vid=rec && rec.vid;
+  if(!src){{                       // статичный дашборд: берём плитку со страницы
+    const t=document.getElementById("t"+id);
+    const im=t && t.querySelector("img");
+    src=im && im.getAttribute("src"); vid=false;
+  }}
+  if(!src){{ return; }}
+  lbxShow(src, vid, "СЦЕНА "+String(id).padStart(2,"0"));
+}}
+function lbxShow(src, isVideo, name){{
+  const box=document.getElementById("lbx");
+  const fr=document.getElementById("lbxframe");
+  const v=String(src).split("?")[0].toLowerCase();
+  const asVideo = isVideo || /[.](mp4|mov|webm|mkv)$/.test(v);
+  fr.innerHTML = asVideo
+    ? '<video src="'+src+'" autoplay loop muted controls playsinline></video>'
+    : '<img src="'+src+'" alt="">';
+  document.getElementById("lbxname").textContent=name||"";
+  document.getElementById("lbxopen").href=src;
+  const sz=document.getElementById("lbxsize"); sz.textContent="";
+  if(!asVideo){{
+    const probe=new Image();
+    probe.onload=()=>{{ sz.textContent=probe.naturalWidth+"×"+probe.naturalHeight+" px"; }};
+    probe.src=src;
+  }}
+  box.classList.remove("full");
+  document.getElementById("lbxtog").textContent="⛶ во весь экран";
+  box.classList.add("on");
+}}
+function lbxToggle(ev){{
+  if(ev) ev.stopPropagation();
+  const box=document.getElementById("lbx");
+  const on=box.classList.toggle("full");
+  document.getElementById("lbxtog").textContent = on ? "⤡ назад на половину" : "⛶ во весь экран";
+}}
+function lbxClose(){{
+  const box=document.getElementById("lbx");
+  box.classList.remove("on","full");
+  document.getElementById("lbxframe").innerHTML="";
+}}
+document.addEventListener("keydown", e=>{{
+  const box=document.getElementById("lbx");
+  if(!box || !box.classList.contains("on")) return;
+  if(e.key==="Escape") lbxClose();
+  if(e.key==="f" || e.key==="F" || e.key==="Enter") lbxToggle();
+}});
 async function previewScene(id, ev){{
   if(ev) ev.stopPropagation();
   const b=document.getElementById("pvbtn"+id);
@@ -2839,6 +2959,16 @@ function rjSend(reason){{
 function rjIgnore(){{ rjSend(""); }}
 </script>
 </body>
+<div class="lbx" id="lbx" onclick="if(event.target.id==='lbx')lbxClose()">
+ <div class="frame" id="lbxframe"></div>
+ <div class="bar">
+  <b id="lbxname"></b>
+  <span id="lbxsize"></span>
+  <button id="lbxtog" onclick="lbxToggle(event)">⛶ во весь экран</button>
+  <a id="lbxopen" href="#" target="_blank" rel="noopener">открыть файл</a>
+  <button onclick="lbxClose()">закрыть · Esc</button>
+ </div>
+</div>
 <div id="rjw" hidden>
  <div id="rjbox">
   <div id="rjttl"></div>
@@ -2963,6 +3093,21 @@ def run_live(scenes_path, images_dir, port):
                     b = make_thumb_bytes(ap)
                     if b:
                         open(tp, "wb").write(b)
+                # УСТАРЕВШЕЕ ПРЕВЬЮ ПЕРЕЖИВАЛО ЗАМЕНУ КАДРА (2026-10-29).
+                # `previewScene` собирает `/.rev/preview_NNN.mp4` и больше его
+                # никто не трогает: кадр перерисовали, превью рядом осталось
+                # от прежней версии — и пользователь второй раз увидел ТОТ ЖЕ
+                # дефект на уже исправленной карточке (живой случай: кадр в
+                # 08:12, превью от 08:06). Вкладка вычистила такие файлы
+                # руками, сравнивая времена. Теперь это делает сервер: превью
+                # старше своего кадра удаляется, следующий показ соберёт его
+                # заново. Чужого не трогаем — только `preview_` своей сцены.
+                try:
+                    _pv = os.path.join(thumbs_dir, f"preview_{sid:03d}.mp4")
+                    if os.path.exists(_pv) and os.path.getmtime(_pv) < os.path.getmtime(ap):
+                        os.remove(_pv)
+                except OSError:
+                    pass
                 is_vid = ap.lower().endswith(VID_EXT)
                 row["is_video"] = is_vid
                 if os.path.exists(tp):
@@ -2970,6 +3115,16 @@ def run_live(scenes_path, images_dir, port):
                     row.update(thumb=f"{images_dir}/.rev/{sid:03d}.jpg",
                                v=int(os.path.getmtime(tp)),
                                badge=cls, badge_label=label)
+                # ИСХОДНЫЙ ФАЙЛ ДЛЯ ОКНА «РАССМОТРЕТЬ» (2026-10-29). Плитка —
+                # это ужатая копия в `.rev/`, и мелкий дефект (срезанная буква
+                # в заголовке карточки) на ней не виден в принципе. Окно
+                # показывает ТО, ЧТО УЕДЕТ В РОЛИК, поэтому ему нужен путь к
+                # самому кадру; сервер отдаёт его обычной статикой из папки
+                # проекта, никакой сборки и никакого счёта на машине.
+                try:
+                    row["full"] = os.path.relpath(ap).replace(os.sep, "/")
+                except ValueError:
+                    row["full"] = ap.replace(os.sep, "/")
             out.append(row)
         # fetch considered done when every scene id is in the manifest
         fetch_done = len(man) >= len(scenes) and len(man) > 0

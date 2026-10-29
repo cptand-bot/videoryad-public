@@ -1,0 +1,136 @@
+name: base-harvest
+# НОЧНОЙ СБОР БАЗЫ КАДРОВ (согласовано 28.10). Отдельная труба: боевой
+# `videoryad-cloud.yml` не трогается вовсе, у него своя группа concurrency и
+# свой триггер по `queue/**`. Здесь триггер по `harvest/**`, поэтому ролик и
+# сбор базы могут идти одновременно на одной цели, не мешая друг другу.
+#
+# Почему это вообще в облаке: ресурсы машины пользователя не используем
+# (его прямое слово 23.10), а на ПУБЛИЧНОЙ цели минуты Actions не считаются —
+# сбор бесплатен и может идти хоть всю ночь при выключенном компьютере.
+on:
+  workflow_dispatch:
+  push:
+    paths: ["harvest/**"]
+  # НОЧНОЙ ДОБОР САМ ПО СЕБЕ (28.10, прямое слово пользователя: «эту команду
+  # я могу прощелкать, я могу забыть»). Берётся ПОСЛЕДНЕЕ лежащее задание и
+  # гоняется заново: сбор идёт глубже по выдаче и приносит то, чего в прошлый
+  # раз не хватило. Повторы не страшны — приёмка отсеивает их по md5 того,
+  # что уже лежит в папке. Минуты на публичной цели не считаются, машина
+  # пользователя не участвует, он может спать.
+  schedule:
+    - cron: "0 2 * * *"      # 02:00 UTC = 05:00 по Москве
+concurrency:
+  # ГРУППА УНИКАЛЬНА НА ПРОГОН — как у cards-render (23.10): одна группа на
+  # репозиторий ставила бы второе задание в очередь даже при свободных
+  # раннерах. Каждое задание приезжает своим коммитом, sha и даёт уникальность.
+  group: base-harvest-${{ github.sha }}
+  cancel-in-progress: false
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      shards: ${{ steps.calc.outputs.shards }}
+      total:  ${{ steps.calc.outputs.total }}
+      dir:    ${{ steps.calc.outputs.dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - id: calc
+        run: |
+          # ПУСТОЙ ПРОГОН ЗАКРЫВАЕМ СРАЗУ: триггер `paths` срабатывает и на
+          # УДАЛЕНИЕ файлов, то есть уборка задания сама запускала бы сбор
+          # (ровно эта мина жила в cards-render).
+          d=$(ls -d harvest/*/ 2>/dev/null | sort | tail -1 | sed 's:/*$::')
+          if [ -z "$d" ] || [ ! -f "$d/plan.json" ]; then
+            echo "задания нет (это коммит уборки) — закрываюсь"
+            echo "total=0" >> "$GITHUB_OUTPUT"; echo "shards=[]" >> "$GITHUB_OUTPUT"
+            echo "dir=" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "dir=$d" >> "$GITHUB_OUTPUT"
+          python3 - "$d/plan.json" <<'PY' >> "$GITHUB_OUTPUT"
+          import json, sys
+          items = json.load(open(sys.argv[1], encoding="utf-8"))["items"]
+          # ПО ДВА ОБЪЕКТА НА МАШИНУ. Один объект = 60-80 адресов выдачи,
+          # до 40 скачиваний и OCR на каждый кадр: это 2-4 минуты. Потолок 12
+          # машин оставляет запас к лимиту 20 раннеров на аккаунт, чтобы сбор
+          # базы не отнимал машины у ролика, если тот поедет в ту же ночь.
+          parts = max(1, min(12, (len(items) + 1) // 2))
+          print("total=%d" % parts)
+          print("shards=%s" % json.dumps(list(range(1, parts + 1))))
+          print("объектов %d, машин %d" % (len(items), parts), file=sys.stderr)
+          PY
+      - name: что решили
+        run: echo "задание ${{ steps.calc.outputs.dir }} на ${{ steps.calc.outputs.total }} машин"
+
+  harvest:
+    needs: plan
+    if: needs.plan.outputs.total != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - name: Сборщик на месте
+        run: test -d assembler/template || { echo "::error::assembler/ не синхронизирован — cloud/sync_assembler.sh"; exit 1; }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Инструменты (OCR обязателен)
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/*google* /etc/apt/sources.list.d/*chrome* /etc/apt/sources.list.d/*microsoft* 2>/dev/null || true
+          timeout 120 sudo apt-get update -qq || true
+          timeout 180 sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-rus fonts-dejavu-core || true
+          python3 -m pip install --quiet pillow numpy
+          # БЕЗ OCR ГЕЙТ КЛЕЙМ ПРОПУСКАЕТ ВСЁ, А ПРОГОН ВЫГЛЯДИТ УСПЕШНЫМ
+          # (класс «успех может значить ничего не сделано», 24.10). Проверяем
+          # ЗАПУСКОМ и валим прогон здесь, а не собираем грязную базу.
+          tesseract --version >/dev/null 2>&1 || { echo "::error::tesseract не запускается — сбор отменён, иначе база соберётся с клеймами"; exit 1; }
+          echo "OCR: $(tesseract --version 2>&1 | head -1)"
+      - name: Ключи из Secrets (в репозиторий не попадают никогда)
+        env:
+          FLICKR_API_KEY: ${{ secrets.FLICKR_API_KEY }}
+          DVIDS_API_KEY: ${{ secrets.DVIDS_API_KEY }}
+        run: |
+          # Pexels здесь НЕ НУЖЕН: сток запрещён пользователем 28.10,
+          # сборщик базы к нему не обращается вовсе.
+          { printf 'FLICKR_API_KEY=%s\n' "$FLICKR_API_KEY"
+            printf 'DVIDS_API_KEY=%s\n'  "$DVIDS_API_KEY"; } > harvest.env
+          chmod 600 harvest.env
+      - name: Сбор своей части
+        env:
+          MIN_IMG_W: "1600"
+          MIN_IMG_H: "900"
+          FETCH_READ_LIMIT_SEC: "90"
+        run: |
+          python3 assembler/cloud/base_harvest.py \
+            "${{ needs.plan.outputs.dir }}/plan.json" out harvest.env \
+            --shard ${{ matrix.shard }}/${{ needs.plan.outputs.total }} \
+            --deadline 2100
+      - name: Что добыто
+        run: |
+          echo "кадров: $(find out/frames -type f | wc -l), листов: $(ls out/sheets 2>/dev/null | wc -l)"
+          cat out/report.shard${{ matrix.shard }}.json
+      # ЛИСТЫ ОТДЕЛЬНЫМ АРТЕФАКТОМ — их забирают УТРОМ и смотрит Codex, они
+      # весят килобайты. Полные кадры тянутся потом и только по отобранным.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: base-sheets-${{ matrix.shard }}
+          path: |
+            out/sheets
+            out/report.shard${{ matrix.shard }}.json
+          retention-days: 5
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: base-frames-${{ matrix.shard }}
+          path: out/frames
+          retention-days: 5
+          if-no-files-found: warn

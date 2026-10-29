@@ -1,20 +1,24 @@
-#
-# `template/` и `cloud/` с этим списком. Нашёл файл, которого здесь нет, —
-# `template/` или `cloud/`: `sync_assembler.sh` раскатывает ЭТИ ДВЕ ПАПКИ на
-# Добавил НАСТОЯЩИЙ боевой файл (новый инструмент конвейера)? Впиши его сюда
-# Зачем. Второй сборщик (арсенал, `fullcycle/`) разрабатывается ОТДЕЛЬНОЙ
-# Как работает. Перед раскаткой `sync_assembler.sh` сверяет содержимое
 # МАНИФЕСТ БОЕВОГО КОДА — что разрешено раскатывать в облако (2026-10-23)
-# Путь — от корня скилла, ровно как печатает `find template cloud -type f`.
+#
+# Зачем. Второй сборщик (арсенал, `fullcycle/`) разрабатывается ОТДЕЛЬНОЙ
 # вкладкой, и его код в боевую сборку попадать не должен. Единственная дорога,
-# все восемь целей, и с этого момента новый код работает в каждом ролике.
-# и в облако оно не едет.
-# ограничена: в `fullcycle/` клади что угодно, туда предохранитель не смотрит
-# одной строкой — это осознанное действие диспетчера, а не формальность.
 # по которой он туда физически может попасть, — файл, положенный в
+# `template/` или `cloud/`: `sync_assembler.sh` раскатывает ЭТИ ДВЕ ПАПКИ на
+# все восемь целей, и с этого момента новый код работает в каждом ролике.
+#
+# Как работает. Перед раскаткой `sync_assembler.sh` сверяет содержимое
+# `template/` и `cloud/` с этим списком. Нашёл файл, которого здесь нет, —
 # раскатка ОСТАНОВЛЕНА, файл назван. Разработка арсенала при этом ничем не
+# ограничена: в `fullcycle/` клади что угодно, туда предохранитель не смотрит
+# и в облако оно не едет.
+#
+# Добавил НАСТОЯЩИЙ боевой файл (новый инструмент конвейера)? Впиши его сюда
+# одной строкой — это осознанное действие диспетчера, а не формальность.
+# Путь — от корня скилла, ровно как печатает `find template cloud -type f`.
 cloud/.gitignore
 cloud/README-CLOUD.md
+cloud/base_harvest.py
+cloud/base_video.py
 cloud/battle_manifest.txt
 cloud/busy.sh
 cloud/classify_prompt.md
@@ -25,6 +29,9 @@ cloud/dash_watch.sh
 cloud/fetch_report.py
 cloud/fetch_shard.py
 cloud/get.sh
+cloud/harvest.sh
+cloud/harvest_get.sh
+cloud/harvest_video.sh
 cloud/merge_shards.py
 cloud/notify.sh
 cloud/preflight.sh
@@ -37,6 +44,8 @@ cloud/sync_assembler.sh
 cloud/traffic.sh
 cloud/use_account.sh
 cloud/va.sh
+cloud/workflows/base-harvest.yml
+cloud/workflows/base-video.yml
 cloud/workflows/cards-render.yml
 cloud/workflows/videoryad-cloud.yml
 cloud/youtube_upload.py
@@ -57,7 +66,6 @@ template/check_lead.py
 template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
-template/tg_media.py
 template/codex_ask.sh
 template/codex_brief.py
 template/contact_sheet.py
@@ -98,5 +106,6 @@ template/sfx/pshik.mp3
 template/sfx/whoosh.mp3
 template/sfx/zatvor.mp3
 template/style_card.py
+template/tg_media.py
 template/voice_note.py
 template/zoom.py
