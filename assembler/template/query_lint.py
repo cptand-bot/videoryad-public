@@ -1330,6 +1330,18 @@ def lint(paths, strict=False, no_net=False):
             print("!! не прочитать %s: %s" % (p, e))
             problems += 1
             continue
+        # ФАЙЛ ВСПЛЫВАШЕК БЫВАЕТ СПИСКОМ, А НЕ СЛОВАРЁМ (30.10, улов
+        # `usuario-42`). `overlays_fetch.scenes.json` у части роликов лежит
+        # голым списком сцен: `fetch_assets_news` его терпит, а линт падал с
+        # `AttributeError: 'list' object has no attribute 'get'` — то есть
+        # запросы всплывашек МОЛЧА не проверялись, и это читалось как «линт
+        # прошёл». Приводим к общему виду, а не падаем.
+        if isinstance(data, list):
+            data = {"scenes": data}
+        if not isinstance(data, dict):
+            print("!! %s: ни список, ни словарь — пропускаю" % p)
+            problems += 1
+            continue
         print("\n=== %s ===" % p)
         for_overlay = "overlay" in os.path.basename(p).lower()
         if not no_net:

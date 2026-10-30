@@ -134,8 +134,9 @@ def main():
     ap.add_argument("--note", default="", help="сноска внизу (золотая)")
     ap.add_argument("--source", default="", help="первоисточник, можно пустым")
     ap.add_argument("--images", default="images")
-    ap.add_argument("--anim", type=float, default=2.5,
-                    help="секунд рисовать покадрово, дальше медленный наезд")
+    ap.add_argument("--anim", type=float, default=0.0,
+                    help="секунд рисовать покадрово (0 — всю сцену: у этих "
+                         "видов элементы выходят по очереди)")
     ap.add_argument("--tail-zoom", type=float, default=0.06)
     ap.add_argument("--watermark", default="", help="перебить канал вручную")
     ap.add_argument("--dry-run", action="store_true", help="только проверки")
@@ -154,6 +155,24 @@ def main():
     dur = float(scene.get("duration_sec") or 0)
     if dur <= 0:
         _fail(2, f"у сцены {a.sid} нет duration_sec")
+
+    # КАРТОЧКА ЗАМОРАЖИВАЛАСЬ НА 2,5 с, А ХВОСТ АНИМАЦИИ В РОЛИК НЕ ЕХАЛ
+    # (30.10, улов `usuario-6b`). Тот же дефект чинили 29.10 в
+    # `fullcycle/card_put.py`, но ЭТОТ файл — отдельный скрипт и правку не
+    # получил: `--anim` стоял константой 2,5 независимо от содержимого.
+    # Замер живьём на сцене 11,84 с: у `timeline` с четырьмя событиями на
+    # последней секунде клипа видно ДВА, с тремя — ОДНО.
+    # Все три вида (`bullets`, `forces`, `timeline`) выводят элементы ПО
+    # ОЧЕРЕДИ, поэтому, как и у досье с картами, покадрово рисуется ВСЯ
+    # сцена — обрезать нечего по устройству. Формулу «сколько нужно секунд»
+    # здесь намеренно не заводим: любое изменение таймингов внутри элемента
+    # снова обрежет кадр.
+    if a.anim <= 0:
+        a.anim = round(dur, 2)
+        print("рисуем покадрово всю сцену (%.1f с) — элементы этого вида "
+              "выходят по очереди и не обрезаются" % a.anim)
+    else:
+        a.anim = round(min(a.anim, dur), 2)
 
     channel = a.watermark or _channel(a.scenes, data if isinstance(data, dict) else {})
     watermark = WM.get(channel, channel or "").upper()

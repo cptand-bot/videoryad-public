@@ -13,9 +13,17 @@
 уже 16:9 — и сборщик сам поставит его в РОДНОМ размере по центру, залив поля
 размытой копией (та же дорожка, что у вертикальных и у узких фото).
 
-ЧЕГО ОН НЕ ЛЕЧИТ: знак в СЕРЕДИНЕ кадра — микрофонный куб с логотипом,
-титр по центру нижней трети, субтитры во всю ширину. Это не край, срезать
-нечего. Такой кадр по-прежнему брак.
+РЕЖИМ «ТОЛЬКО СЕРЕДИНА» (--center, его слово 30.10 про Deutsche Welle):
+«Оно не в центре кадра, как правило в начале — да, в центре, а потом по
+видеоряду его нету в центре, оно где-то в углу прячется. А мы откадрируем
+центр только возьмём, и всё». То есть у телеканала знак в центре стоит
+на ЗАСТАВКЕ, а в самом сюжете уезжает в угол. Поэтому: `--skip` выбрасывает
+заставку, `--center` срезает сразу все четыре края и оставляет серединную
+часть — любой угловой знак уходит вместе с краем, сторону искать не надо.
+
+ЧЕГО ОН НЕ ЛЕЧИТ: знак, который действительно стоит В СЕРЕДИНЕ самого
+сюжета — микрофонный куб с логотипом у говорящего, титр по центру нижней
+трети, субтитры во всю ширину. Это не край, срезать нечего.
 """
 import argparse
 import os
@@ -31,6 +39,13 @@ def _wh(path):
                        capture_output=True, text=True, timeout=60)
     w, h = r.stdout.strip().split("x")[:2]
     return int(w), int(h)
+
+
+def center_expr(w, h, pct):
+    """Оставить середину: срезать `pct` процентов с КАЖДОГО края."""
+    nw = (w - 2 * ((w * pct) // 100)) // 2 * 2
+    nh = (h - 2 * ((h * pct) // 100)) // 2 * 2
+    return f"crop={nw}:{nh}:{(w - nw) // 2}:{(h - nh) // 2}", (nw, nh)
 
 
 def crop_expr(w, h, side, pct):
@@ -50,6 +65,12 @@ def main():
     ap.add_argument("src")
     ap.add_argument("--side", default="left", choices=SIDES,
                     help="с какой стороны стоит знак (по умолчанию левая)")
+    ap.add_argument("--center", action="store_true",
+                    help="взять только середину: срезать все четыре края сразу "
+                         "(телеканалы — знак в любом углу уходит без поиска стороны)")
+    ap.add_argument("--skip", type=float, default=0.0,
+                    help="выбросить столько секунд с начала (заставка телеканала, "
+                         "где знак стоит по центру); только для видео")
     ap.add_argument("--pct", type=int, default=15,
                     help="сколько процентов стороны срезать (по умолчанию 15)")
     ap.add_argument("--out", default="", help="куда писать; по умолчанию рядом, с суффиксом __cut")
@@ -62,12 +83,18 @@ def main():
         sys.exit("ОШИБКА: --pct вне разумного (2-40)")
 
     w, h = _wh(a.src)
-    expr, (nw, nh) = crop_expr(w, h, a.side, a.pct)
+    if a.center:
+        expr, (nw, nh) = center_expr(w, h, a.pct)
+    else:
+        expr, (nw, nh) = crop_expr(w, h, a.side, a.pct)
     root, ext = os.path.splitext(a.src)
     out = a.out or (root + "__cut" + ext)
     is_video = ext.lower() in (".mp4", ".mov", ".webm", ".mkv", ".m4v")
 
-    cmd = ["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", a.src, "-vf", expr]
+    cmd = ["ffmpeg", "-nostdin", "-v", "error", "-y"]
+    if a.skip > 0 and is_video:
+        cmd += ["-ss", "%.2f" % a.skip]
+    cmd += ["-i", a.src, "-vf", expr]
     if is_video:
         cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                 "-pix_fmt", "yuv420p", "-an"]
@@ -76,12 +103,18 @@ def main():
     cmd.append(out)
     subprocess.run(cmd, check=True, timeout=900)
 
-    print("было %dx%d → стало %dx%d (срезано %d%% слева/справа/сверху/снизу: %s)"
-          % (w, h, nw, nh, a.pct, a.side))
+    if a.center:
+        print("было %dx%d → стало %dx%d (взята середина, срезано %d%% с каждого "
+              "края — все четыре угла ушли%s)"
+              % (w, h, nw, nh, a.pct,
+                 ", заставка %.1f с выброшена" % a.skip if a.skip > 0 and is_video else ""))
+    else:
+        print("было %dx%d → стало %dx%d (срезано %d%% с края: %s)"
+              % (w, h, nw, nh, a.pct, a.side))
     print("соотношение %.2f — %s" % (
         nw / nh,
         "уже 16:9, сборщик поставит родным размером с размытой заливкой"
-        if nw / nh < 1.76 else "всё ещё широкий, заливки не будет"))
+        if nw / nh < 1.76 else "то же 16:9 или шире, заливки не будет"))
     print(out)
 
     if a.check:
