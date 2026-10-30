@@ -1,0 +1,343 @@
+{
+  "anchor": "top",
+  "6": {
+    "photo": "overlays/scene_006.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "23": {
+    "photo": "overlays/scene_023.jpg",
+    "shape": "rounded",
+    "at": 3.0,
+    "scale": 1.0,
+    "sound": "ding",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "33": {
+    "photo": "overlays/scene_033.jpg",
+    "shape": "rect",
+    "at": 3.0,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "10": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "РЕШЕНИЕ СНБО · 25 СЕНТЯБРЯ 2026",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "14": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "УКАЗ ВВЕДЁН 26 ОКТЯБРЯ 2026",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МАРИУПОЛЬ · МАРТ 2022",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "19": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "«АЗОВСТАЛЬ» · МАЙ 2022",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "20": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ГОРОДА В УКАЗЕ НЕ НАЗВАНЫ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "КУПЯНСК",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "КОНСТАНТИНОВКА",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "24": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "БАСТОНЬ · ДЕКАБРЬ 1944",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "26": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "3-я АРМИЯ ПАТТОНА",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "27": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЛАДОГА · ДОРОГА ЖИЗНИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "СЛАВЯНСК",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "32": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ФОРТИФИКАЦИИ · ПОКРОВСК",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "35": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "НОВАЯ МОДЕЛЬ — ДО 1 ДЕКАБРЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "36": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "СУМЫ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "38": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "АВДЕЕВКА",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "39": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "БАХМУТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "48": {
+    "at": 2.8,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ГУЛЯЙПОЛЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "51": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МИРНОГРАД",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "2": {
+    "photo": "overlays/scene_002.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "9": {
+    "photo": "overlays/scene_009.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "whoosh",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "47": {
+    "photo": "overlays/scene_047.jpg",
+    "shape": "rect",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "whoosh",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "49": {
+    "photo": "overlays/scene_049.jpg",
+    "shape": "rect",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  }
+}
