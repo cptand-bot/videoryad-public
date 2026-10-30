@@ -874,6 +874,23 @@ def main():
     if not (fx_s or fx_o) or not (scenes or overlays):
         print(__doc__)
         return 2
+    # НАБОР ПРАВОК БЕЗ СВОЕГО ФАЙЛА — ОТБОЙ, А НЕ ТИХИЙ ХОЛОСТОЙ ХОД
+    # (улов 30.10, «Круговая оборона»). `--fix-overlays '{...}'` без
+    # `--overlays <файл>` проходил все проверки, список работ для всплывашек
+    # выходил пустым, и прогон заканчивался успехом БЕЗ СТРОКИ о рефетче
+    # всплывашек — снаружи это читается как «сделано». Поймано только
+    # потому, что проверяющий второй раз назвал ту же всплывашку, а вкладка
+    # сверила mtime файла. Ровно класс «успех может значить ничего не
+    # сделано», поэтому отбиваем явно.
+    if fx_o and not overlays:
+        print("--fix-overlays задан, а --overlays <файл> нет: править нечего."
+              "\nДобавь --overlays overlays_fetch.scenes.json — иначе прогон"
+              " молча не тронет ни одной всплывашки.")
+        return 2
+    if fx_s and not scenes:
+        print("--fix-scenes задан, а --scenes <файл> нет: править нечего."
+              "\nДобавь --scenes <проект>.scenes.json.")
+        return 2
     jobs, pend = [], []
     if scenes and fx_s:
         _fx = json.loads(fx_s)
@@ -936,6 +953,19 @@ def main():
         return 2
     if round_gate(pend, bool(_why)):
         return 1
+    # СНИМОК ФАЙЛОВ ДО ЗАПИСИ (улов 30.10, «Круговая оборона»): линт идёт
+    # ПОСЛЕ apply_fix, и отказ по одной мине оставлял в scenes.json уже
+    # переписанными ВСЕ запросы круга — при том что кадры не трогались.
+    # Дальше возможны два плохих исхода: либо вкладка собирает весь вызов
+    # заново (22 сцены впустую), либо досылает только спорную сцену — и
+    # тогда в файле висят запросы, которым не соответствует ни один кадр
+    # на диске. Поэтому при отказе линта файл возвращается байт в байт.
+    _snapshot = {}
+    for _p, _fx2, _ov in pend:
+        try:
+            _snapshot[_p] = open(_p, "rb").read()
+        except OSError:
+            _snapshot[_p] = None
     for _p, _fx2, _ov in pend:
         jobs.append(apply_fix(_p, _fx2, _ov))
 
@@ -951,10 +981,25 @@ def main():
         print("\n--- линт новых запросов ---")
         rc = subprocess.run(["python3", lint] + _lint_files).returncode
         if rc != 0 and not _why:
+            _back = []
+            for _p, _raw in _snapshot.items():
+                if _raw is None:
+                    continue
+                try:
+                    _t = _p + ".lintback"
+                    open(_t, "wb").write(_raw)
+                    os.replace(_t, _p)
+                    _back.append(os.path.basename(_p))
+                except OSError as e:
+                    print("  !! не удалось вернуть %s: %s" % (_p, e))
             print("\nОШИБКА: замена содержит мину — перепиши её от объекта "
                   "(или --force, если уверен). Фетч НЕ запускался, "
-                  "СТАРЫЕ КАДРЫ НА МЕСТЕ (запросы в scenes.json уже "
-                  "переписаны — поправь их и позови снова).")
+                  "СТАРЫЕ КАДРЫ НА МЕСТЕ.")
+            if _back:
+                print("Файлы сцен возвращены в прежний вид (%s): НИ ОДИН "
+                      "запрос не переписан." % ", ".join(_back))
+                print("Правь только названную мину и зови тот же вызов "
+                      "целиком — остальные сцены ничего не потеряли.")
             for sub, _, _, _ in jobs:
                 if os.path.exists(sub):
                     os.remove(sub)
