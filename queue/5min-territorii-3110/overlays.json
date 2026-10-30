@@ -1,0 +1,353 @@
+{
+  "anchor": "top",
+  "12": {
+    "photo": "overlays/scene_012.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true
+  },
+  "19": {
+    "photo": "overlays/scene_019.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "21": {
+    "photo": "overlays/scene_021.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "23": {
+    "photo": "overlays/scene_023.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "24": {
+    "photo": "overlays/scene_024.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "36": {
+    "photo": "overlays/scene_036.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "41": {
+    "photo": "overlays/scene_041.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "43": {
+    "photo": "overlays/scene_043.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "56": {
+    "photo": "overlays/scene_056.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "4": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "КРАСНЫЕ ЛИНИИ КИЕВА: НЕЙТРАЛИТЕТ · АРМИЯ · ГАРАНТИИ РФ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "7": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПОЗИЦИЯ КИЕВА ПО ГАРАНТИЯМ РОССИИ ИЗМЕНИЛАСЬ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "16": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ГАРАНТИИ НУЖНЫ ВСЕМ: КИЕВУ · МОСКВЕ · ЕВРОПЕ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "31": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ДЕНАЦИФИКАЦИЯ — ЧАСТЬ УСЛОВИЙ МОСКВЫ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "35": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПЕСКОВ: ОБСУДЯТ ВЗАИМНЫЕ ГАРАНТИИ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "40": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МЕХАНИЗМ ДОЛЖЕН ПЕРЕЖИТЬ СМЕНУ ВЛАСТИ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "47": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТРАМПУ НУЖНА СДЕЛКА",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "50": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ДВА ПУТИ: ДОГОВОРЁННОСТЬ ИЛИ ПРОДОЛЖЕНИЕ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "52": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТРЁХСТОРОННЯЯ ВСТРЕЧА: АБУ-ДАБИ, НОЯБРЬ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "54": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЗАВИСИМОСТЬ ОТ ЗАПАДНОЙ ПОДДЕРЖКИ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "СИКОРСКИЙ: ОДНОГО ДОНБАССА НЕДОСТАТОЧНО",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "64": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "РИТОРИКА ДЕШЕВЛЕ ВСЕГО",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "67": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЦЕНУ КОМПРОМИССА ОПРЕДЕЛЯЮТ РЕСУРСЫ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "71": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ОБСУЖДАТЬ — НЕ ЗНАЧИТ СОГЛАСИТЬСЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "78": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ДИПЛОМАТИЯ СИЛЫ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "79": {
+    "at": 2.2,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МОСКВЕ СКАЗАТЬ ОДНО, СВОЕЙ СТРАНЕ — ДРУГОЕ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.2,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "photo": "overlays/scene_028.jpg",
+    "shape": "rounded",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "68": {
+    "photo": "overlays/scene_068.jpg",
+    "shape": "rect",
+    "at": 2.2,
+    "scale": 1.0,
+    "sound": "zatvor",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  }
+}
