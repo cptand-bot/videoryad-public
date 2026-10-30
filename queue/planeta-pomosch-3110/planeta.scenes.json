@@ -1,0 +1,605 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0,
+   "duration_sec": 13.645,
+   "visual_prompt": "Капитолий перед промежуточными выборами в США",
+   "source": "press_photo",
+   "source_query": "купол Капитолия Вашингтон конец октября 2026",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 13.645,
+   "duration_sec": 9.835,
+   "visual_prompt": "Россия, Украина, Европа, Израиль и Иран расположены кругами вокруг даты выборов",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 23.48,
+   "duration_sec": 12.305,
+   "visual_prompt": "настенный календарь рядом с закрытой бутылкой в московской квартире",
+   "source": "web_search",
+   "source_query": "настенный календарь третье ноября квартира Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 35.785,
+   "duration_sec": 10.015,
+   "visual_prompt": "бронетехника НАТО движется по полигону во время учений",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 45.8,
+   "duration_sec": 13.279,
+   "visual_prompt": "итальянская военная техника ожидает погрузки у транспортной рампы",
+   "source": "press_photo",
+   "source_query": "грузовая рампа военной базы Италии техника 2026",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 59.079,
+   "duration_sec": 9.921,
+   "visual_prompt": "делегации работают за круглым столом НАТО",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 69,
+   "duration_sec": 14.441,
+   "visual_prompt": "Джорджа Мелони проводит совещание с итальянскими министрами",
+   "source": "press_photo",
+   "source_query": "Джорджа Мелони совещание правительства Италии октябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 83.441,
+   "duration_sec": 13.426,
+   "visual_prompt": "телекамеры работают в пресс-центре итальянского парламента",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 96.867,
+   "duration_sec": 12.332,
+   "visual_prompt": "военно-транспортный самолёт Италии стоит возле погрузочной техники",
+   "source": "press_photo",
+   "source_query": "военный аэродром Италии транспортный самолёт декабрь 2025",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 109.199,
+   "duration_sec": 11.121,
+   "visual_prompt": "автопоезд с военной техникой ожидает отправки из Италии",
+   "source": "web_search",
+   "source_query": "итальянский автопоезд перевозит военную технику 2026",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 120.32,
+   "duration_sec": 13.282,
+   "visual_prompt": "досье Каи Каллас с должностью главы европейской дипломатии",
+   "source": "card:dossier",
+   "source_query": "карточка «dossier» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 133.602,
+   "duration_sec": 11.117,
+   "visual_prompt": "Кая Каллас выступает после встречи европейских министров",
+   "source": "press_photo",
+   "source_query": "Кая Каллас выступление Брюссель октябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 144.719,
+   "duration_sec": 10.591,
+   "visual_prompt": "покупатель расплачивается у кассы супермаркета в Милане",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ПРИЛАВОК-НЕМЕЦКОГО-СУПЕРМАРКЕТА",
+   "overlays": []
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 155.31,
+   "duration_sec": 9.608,
+   "visual_prompt": "платёжный терминал возле покупательской корзины в итальянском магазине",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ТОЛПА-ГОРОДСКОЙ-ПЛОЩАДИ",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 164.918,
+   "duration_sec": 10.678,
+   "visual_prompt": "итальянское казначейство в рабочий день",
+   "source": "press_photo",
+   "source_query": "руки оператора закладывают купюры евро в счётчик на столе 2026",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 175.596,
+   "duration_sec": 10.842,
+   "visual_prompt": "Кая Каллас участвует во встрече министров Евросоюза",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 186.438,
+   "duration_sec": 10.641,
+   "visual_prompt": "врач кладёт упаковку таблеток на стол в кабинете",
+   "source": "web_search",
+   "source_query": "кабинет врача в поликлинике пустой приёмный стол 2026",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 197.079,
+   "duration_sec": 12.682,
+   "visual_prompt": "редакция немецкой газеты работает в Берлине",
+   "source": "press_photo",
+   "source_query": "здание редакции газеты в Берлине фасад и вывеска 2026",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 209.761,
+   "duration_sec": 12.197,
+   "visual_prompt": "Московский Кремль со стороны набережной в конце октября",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 221.958,
+   "duration_sec": 10,
+   "visual_prompt": "Дональд Трамп выступает перед журналистами",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 231.958,
+   "duration_sec": 13.244,
+   "visual_prompt": "пусковая установка Пэтриот ВСУ на позиции 2026",
+   "source": "press_photo",
+   "source_query": "пусковая установка Пэтриот ВСУ на позиции 2026",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 245.202,
+   "duration_sec": 11.84,
+   "visual_prompt": "временная линия ожидания отправки итальянского пакета помощи",
+   "source": "card:timeline",
+   "source_query": "карточка «timeline» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "rows": [
+    "Июль=ждали отправки",
+    "Сентябрь=снова ждали",
+    "Декабрь прошлого года=последняя поставка",
+    "3 ноября=ожидание выборов в США"
+   ],
+   "overlays": [],
+   "card": {
+    "kind": "timeline",
+    "kick": "КАК ЖДАЛИ ИТАЛЬЯНСКИЙ ПАКЕТ",
+    "title": "ЧАС ИКС",
+    "lines": [
+     "последняя поставка",
+     "перенесли",
+     "перенесли",
+     "выборы в США"
+    ],
+    "src": "La Repubblica",
+    "watermark": "ПЛАНЕТА",
+    "anim": 11.8
+   }
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 257.042,
+   "duration_sec": 12.8,
+   "visual_prompt": "очередь избирателей у входа на избирательный участок США ноябрь 2026",
+   "source": "press_photo",
+   "source_query": "очередь избирателей у входа на избирательный участок США ноябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 269.842,
+   "duration_sec": 10.833,
+   "visual_prompt": "рука держит смартфон у окна утром крупным планом 2026",
+   "source": "press_photo",
+   "source_query": "рука держит смартфон у окна утром крупным планом 2026",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 280.675,
+   "duration_sec": 11.326,
+   "visual_prompt": "флаг Евросоюза и флаг Украины рядом на флагштоках 2026",
+   "source": "press_photo",
+   "source_query": "флаг Евросоюза и флаг Украины рядом на флагштоках 2026",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 292.001,
+   "duration_sec": 12.001,
+   "visual_prompt": "БАЗА/ВЛАСТЬ-США/САМОЛЁТ-AIR-FORCE",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/САМОЛЁТ-AIR-FORCE",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 304.002,
+   "duration_sec": 11.867,
+   "visual_prompt": "служебный вход Еврокомиссии в обычный рабочий день",
+   "source": "press_photo",
+   "source_query": "вход Еврокомиссии Брюссель рабочий день 2026",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 315.869,
+   "duration_sec": 10.167,
+   "visual_prompt": "стеклянная бутылка на кухонном столе у окна 2026",
+   "source": "press_photo",
+   "source_query": "стеклянная бутылка на кухонном столе у окна 2026",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 326.036,
+   "duration_sec": 14.402,
+   "visual_prompt": "Палаццо Киджи в Риме продолжает обычную работу",
+   "source": "press_photo",
+   "source_query": "площадь Палаццо Киджи Рим рабочий день ноябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 340.438,
+   "duration_sec": 8.732,
+   "visual_prompt": "служебные автомобили подъезжают к администрации США",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/НОЯБРЬ-ПОМОЩЬ-УКРАИНЕ",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 349.17,
+   "duration_sec": 8.068,
+   "visual_prompt": "кассовая зона британского казначейства в конце финансового периода",
+   "source": "press_photo",
+   "source_query": "фасад Казначейства Великобритании Уайтхолл Лондон 2026",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 357.238,
+   "duration_sec": 9.28,
+   "visual_prompt": "Даунинг-стрит во время объявления нового британского пакета",
+   "source": "press_photo",
+   "source_query": "фасад дома номер десять на Даунинг-стрит Лондон чёрная дверь без людей 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 366.518,
+   "duration_sec": 13.44,
+   "visual_prompt": "круговая схема частей британского пакета поддержки",
+   "source": "card:pie",
+   "source_query": "карточка «pie» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 379.958,
+   "duration_sec": 12.681,
+   "visual_prompt": "кассир выдаёт фунты стерлингов клиенту в банке Лондона 2026",
+   "source": "press_photo",
+   "source_query": "кассир выдаёт фунты стерлингов клиенту в банке Лондона 2026",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 392.639,
+   "duration_sec": 10.622,
+   "visual_prompt": "штаб-квартира британской деловой газеты",
+   "source": "web_search",
+   "source_query": "деловой квартал Лондона Сити башни утром 2026",
+   "overlays": []
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 403.261,
+   "duration_sec": 10.418,
+   "visual_prompt": "украинские военнослужащие построены возле бронетехники",
+   "source": "press_photo",
+   "source_query": "колонна бронетехники ВСУ на территории воинской части 2026",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 413.679,
+   "duration_sec": 12.24,
+   "visual_prompt": "Европарламент после завершения международного саммита",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 425.919,
+   "duration_sec": 9.232,
+   "visual_prompt": "ремонтная бригада обслуживает украинскую бронемашину",
+   "source": "press_photo",
+   "source_query": "ремонт бронемашины ВСУ Киевская область 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 435.151,
+   "duration_sec": 12.848,
+   "visual_prompt": "украинская бронетехника размещена на технической базе",
+   "source": "press_photo",
+   "source_query": "вход в здание Европейского инвестиционного банка Люксембург 2026",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 447.999,
+   "duration_sec": 12.346,
+   "visual_prompt": "офис Euroclear в Брюсселе",
+   "source": "press_photo",
+   "source_query": "офис Евроклир Брюссель замороженные активы 2026",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 460.345,
+   "duration_sec": 12.477,
+   "visual_prompt": "Европейский центральный банк во Франкфурте",
+   "source": "press_photo",
+   "source_query": "башня Европейского центробанка Франкфурт 2026",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 472.822,
+   "duration_sec": 13.605,
+   "visual_prompt": "юристы входят в Суд Европейского союза",
+   "source": "press_photo",
+   "source_query": "Суд Евросоюза Люксембург вход юристов 2026",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 486.427,
+   "duration_sec": 12.717,
+   "visual_prompt": "терминал Starlink установлен возле техники украинского подразделения",
+   "source": "press_photo",
+   "source_query": "терминал Старлинк у подразделения ВСУ 2026",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 499.144,
+   "duration_sec": 12.862,
+   "visual_prompt": "европейская антенна спутниковой связи на космодроме",
+   "source": "press_photo",
+   "source_query": "станция спутниковой связи Европы параболические антенны поле 2026",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 512.006,
+   "duration_sec": 13.379,
+   "visual_prompt": "мобильная спутниковая тарелка работает возле украинской техники",
+   "source": "press_photo",
+   "source_query": "украинский военный запускает разведывательный дрон в поле 2026",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 525.385,
+   "duration_sec": 14.031,
+   "visual_prompt": "сенаторы США в Капитолии перед голосованием 2026",
+   "source": "press_photo",
+   "source_query": "сенаторы США в Капитолии перед голосованием 2026",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 539.416,
+   "duration_sec": 12.657,
+   "visual_prompt": "служебные автомобили проезжают через въезд в Пентагон",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 552.073,
+   "duration_sec": 13.025,
+   "visual_prompt": "электрик ремонтирует линию электропередачи на опоре",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ЭЛЕКТРИК-ОПОРЕ-ЛЭП",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 565.098,
+   "duration_sec": 12.96,
+   "visual_prompt": "Илон Маск выступает на площадке SpaceX в Техасе",
+   "source": "press_photo",
+   "source_query": "Илон Маск на площадке Спейс-икс Техас 2026",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 578.058,
+   "duration_sec": 13.68,
+   "visual_prompt": "самолёт ВВС США движется по рулёжной дорожке",
+   "source": "press_photo",
+   "source_query": "самолёт ВВС США рулёжная дорожка авиабазы 2026",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 591.738,
+   "duration_sec": 11.237,
+   "visual_prompt": "американский участок готовят к голосованию третьего ноября",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "overlays": []
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 602.975,
+   "duration_sec": 12.172,
+   "visual_prompt": "Капитолий США вечером подсветка купола 2026",
+   "source": "press_photo",
+   "source_query": "Капитолий США вечером подсветка купола 2026",
+   "overlays": []
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 615.147,
+   "duration_sec": 13.44,
+   "visual_prompt": "БАЗА/ВЛАСТЬ-УКРАИНА/КАБИНЕТ-МИНИСТРОВ-УКРАИНЫ",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/КАБИНЕТ-МИНИСТРОВ-УКРАИНЫ",
+   "overlays": []
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 628.587,
+   "duration_sec": 13.645,
+   "visual_prompt": "итальянская батарея противовоздушной обороны остаётся на базе",
+   "source": "press_photo",
+   "source_query": "батарея ПВО армии Италии на базе 2026",
+   "overlays": []
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 642.232,
+   "duration_sec": 7.872,
+   "visual_prompt": "ракета Falcon 9 остаётся на стартовом комплексе",
+   "source": "press_photo",
+   "source_query": "стартовый комплекс Фалкон-9 Флорида 2026",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 650.104,
+   "duration_sec": 8.883,
+   "visual_prompt": "очередь людей у входа в учреждение — все ждут",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ОЧЕРЕДЬ-ЛЮДЕЙ-ВХОДА",
+   "overlays": []
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 658.987,
+   "duration_sec": 6.24,
+   "visual_prompt": "рассвет над правительственным кварталом США",
+   "source": "press_photo",
+   "source_query": "рассвет над Белым домом четвёртое ноября 2026",
+   "overlays": []
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 665.227,
+   "duration_sec": 7.273,
+   "visual_prompt": "закрытая бутылка и настенный календарь на кухонном столе 2026",
+   "source": "web_search",
+   "source_query": "закрытая бутылка и настенный календарь на кухонном столе 2026",
+   "overlays": []
+  }
+ ]
+}
