@@ -59,10 +59,24 @@ def _img_wh(ffprobe, src):
         return W, H
 
 
+# Порог «узкого» кадра — тот же, что у отбора в fetch_assets_news.py.
+NARROW_W, NARROW_H = 1600, 900
+
+
 def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
     frames = int(duration * FPS)
     w, h = _img_wh(ffprobe, src)
     portrait = (w / h) < 1.15  # portrait / square / 4:3 -> would lose too much to a 16:9 centre-crop
+    # УЗКИЙ ГОРИЗОНТАЛЬНЫЙ КАДР — НЕ РАСТЯГИВАЕМ, А ЗАЛИВАЕМ ПОЛЯ (решение
+    # пользователя 30.10, дословно: «можем их помещать в середину его
+    # реальный размер, а по краям то, что остаётся чёрное, делать размытый
+    # его же, только размытым очень размытым фоном, как мы делаем с
+    # вертикальными»). Повод: на прифронтовых городах выдача живёт в
+    # коридоре 1200-1500 px, снимок растягивался до 2560 (в два раза) и
+    # мылился, а вкладка жгла круги правок на поиск более широкого — которого
+    # в выдаче просто нет (замер 30.10: 14 узких из 52 до переписи запросов,
+    # 13 после, то есть формулировки ширину НЕ лечат).
+    narrow = (not portrait) and (w < NARROW_W or h < NARROW_H)
     m = re.search(r"clip_(\d+)", os.path.basename(out_path))
     # -1, а не 0: при нераспознанном имени 0 %% N == 0 включало блик
     # на КАЖДОЙ такой сцене (поймано на тесте 2026-10-16)
@@ -71,17 +85,27 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
     fx_in, fx_steps, fx_out = _fx_layers(sid, duration)  # блик/пылинки/дымка
     tail = (("," + fxc) if fxc else "")
 
-    if portrait:
+    if portrait or narrow:
         # blurred-fill: whole image visible (fit by the frame), sides filled
         # with a darkened, blurred, zoomed copy of the same image. Gentle push
         # on the composite so no edge is ever revealed. Faces never get cut.
-        z = ("min(zoom+0.00035,1.08)" if random.random() < 0.5
-             else "if(eq(on,0),1.08,max(zoom-0.00035,1.0))")
+        if narrow:
+            # Наезд ТОЛЬКО внутрь и мягкий: первый кадр показывает снимок в
+            # его родном размере, как и просил пользователь.
+            z = "min(zoom+0.00025,1.06)"
+            # Коробка переднего плана = родной размер, прижатый рамкой.
+            # Пропорции сохраняет сам ffmpeg (decrease), поэтому снимок
+            # 1400x900 ляжет 1400x900, а 1500x1200 — 1350x1080.
+            fgw, fgh = min(w, W), min(h, H)
+        else:
+            z = ("min(zoom+0.00035,1.08)" if random.random() < 0.5
+                 else "if(eq(on,0),1.08,max(zoom-0.00035,1.0))")
+            fgw, fgh = W, H
         core = (
             f"[0:v]split=2[bg][fg];"
             f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
             f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
-            f"[fg]scale={W}:{H}:force_original_aspect_ratio=decrease[fgs];"
+            f"[fg]scale={fgw}:{fgh}:force_original_aspect_ratio=decrease[fgs];"
             f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2[base];"
             f"[base]zoompan=z='{z}':x='{_ZX}':y='{_ZY}':"
             f"d={frames}:s={W}x{H}:fps={FPS}{tail}"
