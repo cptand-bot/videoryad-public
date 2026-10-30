@@ -372,7 +372,17 @@ _STYLIZED_NAME = ("animate", "ai-gen", "ai_gen", "aigen", "ai-generated",
                   # task/genid UUID pipeline signature (found 2026-09-14 in
                   # ПОЛИТИКА/NEWs and ПОЛИТИКА/SVO, slipping past the filter
                   # above and serving as "real" news b-roll via round-robin)
-                  "_genid_", "grok-video", "task_01")
+                  "_genid_", "grok-video", "task_01",
+                  # ЭКСПОРТЫ ВИДЕОГЕНЕРАТОРА БЕЗ СЛОВА «AI» В ИМЕНИ
+                  # (30.10, улов `usuario-42`). В `ПОЛИТИКА/НЕФТЬ` 37 видео
+                  # из 49 называются `20260204_2114_New Video_simple_compose_
+                  # 01kgn834p….mp4` — ни одного ключа из списка выше, а в
+                  # индексе у них честные тематические теги `oil`, `refinery`,
+                  # `pipeline`, метки `ai-generated` нет. То есть и по имени,
+                  # и по тегам фильтр молчал, round-robin отдавал их как
+                  # настоящую съёмку, а запрос `ПАПКА:refinery` попадал в них
+                  # ПРИЦЕЛЬНО — именно этими тегами они и проиндексированы.
+                  "simple_compose", "_compose_", "new video", "new_video")
 _STYLIZED_TAGS = {"ai-generated", "ai-gen", "stylised", "stylized",
                   "motion-graphics", "emblem-glow", "3d-render", "cgi"}
 
