@@ -340,12 +340,34 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
     # ~20% longer than the sum of the source clips' own durations).
     _m = re.search(r"clip_(\d+)", os.path.basename(out_path))
     _fxc = _fx_chain(int(_m.group(1)) if _m else 0)
-    vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
-          f"setpts=PTS-STARTPTS,fps={FPS}" + ("," + _fxc if _fxc else "") +
-          f",format=yuv420p{_caps(out_path)}")
+    # УЗКОЕ ИЛИ ОБРЕЗАННОЕ ВИДЕО — РОДНОЙ РАЗМЕР И ЗАЛИВКА ПОЛЕЙ, А НЕ
+    # ДОРЕЗКА (30.10, решение пользователя — то же, что для фото). Повод:
+    # у телеканалов знак стоит в углу, `crop_brand.py` срезает полосу с краю,
+    # и кадр перестаёт быть 16:9. Старая ветка дорезала его ещё раз под
+    # рамку — то есть выбрасывала уже вторую часть картинки. Теперь кадр
+    # ставится как есть по центру, поля — размытая притемнённая копия его же.
+    try:
+        _vw, _vh = _img_wh(ffprobe, src)
+    except Exception:
+        _vw, _vh = W, H
+    _ratio = (_vw / _vh) if _vh else (W / H)
+    if _ratio < 1.70:
+        _fw, _fh = min(_vw, W), min(_vh, H)
+        vf = (f"[0:v]setpts=PTS-STARTPTS,fps={FPS},split=2[bg][fg];"
+              f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+              f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
+              f"[fg]scale={_fw}:{_fh}:force_original_aspect_ratio=decrease[fgs];"
+              f"[bgb][fgs]overlay=(W-w)/2:(H-h)/2"
+              + ("," + _fxc if _fxc else "") + f",format=yuv420p{_caps(out_path)}")
+        _vf_args = ["-filter_complex", vf]
+    else:
+        vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+              f"setpts=PTS-STARTPTS,fps={FPS}" + ("," + _fxc if _fxc else "") +
+              f",format=yuv420p{_caps(out_path)}")
+        _vf_args = ["-vf", vf]
     loop_args = ["-stream_loop", "-1"] if (src_dur and src_dur < duration) else []
     seek_args = ["-ss", str(start)] if start > 0 else []
-    cmd = [ffmpeg, "-y", *loop_args, *seek_args, "-i", src, "-vf", vf, "-t", str(duration),
+    cmd = [ffmpeg, "-y", *loop_args, *seek_args, "-i", src, *_vf_args, "-t", str(duration),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-an", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
 

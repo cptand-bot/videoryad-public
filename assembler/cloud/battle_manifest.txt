@@ -68,6 +68,7 @@ template/check_overlay_overlap.py
 template/check_pins.py
 template/codex_ask.sh
 template/codex_brief.py
+template/crop_brand.py
 template/contact_sheet.py
 template/fetch_assets_news.py
 template/fetch_maps.py
