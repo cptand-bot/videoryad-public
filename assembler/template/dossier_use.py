@@ -103,6 +103,42 @@ def used_strings(paths):
     return "\n".join(blob), stats
 
 
+def load_rejected(where):
+    """ЖУРНАЛ ОТКЛОНЁННОГО МАТЕРИАЛА ДОСЬЕ (31.10, предложение `usuario-b2`).
+
+    Гейт не отличал «посмотрел и отклонил по дефекту или по теме» от «не
+    смотрел». Живой случай: запись `ARM` многотемная, и пять файлов из неё
+    про ДРУГИЕ сюжеты той же записи (танкеры в США, гарантии для России) плюс
+    кадр с логотипом телеканала — к ролику не относятся вовсе, а гейт висел
+    красным. Красный гейт, который «всегда красный», перестают читать — это
+    хуже отсутствия гейта. Поэтому отклонённое засчитывается РАЗОБРАННЫМ, но
+    только с названной причиной, и причина печатается: молча спрятать файл
+    нельзя.
+
+    Файл рядом со сценарием: `tg_rejected.json` (или `tg_отказы.json`).
+    Формат любой из двух: {"<url>": "причина"} или
+    [{"url": "…", "why": "…"}, …].
+    """
+    out = {}
+    for name in ("tg_rejected.json", "tg_отказы.json"):
+        p = os.path.join(where, name)
+        if not os.path.isfile(p):
+            continue
+        try:
+            d = json.load(open(p, encoding="utf-8"))
+        except Exception as e:
+            print("!! не прочитать %s: %s" % (name, e))
+            continue
+        if isinstance(d, dict):
+            for k, v in d.items():
+                out[str(k)] = str(v)
+        elif isinstance(d, list):
+            for r in d:
+                if isinstance(r, dict) and r.get("url"):
+                    out[str(r["url"])] = str(r.get("why") or r.get("reason") or "")
+    return out
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args:
@@ -127,18 +163,25 @@ def main():
 
     media = load_tg(tg)
     blob, st = used_strings(args)
+    rej = load_rejected(os.path.dirname(os.path.abspath(args[0])) or ".")
     if not media:
         print("в %s медиа нет вовсе — вложений у постов не было, претензий "
               "нет" % os.path.basename(tg))
         return 0
 
-    unused = [m for m in media if m["url"] not in blob]
-    used = len(media) - len(unused)
+    unused = [m for m in media if m["url"] not in blob
+               and m["url"] not in rej]
+    used = len([m for m in media if m["url"] in blob])
+    dropped = [m for m in media if m["url"] not in blob and m["url"] in rej]
     print("=== МАТЕРИАЛ ДОСЬЕ ===")
     print("файлов во вложениях постов: %d (фото %d, видео %d)" % (
         len(media), sum(1 for m in media if m["kind"] == "фото"),
         sum(1 for m in media if m["kind"] == "видео")))
-    print("поставлено в ролик: %d, лежит без дела: %d" % (used, len(unused)))
+    print("поставлено в ролик: %d, разобрано и отклонено: %d, лежит без "
+          "дела: %d" % (used, len(dropped), len(unused)))
+    for m in dropped[:40]:
+        print("  отклонено: %s из %s — %s"
+              % (m["kind"], m["post"], rej.get(m["url"]) or "без причины"))
     print("сцен: всего %d — досье %d, медиатека %d, поиск %d, рисованных %d"
           % (st["total"], st["direct_url"], st["library"], st["search"],
              st["card"]))
@@ -155,6 +198,10 @@ def main():
     if len(unused) > 40:
         print("  … и ещё %d" % (len(unused) - 40))
 
+    print("\n  Если файл СМОТРЕЛИ и он не подходит (чужая тема той же записи "
+          "ARM, клеймо по центру, вшитые субтитры) — впиши его в "
+          "tg_rejected.json рядом со сценарием: {\"<url>\": \"причина\"}. "
+          "Он зачтётся разобранным, а причина останется видна.")
     if st["search"]:
         print("\nОТКАЗ: %d сцен закрыты ПОИСКОМ, пока %d файлов досье лежат "
               "без дела." % (st["search"], len(unused)))
