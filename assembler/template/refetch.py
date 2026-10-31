@@ -282,9 +282,34 @@ def prune_needs_upload(path="needs_upload.json", only_ids=None):
     except (OSError, ValueError):
         return
     _ids = {str(i) for i in (only_ids or [])}
+
+    # СОЗНАТЕЛЬНАЯ ЖЁЛТАЯ КАРТОЧКА НЕ СНИМАЕТСЯ ВОВСЕ (2026-10-31, улов
+    # `usuario-b2`). Ограничение «только по чинимым id» от 17.10 не спасло: в
+    # круг правок как раз и попадает та сцена, на которую вкладка ставит
+    # карточку («кадр пришёл, но читается не так — пусть заменит сам»). Живой
+    # случай: карточка со сцены 9 снята тем же кругом, который сцену и чинил,
+    # и вкладка ставила её ЗАНОВО после последнего фетча. Разница между двумя
+    # видами записей смысловая: облачная значит «КАДРА НЕТ», её и надо снять,
+    # когда кадр появился; вкладочная пишется КОГДА КАДР ЕСТЬ, и файл на
+    # диске её не опровергает. Опознаём по явной метке `manual` (так писать
+    # правильно) и по формулировке причины — вкладки пишут «кадр спорный»,
+    # «слабый», «замени своим».
+    def _manual(v):
+        if isinstance(v, dict):
+            return bool(v.get("manual") or v.get("вручную"))
+        t = str(v).lower()
+        return any(w in t for w in ("спорн", "слаб", "замен", "не нравится",
+                                     "на твой выбор", "реши сам"))
+
+    kept = [k for k in nu if (not _ids or str(k) in _ids) and _manual(nu[k])]
     alive = [k for k in nu if (not _ids or str(k) in _ids)
+             and not _manual(nu[k])
              and [f for f in glob.glob("images/scene_%03d.*" % int(k))
                   if not f.endswith(SKIP_EXT)]]
+    if kept:
+        print("  needs_upload: ОСТАВЛЕНЫ сознательные жёлтые карточки %s — "
+              "их ставит вкладка при живом кадре, рефетч их не отменяет"
+              % ", ".join(sorted(kept, key=int)))
     if alive:
         for k in alive:
             nu.pop(k, None)
