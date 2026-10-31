@@ -1,0 +1,77 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 3,
+   "text": "",
+   "duration_sec": 9.4,
+   "visual_prompt": "Reuters: Пентагон просит Европу остудить риторику (кадр досье)",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/USL2QcPXuDcxpDY4S1Dun6c5-bz4WdzdYJZR2TKFU9NyC61rG9cj7UJY2jjYq9e0AW1BBQUy375L8ppl_Gwj4IAXUCpKeLdrHYh4vE4wjk3HoW-ODAx9HhDYtSaxKPEYxc3-y6H3DNH1FnZUodzWqX3kq0j1-prHLekBj42TPNcmtocJ1N2jeR8Kv1PEVw2q2bQTyrPc3YERnqKn0egY5oL0pqmBm9tFJjqq3tTXjF-cLe6hYB4yaNCwQ16XKNZKI3auEBJVSxyL2ivghOy-OrL5LukFVW2SBUndZVl_Q8Z8wHRYi7m_AYhSjv-w4_Uj6k-76Jpff1kdISfapfAqFA.jpg"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 8.7,
+   "visual_prompt": "Стубб — второй участник закулисной работы",
+   "source": "press_photo",
+   "source_query": "Александр Стубб президент Финляндии 2026"
+  },
+  {
+   "id": 13,
+   "text": "",
+   "duration_sec": 9.2,
+   "visual_prompt": "карта Финляндии — от чьего имени говорят",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ФИНЛЯНДИЯ"
+  },
+  {
+   "id": 17,
+   "text": "",
+   "duration_sec": 9.3,
+   "visual_prompt": "европейские военные приготовления",
+   "source": "press_photo",
+   "source_query": "учения бундесвера бронетехника Германия 2026"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "duration_sec": 14.8,
+   "visual_prompt": "карта Балтийского региона",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/ЕВРОПА"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "duration_sec": 14.4,
+   "visual_prompt": "Reuters: G20 в США, билборд Atlanta (кадр досье)",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/VqI78MVNcP2xViUy9a84e8zZTlLLyJWt8_aS8AQvxu6lIHvJHtfJrPyRy99z7_8BZWXTYSf8UWV9KilMbkKTql0UxSCls94vrKnR28eUIbcQk_H5HRWG_h3gcfauT2YFWZmUoAjRhsQI-gebe0YDzM0OSPGr-NUaEcGbcWTk6c2WjL1Ym1AiThOUaRmJxCLgXt_LtXurkY4BUKjOI2rO95EjLuz1t2jrIU0IWbqqV1_E4KysnD50ME4tSREbMzbUXTCrepLudNVmRjPCWig8KjbFlgs4_v4rlJvEcwIgG9EFYNAUMxuPx6-2rO3rgMkA_-thn7ghdCzaL7YSl7GJbg.jpg"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "duration_sec": 10.6,
+   "visual_prompt": "карта Китая — где предлагают саммит",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/КИТАЙ"
+  },
+  {
+   "id": 42,
+   "text": "",
+   "duration_sec": 10.2,
+   "visual_prompt": "Зеленский — о ком говорит Лавров",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЗЕЛЕНСКИЙ"
+  },
+  {
+   "id": 49,
+   "text": "",
+   "duration_sec": 11.0,
+   "visual_prompt": "карта мира — экономика за пределами Запада",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАРТЫ/МИР"
+  }
+ ]
+}
