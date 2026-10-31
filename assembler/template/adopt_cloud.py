@@ -222,6 +222,8 @@ def adopt(src, dst, dry=False, force=False):
             if _s != "ok":
                 _why = {"placeholder": "ЗАГЛУШКА «нет кадра», а не кадр",
                         "card_pending": "рисованный кадр, его отрисует cards_cloud",
+                        "library_pending": "сцена медиатеки — кадр берётся "
+                                           "локально, в облаке её нет",
                         "not_supported": "формат не поддержан фетчером",
                         "banned": "забанен на стороне облака"}.get(
                             _s, "статус «%s» — не «ok»" % _s)
