@@ -144,15 +144,33 @@ def main():
     if not args:
         print(__doc__)
         return 2
-    tg = None
+    tgs = []
     if "--tg" in sys.argv:
-        tg = sys.argv[sys.argv.index("--tg") + 1]
-        args = [a for a in args if a != tg]
-    if not tg:
-        here = os.path.dirname(os.path.abspath(args[0])) or "."
-        cand = sorted(glob.glob(os.path.join(here, "tg*.json")))
-        tg = cand[0] if cand else None
-    if not tg or not os.path.isfile(tg):
+        tg1 = sys.argv[sys.argv.index("--tg") + 1]
+        args = [a for a in args if a != tg1]
+        tgs = [tg1]
+    here = os.path.dirname(os.path.abspath(args[0])) or "."
+    # ВСЕ ПРОГОНЫ tg_media, А НЕ ПЕРВЫЙ ФАЙЛ ПО АЛФАВИТУ (31.10, улов
+    # `usuario-6a`): у вкладки было два прогона, `tg.json` и `tg2.json`, и
+    # второй в счёт не шёл — то есть материал «не существовал» для гейта.
+    for c in sorted(glob.glob(os.path.join(here, "tg*.json"))):
+        b = os.path.basename(c).lower()
+        if "reject" in b or "отказ" in b or c in tgs:
+            continue
+        tgs.append(c)
+    # ВСПЛЫВАШКИ СЧИТАЮТСЯ ТОЖЕ (31.10, тот же улов). Гейт сам пишет «что не
+    # лезет в сцену — идёт во всплывашку», а смотрел только базовые сцены:
+    # вкладка поставила шесть файлов досье всплывашками и получила
+    # «поставлено 0». Для ролика, закрывшего материал целиком всплывашками,
+    # это валило бы фетч без причины.
+    _have = {os.path.abspath(x) for x in args}
+    for c in sorted(glob.glob(os.path.join(here, "*overlay*.json"))
+                    + glob.glob(os.path.join(here, "overlays*.json"))):
+        if os.path.abspath(c) not in _have and "snapshot" not in os.path.basename(c):
+            args.append(c)
+            _have.add(os.path.abspath(c))
+    tg = tgs[0] if tgs else None
+    if not tgs:
         print("ОШИБКА: не найден файл выдачи tg_media.py (tg*.json) рядом со "
               "сценарием.", file=sys.stderr)
         print("  Досье ОБЯЗАНО быть прогнано до раскадровки: соберите ВСЕ "
@@ -161,7 +179,16 @@ def main():
               "tg_media.py --json tg.json <ссылки…>.", file=sys.stderr)
         return 2
 
-    media = load_tg(tg)
+    media = []
+    _seen_u = set()
+    for t in tgs:
+        for m in load_tg(t):
+            if m["url"] in _seen_u:
+                continue
+            _seen_u.add(m["url"])
+            media.append(m)
+    print("выдачи tg_media: %s" % ", ".join(os.path.basename(t) for t in tgs))
+    print("сверяю со: %s" % ", ".join(os.path.basename(x) for x in args))
     blob, st = used_strings(args)
     rej = load_rejected(os.path.dirname(os.path.abspath(args[0])) or ".")
     if not media:

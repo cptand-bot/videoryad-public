@@ -2268,7 +2268,8 @@ def _broadcast_banner(path, ffmpeg="ffmpeg"):
     return ", ".join(sorted(set(hits)))
 
 
-def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
+def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False,
+                     is_map=False):
     # `for_overlay` снимает ДВА ограничения базового кадра: порог «тяжёлый
     # текст» (скриншот публикации — законная всплывашка) и минимальное
     # разрешение (мелкое видео во всплывашке приемлемо, во весь экран нет).
@@ -2318,7 +2319,7 @@ def fetch_direct_url(query, out_base, ffmpeg="ffmpeg", for_overlay=False):
                       f"(порог {'300x200 для всплывашки' if for_overlay else '500x320 для базовой сцены'}): "
                       f"{url[:110]}", flush=True)
                 continue
-            okp, why = _accept_direct_photo(path, for_overlay)
+            okp, why = _accept_direct_photo(path, for_overlay or is_map)
             if not okp:
                 print(f"  [direct_url] фото ОТКЛОНЕНО ({why}): {url[:110]}",
                       flush=True)
@@ -2633,9 +2634,28 @@ def main():
                 # всплывашки фетчатся в свой каталог `overlays/`.
                 _is_ov = (scene.get("_dest") == "overlays"
                           or os.path.basename(os.path.normpath(images_dir)) == "overlays")
+                # КАРТА ИСТОЧНИКА — ЗАКОННЫЙ БАЗОВЫЙ КАДР, А СИТО
+                # «ТЯЖЁЛЫЙ ТЕКСТ» ЕЁ НЕ ПУСКАЛО (2026-10-31, улов
+                # `usuario-6a`). У карты по определению много подписей —
+                # города, направления, километры, — и порог «больше восьми
+                # слов» ловил её как скриншот публикации. Обе карты досье
+                # (линия фронта и маршрут дронов FP-1) пришлось ставить
+                # всплывашками, то есть строжайшее правило «карты из постов в
+                # сцены первым делом» было физически невыполнимо.
+                # Послабление ТОЛЬКО по явной метке сцены: `"is_map": true`
+                # (или `"вид": "карта"`), чтобы скриншот издания не проехал в
+                # сцену под видом карты. Бан-лист, стоковые клейма и
+                # документ-бланк остаются включёнными и для карты.
+                _is_map = bool(scene.get("is_map") or scene.get("карта")
+                               or str(scene.get("вид") or "").lower() == "карта")
+                if _is_map and not _is_ov:
+                    print(f"[{sid:03d}] сцена помечена КАРТОЙ — сито «тяжёлый "
+                          f"текст» не применяется (подписи городов и "
+                          f"направлений это не скриншот публикации)",
+                          flush=True)
                 direct_out = fetch_direct_url(
                     query, os.path.join(images_dir, f"scene_{sid:03d}"),
-                    for_overlay=_is_ov)
+                    for_overlay=_is_ov, is_map=_is_map)
                 if direct_out:
                     ok, out_path = True, direct_out
                 else:

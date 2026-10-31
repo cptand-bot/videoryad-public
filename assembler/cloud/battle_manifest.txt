@@ -88,6 +88,7 @@ template/fx/haze.mp4
 template/fx/particles.mp4
 template/fx/preset-news-max.json
 template/fx/preset-news.json
+template/geo_links.py
 template/grab_stream_frame.py
 template/grab_video_frame.py
 template/pair_sheet.py
