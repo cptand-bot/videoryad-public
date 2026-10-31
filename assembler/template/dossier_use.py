@@ -150,12 +150,43 @@ def main():
         args = [a for a in args if a != tg1]
         tgs = [tg1]
     here = os.path.dirname(os.path.abspath(args[0])) or "."
+    # ВРЕМЕННЫЙ ФАЙЛ КРУГА ПРАВОК — НЕ СЦЕНАРИЙ (2026-10-31, улов `usuario-2e`,
+    # дефект моей же правки). `refetch.py` кладёт правленые сцены в
+    # `.refetch_images.json` и зовёт линтер по НЕМУ. Гейт видел две-три
+    # починяемые сцены вместо всего ролика, не находил в них кадров досье и
+    # отбивал круг: «поставлено 0, лежит без дела 1» — при том что кадр стоял
+    # сценой 51 основного сценария. То есть чем аккуратнее вкладка разобрала
+    # досье, тем вернее у неё блокировался любой круг правок, а штатная
+    # лазейка `--force` вкладке недоступна. Подменяем временный файл
+    # настоящими сценариями той же папки.
+    _tmp = [x for x in args
+            if os.path.basename(x).startswith(".")
+            or "refetch" in os.path.basename(x).lower()]
+    if _tmp:
+        _real = [c for c in sorted(glob.glob(os.path.join(here, "*.scenes.json")))
+                 if not os.path.basename(c).startswith(".")
+                 and "refetch" not in os.path.basename(c).lower()]
+        if _real:
+            args = _real + [x for x in args if x not in _tmp]
+            print("круг правок: вместо временного файла (%s) сверяю с "
+                  "полным сценарием — %s"
+                  % (", ".join(os.path.basename(x) for x in _tmp),
+                     ", ".join(os.path.basename(x) for x in _real)))
+        else:
+            print("круг правок: полного сценария рядом нет, гейт досье "
+                  "пропускаю — по двум починяемым сценам судить нельзя.")
+            return 0
     # ВСЕ ПРОГОНЫ tg_media, А НЕ ПЕРВЫЙ ФАЙЛ ПО АЛФАВИТУ (31.10, улов
     # `usuario-6a`): у вкладки было два прогона, `tg.json` и `tg2.json`, и
     # второй в счёт не шёл — то есть материал «не существовал» для гейта.
     for c in sorted(glob.glob(os.path.join(here, "tg*.json"))):
         b = os.path.basename(c).lower()
-        if "reject" in b or "отказ" in b or c in tgs:
+        if "reject" in b or "отказ" in b:
+            continue
+        # сравнение по АБСОЛЮТНОМУ пути: `--tg tg.json` и находка глоба
+        # `/путь/tg.json` — один файл, а строки разные (печаталось «tg.json,
+        # tg.json», и файлы считались дважды)
+        if any(os.path.abspath(c) == os.path.abspath(t) for t in tgs):
             continue
         tgs.append(c)
     # ВСПЛЫВАШКИ СЧИТАЮТСЯ ТОЖЕ (31.10, тот же улов). Гейт сам пишет «что не
