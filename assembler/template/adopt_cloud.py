@@ -156,6 +156,8 @@ def adopt(src, dst, dry=False, force=False):
     os.makedirs(os.path.join(dst, "images"), exist_ok=True)
 
     total_moved = total_skipped = missing = rejected = 0
+    holes = {}          # статус из манифеста → список имён
+    clashes = []        # кадр уже есть в другом формате
     _banned = _banned_md5()
     _q_src = _queries(_scenes_file(src))
     _q_dst = _queries(_scenes_file(dst))
@@ -175,6 +177,22 @@ def adopt(src, dst, dry=False, force=False):
         os.makedirs(d_dir, exist_ok=True)
         man = _recs(_load(os.path.join(s_dir, "manifest.json")))
         names = [os.path.basename(str(m.get("file") or "")) for m in man if m.get("file")]
+        # СТАТУС ИЗ МАНИФЕСТА ЧИТАЛСЯ ТОЛЬКО ГЛАЗАМИ (2026-10-31, улов
+        # `usuario-b2`). Перенос отклонял по бану и по переписанному запросу,
+        # а поле `status` не смотрел вовсе — и ЗАГЛУШКИ ЕХАЛИ КАК ГОДНЫЕ
+        # КАДРЫ. Живой счёт: в манифесте 40 ok, 32 placeholder, 5
+        # card_pending; инструмент отчитался «перенесено 55, отклонено 13» и
+        # в сверке написал «кадров на месте 73, без кадра 4». По факту 17 из
+        # этих 73 — тёмно-красные заглушки «нет кадра» (1920x1080, 34 КБ,
+        # яркость 28), и сверка их считала кадрами, то есть ПРЯТАЛА дыру.
+        # Поймалось косвенно, по одинаковой плотности в `photo_quality.py`.
+        # Правило «переносить только по манифесту» соблюдалось, манифест
+        # честно писал статус — игнорировал его исполнитель.
+        _st = {}
+        for m in man:
+            _f = os.path.basename(str(m.get("file") or ""))
+            if _f:
+                _st[_f] = str(m.get("status") or "ok")
         if not names:
             # манифеста нет или он пуст — берём, что лежит на диске
             names = [os.path.basename(p) for p in glob.glob(os.path.join(s_dir, "scene_*"))
@@ -200,7 +218,34 @@ def adopt(src, dst, dry=False, force=False):
                 print("      стало: %s" % _qd[:90])
                 rejected += 1
                 continue
+            _s = _st.get(n, "ok")
+            if _s != "ok":
+                _why = {"placeholder": "ЗАГЛУШКА «нет кадра», а не кадр",
+                        "card_pending": "рисованный кадр, его отрисует cards_cloud",
+                        "not_supported": "формат не поддержан фетчером",
+                        "banned": "забанен на стороне облака"}.get(
+                            _s, "статус «%s» — не «ok»" % _s)
+                print("   НЕ БЕРУ: %s (сцена %d) — %s" % (n, _sid, _why))
+                holes.setdefault(_s, []).append(_sid)
+                rejected += 1
+                continue
             dp = os.path.join(d_dir, n)
+            # ДВЕ СБОРКИ В ОДНОЙ ПАПКЕ (та же гоча, 31.10): у сцены уже лежал
+            # свой `scene_NNN.mp4` из базы, а сверху ложился `scene_NNN.jpg`
+            # из забора — сборщик брал ОДИН из двух, и какой именно, зависело
+            # от порядка глоба. Кадр, который уже есть, не перекрываем ничем
+            # другого формата: конфликт называется и решается вкладкой.
+            _other = [q for q in glob.glob(os.path.join(d_dir, "scene_%03d.*" % _sid))
+                      if _sid >= 0 and os.path.basename(q) != n
+                      and os.path.splitext(q)[1].lower() in _IMG + _VID]
+            if _other and not force:
+                print("   НЕ КЛАДУ РЯДОМ: %s (сцена %d) — у сцены уже есть "
+                      "%s. Двух кадров на одну сцену быть не должно: сборщик "
+                      "возьмёт любой." % (n, _sid,
+                                          ", ".join(os.path.basename(q) for q in _other)))
+                clashes.append(_sid)
+                rejected += 1
+                continue
             if os.path.exists(dp) and not force:
                 skipped += 1
                 continue
@@ -213,7 +258,23 @@ def adopt(src, dst, dry=False, force=False):
 
     print("ИТОГО перенесено %d, пропущено %d%s" % (
         total_moved, total_skipped,
-        (", ОТКЛОНЕНО %d (бан или переписанный запрос)" % rejected) if rejected else ""))
+        (", ОТКЛОНЕНО %d (статус, бан, переписанный запрос или столкновение "
+         "форматов)" % rejected) if rejected else ""))
+    if holes.get("placeholder"):
+        _ph = sorted(set(holes["placeholder"]))
+        print("\n!! ЗАГЛУШКИ, НУЖЕН ДОБОР — %d сцен: %s" % (
+            len(_ph), ", ".join(str(x) for x in _ph)))
+        print("   Это кадры, которых фетч НЕ НАШЁЛ. Они не перенесены, и в "
+              "сверке ниже честно числятся «без кадра».")
+    for _s, _ids in sorted(holes.items()):
+        if _s == "placeholder":
+            continue
+        print("!! статус «%s» — %d сцен: %s" % (
+            _s, len(set(_ids)), ", ".join(str(x) for x in sorted(set(_ids)))))
+    if clashes:
+        print("!! У %d СЦЕН КАДР УЖЕ БЫЛ в другом формате: %s — из забора не "
+              "брал, разберись какой нужен." % (
+                  len(set(clashes)), ", ".join(str(x) for x in sorted(set(clashes)))))
     sf = _scenes_file(dst, quiet=True) or _scenes_file(src, quiet=True)
     if sf:
         scenes = _load(sf).get("scenes", [])

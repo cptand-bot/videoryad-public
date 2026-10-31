@@ -27,6 +27,7 @@ Exit 0 — чисто (или только мягкие замечания), exi
 """
 import concurrent.futures
 import json
+import glob
 import os
 import re
 import subprocess
@@ -1424,6 +1425,38 @@ def lint(paths, strict=False, no_net=False):
             problems += _x
         else:
             print("  совпадений нет")
+
+    # МАТЕРИАЛ ДОСЬЕ ПРОВЕРЯЕТСЯ ЗДЕСЬ ЖЕ, ДО ФЕТЧА (31.10, строжайшее слово
+    # пользователя): «то, что отдаётся георадаром, по возможности ВСЁ
+    # вставлять. Для чего они тогда нужны, если их не вставлять? Искать
+    # какую-то срань?». Инструмент обязан работать сам, иначе правило живёт
+    # только в инструкции: вкладка взяла 8 ссылок из 65 и честно отчиталась.
+    # Гейт срабатывает лишь когда рядом со сценарием лежит выдача
+    # `tg_media.py` — то есть досье уже прогнано.
+    try:
+        import subprocess
+        _du = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "dossier_use.py")
+        _tg = sorted(glob.glob(os.path.join(
+            os.path.dirname(os.path.abspath(paths[0])) or ".", "tg*.json")))
+        if _tg and os.path.exists(_du):
+            print("\n=== материал досье (георадар) ===")
+            _r = subprocess.run([sys.executable, _du] + list(paths)
+                                + ["--tg", _tg[0]],
+                                capture_output=True, text=True)
+            print(_r.stdout.strip() or _r.stderr.strip())
+            if _r.returncode == 1:
+                problems += 1
+        elif not _tg:
+            print("\n=== материал досье (георадар) ===")
+            print("  выдачи tg_media.py рядом со сценарием нет. Досье обязано "
+                  "быть прогнано ДО раскадровки: собери ВСЕ ссылки t.me со "
+                  "ВСЕХ листов xlsx (Archive, Debug, AuthorNotes, NewsInbox, "
+                  "Claims, Sources, Productions) и прогони "
+                  "tg_media.py --json tg.json <ссылки…>.")
+            soft += 1
+    except Exception as _e:
+        print("  (проверка досье не прошла: %s)" % _e)
 
     print("\n" + "=" * 60)
     print("МИН: %d   мягких замечаний: %d" % (problems, soft))
