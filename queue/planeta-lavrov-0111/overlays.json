@@ -1,0 +1,92 @@
+{
+ "anchor": "bottom",
+ "7": {
+  "photo": "overlays/scene_007.jpg",
+  "sound": "whoosh",
+  "at": 2.9,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "13": {
+  "photo": "overlays/scene_013.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "17": {
+  "photo": "overlays/scene_017.jpg",
+  "sound": "whoosh",
+  "at": 3.1,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "20": {
+  "photo": "overlays/scene_020.jpg",
+  "sound": "whoosh",
+  "at": 4.9,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "39": {
+  "photo": "overlays/scene_039.jpg",
+  "sound": "whoosh",
+  "at": 3.5,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "42": {
+  "photo": "overlays/scene_042.jpg",
+  "sound": "whoosh",
+  "at": 3.4,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "49": {
+  "photo": "overlays/scene_049.jpg",
+  "sound": "whoosh",
+  "at": 3.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "36": {
+  "photo": "overlays/scene_036.jpg",
+  "sound": "whoosh",
+  "at": 4.3,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true
+ },
+ "3": {
+  "photo": "overlays/scene_003.jpg",
+  "sound": "whoosh",
+  "at": 3.1,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ }
+}

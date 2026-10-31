@@ -1,0 +1,677 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 10.0,
+   "visual_prompt": "Путин на международном совещании с европейскими представителями",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 10.0,
+   "duration_sec": 9.0,
+   "visual_prompt": "Руководители Евросоюза прибывают в Еврокомиссию в Брюсселе",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 19.0,
+   "duration_sec": 9.4,
+   "visual_prompt": "Бронетехника европейских армий движется по территории полигона НАТО",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 28.4,
+   "duration_sec": 10.4,
+   "visual_prompt": "Йонас Гар Стёре выходит к журналистам у резиденции правительства Норвегии",
+   "source": "press_photo",
+   "source_query": "Йонас Гар Стёре резиденция правительства Норвегии Осло 2026",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 38.8,
+   "duration_sec": 8.6,
+   "visual_prompt": "Правительственный квартал Осло, где проходила закрытая встреча",
+   "source": "press_photo",
+   "source_query": "Осло панорама города с воды 2026",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 47.4,
+   "duration_sec": 8.2,
+   "visual_prompt": "Российские дипломаты входят в здание МИД России на Смоленской площади",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 55.6,
+   "duration_sec": 8.7,
+   "visual_prompt": "Александр Стубб прибывает к парламенту Финляндии в Хельсинки",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-ПАРЛАМЕНТА-ФИНЛЯНДИИ",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 64.3,
+   "duration_sec": 8.7,
+   "visual_prompt": "Европейские руководители собираются на форуме по Украине",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕС-форумы-Украина",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 73.0,
+   "duration_sec": 15.0,
+   "visual_prompt": "Стёре и Стубб беседуют на встрече руководителей Северной Европы",
+   "source": "press_photo",
+   "source_query": "Стёре и Стубб встреча руководителей Северной Европы 2026",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 88.0,
+   "duration_sec": 9.4,
+   "visual_prompt": "Автомобили европейских делегаций подъезжают к штабу НАТО в Брюсселе",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 97.4,
+   "duration_sec": 9.5,
+   "visual_prompt": "Кортежи европейских руководителей у здания Еврокомиссии",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕВРОПА",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 106.9,
+   "duration_sec": 14.8,
+   "visual_prompt": "Стубб и Стёре во время совместного мероприятия в Хельсинки",
+   "source": "press_photo",
+   "source_query": "совместное мероприятие Стубба и Стёре Хельсинки 2026",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 121.7,
+   "duration_sec": 9.2,
+   "visual_prompt": "Кремль со стороны набережной во время международных контактов президента России",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО",
+   "overlays": []
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 130.9,
+   "duration_sec": 14.4,
+   "visual_prompt": "Путин проводит совещание по международным отношениям в Москве",
+   "source": "press_photo",
+   "source_query": "совещание Путина по международным отношениям Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 145.3,
+   "duration_sec": 9.7,
+   "visual_prompt": "Путин принимает иностранных представителей за рабочим столом",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 155.0,
+   "duration_sec": 14.9,
+   "visual_prompt": "Здание МИД России — позиция Москвы не изменилась",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 169.9,
+   "duration_sec": 9.3,
+   "visual_prompt": "Зал заседаний Госдумы — Москва говорит то же, что раньше",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗАЛ-ЗАСЕДАНИЙ-ГОСУДАРСТВЕННОЙ",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 179.2,
+   "duration_sec": 15.0,
+   "visual_prompt": "Национальный центр управления обороной — ответ России на разговоры о войне",
+   "source": "press_photo",
+   "source_query": "Национальный центр управления обороной России здание Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 194.2,
+   "duration_sec": 9.0,
+   "visual_prompt": "Истребитель европейских ВВС выруливает на авиабазе",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ИСТРЕБИТЕЛЬ-EUROFIGHTER-РУЛЁЖКЕ",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 203.2,
+   "duration_sec": 14.8,
+   "visual_prompt": "Газовоз идёт по Балтийскому морю в сопровождении портовых судов",
+   "source": "press_photo",
+   "source_query": "газовоз в Балтийском море рядом с портовым фарватером 2026",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 218.0,
+   "duration_sec": 9.8,
+   "visual_prompt": "Колонна бронетехники НАТО движется по европейскому полигону",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ЕВРОПА-армия",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 227.8,
+   "duration_sec": 14.9,
+   "visual_prompt": "Танкеры проходят через узкий морской фарватер Балтийского моря",
+   "source": "press_photo",
+   "source_query": "танкер проходит проливы Балтийского моря 2026",
+   "overlays": []
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 242.7,
+   "duration_sec": 8.1,
+   "visual_prompt": "Руководители Евросоюза покидают встречу в здании Europa",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 250.8,
+   "duration_sec": 12.2,
+   "visual_prompt": "Досье Каи Каллас: верховный представитель Евросоюза по иностранным делам",
+   "source": "card:dossier",
+   "source_query": "карточка «dossier» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 263.0,
+   "duration_sec": 12.1,
+   "visual_prompt": "Кая Каллас выступает перед европейскими дипломатами в Брюсселе",
+   "source": "press_photo",
+   "source_query": "Кая Каллас выступление перед европейскими дипломатами Брюссель 2026",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 275.1,
+   "duration_sec": 11.5,
+   "visual_prompt": "Йоханн Вадефуль прибывает в Министерство иностранных дел Германии",
+   "source": "press_photo",
+   "source_query": "Йоханн Вадефуль у Министерства иностранных дел Германии Берлин 2026",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 286.6,
+   "duration_sec": 13.9,
+   "visual_prompt": "Лавров на министерской встрече G20",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров на встрече министров иностранных дел Большой двадцатки 2026",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 300.5,
+   "duration_sec": 13.8,
+   "visual_prompt": "Участники Большой двадцатки расходятся после официальной фотосессии",
+   "source": "press_photo",
+   "source_query": "участники Большой двадцатки после официальной фотосессии 2026",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 314.3,
+   "duration_sec": 11.7,
+   "visual_prompt": "Министры иностранных дел Европы сидят на международной рабочей сессии",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 326.0,
+   "duration_sec": 13.2,
+   "visual_prompt": "Министерство иностранных дел Германии в Берлине во время встречи министров",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ГЕРМАНИЯ",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 339.2,
+   "duration_sec": 13.7,
+   "visual_prompt": "Флаги ЕС — единая линия, которой нет",
+   "source": "press_photo",
+   "source_query": "флаги Евросоюза перед штаб-квартирой Совета ЕС Брюссель 2026",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 352.9,
+   "duration_sec": 11.3,
+   "visual_prompt": "Лавров о деполитизации Большой двадцатки",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров на пресс-конференции в Москве 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 364.2,
+   "duration_sec": 14.4,
+   "visual_prompt": "Госдеп — американское председательство",
+   "source": "press_photo",
+   "source_query": "здание Государственного департамента США в Вашингтоне 2026",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 378.6,
+   "duration_sec": 11.7,
+   "visual_prompt": "Делегации Большой двадцатки работают на общей сессии без церемониальной съёмки",
+   "source": "press_photo",
+   "source_query": "флаги стран Большой двадцатки у входа в конференц-центр 2026",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 390.3,
+   "duration_sec": 13.7,
+   "visual_prompt": "Цитата о позиции Москвы по европейскому представительству и приглашению Польши",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "overlays": [],
+   "card": {
+    "kind": "quote",
+    "text": "Москва против расширения европейского представительства в «Большой двадцатке»",
+    "accent": "против расширения европейского",
+    "watermark": "ПЛАНЕТА"
+   }
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 404.0,
+   "duration_sec": 13.0,
+   "visual_prompt": "Польская делегация прибывает на встречу государств Большой двадцатки",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПОЛЬША",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 417.0,
+   "duration_sec": 12.9,
+   "visual_prompt": "Марко Рубио проводит встречу с иностранными дипломатами в Госдепартаменте",
+   "source": "press_photo",
+   "source_query": "Марко Рубио государственный секретарь США выступление 2026",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 429.9,
+   "duration_sec": 11.7,
+   "visual_prompt": "МИД Китая — третья сторона возможного саммита",
+   "source": "press_photo",
+   "source_query": "здание Министерства иностранных дел Китая Пекин 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 441.6,
+   "duration_sec": 10.6,
+   "visual_prompt": "Современный деловой район Шэньчжэня, возможного места саммита",
+   "source": "press_photo",
+   "source_query": "деловой район Шэньчжэня возможное место международного саммита 2026",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 452.2,
+   "duration_sec": 12.7,
+   "visual_prompt": "Российская, американская и китайская делегации на большой международной площадке",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/CHINA",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 464.9,
+   "duration_sec": 12.1,
+   "visual_prompt": "Европейские лидеры обсуждают внешнюю политику в здании Europa",
+   "source": "press_photo",
+   "source_query": "здание Europa Совета Евросоюза Брюссель 2026",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 477.0,
+   "duration_sec": 10.2,
+   "visual_prompt": "Лавров отвечает на вопрос о возможной встрече президентов России и Украины",
+   "source": "web_search",
+   "source_query": "Лавров отвечает о встрече Путина и Зеленского Москва 2026",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 487.2,
+   "duration_sec": 11.8,
+   "visual_prompt": "Кремль как предложенное место встречи президентов России и Украины",
+   "source": "press_photo",
+   "source_query": "Московский Кремль вид с Большого Москворецкого моста 2026",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 499.0,
+   "duration_sec": 11.2,
+   "visual_prompt": "Площадка прошлых российско-украинских переговоров",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/Украина-РФ-Переговоры",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 510.2,
+   "duration_sec": 11.7,
+   "visual_prompt": "Участники форума Россия — Африка во время пленарной встречи",
+   "source": "press_photo",
+   "source_query": "участники форума Россия Африка пленарная встреча 2026",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 521.9,
+   "duration_sec": 11.2,
+   "visual_prompt": "Круговая диаграмма: БРИКС — более 40 процентов мирового ВВП, Большая семёрка — менее 30 процентов",
+   "source": "card:pie",
+   "source_query": "карточка «pie» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 533.1,
+   "duration_sec": 12.6,
+   "visual_prompt": "Главы стран БРИКС собираются для общей встречи на саммите",
+   "source": "press_photo",
+   "source_query": "штаб-квартира Международного валютного фонда Вашингтон 2026",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 545.7,
+   "duration_sec": 11.3,
+   "visual_prompt": "Делегации России, Китая, Индии, Бразилии и Южной Африки на саммите БРИКС",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/БРИКС",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 557.0,
+   "duration_sec": 11.0,
+   "visual_prompt": "Новый контейнерный терминал и строительные работы в африканском порту",
+   "source": "press_photo",
+   "source_query": "новый контейнерный терминал стройка африканского порта 2026",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 568.0,
+   "duration_sec": 12.8,
+   "visual_prompt": "Министры финансов стран БРИКС на международной экономической встрече",
+   "source": "press_photo",
+   "source_query": "контейнерные краны порта Шанхая 2026",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 580.8,
+   "duration_sec": 11.2,
+   "visual_prompt": "Токаев на саммите Организации тюркских государств (кадр из досье)",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/jzrT65-nPcj-91prdOttL0VfUx1oVyttujWQBdkusjZEaCTkSPJNxHmHc4lnINCrvndsKSk9KFG38OG1HJ9JDVegCGZ6-qdY6eWyk0k4eX_abltivfrl2rDov9euTbcCTDpE7O9wKropzoxlreoiSmAx8rxOloxMvQS2a4c37YgZKBSfA-xBkfe-cAL_BqD-AD7zIaxAekIwWHeOVg6Oa9HDQ33Nwf3k6BMjz-V2zpBuAj8bq9YfUFsIA2GpcJDZ-DNu9YchG2ZIqRLKH4yf9P5uo6_d8eKpp1ormrCSO3OH89mJ87nnboK5y4RGUKxEzicI5pqJbHre-abFeVre0g.jpg",
+   "overlays": []
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 592.0,
+   "duration_sec": 12.2,
+   "visual_prompt": "Дворец независимости в Астане во время саммита тюркских государств",
+   "source": "press_photo",
+   "source_query": "Дворец независимости Астана саммит тюркских государств 2026",
+   "overlays": []
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 604.2,
+   "duration_sec": 12.5,
+   "visual_prompt": "Российская делегация на форуме тюркских государств в Астане",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/КАЗАХСТАН",
+   "overlays": []
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 616.7,
+   "duration_sec": 12.3,
+   "visual_prompt": "Экономический форум Казахстана и России с представителями деловых кругов",
+   "source": "press_photo",
+   "source_query": "Астана панорама города 2026",
+   "overlays": []
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 629.0,
+   "duration_sec": 12.9,
+   "visual_prompt": "Европейские министры стоят рядом с российской делегацией на встрече Большой двадцатки",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ТУРЦИЯ",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 641.9,
+   "duration_sec": 12.3,
+   "visual_prompt": "Представители разных международных объединений на большой конференции",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ООН",
+   "overlays": []
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 654.2,
+   "duration_sec": 13.5,
+   "visual_prompt": "Иностранные делегации прибывают в Москву на международную встречу",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ДОМ-ПРАВИТЕЛЬСТВА-РОССИИ",
+   "overlays": []
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 667.7,
+   "duration_sec": 11.3,
+   "visual_prompt": "Цитата о противоречии между подготовкой к войне и поиском прямого разговора",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "overlays": [],
+   "card": {
+    "kind": "quote",
+    "text": "Европа готовится к войне с Россией и одновременно ищет прямой разговор с Москвой",
+    "accent": "ищет прямой разговор с Москвой",
+    "watermark": "ПЛАНЕТА"
+   }
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 679.0,
+   "duration_sec": 12.9,
+   "visual_prompt": "Вадефуль и другие европейские министры прибывают на международную встречу",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ",
+   "overlays": []
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 691.9,
+   "duration_sec": 11.1,
+   "visual_prompt": "Экономический вес развивающихся стран",
+   "source": "press_photo",
+   "source_query": "деловой район Мумбаи небоскрёбы 2026",
+   "overlays": []
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 703.0,
+   "duration_sec": 10.0,
+   "visual_prompt": "Делегации незападных стран собираются на международном форуме в Астане",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/КОНТЕЙНЕРНЫЙ-ПОРТ-ЛОС-АНДЖЕЛЕСА",
+   "overlays": []
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 713.0,
+   "duration_sec": 10.0,
+   "visual_prompt": "Белый дом во время обсуждения нового внешнеполитического курса США",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО",
+   "overlays": []
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 723.0,
+   "duration_sec": 10.0,
+   "visual_prompt": "Кортежи европейских правительств прибывают на встречу в Брюсселе",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЕЛИСЕЙСКИЙ-ДВОРЕЦ-ПАРИЖЕ",
+   "overlays": []
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 733.0,
+   "duration_sec": 9.0,
+   "visual_prompt": "Лавров прибывает на международную встречу с иностранными представителями",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров отвечает журналистам на подходе 2026",
+   "overlays": []
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 742.0,
+   "duration_sec": 9.0,
+   "visual_prompt": "Европейские дипломаты ожидают начала встречи с российскими представителями",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ОПЕРАТОРЫ-КАМЕРАМИ-ПРЕСС-ПОДХОДЕ",
+   "overlays": []
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 751.0,
+   "duration_sec": 9.0,
+   "visual_prompt": "Иностранные делегации покидают площадку завершившейся международной встречи",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПУТИН",
+   "overlays": []
+  }
+ ]
+}
