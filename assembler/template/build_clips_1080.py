@@ -24,6 +24,33 @@ import random
 # В облаке ограничивать нельзя — там раннер и должен занимать все ядра,
 # поэтому потолок включается только ВНЕ GitHub Actions. Переопределяется
 # переменной VIDEORYAD_FFMPEG_THREADS (0 = без ограничения).
+# НАСКОЛЬКО КРУПНО СТАВИТЬ УЗКИЙ КАДР В РАМКУ 16:9 (2026-10-31, прямое слово
+# пользователя, с руганью). Правило 30.10 говорило «родной размер по центру,
+# поля — размытая копия», и это дало беду: превью телеграма 800x450 занимало
+# 42% ширины и 42% высоты экрана, вокруг — размытое поле. Его слова: «Почему
+# фотографии такие маленькие, в центре? Это что, под микроскопом люди будут её
+# смотреть? Чуть-чуть больше, чтобы рассмотреть можно было, что там. А то она
+# такая же, как всплывашка. Ну и нахер она всралась тогда? А вокруг всё
+# размытое».
+# Поэтому кадр теперь ВПИСЫВАЕТСЯ в рамку: занимает FILL_K по той стороне,
+# которая упирается первой, с мягким ограничением апскейла (выше MAX_UP
+# картинка начинает мылиться, и смысла в этом нет). Заливка полей остаётся —
+# просто поля становятся узкими, а не половиной экрана.
+# Вертикальный кадр при этом по-прежнему уменьшается до высоты рамки: для него
+# множитель выходит меньше единицы, и это правильно.
+FILL_K = 0.88
+MAX_UP = 2.2
+
+
+def _fit_box(w, h, W, H):
+    """(ширина, высота) переднего кадра: вписать в FILL_K рамки, не мылить."""
+    if not w or not h:
+        return min(w or W, W), min(h or H, H)
+    f = min(W * FILL_K / float(w), H * FILL_K / float(h))
+    f = min(f, MAX_UP)
+    return max(2, int(round(w * f)) // 2 * 2), max(2, int(round(h * f)) // 2 * 2)
+
+
 def _threads_args():
     v = os.environ.get("VIDEORYAD_FFMPEG_THREADS")
     if v is None:
@@ -90,13 +117,14 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
         # with a darkened, blurred, zoomed copy of the same image. Gentle push
         # on the composite so no edge is ever revealed. Faces never get cut.
         if narrow:
-            # Наезд ТОЛЬКО внутрь и мягкий: первый кадр показывает снимок в
-            # его родном размере, как и просил пользователь.
+            # Наезд ТОЛЬКО внутрь и мягкий.
             z = "min(zoom+0.00025,1.06)"
-            # Коробка переднего плана = родной размер, прижатый рамкой.
-            # Пропорции сохраняет сам ffmpeg (decrease), поэтому снимок
-            # 1400x900 ляжет 1400x900, а 1500x1200 — 1350x1080.
-            fgw, fgh = min(w, W), min(h, H)
+            # Коробка переднего плана — вписанная в рамку, не родной размер:
+            # см. `_fit_box` выше. Пропорции сохраняет сам ffmpeg (decrease).
+            fgw, fgh = _fit_box(w, h, W, H)
+            print("  узкий кадр %dx%d → %dx%d (%.2f× рамки по ширине), "
+                  "поля — размытая копия" % (w, h, fgw, fgh, fgw / float(W)),
+                  flush=True)
         else:
             z = ("min(zoom+0.00035,1.08)" if random.random() < 0.5
                  else "if(eq(on,0),1.08,max(zoom-0.00035,1.0))")
@@ -352,7 +380,9 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
         _vw, _vh = W, H
     _ratio = (_vw / _vh) if _vh else (W / H)
     if _ratio < 1.70:
-        _fw, _fh = min(_vw, W), min(_vh, H)
+        _fw, _fh = _fit_box(_vw, _vh, W, H)
+        print("  узкое видео %dx%d → %dx%d (%.2f× рамки по ширине)"
+              % (_vw, _vh, _fw, _fh, _fw / float(W)), flush=True)
         vf = (f"[0:v]setpts=PTS-STARTPTS,fps={FPS},split=2[bg][fg];"
               f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
               f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
