@@ -738,6 +738,97 @@ def _is_stock_domain(url):
     return any(d in hay for d in _STOCK_DOMAINS)
 
 
+# --- ВОЗРАСТ КАДРА РЕШАЕТ ПОРЯДОК ОТБОРА (2026-10-31, прямое слово
+# пользователя) ----------------------------------------------------------
+# «Попали старые, вообще 2018 года… Все фото, которые иллюстрируют СЕГОДНЯШНИЕ
+# события, не должны быть старше полугода. Если речь про события 2018 года —
+# там должно быть своё фото 2018 года. Какой-то Обама, Меркель — они уже
+# политические трупы.»
+#
+# ГОД В ЗАПРОСЕ НЕ ЛЕЧИТ (замерено 29.10 на ч/б архиве): поисковик ранжирует
+# по словам, не по эпохе. Лечится ОТБОРОМ, причём ДО скачивания — дата стоит
+# в самом адресе у двух третей новостных кадров. Замер 31.10 на 22 живых
+# адресах выдачи: дата опознана у 15, ложных ноль (размеры кадра 1920x1080 и
+# хвосты хэшей отбиты специально).
+#
+# Порядок групп: СВЕЖЕЕ → дата неизвестна → СТАРОЕ. Старое пробуется только
+# если первые две группы не дали ни одного годного кадра — тогда берётся с
+# громкой пометкой и записью в журнал, чтобы аудит это увидел. Пустая сцена
+# хуже старого кадра, но старый кадр при живом свежем — брак.
+_SIZE_RE = re.compile(r"\d{2,4}\s*[xX]\s*\d{2,4}")
+_DATE_PATS = (
+    # /2025/01/14/ · /uploads/2026/07/ · /photos/2023_04/ · 2026-03-23
+    re.compile(r"(?<![0-9A-Za-z])(19\d\d|20[0-4]\d)[/\-_.](0?[1-9]|1[0-2])"
+               r"(?:[/\-_.](0?[1-9]|[12]\d|3[01]))?(?![0-9A-Za-z])"),
+    # 20260304 · 20260621130632 — компактная дата, с временем и без
+    re.compile(r"(?<![0-9A-Za-z])(20[0-4]\d)(0[1-9]|1[0-2])([0-2]\d|3[01])"
+               r"(?:\d{6}|\d{4})?(?![0-9])"),
+    # /images/2026.07/
+    re.compile(r"(?<![0-9A-Za-z])(19\d\d|20[0-4]\d)\.(0[1-9]|1[0-2])"
+               r"(?![0-9A-Za-z])"),
+)
+_YEAR_ONLY_RE = re.compile(r"(?<![0-9A-Za-z])(19\d\d|20[0-4]\d)(?![0-9A-Za-z])")
+
+
+def _url_ym(url):
+    """(год, месяц|None) из адреса кадра, иначе None.
+
+    Размер в имени файла (`1920x1080`, `-1920x1280.jpg`) датой НЕ считается —
+    вырезается до разбора; год внутри длинной буквенно-цифровой строки (хвост
+    хэша `...c1972c74da...`) не берётся за счёт границ `(?![0-9A-Za-z])`."""
+    s = _SIZE_RE.sub(" ", str(url or "")).split("?")[0]
+    for pat in _DATE_PATS:
+        m = pat.search(s)
+        if m:
+            return int(m.group(1)), int(m.group(2))
+    m = _YEAR_ONLY_RE.search(s)
+    return (int(m.group(1)), None) if m else None
+
+
+def _target_year(query):
+    """Год, НАРОЧНО заказанный запросом, или None.
+
+    Текущий и прошлый год — это уточнение свежести, а не заказ архива:
+    «Лавров 2026» значит «свежее», а не «кадры именно 2026 года»."""
+    m = re.search(r"\b(19\d\d|20[0-4]\d)\b", str(query or ""))
+    if not m:
+        return None
+    y = int(m.group(1))
+    import datetime as _dt
+    return None if y >= _dt.date.today().year - 1 else y
+
+
+def _era_group(url, want_year, fresh_months=None):
+    """0 — годится по эпохе, 1 — дата неизвестна, 2 — не та эпоха."""
+    import datetime as _dt
+    ym = _url_ym(url)
+    if ym is None:
+        return 1
+    y, mo = ym
+    if want_year is not None:            # заказан архив конкретного года
+        d = abs(y - want_year)
+        return 0 if d == 0 else (1 if d <= 1 else 2)
+    if fresh_months is None:
+        fresh_months = int(os.environ.get("PHOTO_FRESH_MONTHS", "6"))
+    t = _dt.date.today()
+    age = (t.year - y) * 12 + (t.month - (mo or 12))
+    return 0 if age <= fresh_months else 2
+
+
+def _fresh_cut_str(months=None):
+    """Порог свежести как YYYY-MM-DD — для тех банков, что умеют фильтр даты."""
+    import datetime as _dt
+    if months is None:
+        months = int(os.environ.get("PHOTO_FRESH_MONTHS", "6"))
+    t = _dt.date.today()
+    m = t.month - months
+    y = t.year
+    while m <= 0:
+        m += 12
+        y -= 1
+    return "%04d-%02d-01" % (y, m)
+
+
 def fetch_web_search(query, out_path, env=None):
     """Search-engine image fallback (user 2026-09-05: search-only channels —
     'сразу лезть в поиск'). Yandex first (Russian/Ukrainian names, hyper-local
@@ -751,12 +842,12 @@ def fetch_web_search(query, out_path, env=None):
     cands = []
     try:
         _pace("yandex")
-        cands += _so.yandex_images(query, n=12)
+        cands += _so.yandex_images(query, n=24)
     except Exception: pass
     try:
         _pace("ddg")
         q_en = _so.translate_to_en(query) if any(ord(c) > 127 for c in query) else query
-        cands += _so.ddg_images(q_en, n=14)
+        cands += _so.ddg_images(q_en, n=20)
     except Exception: pass
     # --- РАЗМЕР УЧАСТВУЕТ В ОТБОРЕ (2026-10-18, улов usuario-18) ---
     # Было: брался ПЕРВЫЙ кандидат, который скачался и прошёл проверки. Размер
@@ -826,8 +917,17 @@ def fetch_web_search(query, out_path, env=None):
             return 255.0
 
     _BAD = (".svg", ".pdf", ".tif", ".tiff", ".djvu")
+    # --- СНАЧАЛА СВЕЖЕЕ, СТАРОЕ — ТОЛЬКО ЕСЛИ БОЛЬШЕ НЕЧЕГО (31.10) ---
+    # Дата стоит в самом адресе, поэтому сортировка БЕСПЛАТНА: ни одного
+    # лишнего запроса, ни одного лишнего скачивания.
+    _want_year = _target_year(query)
+    for c in cands:
+        c["_era"] = _era_group(c.get("full") or c.get("thumb") or "", _want_year)
+    cands = sorted(cands, key=lambda c: c.get("_era", 1))
+    _n_era = Counter(c.get("_era", 1) for c in cands)
     seen = set()
     best = None            # (score, w, h, tmp_path, md5)
+    best_era, best_url = 1, ""
     tried = 0
     tmp = out_path + ".cand"
     for c in cands:
@@ -836,6 +936,8 @@ def fetch_web_search(query, out_path, env=None):
         u = c.get("full") or c.get("thumb") or ""
         if not u or u in seen: continue
         seen.add(u)
+        if c.get("_era") == 2 and best is not None:
+            break          # дальше в выдаче только не та эпоха, а кадр уже есть
         if u.split("?")[0].lower().endswith(_BAD): continue
         if _is_stock_domain(u): continue   # reject by domain, before ever downloading
         if not _download_as_jpeg(u, tmp):
@@ -876,6 +978,7 @@ def fetch_web_search(query, out_path, env=None):
             except OSError:
                 keep = tmp
             best = (score, w, h, keep, h5)
+            best_era, best_url = c.get("_era", 1), u
         else:
             if not _stash_candidate(out_path, tmp, w, h):
                 try: os.remove(tmp)
@@ -902,6 +1005,35 @@ def fetch_web_search(query, out_path, env=None):
               f"заказан — похоже на историческое фото вместо современного. "
               f"Цветного по теме в выдаче не нашлось; проверь кадр глазами "
               f"или перепиши запрос.", flush=True)
+    # --- ВОЗРАСТ ВЫБРАННОГО КАДРА: ЖУРНАЛ, А НЕ ТОЛЬКО ПЕЧАТЬ (31.10) ---
+    _ym_best = _url_ym(best_url)
+    if best_era == 2 or (_want_year is not None and best_era != 0):
+        _was = ("%04d-%02d" % _ym_best) if (_ym_best and _ym_best[1]) else (
+            str(_ym_best[0]) if _ym_best else "дата неизвестна")
+        _need = ("%d год" % _want_year) if _want_year else (
+            "не старше " + _fresh_cut_str())
+        print(f"  [web_search] ВНИМАНИЕ: кадр НЕ ТОЙ ЭПОХИ — {_was}, а нужно "
+              f"{_need}. Свежих в выдаче было "
+              f"{_n_era.get(0, 0)}, без даты {_n_era.get(1, 0)}, старых "
+              f"{_n_era.get(2, 0)} — годного по эпохе не скачалось ни одного, "
+              f"поэтому сцена не осталась пустой. Проверь кадр и перепиши "
+              f"запрос под событие.", flush=True)
+        try:
+            _sl = os.path.join(os.path.dirname(out_path or "."),
+                               ".stale." + os.environ.get("MANIFEST_NAME", "manifest.json"))
+            _ms = re.search(r"scene_(\d+)", os.path.basename(out_path or ""))
+            if _ms:
+                _ds = {}
+                if os.path.exists(_sl):
+                    try:
+                        _ds = json.load(open(_sl, encoding="utf-8"))
+                    except (OSError, ValueError):
+                        _ds = {}
+                _ds[str(int(_ms.group(1)))] = f"{_was}, нужно {_need}"
+                json.dump(_ds, open(_sl, "w", encoding="utf-8"),
+                          ensure_ascii=False, indent=1)
+        except Exception:
+            pass
     if w < _MIN_W or h < _MIN_H:
         _fill = w >= 1000 and (w / max(h, 1)) >= 1.15
         print(f"  [web_search] лучшее, что нашлось: {w}x{h} — ниже порога "
@@ -1721,8 +1853,15 @@ def fetch_openverse(query, out_path):
 
 
 def fetch_internet_archive(query, out_path):
+    # ЭПОХА КАДРА (31.10): archive.org по устройству отдаёт САМОЕ СТАРОЕ, а
+    # современной новостной сцене нужен кадр за порог свежести. Окно ставим
+    # запросом: пусто — не беда, водопад идёт дальше.
+    _wy = _target_year(query)
+    _win = (f" AND date:[{_wy}-01-01 TO {_wy}-12-31]" if _wy
+            else f" AND date:[{_fresh_cut_str()} TO 2099-12-31]")
     search_url = "https://archive.org/advancedsearch.php?" + urllib.parse.urlencode(
-        {"q": f"{query} AND mediatype:image", "fl[]": "identifier", "rows": 5, "output": "json"}
+        {"q": f"{query} AND mediatype:image{_win}", "fl[]": "identifier",
+         "rows": 5, "output": "json"}
     )
     data = json.loads(http_get(search_url))
     docs = data.get("response", {}).get("docs", [])
@@ -1760,14 +1899,22 @@ def fetch_flickr_cc(query, api_key, out_path):
     https://www.flickr.com/services/apps/create/apply - no cost, no card."""
     if not api_key:
         return False
-    search_url = "https://api.flickr.com/services/rest/?" + urllib.parse.urlencode(
-        {
-            "method": "flickr.photos.search", "api_key": api_key, "text": query,
-            "license": "1,2,3,4,5,6,7,8,9,10", "sort": "relevance", "per_page": 5,
-            "content_type": 1, "media": "photos", "extras": "url_c,url_o,url_l",
-            "format": "json", "nojsoncallback": 1,
-        }
-    )
+    # ЭПОХА КАДРА (31.10): у Flickr фильтр даты есть на стороне банка, и это
+    # дешевле, чем фильтровать скачанное. Современная сцена — только съёмка
+    # за порог свежести; заказанный архивный год — окно этого года.
+    _flickr_q = {
+        "method": "flickr.photos.search", "api_key": api_key, "text": query,
+        "license": "1,2,3,4,5,6,7,8,9,10", "sort": "relevance", "per_page": 5,
+        "content_type": 1, "media": "photos", "extras": "url_c,url_o,url_l,date_taken",
+        "format": "json", "nojsoncallback": 1,
+    }
+    _wy = _target_year(query)
+    if _wy:
+        _flickr_q["min_taken_date"] = "%d-01-01 00:00:00" % _wy
+        _flickr_q["max_taken_date"] = "%d-12-31 23:59:59" % _wy
+    else:
+        _flickr_q["min_taken_date"] = _fresh_cut_str() + " 00:00:00"
+    search_url = "https://api.flickr.com/services/rest/?" + urllib.parse.urlencode(_flickr_q)
     data = json.loads(http_get(search_url))
     photos = data.get("photos", {}).get("photo", [])
     for p in photos:
@@ -1795,9 +1942,15 @@ def fetch_dvids(query, api_key, out_path):
     in .env - see SKILL.md)."""
     if not api_key:
         return False
-    search_url = "https://api.dvidshub.net/search?" + urllib.parse.urlencode(
-        {"q": query, "type": "image", "max_results": 5, "api_key": api_key}
-    )
+    # ЭПОХА КАДРА (31.10): у DVIDS фильтр даты штатный.
+    _dq = {"q": query, "type": "image", "max_results": 5, "api_key": api_key}
+    _wy = _target_year(query)
+    if _wy:
+        _dq["from_date"] = "%d-01-01" % _wy
+        _dq["to_date"] = "%d-12-31" % _wy
+    else:
+        _dq["from_date"] = _fresh_cut_str()
+    search_url = "https://api.dvidshub.net/search?" + urllib.parse.urlencode(_dq)
     try:
         data = json.loads(http_get(search_url))
     except Exception:

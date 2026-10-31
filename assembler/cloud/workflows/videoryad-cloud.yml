@@ -453,6 +453,13 @@ jobs:
           print("staged main=%d overlays=%d кандидатов=%d" % (n_main, n_ov, n_c))
           PY
           cp "$proj"/images/manifest.shard${{ matrix.shard }}.json out/ 2>/dev/null || true
+          # ЖУРНАЛЫ ФЕТЧА ЕДУТ ДОМОЙ (31.10): .lowres — что фетч сам
+          # признал мелким, .stale — кадр не той эпохи, когда свежего в
+          # выдаче не было. Их читает photo_quality.py; на облачном пути
+          # они раньше умирали вместе с раннером, то есть монитор был
+          # мёртв именно там, где собираются все ролики.
+          cp "$proj"/images/.lowres.* out/ 2>/dev/null || true
+          cp "$proj"/images/.stale.* out/ 2>/dev/null || true
           cp "$proj"/overlays/manifest.shard${{ matrix.shard }}.ov.json out/overlays/ 2>/dev/null || true
           ls -lR out
 
