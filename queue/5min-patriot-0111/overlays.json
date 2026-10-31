@@ -1,0 +1,246 @@
+{
+  "anchor": "top",
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "whoosh",
+    "at": 2.3,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "7": {
+    "photo": "overlays/scene_007.jpg",
+    "sound": "zatvor",
+    "at": 2.5,
+    "shape": "square",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "9": {
+    "photo": "overlays/scene_009.jpg",
+    "sound": "pop",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "14": {
+    "photo": "overlays/scene_014.jpg",
+    "sound": "ding",
+    "at": 2.5,
+    "shape": "circle",
+    "style": "up-right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "19": {
+    "photo": "overlays/scene_019.jpg",
+    "sound": "whoosh",
+    "at": 2.5,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "28": {
+    "photo": "overlays/scene_028.jpg",
+    "sound": "zatvor",
+    "at": 3.0,
+    "shape": "square",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "29": {
+    "photo": "overlays/scene_029.jpg",
+    "sound": "pop",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "36": {
+    "photo": "overlays/scene_036.jpg",
+    "sound": "ding",
+    "at": 3.0,
+    "shape": "circle",
+    "style": "up-right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "50": {
+    "photo": "overlays/scene_050.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "52": {
+    "photo": "overlays/scene_052.jpg",
+    "sound": "zatvor",
+    "at": 3.0,
+    "shape": "square",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "70": {
+    "photo": "overlays/scene_070.jpg",
+    "sound": "pop",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "up-left",
+    "size": "m",
+    "scale": 1.0
+  },
+  "75": {
+    "photo": "overlays/scene_075.jpg",
+    "sound": "ding",
+    "at": 2.6,
+    "shape": "circle",
+    "style": "up-right",
+    "size": "m",
+    "scale": 1.0
+  },
+  "3": {
+    "text": {
+      "words": "500 РАКЕТ ПЭТРИОТ",
+      "color": "white",
+      "pos": "mc",
+      "at": 2.4,
+      "scale": 1.0
+    }
+  },
+  "6": {
+    "text": {
+      "words": "ПОСТАВКИ ПОСЛЕ 2030",
+      "color": "red",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "13": {
+    "text": {
+      "words": "ХВАТИТ НА ПЯТЬ МЕСЯЦЕВ",
+      "color": "yellow",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "21": {
+    "text": {
+      "words": "НИ ОДНОЙ РАКЕТЫ",
+      "color": "red",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "30": {
+    "text": {
+      "words": "ПОКА ТОЛЬКО ОДОБРЕНИЕ",
+      "color": "white",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "31": {
+    "text": {
+      "words": "УДАР ПО ВАНТАМ",
+      "color": "white",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "39": {
+    "text": {
+      "words": "ДО 1000 КМ/Ч",
+      "color": "yellow",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "42": {
+    "text": {
+      "words": "100 ПУСКОВ В СУТКИ",
+      "color": "yellow",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "45": {
+    "text": {
+      "words": "ДРОНЫ, РАКЕТЫ, ЛОЖНЫЕ ЦЕЛИ",
+      "color": "white",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "47": {
+    "text": {
+      "words": "4-5% ЗАПАСОВ США",
+      "color": "yellow",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "49": {
+    "text": {
+      "words": "−34% СКЛАДОВ",
+      "color": "red",
+      "pos": "mc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "51": {
+    "text": {
+      "words": "МЕНЬШЕ 1% СВОБОДНЫХ",
+      "color": "red",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  },
+  "59": {
+    "text": {
+      "words": "ДО 19 КМ",
+      "color": "white",
+      "pos": "mc",
+      "at": 2.4,
+      "scale": 1.0
+    }
+  },
+  "65": {
+    "text": {
+      "words": "ОПЕРАЦИЯ «ВИВАЛЬДИ»",
+      "color": "white",
+      "pos": "mc",
+      "at": 2.0,
+      "scale": 1.0
+    }
+  },
+  "68": {
+    "text": {
+      "words": "ПЛАЦДАРМ РАСШИРЕН",
+      "color": "white",
+      "pos": "tc",
+      "at": 2.5,
+      "scale": 1.0
+    }
+  }
+}
