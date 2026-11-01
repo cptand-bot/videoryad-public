@@ -1700,6 +1700,41 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         except Exception:
             pass
 
+    if chosen is None and n and n <= COOLDOWN_VIDEOS * 2:
+        # МАЛЕНЬКАЯ ПАПКА НЕДОСТУПНА ПОЧТИ ВСЕГДА (01.11, улов `usuario-a5`).
+        # Кулдаун закрывает файл на три ролика. У папки из 2-3 файлов — а
+        # такими оказались `ВЕДОМСТВА/НАТО` (3) и `ВЕДОМСТВА/МИНОБОРОНЫ-
+        # РОССИИ` (2), только что открытые в каталог, — это значит «пусто»
+        # почти в каждом ролике: сцена молча уезжает в поиск, и пополнение
+        # базы ничего не даёт. Кулдаун придуман против «зритель видит один
+        # двор трижды», и для склада из двух кадров он неприменим: повтор
+        # через три ролика там неизбежен и безвреден. Тот же ход уже сделан
+        # для КАРТ 17.10 по той же причине («по многим регионам у нас вообще
+        # ОДИН файл»).
+        # СНИМАЕТСЯ ТОЛЬКО КУЛДАУН. Бан-лист (постоянный и срочный) и лимит
+        # «не больше `_MAX_PER_BUILD` раз внутри ролика» остаются в силе —
+        # поэтому ниже сверяемся с `load_banned_md5()`, а не с `blocked_md5`,
+        # в котором кулдаун и баны лежат вместе.
+        _banned_only = load_banned_md5()
+        for step in range(n):
+            cand = files[(start + step) % n]
+            cand_path = os.path.join(tag_dir, cand)
+            try:
+                h = file_md5(cand_path)
+            except OSError:
+                continue
+            if h in _banned_only or _USE_COUNT[h] >= _MAX_PER_BUILD:
+                continue
+            ok_sz, why = _lib_fits(cand_path)
+            if not ok_sz and why.startswith(_LIB_HARD):
+                continue
+            chosen, chosen_md5 = cand, h
+            usage_counts[tag] = (start + step + 1)
+            print("  [library] %s/%s: папка маленькая (%d файлов), кулдаун "
+                  "трёх роликов для неё снят — повтор тут неизбежен и "
+                  "безвреден" % (tag, cand, n), flush=True)
+            break
+
     if chosen is None:
         # every file in this folder is on cooldown / already used -> rule 4:
         # fail loudly, do NOT recycle an old shot.
