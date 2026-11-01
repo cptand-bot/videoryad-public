@@ -227,10 +227,18 @@ def main():
               "нет" % os.path.basename(tg))
         return 0
 
-    unused = [m for m in media if m["url"] not in blob
-               and m["url"] not in rej]
+    # КЛЮЧОМ ОТКАЗА ГОДИТСЯ И АДРЕС ПОСТА, И АДРЕС ФАЙЛА (01.11, улов
+    # `usuario-59`). Подсказка ниже печатала `{"<url>": "причина"}`, и это
+    # читается как адрес ПОСТА — вкладка так и записала, а сверка шла по
+    # адресу ФАЙЛА, и гейт держал красный свет на разобранном материале.
+    # Адрес поста закрывает все его вложения: смотрят и отклоняют обычно
+    # пост целиком.
+    def _why(m):
+        return rej.get(m["url"]) or rej.get(m.get("post") or "")
+
+    unused = [m for m in media if m["url"] not in blob and not _why(m)]
     used = len([m for m in media if m["url"] in blob])
-    dropped = [m for m in media if m["url"] not in blob and m["url"] in rej]
+    dropped = [m for m in media if m["url"] not in blob and _why(m)]
     print("=== МАТЕРИАЛ ДОСЬЕ ===")
     print("файлов во вложениях постов: %d (фото %d, видео %d)" % (
         len(media), sum(1 for m in media if m["kind"] == "фото"),
@@ -239,7 +247,7 @@ def main():
           "дела: %d" % (used, len(dropped), len(unused)))
     for m in dropped[:40]:
         print("  отклонено: %s из %s — %s"
-              % (m["kind"], m["post"], rej.get(m["url"]) or "без причины"))
+              % (m["kind"], m["post"], _why(m) or "без причины"))
     print("сцен: всего %d — досье %d, медиатека %d, поиск %d, рисованных %d"
           % (st["total"], st["direct_url"], st["library"], st["search"],
              st["card"]))
@@ -259,6 +267,8 @@ def main():
     print("\n  Если файл СМОТРЕЛИ и он не подходит (чужая тема той же записи "
           "ARM, клеймо по центру, вшитые субтитры) — впиши его в "
           "tg_rejected.json рядом со сценарием: {\"<url>\": \"причина\"}. "
+          "Ключом годится И адрес ПОСТА (t.me/…, закроет все его вложения), "
+          "И адрес ФАЙЛА (cdn…, строка выше) — что удобнее. "
           "Он зачтётся разобранным, а причина останется видна.")
     if st["search"]:
         print("\nОТКАЗ: %d сцен закрыты ПОИСКОМ, пока %d файлов досье лежат "
