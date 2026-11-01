@@ -193,6 +193,39 @@ def main():
             break
         ids |= grew
 
+    # ТРЕТИЙ ПУТЬ: СНАПШОТ СПИСКА (01.11, разбор по прямому вопросу
+    # пользователя «почему кадры КНДР из георадара не вошли»).
+    # У записи `PROD_20261101_GEOPOLITICAL_MIX_IRAN_KOREA_V1` цепочки нет
+    # вовсе: `main_storyline_id` не встречается ни в `Storylines`, ни в
+    # `Events`, ни в `Claims` — запись в статусе draft. Единственная связь с
+    # постами идёт через лист `GEO2_ListSnapshots`: снапшоты вида
+    # `GEO2-20261101-48-v1` содержат `record_key` постов (`-100…:560`), а уже
+    # по этому ключу пост лежит в `Archive`/`NewsInbox`. Обход по графу таких
+    # связей не видел, и материал (единственный пост про КНДР, 28.10, «Ким Чен
+    # Ын приказал усилить подготовку армии», ЦТАК) в ролик не попадал.
+    # Берём ТОЛЬКО снапшоты той же даты, что и запись, и помечаем отдельно —
+    # это не «привязано к ключу», а «лежит в списке того же дня».
+    snap = collections.OrderedDict()
+    _d8 = re.search(r"(20\d{6})", key)
+    if not links and _d8:
+        _snap_keys = set()
+        for sheet, line in rows:
+            if "LISTSNAPSHOT" not in sheet.upper() and "SNAPSHOT" not in line.upper():
+                continue
+            if _d8.group(1) not in line:
+                continue
+            _snap_keys |= set(KEY_RE.findall(line))
+        if _snap_keys:
+            for sheet, line in rows:
+                if not any(k in line for k in _snap_keys):
+                    continue
+                for u in TG_RE.findall(line):
+                    if u not in links:
+                        snap.setdefault(u, sheet)
+            print("по СНАПШОТУ СПИСКА того же дня (%s) нашлось %d ссылок — "
+                  "это посты, отобранные редакцией в этот день; ставь только "
+                  "те, что по теме ролика" % (_d8.group(1), len(snap)))
+
     # ВТОРОЙ ПРОХОД — ПО ТЕМЕ ЗАПИСИ, И ОН ПОМЕЧАЕТСЯ ОТДЕЛЬНО. Нужен там, где
     # автор посты к ключу не подвязал: по цепочке ключа ноль, а материал есть.
     # Такие ссылки годны ТОЛЬКО если тема совпадает, и закрепление за роликом
@@ -212,6 +245,8 @@ def main():
 
     # ЗАКРЕПЛЕНИЕ: чужое не берём, своё помечаем.
     cl = claims_load()
+    for _u, _sh in snap.items():
+        topic.setdefault(_u, _sh)
     taken = {u: cl[u] for u in list(links) + list(topic)
              if u in cl and cl[u].get("проект") != project}
     for u in taken:
