@@ -1,0 +1,79 @@
+[
+ {
+  "scene": 7,
+  "view": "quote",
+  "dur": 9.84,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Чтобы добиться мира, сначала надо разнести друг друга в хлам, а потом дождаться, пока кто-нибудь вылезет из-под обломков",
+   "accent": "разнести друг друга в хлам",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "charts.cartogram",
+  "dur": 12.96,
+  "anim": 12.96,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Украина",
+    "США"
+   ],
+   "mode": "bubble",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "pull",
+  "dur": 13.2,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Переговоры сами по себе ничего физически не выключают: ни беспилотники, ни подстанции, ни решения военных штабов",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "film.film_strip",
+  "dur": 10.72,
+  "anim": 10.72,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "images/scene_018.jpg",
+    "images/scene_021.jpg",
+    "images/scene_013.jpg",
+    "images/scene_024.jpg"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "quote",
+  "dur": 12.72,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Смотреть надо не на слова, а на то, уменьшается ли реальное давление сторон друг на друга",
+   "accent": "уменьшается ли реальное давление",
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
