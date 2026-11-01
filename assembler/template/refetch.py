@@ -902,6 +902,51 @@ def _has_asset_on_disk(kind, sid):
     return False
 
 
+def restore_dropped_overlays(proj="."):
+    """ВЕРНУТЬ В `overlays.json` ЗАПИСИ, ЧЕЙ ФАЙЛ УЖЕ ДОБРАЛИ (01.11, улов
+    `usuario-49`).
+
+    Облачный `merge_shards` выносит всплывашку без фото в
+    `overlays.dropped.json` и выбрасывает её ключ из `overlays.json` — иначе
+    сборка ругается на сироту. Но после УСПЕШНОГО локального добора ключ
+    обратно никто не возвращал: файл лежит в `overlays/`, записи нет, и
+    всплывашка молча не ставится. Вкладка вернула две руками. Класс «успех
+    значит ничего не сделано», поэтому возврат теперь автоматический и
+    идемпотентный: вернулось — ключ убран из журнала потерь.
+    """
+    dpath = os.path.join(proj, "overlays.dropped.json")
+    ovj = os.path.join(proj, "overlays.json")
+    if not (os.path.isfile(dpath) and os.path.isfile(ovj)):
+        return
+    try:
+        lost = json.load(open(dpath, encoding="utf-8"))
+        ov = json.load(open(ovj, encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    back = []
+    for k in list(lost):
+        if not str(k).isdigit() or k in ov:
+            continue
+        if not _has_asset(os.path.join(proj, "overlays"), int(k)):
+            continue
+        entry = (lost[k] or {}).get("entry")
+        if not isinstance(entry, dict):
+            continue
+        ov[k] = entry
+        lost.pop(k)
+        back.append(k)
+    if not back:
+        return
+    json.dump(ov, open(ovj, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    if lost:
+        json.dump(lost, open(dpath, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    else:
+        os.remove(dpath)
+    print("ВЕРНУЛ В overlays.json всплывашки, фото для которых добрали: %s"
+          % ", ".join(sorted(back, key=int)))
+
+
 def main():
     # --next <ids> — мгновенная замена из запаса кандидатов (28.10)
     if "--next" in sys.argv:
@@ -1232,6 +1277,17 @@ def main():
     for sub, _, _, _ in jobs:
         if os.path.exists(sub):
             os.remove(sub)
+    restore_dropped_overlays()
+    # ЗАМЕНА ПО СЕГОДНЯШНЕМУ СОБЫТИЮ — В МЕДИАТЕКУ, А НЕ ВО ВТОРОЙ ЗАПРОС
+    # (01.11, четвёртый независимый замер класса «замены грязнее исходников»:
+    # 57% против 9,3% на том же ролике). Брак однотипный — телеграм-каналы
+    # перепечаток со своими клеймами (`mash`, `ASTRA`, обводка поверх
+    # аэрофото): свежих кадров в выдаче нет, и первыми идут именно они.
+    # Лечение, сработавшее живьём: круг замен уведён на папки медиатеки.
+    print("\nЕСЛИ СЦЕНА ПРО СЕГОДНЯШНЕЕ СОБЫТИЕ — следующую замену веди в "
+          "МЕДИАТЕКУ (`local_library`), а не во второй поисковый запрос: "
+          "свежих кадров в выдаче ещё нет, и поиск отдаст ту же перепечатку "
+          "телеграм-канала с другим клеймом.")
     if failed_runs:
         # ИТОГ СЧИТАЕМ ПО ДИСКУ, А НЕ ПО КОДУ ВОЗВРАТА (28.10, см.
         # `count_replaced`): «фетч вернул 1» значит «часть сцен без кадра», а
