@@ -110,6 +110,20 @@ def restore_missing(d, ids):
             print("  !! сцена %d осталась БЕЗ кадра, вернуть нечего" % sid)
             continue
         src = back[-1]
+        # ЗАБАНЕННЫЙ КАДР ВОЗВРАЩАТЬ НЕЛЬЗЯ (01.11, улов `usuario-16`).
+        # Рефетч банит прежний кадр САМ (на 2 дня, правка 28.10), а при
+        # `--ban` — насовсем. Если замена не нашлась, возврат из `.trash`
+        # ставил на место файл, уже лежащий в бан-листе от этого же вызова:
+        # `selfcheck` ловил это строкой «ЗАБАНЕННЫЙ КАДР В СБОРКЕ» и валил
+        # прогон, а в выводе рефетча стояло безобидное «ВЕРНУЛ прежний кадр».
+        # Теперь возврат отменяется и говорится, что делать.
+        if _md5(src) in _banned_now():
+            print("  !! БЛОКЕР: сцена %d осталась БЕЗ кадра — замена не "
+                  "нашлась, а прежний кадр ЗАБАНЕН (вернуть его нельзя, "
+                  "сборка упадёт на «ЗАБАНЕННЫЙ КАДР В СБОРКЕ»)." % sid)
+            print("     Закрой сцену папкой медиатеки/базы (`local_library`) "
+                  "или перепиши запрос от другого объекта.")
+            continue
         dst = os.path.join(d, os.path.basename(src).split(".", 1)[1])
         try:
             os.replace(src, dst)
@@ -117,6 +131,25 @@ def restore_missing(d, ids):
                   % (sid, os.path.basename(dst)))
         except OSError as e:
             print("  !! сцена %d без кадра, вернуть не вышло: %s" % (sid, e))
+
+
+def _banned_now():
+    """Актуальный бан-лист (срочные записи с истёкшим `until` не считаются).
+
+    Путь тот же, что у фетча, и так же переопределяется переменной
+    `VIDEORYAD_BANNED_FILE`.
+    """
+    path = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.expanduser(
+        "~/projects/media-library/.banned_md5.json")
+    if not os.path.exists(path):
+        return set()
+    try:
+        log = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return set()
+    today = time.strftime("%Y-%m-%d")
+    return {m for m, e in log.items()
+            if not (e or {}).get("until") or e["until"] >= today}
 
 
 def _md5(path):
@@ -697,8 +730,20 @@ def round_gate(pend, force):
             kind = "overlays" if is_ov else "images"
             for sid in [k for k in fx if "%s:%s" % (kind, k) in dropped]:
                 fx.pop(sid)
-        print("  исключено сцен: %d, чиню остальные: %d"
-              % (len(dropped), sum(len(fx) for _p, fx, _o in pend)))
+        # НОМЕРА, А НЕ ТОЛЬКО СЧЁТ (01.11, улов `usuario-16`): во втором
+        # круге сцена 19 была отброшена как повторная переформулировка, и
+        # увидеть это можно было лишь по строке «исключено сцен: 1» в начале
+        # вывода — в хвосте её не было вовсе. Так легко уехать с
+        # неисправленной сценой, считая круг закрытым.
+        _dsids = sorted({int(x.split(":", 1)[1]) for x in dropped
+                         if x.split(":", 1)[1].isdigit()})
+        print("  исключено сцен: %d (%s), чиню остальные: %d"
+              % (len(dropped),
+                 ", ".join(map(str, _dsids)) or "номера не разобраны",
+                 sum(len(fx) for _p, fx, _o in pend)))
+        print("  ЭТИ СЦЕНЫ НЕ ИСПРАВЛЕНЫ — повторная переформулировка того же "
+              "запроса. Либо перепиши их от другого объекта, либо закрой "
+              "папкой медиатеки; круг без них закрытым не считается.")
     return 0
 
 
