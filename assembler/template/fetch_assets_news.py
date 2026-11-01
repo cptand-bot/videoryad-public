@@ -1571,6 +1571,9 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     except ValueError:
         _scene_dur = 0.0
 
+    _LIB_HARD = "\x00"               # причина, по которой файл не берём ДАЖЕ
+                                      # запасным путём (компиляция)
+
     def _lib_fits(path):
         """(годен, как_описать) — порог по типу файла."""
         low = path.lower()
@@ -1602,8 +1605,16 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
             # по ширине: длинный файл уступает нормальному внутри той же
             # папки, а если других нет — берём и говорим вслух.
             if d and d > max(need * 2.5, 25.0):
-                return False, ("%.1f с при сцене %.1f с — это компиляция из "
-                               "многих сюжетов, а не кадр" % (d, need))
+                # ОТКАЗ ЖЁСТКИЙ, В ОТЛИЧИЕ ОТ ШИРИНЫ (01.11, улов
+                # `usuario-16`): узкий кадр лучше пустой сцены, а компиляция
+                # на 119,6 с под сцену 10 с — ХУЖЕ пустой сцены. Мягкий
+                # отказ уходил в запасной путь «крупнее в папке нет, беру как
+                # есть», строку в логе легко проскочить, и дальше `selfcheck`
+                # валил уже собранный ролик («источник N с при нужных M с») —
+                # то есть круг правок тратился на то, что фетч уже знал.
+                return False, (_LIB_HARD + "%.1f с при сцене %.1f с — это "
+                               "компиляция из многих сюжетов, а не кадр"
+                               % (d, need))
             return True, ""
         try:
             from PIL import Image as _I2
@@ -1629,6 +1640,10 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
             continue
         ok_sz, why = _lib_fits(cand_path)
         if not ok_sz:
+            if why.startswith(_LIB_HARD):
+                print("  [library] %s/%s: НЕ БЕРУ — %s"
+                      % (tag, cand, why[len(_LIB_HARD):]), flush=True)
+                continue
             if small is None:
                 small = (cand, h, why, (start + step + 1))
             continue
