@@ -4025,14 +4025,32 @@ def run_live(scenes_path, images_dir, port):
                 continue
         except (OSError, ValueError, UnicodeDecodeError):
             continue
-        _p = ""
+        # ПОРТ БЕРЁМ ИЗ ФАЙЛА, А НЕ ИЗ КОМАНДНОЙ СТРОКИ: в cmdline лежит
+        # ЗАПРОШЕННЫЙ порт, а сервер уходит на первый свободный (разбор —
+        # в месте, где файл пишется).
+        _p, _asked = "", ""
         for _c in _cmd:
             if _c.isdigit() and 1024 < int(_c) < 65536:
-                _p = _c
+                _asked = _c
+        try:
+            with open(".review_port", encoding="utf-8") as _pf:
+                _rec = json.load(_pf)
+            if str(_rec.get("pid")) == str(_pid) and _rec.get("port"):
+                _p = str(_rec["port"])
+        except (OSError, ValueError):
+            pass
+        if _p:
+            _where = ", порт %s (фактический, из .review_port)" % _p
+        elif _asked:
+            _where = (", порт неизвестен: в командной строке стоит %s, но это "
+                      "ЗАПРОШЕННЫЙ порт, а сервер мог уйти на свободный — "
+                      "проверь заголовком: curl -s http://localhost:<порт>/"
+                      "review.html | grep -o \"<title>[^<]*</title>\"" % _asked)
+        else:
+            _where = ""
         print("  дашборд этого проекта УЖЕ ПОДНЯТ: PID %s%s. Второй не "
               "запускаю — пользуйся тем, что работает (если он мёртв, сначала "
-              "kill %s)." % (_pid, (", порт " + _p) if _p else "", _pid),
-              flush=True)
+              "kill %s)." % (_pid, _where, _pid), flush=True)
         return
 
     socketserver.TCPServer.allow_reuse_address = True
@@ -4054,6 +4072,21 @@ def run_live(scenes_path, images_dir, port):
     if srv.server_address[1] != port:
         print(f"  !! порт {port} занят другим процессом — поднялся на {srv.server_address[1]}", flush=True)
     port = srv.server_address[1]
+    # ФАКТИЧЕСКИЙ ПОРТ ЗАПИСЫВАЕМ НА ДИСК (01.11, улов `usuario-a5`).
+    # Проверка «дашборд этого проекта уже поднят» печатала порт, вычитанный из
+    # КОМАНДНОЙ СТРОКИ процесса, то есть ЗАПРОШЕННЫЙ. А сервер уходит на первый
+    # свободный: у вкладки реально был 8793, сообщение называло 8791, и на 8791
+    # сидел ЧУЖОЙ ролик. Вкладка, поверившая сообщению, дала бы пользователю
+    # чужой дашборд — ровно инцидент 11.10, из-за которого он утверждал
+    # карточки не своего ролика. Файл пишется рядом с проектом и читается той
+    # же проверкой, поэтому угадывать больше нечего.
+    try:
+        with open(".review_port", "w", encoding="utf-8") as _pf:
+            json.dump({"pid": os.getpid(), "port": port,
+                       "project": os.path.basename(os.path.abspath("."))},
+                      _pf, ensure_ascii=False)
+    except OSError:
+        pass
     ip = subprocess.run(["hostname", "-I"], capture_output=True, text=True).stdout.split()
     print(f"\n  LIVE-предпросмотр запущен. Открой в браузере Windows:", flush=True)
     print(f"    http://localhost:{port}/review.html", flush=True)
