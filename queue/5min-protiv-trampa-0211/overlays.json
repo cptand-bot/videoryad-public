@@ -1,0 +1,302 @@
+{
+ "anchor": "top",
+ "7": {
+  "photo": "overlays/scene_007.jpg",
+  "sound": "whoosh",
+  "at": 2.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "13": {
+  "photo": "overlays/scene_013.jpg",
+  "sound": "whoosh",
+  "at": 2.2,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "19": {
+  "photo": "overlays/scene_019.jpg",
+  "sound": "whoosh",
+  "at": 2.6,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "25": {
+  "photo": "overlays/scene_025.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "32": {
+  "photo": "overlays/scene_032.jpg",
+  "sound": "whoosh",
+  "at": 2.9,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "36": {
+  "photo": "overlays/scene_036.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "40": {
+  "photo": "overlays/scene_040.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "53": {
+  "photo": "overlays/scene_053.jpg",
+  "sound": "whoosh",
+  "at": 2.8,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "57": {
+  "photo": "overlays/scene_057.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "58": {
+  "photo": "overlays/scene_058.jpg",
+  "sound": "whoosh",
+  "at": 2.7,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "2": {
+  "text": {
+   "words": "СУД · ПРОТЕСТ · ЗАПРЕТ ПАРТИИ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.8,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "5": {
+  "text": {
+   "words": "СТАРОЕ СЛОВО: ЭКСТРЕМИЗМ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "9": {
+  "text": {
+   "words": "БОРЬБА НЕ ЗА ГОЛОСА, А ЗА ДОПУСК",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.0,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "12": {
+  "text": {
+   "words": "СПОРЯТ, КТО УДАРИЛ ПЕРВЫМ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.7,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "16": {
+  "text": {
+   "words": "ГОЛОСОВАТЬ МОЖНО. СОТРУДНИЧАТЬ — НЕЛЬЗЯ",
+   "color": "white",
+   "pos": "mc",
+   "at": 2.7,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "18": {
+  "text": {
+   "words": "САКСОНИЯ-АНХАЛЬТ: ПОСТ ДЛЯ АдГ",
+   "color": "red",
+   "pos": "mc",
+   "at": 3.2,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "21": {
+  "text": {
+   "words": "ОБСУЖДАЕТСЯ ЗАПРЕТ АдГ",
+   "color": "red",
+   "pos": "mc",
+   "at": 2.6,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "22": {
+  "text": {
+   "words": "ЭКСТРЕМИЗМ · РАСИЗМ · СВЯЗИ С РФ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "26": {
+  "text": {
+   "words": "ВЕРНУТЬ ВЛАСТЬ НАЦИОНАЛЬНЫМ СТОЛИЦАМ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "30": {
+  "text": {
+   "words": "ТУСК — ПРАВОЦЕНТРИСТ, НЕ ЛЕВЫЙ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "33": {
+  "text": {
+   "words": "КТО КОГО ОТСТРАНИЛ — ЭТО ДЕКОРАЦИИ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "37": {
+  "text": {
+   "words": "БРЮССЕЛЬ ЗАБРАЛ СЛИШКОМ МНОГО",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "41": {
+  "text": {
+   "words": "СТАРАЯ СИСТЕМА ТЕРЯЕТ МОНОПОЛИЮ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "44": {
+  "text": {
+   "words": "РАНЬШЕ ЭТО НАЗЫВАЛИ ПОПУЛИЗМОМ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.1,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "47": {
+  "text": {
+   "words": "ОДНОГО УБРАТЬ ПРОЩЕ, ЧЕМ МИЛЛИОНЫ",
+   "color": "red",
+   "pos": "mc",
+   "at": 3.4,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "50": {
+  "text": {
+   "words": "СИСТЕМУ СЛОМАЛИ ЧЕРЕЗ ВЫБОРЫ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.3,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "55": {
+  "text": {
+   "words": "ЭТО ИНТЕРПРЕТАЦИЯ, НЕ ДОКАЗАТЕЛЬСТВО",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "59": {
+  "text": {
+   "words": "МИТИНГ → КАРТИНКА С ОГНЁМ",
+   "color": "yellow",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "65": {
+  "text": {
+   "words": "ИГНОРИРОВАЛИ · СМЕЯЛИСЬ · ИЗОЛИРУЮТ",
+   "color": "white",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ },
+ "67": {
+  "text": {
+   "words": "ЗАЧЕМ ТОГДА НУЖЕН МОЙ ГОЛОС?",
+   "color": "red",
+   "pos": "mc",
+   "at": 3.5,
+   "scale": 1.0
+  },
+  "sound": "pop"
+ }
+}
