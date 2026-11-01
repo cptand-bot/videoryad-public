@@ -1837,14 +1837,18 @@ async function poll(){
   try{
     const r = await fetch('state?_='+Date.now());
     const j = await r.json();
-    if(j.stale_code && !document.getElementById("staleban")){
-      const b = document.createElement("div");
-      b.id = "staleban";
-      b.style.cssText = "position:sticky;top:0;z-index:9998;background:#c60;color:#fff;"
-        + "padding:9px 14px;font:bold 15px system-ui;text-align:center";
-      b.textContent = "⚠ дашборд поднят на СТАРОМ коде — скрипт правили после запуска. "
-        + "Перезапусти сервер, иначе свежие кнопки и исправления не появятся.";
-      document.body.insertBefore(b, document.body.firstChild);
+    // ОРАНЖЕВАЯ ПОЛОСА «ПОДНЯТ НА СТАРОМ КОДЕ» СНЯТА СО СТРАНИЦЫ (01.11,
+    // прямое слово пользователя). Она рисовалась на КАЖДОМ уже поднятом
+    // дашборде после любой раскатки кода — а раскаток за смену бывает по
+    // десятку. Он видел полосу на своём и на соседнем ролике и спрашивал,
+    // что происходит: для него это мусор на экране утверждения, а
+    // перезапускать живой дашборд ради неё запрещено (ссылку он уже открыл).
+    // Признак остаётся в `/state` и в логе сервера — то есть у ВКЛАДКИ, где
+    // он и нужен; на страницу не выводится.
+    if(j.stale_code && !window.__staleLogged){
+      window.__staleLogged = 1;
+      console.warn("дашборд поднят на старом коде (скрипт правили после "
+        + "запуска) — на странице это больше не показывается");
     }
     let done = 0;
     const need = j.needs || {};
