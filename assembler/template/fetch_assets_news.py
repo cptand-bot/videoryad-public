@@ -1574,6 +1574,31 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     real = [f for f in files if not _is_stylized(f, ())]
     if real:
         files = real
+    # ПЛОСКАЯ КАРТА — ЭТО НЕ КАРТА (02.11, улов `usuario-3c`). Из пяти
+    # карт-всплывашек ролика ТРИ приехали контуром без единой подсветки
+    # (`КАРТЫ/МИР`, `КАРТЫ/ЕВРОПА`, `КАРТЫ/УКРАИНА`): «светлое на светлом»,
+    # на экране не читается ничем. Числовые проверки на это молчат, поймал
+    # только парный лист — то есть уже после фетча и круга правок.
+    # Детектор у нас есть с 19.10 (`fetch_maps.py --check`, по нему в
+    # медиатеке 23 плоских файла), но он работал ТОЛЬКО при сборе карт и до
+    # выдачи не доходил. Теперь плоские не выдаются вовсе; если в папке
+    # плоские ВСЕ — отдаём как есть, пустая сцена хуже тусклой карты.
+    if "/КАРТЫ/" in ("/" + tag.replace("\\", "/") + "/") and files:
+        try:
+            import fetch_maps as _fm
+            _live = [f for f in files
+                     if not _fm._flat_map_warning(os.path.join(tag_dir, f))]
+            if _live and len(_live) != len(files):
+                print(f"[{seq:03d}] карты: снял {len(files) - len(_live)} "
+                      f"ПЛОСКИХ (страна не подсвечена, «светлое на светлом») "
+                      f"из {len(files)} в '{tag}'")
+                files = _live
+            elif not _live:
+                print(f"[{seq:03d}] карты: в '{tag}' ВСЕ {len(files)} плоские "
+                      f"— отдаю как есть, но кадр будет тусклым; лучше "
+                      f"закрыть сцену нашим `card:map`")
+        except Exception as _e:
+            print(f"[{seq:03d}] карты: проверка подсветки не прошла ({_e})")
     if not files:
         return None
 
