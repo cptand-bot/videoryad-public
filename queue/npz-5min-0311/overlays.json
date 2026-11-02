@@ -1,0 +1,448 @@
+{
+  "anchor": "top",
+  "12": {
+    "photo": "overlays/scene_012.jpg",
+    "sound": "zatvor",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "30": {
+    "photo": "overlays/scene_030.jpg",
+    "sound": "ding",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "35": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "АБУ-ДАБИ · ПЕРВАЯ ПОЛОВИНА НОЯБРЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "41": {
+    "photo": "overlays/scene_041.jpg",
+    "sound": "pop",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "46": {
+    "photo": "overlays/scene_046.jpg",
+    "sound": "zatvor",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "62": {
+    "photo": "overlays/scene_062.jpg",
+    "sound": "ding",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "3": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "В КИЕВЕ ЭКСТРЕННЫЕ ОТКЛЮЧЕНИЯ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ГРАФИКИ НА МНОГИЕ ЧАСЫ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "6": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЗАРЯДКА СТАЛА БЫТОВЫМ ВОПРОСОМ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "10": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "УДАРЫ ИДУТ СЕРИЯМИ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПОЧАСОВЫЕ ОГРАНИЧЕНИЯ В ОБЛАСТЯХ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "14": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЭНЕРГОСИСТЕМА НЕ УСПЕВАЕТ ВЫДОХНУТЬ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "17": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "НОВОКУЙБЫШЕВСК, ЗАТЕМ КСТОВО",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "18": {
+    "photo": "overlays/scene_018.jpg",
+    "sound": "pop",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "right",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "19": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ЛИНИЯ УДАРОВ ПРОДОЛЖИЛАСЬ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "США ПРЕДЛАГАЛИ ПАУЗУ НА ТРИДЦАТЬ ДНЕЙ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "КИЕВ: ОБЯЗАТЕЛЬСТВА НЕ БРАЛИ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "25": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТРАМП УЖЕ ПРОСИЛ ОСТАНОВИТЬСЯ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "26": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТЕПЕРЬ ОБЕЩАЕТ ПОГОВОРИТЬ СНОВА",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "УДАРЫ ПО НПЗ — ЧАСТЬ ДАВЛЕНИЯ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "31": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "СВЕТ · ТЕПЛО · ПРОМЫШЛЕННОСТЬ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "33": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ДВЕ ЛИНИИ ДАВЛЕНИЯ СРАЗУ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "34": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТРЁХСТОРОННИЙ ФОРМАТ С УЧАСТИЕМ США",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "38": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "СНАЧАЛА СИЛА, ПОТОМ СТОЛ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ТРЕВОГА — ЭТО ТРЕВОГА",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "45": {
+    "photo": "overlays/scene_045.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "shape": "rect",
+    "style": "left",
+    "size": "m",
+    "scale": 1.0,
+    "approved": true
+  },
+  "47": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "КАЖДЫЙ УДАР УЛУЧШАЕТ ПОЗИЦИЮ?",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "50": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПРОБЛЕМА НЕ В ПРОСЬБЕ, А В ПОНИМАНИИ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "55": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "БИТЬ И ГОВОРИТЬ ОДНОВРЕМЕННО",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "58": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МИР ПРИ СВЕЧАХ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "59": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "УЩЕРБ УЖЕ РЕАЛЬНЫЙ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "ding",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ВСТРЕЧА МОЖЕТ СОСТОЯТЬСЯ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
