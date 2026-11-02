@@ -1612,6 +1612,44 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     # степени»). Теперь кандидаты сортируются по журналу показов медиатеки:
     # сперва те, что показывали реже и давнее.
     files = _by_rarity(tag_dir, files)
+    # УЖЕ СТОЯЩИЕ В ЭТОМ РОЛИКЕ КАДРЫ ИЗ РАЗДАЧИ ВЫБРАСЫВАЕМ (02.11, два
+    # независимых улова: `usuario-4c` — девять итераций каскада, `usuario-04`
+    # — три повтора за ролик). Раздача по кругу ведётся счётчиком В ПАМЯТИ
+    # ПРОЦЕССА, а круги правок и доборы — это ОТДЕЛЬНЫЕ запуски фетча: счётчик
+    # каждый раз начинается заново и честно отдаёт первый файл папки, который
+    # в ролике уже стоит. Дальше включается каскад: `refetch` банит снятый
+    # файл, его близнец на другой сцене становится «забаненным кадром в
+    # сборке», меняешь её — банится следующий. Лечится не счётчиком, а
+    # ПАМЯТЬЮ НА ДИСКЕ: то, что уже лежит в `images/` и `overlays/`, второй
+    # раз не выдаём. Это работает между любыми запусками и переживает круги.
+    try:
+        _proj = os.path.dirname(os.path.abspath(out_base)) or "."
+        _busy = set()
+        for _d in ("images", "overlays"):
+            _dd = os.path.join(_proj, _d)
+            if not os.path.isdir(_dd):
+                continue
+            for _f in os.listdir(_dd):
+                _p = os.path.join(_dd, _f)
+                if os.path.isfile(_p) and not _f.startswith("."):
+                    _h = file_md5(_p)
+                    if _h:
+                        _busy.add(_h)
+        if _busy:
+            _free = [f for f in files
+                     if file_md5(os.path.join(tag_dir, f)) not in _busy]
+            if _free and len(_free) != len(files):
+                print(f"[{seq:03d}] медиатека '{tag}': снял "
+                      f"{len(files) - len(_free)} кадр(ов), уже стоящих в "
+                      f"этом ролике — раздача по кругу их не помнит между "
+                      f"запусками")
+                files = _free
+            elif not _free:
+                print(f"[{seq:03d}] медиатека '{tag}': ВСЕ {len(files)} кадра "
+                      f"папки уже стоят в ролике — возьми другую папку или "
+                      f"пин, иначе будет дубль по md5")
+    except OSError:
+        pass
     n = len(files)
     start = usage_counts.get(tag, 0)
     chosen = None
