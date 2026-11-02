@@ -1961,6 +1961,15 @@ poll();
     progress = ('<div id="prog"><i id="progi"></i></div>'
                 '<span class="sub" id="pgtxt">загрузка…</span>') if live else ""
 
+    # МАТЕРИАЛ ДОСЬЕ УЧИТЫВАЕТСЯ В ШАПКЕ (02.11, прямое слово пользователя:
+    # «чтобы они были учтены в дашборде и употреблены»). На карточке вложение
+    # и так помечено «📨 ИЗ ИСТОЧНИКА», но числом по ролику это нигде не
+    # стояло — и «вложений не было» было не отличить от «вложения не взяли».
+    _dos = [s for s in scenes
+            if str(s.get("source", "")).startswith("direct_url")]
+    dossier_badge = ('<span class="sub">· из георадара: <b>%d</b> сцен</span>'
+                     % len(_dos)) if _dos else ""
+
     return f"""<!doctype html><html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Предпросмотр — {project}</title>
@@ -1968,6 +1977,7 @@ poll();
 <header>
   <h1>Предпросмотр видеоряда{' · LIVE' if live else ''}</h1>
   <span class="sub">{project} · {len(scenes)} сцен · {fmt(total)}</span>
+  {dossier_badge}
   {progress}
   <span class="spacer"></span>
   <span class="sub">На каждой карточке: <b>✏️ Изменить кадр</b> — впиши что поставить ·

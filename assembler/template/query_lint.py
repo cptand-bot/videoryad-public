@@ -1570,7 +1570,29 @@ def lint(paths, strict=False, no_net=False):
                   "ВСЕХ листов xlsx (Archive, Debug, AuthorNotes, NewsInbox, "
                   "Claims, Sources, Productions) и прогони "
                   "tg_media.py --json tg.json <ссылки…>.")
-            soft += 1
+            # КЛЮЧ ЗАПИСИ УЖЕ РАЗОБРАН, А ВЛОЖЕНИЯ НЕ СМОТРЕЛИ — ЭТО МИНА,
+            # А НЕ ЗАМЕЧАНИЕ (02.11, прямое слово пользователя: «при получении
+            # вот этого ID чекалось, проверялись ссылки на наличие видео и
+            # картинок, и они были скачаны и употреблены»). Признак разобранного
+            # ключа — файлы, которые кладёт САМ `geo_links.py`: `links.txt` и
+            # разбор отбора `tg_source.json`. Их нет — темы в георадаре не
+            # нашлось вовсе, и тогда это по-прежнему мягкое замечание: ролик
+            # целиком на базе и поиске остаётся нормальным исходом.
+            _pd = os.path.dirname(os.path.abspath(paths[0])) or "."
+            _key_done = [f for f in ("links.txt", "tg_source.json",
+                                     "links_topic.txt")
+                         if os.path.exists(os.path.join(_pd, f))]
+            if _key_done:
+                print("  МИНА: ключ записи уже разобран (%s рядом со "
+                      "сценарием), а вложения постов не смотрели ни разу. "
+                      "Фетч не поедет, пока не прогнан tg_media.py: "
+                      "`tg_media.py --json tg.json $(cat links.txt)`."
+                      % ", ".join(_key_done))
+                print("  Знак телеканала на кадре досье — не повод выбросить, "
+                      "а повод обрезать: crop_brand.py --center --skip 3.")
+                problems += 1
+            else:
+                soft += 1
     except Exception as _e:
         print("  (проверка досье не прошла: %s)" % _e)
 
