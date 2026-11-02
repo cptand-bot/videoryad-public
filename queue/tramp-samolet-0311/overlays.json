@@ -1,0 +1,222 @@
+{
+ "anchor": "top",
+ "6": {
+  "photo": "overlays/scene_006.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "8": {
+  "photo": "overlays/scene_008.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "20": {
+  "photo": "overlays/scene_020.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "25": {
+  "photo": "overlays/scene_025.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "33": {
+  "photo": "overlays/scene_033.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "38": {
+  "photo": "overlays/scene_038.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "41": {
+  "photo": "overlays/scene_041.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "54": {
+  "photo": "overlays/scene_054.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "59": {
+  "photo": "overlays/scene_059.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "61": {
+  "photo": "overlays/scene_061.jpg",
+  "shape": "rounded",
+  "at": 2.8,
+  "scale": 1.0,
+  "sound": "pop",
+  "style": "right",
+  "anchor": "top"
+ },
+ "2": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПВО ПОЯВИЛОСЬ ЗАРАНЕЕ",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "4": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "РАКЕТЫ STINGER",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "5": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "МЕЖДУНАРОДНЫЙ АЭРОПОРТ ПАЛМ-БИЧ",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "10": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПОВЫШЕННЫЙ УРОВЕНЬ УГРОЗ",
+   "color": "red",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПОДГОТОВКА — ОКОЛО ЧЕТЫРЁХ СУТОК",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "14": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ДО 3 НОЯБРЯ УДАРА НЕ БУДЕТ",
+   "color": "red",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "21": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПРИЧИНУ УСТАНАВЛИВАЮТ",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "30": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "24 ОКТЯБРЯ — ПЕРЕХВАТ NORAD",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "37": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ВЫБОРЫ — 3 НОЯБРЯ",
+   "color": "white",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ },
+ "68": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "К ЧЕМУ ОНИ ГОТОВЯТСЯ?",
+   "color": "yellow",
+   "pos": "tc",
+   "at": 2.4,
+   "scale": 1.0
+  }
+ }
+}
