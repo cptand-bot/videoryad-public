@@ -177,6 +177,7 @@ def harvest_one(item, out_dir, want, tries, deadline):
     _say("    всего кандидатов: %d" % len(cands))
     # то, что уже лежит в базе у этого объекта, качать заново незачем
     kept, seen_md5, rej = [], set(item.get("known_md5") or []), {}
+    _srcmap = {}
     if seen_md5:
         _say("    в базе уже есть %d кадров — их md5 отбиваю сразу" % len(seen_md5))
     tried = 0
@@ -210,7 +211,29 @@ def harvest_one(item, out_dir, want, tries, deadline):
         name = "%02d_%dx%d.jpg" % (len(kept) + 1, w, h)
         os.replace(tmp, os.path.join(dst, name))
         kept.append(os.path.join(dst, name))
+        # ОТКУДА ПРИШЁЛ КАДР — ЗАПИСЫВАЕМ (02.11). Повод: замощённое клеймо
+        # апскейлера «Magnific» за день нашлось в ДЕВЯТИ файлах базы (три
+        # папки, два ролика), а OCR его не читает — проверено и по кадру, и
+        # по усиленному остатку, и поиском периодичности по спектру. Значит
+        # ловить его придётся глазами всегда, И ЕДИНСТВЕННОЕ, чем можно
+        # закрыть источник целиком, — бан ДОМЕНА. Для этого нужно знать, с
+        # какого адреса файл приехал; раньше это нигде не сохранялось, и
+        # забаненный кадр ничего не говорил о своих собратьях.
+        _srcmap[os.path.join(dst, name)] = u
         _say("    + %s  %s  плотность %.2f  (%s)" % (name, u[:58], d, src))
+
+    if _srcmap:
+        try:
+            _sp = os.path.join(os.path.dirname(next(iter(_srcmap))),
+                               "_ОТКУДА.json")
+            _old = {}
+            if os.path.exists(_sp):
+                _old = json.load(open(_sp, encoding="utf-8"))
+            _old.update({os.path.basename(k): v for k, v in _srcmap.items()})
+            json.dump(_old, open(_sp, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+        except Exception as _e:
+            _say("    (карта источников не записана: %s)" % _e)
 
     sheets = []
     if kept:
