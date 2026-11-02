@@ -124,7 +124,27 @@ def _media_library_dir(dest="."):
     return ml
 
 
-def _base_catalog(dest="."):
+def srt_plain_text(path):
+    """Закадровый текст из .srt одной строкой — для сверки имён папок `ТЕМЫ/*`.
+
+    Нужен, чтобы ночной сбор по георадару САМ попадал в тот ролик, под который
+    собран (02.11, второй случай подряд, когда вкладка теряла девять готовых
+    папок). Разметка выбрасывается, остаётся только речь.
+    """
+    try:
+        raw = open(path, encoding="utf-8-sig", errors="ignore").read()
+    except OSError:
+        return ""
+    out = []
+    for ln in raw.splitlines():
+        ln = ln.strip()
+        if not ln or ln.isdigit() or "-->" in ln:
+            continue
+        out.append(ln)
+    return " ".join(out)
+
+
+def _base_catalog(dest=".", match_text=""):
     """Блок каталога базы кадров для брифа; пусто, если база ещё не набрана."""
     try:
         import importlib.util
@@ -133,6 +153,10 @@ def _base_catalog(dest="."):
         spec = importlib.util.spec_from_file_location("base_catalog", cat_py)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
+        # ТЕКСТ РОЛИКА — ДО `scan`: по нему каталог сам впускает те папки
+        # `БАЗА/ТЕМЫ/*`, чьи имена звучат в закадровке (см. `_theme_auto_ok`).
+        if match_text:
+            mod.AUTO_TEXT = match_text
         ml = _media_library_dir(dest)
         # ТЕМАТИЧЕСКИЕ ПАПКИ МЕДИАТЕКИ ТОЖЕ (2026-10-29). Раньше здесь был
         # только `scan` по `БАЗА/`, и агент, обязанный чем-то закрыть
@@ -226,7 +250,7 @@ def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАД�
         # раскадровку, а узнать о ней он может ТОЛЬКО отсюда. Без этого блока
         # собранная ночью база физически не попадает ни в один ролик — фетч не
         # найдёт папку по описанию и молча уйдёт в пресс-водопад.
-        _base_catalog(dest),
+        _base_catalog(dest, match_text=srt_plain_text(srt)),
         # РИСОВАННЫЕ КАДРЫ АРСЕНАЛА (28.10). Пользователь: «арсенал
         # разрабатывался, чтобы элементы внедрять в логику сборки». Это те
         # сцены, на которых поиск заведомо даёт брак: нет ни имени, ни места,
