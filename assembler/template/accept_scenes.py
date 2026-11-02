@@ -184,6 +184,23 @@ def main():
             _known = set(re.findall(r'"([a-z_]+)":', _blk.group(1)))
     except Exception:
         _known = set()
+    # РЕЕСТРА ДВА, А ПРИЁМКА ЗНАЛА ОДИН (02.11, улов `usuario-04`).
+    # Рисованные кадры делают ДВА инструмента: `fullcycle/card_put.py`
+    # (карты, досье, плёнка, цитаты) и боевой `template/style_card.py`
+    # (`bullets`, `forces`, `timeline`). Бриф раскадровки предлагает виды из
+    # ОБОИХ, а приёмка сверялась только с первым — агент честно выполнил
+    # бриф, поставил `card:timeline` и получил отказ «вида НЕ СУЩЕСТВУЕТ».
+    # Это тот же класс «инструментов два, правку получил один», что и с
+    # анимацией карточек 30.10. Читаем оба реестра.
+    try:
+        _sc = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "style_card.py")
+        _st = open(_sc, encoding="utf-8").read()
+        _lb = re.search(r"LIMITS = \{(.*?)\n\}", _st, re.S)
+        if _lb:
+            _known |= set(re.findall(r'"([a-z_]+)":\s*\{', _lb.group(1)))
+    except Exception:
+        pass
     for i in cards:
         _view = str(scenes[i].get("source", ""))[len(CARD_PREFIX):].strip()
         if not _view:
