@@ -1,0 +1,76 @@
+{
+ "scenes": [
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/eb008e7ccf.mp4?token=DhaAkGzEm5hBaY4UJ9BL1_jG9hJzjDa1UiDeh4S1lKaWuXakVecOtNV-6YkhqcEhWd-pPjwNKWd74dZfWoujK3i47m1B9cDG8YffkeCc_5EwRZADiXgttnHG8faq2OOH9PSTJMqGPWI8qKvpDnLEa-osXy6TIV98Q-f3UJqP1sqwkUt6ZkyeAfY8EqAXBhf644yCaDq5fa8-06ZLn1nKT38ebfqKYem4rsMgLeBUWESvZgqcvzGvFXbUEv_0vGTWEe1nIKgaO_32_pghZ0TjQKULqLSWSXH2_S2YWDXSkd-Lz3LZkkKH3hzaEQ8TaZ0yoKDmi9EuwBHzyFaq7Tix6A",
+   "visual_prompt": "ПВО на набережной у Мар-а-Лаго — сами комплексы, которых нет в аэрокадре поместья"
+  },
+  {
+   "id": 20,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "press_photo",
+   "source_query": "бизнес-джет Learjet 60 в полёте реальное фото",
+   "visual_prompt": "Learjet назван в тексте — как он выглядел целым, до падения"
+  },
+  {
+   "id": 25,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/AVENGER-МАР-А-ЛАГО-3110_РЕЗИДЕНЦИЯ-МАР-А-ЛАГО-ВО",
+   "visual_prompt": "что именно защищают: сам объект, о котором вопрос"
+  },
+  {
+   "id": 33,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/ИРАН-ЯДЕРНАЯ-ДОКТРИНА-3110_АТОМНЫЙ-ОБЪЕКТ-НАТАНЗЕ/06_2048x1366.jpg",
+   "visual_prompt": "предыдущие американские удары названы в тексте — по чему именно"
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "press_photo",
+   "source_query": "ударный беспилотник Shahed в полёте реальное фото",
+   "visual_prompt": "цель, по которой работают комплексы: беспилотник назван в тексте"
+  },
+  {
+   "id": 41,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/ТРАМП-МИР-БЛИЗКО-3110_ТРАМП-ЖУРНАЛИСТЫ-БОРТА/01_7699x4879.jpg",
+   "visual_prompt": "Трамп назван в тексте — лицо того, кто обещает стать Мистером вето"
+  },
+  {
+   "id": 54,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/ТРАМП-МИР-БЛИЗКО-3110_ТРАМП-ВЫСТУПАЕТ-БЕЛОМ/03_1920x1080.jpg",
+   "visual_prompt": "президент назван в тексте — тот, чьё давление обсуждают в зале НАТО"
+  },
+  {
+   "id": 59,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ",
+   "visual_prompt": "«НАТО готовится» — где именно готовится, базы этого не показывает"
+  },
+  {
+   "id": 61,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "press_photo",
+   "source_query": "Папа Лев Четырнадцатый 2026",
+   "visual_prompt": "Папа назван в тексте — лицо, которого нет в кадре Капитолия Иллинойса"
+  }
+ ]
+}

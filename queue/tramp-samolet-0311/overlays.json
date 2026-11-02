@@ -1,0 +1,243 @@
+{
+  "anchor": "top",
+  "6": {
+    "photo": "overlays/scene_006.mp4",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "20": {
+    "photo": "overlays/scene_020.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "25": {
+    "photo": "overlays/scene_025.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "33": {
+    "photo": "overlays/scene_033.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "34": {
+    "photo": "overlays/scene_034.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "41": {
+    "photo": "overlays/scene_041.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "54": {
+    "photo": "overlays/scene_054.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "59": {
+    "photo": "overlays/scene_059.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "61": {
+    "photo": "overlays/scene_061.jpg",
+    "shape": "rounded",
+    "at": 2.8,
+    "scale": 1.0,
+    "sound": "pop",
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "2": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПВО ПОЯВИЛОСЬ ЗАРАНЕЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "4": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "РАКЕТЫ STINGER",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "МЕЖДУНАРОДНЫЙ АЭРОПОРТ ПАЛМ-БИЧ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "10": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПОВЫШЕННЫЙ УРОВЕНЬ УГРОЗ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПОДГОТОВКА — ОКОЛО ЧЕТЫРЁХ СУТОК",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "14": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ДО 3 НОЯБРЯ УДАРА НЕ БУДЕТ",
+      "color": "red",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "21": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ПРИЧИНУ УСТАНАВЛИВАЮТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "24 ОКТЯБРЯ — ПЕРЕХВАТ NORAD",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "37": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "ВЫБОРЫ — 3 НОЯБРЯ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "68": {
+    "at": 2.6,
+    "scale": 1.0,
+    "anchor": "top",
+    "text": {
+      "words": "К ЧЕМУ ОНИ ГОТОВЯТСЯ?",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.4,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
