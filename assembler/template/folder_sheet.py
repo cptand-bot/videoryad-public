@@ -54,6 +54,20 @@ try:
 except OSError:
     F = ImageFont.load_default()
 
+# ОДНА И ТА ЖЕ ПАПКА ПИШЕТСЯ ЗДЕСЬ И В КАТАЛОГЕ ОДИНАКОВО (03.11, улов
+# `usuario-79`). `catalog.py --check-dir "ТЕМЫ/X"` работает, а сюда надо было
+# писать `БАЗА/ТЕМЫ/X` — восемь папок подряд отбились «папки нет», и это
+# читается как «папок нет», а не «префикс не тот». Задание на раскадровку при
+# этом само советует «прогони через ту же проверку, что и каталог» и печатает
+# пример БЕЗ префикса. Теперь принимаются оба написания, как в каталоге.
+if not os.path.isdir(os.path.join(LIB, tag)):
+    for _cand in ("БАЗА/" + tag.strip("/"),
+                  tag.strip("/")[5:] if tag.strip("/").upper().startswith("БАЗА/") else ""):
+        if _cand and os.path.isdir(os.path.join(LIB, _cand)):
+            print("папка найдена как «%s» (принимаю оба написания, с «БАЗА/» "
+                  "и без)" % _cand, flush=True)
+            tag = _cand
+            break
 d = os.path.join(LIB, tag)
 if not os.path.isdir(d):
     # ОТКАТ НА СОСЕДНЮЮ БИБЛИОТЕКУ — ТОТ ЖЕ, ЧТО В ФЕТЧЕ (03.11, улов
@@ -71,7 +85,15 @@ if not os.path.isdir(d):
         _alt = os.path.join(os.path.dirname(os.path.normpath(LIB)), _b[:-2])
     elif _b == "media-library":
         _alt = os.path.normpath(LIB) + "-2"
-    if _alt and os.path.isdir(os.path.join(_alt, tag)):
+    _try = [tag]
+    if not tag.upper().startswith("БАЗА/"):
+        _try.append("БАЗА/" + tag.strip("/"))
+    else:
+        _try.append(tag.strip("/")[5:])
+    _hit = next((t for t in _try
+                 if _alt and os.path.isdir(os.path.join(_alt, t))), "")
+    if _hit:
+        tag = _hit
         d = os.path.join(_alt, tag)
         print("папки нет в %s — беру из соседней библиотеки %s" % (LIB, _alt),
               flush=True)

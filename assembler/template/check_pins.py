@@ -66,6 +66,41 @@ def cooldown_md5(this_project):
     return blocked, recent
 
 
+def _lib_alt(lib):
+    """Соседняя библиотека: `media-library` ↔ `media-library-2`.
+
+    ОТКАТ ПОВТОРЯЕТ ФЕТЧЕР (`fetch_assets_news.py`, откат от 29.10), и это не
+    удобство, а условие правильного приговора: фетч ищет тег в библиотеке
+    канала, а не найдя — в соседней, ДЛЯ ЛЮБОГО тега, не только `БАЗА/`.
+    Проверка без отката объявляла живые папки выдуманными (03.11, улов
+    `usuario-0d`: на 5 МИНУТ отбились разом ПОЛИТИКА/ЕВРОПА, ЕВРОПА-армия,
+    ЕС-форумы-Украина, НАТО, ПОЛЬША, УКРАИНА, ФРАНЦИЯ — 14 сцен из 75, в
+    которых лежало от 10 до 141 файла). Цена ошибки обратная заявленной:
+    сообщение гнало переписать живые библиотечные сцены в ПОИСКОВЫЕ, а доля
+    поиска — главный множитель брака.
+    """
+    b = os.path.basename(os.path.normpath(lib))
+    if b.endswith("-2"):
+        return os.path.join(os.path.dirname(os.path.normpath(lib)), b[:-2])
+    if b == "media-library":
+        return os.path.normpath(lib) + "-2"
+    return ""
+
+
+def _lib_has(lib, rel):
+    """Есть ли тег в библиотеке канала ИЛИ в соседней — как у фетчера.
+
+    Возвращает путь, по которому нашлось (или пустую строку).
+    """
+    for base in (lib, _lib_alt(lib)):
+        if not base:
+            continue
+        p = os.path.join(base, rel)
+        if os.path.isdir(p) or os.path.isfile(p):
+            return p
+    return ""
+
+
 def main():
     argv = [a for a in sys.argv[1:] if a != "--strict"]
     strict = "--strict" in sys.argv[1:]
@@ -89,14 +124,15 @@ def main():
             if sc.get("source") != "local_library" or not q:
                 continue
             qq = q.strip()
-            direct = os.path.join(lib, qq)
-            if os.path.isfile(direct):
+            direct = _lib_has(lib, qq)
+            if direct and os.path.isfile(direct):
                 pins.append((path, sc.get("id"), qq, direct,
                              float(sc.get("duration_sec") or 0)))
                 continue
             # «папка:keyword» (кусок индексированного видео) — это папка
             folder = qq.split(":", 1)[0] if ":" in qq else qq
-            if os.path.isdir(os.path.join(lib, folder)):
+            _f = _lib_has(lib, folder)
+            if _f and os.path.isdir(_f):
                 continue            # папка — round-robin, не пин, не наше дело
             # НИ ФАЙЛА, НИ ПАПКИ — БИТЫЙ ПИН (2026-10-18, улов usuario-b7).
             # Раньше такой путь попадал в ветку «папка, не наше дело» и

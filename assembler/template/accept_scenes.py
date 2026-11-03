@@ -88,13 +88,57 @@ def motif_counts(scenes):
     return out
 
 
+def _lib_alt(lib):
+    """Соседняя библиотека: `media-library` ↔ `media-library-2`.
+
+    ОТКАТ ПОВТОРЯЕТ ФЕТЧЕР (`fetch_assets_news.py`, откат от 29.10), и это не
+    удобство, а условие правильного приговора: фетч ищет тег в библиотеке
+    канала, а не найдя — в соседней, ДЛЯ ЛЮБОГО тега, не только `БАЗА/`.
+    Проверка без отката объявляла живые папки выдуманными (03.11, улов
+    `usuario-0d`: на 5 МИНУТ отбились разом ПОЛИТИКА/ЕВРОПА, ЕВРОПА-армия,
+    ЕС-форумы-Украина, НАТО, ПОЛЬША, УКРАИНА, ФРАНЦИЯ — 14 сцен из 75, в
+    которых лежало от 10 до 141 файла). Цена ошибки обратная заявленной:
+    сообщение гнало переписать живые библиотечные сцены в ПОИСКОВЫЕ, а доля
+    поиска — главный множитель брака.
+    """
+    b = os.path.basename(os.path.normpath(lib))
+    if b.endswith("-2"):
+        return os.path.join(os.path.dirname(os.path.normpath(lib)), b[:-2])
+    if b == "media-library":
+        return os.path.normpath(lib) + "-2"
+    return ""
+
+
+def _lib_has(lib, rel):
+    """Есть ли тег в библиотеке канала ИЛИ в соседней — как у фетчера.
+
+    Возвращает путь, по которому нашлось (или пустую строку).
+    """
+    for base in (lib, _lib_alt(lib)):
+        if not base:
+            continue
+        p = os.path.join(base, rel)
+        if os.path.isdir(p) or os.path.isfile(p):
+            return p
+    return ""
+
+
 def _media_lib(near=""):
     """Папка медиатеки ТАК, КАК ЕЁ ВИДИТ ФЕТЧЕР: `.env` ролика, иначе
     `~/projects/media-library`. Правила разрешения повторяют `check_pins.py`
     (относительное имя вида `media-library-2` раскрывается в `~/projects/…`).
     """
-    val = ""
+    # ПЕРЕМЕННАЯ ОКРУЖЕНИЯ ЧИТАЕТСЯ ТОЖЕ (03.11): `folder_sheet.py` и
+    # `base/catalog.py` берут её, а приёмка брала ТОЛЬКО `.env` — вкладка не
+    # могла перекрыть библиотеку на один прогон и делала папку-пустышку со
+    # своим `.env`. Приоритет: явная переменная, затем `.env` ролика.
+    val = (os.environ.get("MEDIA_LIBRARY_DIR") or "").strip()
     seen = []
+    if val:
+        lib = os.path.expanduser(val)
+        if not os.path.isabs(lib):
+            lib = os.path.expanduser(os.path.join("~/projects", lib))
+        return lib
     for d in (near, os.getcwd()):
         if not d or d in seen:
             continue
@@ -375,11 +419,10 @@ def main():
     elif lib_dirs:
         for d, ids in sorted(lib_dirs.items()):
             head = d.split(":", 1)[0].strip("/")
-            pth = os.path.join(_lib, head)
-            if not (os.path.isdir(pth) or os.path.isfile(pth)):
-                bad.append("сцены %s: папки медиатеки «%s» НЕТ в %s — путь "
-                           "выдуман, фетч молча уйдёт в поиск, а манифест "
-                           "запишет local_library"
+            if not _lib_has(_lib, head):
+                bad.append("сцены %s: папки медиатеки «%s» НЕТ ни в %s, ни в "
+                           "соседней библиотеке — путь выдуман, фетч молча "
+                           "уйдёт в поиск, а манифест запишет local_library"
                            % (", ".join(map(str, ids)), d,
                               os.path.basename(_lib)))
     for d, ids in sorted(lib_dirs.items()):
