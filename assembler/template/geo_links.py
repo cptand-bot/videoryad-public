@@ -287,9 +287,11 @@ def main():
     # молча. Поэтому при полном отбое кладём их в файл и печатаем готовую
     # команду: решение «брать или не брать» остаётся за вкладкой, но собирать
     # руками больше нечего.
+    claimed_out = ""
     if not links and not topic and taken:
         c_out = os.path.join(os.path.dirname(os.path.abspath(out)),
                              "links_claimed.txt")
+        claimed_out = c_out
         with open(c_out, "w", encoding="utf-8") as f:
             for u in taken:
                 f.write(u + "\n")
@@ -342,7 +344,21 @@ def main():
         for u in links:
             print("  " + u)
     print("дальше: tg_media.py --json tg.json $(cat %s)" % out)
-    return 0 if (links or topic) else 1
+    # КОД ВОЗВРАТА ЧЕСТНЫЙ, А НЕ «ПУСТ ЛИ links.txt» (03.11, улов `usuario-0d`).
+    # Ветка полного отбоя по закреплению (добавлена в то же утро) кладёт все
+    # ссылки в `links_claimed.txt` и печатает готовую команду — то есть
+    # материал ЕСТЬ и работа продолжается, — а код оставался 1. Под `set -e`
+    # это встаёт как отказ ровно там, где прогон успешен. Класс тот же, что
+    # «успех джоба при пустой матрице»: код говорил не о том, что произошло.
+    # 1 остаётся только когда НЕ НАЙДЕНО НИЧЕГО.
+    if claimed_out:
+        print("код возврата 0: ссылки есть, они в %s (решение «брать или "
+              "нет» за тобой)" % os.path.basename(claimed_out))
+        return 0
+    if not (links or topic):
+        print("код возврата 1: не найдено НИ ОДНОЙ ссылки", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
