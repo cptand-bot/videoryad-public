@@ -20,7 +20,7 @@ Usage:
   python3 build_overlays.py overlay <scenes.json> <images-dir> <clips-dir> <overlays.json>
   python3 build_overlays.py sfx <scenes.json> <overlays.json> <sfx-dir> <in.mp4> <out.mp4> [stretch-factor]
 """
-import json, os, sys, subprocess, glob, random, shutil
+import json, os, re, sys, subprocess, glob, random, shutil
 
 # ОГРАНИЧЕНИЕ ПОТОКОВ FFMPEG: ЛОКАЛЬНО — ДА, В ОБЛАКЕ — НЕТ (2026-10-19).
 # Повод: локальный прогон второго сборщика забрал 522% из восьми ядер
@@ -326,6 +326,50 @@ def _img_wh(ffprobe, path):
         return 1200, 800
 
 
+def _caps_shard(sid):
+    """Кусок субтитров для сцены, если они включены. Иначе пустая строка."""
+    d = os.environ.get("CAPTIONS_DIR", "")
+    if not d:
+        return ""
+    f = os.path.join(d, "scene_%03d.ass" % int(sid))
+    return f if os.path.isfile(f) else ""
+
+
+def burn_caps(ffmpeg, clip, sid):
+    """СУБТИТРЫ — САМЫЙ ВЕРХНИЙ СЛОЙ (03.11, прямое слово пользователя:
+    «всплывашки и вся хрень должна идти за субтитрами, чтобы субтитры шли
+    впереди, самым верхним слоем, чтобы они перекрывали всё»).
+
+    Раньше они вжигались в build_clips_1080.py, то есть ДО всплывашек, и
+    фото- или текстовая всплывашка могла лечь поверх строки. Теперь вжигание
+    идёт последним проходом по сцене — после фото-всплывашки и после текста.
+    Цена: один лишний прогон кодирования на сцену, но он идёт на тех же 12
+    машинах, что и всплывашки, и только по сценам, где субтитры есть.
+    """
+    f = _caps_shard(sid)
+    if not f or not os.path.isfile(clip):
+        return False
+    esc = f.replace("\\", "/").replace(":", r"\:").replace(",", r"\,")
+    fd = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+    vf = "ass='%s'" % esc
+    if os.path.isdir(fd):
+        vf = "ass='%s':fontsdir='%s'" % (
+            esc, fd.replace("\\", "/").replace(":", r"\:").replace(",", r"\,"))
+    tmp = clip + ".caps.mp4"
+    r = subprocess.run([ffmpeg, "-y", *_threads_args(), "-i", clip,
+                        "-vf", vf + ",format=yuv420p",
+                        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+                        "-c:a", "copy", tmp], capture_output=True, text=True)
+    if r.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 10000:
+        os.replace(tmp, clip)
+        print("[%03d] субтитры вжжены ПОВЕРХ всплывашек" % sid, flush=True)
+        return True
+    if os.path.exists(tmp):
+        os.remove(tmp)
+    print("[%03d] !! субтитры не вжглись: %s" % (sid, r.stderr[-200:]), flush=True)
+    return False
+
+
 def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
     ffprobe = "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1))
     ov = json.load(open(ov_path, encoding="utf-8"))
@@ -538,6 +582,29 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
             shutil.copyfile(orig, clip)
             print(f"[{sid:03d}] всплывашка не встала — вернул клип без неё "
                   f"(см. FAIL выше)", flush=True)
+
+        # СУБТИТРЫ ПОСЛЕДНИМИ — поверх фото-всплывашки и поверх текста
+        burn_caps(ffmpeg, clip, sid)
+
+    # СЦЕНЫ БЕЗ ВСПЛЫВАШЕК ТОЖЕ ПОЛУЧАЮТ СУБТИТРЫ (03.11). Цикл выше идёт по
+    # `overlays.json`, а субтитры есть на каждой сцене, где звучит речь —
+    # иначе строка пропадала бы ровно там, где всплывашки нет. Шардинг тот же,
+    # чтобы машины не делали одну работу дважды.
+    if os.environ.get("CAPTIONS_DIR"):
+        _done = {int(k) for k in ov if str(k).isdigit()}
+        for _f in sorted(glob.glob(os.path.join(os.environ["CAPTIONS_DIR"],
+                                                "scene_*.ass"))):
+            _m = re.search(r"scene_(\d+)\.ass$", _f)
+            if not _m:
+                continue
+            _sid = int(_m.group(1))
+            if _sid in _done:
+                continue
+            if wc > 1 and (_sid % wc) != wk:
+                continue
+            _clip = os.path.join(clips_dir, "clip_%03d.mp4" % _sid)
+            if os.path.isfile(_clip):
+                burn_caps(ffmpeg, _clip, _sid)
 
 
 def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="ffmpeg",

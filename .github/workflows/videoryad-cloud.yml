@@ -699,7 +699,9 @@ jobs:
           else
             echo "эффекты: выключены (fx.json в проекте нет)"
           fi
-          FX_DIR="$fxd" CAPTIONS_DIR="$caps" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
+          # CAPTIONS_DIR клипам БОЛЬШЕ НЕ ОТДАЁМ (03.11): субтитры жжёт
+          # build_overlays.py последним слоем, поверх всплывашек.
+          FX_DIR="$fxd" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \
             python3 assembler/template/build_clips_1080.py "$sc" "$proj/images" "$proj/clips"
           made=$(ls "$proj/clips"/clip_*.mp4 2>/dev/null | wc -l)
           echo "shard ${{ matrix.shard }}: $made clips"
@@ -928,12 +930,33 @@ jobs:
           echo "инструменты на месте: $(ffmpeg -version 2>/dev/null | head -1)"
           python3 -m pip install --quiet pillow
 
+      - name: Prepare per-scene captions (burned LAST, above pop-ups)
+        id: caps
+        if: steps.have.outputs.count != '0'
+        run: |
+          # СУБТИТРЫ — ВЕРХНИЙ СЛОЙ (03.11, прямое слово пользователя).
+          # Раньше их жёг build_clips_1080.py, то есть ДО всплывашек, и
+          # всплывашка могла лечь поверх строки. Теперь куски .ass готовятся
+          # здесь, а жжёт их build_overlays.py последним проходом по сцене.
+          proj="queue/${{ needs.setup.outputs.name }}"
+          caps=""
+          if [ -f "$proj/captions.ass" ]; then
+            sc=$(ls "$proj"/*.scenes.json 2>/dev/null | grep -v overlays_fetch | head -1)
+            python3 assembler/template/captions_shard.py "$sc" "$proj/captions.ass" "$proj/.caps"
+            caps="$PWD/$proj/.caps"
+            echo "субтитры: ВКЛЮЧЕНЫ, вожгу их ПОВЕРХ всплывашек"
+          else
+            echo "субтитры: выключены (captions.ass в проекте нет)"
+          fi
+          echo "dir=$caps" >> "$GITHUB_OUTPUT"
+
       - name: Render this worker's pop-ups
         if: steps.have.outputs.count != '0'
         env:
           OVL_SHARD_COUNT: "12"
           OVL_SHARD_ID: ${{ matrix.shard }}
           CLOUD_WORKERS: "4"
+          CAPTIONS_DIR: ${{ steps.caps.outputs.dir }}
         run: python3 assembler/cloud/cloud_pipeline.py "queue/${{ needs.setup.outputs.name }}" --only overlays
 
       - name: Stage overlaid clips
