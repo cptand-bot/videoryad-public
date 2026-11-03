@@ -114,3 +114,20 @@ for pi in range((len(tiles) + PER - 1) // PER):
 
 for f in glob.glob(os.path.join(out_dir, "_f*.jpg")):
     os.remove(f)
+
+# ГДЕ ЛЕЖАТ ЛИСТЫ — ГОВОРИМ ОДНОЙ СТРОКОЙ (03.11, улов `usuario-79`: все ТРИ
+# её субагента независимо написали «пути нет»). Причина путаницы: чек-лист
+# предлагал третьим аргументом `<out>.html`, а это ИМЯ КАТАЛОГА — листы
+# оказывались в папке с точкой в имени (`sheet.html/`), тогда как задания
+# субагентам ссылались на `thumbs/`. Копировал их в `thumbs/` только
+# `codex_brief.py`, и только на `D:`. Теперь путь печатается явно, а имя с
+# «.html» получает предупреждение.
+_sheets = sorted(glob.glob(os.path.join(out_dir, "sheet_*.jpg")))
+if _sheets:
+    print("ЛИСТОВ: %d, лежат в «%s» — ИМЕННО ЭТОТ путь указывай в задании "
+          "субагенту или внешнему агенту: %s"
+          % (len(_sheets), out_dir,
+             ", ".join(os.path.basename(x) for x in _sheets[:6])))
+    if out_dir.lower().endswith((".html", ".htm")):
+        print("ВНИМАНИЕ: «%s» — это КАТАЛОГ, а не html-файл. Третий аргумент "
+              "contact_sheet.py всегда папка; по умолчанию `thumbs`." % out_dir)

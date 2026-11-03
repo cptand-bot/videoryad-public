@@ -117,6 +117,54 @@ def _local_only_gate(scenes_path, images_dir):
         print("[parallel] библиотечных сцен в файле нет — делать нечего.",
               flush=True)
         return ""
+    # ДОБОР ТРОГАЕТ ТОЛЬКО ПУСТЫЕ СЦЕНЫ (03.11, улов `usuario-0d`). Библиотечная
+    # ветка фетчера выбирает файл папки ЗАНОВО на каждом запуске, поэтому проход
+    # по ПОЛНОМУ файлу ради нескольких пустых сцен молча менял кадры, уже
+    # утверждённые глазами: у вкладки так сменились девять файлов, включая три
+    # утверждённые час назад (сцены 3, 9, 16 — их в `--fix` не было вовсе).
+    # Опаснее всего то, что утверждение и приговоры внешнего агента держатся
+    # ровно на обратном: утверждённый кадр больше не меняется.
+    # Поэтому: сцена с ЖИВЫМ кадром не трогается. Облачная заглушка кадром не
+    # считается (её для этого и заменяют локально), забаненный файл тоже.
+    # Снять — `--all` (переснять всё заново осознанно).
+    if "--all" not in sys.argv:
+        try:
+            from fetch_assets_news import _looks_like_cloud_stub, \
+                load_banned_md5, file_md5
+            _ban = load_banned_md5()
+        except Exception:
+            _looks_like_cloud_stub = None
+            _ban, file_md5 = set(), None
+        _empty, _busy_ids = [], []
+        for sc in lib:
+            sid = sc.get("id")
+            have = [f for f in glob.glob(
+                os.path.join(images_dir, "scene_%03d.*" % (sid or 0)))
+                if os.path.getsize(f) > 0
+                and not f.endswith((".json", ".text.png", ".lock"))
+                and ".ovthumb." not in f]
+            _live = ""
+            for f in have:
+                if _looks_like_cloud_stub and _looks_like_cloud_stub(f):
+                    continue
+                if file_md5 and _ban and file_md5(f) in _ban:
+                    continue
+                _live = f
+                break
+            (_busy_ids if _live else _empty).append(sid)
+        if _busy_ids:
+            print("[parallel] у %d библиотечных сцен кадр УЖЕ СТОИТ — не "
+                  "трогаю (%s). Раздача по кругу выбрала бы другой файл и "
+                  "сменила утверждённый кадр."
+                  % (len(_busy_ids), ", ".join(map(str, _busy_ids[:12]))),
+                  flush=True)
+            print("[parallel] переснять конкретные сцены — refetch.py; "
+                  "переснять ВСЁ осознанно — ключ --all.", flush=True)
+        if not _empty:
+            print("[parallel] пустых библиотечных сцен нет — делать нечего.",
+                  flush=True)
+            return ""
+        lib = [sc for sc in lib if sc.get("id") in set(_empty)]
     sub = {x: data[x] for x in data if x != "scenes"}
     sub["scenes"] = lib
     os.makedirs(images_dir, exist_ok=True)
