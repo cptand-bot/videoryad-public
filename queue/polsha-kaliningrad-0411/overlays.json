@@ -1,0 +1,473 @@
+{
+ "anchor": "top",
+ "4": {
+  "photo": "overlays/scene_004.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "9": {
+  "photo": "overlays/scene_009.jpg",
+  "sound": "zatvor",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "13": {
+  "photo": "overlays/scene_013.jpg",
+  "sound": "pop",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "23": {
+  "photo": "overlays/scene_023.jpg",
+  "sound": "ding",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "30": {
+  "photo": "overlays/scene_030.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "sound": "zatvor",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "39": {
+  "photo": "overlays/scene_039.jpg",
+  "sound": "pop",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "44": {
+  "photo": "overlays/scene_044.jpg",
+  "sound": "ding",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "54": {
+  "photo": "overlays/scene_054.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "61": {
+  "photo": "overlays/scene_061.jpg",
+  "sound": "zatvor",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "70": {
+  "photo": "overlays/scene_070.jpg",
+  "sound": "pop",
+  "at": 3.0,
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": false
+ },
+ "2": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "УЧЕНИЯ «KOALICJA»: ДЕВЯТОЕ — ДВАДЦАТЬ ВТОРОЕ НОЯБРЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "5": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПОЛИГОН НОВА-ДЕМБА, ЮГО-ВОСТОК ПОЛЬШИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "8": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "В УЧЕНИЯХ УЧАСТВУЮТ УКРАИНСКИЕ ВОЕННОСЛУЖАЩИЕ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "11": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "КОАЛИЦИЯ — ТРИДЦАТЬ ШЕСТЬ СТРАН · ВО ГЛАВЕ ФРАНЦИЯ И БРИТАНИЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "12": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "НАТО ТОЛЬКО ПРОИНФОРМИРОВАНО · США НЕ УЧАСТВУЮТ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "16": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ШТАБ БРИГАДЫ — ОЛЬШТЫН · ПЯТЬ БАТАЛЬОНОВ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "18": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПРОГРАММА «ВОСТОЧНЫЙ ЩИТ»: УКРЕПЛЕНИЯ, СКЛАДЫ, ИНЖЕНЕРНЫЕ СООРУЖЕНИЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "19": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "КОМПОНЕНТ ОБОРОНЫ ПОГРАНИЧЬЯ РАБОТАЕТ С ПЕРВОГО ИЮЛЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "20": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ОПЕРАЦИЕЙ РУКОВОДИТ ГЛАВНАЯ КОМЕНДАТУРА ПОЛИЦИИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "21": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ФИНЛЯНДИЯ ВОШЛА В ПРОГРАММУ ЧЕТЫРНАДЦАТОГО СЕНТЯБРЯ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "25": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "КОНТРОЛЬ НАД АРСЕНАЛОМ ОСТАЁТСЯ ЗА ПАРИЖЕМ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "28": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ОСНОВА — АТОМНЫЕ ПОДЛОДКИ В МОРЕ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "31": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "МИНОБОРОНЫ ФРАНЦИИ ПИШЕТ ОБ ЭТОМ ОТКРЫТО",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "37": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ФИНСКИЕ АЭРОДРОМЫ И ВОЗДУШНОЕ ПРОСТРАНСТВО УЖЕ ГОТОВЯТ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "41": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ОЦЕНКА СТОКГОЛЬМСКОГО ИНСТИТУТА НА НАЧАЛО ГОДА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "45": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "БОЕЗАРЯДЫ В МИРНОЕ ВРЕМЯ ЗАВОЗИТЬ НЕ ПЛАНИРУЮТ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "47": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ПРИБАЛТИКА В ПРОГРАММУ НЕ ПОПАЛА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "48": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ТАКИХ СОГЛАШЕНИЙ У ФРАНЦИИ УЖЕ ОКОЛО ДЕСЯТИ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "52": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ЗАСЕДАНИЕ «РАМШТАЙНА» — СЕМНАДЦАТОГО НОЯБРЯ, БРЮССЕЛЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "57": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ВСТРЕЧА КОАЛИЦИИ В БЕРЛИНЕ — В НОЯБРЕ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "62": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ЧЕТЫРЕ БРИГАДЫ НА ВОСТОЧНОМ НАПРАВЛЕНИИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "66": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "БАТАЛЬОНЫ: ГИЖИЦКО, МОРОНГ, БРАНЕВО, ЭЛК, ОЛЬШТЫН",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "71": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "УЧЕБНЫЕ ЦЕНТРЫ ДЛЯ УКРАИНСКИХ ВОЕННЫХ РАБОТАЮТ В ПОЛЬШЕ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ },
+ "74": {
+  "at": 2.6,
+  "scale": 1.0,
+  "anchor": "top",
+  "text": {
+   "words": "ГРАНИЦА ФИНЛЯНДИИ С РОССИЕЙ — ТЫСЯЧА ТРИСТА СОРОК КИЛОМЕТРОВ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0,
+   "approved": false
+  }
+ }
+}
