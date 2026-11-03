@@ -110,8 +110,63 @@ def claims_save(d):
         print("!! журнал закрепления не записан: %s" % e, file=sys.stderr)
 
 
+def _release(args, project):
+    """Отпустить ссылки, закреплённые ЗА ЭТИМ роликом (03.11).
+
+    Повод живой: хоп-обход `geo_links` по ключу соседнего ролика притащил 7
+    ссылок ЧУЖОЙ темы (ракета FP-7, боеголовки КНДР, Зеленский про НПЗ, два
+    поста про Patriot) и закрепил их за ним же. Вкладка их законно не взяла —
+    но журнал закрепления уже считал их занятыми, и РОДНОЙ ролик этой темы
+    получал «ЧУЖОЕ, НЕ БЕРУ» на свой собственный материал. Руками журнал
+    править нельзя: он один на всю машину и его пишут четыре вкладки.
+
+    Отпускается ТОЛЬКО своё: запись, закреплённая за другим проектом, не
+    трогается (иначе один ролик уводил бы кадры у другого).
+    """
+    urls = []
+    for a in args:
+        if os.path.isfile(a):
+            urls += [l.strip() for l in open(a, encoding="utf-8") if l.strip()]
+        elif a.startswith("http"):
+            urls.append(a.strip())
+    if not urls:
+        print("--release: нечего отпускать. Дай ссылки списком или файлом "
+              "(например links.txt).", file=sys.stderr)
+        return 2
+    cl = claims_load()
+    freed, foreign, absent = [], [], []
+    for u in urls:
+        v = cl.get(u)
+        if not v:
+            absent.append(u)
+        elif v.get("проект") != project:
+            foreign.append((u, v.get("проект")))
+        else:
+            cl.pop(u)
+            freed.append(u)
+    if freed:
+        claims_save(cl)
+    print("отпущено: %d (проект %s)" % (len(freed), project))
+    for u in freed:
+        print("  " + u)
+    if foreign:
+        print("НЕ ТРОГАЛ, это чужое закрепление: %d" % len(foreign))
+        for u, pr in foreign[:10]:
+            print("  %s → %s" % (u, pr))
+    if absent:
+        print("в журнале не было: %d" % len(absent))
+    return 0
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    # --release идёт БЕЗ таблицы и ключа: отпустить ссылки, которые этот ролик
+    # взял и не использовал, чтобы их получил ролик своей темы.
+    if "--release" in sys.argv:
+        _pr = os.path.basename(os.path.abspath(os.getcwd()))
+        if "--project" in sys.argv:
+            _pr = sys.argv[sys.argv.index("--project") + 1]
+        return _release(args, _pr)
     if len(args) < 2:
         print(__doc__)
         return 2
