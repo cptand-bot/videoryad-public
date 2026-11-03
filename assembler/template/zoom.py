@@ -24,6 +24,32 @@ import os
 import sys
 
 OUT = "thumbs"
+VID = (".mp4", ".mov", ".webm", ".mkv", ".m4v")
+
+
+def _as_image(src):
+    """Видеофайл → один кадр JPEG; картинка возвращается как есть (03.11).
+
+    Повод (улов `usuario-1f`): `zoom.py --corners` падал
+    `PIL.UnidentifiedImageError: cannot identify image file
+    'images/scene_018.mp4'`. Сцена из медиатеки часто ВИДЕО, а внешний
+    проверяющий просит кроп углов именно по ней — то есть натыкались бы
+    регулярно, и каждая вкладка делала бы один и тот же обход через ffmpeg.
+    Кадр берём с третьей секунды: на нулевой у клипов бывает затемнение.
+    """
+    if not src.lower().endswith(VID):
+        return src, ""
+    import subprocess
+    os.makedirs(OUT, exist_ok=True)
+    out = os.path.join(OUT, "frame_" + os.path.splitext(
+        os.path.basename(src))[0] + ".jpg")
+    for ss in ("3", "0.5"):
+        subprocess.run(["ffmpeg", "-y", "-ss", ss, "-i", src,
+                        "-frames:v", "1", "-q:v", "2", out],
+                       capture_output=True)
+        if os.path.isfile(out) and os.path.getsize(out) > 0:
+            return out, ("кадр из видео на %s с" % ss.replace(".", ","))
+    return "", "кадр из видео не вынулся"
 
 
 def _save(im, path):
@@ -70,8 +96,13 @@ def main():
     files = []
     if os.path.isdir(a.target):
         for sid in a.ids:
+            # ВИДЕО БОЛЬШЕ НЕ ОТБРАСЫВАЕМ: из него вынимается кадр (см.
+            # `_as_image`). Раньше сцена-видео просто пропадала из выдачи, и
+            # «нечего смотреть» выглядело как «кадра нет».
             got = [f for f in glob.glob(os.path.join(a.target, "scene_%03d.*" % sid))
-                   if not f.lower().endswith((".json", ".mp4", ".mov", ".webm"))]
+                   if not f.lower().endswith((".json", ".text.png"))
+                   and ".ovthumb." not in f]
+            got.sort(key=lambda f: f.lower().endswith(VID))  # картинки раньше
             files += got[:1] or []
         if not a.ids:
             sys.exit("дана папка — перечисли номера сцен: zoom.py images 7 19 42")
@@ -84,9 +115,14 @@ def main():
         if not os.path.isfile(f):
             print(f"  нет файла: {f}")
             continue
-        out, size, orig = (corners(f) if a.corners else shrink(f, a.side))
+        src, _note = _as_image(f)
+        if not src:
+            print(f"  {os.path.basename(f)}: {_note}")
+            continue
+        out, size, orig = (corners(src) if a.corners else shrink(src, a.side))
         kind = "углы+центр 1:1" if a.corners else "ужат"
-        print(f"  {os.path.basename(f)}: {orig[0]}x{orig[1]} → {kind} {size[0]}x{size[1]}")
+        print(f"  {os.path.basename(f)}: {orig[0]}x{orig[1]} → {kind} "
+              f"{size[0]}x{size[1]}" + (f" ({_note})" if _note else ""))
         print(f"    {out}")
     print("\nЧитай ЭТИ файлы, а не исходные кадры: полный кадр остаётся в "
           "контексте до конца работы агента и перечитывается на каждом шаге.")
