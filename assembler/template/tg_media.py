@@ -27,6 +27,7 @@ mp4 в веб-превью вовсе — в разметке стоит `not_su
 рядом живая. Это видно ДО любой попытки скачивания, и круги на `?embed=1`
 тратить незачем — инструмент так и пишет: «видео есть, файла нет».
 """
+import html as html_mod
 import json
 import re
 import subprocess
@@ -73,6 +74,33 @@ def _probe(url, referer):
         return (None, None, None)
 
 
+def _text(blk):
+    """ТЕКСТ ПОСТА одной строкой.
+
+    Нужен, чтобы отбирать посты снапшота георадара ПО СМЫСЛУ, а не по имени
+    канала: до 03.11 `--json` клал только адреса, и вкладка, получив 69
+    ссылок дня, не могла проверить, про её ли сюжет пост (улов `usuario-b5`).
+    Границу блока текста ищем счётчиком вложенности, а не первым `</div>`:
+    внутри лежат ссылки, спойлеры и эмодзи своими тегами.
+    """
+    m = re.search(r'class="[^"]*tgme_widget_message_text[^"]*"[^>]*>', blk)
+    if not m:
+        return ""
+    i, depth, j = m.end(), 1, m.end()
+    for t in re.finditer(r"<(/?)div\b", blk[i:]):
+        depth += -1 if t.group(1) else 1
+        if depth == 0:
+            j = i + t.start()
+            break
+    else:
+        j = len(blk)
+    txt = re.sub(r"<br\s*/?>", " ", blk[i:j])
+    txt = re.sub(r"<[^>]+>", "", txt)
+    txt = html_mod.unescape(txt)
+    txt = re.sub(r"\s+", " ", txt).strip()
+    return txt[:1500]
+
+
 def post(url):
     m = re.search(r"t\.me/(?:s/)?([A-Za-z0-9_]+)/(\d+)", url)
     if not m:
@@ -84,7 +112,7 @@ def post(url):
         return {"url": url, "error": "пост не найден на странице канала"}
 
     res = {"url": url, "channel": chan, "id": mid, "photos": [], "videos": [],
-           "notes": []}
+           "notes": [], "text": _text(blk)}
 
     # фото: только носители кадра, аватарка канала отсекается классом
     for mm in re.finditer(r'class="[^"]*(photo_wrap|video_thumb)[^"]*"[^>]*'
@@ -193,6 +221,8 @@ def main():
         for v in r["videos"]:
             print("   видео: %s" % (v[:60] + "…(%d знаков, полный адрес в --json)" % len(v)
                                     if len(v) > 60 else v))
+        if r.get("text"):
+            print("   текст: %s" % (r["text"][:200] + ("…" if len(r["text"]) > 200 else "")))
         for n in r["notes"]:
             print("   %s" % n)
         if not (r["photos"] or r["videos"] or r["notes"]):
