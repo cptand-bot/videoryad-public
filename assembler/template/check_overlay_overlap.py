@@ -78,7 +78,12 @@ def overlay_geom(sid, spec, photo_path, anchor):
         x = W - dw - margin
     else:
         x = (W - dw) // 2
-    y = margin if str(anchor).lower() == "top" else H - dh - margin
+    # «middle» поддержан наравне с top/bottom: его чтит `build_overlays.py`
+    # ((H-h)/2), а здесь он падал в ветку «снизу» — рамка рисовалась не там,
+    # где кадр её получит (03.11, вместе с правкой про anchor у записи).
+    _a = str(anchor).lower()
+    y = (margin if _a == "top"
+         else ((H - dh) // 2 if _a == "middle" else H - dh - margin))
     return x, y, dw, dh
 
 
@@ -174,6 +179,14 @@ def main():
     _tmp = tempfile.mkdtemp(prefix="ovlchk_")
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     ov = json.load(open(ov_path, encoding="utf-8"))
+    # ANCHOR БЕРЁТСЯ У КАЖДОЙ ЗАПИСИ, А НЕ ТОЛЬКО ОБЩИЙ (03.11, улов
+    # `usuario-1f`). `build_overlays.py` чтит `anchor` ОТДЕЛЬНОЙ всплывашки
+    # (`sc_anchor = spec.get("anchor") or anchor`), а эта проверка читала
+    # только глобальный ключ ролика и рисовала рамку на прежнем месте. То
+    # есть вкладка правила `anchor` у всплывашки, садившейся на лицо,
+    # пересобирала лист, видела рамку там же и считала правку нерабочей —
+    # а на кадре она как раз СРАБОТАЛА. Проверка, которая врёт про результат
+    # правки, хуже отсутствующей.
     anchor = ov.get("anchor", "bottom")
 
     ids = sorted(int(k) for k in ov if k.isdigit())
@@ -188,7 +201,10 @@ def main():
         draw = ImageDraw.Draw(frame)
         # ФОТО-всплывашка — красная рамка, как было
         if spec.get("photo"):
-            x, y, dw, dh = overlay_geom(sid, spec, spec.get("photo"), anchor)
+            _a = str(spec.get("anchor") or anchor).lower()
+            if _a not in ("top", "middle", "bottom"):
+                _a = anchor
+            x, y, dw, dh = overlay_geom(sid, spec, spec.get("photo"), _a)
             draw.rectangle([x, y, x + dw, y + dh], outline=(255, 0, 0), width=8)
         # ТЕКСТОВАЯ — кладём НАСТОЯЩИЙ отрендеренный текст, а не рамку:
         # проверяющий должен видеть ровно то, что ляжет на кадр
@@ -230,7 +246,12 @@ def main():
         sh.save(os.path.join(out_dir, f"check_{s + 1}.jpg"), quality=85)
     import shutil as _sh
     _sh.rmtree(_tmp, ignore_errors=True)
-    print(f"tiles: {len(tiles)}  sheets: {n_sheets}  anchor: {anchor}  ->  {out_dir}/")
+    _own = sorted(int(k) for k in ov if k.isdigit()
+                  and str((ov[k] or {}).get("anchor") or "").lower()
+                  in ("top", "middle", "bottom"))
+    print(f"tiles: {len(tiles)}  sheets: {n_sheets}  anchor: {anchor}"
+          + (f"  (свой anchor у сцен: {_own})" if _own else "")
+          + f"  ->  {out_dir}/")
     print("  красная рамка = фото-всплывашка, голубая = ТЕКСТОВАЯ "
           "(показан настоящий рендер, не схема)")
 
