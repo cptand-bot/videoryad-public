@@ -80,20 +80,51 @@ def _plate_line(dur):
             f"{{\\pos({PLATE_X},{PLATE_Y})\\p1}}{draw}{{\\p0}}")
 
 
+def _colors_from(head):
+    """ЦВЕТА БЕРЁМ ИЗ ИСХОДНОГО .ass, А НЕ ЗАШИВАЕМ (03.11, прямое слово
+    пользователя: «цвет плашки для канала ПЛАНЕТА и для канала 5 МИНУТ —
+    там разные цвета, обязательно зафиксируй»).
+
+    Было: этот резчик ПОДМЕНЯЛ стиль Caption своим — белый текст на тёмной
+    плашке, — и бирюзовая плашка ПЛАНЕТЫ, заданная в `captions_from_srt.py`,
+    молча исчезала. Теперь цвет текста и цвет плашки читаются из строки
+    `Style: Caption,...` исходного файла: поле 4 — текст (PrimaryColour),
+    поле 7 — подложка (BackColour). Нет своего стиля — остаются прежние
+    значения по умолчанию.
+    """
+    for ln in head:
+        if ln.startswith("Style: Caption,"):
+            f = ln.split(",")
+            if len(f) > 7:
+                return f[3].strip(), f[6].strip()
+    return "", ""
+
+
 def _restyle(head):
     """Подменяем стиль Caption на свой и добавляем стиль плашки."""
+    _text, _plate = _colors_from(head)
+    cap, plate = CAPTION_STYLE, PLATE_STYLE
+    if _text and _plate:
+        _c = CAPTION_STYLE.split(",")
+        _c[3] = _text                       # цвет текста
+        cap = ",".join(_c)
+        _p = PLATE_STYLE.split(",")
+        _p[3] = _p[5] = _p[6] = _plate      # заливка, обводка и фон плашки
+        plate = ",".join(_p)
+        print("цвета субтитров взяты из файла: текст %s, плашка %s"
+              % (_text, _plate))
     out, added = [], False
     for ln in head:
         if ln.startswith("Style: Caption,"):
-            out.append(CAPTION_STYLE)
-            out.append(PLATE_STYLE)
+            out.append(cap)
+            out.append(plate)
             added = True
         else:
             out.append(ln)
     if not added:                       # на случай другого имени стиля
         for i, ln in enumerate(out):
             if ln.strip().lower().startswith("[events]"):
-                out.insert(i, PLATE_STYLE)
+                out.insert(i, plate)
                 break
     return out
 
