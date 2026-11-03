@@ -1623,10 +1623,19 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     # ПАМЯТЬЮ НА ДИСКЕ: то, что уже лежит в `images/` и `overlays/`, второй
     # раз не выдаём. Это работает между любыми запусками и переживает круги.
     try:
-        _proj = os.path.dirname(os.path.abspath(out_base)) or "."
+        # УРОВЕНЬ ПАПКИ (03.11, улов `usuario-b5` — правка 02.11 была НЕ
+        # РАБОЧЕЙ). `out_base` — это `<проект>/images/scene_NNN`, значит
+        # `dirname` даёт `<проект>/images`, и прежний код искал
+        # `<проект>/images/images` и `<проект>/images/overlays`: таких папок
+        # нет, `_busy` всегда выходил пустым, и «память на диске» не работала
+        # ни одного дня. Живой счёт у вкладки: один файл (md5 591df34e) встал
+        # на сцены 3 и 11 двумя разными доборами, и ещё кадр базы 36 совпал со
+        # всплывашкой 34. Теперь смотрим и СВОЮ папку, и соседние у проекта.
+        _here = os.path.dirname(os.path.abspath(out_base)) or "."
+        _proj = os.path.dirname(_here) or _here
         _busy = set()
-        for _d in ("images", "overlays"):
-            _dd = os.path.join(_proj, _d)
+        for _dd in {_here, os.path.join(_proj, "images"),
+                    os.path.join(_proj, "overlays")}:
             if not os.path.isdir(_dd):
                 continue
             for _f in os.listdir(_dd):
