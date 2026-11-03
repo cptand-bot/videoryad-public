@@ -265,7 +265,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     tmp = out_mp4 + ".ttmp.mp4"
     cmd = [ffmpeg, "-y", *_threads_args(), "-i", base_mp4, "-loop", "1", "-i", png,
            "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
-           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
            "-pix_fmt", "yuv420p", "-t", f"{dur:.3f}", tmp]
     r = subprocess.run(cmd, capture_output=True, text=True)
     try:
@@ -358,7 +358,7 @@ def burn_caps(ffmpeg, clip, sid):
     tmp = clip + ".caps.mp4"
     r = subprocess.run([ffmpeg, "-y", *_threads_args(), "-i", clip,
                         "-vf", vf + ",format=yuv420p",
-                        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+                        "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
                         "-c:a", "copy", tmp], capture_output=True, text=True)
     if r.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 10000:
         os.replace(tmp, clip)
@@ -546,7 +546,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         _in2 = ["-stream_loop", "-1", "-i", photo] if ov_is_video else ["-loop", "1", "-i", photo]
         cmd = [ffmpeg, "-y", *_threads_args(), "-i", orig, *_in2,
                "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
-               "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+               "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
                "-pix_fmt", "yuv420p", "-t", f"{_dur:.3f}", _text_target]
         r = subprocess.run(cmd, capture_output=True, text=True)
         ph_ok = os.path.exists(_text_target) and r.returncode == 0

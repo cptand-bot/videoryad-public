@@ -463,7 +463,7 @@ def step_stretch(proj, scenes_json):
     tmp = os.path.join(proj, "_silent_stretched.mp4")
     run(["ffmpeg", "-y", "-i", silent,
          "-vf", f"setpts=PTS*{factor}",
-         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"), "-pix_fmt", "yuv420p",
          "-an", tmp], cwd=proj)
     os.replace(tmp, silent)
 

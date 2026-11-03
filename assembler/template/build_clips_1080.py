@@ -174,7 +174,7 @@ def build_image_clip(ffmpeg, src, out_path, duration, ffprobe="ffprobe"):
 
     cmd = [ffmpeg, "-y", *_threads_args(), "-loop", "1", "-i", src, *fx_in,
            "-filter_complex", vf, *out_map, "-t", str(duration),
-           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", out_path]
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"), "-pix_fmt", "yuv420p", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
 
 
@@ -423,7 +423,7 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
     loop_args = ["-stream_loop", "-1"] if (src_dur and src_dur < duration) else []
     seek_args = ["-ss", str(start)] if start > 0 else []
     cmd = [ffmpeg, "-y", *loop_args, *seek_args, "-i", src, *_vf_args, "-t", str(duration),
-           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-an", out_path]
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"), "-pix_fmt", "yuv420p", "-an", out_path]
     subprocess.run(cmd, check=True, capture_output=True)
 
 
