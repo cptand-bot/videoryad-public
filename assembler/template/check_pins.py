@@ -169,7 +169,17 @@ def main():
             files = [f for f in os.listdir(fpath) if f.lower().endswith(_EXT)]
         except OSError:
             continue
-        if not files or len(files) > _EXH_MAX:
+        if not files:
+            # ПУСТАЯ ПАПКА-ЗАГОТОВКА (03.11, улов `usuario-15`): в базе лежат
+            # каталоги, созданные заранее под ночной сбор. Путь существует,
+            # поэтому «выдуманным» он не считается, а кадра в нём нет — фетч
+            # отдаст FAILED, и это видно здесь за секунды.
+            bad.append((", ".join(map(str, sids)), folder,
+                        "ПАПКА ПУСТАЯ (ноль кадров) — это заготовка под "
+                        "ночной сбор, а не материал. Фетч отдаст сцену "
+                        "FAILED: возьми другую папку или поисковый запрос"))
+            continue
+        if len(files) > _EXH_MAX:
             continue
         _is_map = "/КАРТЫ/" in ("/" + folder.replace("\\", "/"))
         free = 0
