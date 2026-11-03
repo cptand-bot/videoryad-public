@@ -1967,8 +1967,61 @@ poll();
     # стояло — и «вложений не было» было не отличить от «вложения не взяли».
     _dos = [s for s in scenes
             if str(s.get("source", "")).startswith("direct_url")]
-    dossier_badge = ('<span class="sub">· из георадара: <b>%d</b> сцен</span>'
-                     % len(_dos)) if _dos else ""
+    # ЧИСЛА ПО ГЕОРАДАРУ СТОЯТ ВСЕГДА, ДАЖЕ КОГДА НОЛЬ (03.11, прямое
+    # замечание пользователя: «вкладки не используют данные георадара, не
+    # выкачивают оттуда видео и картинки и не употребляют их в дашборде»).
+    # Раньше строка появлялась только при ненулевом числе сцен, и «вложений
+    # в постах не было» было не отличить от «вложения не взяли». Теперь
+    # видно всю цепочку: сколько ссылок разобрано, сколько файлов скачано,
+    # сколько встало в сцены и во всплывашки, сколько отклонено и почему.
+    _ovl_dos = 0
+    try:
+        _ovj = os.path.join(os.path.dirname(os.path.abspath(scenes_path)),
+                            "overlays.json") if "scenes_path" in dir() else ""
+    except Exception:
+        _ovj = ""
+    _links = _got = _rej = 0
+    _rej_why = []
+    for _name in ("tg.json", "tg_fresh.json"):
+        try:
+            _t = json.load(open(_name, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        _items = _t if isinstance(_t, list) else (
+            _t.get("posts") or _t.get("items") or [])
+        if isinstance(_items, dict):
+            _items = list(_items.values())
+        _links = max(_links, len(_items))
+        for _it in _items:
+            if not isinstance(_it, dict):
+                continue
+            # КЛЮЧИ ИМЕННО ТАКИЕ, КАК ИХ ПИШЕТ `tg_media.py --json`:
+            # `photos` и `videos` (проверено на живом tg.json 03.11).
+            # «media»/«files» были догадкой и давали ноль — ровно та ошибка,
+            # против которой стоит правило «сверяться со своими файлами».
+            for _k in ("photos", "videos", "media", "files"):
+                _m = _it.get(_k)
+                if isinstance(_m, (list, tuple)):
+                    _got += len(_m)
+    try:
+        _r = json.load(open("tg_rejected.json", encoding="utf-8"))
+        if isinstance(_r, dict):
+            _rej = len(_r)
+            _rej_why = [str(v)[:60] for v in list(_r.values())[:4]]
+    except (OSError, ValueError):
+        pass
+    _parts = ["разобрано постов: <b>%d</b>" % _links] if _links else []
+    if _got:
+        _parts.append("скачано файлов: <b>%d</b>" % _got)
+    _parts.append("встало в сцены: <b>%d</b>" % len(_dos))
+    if _rej:
+        _parts.append("отклонено с причиной: <b>%d</b>" % _rej)
+    dossier_badge = ('<span class="sub">· ГЕОРАДАР — %s</span>'
+                     % " · ".join(_parts)) if (_links or _dos or _rej) else (
+        '<span class="sub">· ГЕОРАДАР: записи по теме нет</span>')
+    if _rej_why:
+        dossier_badge += ('<span class="sub">(отклонено: %s)</span>'
+                          % "; ".join(_rej_why))
 
     return f"""<!doctype html><html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
