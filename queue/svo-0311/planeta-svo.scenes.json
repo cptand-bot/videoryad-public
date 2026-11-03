@@ -1,0 +1,525 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0,
+   "duration_sec": 9.7,
+   "visual_prompt": "камеры и микрофоны на пресс-подходе",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ОПЕРАТОРЫ-КАМЕРАМИ-ПРЕСС-ПОДХОДЕ",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 9.7,
+   "duration_sec": 11.2,
+   "visual_prompt": "землеройная машина в поле",
+   "source": "press_photo",
+   "source_query": "экскаватор роет ров в поле реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 20.9,
+   "duration_sec": 9.8,
+   "visual_prompt": "здание Офиса президента Украины",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 30.7,
+   "duration_sec": 9.2,
+   "visual_prompt": "Рисованная карта с выделенными Алёшками",
+   "source": "card:map_regions",
+   "source_query": "карточка «map_regions» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 39.9,
+   "duration_sec": 10,
+   "visual_prompt": "украинские военные на позиции",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 49.9,
+   "duration_sec": 9.2,
+   "visual_prompt": "блокпост на въезде в город",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/БЛОКПОСТ-ВЪЕЗДЕ-ГОРОД",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 59.1,
+   "duration_sec": 13.8,
+   "visual_prompt": "кадр с беспилотника: техника и люди на улице Алёшек во время гуманитарной паузы",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/HaL1FmrlrwYpUiT85-35yhOgx063v0mhgWapSwAVgBEM1n6jPAsPPiLBog57Bvwpyv11nOrHXGFIAHgDP12hVRZB2rzNEUlwvxY_JGOI4USZLByz7_38R-7jzd-84LmQml6h96z6Qkn5hnkiEx0SlvqOj7zjSdjMoZM9JrzMEBCNwsbouChQFcfrNQvD7_2HZkSOPO2GwSeAPyqU-T62s6vFvcwymT_k8hZaCcUVNl-nV9bcWsGiw9XTqRON2N2fv5mBFVbnh5nCq3sBYOFUOr3-hqkqokq2MV9s8fdpEX773SQkfE5912VblQnQrrV-PNnPxXc_md3Tof7YfSrvGA.jpg",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 72.9,
+   "duration_sec": 10,
+   "visual_prompt": "портрет уполномоченного Верховной Рады по правам человека Дмитрия Лубинца",
+   "source": "press_photo",
+   "source_query": "Дмитрий Лубинец омбудсмен Украины реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 82.9,
+   "duration_sec": 9.2,
+   "visual_prompt": "ящики с боеприпасами на земле у военного грузовика реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "ящики с боеприпасами на земле у военного грузовика реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 92.1,
+   "duration_sec": 9.8,
+   "visual_prompt": "ящики с питьевой водой на поддоне у грузовика реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "ящики с питьевой водой на поддоне у грузовика реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 101.9,
+   "duration_sec": 10,
+   "visual_prompt": "техника на ремонте в ангаре",
+   "source": "press_photo",
+   "source_query": "ремонт гусеничной техники в ангаре воинской части 2026 реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 111.9,
+   "duration_sec": 12.5,
+   "visual_prompt": "ящики с продуктами выгружают из грузовика реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "ящики с продуктами выгружают из грузовика реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 124.4,
+   "duration_sec": 9.8,
+   "visual_prompt": "самоходная артиллерийская установка на позиции",
+   "source": "press_photo",
+   "source_query": "самоходная гаубица российской армии на огневой позиции реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 134.2,
+   "duration_sec": 10,
+   "visual_prompt": "аварийная бригада у раскопанной трубы",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/АВАРИЙНАЯ-БРИГАДА-КИЕВВОДОКАНАЛА",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 144.2,
+   "duration_sec": 10,
+   "visual_prompt": "Трубопровод большого диаметра и технические переходы внутри сооружения",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ГАЗОВАЯ-КОМПРЕССОРНАЯ-СТАНЦИЯ",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 154.2,
+   "duration_sec": 10,
+   "visual_prompt": "вход в бетонное убежище",
+   "source": "press_photo",
+   "source_query": "вход в бетонное бомбоубежище реальное фото Украина",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 164.2,
+   "duration_sec": 13.8,
+   "visual_prompt": "Квадрокоптер завис над дорогой и лесополосой в районе Купянска",
+   "source": "web_search",
+   "source_query": "квадрокоптер над дорогой возле Купянска 2026",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 178,
+   "duration_sec": 11.5,
+   "visual_prompt": "Бетонный подземный коллектор с трубами и техническими проходами",
+   "source": "press_photo",
+   "source_query": "бетонный коллектор большого диаметра технический проход реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 189.5,
+   "duration_sec": 11.5,
+   "visual_prompt": "Подземный тоннель с коммуникациями под городской застройкой",
+   "source": "press_photo",
+   "source_query": "подземный тоннель коммунальных сетей реальное фото Украина",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 201,
+   "duration_sec": 11.5,
+   "visual_prompt": "БАЗА/ВЛАСТЬ-УКРАИНА/БЛОКПОСТ-ВЪЕЗДЕ-ГОРОД",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/БЛОКПОСТ-ВЪЕЗДЕ-ГОРОД",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 212.5,
+   "duration_sec": 11.5,
+   "visual_prompt": "Военная техника движется по грунтовой дороге возле Гуляйполя",
+   "source": "press_photo",
+   "source_query": "колонна грузовиков российской армии на просёлочной дороге Запорожская область 2026",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 224,
+   "duration_sec": 11.5,
+   "visual_prompt": "карта: подсвечиваются Весёлое, Гуляйполе, Горькое",
+   "source": "card:map_regions",
+   "source_query": "карточка «map_regions» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 235.5,
+   "duration_sec": 11.5,
+   "visual_prompt": "степная просёлочная дорога и побелённые дома юга Украины реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "степная просёлочная дорога и побелённые дома юга Украины реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 247,
+   "duration_sec": 11.5,
+   "visual_prompt": "Грузовик с ящиками подъезжает к укреплённой позиции",
+   "source": "press_photo",
+   "source_query": "грузовик с ящиками у позиции российской армии 2026",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 258.5,
+   "duration_sec": 11.5,
+   "visual_prompt": "украинские военные на позиции",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/УКРАИНА ВСУ и Азов",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 270,
+   "duration_sec": 11.5,
+   "visual_prompt": "Бронированная машина на дороге возле укреплённого рубежа",
+   "source": "press_photo",
+   "source_query": "бронированная машина у укреплённого рубежа Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 281.5,
+   "duration_sec": 13.5,
+   "visual_prompt": "Досье на советника президента Украины Сергея Бескрестнова",
+   "source": "card:dossier",
+   "source_query": "карточка «dossier» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 295,
+   "duration_sec": 12.4,
+   "visual_prompt": "мачта с антеннами связи над городской застройкой Киева",
+   "source": "press_photo",
+   "source_query": "антенны радиосвязи на мачте над Киевом реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 307.4,
+   "duration_sec": 12.4,
+   "visual_prompt": "Станция радиоэлектронной борьбы украинской армии с антеннами",
+   "source": "press_photo",
+   "source_query": "станция радиоэлектронной борьбы украинской армии Киев 2026",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 319.8,
+   "duration_sec": 12.4,
+   "visual_prompt": "аппаратура радиоэлектронной борьбы",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ДРОНЫ/рэб1.jpg",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 332.2,
+   "duration_sec": 12.4,
+   "visual_prompt": "антенная мачта в поле",
+   "source": "press_photo",
+   "source_query": "антенная мачта связи в поле реальное фото Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 344.6,
+   "duration_sec": 12.4,
+   "visual_prompt": "параболическая антенна спутниковой связи на мачте реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "параболическая антенна спутниковой связи на мачте реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 357,
+   "duration_sec": 12.4,
+   "visual_prompt": "Модуль подавления радиосигнала на автомобиле украинской армии",
+   "source": "press_photo",
+   "source_query": "модуль подавления радиосигнала на машине Украины 2026",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 369.4,
+   "duration_sec": 12.4,
+   "visual_prompt": "Радиоприёмное оборудование и кабели комплекса связи",
+   "source": "press_photo",
+   "source_query": "антенный пост радиосвязи украинской армии реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 381.8,
+   "duration_sec": 12.4,
+   "visual_prompt": "щит с кабелями на подстанции",
+   "source": "press_photo",
+   "source_query": "распределительный щит с кабелями на электроподстанции реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 394.2,
+   "duration_sec": 12.3,
+   "visual_prompt": "БАЗА/БЫТ-УКРАИНА/ДИЗЕЛЬНЫЙ-ГЕНЕРАТОР-РАБОТАЕТ",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ДИЗЕЛЬНЫЙ-ГЕНЕРАТОР-РАБОТАЕТ",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 406.5,
+   "duration_sec": 11.8,
+   "visual_prompt": "ремонтная бригада восстанавливает сети",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_РЕМОНТНАЯ-БРИГАДА-ВОССТАНАВЛИВАЕТ",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 418.3,
+   "duration_sec": 12.2,
+   "visual_prompt": "Автокран устанавливает силовой трансформатор на украинском энергообъекте",
+   "source": "press_photo",
+   "source_query": "автокран устанавливает трансформатор Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 430.5,
+   "duration_sec": 12,
+   "visual_prompt": "Рисованная карта энергосистемы с выделенными четырьмя городами",
+   "source": "card:map_regions",
+   "source_query": "карточка «map_regions» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 442.5,
+   "duration_sec": 12.4,
+   "visual_prompt": "ночная трансформаторная подстанция на фоне города",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ТРАНСФОРМАТОРНАЯ-ПОДСТАНЦИЯ-СЕТКОЙ/15_2560x1440.jpg",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 454.9,
+   "duration_sec": 11.9,
+   "visual_prompt": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_РЕМОНТНАЯ-БРИГАДА-ВОССТАНАВЛИВАЕТ",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_РЕМОНТНАЯ-БРИГАДА-ВОССТАНАВЛИВАЕТ",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 466.8,
+   "duration_sec": 12.3,
+   "visual_prompt": "распределительная подстанция, оборудование",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_ТРАНСФОРМАТОРНАЯ-ПОДСТАНЦИЯ-РАСПРЕДЕЛИТЕЛЬНОЙ/05_2500x1667.jpg",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 479.1,
+   "duration_sec": 12.1,
+   "visual_prompt": "Опоры линии электропередачи и провода над украинским городом",
+   "source": "press_photo",
+   "source_query": "опоры линии электропередачи над Киевом 2026",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 491.2,
+   "duration_sec": 12.5,
+   "visual_prompt": "четыре карты кружками: фронт, энергосети, маршруты дронов, трубы под Купянском",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 503.7,
+   "duration_sec": 11.7,
+   "visual_prompt": "Кабельные каналы и коммуникации под украинским энергообъектом",
+   "source": "press_photo",
+   "source_query": "кабельные каналы украинского энергообъекта 2026",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 515.4,
+   "duration_sec": 12.4,
+   "visual_prompt": "Передвижная ремонтная мастерская энергетиков возле повреждённого узла",
+   "source": "press_photo",
+   "source_query": "передвижная ремонтная мастерская энергетиков Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 527.8,
+   "duration_sec": 12,
+   "visual_prompt": "Рабочий процесс операторов перед рядами мониторов",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 539.8,
+   "duration_sec": 12.3,
+   "visual_prompt": "бетонное укрытие для техники в поле реальное фото 2026",
+   "source": "press_photo",
+   "source_query": "бетонное укрытие для техники в поле реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 552.1,
+   "duration_sec": 11.9,
+   "visual_prompt": "Тягач перевозит бронированную машину по украинской дороге",
+   "source": "press_photo",
+   "source_query": "тягач перевозит бронированную машину Украина 2026",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 564,
+   "duration_sec": 12.2,
+   "visual_prompt": "энергетики у кабеля в земле",
+   "source": "press_photo",
+   "source_query": "бригада энергетиков у раскопанного кабеля реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 576.2,
+   "duration_sec": 11.8,
+   "visual_prompt": "Бетонные блоки и военная машина на дороге у линии боёв",
+   "source": "press_photo",
+   "source_query": "бетонные блоки на дороге Запорожская область 2026",
+   "overlays": []
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 588,
+   "duration_sec": 11.2,
+   "visual_prompt": "пустая просёлочная дорога",
+   "source": "press_photo",
+   "source_query": "пустая просёлочная дорога в поле реальное фото Украина 2026",
+   "overlays": []
+  }
+ ]
+}
