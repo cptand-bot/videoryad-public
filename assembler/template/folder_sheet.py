@@ -55,6 +55,34 @@ except OSError:
     F = ImageFont.load_default()
 
 d = os.path.join(LIB, tag)
+if not os.path.isdir(d):
+    # ОТКАТ НА СОСЕДНЮЮ БИБЛИОТЕКУ — ТОТ ЖЕ, ЧТО В ФЕТЧЕ (03.11, улов
+    # `usuario-0d`). У фетча этот откат стоит с 29.10 (`БАЗА/` физически в
+    # `media-library`, а 5 МИНУТ работает на `media-library-2`), а здесь его
+    # не было: любая папка, которой нет в библиотеке КАНАЛА, валила скрипт
+    # трейсбеком `FileNotFoundError` — на 5 МИНУТ так падали
+    # `ПОЛИТИКА/КАЛИНИНГРАД` и `ПОЛИТИКА/ФИНЛЯНДИЯ`. Коварство в том, что
+    # `base/catalog.py --check-dir` на те же папки отвечает «в каталог
+    # ПРОХОДИТ» (он смотрит library-1): каталог обещает папку, а лист по ней
+    # не собирается. Вкладка обходила ручным `MEDIA_LIBRARY_DIR=media-library`.
+    _b = os.path.basename(os.path.normpath(LIB))
+    _alt = None
+    if _b.endswith("-2"):
+        _alt = os.path.join(os.path.dirname(os.path.normpath(LIB)), _b[:-2])
+    elif _b == "media-library":
+        _alt = os.path.normpath(LIB) + "-2"
+    if _alt and os.path.isdir(os.path.join(_alt, tag)):
+        d = os.path.join(_alt, tag)
+        print("папки нет в %s — беру из соседней библиотеки %s" % (LIB, _alt),
+              flush=True)
+    else:
+        # НЕ ТРЕЙСБЕК, А ВНЯТНАЯ СТРОКА: трейсбек читается как поломка кода,
+        # и вкладка идёт искать баг вместо того, чтобы поправить путь.
+        print("ОШИБКА: папки «%s» нет ни в %s, ни в соседней библиотеке.\n"
+              "  Проверь имя (его печатает `base/catalog.py`) или задай\n"
+              "  MEDIA_LIBRARY_DIR=<media-library|media-library-2> перед командой."
+              % (tag, LIB), file=sys.stderr)
+        sys.exit(2)
 exts = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")
 files = sorted(f for f in os.listdir(d) if f.lower().endswith(exts))
 print(f"{tag}: {len(files)} files")
