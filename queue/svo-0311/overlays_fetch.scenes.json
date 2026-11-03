@@ -1,0 +1,69 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 2,
+   "text": "",
+   "duration_sec": 11.2,
+   "visual_prompt": "микрофоны и диктофоны на брифинге",
+   "source": "press_photo",
+   "source_query": "журналисты с микрофонами на брифинге реальное фото 2026"
+  },
+  {
+   "id": 7,
+   "text": "",
+   "duration_sec": 13.8,
+   "visual_prompt": "портрет Дмитрия Пескова",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПЕСКОВ"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 10,
+   "visual_prompt": "секция магистральной трубы большого диаметра",
+   "source": "press_photo",
+   "source_query": "труба магистрального трубопровода большого диаметра реальное фото"
+  },
+  {
+   "id": 32,
+   "text": "",
+   "duration_sec": 12.4,
+   "visual_prompt": "спутник на орбите",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/КОСМОС-ЗАПУСКИ-СПУТНИКИ"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 12.3,
+   "visual_prompt": "портрет эксперта Юрия Корольчука",
+   "source": "press_photo",
+   "source_query": "Юрий Корольчук энергетический эксперт реальное фото"
+  },
+  {
+   "id": 39,
+   "text": "",
+   "duration_sec": 12,
+   "visual_prompt": "тёмные окна многоэтажек",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_ТЁМНЫЕ-ОКНА-МНОГОЭТАЖЕК"
+  },
+  {
+   "id": 43,
+   "text": "",
+   "duration_sec": 12.1,
+   "visual_prompt": "жильцы заряжают телефоны",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ЖИЛЬЦЫ-ЗАРЯЖАЮТ-ТЕЛЕФОНЫ"
+  },
+  {
+   "id": 48,
+   "text": "",
+   "duration_sec": 12.3,
+   "visual_prompt": "открытый люк коммунального коллектора",
+   "source": "press_photo",
+   "source_query": "открытый люк коллектора на улице реальное фото"
+  }
+ ]
+}
