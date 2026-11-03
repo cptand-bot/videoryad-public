@@ -556,6 +556,39 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
     inputs, filters, mixn = ["-f", "lavfi", "-t", f"{total:.3f}", "-i", "anullsrc=r=44100:cl=stereo"], [], []
     idx = [2]  # input 0 = in_mp4 (video), input 1 = silence bed
 
+    # ОЗВУЧКА ВМЕШИВАЕТСЯ В СБОРКУ (03.11, прямое слово пользователя: «пускай
+    # она будет в облаке… чтобы звуки всплывашек были процентов мощности, а
+    # озвучка полной, стопроцентной громкости»). До этого готовый файл несёл
+    # ТОЛЬКО щелчки всплывашек, а голос пользователь накладывал сам.
+    # Озвучка ищется в папке ролика: `narration.mp3` либо единственный mp3/wav
+    # в корне (его кладёт ship.sh под именем narration.mp3). Нет файла —
+    # поведение прежнее, старые потоки не меняются.
+    # Громкость: голос 1.0, щелчки 0.3 — числа держатся здесь, рядом с миксом.
+    SFX_VOL_WITH_VOICE, SFX_VOL_ALONE, VOICE_VOL = 0.3, 0.9, 1.0
+    _voice = os.environ.get("VIDEORYAD_NARRATION") or ""
+    if not _voice:
+        for _c in ("narration.mp3", "narration.wav", "narration.m4a"):
+            if os.path.isfile(_c):
+                _voice = _c
+                break
+    if not _voice:
+        _loose = [f for f in sorted(glob.glob("*.mp3")) + sorted(glob.glob("*.wav"))
+                  if os.path.dirname(os.path.abspath(f)) == os.path.abspath(".")]
+        if len(_loose) == 1:
+            _voice = _loose[0]
+    sfx_vol = SFX_VOL_ALONE
+    if _voice and os.path.isfile(_voice):
+        sfx_vol = SFX_VOL_WITH_VOICE
+        inputs.extend(["-i", _voice])
+        filters.append(f"[{idx[0]}:a]volume={VOICE_VOL}[voice]")
+        mixn.append("[voice]")
+        print("ОЗВУЧКА: %s — голос %.0f%%, щелчки всплывашек %.0f%%"
+              % (_voice, VOICE_VOL * 100, sfx_vol * 100), flush=True)
+        idx[0] += 1
+    else:
+        print("озвучки в папке нет — собираю как раньше, только щелчки "
+              "(%.0f%%)" % (sfx_vol * 100), flush=True)
+
     def _add(sid, sound, at, tag):
         snd = None
         for e in (".mp3", ".wav", ".m4a", ".ogg"):
@@ -567,7 +600,8 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
             return
         pos_ms = int((starts[sid] + float(at)) * factor * 1000)
         inputs.extend(["-i", snd])
-        filters.append(f"[{idx[0]}:a]adelay={pos_ms}|{pos_ms},volume=0.9[s{idx[0]}]")
+        filters.append(f"[{idx[0]}:a]adelay={pos_ms}|{pos_ms},"
+                       f"volume={sfx_vol}[s{idx[0]}]")
         mixn.append(f"[s{idx[0]}]")
         print(f"[{sid:03d}] {tag}{sound} @ {pos_ms/1000:.2f}s (финальный таймлайн)")
         idx[0] += 1
@@ -588,7 +622,7 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
             _add(sid, ts.get("sound") or _TXT_CYCLE[sid % len(_TXT_CYCLE)],
                  ts.get("at", LEAD), "ТЕКСТ ")
     if not mixn:
-        print("нет звуков для наложения — просто копирую видео")
+        print("ни озвучки, ни звуков — просто копирую видео")
         subprocess.run([ffmpeg, "-y", "-i", in_mp4, "-c", "copy", out_mp4], capture_output=True)
         return
     fc = ";".join(filters) + f";[1:a]{''.join(mixn)}amix=inputs={len(mixn)+1}:normalize=0[a]"
