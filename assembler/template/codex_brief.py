@@ -400,7 +400,14 @@ def main():
     # `pair_sheet/`, а сюда их до сих пор копировали руками. Ищем во всех.
     def _find(pat):
         out = []
-        for d in (a.thumbs, "sheet.html", "pair_sheet", "thumbs"):
+        # `contact_sheet.py` КЛАДЁТ ЛИСТЫ В `<имя>.html/sheet_N.jpg` (03.11,
+        # улов `usuario-b5`): здесь перечислялись только четыре папки, и
+        # `--stage zamena` валился «нет thumbs/sheet-zameny.jpg», хотя листы
+        # лежали рядом — вкладка копировала файл руками. Это тот же класс, что
+        # «два генератора листов кладут файлы по разным схемам имён».
+        _dirs = [a.thumbs, "sheet.html", "pair_sheet", "thumbs"]
+        _dirs += sorted(d for d in glob.glob("*.html") if os.path.isdir(d))
+        for d in _dirs:
             out += glob.glob(os.path.join(d, pat))
         seen, uniq = set(), []
         for f in sorted(out):
@@ -416,7 +423,20 @@ def main():
     if a.stage == "audit" and not sheets:
         sys.exit("листов нет — сначала contact_sheet.py (и pair_sheet.py)")
     if a.stage == "zamena" and not os.path.exists(zam):
-        sys.exit("нет thumbs/sheet-zameny.jpg — сначала собери лист замен")
+        # ЛИСТ ЗАМЕН МОЖЕТ НАЗЫВАТЬСЯ ИНАЧЕ. `contact_sheet.py` имени
+        # `sheet-zameny.jpg` не создаёт никогда — он кладёт `sheet_N.jpg` в
+        # папку `<имя>.html`. Берём лист из папки, в имени которой слышно
+        # «замены», и говорим вслух, что именно взяли.
+        _cand = [f for f in _find("sheet_*.jpg")
+                 if "zamen" in f.lower() or "замен" in f.lower()]
+        if _cand:
+            zam = _cand[0]
+            print("лист замен взят как %s (имени sheet-zameny.jpg "
+                  "contact_sheet.py не создаёт)" % zam)
+        else:
+            sys.exit("листа замен нет. Собери его: python3 contact_sheet.py "
+                     "<сцены замен> --out zameny.html — файлы лягут в "
+                     "zameny.html/sheet_N.jpg, и этот ключ их найдёт сам")
 
     dest_thumbs = os.path.join(a.dest, "thumbs")
     # `--no-copy` НЕ ДОЛЖЕН ОСТАВЛЯТЬ БРИФ БЕЗ СПИСКА СЦЕН (24.10, улов
