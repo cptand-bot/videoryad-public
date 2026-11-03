@@ -35,7 +35,7 @@ PlayResY: 1080
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Caption,Arial,{size},{text},&H000000FF,{plate},{plate},1,0,0,0,100,100,0,0,3,{pad},0,2,80,80,{mv},1
+Style: Caption,Arial,{size},{text},&H000000FF,{plate},{plate},1,0,0,0,100,100,0,0,1,0,0,2,80,80,{mv},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -78,7 +78,9 @@ def main():
     ap.add_argument("--channel", default="", help="канал: подставит его палитру")
     ap.add_argument("--plate", default="", help="цвет подложки, 6 знаков")
     ap.add_argument("--text", default="", help="цвет текста, 6 знаков")
-    ap.add_argument("--alpha", default="00", help="прозрачность подложки, 00 — плотная")
+    # ПЛАШКА ПОЛУПРОЗРАЧНАЯ: 40 из 255 (~25%) — его слово «немного
+    # прозрачной». 00 — плотная, FF — невидимая.
+    ap.add_argument("--alpha", default="40", help="прозрачность подложки, 00 плотная, 40 — немного")
     ap.add_argument("--size", type=int, default=52)
     ap.add_argument("--pad", type=int, default=6, help="воздух вокруг текста в плашке")
     ap.add_argument("--margin", type=int, default=75, help="отступ снизу")
@@ -88,11 +90,16 @@ def main():
     # бирюзовая подложка #06c7c7, 5 МИНУТ — бордовая #5d0303. Текст подбирается
     # к подложке: на светлой бирюзовой тёмный (контраст ~8:1), на тёмной
     # бордовой белый. Белый на бирюзовой даёт ~2:1 и не читается.
-    CHAN = {"ПЛАНЕТА": ("06c7c7", "0B1B1B"),
+    # ТЕКСТ БЕЛЫЙ НА ОБОИХ КАНАЛАХ, ПЛАШКА ПОЛУПРОЗРАЧНАЯ (03.11, его правка
+    # после первого пробника: «субтитры у тебя чёрного цвета, должны быть
+    # белого; плашка должна быть статичной; и плашка бирюзового цвета должна
+    # быть немного прозрачной»). Тёмный текст я подобрал по контрасту — он
+    # отверг, вид важнее формального контраста.
+    CHAN = {"ПЛАНЕТА": ("06c7c7", "FFFFFF"),
             "5 МИНУТ": ("5d0303", "FFFFFF"),
             "5МИНУТ": ("5d0303", "FFFFFF")}
     _ch = (a.channel or "").strip().upper().replace("Ё", "Е")
-    _pl, _tx = CHAN.get(_ch, ("06c7c7", "0B1B1B"))
+    _pl, _tx = CHAN.get(_ch, ("06c7c7", "FFFFFF"))
     if _ch and _ch not in CHAN:
         print("канал «%s» не в палитре — беру бирюзовую по умолчанию" % a.channel)
     a.plate = a.plate or _pl
