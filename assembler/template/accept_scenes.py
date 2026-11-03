@@ -45,6 +45,33 @@ def srt_end(path):
     return last
 
 
+def _media_lib(near=""):
+    """Папка медиатеки ТАК, КАК ЕЁ ВИДИТ ФЕТЧЕР: `.env` ролика, иначе
+    `~/projects/media-library`. Правила разрешения повторяют `check_pins.py`
+    (относительное имя вида `media-library-2` раскрывается в `~/projects/…`).
+    """
+    val = ""
+    seen = []
+    for d in (near, os.getcwd()):
+        if not d or d in seen:
+            continue
+        seen.append(d)
+        try:
+            for ln in open(os.path.join(d, ".env"), encoding="utf-8",
+                           errors="ignore"):
+                ln = ln.strip()
+                if ln.startswith("MEDIA_LIBRARY_DIR="):
+                    val = ln.split("=", 1)[1].strip().strip('"').strip("'")
+        except OSError:
+            pass
+        if val:
+            break
+    lib = os.path.expanduser(val or "~/projects/media-library")
+    if not os.path.isabs(lib):
+        lib = os.path.expanduser(os.path.join("~/projects", lib))
+    return lib
+
+
 def main():
     ap = argparse.ArgumentParser(description="принять раскадровку от Codex")
     ap.add_argument("src")
@@ -290,6 +317,28 @@ def main():
         h = " ".join(q.split()[:3])
         if h:
             heads.setdefault(h, []).append(sc.get("id"))
+    # ВЫДУМАННЫЙ ПУТЬ МЕДИАТЕКИ — ОТКАЗ ПРИЁМКИ (03.11, улов `usuario-37`).
+    # Внешний агент выдумал ВОСЕМЬ папок, которых нет в каталоге брифа
+    # (`ПОЛИТИКА/УКРАИНА`, `ПОЛИТИКА/ЕВРОПА`, `ПОЛИТИКА/США`…), и приёмка
+    # пропустила все восемь: проверка путей жила ТОЛЬКО в `check_pins.py`,
+    # который гоняют «если есть пины». Дальше фетч по несуществующей папке
+    # молча уходит в веб-водопад, а в манифесте остаётся `local_library /
+    # cached` — то есть манифест врёт, будто кадр взят из медиатеки.
+    # Проверяем ровно то же, что `check_pins`: папка или файл существует.
+    _lib = _media_lib(os.path.dirname(os.path.abspath(a.out or a.src)))
+    if lib_dirs and not os.path.isdir(_lib):
+        warn.append("медиатека «%s» не найдена — пути библиотечных сцен НЕ "
+                    "проверены, прогони check_pins.py из папки ролика" % _lib)
+    elif lib_dirs:
+        for d, ids in sorted(lib_dirs.items()):
+            head = d.split(":", 1)[0].strip("/")
+            pth = os.path.join(_lib, head)
+            if not (os.path.isdir(pth) or os.path.isfile(pth)):
+                bad.append("сцены %s: папки медиатеки «%s» НЕТ в %s — путь "
+                           "выдуман, фетч молча уйдёт в поиск, а манифест "
+                           "запишет local_library"
+                           % (", ".join(map(str, ids)), d,
+                              os.path.basename(_lib)))
     for d, ids in sorted(lib_dirs.items()):
         if len(ids) > 2:
             bad.append("папка медиатеки «%s» стоит на %d сценах (%s) — больше "
