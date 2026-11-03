@@ -116,6 +116,7 @@ def main():
     cooled, recent = cooldown_md5(project)
 
     pins, bad, seen, missing = [], [], {}, []
+    folders = {}
     for path in argv:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
@@ -133,7 +134,16 @@ def main():
             folder = qq.split(":", 1)[0] if ":" in qq else qq
             _f = _lib_has(lib, folder)
             if _f and os.path.isdir(_f):
-                continue            # папка — round-robin, не пин, не наше дело
+                # ПАПКА — round-robin, НО ОНА МОЖЕТ БЫТЬ ИСЧЕРПАНА КУЛДАУНОМ
+                # (03.11, улов `usuario-79`). Живой случай:
+                # `БАЗА/ВЕДОМСТВА/МИНОБОРОНЫ-РОССИИ` — ровно два файла, оба
+                # съедены вчерашними роликами, и фетч отбил сцену «все файлы
+                # использованы в последних 3 видео». Ни каталог («в каталог
+                # ПРОХОДИТ»), ни пины («все пины чистые») этого не показывали:
+                # сцена приезжала FAILED уже на фетче, то есть круг правок
+                # терялся на том, что видно заранее одной проверкой.
+                folders.setdefault(folder, (_f, []))[1].append(sc.get("id"))
+                continue
             # НИ ФАЙЛА, НИ ПАПКИ — БИТЫЙ ПИН (2026-10-18, улов usuario-b7).
             # Раньше такой путь попадал в ветку «папка, не наше дело» и
             # check_pins печатал «все пины чистые». Фетч при этом молча уходит
@@ -149,6 +159,43 @@ def main():
     print(f"бан-лист: {BANNED_LOG} ({len(banned)} активных md5)")
     print("кулдаун: " + (", ".join(f"{p} ({d})" for p, d in recent) or "журнала нет"))
     print(f"пинов найдено: {len(pins)}")
+    # --- СВОБОДНЫХ ФАЙЛОВ В ПАПКЕ (кулдаун и бан) -------------------------
+    # Считаем ТОЛЬКО у небольших папок: у папки на 40 файлов исчерпание
+    # практически невозможно, а md5 каждого файла стоит чтения с диска.
+    _EXH_MAX = 12
+    _EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm", ".mkv")
+    for folder, (fpath, sids) in sorted(folders.items()):
+        try:
+            files = [f for f in os.listdir(fpath) if f.lower().endswith(_EXT)]
+        except OSError:
+            continue
+        if not files or len(files) > _EXH_MAX:
+            continue
+        _is_map = "/КАРТЫ/" in ("/" + folder.replace("\\", "/"))
+        free = 0
+        for f in files:
+            try:
+                h = file_md5(os.path.join(fpath, f))
+            except OSError:
+                continue
+            if h in banned:
+                continue
+            if h in cooled and not _is_map:
+                continue
+            free += 1
+        if not free:
+            bad.append((", ".join(map(str, sids)), folder,
+                        "ПАПКА ИСЧЕРПАНА: все %d файл(ов) в бане или кулдауне "
+                        "(последние %d ролика) — фетч отдаст сцену FAILED, "
+                        "это видно ЗАРАНЕЕ. Возьми другую папку или сними бан"
+                        % (len(files), COOLDOWN_VIDEOS)))
+        elif free < len(sids):
+            print("  ВНИМАНИЕ: папка «%s» стоит на %d сценах (%s), а свободных "
+                  "от кулдауна файлов в ней %d из %d — часть сцен уйдёт в "
+                  "поиск или повторит кадр"
+                  % (folder, len(sids), ", ".join(map(str, sids)),
+                     free, len(files)))
+
     for src, sid, q in missing:
         bad.append((sid, q, "НЕТ ТАКОГО ФАЙЛА И НЕТ ТАКОЙ ПАПКИ в медиатеке — "
                             "фетч молча уйдёт в веб-водопад, а манифест оставит "

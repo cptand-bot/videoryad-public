@@ -77,7 +77,59 @@ def partition(scenes, k):
     return [sh for sh in shards if sh]
 
 
+def _local_only_gate(scenes_path, images_dir):
+    """НА МАШИНЕ ПОЛЬЗОВАТЕЛЯ ФЕТЧИМ ТОЛЬКО МЕДИАТЕКУ (03.11, улов `usuario-79`).
+
+    Прямое правило пользователя от 23.10: «при сборке... ни в коем случае не
+    использовать ресурсы компьютера, всё, что можно сделать на GitHub, всё
+    отсылать в GitHub». Медиатеки в облаке нет, поэтому библиотечные сцены
+    добираются локально — и ТОЛЬКО они. Но в чек-листе рядом со словами
+    «дофетчить библиотечные сцены локально» стояла команда на ПОЛНЫЙ
+    `scenes.json`: вкладка запускала её буквально и гнала ВЕБ-ПОИСК на машине
+    пользователя параллельно с облаком (живой случай — успело скачаться 14
+    сцен, пока вкладка не сняла процесс). Вкладки обходили это, собирая файл
+    только из `local_library` руками — в делах сданных роликов такие файлы
+    лежат, то есть каждая доходила до обхода сама.
+
+    Теперь это не договорённость, а поведение: веб-сцены отбрасываются, в
+    работу идут только библиотечные. Снять — `VIDEORYAD_LOCAL_OK=1` (тот же
+    ключ, что у локального рендера карточек) или `--web`.
+    """
+    data = json.load(open(scenes_path, encoding="utf-8"))
+    scenes = data.get("scenes") or []
+    lib = [s for s in scenes if s.get("source") == "local_library"]
+    web = [s for s in scenes if s.get("source") != "local_library"]
+    if not web:
+        return scenes_path
+    if os.environ.get("VIDEORYAD_LOCAL_OK") == "1" or "--web" in sys.argv:
+        print("[parallel] ВНИМАНИЕ: веб-фетч %d сцен идёт НА МАШИНЕ "
+              "ПОЛЬЗОВАТЕЛЯ (снято ключом) — это его ресурсы и его сеть."
+              % len(web), flush=True)
+        return scenes_path
+    print("[parallel] локально фетчим ТОЛЬКО медиатеку: беру %d библиотечных "
+          "сцен, отбрасываю %d веб-сцен (%s…)."
+          % (len(lib), len(web),
+             ", ".join(str(s.get("id")) for s in web[:8])), flush=True)
+    print("[parallel] веб-сцены собирает ОБЛАКО (ship.sh). Нужен веб локально "
+          "— VIDEORYAD_LOCAL_OK=1 или ключ --web, и скажи об этом "
+          "пользователю.", flush=True)
+    if not lib:
+        print("[parallel] библиотечных сцен в файле нет — делать нечего.",
+              flush=True)
+        return ""
+    sub = {x: data[x] for x in data if x != "scenes"}
+    sub["scenes"] = lib
+    os.makedirs(images_dir, exist_ok=True)
+    out = os.path.join(images_dir, ".local_only.scenes.json")
+    json.dump(sub, open(out, "w", encoding="utf-8"),
+              ensure_ascii=False, indent=1)
+    return out
+
+
 def run(scenes_path, images_dir, env_path, k):
+    scenes_path = _local_only_gate(scenes_path, images_dir)
+    if not scenes_path:
+        return 0
     data = json.load(open(scenes_path, encoding="utf-8"))
     scenes = data["scenes"]
     meta = {x: data[x] for x in data if x != "scenes"}
