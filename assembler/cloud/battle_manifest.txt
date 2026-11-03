@@ -60,6 +60,7 @@ template/build_clips_1080.py
 template/build_overlays.py
 template/build_ticker.py
 template/build_usage_log.py
+template/captions_from_srt.py
 template/captions_shard.py
 template/cards_queue.py
 template/check_lead.py
