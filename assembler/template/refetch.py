@@ -1093,8 +1093,20 @@ def main():
     # фетч не шёл, вкладка теряла время и лезла в обход.
     _lint_files = [j[0] for j in jobs if j and j[0] and os.path.exists(j[0])]
     if os.path.exists(lint) and _lint_files:
-        print("\n--- линт новых запросов ---")
-        rc = subprocess.run(["python3", lint] + _lint_files).returncode
+        print("\n--- линт новых запросов ---", flush=True)
+        # ВЫВОД ЛИНТА ЧИТАЕМ САМИ, А НЕ ОТДАЁМ В ОБЩИЙ ПОТОК (03.11, улов
+        # `usuario-79`): раздел печатался ПУСТЫМ (родительский print
+        # буферизован, вывод ребёнка уходил в другое место лога), следом шло
+        # «ОШИБКА: замена содержит мину» без номера сцены и без слова-мины —
+        # вкладка правила ВСЛЕПУЮ три прохода и нашла мину, только прогнав
+        # `query_lint` отдельным файлом. Теперь мины повторяются строкой
+        # прямо в тексте отказа.
+        _lr = subprocess.run(["python3", lint] + _lint_files,
+                             capture_output=True, text=True)
+        rc = _lr.returncode
+        _lout = (_lr.stdout or "") + (_lr.stderr or "")
+        print(_lout, flush=True)
+        _mines = [ln.strip() for ln in _lout.splitlines() if "МИНА" in ln]
         if rc != 0 and not _why:
             _back = []
             for _p, _raw in _snapshot.items():
@@ -1110,6 +1122,14 @@ def main():
             print("\nОШИБКА: замена содержит мину — перепиши её от объекта "
                   "(или --force, если уверен). Фетч НЕ запускался, "
                   "СТАРЫЕ КАДРЫ НА МЕСТЕ.")
+            if _mines:
+                print("Мина названа здесь, второй раз линт гонять не нужно:")
+                for _m in _mines[:8]:
+                    print("  " + _m)
+            else:
+                print("Линт не назвал мину строкой — значит код возврата "
+                      "ненулевой по другой причине, смотри его вывод выше "
+                      "целиком.")
             if _back:
                 print("Файлы сцен возвращены в прежний вид (%s): НИ ОДИН "
                       "запрос не переписан." % ", ".join(_back))
@@ -1265,7 +1285,56 @@ def main():
     round_record(pend, _fill_now, _why)   # круг засчитан, причина форса — в журнал
 
     failed_runs = []
+    # КРУГ ПРАВОК ПО ВЕБ-СЦЕНАМ ЕДЕТ В ОБЛАКО (03.11, решение диспетчера по
+    # улову `usuario-79`). Фетч на машине пользователя запрещён его прямым
+    # словом 23.10, и `fetch_parallel.py` с 03.11 сам отбрасывает веб-сцены —
+    # а круг правок почти целиком из них и состоит, поэтому локальный путь
+    # `refetch.py` выдавал «беру 0 библиотечных сцен… делать нечего» и следом
+    # честный, но пугающий отбой «НЕ ИЗМЕНИЛИСЬ 5». Запросы при этом уже
+    # переписаны и сохранены — то есть терялось не время фетча, а понимание,
+    # что делать дальше. Теперь refetch сам говорит, что дальше: библиотечные
+    # сцены добирает локально (их в облаке негде взять), веб-сцены оставляет
+    # облаку одной командой. Снять — `VIDEORYAD_LOCAL_OK=1`, и тогда он
+    # печатает, что счёт идёт на машине пользователя.
+    _cloud_wait = []
+    _local_ok = os.environ.get("VIDEORYAD_LOCAL_OK") == "1"
     for sub, assets, ids, before in jobs:
+        _web = []
+        if not _local_ok:
+            try:
+                _d = json.load(open(sub, encoding="utf-8"))
+                _sc = _d.get("scenes") or []
+                _web = [x.get("id") for x in _sc
+                        if x.get("source") != "local_library"]
+                _lib = [x for x in _sc if x.get("source") == "local_library"]
+                if _web and not _lib:
+                    _cloud_wait += [i for i in _web if i is not None]
+                    print("\n--- %s: %d веб-сцен(ы) %s — ЛОКАЛЬНО НЕ ФЕТЧУ ---"
+                          % (assets, len(_web), sorted(x for x in _web if x)))
+                    print("    Запросы переписаны и СОХРАНЕНЫ. Прежние кадры "
+                          "сняты и забанены на 2 дня (иначе поиск вернёт их "
+                          "же), поэтому до прогона эти сцены ПУСТЫЕ — полную "
+                          "сборку не запускай, сперва забери кадры. Веб "
+                          "собирает облако, пошли один прогон:")
+                    print("    bash ~/.claude/skills/news-video/cloud/va.sh "
+                          "<цель> bash ~/.claude/skills/news-video/cloud/"
+                          "ship.sh <проект> <имя> --fetch-only")
+                    print("    и забери кадры как обычно (adopt_cloud). "
+                          "Локально считать на его машине нельзя (23.10); "
+                          "нужно всё равно — VIDEORYAD_LOCAL_OK=1.",
+                          flush=True)
+                    continue
+                if _web and _lib:
+                    _cloud_wait += [i for i in _web if i is not None]
+                    _d["scenes"] = _lib
+                    json.dump(_d, open(sub, "w", encoding="utf-8"),
+                              ensure_ascii=False, indent=1)
+                    print("\n--- %s: беру локально %d библиотечных, веб-сцены "
+                          "%s оставляю облаку (ship.sh --fetch-only) ---"
+                          % (assets, len(_lib),
+                             sorted(x for x in _web if x)), flush=True)
+            except (OSError, ValueError) as _e:
+                print("  !! не разобрал %s (%s) — фетчу как есть" % (sub, _e))
         print("\n--- рефетч %s: %s ---" % (assets, ids))
         rc = subprocess.run(["python3", os.path.join(here, "fetch_parallel.py"),
                              sub, assets, ".env", "5"]).returncode
@@ -1302,6 +1371,13 @@ def main():
                 _untouched.append((sid, "файл не изменился"))
             elif _new is None:
                 _untouched.append((sid, "файла нет вовсе"))
+    # СЦЕНЫ, ЖДУЩИЕ ОБЛАКА, — НЕ «НЕ ИЗМЕНИЛИСЬ» (03.11). Иначе штатный путь
+    # заканчивается словом ОШИБКА при полностью исправной работе.
+    _wait = sorted(set(_cloud_wait))
+    _untouched = [(sid, why) for sid, why in _untouched if sid not in _wait]
+    if _wait:
+        print("\nЖДУТ ОБЛАКА (запросы переписаны, кадры придут с прогоном "
+              "`ship.sh … --fetch-only`): %s" % _wait, flush=True)
     if _untouched:
         print("\nОШИБКА: запрошено сцен %d, НЕ ИЗМЕНИЛИСЬ %d — проверь их "
               "руками, замена не состоялась:" % (len(_asked), len(_untouched)),
