@@ -140,15 +140,29 @@ for src in ${attach[@]+"${attach[@]}"}; do
     echo "  уже на месте: $base"
     continue
   fi
-  if iconv -f UTF-8 -t UTF-8 "$src" >/dev/null 2>&1; then
-    cp -f "$src" "$workdir/$base"
-  else
-    iconv -f CP1251 -t UTF-8 "$src" > "$workdir/$base" 2>/dev/null \
-      || cp -f "$src" "$workdir/$base"
-    echo "перекодировал в UTF-8: $base"
+  # НИКОГДА НЕ ПЕРЕТИРАЕМ ЧУЖОЙ ФАЙЛ С ТЕМ ЖЕ ИМЕНЕМ (04.11, улов
+  # `usuario-82` — мы УДАЛИЛИ `.srt` ПОЛЬЗОВАТЕЛЯ из его папки на `D:`).
+  # Механика: источник дали ОТНОСИТЕЛЬНЫМ путём из папки проекта в WSL, а
+  # задание лежало в ЕГО папке, где уже был файл С ТАКИМ ЖЕ ИМЕНЕМ.
+  # Проверка «источник и назначение — один файл» не срабатывает: пути
+  # разные и тома разные, это РАЗНЫЕ файлы. Дальше `cp -f` перетирал его
+  # оригинал нашей копией, а чистка копий на выходе сносила её — вместе с
+  # оригиналом. Это худший класс: мы уничтожаем его файлы.
+  # Теперь: занято — кладём под СВОИМ именем, и удаляем только своё.
+  _dst="$workdir/$base"
+  if [ -e "$_dst" ]; then
+    _dst="$workdir/__attach_$$_$base"
+    echo "  рядом с заданием уже есть «$base» — НЕ ТРОГАЮ его, кладу копию как $(basename "$_dst")"
   fi
-  _mine+=("$workdir/$base")
-  echo "  приложен: $base"
+  if iconv -f UTF-8 -t UTF-8 "$src" >/dev/null 2>&1; then
+    cp -f "$src" "$_dst"
+  else
+    iconv -f CP1251 -t UTF-8 "$src" > "$_dst" 2>/dev/null \
+      || cp -f "$src" "$_dst"
+    echo "перекодировал в UTF-8: $(basename "$_dst")"
+  fi
+  _mine+=("$_dst")
+  echo "  приложен: $(basename "$_dst")"
 done
 _cleanup_attached() {
   for f in ${_mine[@]+"${_mine[@]}"}; do rm -f "$f"; done
