@@ -85,6 +85,8 @@ def main():
     ap.add_argument("--pad", type=int, default=6, help="воздух вокруг текста в плашке")
     ap.add_argument("--margin", type=int, default=75, help="отступ снизу")
     ap.add_argument("--out", default="captions.ass")
+    ap.add_argument("--allow-stub", action="store_true", dest="allow_stub",
+                    help="разрешить заведомо короткий SRT (обычно это заглушка)")
     a = ap.parse_args()
     # ПАЛИТРА СУБТИТРОВ ПО КАНАЛУ (прямое слово пользователя 03.11): ПЛАНЕТА —
     # бирюзовая подложка #06c7c7, 5 МИНУТ — бордовая #5d0303. Текст подбирается
@@ -129,6 +131,30 @@ def main():
             groups[i][1] += d
     if not groups:
         sys.exit("в SRT не нашлось ни одной реплики")
+
+    # ЗАГЛУШКА ВМЕСТО НАСТОЯЩЕГО SRT (04.11, улов `usuario-eb`). В публичную
+    # очередь уезжает `<имя>.srt` ЗАГЛУШКОЙ на 34 байта (текст сценария
+    # наружу не отправляем), и после `get.sh` она лежит в папке забора. Имя
+    # у неё своё, поэтому `take_folder.py` её не перетирает: у пользователя
+    # файл называется иначе. Сделать субтитры из такой заглушки легко и
+    # МОЛЧА — на экране будет одна строка на весь ролик.
+    _total = groups[-1][1] - groups[0][0]
+    _size = os.path.getsize(a.srt)
+    if len(groups) < 10 or _total < 60 or _size < 2000:
+        print("", file=sys.stderr)
+        print("!! ЭТО ПОХОЖЕ НА ЗАГЛУШКУ, А НЕ НА НАСТОЯЩИЙ SRT:", file=sys.stderr)
+        print("   %s — %d байт, реплик %d, перекрыто %.1f с"
+              % (a.srt, _size, len(groups), _total), file=sys.stderr)
+        print("   Настоящий SRT ролика — это сотни реплик и вся длительность.",
+              file=sys.stderr)
+        print("   В папке забора после get.sh лежит ПУБЛИЧНАЯ ЗАГЛУШКА (34 байта):",
+              file=sys.stderr)
+        print("   возьми файл из папки пользователя на D: и повтори.",
+              file=sys.stderr)
+        print("   Если заглушка — это и есть замысел: --allow-stub",
+              file=sys.stderr)
+        if not a.allow_stub:
+            sys.exit(2)
 
     body = [HDR.format(size=a.size, pad=a.pad, mv=a.margin,
                        text=_ass_color(a.text), plate=_ass_color(a.plate, a.alpha))]
