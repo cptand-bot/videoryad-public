@@ -52,6 +52,30 @@ BIG_POOL = [
  "aircraft hangar maintenance workers", "racetrack empty grandstand", "stadium empty seats aerial",
 ]
 
+def _dhash(path):
+    """Перцептивный хеш 8x8: одинаков у пережатых копий одной картинки.
+
+    Видео пропускаем — у клипа «та же картинка» значит другое, и кадр из
+    середины ролика ничего не говорит о повторе.
+    """
+    if path.lower().endswith((".mp4", ".mov", ".webm", ".mkv")):
+        return ""
+    try:
+        from PIL import Image
+    except ImportError:
+        return ""
+    try:
+        im = Image.open(path).convert("L").resize((9, 8), Image.LANCZOS)
+    except Exception:
+        return ""
+    px = im.load()
+    bits = 0
+    for y in range(8):
+        for x in range(8):
+            bits = (bits << 1) | (1 if px[x, y] > px[x + 1, y] else 0)
+    return "%016x" % bits
+
+
 def md5(p):
     h = hashlib.md5()
     with open(p, "rb") as f:
@@ -97,7 +121,30 @@ def main():
         by_hash = {}
         for f in files:
             by_hash.setdefault(md5(f), []).append(f)
-        return [v for v in by_hash.values() if len(v) > 1]
+        groups = [v for v in by_hash.values() if len(v) > 1]
+        # ОДНА И ТА ЖЕ КАРТИНКА С РАЗНЫМ md5 (04.11, улов `usuario-af` на
+        # «Газе»). Сцены 56 и 62 получили буквально одно фото газовоза с
+        # тремя буксирами, но файлы отличались по байтам — другая
+        # перекодировка источником, — и дедуп честно печатал «дублей нет».
+        # md5 ловит только ПОБАЙТОВЫЙ повтор; добавляем перцептивный хеш
+        # (dHash 8x8 по яркости): он одинаков у пережатой, чуть иначе
+        # сжатой и слегка перемасштабированной копии.
+        # Порог 0 (точное совпадение dHash) выбран намеренно: при допуске в
+        # несколько бит под нож попадают РАЗНЫЕ кадры одной съёмки, а их
+        # снимать нельзя — решает вкладка, не инструмент.
+        seen = {f for g in groups for f in g}
+        by_ph = {}
+        for f in files:
+            if f in seen:
+                continue
+            h = _dhash(f)
+            if h:
+                by_ph.setdefault(h, []).append(f)
+        extra = [v for v in by_ph.values() if len(v) > 1]
+        if extra:
+            print("ПОВТОР ПО ВИДУ (разные файлы, одна картинка) — %d групп; "
+                  "md5 их не видит" % len(extra))
+        return groups + extra
 
     def parse_path(f):
         d = os.path.dirname(f)
@@ -110,7 +157,7 @@ def main():
     if not a.pool_reassign:
         groups = dedup_groups()
         if not groups:
-            print("дублей нет: ни один кадр не повторяется по md5")
+            print("дублей нет: ни один кадр не повторяется ни по md5, ни по виду (dHash)")
             return 0
         print("ДУБЛИ ПО md5 — %d групп. Файлы проигравших снесены, ЗАПРОСЫ НЕ "
               "ТРОНУТЫ." % len(groups))
