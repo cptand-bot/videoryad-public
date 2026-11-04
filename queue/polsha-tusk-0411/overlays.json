@@ -1,0 +1,432 @@
+{
+ "anchor": "bottom",
+ "2": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "НОЧЬ · ГРАНИЦА С КАЛИНИНГРАДСКОЙ ОБЛАСТЬЮ",
+   "style": "plate"
+  }
+ },
+ "5": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПОЛИЦИЯ · ПОГРАНИЧНИКИ · АРМИЯ · АНТИТЕРРОР",
+   "style": "plate"
+  }
+ },
+ "9": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДИВЕРСАНТ ПРЯЧЕТСЯ · ЭТИ СВЕТИЛИ",
+   "style": "plate"
+  }
+ },
+ "12": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "СИЛЫ ОТПРАВИЛИ СЕРЬЁЗНЫЕ",
+   "style": "plate"
+  }
+ },
+ "15": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДВА НАПРАВЛЕНИЯ: СЕВЕР И ЮГО-ВОСТОК",
+   "style": "plate"
+  }
+ },
+ "17": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "УЧЕНИЯ «KOALICJA» · 9-22 НОЯБРЯ",
+   "style": "plate"
+  }
+ },
+ "18": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ОКОЛО 2800 ВОЕННОСЛУЖАЩИХ",
+   "style": "plate"
+  }
+ },
+ "19": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "КОМАНДОВАНИЕ · СВЯЗЬ · СНАБЖЕНИЕ · ДРОНЫ",
+   "style": "plate"
+  }
+ },
+ "21": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "БЕЗ АМЕРИКАНСКОЙ ОПОРЫ",
+   "style": "plate"
+  }
+ },
+ "22": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВЕДУТ ФРАНЦИЯ И БРИТАНИЯ",
+   "style": "plate"
+  }
+ },
+ "23": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "НАТО В КУРСЕ — ОПЕРАЦИЯ ОТДЕЛЬНО",
+   "style": "plate"
+  }
+ },
+ "25": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРОВЕРЯЮТ РУКАМИ, А НЕ НА БУМАГЕ",
+   "style": "plate"
+  }
+ },
+ "28": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ОТВЕТНЫЙ ОГОНЬ ПРИ НАПАДЕНИИ",
+   "style": "plate"
+  }
+ },
+ "29": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "РОССИЯ: ПРИСУТСТВИЕ НЕПРИЕМЛЕМО",
+   "style": "plate"
+  }
+ },
+ "31": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "СНАЧАЛА ПЛЮС СОРОК, ПОТОМ СКИДКА ДВАДЦАТЬ",
+   "style": "plate"
+  }
+ },
+ "33": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЗАДАЧИ НАЗВАНЫ ОБОРОНИТЕЛЬНЫМИ",
+   "style": "plate"
+  }
+ },
+ "37": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "«VANTA 24» · ОКОЛО 24 МЕТРОВ · БЕЗ ЭКИПАЖА",
+   "style": "plate"
+  }
+ },
+ "38": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ОХРАНА ПОДВОДНЫХ КАБЕЛЕЙ",
+   "style": "plate"
+  }
+ },
+ "39": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "РАКЕТЫ И ПУШКА ТРИДЦАТЬ МИЛЛИМЕТРОВ",
+   "style": "plate"
+  }
+ },
+ "40": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "НАГРУЗКА ДО 50 ТОНН · СВЫШЕ 60 КМ/Ч",
+   "style": "plate"
+  }
+ },
+ "42": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "СТАЯ ДЕШЁВЫХ ВМЕСТО ОДНОГО ДОРОГОГО",
+   "style": "plate"
+  }
+ },
+ "45": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_045.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "46": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВОДА · ЕДА · АПТЕЧКА · НАЛИЧНЫЕ · РАДИО",
+   "style": "plate"
+  }
+ },
+ "49": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЕВРОПЕЙСКИЙ ДЕНЬ ГОТОВНОСТИ",
+   "style": "plate"
+  }
+ },
+ "50": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРОВЕРКА СЛУЖБ ПРИ МАСШТАБНОМ СБОЕ",
+   "style": "plate"
+  }
+ },
+ "52": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПЕРВЫЕ ТРОЕ СУТОК — САМ",
+   "style": "plate"
+  }
+ },
+ "54": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПОЛЬША — КЛЮЧЕВОЕ ЗВЕНО СНАБЖЕНИЯ",
+   "style": "plate"
+  }
+ },
+ "57": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПОВЕСТКА ДОГОНИТ И ЗА ГРАНИЦЕЙ",
+   "style": "plate"
+  }
+ },
+ "59": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "НЕ ДАЛЬШЕ ДВЕНАДЦАТИ ЧАСОВ ОТ ДОМА",
+   "style": "plate"
+  }
+ },
+ "60": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВСТУПИТ В СИЛУ ПОСЛЕ ВСЕХ ПРОЦЕДУР",
+   "style": "plate"
+  }
+ },
+ "63": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЗАКОНЫ НА СЛУЧАЙ ВОЙНЫ",
+   "style": "plate"
+  }
+ },
+ "66": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "СИЛЫ К ГРАНИЦЕ И СЦЕНАРИЙ УКРАИНЫ",
+   "style": "plate"
+  }
+ },
+ "67": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДРОНЫ И КРИТИЧЕСКАЯ ИНФРАСТРУКТУРА",
+   "style": "plate"
+  }
+ },
+ "70": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ОДИН ГОЛОС — ЗАЯВЛЕНИЕ, ДЕСЯТЬ — ВОЛНА",
+   "style": "plate"
+  }
+ },
+ "74": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "В СПОКОЙНОЕ ВРЕМЯ — ПРОСТО ГРИБНИКИ",
+   "style": "plate"
+  }
+ },
+ "75": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "СЕЙЧАС — СРАЗУ В СИСТЕМУ КОМАНД",
+   "style": "plate"
+  }
+ },
+ "78": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ОБЕ СТОРОНЫ СЧИТАЮТ СЕБЯ ОБОРОНЯЮЩИМИСЯ",
+   "style": "plate"
+  }
+ },
+ "81": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "РАДИ МИРА — ПРАВИЛА ОТКРЫТИЯ ОГНЯ",
+   "style": "plate"
+  }
+ },
+ "82": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "РАДИ МИРА — ЗАПАСЫ ВОДЫ И БАТАРЕЕК",
+   "style": "plate"
+  }
+ },
+ "84": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_084.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "86": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВООРУЖЕНО · ОБУЧЕНО · ЖДЁТ СИГНАЛА",
+   "style": "plate"
+  }
+ },
+ "6": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_006.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "11": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_011.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "16": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_016.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "20": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_020.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "27": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_027.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "36": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_036.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "48": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_048.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "56": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_056.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "62": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_062.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "71": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_071.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "77": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_077.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ }
+}

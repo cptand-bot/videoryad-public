@@ -1,0 +1,121 @@
+{
+ "scenes": [
+  {
+   "id": 6,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "Дональд Туск, который предупреждал о диверсиях",
+   "source": "local_library",
+   "source_query": "ПОЛИТИКА/ПОЛЬША/ТУСК",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "фонарь как предмет спора",
+   "source": "press_photo",
+   "source_query": "мощный ручной фонарь светит в темноте, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "рубеж, который усиливают",
+   "source": "press_photo",
+   "source_query": "пограничное заграждение из колючей проволоки, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "связь, которую проверяют руками",
+   "source": "press_photo",
+   "source_query": "военная рация и планшет в руках военного, реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "кто именно пойдёт в контингент",
+   "source": "press_photo",
+   "source_query": "британские военные на построении в береге, реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 36,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "что именно охраняют в море",
+   "source": "press_photo",
+   "source_query": "подводный кабель связи на морском дне, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "из чего состоит набор на 72 часа",
+   "source": "press_photo",
+   "source_query": "полка магазина с фонарями и батарейками, Европа, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "ещё один пункт того же набора",
+   "source": "press_photo",
+   "source_query": "открытая аптечка первой помощи, реальное фото, без людей",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "как выглядит молдавский проект на бумаге",
+   "source": "press_photo",
+   "source_query": "вывеска министерства обороны Молдовы в Кишинёве, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 62,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "чем смотрят за границей",
+   "source": "press_photo",
+   "source_query": "вышка наблюдения на пограничном рубеже, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 71,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "новая платформа у берега",
+   "source": "press_photo",
+   "source_query": "беспилотный морской катер у пирса, реальное фото",
+   "overlays": []
+  },
+  {
+   "id": 77,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "чья техника заходит после перемирия",
+   "source": "press_photo",
+   "source_query": "французский бронетранспортёр на дороге, реальное фото 2026",
+   "overlays": []
+  },
+  {
+   "id": 84,
+   "text": "",
+   "duration_sec": 6.0,
+   "visual_prompt": "дрон, который всё начинает",
+   "source": "press_photo",
+   "source_query": "квадрокоптер в ночном небе, реальное фото",
+   "overlays": []
+  }
+ ]
+}
