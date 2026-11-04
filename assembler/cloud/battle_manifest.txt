@@ -116,4 +116,5 @@ template/sfx/zatvor.mp3
 template/style_card.py
 template/tg_media.py
 template/voice_note.py
+template/wm_sheet.py
 template/zoom.py
