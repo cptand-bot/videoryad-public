@@ -2916,7 +2916,21 @@ function rjMic(){{
      Иначе каждая диктовка начинается с неудачной попытки, пользователь теряет
      первые слова и видит мигающие сообщения. Запомнили — идём сразу локально.
      (Edge, 2026-10-16: сервис распознавания недоступен, а API объявлен.) */
-  try{{ if(localStorage.getItem("rjsr_bad") === "1") return rjMicFile(); }}catch(e){{}}
+  /* ФЛАГ «БРАУЗЕРНОЕ РАСПОЗНАВАНИЕ НЕ РАБОТАЕТ» БОЛЬШЕ НЕ ВЕЧНЫЙ (04.11,
+     прямое наблюдение пользователя: «на ПЛАНЕТЕ долгая расшифровка, на
+     5 МИНУТ нормально»). Флаг лежит в localStorage, а он привязан к
+     ORIGIN, то есть к ПОРТУ дашборда. Одна осечка сервиса на каком-то
+     порту — и на ЭТОМ порту навсегда включался медленный локальный
+     whisper, а на соседнем всё оставалось быстрым. Отсюда и разница между
+     каналами: у них просто разные порты. Теперь флаг живёт ЧАС. */
+  try{{
+    const _bad = localStorage.getItem("rjsr_bad");
+    if(_bad){{
+      const _age = Date.now() - (parseInt(_bad, 10) || 0);
+      if(_age < 3600000) return rjMicFile();
+      localStorage.removeItem("rjsr_bad");
+    }}
+  }}catch(e){{}}
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR) return rjMicFile();        /* нет API — пишем файл и шлём whisper */
   const btn = document.getElementById("rjmic");
@@ -2951,7 +2965,7 @@ function rjMic(){{
       st.textContent = "микрофон запрещён в браузере — разреши доступ и повтори";
       return;
     }}
-    try{{ localStorage.setItem("rjsr_bad", "1"); }}catch(e){{}}
+    try{{ localStorage.setItem("rjsr_bad", String(Date.now())); }}catch(e){{}}
     st.textContent = "распознавание браузера недоступно — пишу локально…";
     rjMicFile();
   }};
@@ -2965,7 +2979,7 @@ function rjMic(){{
   }}catch(e){{
     /* бывает, что API объявлен, но стартовать не даёт — не теряем диктовку */
     _rjSR = null;
-    try{{ localStorage.setItem("rjsr_bad", "1"); }}catch(e2){{}}
+    try{{ localStorage.setItem("rjsr_bad", String(Date.now())); }}catch(e2){{}}
     st.textContent = "распознавание браузера не стартовало — пишу локально…";
     return rjMicFile();
   }}
