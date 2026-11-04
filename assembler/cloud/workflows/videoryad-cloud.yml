@@ -1443,8 +1443,37 @@ jobs:
           done
           echo "attaching: ${assets[*]}"
           notes="$proj/_cloud/QA-report.md"; [ -f "$notes" ] || { echo "build incomplete" > /tmp/n.md; notes=/tmp/n.md; }
+          # РЕЛИЗ СОЗДАЁМ ПУСТЫМ, АССЕТЫ ЛЬЁМ ПО ОДНОМУ С ПОВТОРАМИ
+          # (04.11, улов `usuario-eb`). Было: `delete` + `create` со всеми
+          # ассетами одной командой — и одна сетевая осечка на выгрузке
+          # (`HTTP 404` на `overlays.json`) снесла ВЕСЬ результат: старого
+          # релиза уже нет, новый не создан, шесть зелёных джобов фетча
+          # потеряны целиком, `gh release view` отвечает «not found».
+          # Снаружи это читается как «упала сборка», хотя упала ДОСТАВКА
+          # готовой работы. Теперь: релиз появляется сразу, каждый ассет
+          # грузится отдельно и трижды, падение шага — только если не доехал
+          # КРИТИЧЕСКИЙ ассет (готовое видео или архив проекта).
           gh release delete "$NAME" -y --cleanup-tag 2>/dev/null || true
-          gh release create "$NAME" "${assets[@]}" --title "$NAME" --notes-file "$notes"
+          gh release create "$NAME" --title "$NAME" --notes-file "$notes"
+          _lost=()
+          for f in "${assets[@]}"; do
+            for _try in 1 2 3; do
+              gh release upload "$NAME" "$f" --clobber && break
+              echo "::warning::ассет не загрузился ($f), попытка $_try из 3"
+              sleep 5
+              [ "$_try" = 3 ] && _lost+=("$f")
+            done
+          done
+          if [ ${#_lost[@]} -gt 0 ]; then
+            echo "::warning::не доехали ассеты: ${_lost[*]}"
+            for f in "${_lost[@]}"; do
+              case "$f" in
+                *ВИДЕОРЯД.mp4|*-project.tgz)
+                  echo "::error::КРИТИЧЕСКИЙ ассет не доехал: $f"; exit 1;;
+              esac
+            done
+            echo "некритичные ассеты потеряны, релиз на месте — забирай"
+          fi
 
       - name: Clear the queue slot
         if: success() || failure()

@@ -392,10 +392,27 @@ def step_overlays(proj, scenes_json):
         rebuilt_clean = not os.path.isfile(os.path.join(clips, f"clip_{int(k):03d}.orig.mp4"))
         if prev.get(k) != fp(k) or rebuilt_clean:
             stale.append(int(k))
-    if not stale and prev:
+    # СУБТИТРЫ ТЕРЯЛИСЬ ВМЕСТЕ С ПРОПУСКОМ ШАГА (04.11, улов `usuario-af`,
+    # готовый файл на 476 МБ приехал БЕЗ НИХ и молча). С 03.11 субтитры жжёт
+    # `build_overlays.py` последним слоем — а весь шаг пропускается, когда
+    # отпечатки всплывашек совпали (у него они приехали готовыми с матрицы).
+    # Выключатель субтитров в проекте есть, `captions.ass` уехал в облако, в
+    # логе ни строки — класс «успех значит ничего не сделано».
+    # Поэтому: субтитры включены, а отметки о вжигании нет — шаг НЕ
+    # пропускаем и гоним по ВСЕМ сценам (вжигание идёт и на сценах без
+    # всплывашек, вторым циклом по шардам `.caps`).
+    _capdir = os.environ.get("CAPTIONS_DIR", "")
+    _capmark = os.path.join(clips, f".capped.{shard_i}.json" if shard_n > 1
+                            else ".capped.json")
+    _need_caps = bool(_capdir) and os.path.isdir(_capdir) \
+        and not os.path.isfile(_capmark)
+    if _need_caps:
+        log("субтитры ВКЛЮЧЕНЫ и ещё не вожжены — шаг всплывашек не пропускаю")
+    if not stale and prev and not _need_caps:
         log("всплывашки: ничего не изменилось — пропускаю")
     else:
-        target = stale if prev else [int(k) for k in ids]
+        target = ([int(k) for k in ids] if (_need_caps or not prev)
+                  else stale)
         log(f"всплывашки: рендерю {len(target)} шт {target if prev else '(все)'}")
         # limit build_overlays to the target scenes via a temp overlays.json
         sub = {kk: ov[kk] for kk in ov if not str(kk).isdigit() or int(kk) in target}
@@ -407,6 +424,12 @@ def step_overlays(proj, scenes_json):
         _parallel([(proj, base, dict(os.environ, WORKER_COUNT=str(n), WORKER_ID=str(w)))
                    for w in range(n)], "build_overlays")
         os.remove(tmp)
+        if _capdir and os.path.isdir(_capdir):
+            json.dump({"вожжено": sorted(int(k) for k in ids),
+                       "каталог": _capdir},
+                      open(_capmark, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            log("субтитры: вжигание отмечено в %s" % os.path.basename(_capmark))
     json.dump({k: fp(k) for k in ids}, open(prev_path, "w"), ensure_ascii=False, indent=1)
 
 
