@@ -699,6 +699,14 @@ jobs:
           else
             echo "эффекты: выключены (fx.json в проекте нет)"
           fi
+          # ЭФФЕКТ №3 «ВРЕЗКА + КРУГИ» (04.11). Врезки лежат в $proj/insets/,
+          # build_clips_1080.py ищет их ОТ FX_DIR — значит путь нужен и тогда,
+          # когда fx.json в проекте нет (световые эффекты и врезка включаются
+          # независимо друг от друга).
+          if [ -d "$proj/insets" ]; then
+            fxd="$PWD/$proj"
+            echo "эффект-врезка: врезок в проекте $(ls "$proj/insets" | wc -l)"
+          fi
           # CAPTIONS_DIR клипам БОЛЬШЕ НЕ ОТДАЁМ (03.11): субтитры жжёт
           # build_overlays.py последним слоем, поверх всплывашек.
           FX_DIR="$fxd" BUILD_APPROVED=1 WORKER_COUNT=12 WORKER_ID=${{ matrix.shard }} \

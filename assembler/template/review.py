@@ -1266,6 +1266,8 @@ figcaption{padding:10px 13px 13px}
 .card.marked .note{display:block}
 .ovb{position:absolute;left:8px;bottom:8px;background:#0b3d2eee;color:#8ef0c8;
   padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
+.fxb{position:absolute;left:8px;top:8px;background:#06c7c7ee;color:#04201f;
+  padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700}
 .ovwrap{margin-top:9px;border:1px solid #8a7300;border-radius:8px;background:#221c00;padding:9px}
 .ovwrap.ok{border-color:#1f6b4f;background:#0e1a15}
 .ovhead{font-size:11.5px;color:#ffe27a;font-weight:700;margin-bottom:7px}
@@ -1548,6 +1550,11 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     _photo_active = bool(ov_cur.get("photo")) or (bool(ov_cur) and not _text_active)
     has_ov = _photo_active or _text_active
     ov_badge = (f'<span class="ovb" id="ovb{sid}"{"" if has_ov else " hidden"}>🖼 всплывашка</span>')
+    # ЭФФЕКТ-ВРЕЗКА ВИДЕН НА ДАШБОРДЕ (04.11). Он ставится ДО сборки, а
+    # смотрит пользователь дашборд — без значка «эффект есть» было бы не
+    # отличить от «забыли поставить», и спорить пришлось бы по готовому файлу.
+    fx_badge = ('<span class="fxb">🎯 ЭФФЕКТ-ВРЕЗКА</span>'
+                if str(s.get("fx", "")).strip().lower() == "inset" else "")
     if live:
         opts = "".join(f'<option value="{x["name"]}"'
                        f'{" selected" if x["name"] == ov_cur.get("sound") else ""}>{x["label"]}</option>'
@@ -1748,7 +1755,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
 
     card_cls = "card needup" if need_reason else "card"
     return f"""<figure class="{card_cls}" data-id="{sid}">
-  <div class="{thumb_cls}" id="t{sid}">{thumb_inner}{ov_badge}<div class="ovmark" id="ovmark{sid}" hidden><img id="ovmarkimg{sid}" alt=""></div><div class="txtmark" id="txtmark{sid}" hidden><img id="txtmarkimg{sid}" alt=""></div><div class="pvbox" id="pvbox{sid}" hidden></div></div>
+  <div class="{thumb_cls}" id="t{sid}">{thumb_inner}{ov_badge}{fx_badge}<div class="ovmark" id="ovmark{sid}" hidden><img id="ovmarkimg{sid}" alt=""></div><div class="txtmark" id="txtmark{sid}" hidden><img id="txtmarkimg{sid}" alt=""></div><div class="pvbox" id="pvbox{sid}" hidden></div></div>
   <figcaption>
     <div class="meta">СЦЕНА {sid:02d} · {fmt(t)}–{fmt(t + d)} · {d:.1f}с</div>
     <div class="srcq">{_h(srcq)}</div>
@@ -2016,6 +2023,12 @@ poll();
     _parts.append("встало в сцены: <b>%d</b>" % len(_dos))
     if _rej:
         _parts.append("отклонено с причиной: <b>%d</b>" % _rej)
+    # ЭФФЕКТ-ВРЕЗКА ЧИСЛОМ В ШАПКЕ: потолок три его словом, и видно сразу,
+    # сколько стоит и на каких сценах.
+    _fx = [s.get("id") for s in scenes
+           if str(s.get("fx", "")).strip().lower() == "inset"]
+    fx_hdr = ('<span class="sub">· ЭФФЕКТ-ВРЕЗКА: <b>%d из 3</b> (сцены %s)</span>'
+              % (len(_fx), ", ".join(str(i) for i in _fx))) if _fx else ""
     dossier_badge = ('<span class="sub">· ГЕОРАДАР — %s</span>'
                      % " · ".join(_parts)) if (_links or _dos or _rej) else (
         '<span class="sub">· ГЕОРАДАР: записи по теме нет</span>')
@@ -2030,7 +2043,7 @@ poll();
 <header>
   <h1>Предпросмотр видеоряда{' · LIVE' if live else ''}</h1>
   <span class="sub">{project} · {len(scenes)} сцен · {fmt(total)}</span>
-  {dossier_badge}
+  {fx_hdr}{dossier_badge}
   {progress}
   <span class="spacer"></span>
   <span class="sub">На каждой карточке: <b>✏️ Изменить кадр</b> — впиши что поставить ·

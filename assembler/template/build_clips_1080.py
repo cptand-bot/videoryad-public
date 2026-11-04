@@ -70,6 +70,59 @@ W, H, FPS = 1920, 1080, 30
 CARD_SIDS = set()
 
 
+# ЭФФЕКТ №3 «ВРЕЗКА + КРУГИ-РАДАР + ПЛАВНЫЙ ЗУМ» В ШТАТНОЙ СБОРКЕ (04.11).
+# 03.11 пользователь принял эффект словами «шикарно, этот оставляем так, как
+# есть, и в работу его завтра», но инструмент работал ОТДЕЛЬНОЙ командой по
+# готовому кадру — то есть вручную и уже после сборки. Теперь он живёт на
+# этапе clips, где кадр сцены ещё отдельный файл: сцена помечается ключом
+#     "fx": "inset"
+# а видео-врезка лежит в проекте как `insets/scene_NNN.mp4` (кладёт её
+# `template/fx_put.py`, в облако везёт `ship.sh`).
+#
+# ТРИ ЕГО ГРАНИЦЫ ПРОВЕРЯЮТСЯ ЗДЕСЬ, А НЕ ТОЛЬКО В ПРИЁМКЕ:
+#   * канал ТОЛЬКО ПЛАНЕТА (берётся из поля `channel` самого scenes.json);
+#   * НЕ БОЛЬШЕ ТРЁХ сцен на ролик — лишние идут обычным кадром;
+#   * глитча нет и не добавляем, круги — независимый слой.
+# Ограничения считаются по ПОЛНОМУ списку сцен, а не по шарду: каждый из 12
+# раннеров читает один и тот же scenes.json, поэтому «первые три» у всех
+# совпадают и ролик не меняет вид от прогона к прогону.
+#
+# ОТКАЗ ЭФФЕКТА НЕ ВАЛИТ СЦЕНУ: нет файла врезки, не тот канал, упал ffmpeg —
+# печатается причина и кадр собирается ОБЫЧНЫМ путём. Пустых сцен из-за
+# украшения не бывает.
+HERE = os.path.dirname(os.path.abspath(__file__))
+INSET_SIDS = set()          # сцены, которым эффект РАЗРЕШЁН (уже с потолком)
+CHANNEL = ""
+
+
+def _inset_src(sid):
+    return os.path.join(_fx_dir(), "insets", f"scene_{sid:03d}.mp4")
+
+
+def build_inset_clip(ffmpeg, src, out_path, duration, sid):
+    """Кадр сцены + врезка + круги. True — собрал, False — зови обычный путь."""
+    inset = _inset_src(sid)
+    if not os.path.isfile(inset):
+        print(f"  !! эффект-врезка: нет файла {inset} — собираю обычный кадр",
+              flush=True)
+        return False
+    cmd = [sys.executable, os.path.join(HERE, "fx_inset.py"), src, inset,
+           out_path, "--seconds", f"{float(duration):.3f}",
+           "--channel", CHANNEL or "ПЛАНЕТА", "--ffmpeg", ffmpeg]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    ok = r.returncode == 0 and os.path.isfile(out_path) and os.path.getsize(out_path) > 0
+    if ok:
+        print(f"  эффект-врезка ПОСТАВЛЕН ({os.path.getsize(out_path)//1024} КБ)",
+              flush=True)
+        return True
+    if os.path.isfile(out_path):
+        os.remove(out_path)
+    print("  !! эффект-врезка НЕ ВСТАЛ, собираю обычный кадр: "
+          + ((r.stdout or "") + (r.stderr or ""))[-400:].replace("\n", " "),
+          flush=True)
+    return False
+
+
 def find_source(images_dir, sid):
     for ext in ("mp4", "mov", "png", "jpg", "jpeg", "webp"):
         p = os.path.join(images_dir, f"scene_{sid:03d}.{ext}")
@@ -445,6 +498,26 @@ def main():
         print("карточки арсенала (без эффектов): "
               + ", ".join(str(i) for i in sorted(CARD_SIDS)))
 
+    # --- эффект №3: кому он разрешён в этом ролике ---
+    global CHANNEL
+    CHANNEL = str(data.get("channel", "") or "")
+    _want = sorted(sc["id"] for sc in data["scenes"]
+                   if str(sc.get("fx", "")).strip().lower() == "inset")
+    if _want:
+        _plan = CHANNEL.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
+        if not _plan:
+            print("эффект-врезка: канал «%s» — НЕ ставлю (его слово 03.11: "
+                  "только ПЛАНЕТА). Сцены %s пойдут обычным кадром"
+                  % (CHANNEL, ", ".join(str(i) for i in _want)))
+        else:
+            INSET_SIDS.update(_want[:3])
+            print("эффект-врезка: сцены " +
+                  ", ".join(str(i) for i in sorted(INSET_SIDS)) +
+                  " (потолок три на ролик)")
+            if len(_want) > 3:
+                print("  сверх потолка и БЕЗ эффекта: "
+                      + ", ".join(str(i) for i in _want[3:]))
+
     _wc = int(os.environ.get("WORKER_COUNT", "1"))
     _wk = int(os.environ.get("WORKER_ID", "0"))
     concat_lines = []
@@ -460,7 +533,10 @@ def main():
                 continue
             print(f"[{sid:03d}] {'video' if ext=='mp4' else 'image'} -> {duration}s")
             try:
-                if ext == "mp4":
+                if sid in INSET_SIDS and build_inset_clip(
+                        ffmpeg, src, out_path, duration, sid):
+                    pass
+                elif ext == "mp4":
                     build_video_clip(ffmpeg, ffprobe, src, out_path, duration)
                 else:
                     build_image_clip(ffmpeg, src, out_path, duration, ffprobe)

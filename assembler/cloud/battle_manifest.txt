@@ -90,6 +90,7 @@ template/fx/particles.mp4
 template/fx/preset-news-max.json
 template/fx/preset-news.json
 template/fx_inset.py
+template/fx_put.py
 template/fx_rings.py
 template/geo_links.py
 template/grab_stream_frame.py

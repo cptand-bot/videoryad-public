@@ -327,6 +327,41 @@ def main():
                        % (scenes[i].get("id"), _view,
                           ", ".join(sorted(_known))))
 
+    # ЭФФЕКТ №3 «ВРЕЗКА + КРУГИ» — ЕГО ТРИ ГРАНИЦЫ ПРОВЕРЯЮТСЯ ЗДЕСЬ (04.11).
+    # Ключ сцены `"fx": "inset"` ставит `template/fx_put.py`; он же проверяет
+    # границы при постановке. Приёмка повторяет проверку, потому что файл сцен
+    # приходит от внешнего агента и правится руками: опечатка в значении или
+    # четвёртый эффект иначе доехали бы до облака, где эффект молча не встанет.
+    _fx_sids = [sc.get("id") for sc in scenes
+                if str(sc.get("fx", "")).strip()]
+    if _fx_sids:
+        _ok_fx = {"inset"}
+        for sc in scenes:
+            v = str(sc.get("fx", "")).strip().lower()
+            if v and v not in _ok_fx:
+                bad.append("сцена %s: эффекта «%s» не существует — сборка знает "
+                           "только %s" % (sc.get("id"), sc.get("fx"),
+                                          ", ".join(sorted(_ok_fx))))
+            if v and str(sc.get("source", "")).startswith(CARD_PREFIX):
+                bad.append("сцена %s: эффект на рисованную карточку (%s) не "
+                           "кладём" % (sc.get("id"), sc.get("source")))
+        if a.channel.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
+            bad.append("эффект-врезка стоит на сценах %s, а канал «%s» — "
+                       "эффект ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
+                       % (", ".join(str(i) for i in _fx_sids), a.channel))
+        if len(_fx_sids) > 3:
+            bad.append("сцен с эффектом-врезкой %d (%s) — потолок ТРИ на ролик "
+                       "его словом" % (len(_fx_sids),
+                                       ", ".join(str(i) for i in _fx_sids)))
+        _ins = os.path.join(os.path.dirname(os.path.abspath(a.src)), "insets")
+        _nofile = [i for i in _fx_sids
+                   if not os.path.isfile(os.path.join(_ins, "scene_%03d.mp4" % i))]
+        if _nofile:
+            warn.append("эффект-врезка без файла врезки (сцены %s): положи её "
+                        "`fx_put.py <scenes.json> <sid> <видео>`, иначе сцена "
+                        "соберётся обычным кадром"
+                        % ", ".join(str(i) for i in _nofile))
+
     # ДВЕ СЕМЬИ, КАЖДАЯ СО СВОЕЙ НОРМОЙ (2026-10-29, как в `card_put.py`).
     # Единая норма «одна на 15» писалась под ТЕКСТОВЫЕ карточки и под запрет
     # пользователя «не превращать в слайд-шоу»; изобразительные виды под неё
