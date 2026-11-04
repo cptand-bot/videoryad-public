@@ -44,7 +44,14 @@ def _media_library_dir():
 LIB = _media_library_dir()
 print("медиатека:", LIB, "" if os.path.isdir(LIB) else "— ПАПКИ НЕТ", flush=True)
 tag = sys.argv[1]
-prefix = sys.argv[2] if len(sys.argv) > 2 else "fs_" + os.path.basename(tag)
+# ИМЯ ЛИСТА — ПО ПОЛНОМУ ПУТИ ПАПКИ, А НЕ ПО ПОСЛЕДНЕМУ СЕГМЕНТУ (04.11,
+# улов `usuario-31`). `ПОЛИТИКА/ЗЕЛЕНСКИЙ` и `БАЗА/ПЕРСОНЫ/ЗЕЛЕНСКИЙ` —
+# РАЗНЫЕ папки с одинаковым хвостом, и лист второй молча затирал лист
+# первой. Тот же класс, что чужая пометка осмотра по короткому имени,
+# починенная этим же утром. Берём два последних сегмента: имя остаётся
+# коротким, а столкновение исчезает.
+_tp = [x for x in str(tag).replace("\\", "/").strip("/").split("/") if x]
+prefix = sys.argv[2] if len(sys.argv) > 2 else "fs_" + "_".join(_tp[-2:])
 outdir = "folder_sheets"
 os.makedirs(outdir, exist_ok=True)
 
