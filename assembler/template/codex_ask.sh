@@ -206,13 +206,49 @@ if [ -n "$json_out" ]; then
   python3 - "$out" "$json_out" <<'PYJ' || true
 import json, re, sys
 raw = open(sys.argv[1], encoding="utf-8", errors="replace").read()
-m = re.search(r"```(?:json)?\s*(.+?)```", raw, re.S) or re.search(r"(\{.*\})", raw, re.S)
-if not m:
-    sys.exit("в ответе нет JSON — класть нечего, смотри текст ответа")
-try:
-    data = json.loads(m.group(1))
-except ValueError as e:
-    sys.exit("JSON в ответе битый: %s" % e)
+
+
+def _pick(txt):
+    """Самый большой РАЗБИРАЕМЫЙ объект со списком — без опоры на ```json.
+
+    04.11, улов `usuario-02`: агент отдал JSON БЕЗ фенса, а в сыром логе
+    шесть вхождений ```json из ЭХА ЗАДАНИЯ («верни одним блоком ```json»).
+    Парсер цеплялся за эхо и падал «Expecting value: line 1 column 1», хотя
+    ответ в файле был целым — 87 сцен. Поэтому фенс теперь лишь подсказка:
+    если по нему не разобралось, идём по всем позициям `{` сырым декодером
+    и берём самый большой объект, в котором есть непустой список.
+    """
+    best = None
+    dec = json.JSONDecoder()
+    for i, ch in enumerate(txt):
+        if ch != "{":
+            continue
+        try:
+            obj, _ = dec.raw_decode(txt[i:])
+        except ValueError:
+            continue
+        if not isinstance(obj, dict):
+            continue
+        for k in ("scenes", "sheets", "items", "picks"):
+            v = obj.get(k)
+            if isinstance(v, list) and v:
+                if best is None or len(v) > best[1]:
+                    best = (obj, len(v))
+                break
+    return best[0] if best else None
+
+
+data = None
+m = re.search(r"```(?:json)?\s*(.+?)```", raw, re.S)
+if m:
+    try:
+        data = json.loads(m.group(1))
+    except ValueError:
+        data = None
+if data is None:
+    data = _pick(raw)
+if data is None:
+    sys.exit("в ответе нет разбираемого JSON со списком — смотри текст ответа")
 # КЛЮЧ ОТВЕТА ЗАВИСИТ ОТ ЗАДАНИЯ (28.10). Раньше здесь требовался ровно
 # `scenes` — и ответ на любое ДРУГОЕ задание молча не сохранялся: отбор
 # кадров в базу возвращает `sheets`, и 7 разобранных листов едва не уехали
