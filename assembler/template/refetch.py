@@ -1452,6 +1452,23 @@ def _warn_banned_in_build():
             _log = json.load(open(_bp, encoding="utf-8"))
         except (OSError, ValueError):
             _log = {}
+        # СЦЕНЫ-КАРТОЧКИ ПРОПУСКАЕМ (04.11, улов `usuario-af`). До прогона
+        # `cards_cloud.py` облако кладёт всем сценам `card:*` ОДНУ И ТУ ЖЕ
+        # заглушку ~34 КБ. Кто-то её однажды забанил — и «ЗАБАНЕННЫЙ КАДР В
+        # СБОРКЕ» всплывало на каждой карточной сцене каждого ролика.
+        # Карточку рисуем мы сами, бан-лист к ней отношения не имеет.
+        _cards = set()
+        try:
+            import glob as _g
+            for _sp in _g.glob("*.scenes.json"):
+                if "overlays_fetch" in os.path.basename(_sp):
+                    continue
+                _d = json.load(open(_sp, encoding="utf-8"))
+                for _sc in (_d.get("scenes") if isinstance(_d, dict) else _d) or []:
+                    if str(_sc.get("source", "")).startswith("card"):
+                        _cards.add(int(_sc.get("id", -1)))
+        except Exception:
+            _cards = set()
         hits = []
         for d in ("images", "overlays"):
             if not os.path.isdir(d):
@@ -1459,6 +1476,9 @@ def _warn_banned_in_build():
             for f in sorted(os.listdir(d)):
                 p = os.path.join(d, f)
                 if not os.path.isfile(p) or f.startswith("."):
+                    continue
+                _m = re.search(r"scene_(\d+)", f)
+                if _m and int(_m.group(1)) in _cards:
                     continue
                 try:
                     h = _md5(p)

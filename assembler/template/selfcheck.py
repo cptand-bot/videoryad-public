@@ -787,10 +787,44 @@ try:
             if not (isinstance(e, dict) and e.get("until")) or e["until"] >= _today}
 except (OSError, ValueError):
     _ban_raw, _ban = {}, set()
-if _ban:
+# СЦЕНЫ-КАРТОЧКИ ИЗ СВЕРКИ ИСКЛЮЧЕНЫ (04.11, улов `usuario-af`). Облако
+# кладёт всем сценам `card:*` ОДНУ И ТУ ЖЕ заглушку ~34 КБ до прогона
+# `cards_cloud.py`. Кто-то её однажды забанил — и предупреждение «забаненный
+# кадр в сборке» стало всплывать на каждой карточной сцене каждого ролика.
+# Это ложная тревога: карточку рисуем мы сами, бан-лист к ней отношения не
+# имеет.
+_card_sids = {int(s["id"]) for s in scenes
+              if str(s.get("source", "")).startswith("card")}
+
+
+def _sid_of(path):
+    import re as _re2
+    m = _re2.search(r"scene_(\d+)", os.path.basename(path))
+    return int(m.group(1)) if m else -1
+
+
+# УБРАННОЕ ИЗ БАЗЫ ПО КЛЕЙМУ АПСКЕЙЛЕРА — ТОТ ЖЕ ПОСЛЕДНИЙ РУБЕЖ (04.11,
+# предложение `usuario-af`, подтверждённое живым случаем в тот же час).
+# Кадры с замощённым «Magnific» убираются из базы в `_БРАК-апскейлер`, но
+# вкладка, зафетчившая кадр ДО уборки, уже держит его у себя и узнает об
+# этом только от пользователя. Сверка по md5 стоит секунды и ловит то, чего
+# не видно на контактном листе. Живой случай: `ЛЮДИ-ОФИСЕ-МОНИТОРАМИ__05`
+# стоял в сцене 44 готового набора.
+_wm_dir = os.environ.get("VIDEORYAD_UPSCALED_DIR") or "/mnt/d/media-library/_БРАК-апскейлер"
+_wm = {}
+try:
+    for _f in sorted(glob.glob(os.path.join(_wm_dir, "*"))):
+        if os.path.isfile(_f):
+            _wm[hashlib.md5(open(_f, "rb").read()).hexdigest()] = os.path.basename(_f)
+except OSError:
+    _wm = {}
+
+if _ban or _wm:
     _checked = 0
     for _p in sorted(glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*")):
         if _p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg") + TMP_SUFFIX):
+            continue
+        if _sid_of(_p) in _card_sids:
             continue
         try:
             _h = hashlib.md5(open(_p, "rb").read()).hexdigest()
@@ -802,7 +836,14 @@ if _ban:
             FAIL.append(f"ЗАБАНЕННЫЙ КАДР В СБОРКЕ: {_p} (md5 {_h[:10]}) — "
                         f"бан от {(_ban_raw.get(_h) or {}).get('date','?')}: {_why or 'без причины'}. "
                         f"Заменить до сборки.")
-    print(f"[selfcheck] сверка с бан-листом: {_checked} файлов против {len(_ban)} активных банов")
+        if _h in _wm:
+            FAIL.append(f"КАДР С КЛЕЙМОМ АПСКЕЙЛЕРА В СБОРКЕ: {_p} — это "
+                        f"{_wm[_h]}, убранный из базы. На контактном листе "
+                        f"клеймо не видно, в готовом файле видно. Заменить "
+                        f"рефетчем из той же папки.")
+    print(f"[selfcheck] сверка с бан-листом: {_checked} файлов против "
+          f"{len(_ban)} активных банов и {len(_wm)} убранных по клейму"
+          + (f" (сцены-карточки пропущены: {len(_card_sids)})" if _card_sids else ""))
 
 # 6. сцена 1 = видео — БЫЛО hard FAIL, РАЗЖАЛОВАНО В WARN (user, 2026-10-08,
 # зло: "исключаем из правила первый кадр видео... топчетесь на одном месте и
