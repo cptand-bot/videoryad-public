@@ -91,6 +91,34 @@ def used_strings(paths):
             for k in ("file", "url", "asset", "path"):
                 if s.get(k):
                     blob.append(str(s[k]))
+            # ВСПЛЫВАШКИ ВНУТРИ СЦЕНЫ ТОЖЕ СЧИТАЮТСЯ (04.11, улов `usuario-af`
+            # на «Газе»). Докстрока обещала «сценарий И ВСПЛЫВАШКИ», а
+            # сканировался только уровень сцены — и два файла досье,
+            # поставленные всплывашками в `scenes[].overlays` (формат из
+            # задания раскадровки), гейт объявил «лежат без дела» при обоих
+            # ПОСТАВЛЕННЫХ. Вкладка обходила переносом в
+            # `overlays_fetch.scenes.json`. Класс тот же, что «поле в JSON ≠
+            # файл, на который оно ссылается»: проверка смотрела не туда, где
+            # лежит ответ.
+            ovs = s.get("overlays")
+            if isinstance(ovs, dict):
+                ovs = [ovs]
+            if isinstance(ovs, (list, tuple)):
+                for ov in ovs:
+                    if isinstance(ov, str):
+                        blob.append(ov)
+                        continue
+                    if not isinstance(ov, dict):
+                        continue
+                    for k in ("photo", "file", "url", "asset", "path", "src",
+                              "image", "query", "source_query"):
+                        if ov.get(k):
+                            blob.append(str(ov[k]))
+                    _t = ov.get("text")
+                    if isinstance(_t, dict):
+                        for k in ("photo", "file", "url", "asset", "path"):
+                            if _t.get(k):
+                                blob.append(str(_t[k]))
             stats["total"] += 1
             if src == "direct_url":
                 stats["direct_url"] += 1
