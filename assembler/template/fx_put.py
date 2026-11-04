@@ -34,6 +34,7 @@ GitHub незачем (а тот рубит файлы >100 МБ). Жмём то
 длиннее сцены, шире 1280 или тяжелее 8 МБ; иначе файл просто копируется.
 """
 import argparse
+import glob
 import json
 import os
 import shutil
@@ -68,8 +69,12 @@ def _probe(ffprobe, src):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("scenes")
-    ap.add_argument("sid", type=int)
+    ap.add_argument("sid", type=int, nargs="?", default=None)
     ap.add_argument("video", nargs="?", default="")
+    ap.add_argument("--auto", action="store_true",
+                    help="расставить три перехода по ролику самому (ПЛАНЕТА)")
+    ap.add_argument("--images", default="",
+                    help="папка кадров; по умолчанию images/ рядом со сценами")
     ap.add_argument("--kind", default="", choices=("",) + KINDS,
                     help="вид эффекта; по умолчанию inset, если дано видео")
     ap.add_argument("--off", action="store_true", help="снять эффект со сцены")
@@ -77,6 +82,8 @@ def main():
     a = ap.parse_args()
 
     kind = a.kind or ("inset" if a.video else "")
+    if a.auto:
+        kind = kind or "auto"
     if not a.off and not kind:
         return _die("скажи, какой эффект: --kind inset|mosaic|panels|wipe "
                     "(для inset дай ещё путь к видео-врезке)")
@@ -98,6 +105,12 @@ def main():
     if not a.off and chan.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
         return _die("канал «%s» — эффект ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
                     % (chan or "не указан в scenes.json"))
+
+    if a.auto:
+        return _auto(a, data, scenes)
+    if a.sid is None:
+        return _die("скажи номер сцены — или поставь --auto, и я расставлю "
+                    "три перехода по ролику сам")
 
     sc = next((s for s in scenes if int(s.get("id", -1)) == a.sid), None)
     if sc is None:
@@ -193,6 +206,101 @@ def main():
           % (len(have), FX_MAX, ", ".join(str(i) for i in have)))
     print("дальше ничего не делать: ship.sh везёт insets/ сам, "
           "клип соберёт шаг clips")
+    return 0
+
+
+def _auto(a, data, scenes):
+    """Расставить три перехода по ролику — его слово 04.11: «поставь эти
+    эффекты на ролики, это на канал ПЛАНЕТА, и не больше 3 на ролик».
+
+    Почему это отдельный режим, а не памятка вкладке: вкладка забудет, а
+    забытый эффект виден только в готовом файле, когда правок уже не бывает.
+    Правило «инструмент должен работать сам».
+
+    КОГО БЕРЁМ: сцену-фотографию длиннее 2,5 с, у которой ПРЕДЫДУЩАЯ сцена
+    тоже фотография (переход уезжает с её кадра), не первую в ролике, не
+    рисованную карточку. Три штуки, разнесённые по ролику примерно на
+    четверти, и три РАЗНЫХ вида — чтобы не читалось как один приём.
+    Уже стоящие вручную эффекты (в том числе врезки) считаются и место
+    занимают: потолок три — на все виды вместе.
+    """
+    proj = os.path.dirname(os.path.abspath(a.scenes))
+    images = a.images or os.path.join(proj, "images")
+    ids = [int(s.get("id", 0)) for s in scenes]
+    first = min(ids) if ids else 0
+    by_id = {int(s.get("id", 0)): s for s in scenes}
+
+    def photo_like(sid):
+        """Фото ли это. Если кадр уже скачан — смотрим ФАЙЛ, а не источник:
+        после фетча это единственная правда (`library_video` мог приехать
+        картинкой и наоборот)."""
+        hit = [f for f in glob.glob(os.path.join(images, "scene_%03d.*" % sid))
+               if not f.endswith((".json", ".text.png", ".lock", ".ovthumb.jpg"))]
+        if hit:
+            return not any(h.lower().endswith((".mp4", ".mov", ".webm", ".mkv"))
+                           for h in hit)
+        src = str(by_id.get(sid, {}).get("source", ""))
+        return src in ("press_photo", "web_search", "stock_photo", "local_library")
+
+    have = sorted(s["id"] for s in scenes
+                  if str(s.get("fx", "")).strip().lower() in KINDS)
+    free = FX_MAX - len(have)
+    if free <= 0:
+        print("эффекты уже стоят: %s — потолок %d на ролик, добавлять нечего"
+              % (", ".join(str(i) for i in have), FX_MAX))
+        return 0
+
+    ok = []
+    for s in scenes:
+        sid = int(s.get("id", 0))
+        if sid <= first or sid in have:
+            continue
+        if str(s.get("source", "")).startswith("card"):
+            continue
+        if float(s.get("duration_sec") or 0) < 2.5:
+            continue
+        if not photo_like(sid) or not photo_like(sid - 1):
+            continue
+        ok.append(sid)
+    if not ok:
+        print("!! подходящих сцен нет: переходу нужна сцена-фотография "
+              "длиннее 2,5 с, у которой предыдущая сцена тоже фотография",
+              file=sys.stderr)
+        return 1
+
+    # разносим по ролику: цели на четвертях, берём ближайшую подходящую
+    n = len(scenes)
+    targets = [first + int(n * k) for k in (0.25, 0.5, 0.75)][:free]
+    picked = []
+    for t in targets:
+        cand = [x for x in ok if x not in picked]
+        if not cand:
+            break
+        picked.append(min(cand, key=lambda x: (abs(x - t), x)))
+    # соседние эффекты — не ближе четырёх сцен друг к другу и к уже стоящим
+    picked.sort()
+    keep, busy = [], list(have)
+    for x in picked:
+        if all(abs(x - y) >= 4 for y in busy):
+            keep.append(x); busy.append(x)
+    picked = keep
+    if not picked:
+        print("!! подходящие сцены есть, но все ближе четырёх сцен к уже "
+              "стоящим эффектам — ставить не буду", file=sys.stderr)
+        return 1
+
+    kinds = ["mosaic", "panels", "wipe"]
+    for i, sid in enumerate(picked):
+        by_id[sid]["fx"] = kinds[i % len(kinds)]
+    _save(a.scenes, data)
+    allfx = sorted(set(have) | set(picked))
+    for sid in picked:
+        print("сцена %d (%.1f с): переход «%s» ПОСТАВЛЕН"
+              % (sid, float(by_id[sid].get("duration_sec") or 0),
+                 by_id[sid]["fx"]))
+    print("эффектов в ролике: %d из %d (%s)"
+          % (len(allfx), FX_MAX, ", ".join(str(i) for i in allfx)))
+    print("файлов не нужно: кадры прошлых сцен облако возьмёт само")
     return 0
 
 
