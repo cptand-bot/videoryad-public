@@ -46,7 +46,12 @@ MAX_MB = 8.0
 MAX_W = 1280
 KINDS = ("inset", "mosaic", "panels", "wipe")
 TRANS = ("mosaic", "panels", "wipe")
-FX_MAX = 3
+# ПОТОЛОК ТРИ — НА КАЖДЫЙ ВИД, А НЕ НА ВЕСЬ РОЛИК (04.11, его прямое слово
+# после первого боевого ролика: «не больше 3 раз ОДНОГО эффекта на всём
+# протяжении видео… пока этих эффектов мало, пусть будет 3 раза»).
+# Утром правило читали наоборот — как три штуки на все виды вместе, — и он
+# увидел в ролике по одному разу каждого и сказал, что этого мало.
+FX_MAX = 3          # на каждый ВИД
 
 
 def _probe(ffprobe, src):
@@ -134,10 +139,12 @@ def main():
 
     have = sorted(s["id"] for s in scenes
                   if str(s.get("fx", "")).strip().lower() in KINDS)
-    if a.sid not in have and len(have) >= FX_MAX:
-        return _die("на ролике уже %d сцены с эффектами (%s) — потолок его "
-                    "словом на ВСЕ виды вместе, четвёртый не ставлю"
-                    % (FX_MAX, ", ".join(str(i) for i in have)))
+    same = sorted(s["id"] for s in scenes
+                  if str(s.get("fx", "")).strip().lower() == kind)
+    if a.sid not in same and len(same) >= FX_MAX:
+        return _die("вида «%s» на ролике уже %d (сцены %s) — потолок его "
+                    "словом ТРИ НА КАЖДЫЙ ВИД, четвёртый не ставлю"
+                    % (kind, len(same), ", ".join(str(i) for i in same)))
 
     if kind in TRANS:
         # Переход уезжает с кадра ПРОШЛОЙ сцены: на первой сцене ему не с
@@ -159,8 +166,9 @@ def main():
         _save(a.scenes, data)
         have = sorted(set(have) | {a.sid})
         print("сцена %d (%.1f с): переход «%s» ПОСТАВЛЕН" % (a.sid, dur, kind))
-        print("эффектов в ролике: %d из %d (%s)"
-              % (len(have), FX_MAX, ", ".join(str(i) for i in have)))
+        print("вида «%s» в ролике: %d из %d; эффектов всего %d"
+              % (kind, len(set(same) | {a.sid}), FX_MAX,
+                 len(set(have) | {a.sid})))
         print("файлов не нужно: кадр прошлой сцены облако возьмёт само")
         return 0
 
@@ -203,8 +211,8 @@ def main():
     have = sorted(set(have) | {a.sid})
     print("сцена %d (%.1f с): эффект-врезка ПОСТАВЛЕН → %s"
           % (a.sid, dur, os.path.relpath(dst, proj)))
-    print("эффектов в ролике: %d из %d (%s)"
-          % (len(have), FX_MAX, ", ".join(str(i) for i in have)))
+    print("вида «inset» в ролике: %d из %d; эффектов всего %d"
+          % (len(set(same) | {a.sid}), FX_MAX, len(set(have) | {a.sid})))
     print("дальше ничего не делать: ship.sh везёт insets/ сам, "
           "клип соберёт шаг clips")
     return 0
@@ -245,10 +253,19 @@ def _auto(a, data, scenes):
 
     have = sorted(s["id"] for s in scenes
                   if str(s.get("fx", "")).strip().lower() in KINDS)
-    free = FX_MAX - len(have)
+    by_kind = {}
+    for s in scenes:
+        k = str(s.get("fx", "")).strip().lower()
+        if k in KINDS:
+            by_kind.setdefault(k, []).append(int(s.get("id", 0)))
+    # по ТРИ КАЖДОГО перехода (его слово 04.11). Врезку `inset` автомат не
+    # ставит: ей нужна видео-врезка, которую выбирает вкладка глазами.
+    need = []
+    for k in TRANS:
+        need += [k] * max(0, FX_MAX - len(by_kind.get(k, [])))
+    free = len(need)
     if free <= 0:
-        print("эффекты уже стоят: %s — потолок %d на ролик, добавлять нечего"
-              % (", ".join(str(i) for i in have), FX_MAX))
+        print("все переходы уже по %d раза — добавлять нечего" % FX_MAX)
         return 0
 
     ok = []
@@ -278,8 +295,10 @@ def _auto(a, data, scenes):
     # слоёв в `build_clips_1080.py`).
     rnd = random.Random("fx|" + os.path.basename(proj))
     n = len(scenes)
-    targets = [first + int(n * (k + rnd.uniform(-0.07, 0.07)))
-               for k in (0.25, 0.5, 0.75)][:free]
+    # цели равномерно по ролику: free эффектов — free долей
+    step = 1.0 / (free + 1)
+    targets = [first + int(n * (step * (i + 1) + rnd.uniform(-0.03, 0.03)))
+               for i in range(free)]
     picked = []
     for t in targets:
         cand = [x for x in ok if x not in picked]
@@ -298,18 +317,21 @@ def _auto(a, data, scenes):
               "стоящим эффектам — ставить не буду", file=sys.stderr)
         return 1
 
-    kinds = ["mosaic", "panels", "wipe"]
-    rnd.shuffle(kinds)
+    rnd.shuffle(need)
     for i, sid in enumerate(picked):
-        by_id[sid]["fx"] = kinds[i % len(kinds)]
+        by_id[sid]["fx"] = need[i % len(need)]
     _save(a.scenes, data)
     allfx = sorted(set(have) | set(picked))
     for sid in picked:
         print("сцена %d (%.1f с): переход «%s» ПОСТАВЛЕН"
               % (sid, float(by_id[sid].get("duration_sec") or 0),
                  by_id[sid]["fx"]))
-    print("эффектов в ролике: %d из %d (%s)"
-          % (len(allfx), FX_MAX, ", ".join(str(i) for i in allfx)))
+    _cnt = {}
+    for sid in allfx:
+        _cnt[by_id[sid]["fx"]] = _cnt.get(by_id[sid]["fx"], 0) + 1
+    print("эффектов в ролике: %d — %s (норма по %d на КАЖДЫЙ вид)"
+          % (len(allfx),
+             ", ".join("%s %d" % kv for kv in sorted(_cnt.items())), FX_MAX))
     print("файлов не нужно: кадры прошлых сцен облако возьмёт само")
     return 0
 

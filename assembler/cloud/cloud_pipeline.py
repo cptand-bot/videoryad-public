@@ -433,6 +433,58 @@ def step_overlays(proj, scenes_json):
     json.dump({k: fp(k) for k in ids}, open(prev_path, "w"), ensure_ascii=False, indent=1)
 
 
+# ХВОСТ ТИШИНЫ ПОСЛЕ ПОСЛЕДНЕГО СЛОВА (04.11, прямое слово пользователя по
+# первому сданному ролику: «в конце ролика идёт обрыв на последней букве
+# озвучки. Этого не надо допускать. Пускай будет секунда-две ещё пустого
+# места, пустой тишины. В конце звук должен попасть полностью, вся озвучка»).
+# Замер на «Газе»: видео 785,100 с, озвучка 785,254 с — видео КОРОЧЕ голоса
+# на 0,154 с, и последнее слово обрезано. Запаса не было вообще: сумма сцен
+# по приёмке равна длине озвучки, а после последней сцены не добавлялось
+# ничего, поэтому любое округление вниз режет хвост.
+# Лечение: ПОСЛЕДНИЙ клип продлевается замороженным последним кадром на
+# (озвучка − видео) + TAIL_SEC. Картинка остаётся на экране, чёрного кадра
+# нет, звук успевает договорить.
+TAIL_SEC = 2.0
+
+
+def step_tail(proj, scenes_json):
+    clips = os.path.join(proj, "clips")
+    lst = os.path.join(clips, "concat_list.txt")
+    if not os.path.isfile(lst):
+        return
+    rows = [l.strip() for l in open(lst, encoding="utf-8") if l.strip()]
+    if not rows:
+        return
+    last = rows[-1].split("'")[1] if "'" in rows[-1] else rows[-1].split(" ", 1)[-1]
+    if not os.path.isfile(last):
+        log("хвост тишины: последнего клипа нет (%s), пропускаю" % last)
+        return
+    if os.path.isfile(last + ".tailed"):
+        log("хвост тишины: уже добавлен, второй раз не продлеваю")
+        return
+    total = sum(_dur(r.split("'")[1]) for r in rows if "'" in r) or 0.0
+    want = narration_duration(proj, scenes_json)
+    need = max(0.0, want - total) + TAIL_SEC
+    if need <= 0.05:
+        return
+    tmp = last + ".tail.mp4"
+    r = subprocess.run(
+        ["ffmpeg", "-y", "-v", "error", "-i", last,
+         "-vf", "tpad=stop_mode=clone:stop_duration=%.3f" % need,
+         "-c:v", "libx264", "-preset", "veryfast",
+         "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
+         "-pix_fmt", "yuv420p", "-an", tmp],
+        capture_output=True, text=True)
+    if r.returncode != 0 or not os.path.isfile(tmp):
+        log("хвост тишины НЕ добавлен: %s" % r.stderr[-200:])
+        return
+    os.replace(tmp, last)
+    open(last + ".tailed", "w").close()
+    log("хвост тишины: последняя сцена продлена на %.2f с "
+        "(видео было %.2f, озвучка %.2f) — последнее слово не обрежется"
+        % (need, total, want))
+
+
 def step_concat(proj):
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0",
          "-i", os.path.join(proj, "clips", "concat_list.txt"),
@@ -653,10 +705,22 @@ def step_qa(proj, scenes_json):
     final = os.path.join(proj, _final_name(proj, scenes_json))
     if os.path.isfile(final):
         dv, dn = _dur(final), narration_duration(proj, scenes_json)
-        info.append(f"длина: видео {dv:.1f}s / озвучка {dn:.1f}s")
-        if abs(dv - dn) > 1.0:
-            flags.append(f"ДЛИНА НЕ СХОДИТСЯ: video {dv:.1f}s vs narration {dn:.1f}s "
-                         f"(разница {dv-dn:+.2f}s > 1s)")
+        info.append(f"длина: видео {dv:.3f}s / озвучка {dn:.3f}s "
+                    f"(хвост {dv - dn:+.2f}s, норма +{TAIL_SEC:.0f}s)")
+        # ВИДЕО КОРОЧЕ ОЗВУЧКИ — ЭТО БРАК, А НЕ «РАСХОЖДЕНИЕ» (04.11, его
+        # прямое слово по первому сданному ролику: «в конце звук должен
+        # попасть полностью, вся озвучка»). Раньше тут стояло мирное
+        # «длина не сходится» при разнице больше секунды — а обрыв на
+        # последней букве случился при разнице 0,154 с и не был замечен
+        # вообще.
+        if dv < dn:
+            flags.append(f"ОБРЫВ ОЗВУЧКИ: видео {dv:.3f}s КОРОЧЕ голоса "
+                         f"{dn:.3f}s на {dn - dv:.3f}s — последнее слово "
+                         f"обрезано. Хвост тишины не добавился, смотри шаг "
+                         f"concat.")
+        elif dv - dn > TAIL_SEC + 2.0:
+            flags.append(f"ХВОСТ СЛИШКОМ ДЛИННЫЙ: видео на {dv - dn:.1f}s "
+                         f"длиннее озвучки (норма +{TAIL_SEC:.0f}s)")
     else:
         flags.append("финального видео нет на диске")
 
@@ -723,7 +787,7 @@ _DISPATCH = {
     "overlays_fetch": lambda p, s: step_overlays_fetch(p),
     "clips": lambda p, s: step_clips(p, s),
     "overlays": lambda p, s: step_overlays(p, s),
-    "concat": lambda p, s: step_concat(p),
+    "concat": lambda p, s: (step_tail(p, s), step_concat(p))[-1],
     "stretch": lambda p, s: step_stretch(p, s),
     "sfx": lambda p, s: step_sfx(p, s),
     "deliver": lambda p, s: step_deliver(p, s),

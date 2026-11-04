@@ -559,16 +559,24 @@ def main():
                   "ПЛАНЕТА). Сцены %s пойдут обычным кадром"
                   % (CHANNEL, ", ".join(str(i) for i, _ in _want)))
         else:
-            for sid_, kind_ in _want[:FX_MAX]:
+            # ПОТОЛОК СЧИТАЕТСЯ ПО ВИДУ (04.11, его уточнение): три
+            # `mosaic` + три `panels` + три `wipe` + три `inset` законны.
+            _seen = {}
+            for sid_, kind_ in _want:
+                _seen.setdefault(kind_, 0)
+                if _seen[kind_] >= FX_MAX:
+                    continue
+                _seen[kind_] += 1
                 FX_OF[sid_] = kind_
                 if kind_ == "inset":
                     INSET_SIDS.add(sid_)
             print("эффекты: " + ", ".join("сцена %d — %s" % (i, k)
                                           for i, k in sorted(FX_OF.items()))
-                  + " (потолок %d на ролик, на ВСЕ виды вместе)" % FX_MAX)
-            if len(_want) > FX_MAX:
-                print("  сверх потолка и БЕЗ эффекта: "
-                      + ", ".join("%d (%s)" % (i, k) for i, k in _want[FX_MAX:]))
+                  + " (потолок %d на КАЖДЫЙ вид)" % FX_MAX)
+            _extra = [(i, k) for i, k in _want if i not in FX_OF]
+            if _extra:
+                print("  сверх потолка своего вида и БЕЗ эффекта: "
+                      + ", ".join("%d (%s)" % (i, k) for i, k in _extra))
 
     _wc = int(os.environ.get("WORKER_COUNT", "1"))
     _wk = int(os.environ.get("WORKER_ID", "0"))

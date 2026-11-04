@@ -364,11 +364,20 @@ def main():
             bad.append("эффекты стоят на сценах %s, а канал «%s» — "
                        "эффекты ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
                        % (", ".join(str(i) for i in _fx_sids), a.channel))
-        if len(_fx_sids) > 3:
-            bad.append("сцен с эффектами %d (%s) — потолок ТРИ на ролик его "
-                       "словом, на ВСЕ виды вместе"
-                       % (len(_fx_sids),
-                          ", ".join(str(i) for i in _fx_sids)))
+        # ПОТОЛОК ТРИ — НА КАЖДЫЙ ВИД (04.11, его уточнение по первому
+        # боевому ролику: «не больше 3 раз ОДНОГО эффекта»). Утром считали
+        # на все виды вместе, он посмотрел и сказал, что этого мало.
+        _by_kind = {}
+        for sc in scenes:
+            v = str(sc.get("fx", "")).strip().lower()
+            if v in _ok_fx:
+                _by_kind.setdefault(v, []).append(sc.get("id"))
+        for _k, _ids in sorted(_by_kind.items()):
+            if len(_ids) > 3:
+                bad.append("эффекта «%s» в ролике %d (сцены %s) — потолок "
+                           "ТРИ НА КАЖДЫЙ ВИД его словом"
+                           % (_k, len(_ids),
+                              ", ".join(str(i) for i in _ids)))
         _ins = os.path.join(os.path.dirname(os.path.abspath(a.src)), "insets")
         _nofile = [sc.get("id") for sc in scenes
                    if str(sc.get("fx", "")).strip().lower() == "inset"
