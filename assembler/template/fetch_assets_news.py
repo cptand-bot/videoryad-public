@@ -1406,7 +1406,29 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     # the library. Hand-picked per scene during the audit so the exact frame
     # is chosen, not round-robin. Repetition across the video is still capped
     # by the manifest audit (rule 5).
+    # ПИН ТОЧНОГО ФАЙЛА ТОЖЕ ИЩЕТСЯ В СОСЕДНЕЙ БИБЛИОТЕКЕ (04.11, улов
+    # `usuario-75`, пять FAILED-сцен). Откат `media-library-2` →
+    # `media-library` был сделан 29.10 только для ПАПКИ (`tag_dir`), а пин
+    # конкретного файла проверялся ВЫШЕ и до отката не доживал: на 5 МИНУТ
+    # пин «ПОЛИТИКА/ГЕРМАНИЯ/армия германии.mp4» падал со строкой «пин
+    # медиатеки недоступна (в облаке медиатеки нет)», хотя фетч шёл локально
+    # и файл лежал на диске. `check_pins.py` при этом печатал «все пины
+    # чистые», потому что ищет в обеих библиотеках — проверка и фетч
+    # расходились.
+    def _alt_lib(d):
+        b = os.path.basename(os.path.normpath(d))
+        if b.endswith("-2"):
+            return os.path.join(os.path.dirname(os.path.normpath(d)), b[:-2])
+        if b == "media-library":
+            return os.path.normpath(d) + "-2"
+        return ""
+
     direct = os.path.join(media_library_dir, tag_query)
+    if not os.path.isfile(direct):
+        _a = _alt_lib(media_library_dir)
+        if _a and os.path.isfile(os.path.join(_a, tag_query)):
+            direct = os.path.join(_a, tag_query)
+            print("  пин найден в соседней библиотеке: %s" % direct, flush=True)
     if os.path.isfile(direct):
         try:
             h = file_md5(direct)
