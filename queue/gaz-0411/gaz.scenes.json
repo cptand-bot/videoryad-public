@@ -1,0 +1,688 @@
+{
+ "channel": "ПЛАНЕТА",
+ "scenes": [
+  {
+   "id": 1,
+   "text": "",
+   "start_sec": 0.0,
+   "duration_sec": 9.2,
+   "visual_prompt": "Жёлтые газовые трубы и узлы станции крупным планом.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ГАЗОВАЯ-КОМПРЕССОРНАЯ-СТАНЦИЯ",
+   "overlays": []
+  },
+  {
+   "id": 2,
+   "text": "",
+   "start_sec": 9.2,
+   "duration_sec": 10.0,
+   "visual_prompt": "Угольная электростанция в Германии, градирни и дымовые трубы.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/УГОЛЬНАЯ-ЭЛЕКТРОСТАНЦИЯ-ГЕРМАНИИ",
+   "overlays": []
+  },
+  {
+   "id": 3,
+   "text": "",
+   "start_sec": 19.2,
+   "duration_sec": 10.0,
+   "visual_prompt": "Фасад здания Еврокомиссии в Брюсселе с прибывающими автомобилями.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ",
+   "overlays": []
+  },
+  {
+   "id": 4,
+   "text": "",
+   "start_sec": 29.2,
+   "duration_sec": 12.1,
+   "visual_prompt": "Валдис Домбровскис на рабочей встрече Еврокомиссии по энергетике.",
+   "source": "press_photo",
+   "source_query": "Валдис Домбровскис на заседании Еврокомиссии по энергетике, 2026",
+   "overlays": []
+  },
+  {
+   "id": 5,
+   "text": "",
+   "start_sec": 41.3,
+   "duration_sec": 9.4,
+   "visual_prompt": "Александр Новак говорит за синей стойкой, подняв руку.",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/LOo5TN6aCdKzGrvyy2q-vkUdrDkLUrTpkaaX2LDXfzaavUGwwdvRUYN9McGn_F32-q9GmSW42i0TwN1jbjnhx5AJtAlkHxNTUTw9_7VnH6XuocuOZ0SezYxXNZvcoVgfQNTruwz6d_oZTrwpM1sHMIYH1x7tAVDOpu1d1RLyY_QvUDCxnIcTxKgSzFaHoB1Nko_WSZfRYo9xS8DHmfU4mY4Cl6gml9FoKUG6IoljwrAzibGBLXe172x4Ybt_E3K4CfjePUmxm0RAnALUCCtQFXkTtw8RIL6Ufph-dGHmREUxmIGhMG0sBxYSYGwjzLeUyq73oP5eHGldfJ0mvbxUnQ.jpg",
+   "overlays": []
+  },
+  {
+   "id": 6,
+   "text": "",
+   "start_sec": 50.7,
+   "duration_sec": 9.6,
+   "visual_prompt": "Современный нефтеперерабатывающий комплекс с работающим факелом.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/НЕФТЕПЕРЕРАБАТЫВАЮЩИЙ-ЗАВОД-ФАКЕЛ",
+   "overlays": []
+  },
+  {
+   "id": 7,
+   "text": "",
+   "start_sec": 60.3,
+   "duration_sec": 13.0,
+   "visual_prompt": "Цитата о происхождении индийского дизеля на тёмном энергетическом фоне.",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 8,
+   "text": "",
+   "start_sec": 73.3,
+   "duration_sec": 10.0,
+   "visual_prompt": "Причалы Новороссийска с судами и погрузочной инфраструктурой.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ПОРТ-НОВОРОССИЙСКА-ПРИЧАЛЫ",
+   "overlays": []
+  },
+  {
+   "id": 9,
+   "text": "",
+   "start_sec": 83.3,
+   "duration_sec": 9.6,
+   "visual_prompt": "Грузовой состав с контейнерами движется по европейской магистрали.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ГРУЗОВОЙ-ПОЕЗД-КОНТЕЙНЕРАМИ",
+   "overlays": []
+  },
+  {
+   "id": 10,
+   "text": "",
+   "start_sec": 92.9,
+   "duration_sec": 9.4,
+   "visual_prompt": "Краны перемещают контейнеры между судном и штабелями терминала.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/КОНТЕЙНЕРНЫЙ-ТЕРМИНАЛ-ПОРТА",
+   "overlays": []
+  },
+  {
+   "id": 11,
+   "text": "",
+   "start_sec": 102.3,
+   "duration_sec": 9.2,
+   "visual_prompt": "Распределительный центр со стеллажами и движущейся складской техникой.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/СКЛАД-РАСПРЕДЕЛИТЕЛЬНЫЙ-ЦЕНТР-ИЗНУТРИ",
+   "overlays": []
+  },
+  {
+   "id": 12,
+   "text": "",
+   "start_sec": 111.5,
+   "duration_sec": 10.0,
+   "visual_prompt": "Контейнеровоз маневрирует между причалами порта Гамбурга.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ПОРТ-ГАМБУРГА-ВОЗДУХА",
+   "overlays": []
+  },
+  {
+   "id": 13,
+   "text": "",
+   "start_sec": 121.5,
+   "duration_sec": 12.0,
+   "visual_prompt": "Автоцистерны выезжают с европейского нефтеналивного терминала.",
+   "source": "press_photo",
+   "source_query": "Автоцистерны у европейского нефтеналивного терминала, 2026",
+   "overlays": [],
+   "fx": "panels"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "start_sec": 133.5,
+   "duration_sec": 9.2,
+   "visual_prompt": "Американская делегация входит в официальное помещение Госдепартамента.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ГОСДЕП-США",
+   "overlays": []
+  },
+  {
+   "id": 15,
+   "text": "",
+   "start_sec": 142.7,
+   "duration_sec": 12.1,
+   "visual_prompt": "Белый дом со стороны Южного газона как центр американской схемы.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО",
+   "overlays": []
+  },
+  {
+   "id": 16,
+   "text": "",
+   "start_sec": 154.8,
+   "duration_sec": 12.5,
+   "visual_prompt": "Карта маршрута газа из России через Украину в Европу с американским посредником.",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 17,
+   "text": "",
+   "start_sec": 167.3,
+   "duration_sec": 9.2,
+   "visual_prompt": "Ветряные турбины вращаются над Северным морем.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ВЕТРОПАРК-СЕВЕРНОМ-МОРЕ",
+   "overlays": []
+  },
+  {
+   "id": 18,
+   "text": "",
+   "start_sec": 176.5,
+   "duration_sec": 12.5,
+   "visual_prompt": "Подводный газопровод выходит на берег европейского энергетического узла.",
+   "source": "press_photo",
+   "source_query": "Подводный газопровод на береговом участке Европы, 2026",
+   "overlays": []
+  },
+  {
+   "id": 19,
+   "text": "",
+   "start_sec": 189.0,
+   "duration_sec": 12.9,
+   "visual_prompt": "Джаред Кушнер и Стив Уиткофф на официальной встрече.",
+   "source": "web_search",
+   "source_query": "Джаред Кушнер и Стив Уиткофф на официальной встрече, 2026",
+   "overlays": []
+  },
+  {
+   "id": 20,
+   "text": "",
+   "start_sec": 201.9,
+   "duration_sec": 9.2,
+   "visual_prompt": "Рабочий брифинг в Белом доме перед камерами прессы.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БРИФИНГ-ЗАЛ-БЕЛОГО-ДОМА",
+   "overlays": []
+  },
+  {
+   "id": 21,
+   "text": "",
+   "start_sec": 211.1,
+   "duration_sec": 12.4,
+   "visual_prompt": "Буровая установка работает на газовом месторождении США.",
+   "source": "press_photo",
+   "source_query": "Буровая установка на газовом месторождении США, 2026",
+   "overlays": []
+  },
+  {
+   "id": 22,
+   "text": "",
+   "start_sec": 223.5,
+   "duration_sec": 11.4,
+   "visual_prompt": "Офис американской энергетической компании во время деловой встречи.",
+   "source": "press_photo",
+   "source_query": "Офис американской энергетической компании на деловой встрече, 2026",
+   "overlays": []
+  },
+  {
+   "id": 23,
+   "text": "",
+   "start_sec": 234.9,
+   "duration_sec": 9.7,
+   "visual_prompt": "Плотный поток автомобилей движется по американскому хайвею.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/ХАЙВЕЙ-США-ПОТОК",
+   "overlays": []
+  },
+  {
+   "id": 24,
+   "text": "",
+   "start_sec": 244.6,
+   "duration_sec": 11.8,
+   "visual_prompt": "Джаред Кушнер на международном экономическом форуме.",
+   "source": "press_photo",
+   "source_query": "Джаред Кушнер на международном экономическом форуме, 2026",
+   "overlays": []
+  },
+  {
+   "id": 25,
+   "text": "",
+   "start_sec": 256.4,
+   "duration_sec": 12.8,
+   "visual_prompt": "БАЗА/ВЛАСТЬ-РОССИЯ/ЦИСТЕРНЫ-НЕФТЬЮ-ЖЕЛЕЗНОДОРОЖНОЙ",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЦИСТЕРНЫ-НЕФТЬЮ-ЖЕЛЕЗНОДОРОЖНОЙ",
+   "overlays": []
+  },
+  {
+   "id": 26,
+   "text": "",
+   "start_sec": 269.2,
+   "duration_sec": 12.0,
+   "visual_prompt": "БАЗА/ВЛАСТЬ-РОССИЯ/ГАЗОВАЯ-КОМПРЕССОРНАЯ-СТАНЦИЯ",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ГАЗОВАЯ-КОМПРЕССОРНАЯ-СТАНЦИЯ",
+   "overlays": []
+  },
+  {
+   "id": 27,
+   "text": "",
+   "start_sec": 281.2,
+   "duration_sec": 12.8,
+   "visual_prompt": "Полукруг зала Европарламента в Страсбурге, ряды кресел.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ",
+   "overlays": []
+  },
+  {
+   "id": 28,
+   "text": "",
+   "start_sec": 294.0,
+   "duration_sec": 11.7,
+   "visual_prompt": "Плавучий терминал СПГ принимает судно у немецкого причала.",
+   "source": "press_photo",
+   "source_query": "Плавучий терминал СПГ у причала Вильгельмсхафена, 2026",
+   "overlays": []
+  },
+  {
+   "id": 29,
+   "text": "",
+   "start_sec": 305.7,
+   "duration_sec": 12.0,
+   "visual_prompt": "Дональд Трамп отвечает журналистам у правительственного борта.",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП",
+   "overlays": []
+  },
+  {
+   "id": 30,
+   "text": "",
+   "start_sec": 317.7,
+   "duration_sec": 11.4,
+   "visual_prompt": "Марко Рубио выступает в Госдепартаменте по теме Чёрного моря.",
+   "source": "web_search",
+   "source_query": "Марко Рубио говорит у микрофонов на брифинге, крупный план, реальное фото, 2026",
+   "overlays": []
+  },
+  {
+   "id": 31,
+   "text": "",
+   "start_sec": 329.1,
+   "duration_sec": 12.4,
+   "visual_prompt": "Зерновоз идёт по Чёрному морю в направлении Босфора.",
+   "source": "press_photo",
+   "source_query": "Зерновоз в Чёрном море у пролива Босфор, 2026",
+   "overlays": []
+  },
+  {
+   "id": 32,
+   "text": "",
+   "start_sec": 341.5,
+   "duration_sec": 12.0,
+   "visual_prompt": "Гружёный сухогруз проходит пролив в сопровождении буксира.",
+   "source": "press_photo",
+   "source_query": "Сухогруз проходит Босфор в сопровождении буксира, 2026",
+   "overlays": []
+  },
+  {
+   "id": 33,
+   "text": "",
+   "start_sec": 353.5,
+   "duration_sec": 13.1,
+   "visual_prompt": "Балкер загружают зерном у черноморского причала.",
+   "source": "web_search",
+   "source_query": "Балкер загружают зерном в черноморском порту, 2026",
+   "overlays": []
+  },
+  {
+   "id": 34,
+   "text": "",
+   "start_sec": 366.6,
+   "duration_sec": 12.3,
+   "visual_prompt": "Навигационный буй отмечает действующий морской коридор.",
+   "source": "press_photo",
+   "source_query": "Навигационный буй морского коридора в Чёрном море, 2026",
+   "overlays": []
+  },
+  {
+   "id": 35,
+   "text": "",
+   "start_sec": 378.9,
+   "duration_sec": 11.5,
+   "visual_prompt": "Грузовой причал расположен рядом с жилыми кварталами Херсонской области.",
+   "source": "web_search",
+   "source_query": "Грузовой причал рядом с жилыми кварталами Херсонской области, 2026",
+   "overlays": [],
+   "fx": "wipe"
+  },
+  {
+   "id": 36,
+   "text": "",
+   "start_sec": 390.4,
+   "duration_sec": 11.1,
+   "visual_prompt": "Колонна грузовиков с гуманитарной помощью движется к Алёшкам.",
+   "source": "web_search",
+   "source_query": "Колонна гуманитарных грузовиков у Алёшек, 2026",
+   "overlays": []
+  },
+  {
+   "id": 37,
+   "text": "",
+   "start_sec": 401.5,
+   "duration_sec": 12.2,
+   "visual_prompt": "Белый грузовой фургон стоит у пункта выдачи помощи.",
+   "source": "press_photo",
+   "source_query": "Белый грузовой фургон у пункта помощи в Алёшках, 2026",
+   "overlays": []
+  },
+  {
+   "id": 38,
+   "text": "",
+   "start_sec": 413.7,
+   "duration_sec": 11.7,
+   "visual_prompt": "Портовые краны разгружают навалочный груз с большого судна.",
+   "source": "press_photo",
+   "source_query": "Портовые краны разгружают навалочный груз, 2026",
+   "overlays": []
+  },
+  {
+   "id": 39,
+   "text": "",
+   "start_sec": 425.4,
+   "duration_sec": 11.8,
+   "visual_prompt": "Штаб-квартира Евроклир в деловом районе Брюсселя.",
+   "source": "press_photo",
+   "source_query": "Штаб-квартира Евроклир в Брюсселе, 2026",
+   "overlays": []
+  },
+  {
+   "id": 40,
+   "text": "",
+   "start_sec": 437.2,
+   "duration_sec": 11.5,
+   "visual_prompt": "Два денежных круга показывают доход и перечисление Евросоюзу.",
+   "source": "card:doc",
+   "source_query": "карточка «doc» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 41,
+   "text": "",
+   "start_sec": 448.7,
+   "duration_sec": 12.5,
+   "visual_prompt": "Лидеры Евросоюза собираются на саммит в Брюсселе.",
+   "source": "press_photo",
+   "source_query": "Саммит Европейского союза в Брюсселе, 2026",
+   "overlays": []
+  },
+  {
+   "id": 42,
+   "text": "",
+   "start_sec": 461.2,
+   "duration_sec": 13.0,
+   "visual_prompt": "Монументальный фасад Национального банка Бельгии.",
+   "source": "press_photo",
+   "source_query": "Здание Национального банка Бельгии в Брюсселе, 2026",
+   "overlays": []
+  },
+  {
+   "id": 43,
+   "text": "",
+   "start_sec": 474.2,
+   "duration_sec": 12.0,
+   "visual_prompt": "Комплекс Суда Европейского союза в Люксембурге.",
+   "source": "press_photo",
+   "source_query": "Суд Европейского союза в Люксембурге, 2026",
+   "overlays": []
+  },
+  {
+   "id": 44,
+   "text": "",
+   "start_sec": 486.2,
+   "duration_sec": 12.1,
+   "visual_prompt": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "overlays": []
+  },
+  {
+   "id": 45,
+   "text": "",
+   "start_sec": 498.3,
+   "duration_sec": 11.3,
+   "visual_prompt": "БАЗА/УНИВЕРСАЛЬНОЕ/ОПЕРАТОРЫ-КАМЕРАМИ-ПРЕСС-ПОДХОДЕ",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ОПЕРАТОРЫ-КАМЕРАМИ-ПРЕСС-ПОДХОДЕ",
+   "overlays": []
+  },
+  {
+   "id": 46,
+   "text": "",
+   "start_sec": 509.6,
+   "duration_sec": 11.8,
+   "visual_prompt": "Защищённый кассовый центр бельгийского национального банка.",
+   "source": "press_photo",
+   "source_query": "Кассовый центр Национального банка Бельгии, 2026",
+   "overlays": []
+  },
+  {
+   "id": 47,
+   "text": "",
+   "start_sec": 521.4,
+   "duration_sec": 12.6,
+   "visual_prompt": "Главное здание Банка России на Неглинной улице.",
+   "source": "press_photo",
+   "source_query": "Главное здание Банка России на Неглинной улице, 2026",
+   "overlays": []
+  },
+  {
+   "id": 48,
+   "text": "",
+   "start_sec": 534.0,
+   "duration_sec": 13.6,
+   "visual_prompt": "Фасад арбитражного суда в Москве в рабочий день.",
+   "source": "press_photo",
+   "source_query": "Арбитражный суд Москвы фасад, 2026",
+   "overlays": []
+  },
+  {
+   "id": 49,
+   "text": "",
+   "start_sec": 547.6,
+   "duration_sec": 13.0,
+   "visual_prompt": "Архивный портрет Отто фон Бисмарка конца девятнадцатого века.",
+   "source": "press_photo",
+   "source_query": "Отто фон Бисмарк, архивный фотопортрет в мундире, реальное фото, XIX век",
+   "overlays": []
+  },
+  {
+   "id": 50,
+   "text": "",
+   "start_sec": 560.6,
+   "duration_sec": 11.9,
+   "visual_prompt": "Московский Кремль со стороны набережной как символ позиции России.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО",
+   "overlays": []
+  },
+  {
+   "id": 51,
+   "text": "",
+   "start_sec": 572.5,
+   "duration_sec": 12.8,
+   "visual_prompt": "Представители Банка России входят в здание арбитражного суда.",
+   "source": "web_search",
+   "source_query": "Представители Банка России входят в арбитражный суд, 2026",
+   "overlays": [],
+   "fx": "mosaic"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "start_sec": 585.3,
+   "duration_sec": 12.1,
+   "visual_prompt": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ЦЕХ-НЕМЕЦКОГО-ЗАВОДА",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ЦЕХ-НЕМЕЦКОГО-ЗАВОДА",
+   "overlays": []
+  },
+  {
+   "id": 53,
+   "text": "",
+   "start_sec": 597.4,
+   "duration_sec": 11.4,
+   "visual_prompt": "Наземная инфраструктура газового хранилища Реден в Германии.",
+   "source": "press_photo",
+   "source_query": "Газовое хранилище Реден Германия, ноябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 54,
+   "text": "",
+   "start_sec": 608.8,
+   "duration_sec": 11.1,
+   "visual_prompt": "Круговая диаграмма сравнивает фактический запас газа с немецкой целью.",
+   "source": "card:pie",
+   "source_query": "карточка «pie» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  },
+  {
+   "id": 55,
+   "text": "",
+   "start_sec": 619.9,
+   "duration_sec": 10.9,
+   "visual_prompt": "Угольная электростанция Германии работает без признаков чрезвычайной ситуации.",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/УГОЛЬНАЯ-ЭЛЕКТРОСТАНЦИЯ-ГЕРМАНИИ",
+   "overlays": []
+  },
+  {
+   "id": 56,
+   "text": "",
+   "start_sec": 630.8,
+   "duration_sec": 11.4,
+   "visual_prompt": "Газовоз разгружается у причала немецкого СПГ-узла.",
+   "source": "press_photo",
+   "source_query": "Газовоз у причала Вильгельмсхафена, ноябрь 2026",
+   "overlays": []
+  },
+  {
+   "id": 57,
+   "text": "",
+   "start_sec": 642.2,
+   "duration_sec": 10.4,
+   "visual_prompt": "Газораспределительный узел Баумгартен с действующими трубными линиями.",
+   "source": "press_photo",
+   "source_query": "Газораспределительный узел Баумгартен, 2026",
+   "overlays": []
+  },
+  {
+   "id": 58,
+   "text": "",
+   "start_sec": 652.6,
+   "duration_sec": 11.5,
+   "visual_prompt": "Инженеры осматривают участок немецкой газовой магистрали.",
+   "source": "press_photo",
+   "source_query": "Инженеры осматривают газопровод Германии, 2026",
+   "overlays": []
+  },
+  {
+   "id": 59,
+   "text": "",
+   "start_sec": 664.1,
+   "duration_sec": 12.4,
+   "visual_prompt": "Стеклянный купол Бундестага в спокойный рабочий день.",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ",
+   "overlays": []
+  },
+  {
+   "id": 60,
+   "text": "",
+   "start_sec": 676.5,
+   "duration_sec": 11.4,
+   "visual_prompt": "Газовые трубы проходят вдоль жилого квартала Берлина.",
+   "source": "press_photo",
+   "source_query": "Газовые трубы у жилого квартала Берлина, 2026",
+   "overlays": []
+  },
+  {
+   "id": 61,
+   "text": "",
+   "start_sec": 687.9,
+   "duration_sec": 12.1,
+   "visual_prompt": "Промышленный счётчик газа установлен на распределительном узле.",
+   "source": "press_photo",
+   "source_query": "Счётчик газа на распределительном узле Германии, 2026",
+   "overlays": []
+  },
+  {
+   "id": 62,
+   "text": "",
+   "start_sec": 700.0,
+   "duration_sec": 12.1,
+   "visual_prompt": "Регазификационная установка работает в порту Эмсхафен.",
+   "source": "press_photo",
+   "source_query": "Регазификационная установка порта Эмсхафен, 2026",
+   "overlays": []
+  },
+  {
+   "id": 63,
+   "text": "",
+   "start_sec": 712.1,
+   "duration_sec": 13.1,
+   "visual_prompt": "Современный нефтеперерабатывающий комплекс Джамнагар в Индии.",
+   "source": "press_photo",
+   "source_query": "Современный нефтеперерабатывающий комплекс Джамнагар, 2026",
+   "overlays": []
+  },
+  {
+   "id": 64,
+   "text": "",
+   "start_sec": 725.2,
+   "duration_sec": 12.4,
+   "visual_prompt": "Представители США и Евросоюза обсуждают энергетику за рабочим столом.",
+   "source": "press_photo",
+   "source_query": "Встреча представителей США и Евросоюза по энергетике, 2026",
+   "overlays": []
+  },
+  {
+   "id": 65,
+   "text": "",
+   "start_sec": 737.6,
+   "duration_sec": 11.3,
+   "visual_prompt": "Контейнерные краны перемещают грузы в порту Антверпена.",
+   "source": "press_photo",
+   "source_query": "Контейнерные краны порта Антверпена, 2026",
+   "overlays": []
+  },
+  {
+   "id": 66,
+   "text": "",
+   "start_sec": 748.9,
+   "duration_sec": 11.6,
+   "visual_prompt": "Газовоз прибывает к европейскому терминалу в Зебрюгге.",
+   "source": "press_photo",
+   "source_query": "Газовоз прибывает в порт Зебрюгге, 2026",
+   "overlays": []
+  },
+  {
+   "id": 67,
+   "text": "",
+   "start_sec": 760.5,
+   "duration_sec": 11.8,
+   "visual_prompt": "Деловой квартал Франкфурта вечером с освещёнными офисными башнями.",
+   "source": "press_photo",
+   "source_query": "Деловой квартал Франкфурта вечером, 2026",
+   "overlays": []
+  },
+  {
+   "id": 68,
+   "text": "",
+   "start_sec": 772.3,
+   "duration_sec": 12.8,
+   "visual_prompt": "Финальная цитата о сожжённом и новом платном мосте.",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен",
+   "overlays": []
+  }
+ ]
+}
