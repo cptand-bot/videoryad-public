@@ -62,7 +62,28 @@ def _scene_sources(images_dir):
     """
     out = {}
     base = os.path.dirname(os.path.abspath(images_dir)) or "."
-    for sp in sorted(glob.glob(os.path.join(base, "*.scenes.json"))):
+    # ФАЙЛ ВСПЛЫВАШЕК — НЕ ФАЙЛ СЦЕН (04.11, улов `usuario-31`, стоил
+    # мутного кадра на весь экран в СДАННОМ ролике). Перебор шёл по
+    # `sorted(glob)`, а `overlays_fetch.scenes.json` идёт ПЕРВЫМ по алфавиту;
+    # `setdefault` закреплял за номером сцены источник из НЕГО. У сцены 19
+    # всплывашкой стояла карта из медиатеки — и мутное ПОИСКОВОЕ фото
+    # аэропорта было объявлено «из медиатеки, МЕНЯТЬ НЕЛЬЗЯ». То есть
+    # единственная проверка, которая обязана была его поймать, сама вывела
+    # его из-под брака. Берём файл СЦЕН ролика, а служебные — только если
+    # своего нет.
+    _all = sorted(glob.glob(os.path.join(base, "*.scenes.json")))
+    _own = [x for x in _all
+            if "overlays_fetch" not in os.path.basename(x)
+            and "maps_fetch" not in os.path.basename(x)]
+    # самый большой по числу сцен — это и есть файл ролика
+    def _n(p):
+        try:
+            d = json.load(open(p, encoding="utf-8"))
+            return len((d.get("scenes") if isinstance(d, dict) else d) or [])
+        except Exception:
+            return 0
+    _own.sort(key=_n, reverse=True)
+    for sp in (_own or _all):
         try:
             data = json.load(open(sp, encoding="utf-8"))
         except (OSError, ValueError):
