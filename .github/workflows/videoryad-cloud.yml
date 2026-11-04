@@ -451,6 +451,23 @@ jobs:
                   shutil.copy2(p, "out/cands")
                   n_c += 1
           print("staged main=%d overlays=%d кандидатов=%d" % (n_main, n_ov, n_c))
+          # ЗАПРЕТ ЛОЖНОГО УСПЕХА НА ФЕТЧЕ (04.11, улов `usuario-af`: шард
+          # дважды подряд молча не добыл всплывашку, и в отчёте стояло «их
+          # никто не фетчил» — то есть вкладка не могла отличить «упал шард»
+          # от «сцену не раздали»). У клипов такой запрет стоит с 24.10, у
+          # фетча его не было. `assemble` идёт с `if: always()`, поэтому
+          # красный шард сборку не валит — он её ЗАМЕТНЫМ делает.
+          owed = [s for s in sc
+                  if not str(s.get("source", "")).startswith("card")]
+          got = 0
+          for d in ("out", "out/overlays"):
+              got += len([f for f in os.listdir(d)
+                          if f.startswith("scene_")]) if os.path.isdir(d) else 0
+          if owed and got == 0:
+              print("::error::шард %s взял %d сцен и не принёс НИ ОДНОГО "
+                    "файла — это не «сцену никто не фетчил», это упавший "
+                    "шард" % (k, len(owed)))
+              sys.exit(1)
           PY
           cp "$proj"/images/manifest.shard${{ matrix.shard }}.json out/ 2>/dev/null || true
           # ЖУРНАЛЫ ФЕТЧА ЕДУТ ДОМОЙ (31.10): .lowres — что фетч сам
