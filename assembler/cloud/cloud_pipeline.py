@@ -404,8 +404,29 @@ def step_overlays(proj, scenes_json):
     _capdir = os.environ.get("CAPTIONS_DIR", "")
     _capmark = os.path.join(clips, f".capped.{shard_i}.json" if shard_n > 1
                             else ".capped.json")
+    # НА СБОРКЕ СЛИВАЕМ ОТМЕТКИ МАТРИЦЫ (04.11, второй заход по жалобе
+    # пользователя «если есть надпись, субтитры пропадают»). Матрица пишет
+    # `.capped.<шард>.json`, а добор в `assemble` искал `.capped.json` — не
+    # находил и КАЖДЫЙ РАЗ гнал всплывашки заново по ВСЕМ сценам. Повторный
+    # проход берёт базу из `clip_NNN.orig.mp4` (кадр ДО субтитров) и на
+    # сценах с ТОЛЬКО-ТЕКСТОВОЙ всплывашкой затирает уже вожжённую строку.
+    # Это та же причина, что у случая 03.11 с пересборкой, только здесь она
+    # срабатывает на ПЕРВОЙ же сборке. Теперь отметки шардов считаются так
+    # же, как `.overlaid.*.json`: покрыли все сцены — повторять нечего.
+    _capped_ids = set()
+    if shard_n == 1:
+        for _f in glob.glob(os.path.join(clips, ".capped.*.json")):
+            try:
+                _d = json.load(open(_f, encoding="utf-8"))
+                _capped_ids |= {int(x) for x in (_d.get("вожжено") or [])}
+            except Exception:
+                pass
+        if _capped_ids and not os.path.isfile(_capmark):
+            log("субтитры: отметки матрицы покрывают %d сцен — повторно не "
+                "вжигаю" % len(_capped_ids))
     _need_caps = bool(_capdir) and os.path.isdir(_capdir) \
-        and not os.path.isfile(_capmark)
+        and not os.path.isfile(_capmark) \
+        and not (_capped_ids >= {int(k) for k in ids})
     if _need_caps:
         log("субтитры ВКЛЮЧЕНЫ и ещё не вожжены — шаг всплывашек не пропускаю")
     if not stale and prev and not _need_caps:
