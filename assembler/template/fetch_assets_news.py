@@ -1478,7 +1478,33 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
         if alt and os.path.isdir(os.path.join(alt, tag)):
             tag_dir = os.path.join(alt, tag)
         else:
-            return None
+            # КОРОТКОЕ НАПИСАНИЕ БЕЗ «БАЗА/» (04.11, улов `usuario-eb`).
+            # Каталог и `--check-dir` принимают `ТЕМЫ/X`, а фетчер требовал
+            # полный путь `БАЗА/ТЕМЫ/X` — и отвечал «папка медиатеки
+            # недоступна (в облаке медиатеки нет)», то есть уводил в сторону:
+            # выглядит как отсутствие медиатеки, а на деле другое написание.
+            # Пробуем оба варианта, как это делает каталог.
+            _cands = []
+            _t = tag.replace("\\", "/").strip("/")
+            if not _t.upper().startswith("БАЗА/"):
+                _cands.append("БАЗА/" + _t)
+            else:
+                _cands.append(_t.split("/", 1)[1])
+            for _base in (media_library_dir, alt):
+                if not _base:
+                    continue
+                for _c in _cands:
+                    _p = os.path.join(_base, _c)
+                    if os.path.isdir(_p):
+                        print("  папка медиатеки найдена как «%s» (в сцене "
+                              "написано «%s») — беру её" % (_c, tag),
+                              flush=True)
+                        tag_dir = _p
+                        break
+                if tag_dir != os.path.join(media_library_dir, tag):
+                    break
+            if tag_dir == os.path.join(media_library_dir, tag):
+                return None
 
     if keyword:
         index_path = os.path.join(tag_dir, "index.json")
