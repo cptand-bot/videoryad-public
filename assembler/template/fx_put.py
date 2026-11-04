@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ДВЕРЬ ЭФФЕКТА №3: поставить сцене врезку с кругами-радаром.
+"""ДВЕРЬ ЭФФЕКТОВ: поставить сцене эффект из его образца.
 
-    python3 fx_put.py <ролик>.scenes.json <sid> <видео-врезка.mp4>
-    python3 fx_put.py <ролик>.scenes.json <sid> --off      # снять
+    python3 fx_put.py <ролик>.scenes.json <sid> <видео-врезка.mp4>   # врезка
+    python3 fx_put.py <ролик>.scenes.json <sid> --kind mosaic        # переход
+    python3 fx_put.py <ролик>.scenes.json <sid> --off                # снять
+
+ЧЕТЫРЕ ВИДА (все из `D:\ЗАГРУЗКИ\Эффекты-1\Эффекты-1.mp4`):
+    inset   врезка в рамке + круги-радар + плавный зум (принят 03.11);
+            ТРЕБУЕТ видео-врезку аргументом;
+    mosaic  кадр рассыпается на плитки, из плиток собирается следующий;
+    panels  новый кадр разворачивается вертикальными панелями;
+    wipe    новый кадр въезжает по диагонали со светлой линией на стыке.
+Три последних — ПЕРЕХОДЫ: они начинаются с кадра ПРОШЛОЙ сцены, поэтому
+ставятся только на сцену-фотографию и только начиная со второй.
 
 Что делает: кладёт врезку в `insets/scene_NNN.mp4` рядом с scenes.json и
 ставит сцене ключ `"fx": "inset"`. Дальше ВСЁ САМО: `ship.sh` везёт папку
@@ -14,7 +24,8 @@
 ГРАНИЦЫ ПОЛЬЗОВАТЕЛЯ (03.11, дословно «шикарно, этот оставляем так, как есть,
 и в работу его завтра»), проверяются здесь и ещё раз в сборке:
   * ТОЛЬКО канал ПЛАНЕТА — на другом инструмент откажет;
-  * НЕ БОЛЬШЕ ТРЁХ сцен на ролик;
+  * НЕ БОЛЬШЕ ТРЁХ сцен на ролик — НА ВСЕ ВИДЫ ВМЕСТЕ («эффекты не больше
+    3 раз на видеоряд»), а не по три каждого;
   * глитча в эффекте нет и не добавляем; круги кадр не трогают.
 
 ПОЧЕМУ ВРЕЗКА ПЕРЕЖИМАЕТСЯ ЗДЕСЬ, А НЕ В ОБЛАКЕ: в самом эффекте она
@@ -31,6 +42,9 @@ import sys
 
 MAX_MB = 8.0
 MAX_W = 1280
+KINDS = ("inset", "mosaic", "panels", "wipe")
+TRANS = ("mosaic", "panels", "wipe")
+FX_MAX = 3
 
 
 def _probe(ffprobe, src):
@@ -56,12 +70,22 @@ def main():
     ap.add_argument("scenes")
     ap.add_argument("sid", type=int)
     ap.add_argument("video", nargs="?", default="")
+    ap.add_argument("--kind", default="", choices=("",) + KINDS,
+                    help="вид эффекта; по умолчанию inset, если дано видео")
     ap.add_argument("--off", action="store_true", help="снять эффект со сцены")
     ap.add_argument("--ffmpeg", default="")
     a = ap.parse_args()
 
-    if not a.off and not a.video:
-        return _die("нужен путь к видео-врезке (или --off, чтобы снять)")
+    kind = a.kind or ("inset" if a.video else "")
+    if not a.off and not kind:
+        return _die("скажи, какой эффект: --kind inset|mosaic|panels|wipe "
+                    "(для inset дай ещё путь к видео-врезке)")
+    if not a.off and kind == "inset" and not a.video:
+        return _die("врезке нужен путь к видео (`inset` — это окно с видео "
+                    "в рамке)")
+    if not a.off and kind in TRANS and a.video:
+        return _die("«%s» — это ПЕРЕХОД, видео ему не нужно: он уезжает с "
+                    "кадра прошлой сцены на свой" % kind)
     try:
         data = json.load(open(a.scenes, encoding="utf-8"))
     except (OSError, ValueError) as e:
@@ -95,11 +119,36 @@ def main():
                     "нарисованный кадр не кладём" % (a.sid, sc.get("source")))
 
     have = sorted(s["id"] for s in scenes
-                  if str(s.get("fx", "")).strip().lower() == "inset")
-    if a.sid not in have and len(have) >= 3:
-        return _die("на ролике уже три сцены с эффектом (%s) — потолок его "
-                    "словом, четвёртую не ставлю"
-                    % ", ".join(str(i) for i in have))
+                  if str(s.get("fx", "")).strip().lower() in KINDS)
+    if a.sid not in have and len(have) >= FX_MAX:
+        return _die("на ролике уже %d сцены с эффектами (%s) — потолок его "
+                    "словом на ВСЕ виды вместе, четвёртый не ставлю"
+                    % (FX_MAX, ", ".join(str(i) for i in have)))
+
+    if kind in TRANS:
+        # Переход уезжает с кадра ПРОШЛОЙ сцены: на первой сцене ему не с
+        # чего начинать, и он молча поехал бы с чёрного.
+        if a.sid <= min(int(s.get("id", 0)) for s in scenes):
+            return _die("«%s» — переход с прошлой сцены, на первой сцене "
+                        "ролика его ставить не с чего" % kind)
+        dur = float(sc.get("duration_sec") or 0)
+        if dur < 2.5:
+            return _die("сцена %d всего %.1f с — переходу «%s» нужно не "
+                        "меньше 2,5 с" % (a.sid, dur, kind))
+        sc["fx"] = kind
+        # Сцена могла быть врезкой — тогда её файл больше не нужен и в облако
+        # поедет мёртвым грузом (а `ship.sh` честно отчитается о врезке,
+        # которой в сборке не будет).
+        if os.path.isfile(dst):
+            os.remove(dst)
+            print("прежняя врезка этой сцены удалена — переходу она не нужна")
+        _save(a.scenes, data)
+        have = sorted(set(have) | {a.sid})
+        print("сцена %d (%.1f с): переход «%s» ПОСТАВЛЕН" % (a.sid, dur, kind))
+        print("эффектов в ролике: %d из %d (%s)"
+              % (len(have), FX_MAX, ", ".join(str(i) for i in have)))
+        print("файлов не нужно: кадр прошлой сцены облако возьмёт само")
+        return 0
 
     if not os.path.isfile(a.video):
         return _die("нет файла врезки: %s" % a.video)
@@ -140,8 +189,8 @@ def main():
     have = sorted(set(have) | {a.sid})
     print("сцена %d (%.1f с): эффект-врезка ПОСТАВЛЕН → %s"
           % (a.sid, dur, os.path.relpath(dst, proj)))
-    print("эффектов в ролике: %d из 3 (%s)"
-          % (len(have), ", ".join(str(i) for i in have)))
+    print("эффектов в ролике: %d из %d (%s)"
+          % (len(have), FX_MAX, ", ".join(str(i) for i in have)))
     print("дальше ничего не делать: ship.sh везёт insets/ сам, "
           "клип соберёт шаг clips")
     return 0

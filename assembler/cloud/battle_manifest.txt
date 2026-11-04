@@ -92,6 +92,7 @@ template/fx/preset-news.json
 template/fx_inset.py
 template/fx_put.py
 template/fx_rings.py
+template/fx_trans.py
 template/geo_links.py
 template/grab_stream_frame.py
 template/grab_video_frame.py

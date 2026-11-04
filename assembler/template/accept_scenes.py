@@ -335,9 +335,24 @@ def main():
     _fx_sids = [sc.get("id") for sc in scenes
                 if str(sc.get("fx", "")).strip()]
     if _fx_sids:
-        _ok_fx = {"inset"}
+        # Четыре вида из его образца: врезка (03.11) и три перехода (04.11).
+        # ПОТОЛОК ТРИ СЧИТАЕТСЯ НА ВСЕ ВИДЫ ВМЕСТЕ — «эффекты не больше 3 раз
+        # на видеоряд».
+        _ok_fx = {"inset", "mosaic", "panels", "wipe"}
+        _trans = {"mosaic", "panels", "wipe"}
+        _first = min((int(sc.get("id", 0)) for sc in scenes), default=0)
         for sc in scenes:
             v = str(sc.get("fx", "")).strip().lower()
+            if v in _trans:
+                if int(sc.get("id", 0)) <= _first:
+                    bad.append("сцена %s: «%s» — переход с кадра ПРОШЛОЙ "
+                               "сцены, на первой сцене ролика его ставить не "
+                               "с чего" % (sc.get("id"), v))
+                if float(sc.get("duration_sec") or 0) < 2.5:
+                    bad.append("сцена %s: %.1f с — переходу «%s» нужно не "
+                               "меньше 2,5 с"
+                               % (sc.get("id"),
+                                  float(sc.get("duration_sec") or 0), v))
             if v and v not in _ok_fx:
                 bad.append("сцена %s: эффекта «%s» не существует — сборка знает "
                            "только %s" % (sc.get("id"), sc.get("fx"),
@@ -346,16 +361,19 @@ def main():
                 bad.append("сцена %s: эффект на рисованную карточку (%s) не "
                            "кладём" % (sc.get("id"), sc.get("source")))
         if a.channel.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
-            bad.append("эффект-врезка стоит на сценах %s, а канал «%s» — "
-                       "эффект ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
+            bad.append("эффекты стоят на сценах %s, а канал «%s» — "
+                       "эффекты ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
                        % (", ".join(str(i) for i in _fx_sids), a.channel))
         if len(_fx_sids) > 3:
-            bad.append("сцен с эффектом-врезкой %d (%s) — потолок ТРИ на ролик "
-                       "его словом" % (len(_fx_sids),
-                                       ", ".join(str(i) for i in _fx_sids)))
+            bad.append("сцен с эффектами %d (%s) — потолок ТРИ на ролик его "
+                       "словом, на ВСЕ виды вместе"
+                       % (len(_fx_sids),
+                          ", ".join(str(i) for i in _fx_sids)))
         _ins = os.path.join(os.path.dirname(os.path.abspath(a.src)), "insets")
-        _nofile = [i for i in _fx_sids
-                   if not os.path.isfile(os.path.join(_ins, "scene_%03d.mp4" % i))]
+        _nofile = [sc.get("id") for sc in scenes
+                   if str(sc.get("fx", "")).strip().lower() == "inset"
+                   and not os.path.isfile(
+                       os.path.join(_ins, "scene_%03d.mp4" % int(sc.get("id", 0))))]
         if _nofile:
             warn.append("эффект-врезка без файла врезки (сцены %s): положи её "
                         "`fx_put.py <scenes.json> <sid> <видео>`, иначе сцена "

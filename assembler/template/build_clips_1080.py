@@ -91,7 +91,17 @@ CARD_SIDS = set()
 # печатается причина и кадр собирается ОБЫЧНЫМ путём. Пустых сцен из-за
 # украшения не бывает.
 HERE = os.path.dirname(os.path.abspath(__file__))
-INSET_SIDS = set()          # сцены, которым эффект РАЗРЕШЁН (уже с потолком)
+# ЧЕТЫРЕ ВИДА ЭФФЕКТА ИЗ ЕГО ОБРАЗЦА. `inset` — принятый 03.11 («врезка +
+# круги-радар»), остальные три — переходы между сценами, разобранные 04.11 по
+# тому же файлу `Эффекты-1.mp4`: мозаика плиток, разлёт вертикальных панелей,
+# диагональный вайп со светлой линией.
+# ПОТОЛОК ТРИ — НА ВСЕ ЭФФЕКТЫ ВМЕСТЕ, А НЕ НА КАЖДЫЙ ВИД: его слово звучало
+# «эффекты не больше 3 раз на видеоряд», то есть считается ролик целиком.
+FX_KINDS = ("inset", "mosaic", "panels", "wipe")
+FX_TRANS = ("mosaic", "panels", "wipe")
+FX_MAX = 3
+FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
+INSET_SIDS = set()          # из них те, что «врезка» (для совместимости)
 CHANNEL = ""
 
 
@@ -119,6 +129,44 @@ def build_inset_clip(ffmpeg, src, out_path, duration, sid):
         os.remove(out_path)
     print("  !! эффект-врезка НЕ ВСТАЛ, собираю обычный кадр: "
           + ((r.stdout or "") + (r.stderr or ""))[-400:].replace("\n", " "),
+          flush=True)
+    return False
+
+
+def build_trans_clip(ffmpeg, ffprobe, src, out_path, duration, sid, kind,
+                     images_dir):
+    """Клип сцены с переходом в голове. True — собрал, False — обычный путь."""
+    if src.lower().endswith((".mp4", ".mov", ".webm", ".mkv")):
+        print("  !! переход «%s»: сцена на ВИДЕО — переход кладём только на "
+              "фотокадр, собираю обычный клип" % kind, flush=True)
+        return False
+    prev_src, prev_ext = find_source(images_dir, sid - 1)
+    prev = prev_src or "-"
+    tmpf = ""
+    if prev_src and prev_ext in ("mp4", "mov"):
+        # у прошлой сцены видео — берём из него один кадр, иначе переходу
+        # не с чего уезжать (и он молча поехал бы с чёрного)
+        tmpf = os.path.join(os.path.dirname(out_path), f".prev_{sid:03d}.jpg")
+        r = subprocess.run([ffmpeg, "-y", "-v", "error", "-ss", "1", "-i",
+                            prev_src, "-frames:v", "1", tmpf],
+                           capture_output=True, text=True)
+        prev = tmpf if (r.returncode == 0 and os.path.isfile(tmpf)) else "-"
+    cmd = [sys.executable, os.path.join(HERE, "fx_trans.py"), prev, src,
+           out_path, "--kind", kind, "--seconds", f"{float(duration):.3f}",
+           "--channel", CHANNEL or "ПЛАНЕТА", "--ffmpeg", ffmpeg]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if tmpf and os.path.isfile(tmpf):
+        os.remove(tmpf)
+    ok = r.returncode == 0 and os.path.isfile(out_path) and os.path.getsize(out_path) > 0
+    if ok:
+        print("  переход «%s» ПОСТАВЛЕН%s (%d КБ)"
+              % (kind, "" if prev != "-" else ", с чёрного (кадра прошлой сцены нет)",
+                 os.path.getsize(out_path) // 1024), flush=True)
+        return True
+    if os.path.isfile(out_path):
+        os.remove(out_path)
+    print("  !! переход «%s» НЕ ВСТАЛ, собираю обычный кадр: %s"
+          % (kind, ((r.stdout or "") + (r.stderr or ""))[-400:].replace("\n", " ")),
           flush=True)
     return False
 
@@ -498,25 +546,29 @@ def main():
         print("карточки арсенала (без эффектов): "
               + ", ".join(str(i) for i in sorted(CARD_SIDS)))
 
-    # --- эффект №3: кому он разрешён в этом ролике ---
+    # --- эффекты: кому они разрешены в этом ролике ---
     global CHANNEL
     CHANNEL = str(data.get("channel", "") or "")
-    _want = sorted(sc["id"] for sc in data["scenes"]
-                   if str(sc.get("fx", "")).strip().lower() == "inset")
+    _want = sorted((sc["id"], str(sc.get("fx", "")).strip().lower())
+                   for sc in data["scenes"]
+                   if str(sc.get("fx", "")).strip().lower() in FX_KINDS)
     if _want:
         _plan = CHANNEL.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
         if not _plan:
-            print("эффект-врезка: канал «%s» — НЕ ставлю (его слово 03.11: "
-                  "только ПЛАНЕТА). Сцены %s пойдут обычным кадром"
-                  % (CHANNEL, ", ".join(str(i) for i in _want)))
+            print("эффекты: канал «%s» — НЕ ставлю (его слово 03.11: только "
+                  "ПЛАНЕТА). Сцены %s пойдут обычным кадром"
+                  % (CHANNEL, ", ".join(str(i) for i, _ in _want)))
         else:
-            INSET_SIDS.update(_want[:3])
-            print("эффект-врезка: сцены " +
-                  ", ".join(str(i) for i in sorted(INSET_SIDS)) +
-                  " (потолок три на ролик)")
-            if len(_want) > 3:
+            for sid_, kind_ in _want[:FX_MAX]:
+                FX_OF[sid_] = kind_
+                if kind_ == "inset":
+                    INSET_SIDS.add(sid_)
+            print("эффекты: " + ", ".join("сцена %d — %s" % (i, k)
+                                          for i, k in sorted(FX_OF.items()))
+                  + " (потолок %d на ролик, на ВСЕ виды вместе)" % FX_MAX)
+            if len(_want) > FX_MAX:
                 print("  сверх потолка и БЕЗ эффекта: "
-                      + ", ".join(str(i) for i in _want[3:]))
+                      + ", ".join("%d (%s)" % (i, k) for i, k in _want[FX_MAX:]))
 
     _wc = int(os.environ.get("WORKER_COUNT", "1"))
     _wk = int(os.environ.get("WORKER_ID", "0"))
@@ -533,8 +585,13 @@ def main():
                 continue
             print(f"[{sid:03d}] {'video' if ext=='mp4' else 'image'} -> {duration}s")
             try:
-                if sid in INSET_SIDS and build_inset_clip(
+                _kind = FX_OF.get(sid, "")
+                if _kind == "inset" and build_inset_clip(
                         ffmpeg, src, out_path, duration, sid):
+                    pass
+                elif _kind in FX_TRANS and build_trans_clip(
+                        ffmpeg, ffprobe, src, out_path, duration, sid, _kind,
+                        images_dir):
                     pass
                 elif ext == "mp4":
                     build_video_clip(ffmpeg, ffprobe, src, out_path, duration)

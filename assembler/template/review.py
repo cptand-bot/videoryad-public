@@ -1553,8 +1553,10 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     # ЭФФЕКТ-ВРЕЗКА ВИДЕН НА ДАШБОРДЕ (04.11). Он ставится ДО сборки, а
     # смотрит пользователь дашборд — без значка «эффект есть» было бы не
     # отличить от «забыли поставить», и спорить пришлось бы по готовому файлу.
-    fx_badge = ('<span class="fxb">🎯 ЭФФЕКТ-ВРЕЗКА</span>'
-                if str(s.get("fx", "")).strip().lower() == "inset" else "")
+    _FXL = {"inset": "🎯 ВРЕЗКА + КРУГИ", "mosaic": "🎯 МОЗАИКА ПЛИТОК",
+            "panels": "🎯 РАЗЛЁТ ПАНЕЛЕЙ", "wipe": "🎯 ДИАГОНАЛЬНЫЙ ВАЙП"}
+    _fxk = str(s.get("fx", "")).strip().lower()
+    fx_badge = ('<span class="fxb">%s</span>' % _FXL[_fxk]) if _fxk in _FXL else ""
     if live:
         opts = "".join(f'<option value="{x["name"]}"'
                        f'{" selected" if x["name"] == ov_cur.get("sound") else ""}>{x["label"]}</option>'
@@ -2025,10 +2027,11 @@ poll();
         _parts.append("отклонено с причиной: <b>%d</b>" % _rej)
     # ЭФФЕКТ-ВРЕЗКА ЧИСЛОМ В ШАПКЕ: потолок три его словом, и видно сразу,
     # сколько стоит и на каких сценах.
-    _fx = [s.get("id") for s in scenes
-           if str(s.get("fx", "")).strip().lower() == "inset"]
-    fx_hdr = ('<span class="sub">· ЭФФЕКТ-ВРЕЗКА: <b>%d из 3</b> (сцены %s)</span>'
-              % (len(_fx), ", ".join(str(i) for i in _fx))) if _fx else ""
+    _fx = [(s.get("id"), str(s.get("fx", "")).strip().lower()) for s in scenes
+           if str(s.get("fx", "")).strip().lower()
+           in ("inset", "mosaic", "panels", "wipe")]
+    fx_hdr = ('<span class="sub">· ЭФФЕКТЫ: <b>%d из 3</b> (%s)</span>'
+              % (len(_fx), ", ".join("%s — %s" % (i, k) for i, k in _fx))) if _fx else ""
     dossier_badge = ('<span class="sub">· ГЕОРАДАР — %s</span>'
                      % " · ".join(_parts)) if (_links or _dos or _rej) else (
         '<span class="sub">· ГЕОРАДАР: записи по теме нет</span>')
