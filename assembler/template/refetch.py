@@ -971,7 +971,26 @@ def main():
     if "--verify" in sys.argv:
         return verify(arg("--verify"))
     if "--rounds" in sys.argv:
-        return rounds_report()
+        # `--rounds` — ТОЛЬКО ОТЧЁТ, И ТЕПЕРЬ ОН ЭТО ГОВОРИТ (04.11, улов
+        # `usuario-31`, стоил прогона). С этим ключом скрипт печатал счётчик
+        # кругов и выходил, молча проглотив `--fix`: ни ошибки, ни
+        # предупреждения, кадры не менялись — выглядело как «отработал».
+        # Класс «успех значит ничего не сделано», восьмой случай за смену.
+        _r = rounds_report()
+        _ignored = [a for a in ("--fix", "--fix-overlays", "--ban", "--next",
+                                "--force", "--place")
+                    if a in sys.argv]
+        if _ignored:
+            print("", file=sys.stderr)
+            print("!! ЗАМЕН НЕ БЫЛО: `--rounds` — это ТОЛЬКО ОТЧЁТ по кругам.",
+                  file=sys.stderr)
+            print("   Ключи %s с ним НЕ работают и были проигнорированы."
+                  % ", ".join(_ignored), file=sys.stderr)
+            print("   Повтори БЕЗ `--rounds`, иначе кадры останутся прежними.",
+                  file=sys.stderr)
+            return 2
+        print("(это только отчёт по кругам; замен `--rounds` не делает)")
+        return _r
     scenes, overlays = arg("--scenes"), arg("--overlays")
     # ОТДЕЛЬНЫЕ наборы правок на файл. Общий --fix на оба файла был
     # ошибкой дизайна (поймано живьём 2026-10-12): формат значений разный
