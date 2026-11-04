@@ -587,6 +587,23 @@ def main():
         if _wc > 1 and (sid % _wc) != _wk:
             continue
         if not os.path.exists(out_path):
+            # СТАРЫЙ `.orig.mp4` ПОСЛЕ ПЕРЕСБОРКИ — ЯД (04.11, улов
+            # `usuario-75`, разбор по пикселям: субтитры пропали на 22 сценах
+            # из 73). `build_overlays` хранит чистый клип как
+            # `clip_NNN.orig.mp4` и при повторном прогоне берёт базу ИЗ НЕГО.
+            # Если клип пересобран (новый кадр, новые субтитры), прошлый
+            # `orig` — это кадр ДО субтитров, и текстовая всплывашка
+            # затирает ими вожжённую строку. Фото-ветка идёт через
+            # `.p.mp4` и не страдает, поэтому дефект бил ТОЛЬКО сцены с
+            # «только текстом» и ТОЛЬКО со второй сборки одного имени.
+            # Раз клип делается заново — всё производное от прежнего клипа
+            # недействительно.
+            for _stale in (out_path.replace(".mp4", ".orig.mp4"),
+                           out_path + ".p.mp4"):
+                if os.path.exists(_stale):
+                    os.remove(_stale)
+                    print(f"  убран устаревший {os.path.basename(_stale)} "
+                          f"(клип пересобран)", flush=True)
             src, ext = find_source(images_dir, sid)
             if not src:
                 print(f"[{sid:03d}] MISSING SOURCE, skip")
