@@ -118,3 +118,4 @@ template/tg_media.py
 template/voice_note.py
 template/wm_sheet.py
 template/zoom.py
+template/take_folder.py

@@ -1347,10 +1347,35 @@ jobs:
           )
           python3 assembler/cloud/merge_shards.py "$sc" "$proj/images" "$proj/.env" "$proj"
 
+      # СУБТИТРЫ НУЖНЫ И ЗДЕСЬ (04.11, корень потери субтитров на «Газе»).
+      # `CAPTIONS_DIR` выставлялся ТОЛЬКО матричному джобу `overlays`, а шаг
+      # `assemble` гоняет те же всплывашки добором (`--from clips`) — и про
+      # субтитры не знал ВООБЩЕ. Если матрица свою часть пропустила (у неё
+      # совпали отпечатки) или не покрыла все сцены, строка не вжигалась
+      # нигде, а в логе стояло безобидное «ничего не изменилось». Готовим
+      # куски `.ass` здесь заново (операция идемпотентная) и отдаём путь.
+      - name: Prepare per-scene captions for the mop-up pass
+        id: caps2
+        if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
+        run: |
+          proj="queue/${{ needs.setup.outputs.name }}"
+          caps=""
+          if [ -f "$proj/captions.ass" ]; then
+            sc=$(ls "$proj"/*.scenes.json 2>/dev/null | grep -v overlays_fetch | head -1)
+            python3 assembler/template/captions_shard.py "$sc" "$proj/captions.ass" "$proj/.caps"
+            caps="$PWD/$proj/.caps"
+            echo "субтитры: ВКЛЮЧЕНЫ, вожгу их ПОВЕРХ всплывашек"
+          else
+            echo "субтитры: выключены (captions.ass в проекте нет)"
+          fi
+          echo "dir=$caps" >> "$GITHUB_OUTPUT"
+
       - name: Assemble (clips ready -> pop-ups -> concat -> sfx -> dashboard -> qa)
         id: assemble
         if: hashFiles(format('queue/{0}/.fetch-only', needs.setup.outputs.name)) == ''
-        env: { CLOUD_WORKERS: "4" }
+        env:
+          CLOUD_WORKERS: "4"
+          CAPTIONS_DIR: ${{ steps.caps2.outputs.dir }}
         run: python3 assembler/cloud/cloud_pipeline.py "queue/${{ needs.setup.outputs.name }}" --from clips
 
       - name: Fetch-only — stop before the build (dashboard review happens locally)
