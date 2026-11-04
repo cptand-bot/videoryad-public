@@ -1192,6 +1192,62 @@ def main():
     # Поэтому: снятый кадр исключается из выдачи ВСЕГДА. Без `--ban` — на два
     # дня (заготовка не хоронится навсегда), с `--ban` — как раньше: веб-кадру
     # вечно, библиотечному на два дня.
+    # ПЕРЕД БАНОМ БИБЛИОТЕЧНОЙ СЦЕНЫ СМОТРИМ, ЧТО ОСТАНЕТСЯ В ПАПКЕ (04.11,
+    # улов `usuario-31`). Живой случай: `--ban 6` снёс нарезку и забанил её,
+    # а замена из той же папки не нашлась — остальные файлы в кулдауне, один
+    # забанен утром. Сцена осталась ПУСТОЙ, и это выяснилось уже после
+    # фетча. `check_pins` умеет считать свободные файлы ЗАРАНЕЕ, а `refetch`
+    # не считал. Теперь считает и предупреждает ДО отправки круга.
+    if _ban:
+        try:
+            _EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")
+            _warned = []
+            for _sc in scenes:
+                _sid = int(_sc.get("id", 0))
+                if _ban_sids and _sid not in _ban_sids:
+                    continue
+                if str(_sc.get("source", "")) != "local_library":
+                    continue
+                _q = str(_sc.get("source_query", "")).strip().strip("/")
+                if not _q or re.search(r"\.[A-Za-z0-9]{2,4}$", _q):
+                    continue
+                _fp = ""
+                _libs = []
+                _env = os.environ.get("MEDIA_LIBRARY_DIR", "")
+                if _env:
+                    _libs.append(_env if os.path.isabs(_env)
+                                 else os.path.expanduser("~/projects/" + _env))
+                for _n in ("media-library", "media-library-2"):
+                    _libs.append(os.path.expanduser("~/projects/" + _n))
+                for _b in _libs:
+                    for _c in (_q, "БАЗА/" + _q):
+                        _p = os.path.join(_b, _c)
+                        if os.path.isdir(_p):
+                            _fp = _p
+                            break
+                    if _fp:
+                        break
+                if not _fp:
+                    continue
+                _files = [f for f in os.listdir(_fp)
+                          if f.lower().endswith(_EXT)]
+                _banned_now_set = _banned_now()
+                _free = sum(1 for f in _files
+                            if _md5(os.path.join(_fp, f)) not in _banned_now_set)
+                if _free <= 1:
+                    _warned.append((_sid, _q, _free, len(_files)))
+            for _sid, _q, _free, _tot in _warned:
+                print("\n!! СЦЕНА %d: после бана в папке «%s» останется "
+                      "СВОБОДНЫХ ФАЙЛОВ: %d из %d." % (_sid, _q, _free - 1
+                                                       if _free else 0, _tot),
+                      flush=True)
+                print("   Замена из неё НЕ найдётся, сцена останется пустой "
+                      "и ты узнаешь об этом после круга. Либо бань без "
+                      "`--ban` (на 2 дня), либо сразу назначь другую папку.",
+                      flush=True)
+        except Exception as _e:
+            print("  (проверка остатка папки не отработала: %s)" % _e)
+
     if not _ban:
         _n = sum(len(ids) for _, _, ids, _ in jobs)
         print(f"\nБЕЗ `--ban`: {_n} снятых кадров исключаются из выдачи на 2 "

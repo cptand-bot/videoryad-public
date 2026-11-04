@@ -405,7 +405,25 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                           for i, v in sorted(FX_MIN_AT.items())), flush=True)
     # vertical anchor: "top" for non-Планета channels (user, 2026-09-05),
     # "bottom" (default) for Планета. Whole-file key, sibling to the scene ids.
-    anchor = str(ov.get("anchor", "bottom")).lower()   # общий на ролик, его перебивает ключ сцены
+    # ДЕФОЛТ ЯКОРЯ — ПО КАНАЛУ, А НЕ «bottom» ВСЕГДА (04.11, улов
+    # `usuario-31`). Правило «на всех каналах кроме ПЛАНЕТЫ всплывашка
+    # вверху» живёт в коде с 05.09, но дефолт здесь стоял жёсткий `bottom`,
+    # и `overlays.json`, собранный руками без ключа `anchor`, молча уезжал
+    # с нижним якорем на 5 МИНУТ. Теперь: ключ в файле сильнее всего, а если
+    # его нет — смотрим канал в scenes.json.
+    _chan = ""
+    try:
+        _d = json.load(open(scenes_path, encoding="utf-8"))
+        _chan = str(_d.get("channel", "") if isinstance(_d, dict) else "")
+    except (OSError, ValueError):
+        _chan = ""
+    _def_anchor = ("bottom"
+                   if _chan.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
+                   or not _chan.strip() else "top")
+    anchor = str(ov.get("anchor", _def_anchor)).lower()   # общий на ролик, его перебивает ключ сцены
+    if "anchor" not in ov:
+        print("якорь всплывашек по каналу «%s»: %s (ключа `anchor` в "
+              "overlays.json нет)" % (_chan or "не указан", anchor), flush=True)
     wc = int(os.environ.get("WORKER_COUNT", "1"))
     wk = int(os.environ.get("WORKER_ID", "0"))
     for sid_s, spec in ov.items():

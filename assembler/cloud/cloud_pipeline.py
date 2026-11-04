@@ -447,6 +447,11 @@ def step_overlays(proj, scenes_json):
 TAIL_SEC = 2.0
 
 
+def _tail_added(proj):
+    """Добавлен ли хвост тишины к последней сцене (метка от `step_tail`)."""
+    return bool(glob.glob(os.path.join(proj, "clips", "*.tailed")))
+
+
 def step_tail(proj, scenes_json):
     clips = os.path.join(proj, "clips")
     lst = os.path.join(clips, "concat_list.txt")
@@ -504,6 +509,15 @@ def step_stretch(proj, scenes_json):
     silent = os.path.join(proj, "_silent.mp4")
     dv = _dur(silent)
     dn = narration_duration(proj, scenes_json)
+    # ЦЕЛЬ — ОЗВУЧКА ПЛЮС ХВОСТ ТИШИНЫ (04.11, улов `usuario-75` в тот же
+    # час, когда хвост появился). Шаг `tail` честно продлевал последнюю
+    # сцену на 2 с, а этот шаг тут же сжимал видео обратно под длину голоса:
+    # `abs(dv - dn)` становилось ровно 2.0, допуск «меньше 2» не срабатывал,
+    # и `setpts` съедал добавленное. В логе при этом стояли обе честные
+    # строки — и «хвост продлён», и «stretch applying», — а в файле хвоста
+    # не было. Класс «каждый шаг прав, а вместе неверно».
+    if _tail_added(proj):
+        dn = dn + TAIL_SEC
 
     # Dead zone. Re-encoding the WHOLE video costs ~10 min on a 15-min ролик
     # (measured: 606s to correct 0.45s on planeta-8-mostov-1310, 2026-10-12)
@@ -569,6 +583,7 @@ def step_deliver(proj, scenes_json):
     n_scenes = len(json.load(open(scenes_json, encoding="utf-8"))["scenes"])
     n_clips = len(glob.glob(os.path.join(proj, "clips", "clip_*.mp4")))
     dv, dn = _dur(final), narration_duration(proj, scenes_json)
+    _dn_target = dn + (TAIL_SEC if _tail_added(proj) else 0.0)
 
     log(f"final = {final}  ({os.path.getsize(final)/1e6:.1f} MB)")
     log(f"duration: video {dv:.2f}s vs target {dn:.2f}s  (diff {dv-dn:+.2f}s)")
@@ -579,10 +594,15 @@ def step_deliver(proj, scenes_json):
         problems.append(
             f"собрано {n_clips} клипов на {n_scenes} сцен — {n_scenes - n_clips} "
             f"потеряно, склейка выдала огрызок")
-    if abs(dv - dn) > 3.0:
+    if abs(dv - _dn_target) > 3.0:
         problems.append(
-            f"длительность разъехалась на {dv - dn:+.2f}s "
-            f"(видео {dv:.2f}s, озвучка {dn:.2f}s)")
+            f"длительность разъехалась на {dv - _dn_target:+.2f}s "
+            f"(видео {dv:.2f}s, цель {_dn_target:.2f}s = озвучка {dn:.2f}s"
+            + (f" + хвост {TAIL_SEC:.0f}s)" if _tail_added(proj) else ")"))
+    if dv < dn:
+        problems.append(
+            f"ОБРЫВ ОЗВУЧКИ: видео {dv:.3f}s короче голоса {dn:.3f}s "
+            f"на {dn - dv:.3f}s — последнее слово обрезано")
     if problems:
         for p in problems:
             log("❌ " + p)
