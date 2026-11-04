@@ -41,6 +41,24 @@ _VID_EXT = (".mp4", ".mov", ".webm", ".mkv")
 W, H, FPS = 1920, 1080, 30
 SLIDE = 0.33               # slide-in / slide-out seconds
 LEAD = 0.4                 # всплывашка появляется через долю секунды после старта сцены
+
+# ВСПЛЫВАШКА НЕ ЛЕЗЕТ В ПЕРЕХОД (04.11). Сцена с `"fx": "mosaic|panels|wipe"`
+# первые 0,7-1,6 с ещё ПРИЕЗЖАЕТ: кадр рассыпан на плитки, развёрнут панелями
+# или наполовину закрыт прошлым кадром. Всплывашка по умолчанию въезжает на
+# 0,4 с, то есть легла бы прямо на эту кашу. Поэтому на таких сценах её старт
+# отодвигается за конец перехода. Длительности — те же, что в `fx_trans.py`.
+FX_TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7}
+FX_MIN_AT = {}             # sid -> не раньше этой секунды; заполняется в do_overlay
+
+
+def _floor_at(sid, at, dur):
+    if sid is None:
+        return at
+    lo = FX_MIN_AT.get(int(sid), 0.0)
+    if lo <= 0 or at >= lo:
+        return at
+    # если сцена короткая и отодвигать некуда — оставляем как было
+    return lo if lo < dur - 2 * SLIDE - 1.0 else at
 TAIL = 0.4                 # и уезжает за долю секунды до конца сцены
 # всплывашка держится ПОЧТИ ВСЮ сцену (user 2026-09-06: «а то кадр пошёл,
 # всплывашка всплыла и тут же пропала»). Раньше HOLD=1.6с фикс — мелькала.
@@ -223,6 +241,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     except (TypeError, ValueError):
         msc = 1.0
     at = float(ts.get("at", LEAD))
+    at = _floor_at(sid, at, dur)
     at = max(0.0, min(at, max(0.0, dur - 2 * SLIDE - 0.6)))
     hold = max(0.5, dur - at - 2 * SLIDE - TAIL)
     t0, t2, t3 = at, at + SLIDE + hold, at + 2 * SLIDE + hold
@@ -373,6 +392,17 @@ def burn_caps(ffmpeg, clip, sid):
 def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
     ffprobe = "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1))
     ov = json.load(open(ov_path, encoding="utf-8"))
+    try:
+        for _sc in json.load(open(scenes_path, encoding="utf-8"))["scenes"]:
+            _k = str(_sc.get("fx", "")).strip().lower()
+            if _k in FX_TRANS_SEC:
+                FX_MIN_AT[int(_sc["id"])] = FX_TRANS_SEC[_k] + 0.2
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    if FX_MIN_AT:
+        print("всплывашки на сценах с переходом сдвинуты за его конец: "
+              + ", ".join("%d→%.1f с" % (i, v)
+                          for i, v in sorted(FX_MIN_AT.items())), flush=True)
     # vertical anchor: "top" for non-Планета channels (user, 2026-09-05),
     # "bottom" (default) for Планета. Whole-file key, sibling to the scene ids.
     anchor = str(ov.get("anchor", "bottom")).lower()   # общий на ролик, его перебивает ключ сцены
@@ -446,6 +476,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         # «секунда» с дашборда = когда всплывашка НАЧИНАЕТ въезжать (по умолчанию
         # LEAD — сразу после старта сцены). Держится до конца сцены минус TAIL.
         at = float(spec.get("at", LEAD))
+        at = _floor_at(sid, at, _dur)
         at = max(0.0, min(at, max(0.0, _dur - 2*SLIDE - 0.6)))
         hold = max(0.5, _dur - at - 2*SLIDE - TAIL)
         t0, t1, t2, t3 = at, at + SLIDE, at + SLIDE + hold, at + 2 * SLIDE + hold
