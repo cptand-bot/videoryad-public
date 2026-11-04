@@ -37,6 +37,7 @@ import argparse
 import glob
 import json
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -268,9 +269,17 @@ def _auto(a, data, scenes):
               file=sys.stderr)
         return 1
 
-    # разносим по ролику: цели на четвертях, берём ближайшую подходящую
+    # РИСУНОК РАССТАНОВКИ СВОЙ У КАЖДОГО РОЛИКА (04.11, его вопрос: «а если
+    # на ПЛАНЕТЕ это будет каждый ролик, каждый ролик?»). Если всегда ставить
+    # мозаику-панели-вайп на четвертях, через неделю это читается как штамп
+    # канала, а не как приём. Поэтому и ВИДЫ, и МЕСТА гуляют — но ДЕТЕРМИНИРОВАННО
+    # по имени папки ролика: пересборка, рефетч и повтор дают тот же рисунок,
+    # иначе ролик менял бы вид от прогона к прогону (та же логика, что у
+    # слоёв в `build_clips_1080.py`).
+    rnd = random.Random("fx|" + os.path.basename(proj))
     n = len(scenes)
-    targets = [first + int(n * k) for k in (0.25, 0.5, 0.75)][:free]
+    targets = [first + int(n * (k + rnd.uniform(-0.07, 0.07)))
+               for k in (0.25, 0.5, 0.75)][:free]
     picked = []
     for t in targets:
         cand = [x for x in ok if x not in picked]
@@ -290,6 +299,7 @@ def _auto(a, data, scenes):
         return 1
 
     kinds = ["mosaic", "panels", "wipe"]
+    rnd.shuffle(kinds)
     for i, sid in enumerate(picked):
         by_id[sid]["fx"] = kinds[i % len(kinds)]
     _save(a.scenes, data)
