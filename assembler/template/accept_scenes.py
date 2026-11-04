@@ -178,7 +178,10 @@ def main():
     ap.add_argument("src")
     ap.add_argument("--srt", default="")
     ap.add_argument("--out", default="")
-    ap.add_argument("--fix", action="store_true", help="починить дрейф start_sec")
+    ap.add_argument("--fix", action="store_true",
+                    help="починить механическое: дрейф start_sec, тайминг по "
+                         "SRT и свалку текста, выдуманный файл медиатеки, "
+                         "сцены короче трёх секунд, перегруженную папку")
     ap.add_argument("--channel", default="5 МИНУТ",
                     help="канал в шапку готового файла (ПЛАНЕТА / 5 МИНУТ / …)")
     ap.add_argument("--per-scene", type=float, default=0.0,
@@ -193,6 +196,31 @@ def main():
     scenes = data.get("scenes") if isinstance(data, dict) else data
     if not scenes:
         sys.exit("ОШИБКА: в файле нет сцен")
+
+    # АВТОПОЧИНКА МЕХАНИЧЕСКИХ ОТКАЗОВ (04.11). Замер по 28 сырым файлам
+    # агента: приёмка не пропускает 8, и каждый отказ стоит ЗАХОДА к нему
+    # (13 минут). Четыре причины из пяти чинятся без него — см.
+    # `autofix_scenes.py`. Правки идут ДО проверок, чтобы проверки видели уже
+    # починенный файл, и каждая печатается строкой «ПОЧИНЕНО».
+    fixlog, fixed_n = [], 0
+    if a.fix:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        try:
+            from autofix_scenes import autofix, need_query
+        except ImportError as e:
+            print("  ВНИМАНИЕ: автопочинка недоступна (%s) — чиню только "
+                  "дрейф start_sec" % e)
+            autofix = need_query = None
+        if autofix:
+            _lib0 = _media_lib(os.path.dirname(os.path.abspath(a.out or a.src)))
+            _before = len(scenes)
+            scenes, fixlog = autofix(scenes, a.srt, _lib0)
+            fixed_n = len(fixlog)
+            for _ln in fixlog:
+                print("  ПОЧИНЕНО:", _ln)
+            if _before != len(scenes):
+                print("  ПОЧИНЕНО: сцен было %d, стало %d — номера и тайминг "
+                      "пересчитаны подряд" % (_before, len(scenes)))
 
     bad, warn = [], []
     # --- поля ---
@@ -775,10 +803,34 @@ def main():
     # сцены и два шаблона запросов. Вкладка, доверившая `--fix`, уехала бы в
     # фетч с мусором и ничего не заметила. Дыра была ровно в том месте, которое
     # приёмка и должна закрывать.
+    # ПОЧИНЕННЫЙ ФАЙЛ СОХРАНЯЕТСЯ ВСЕГДА, ДАЖЕ ПРИ ОТКАЗЕ. Иначе выигрыш
+    # мнимый: автопочинка разрезала свалку и пересобрала тайминг, файл не
+    # принят из-за пустых запросов — и вся механика потеряна, вкладка идёт на
+    # заход к агенту, ровно то, от чего уходили.
+    _draft = ""
+    if fixed_n and a.out:
+        _draft = a.out + ".autofix.json"
+        _d2 = dict(data) if isinstance(data, dict) else {}
+        _d2["channel"] = a.channel
+        _d2["scenes"] = scenes
+        json.dump(_d2, open(_draft, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+
     if bad:
+        _nq = need_query(scenes) if (a.fix and fixed_n and need_query) else []
+        if _nq:
+            print("\nВПИШИ ЗАПРОСЫ САМА — ЭТО МИНУТА, ЗАХОД К АГЕНТУ НЕ НУЖЕН "
+                  "(%d сцен):" % len(_nq))
+            for _sc in _nq:
+                print("  сцена %s (%.1f с): %s"
+                      % (_sc.get("id"), float(_sc.get("duration_sec") or 0),
+                         str(_sc.get("text", ""))[:160]))
+            if _draft:
+                print("  правь в %s и прогони приёмку по нему" % _draft)
         print("\nПРИНИМАТЬ НЕЛЬЗЯ — исправь перечисленное или попроси переделать."
-              + ("\n(`--fix` чинит только дрейф start_sec; перечисленное выше он "
-                 "не лечит — это переделка на его стороне.)" if a.fix else ""),
+              + ("\n(механическое `--fix` уже починил, см. строки ПОЧИНЕНО; "
+                 "перечисленное выше — смысловое, его пишет вкладка или "
+                 "переделывает агент.)" if a.fix else ""),
               file=sys.stderr)
         return 1
     if a.out:
