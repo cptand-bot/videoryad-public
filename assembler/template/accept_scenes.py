@@ -380,7 +380,8 @@ def main():
         # Четыре вида из его образца: врезка (03.11) и три перехода (04.11).
         # ПОТОЛОК ТРИ СЧИТАЕТСЯ НА ВСЕ ВИДЫ ВМЕСТЕ — «эффекты не больше 3 раз
         # на видеоряд».
-        _ok_fx = {"inset", "mosaic", "panels", "wipe", "depth", "tear"}
+        _ok_fx = {"inset", "mosaic", "panels", "wipe", "depth", "tear",
+                  "subscribe"}
         _trans = {"mosaic", "panels", "wipe", "depth", "tear"}
         _first = min((int(sc.get("id", 0)) for sc in scenes), default=0)
         for sc in scenes:

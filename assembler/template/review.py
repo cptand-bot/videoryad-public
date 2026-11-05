@@ -1608,7 +1608,8 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     _FXL = {"inset": "🎯 ВРЕЗКА + КРУГИ", "mosaic": "🎯 МОЗАИКА ПЛИТОК",
             "panels": "🎯 РАЗЛЁТ ПАНЕЛЕЙ", "wipe": "🎯 ДИАГОНАЛЬНЫЙ ВАЙП",
             "depth": "🎯 КАДР ИЗ ГЛУБИНЫ",
-            "tear": "🎯 РАЗРЫВ НА КУСКИ"}
+            "tear": "🎯 РАЗРЫВ НА КУСКИ",
+            "subscribe": "🎯 КНОПКА «ПОДПИШИСЬ»"}
     _fxk = str(s.get("fx", "")).strip().lower()
     fx_badge = ('<span class="fxb">%s</span>' % _FXL[_fxk]) if _fxk in _FXL else ""
     if live:
@@ -2104,7 +2105,8 @@ poll();
     # сколько стоит и на каких сценах.
     _fx = [(s.get("id"), str(s.get("fx", "")).strip().lower()) for s in scenes
            if str(s.get("fx", "")).strip().lower()
-           in ("inset", "mosaic", "panels", "wipe", "depth", "tear")]
+           in ("inset", "mosaic", "panels", "wipe", "depth", "tear",
+               "subscribe")]
     # СЧЁТ В ШАПКЕ — ПО ВИДАМ, А НЕ «N из 3» (05.11). Потолок три — на КАЖДЫЙ
     # вид (его уточнение 04.11), а видов уже пять, поэтому строка «12 из 3»
     # читалась как перебор нормы там, где норма соблюдена.

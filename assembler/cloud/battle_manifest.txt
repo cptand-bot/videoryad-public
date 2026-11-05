@@ -122,3 +122,4 @@ template/zoom.py
 template/take_folder.py
 template/final_sheet.py
 template/fx_sheet.py
+template/fx_subscribe.py

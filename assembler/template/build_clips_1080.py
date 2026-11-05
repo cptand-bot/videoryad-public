@@ -133,7 +133,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # диагональный вайп со светлой линией.
 # ПОТОЛОК ТРИ — НА ВСЕ ЭФФЕКТЫ ВМЕСТЕ, А НЕ НА КАЖДЫЙ ВИД: его слово звучало
 # «эффекты не больше 3 раз на видеоряд», то есть считается ролик целиком.
-FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear")
+# `subscribe` — не переход и не врезка: кнопка ложится ПОВЕРХ уже
+# собранного клипа сцены (его заказ 05.11). Поэтому она есть в FX_KINDS
+# (чтобы попасть в разбор и в потолок), но нет в FX_TRANS.
+FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear",
+            "subscribe")
 FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
@@ -203,6 +207,31 @@ def build_trans_clip(ffmpeg, ffprobe, src, out_path, duration, sid, kind,
         os.remove(out_path)
     print("  !! переход «%s» НЕ ВСТАЛ, собираю обычный кадр: %s"
           % (kind, ((r.stdout or "") + (r.stderr or ""))[-400:].replace("\n", " ")),
+          flush=True)
+    return False
+
+
+def build_subscribe_clip(ffmpeg, out_path, sid):
+    """Кнопка «подпишись» поверх УЖЕ СОБРАННОГО клипа сцены.
+
+    Отдельным проходом, а не внутри сборки кадра: кнопка одинаково ложится и
+    на фото-сцену, и на видео-сцену, и на сцену с переходом — ей всё равно,
+    чем кадр был до неё. Не встала — клип остаётся как был, сцена не теряется.
+    """
+    tmp = out_path + ".sub.mp4"
+    cmd = [sys.executable, os.path.join(HERE, "fx_subscribe.py"),
+           out_path, tmp, "--at", "0.3", "--ffmpeg", ffmpeg]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    ok = (r.returncode == 0 and os.path.isfile(tmp)
+          and os.path.getsize(tmp) > 0)
+    if ok:
+        os.replace(tmp, out_path)
+        print("  кнопка «подпишись» ПОСТАВЛЕНА", flush=True)
+        return True
+    if os.path.isfile(tmp):
+        os.remove(tmp)
+    print("  !! кнопка «подпишись» НЕ ВСТАЛА, клип без неё: "
+          + ((r.stdout or "") + (r.stderr or ""))[-400:].replace("\n", " "),
           flush=True)
     return False
 
@@ -665,6 +694,8 @@ def main():
                     build_video_clip(ffmpeg, ffprobe, src, out_path, duration)
                 else:
                     build_image_clip(ffmpeg, src, out_path, duration, ffprobe)
+                if _kind == "subscribe" and os.path.exists(out_path):
+                    build_subscribe_clip(ffmpeg, out_path, sid)
             except subprocess.CalledProcessError as e:
                 print(f"  FAILED: {e.stderr.decode()[-500:]}")
                 continue

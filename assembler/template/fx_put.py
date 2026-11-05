@@ -48,7 +48,8 @@ import sys
 
 MAX_MB = 8.0
 MAX_W = 1280
-KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear")
+KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear",
+         "subscribe")
 TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 # В АВТОМАТИЧЕСКУЮ РОТАЦИЮ ВИД ПОПАДАЕТ ТОЛЬКО ПОСЛЕ ЕГО «БЕРЁМ» (05.11).
 # Новый эффект ставится руками и показывается ему готовым mp4; до этого
@@ -160,6 +161,24 @@ def main():
         return _die("вида «%s» на ролике уже %d (сцены %s) — потолок его "
                     "словом ТРИ НА КАЖДЫЙ ВИД, четвёртый не ставлю"
                     % (kind, len(same), ", ".join(str(i) for i in same)))
+
+    if kind == "subscribe":
+        # КНОПКА — НЕ ПЕРЕХОД: ей не нужен ни кадр прошлой сцены, ни файл.
+        # Нужна только длина: вся анимация идёт 3,4 с плюс запас, на короткой
+        # сцене она не успела бы дойти до «вы подписаны» и обрезалась бы
+        # на полужесте.
+        dur = float(sc.get("duration_sec") or 0)
+        if dur < 4.5:
+            return _die("сцена %d всего %.1f с — кнопке «подпишись» нужно "
+                        "не меньше 4,5 с (сама анимация 3,4 с)" % (a.sid, dur))
+        sc["fx"] = "subscribe"
+        if os.path.isfile(dst):
+            os.remove(dst)
+        _save(a.scenes, data)
+        print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ» ПОСТАВЛЕНА" % (a.sid, dur))
+        print("кнопок в ролике: %d из %d" % (len(set(same) | {a.sid}), FX_MAX))
+        print("файлов не нужно: кадры кнопки рисует облако само")
+        return 0
 
     if kind in TRANS:
         # Переход уезжает с кадра ПРОШЛОЙ сцены: на первой сцене ему не с
