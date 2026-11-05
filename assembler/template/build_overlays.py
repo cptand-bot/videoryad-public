@@ -5,8 +5,13 @@ Reads overlays.json: {"<scene_id>": {"photo": "<path>", "sound": "<name>", "at":
   - sound: base name of a file in <sfx-dir> (e.g. "whoosh" -> whoosh.mp3/.wav)
   - at:    seconds into that scene's clip when the pop-up starts sliding in
 
-RULE: only scenes whose main clip is VIDEO get a pop-up (news + esoteric) (photo-on-photo looks
-flat). A scene id pointing at an image asset is skipped with a warning.
+УСТАРЕВШЕЕ ПРАВИЛО, СНЯТО 05.11 (улов `usuario-ca`): здесь годами стояло
+«всплывашку получают только сцены, где основной клип ВИДЕО», и КОД ЭТОГО НЕ
+ПРОВЕРЯЕТ — ставит на любые, в том числе на фото-сцены. Вкладка, поверившая
+шапке, поставила бы 2 всплывашки вместо 10 и получила бы отказ `selfcheck`
+(ориентир — около десяти фото-всплывашек на ролик). Фото поверх фото в подаче
+канала нормально: у всплывашки своя рамка, тень и въезд.
+Сцена без годного кадра пропускается с предупреждением — это осталось.
 
 Two stages:
   overlay  — re-render each listed clip with the corner slide-in. Keeps the
