@@ -445,6 +445,25 @@ def drop_ticker(sid):
 
 _POS2STYLE = {"left": "left", "right": "right", "center": "up-center"}
 
+# ПОЗИЦИЯ НАДПИСИ: ДЕФОЛТ «ВВЕРХУ ПО ЦЕНТРУ», НИЗ ЗАПРЕЩЁН (05.11, прямое
+# слово пользователя через `usuario-1a`: «надписи ни в коем случае не выводить
+# внизу. Или в середине, или вверху. Внизу идут субтитры»).
+# ПОЧЕМУ ЭТО ГЛАВНАЯ ПРИЧИНА, А НЕ `anchor`: дефолты РАЗОШЛИСЬ между файлами —
+# `build_overlays.py` с 28.10 ставит `tc` и поднимает любой низ наверх, а
+# дашборд в трёх местах подставлял `bc` и ещё и принудительно возвращал его
+# при любом непонятном значении. То есть пользователь на дашборде видел
+# надписи ВНИЗУ, а сборка поставила бы их ВВЕРХУ: ни одна проверка не
+# ругалась, потому что `anchor` был правильный и selfcheck зелёный.
+# Пользователь судит по дашборду и прав — он видел то, что ему показали.
+def _pos_ok(value):
+    p = str(value or "").lower()
+    if not (len(p) == 2 and p[0] in "tmb" and p[1] in "lcr"):
+        return "tc"
+    if p[0] == "b":                     # низ → верх с тем же выравниванием
+        return "t" + p[1]
+    return p
+
+
 def _ovcell_cur(spec, anchor=""):
     """Клетка схемы 3×3 для ФОТО-всплывашки: горизонталь из style,
     вертикаль из anchor записи (или общего ключа ролика).
@@ -543,7 +562,7 @@ def overlay_text_geom(tspec, png_path=None, sid=None):
         msc = max(0.4, min(2.4, float(tspec.get("scale", 1.0))))
     except (TypeError, ValueError):
         msc = 1.0
-    pos = str(tspec.get("pos", "bc")).lower()
+    pos = _pos_ok(tspec.get("pos"))
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     ar = 6.0
@@ -1617,7 +1636,7 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         _tfont = str(_tw.get("font") or "default").lower()
         if _tfont not in TEXT_FONT_FILES:
             _tfont = "default"
-        _tpos = _tw.get("pos", "bc")
+        _tpos = _pos_ok(_tw.get("pos"))
         _topts = "".join(f'<option value="{x["name"]}"'
                          f'{" selected" if x["name"] == _tw.get("sound", text_sound_for(sid)) else ""}>{x["label"]}</option>'
                          for x in sfx)
@@ -3470,9 +3489,7 @@ def run_live(scenes_path, images_dir, port):
                             or text_color_for(sid)).lower()
                 if color not in TEXT_COLORS:
                     color = text_color_for(sid)
-                pos = str(spec.get("pos", "bc")).lower()
-                if not (len(pos) == 2 and pos[0] in "tmb" and pos[1] in "lcr"):
-                    pos = "bc"
+                pos = _pos_ok(spec.get("pos"))
                 fkey = str(spec.get("font") or "default").lower()
                 if fkey not in TEXT_FONT_FILES:
                     fkey = "default"
