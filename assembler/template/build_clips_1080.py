@@ -137,7 +137,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # собранного клипа сцены (его заказ 05.11). Поэтому она есть в FX_KINDS
 # (чтобы попасть в разбор и в потолок), но нет в FX_TRANS.
 FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear",
-            "subscribe")
+            "subscribe", "subscribe2")
 FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
@@ -218,7 +218,8 @@ def _sub_corner(sid):
     раннеров читает один и тот же scenes.json, поэтому очередь у всех
     совпадает и ролик не меняет вид от прогона к прогону.
     """
-    order = sorted(i for i, k in FX_OF.items() if k == "subscribe")
+    order = sorted(i for i, k in FX_OF.items()
+                   if k in ("subscribe", "subscribe2"))
     try:
         return "right" if order.index(int(sid)) % 2 == 0 else "left"
     except ValueError:
@@ -233,7 +234,9 @@ def build_subscribe_clip(ffmpeg, out_path, sid):
     чем кадр был до неё. Не встала — клип остаётся как был, сцена не теряется.
     """
     tmp = out_path + ".sub.mp4"
-    cmd = [sys.executable, os.path.join(HERE, "fx_subscribe.py"),
+    tool = ("fx_subscribe2.py" if FX_OF.get(sid) == "subscribe2"
+            else "fx_subscribe.py")
+    cmd = [sys.executable, os.path.join(HERE, tool),
            out_path, tmp, "--at", "0.3", "--ffmpeg", ffmpeg,
            "--corner", _sub_corner(sid)]
     r = subprocess.run(cmd, capture_output=True, text=True)
@@ -709,7 +712,8 @@ def main():
                     build_video_clip(ffmpeg, ffprobe, src, out_path, duration)
                 else:
                     build_image_clip(ffmpeg, src, out_path, duration, ffprobe)
-                if _kind == "subscribe" and os.path.exists(out_path):
+                if _kind in ("subscribe", "subscribe2") \
+                        and os.path.exists(out_path):
                     build_subscribe_clip(ffmpeg, out_path, sid)
             except subprocess.CalledProcessError as e:
                 print(f"  FAILED: {e.stderr.decode()[-500:]}")

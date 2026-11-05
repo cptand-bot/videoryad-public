@@ -123,3 +123,4 @@ template/take_folder.py
 template/final_sheet.py
 template/fx_sheet.py
 template/fx_subscribe.py
+template/fx_subscribe2.py
