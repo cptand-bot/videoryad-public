@@ -930,12 +930,17 @@ def main():
                 continue
             _best = (0.0, None)
             for _t, _c in _cu:
-                if _t < _prev - 20:
+                # ТОЛЬКО ВПЕРЁД ОТ ПРЕДЫДУЩЕГО ЯКОРЯ (05.11, улов
+                # `usuario-f4`): допуск «назад на 20 с» давал якорю
+                # возможность сесть на ЧУЖУЮ реплику, и кадр уезжал на
+                # соседний текст — Мерц на реплику про АдГ, Ле Пен на
+                # вступление, где её не называют.
+                if _t < _prev:
                     continue
                 _r = _dl.SequenceMatcher(None, _tx, _c.lower()[:60]).ratio()
                 if _r > _best[0]:
                     _best = (_r, _t)
-            if _best[0] >= 0.5 and _best[1] is not None:
+            if _best[0] >= 0.62 and _best[1] is not None:
                 _prev = _best[1]
                 _d = _best[1] - float(sc.get("start_sec") or 0)
                 _drift.append((sc.get("id"), round(_best[1], 1), _d))
@@ -991,10 +996,41 @@ def main():
             _end = _tot if _tot else (_st[-1] + 6.0)
             if _end < _st[-1] + 2.0:
                 _end = _st[-1] + 2.0
+            # НИ ОДНОЙ СЦЕНЫ КОРОЧЕ 3,5 с (05.11, улов `usuario-f4`: после
+            # привязки появились сцены по 2,0 с — кадр не успевает прочитаться,
+            # а отрезок медиатеки в такую сцену не лезет вовсе). Недостающее
+            # ЗАНИМАЕМ У СОСЕДА: сначала двигаем начало сцены назад, если
+            # предыдущая длинная, иначе отодвигаем начало следующей.
+            _MINS = 3.5
+            for _n in range(len(_st)):
+                _nx = _st[_n + 1] if _n + 1 < len(_st) else _end
+                _need = _MINS - (_nx - _st[_n])
+                if _need <= 0:
+                    continue
+                _room_back = (_st[_n] - _st[_n - 1] - _MINS) if _n > 0 else _st[_n]
+                _take = min(_need, max(0.0, _room_back))
+                _st[_n] = round(_st[_n] - _take, 2)
+                _need -= _take
+                if _need > 0 and _n + 1 < len(_st):
+                    _st[_n + 1] = round(_st[_n + 1] + _need, 2)
+            _moved = []
             for _n, sc in enumerate(scenes):
+                _was = float(sc.get("start_sec") or 0)
                 sc["start_sec"] = round(_st[_n], 2)
                 _nx = _st[_n + 1] if _n + 1 < len(_st) else _end
                 sc["duration_sec"] = round(_nx - _st[_n], 2)
+                if abs(_st[_n] - _was) > 8.0:
+                    _moved.append((sc.get("id"), round(_st[_n] - _was, 1)))
+            if _moved:
+                print("  СЦЕНЫ СДВИНУЛИСЬ БОЛЬШЕ ЧЕМ НА 8 с — ПРОВЕРЬ ГЛАЗАМИ,")
+                print("  на своих ли словах стоят их кадры (правило «кадр")
+                print("  против слова»): "
+                      + ", ".join("%s (%+.1f с)" % (i, d) for i, d in _moved[:12]))
+            _short = [sc.get("id") for sc in scenes
+                      if float(sc.get("duration_sec") or 0) < 3.0]
+            if _short:
+                print("  ВНИМАНИЕ: после привязки остались короткие сцены: "
+                      + ", ".join(map(str, _short)))
             print("  тайминг снят с ОЗВУЧКИ по тексту сцен: привязано %d из %d, "
                   "остальные вставкой между соседями"
                   % (len(_pts), len(scenes)))
