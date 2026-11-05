@@ -195,6 +195,13 @@ def main():
     print("строк в таблице: %d" % len(rows))
 
     ids = {key.upper()}
+    # НА КАКОМ ШАГЕ ПРИШЛА ССЫЛКА (05.11, улов `usuario-ca`). По ключу
+    # EUENLARGE_255 обход дал 24 ссылки, по теме ролика — 7: запись соседней
+    # темы перечислена в связях, и дальние шаги тянут её посты. Выбросить
+    # дальние нельзя (04.11 было ровно наоборот: запись называет СВОИ
+    # источники, и их отбивали как чужие), а вот СКАЗАТЬ, какие ближние и
+    # какие дальние, дёшево — разбор вкладки начинается с ближних.
+    hop_of = {}
     sheets = collections.Counter()
     links = collections.OrderedDict()
     for hop in range(hops):
@@ -213,6 +220,8 @@ def main():
                 if hop == 0 or mu.startswith(FOLLOW) or KEY_RE.fullmatch(mu):
                     grew.add(mu)
             for u in TG_RE.findall(line):
+                if u not in links:
+                    hop_of[u] = hop
                 links.setdefault(u, sheet)
         print("шаг %d: строк по связям %d, идентификаторов было %d, "
               "добавилось %d, ссылок %d"
@@ -297,6 +306,20 @@ def main():
                 if u not in links:
                     topic.setdefault(u, sheet)
         print("по теме записи (слова/дата) нашлось ещё %d ссылок" % len(topic))
+
+    if links:
+        _hp = "links_hops.txt"
+        try:
+            with open(_hp, "w", encoding="utf-8") as _f:
+                for _u in sorted(links, key=lambda x: (hop_of.get(x, 9), x)):
+                    _f.write("%d\t%s\n" % (hop_of.get(_u, 9), _u))
+            _near = sum(1 for _u in links if hop_of.get(_u, 9) == 0)
+            print("\nРАССТОЯНИЕ ДО ССЫЛКИ записано в %s: шаг 0 (строки самой "
+                  "записи) — %d из %d. Разбор начинай с них: дальние шаги "
+                  "тянут посты СОСЕДНИХ тем, перечисленных в связях."
+                  % (_hp, _near, len(links)))
+        except OSError:
+            pass
 
     # ЗАКРЕПЛЕНИЕ: чужое не берём, своё помечаем.
     cl = claims_load()
