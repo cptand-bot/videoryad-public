@@ -59,9 +59,11 @@ def channels_path(plan_path):
     только `template/` и `cloud/`, папки `base/` там нет вовсе — первый
     прогон 28.10 упал именно на этом: шесть машин честно отработали ноль
     клипов, а ошибка выглядела как «YouTube не пустил»."""
-    near = os.path.join(os.path.dirname(os.path.abspath(plan_path)), "channels.json")
-    if os.path.exists(near):
-        return near
+    near = ""
+    if plan_path:
+        near = os.path.join(os.path.dirname(os.path.abspath(plan_path)), "channels.json")
+        if os.path.exists(near):
+            return near
     local = os.path.join(BASE, "channels.json")
     if os.path.exists(local):
         return local
@@ -92,6 +94,52 @@ def probe(path):
         return int(st.get("width") or 0), int(st.get("height") or 0), dur
     except Exception:
         return 0, 0, 0.0
+
+
+_CH_FLAGS = None
+
+
+def _ch_flags(plan_path=None):
+    """Карта «id канала → его запись в channels.json». Нужна одному полю —
+    `режем_знак`."""
+    global _CH_FLAGS
+    if _CH_FLAGS is None:
+        _CH_FLAGS = {}
+        try:
+            with open(channels_path(plan_path), encoding="utf-8") as f:
+                data = json.load(f)
+            for c in (data if isinstance(data, list) else data.get("каналы") or []):
+                if isinstance(c, dict) and c.get("id"):
+                    _CH_FLAGS[str(c["id"]).lower()] = c
+        except Exception:
+            pass
+    return _CH_FLAGS
+
+
+def brand_cut_on(ch_id, plan_path=None):
+    """РЕЖЕМ ЛИ ЗНАК У ЭТОГО КАНАЛА (улов 05.11).
+
+    Ведомство ставит на свою же съёмку СВОЮ эмблему в угол, а часто и
+    вшитые субтитры внизу — ровно как телеканал. Отбор 04.11 это показал
+    числом: `@mod_russia` 15 кусков из 15 и `@NATO` 15 из 15 ушли в отказ с
+    причиной «логотип поверх кадра», `ВЕДОМСТВА/МИНОБОРОНЫ-РОССИИ` и
+    `ВЕДОМСТВА/НАТО` так и стоят по 2 клипа, пока сбор каждую ночь берёт по
+    тридцать. Лечится тем же резом, который он утвердил 30.10 для DW.
+    """
+    c = _ch_flags(plan_path).get(str(ch_id or "").lower()) or {}
+    return bool(c.get("режем_знак") or c.get("телеканал"))
+
+
+def brand_vf(w, h, low=22, edge=15):
+    """Фильтр реза — те же числа, что у `base/topic_clips.py::tv_cut`
+    (замер 30.10 на DW 1920x1080: низ 22%, затем края по 15%, все четыре
+    угла чисты). Здесь он подмешивается в ТОТ ЖЕ проход ffmpeg, которым
+    кусок и так нарезается, поэтому лишнего счёта на машине не появляется."""
+    ch = (h * low) // 100 // 2 * 2
+    h1 = h - ch
+    nw = (w - 2 * ((w * edge) // 100)) // 2 * 2
+    nh = (h1 - 2 * ((h1 * edge) // 100)) // 2 * 2
+    return "crop=%d:%d:0:0,crop=%d:%d:%d:%d" % (w, h1, nw, nh, (w - nw) // 2, (h1 - nh) // 2)
 
 
 def clip_is_clean(path, dur):
@@ -156,7 +204,7 @@ def pick_videos(channel, query, want):
     return urls
 
 
-def cut_clips(src, dst_dir, base_name, clip_len, want, seen_md5):
+def cut_clips(src, dst_dir, base_name, clip_len, want, seen_md5, brand=False):
     """Режем ровные куски из середины — начало роликов ведомств почти всегда
     заставка с гербом, конец — титры."""
     w, h, dur = probe(src)
@@ -171,11 +219,17 @@ def cut_clips(src, dst_dir, base_name, clip_len, want, seen_md5):
     while start + clip_len < dur * 0.95 and len(out) < want:
         n += 1
         dst = os.path.join(dst_dir, "%s_%02d.mp4" % (base_name, n))
-        r = _run(["ffmpeg", "-nostdin", "-v", "error", "-ss", "%.2f" % start,
-                  "-i", src, "-t", "%.2f" % clip_len,
-                  # звук не нужен: поверх ляжет озвучка, а файл легче вдвое
-                  "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
-                  "-pix_fmt", "yuv420p", "-y", dst], 600)
+        cmd = ["ffmpeg", "-nostdin", "-v", "error", "-ss", "%.2f" % start,
+               "-i", src, "-t", "%.2f" % clip_len,
+               # звук не нужен: поверх ляжет озвучка, а файл легче вдвое
+               "-an"]
+        # РЕЗ ЗНАКА ИДЁТ ТЕМ ЖЕ ПРОХОДОМ, что и нарезка, и ОБЯЗАТЕЛЬНО до
+        # `clip_is_clean`: иначе OCR читает эмблему и отбивает уже чистый кадр
+        if brand:
+            cmd += ["-vf", brand_vf(w, h)]
+        cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+                "-pix_fmt", "yuv420p", "-y", dst]
+        r = _run(cmd, 600)
         start += step
         if not r or not os.path.exists(dst) or os.path.getsize(dst) < 50000:
             continue
@@ -208,6 +262,7 @@ def sweep_channel(item, out_dir, per_object, clip_len, deadline, per_video=3):
 
     Говорящая голова тут НЕ брак, а именно то, что нужно: это кадр персоны."""
     ch, folder = item["channel"], item["dir"]
+    brand = brand_cut_on(ch, item.get("_plan"))
     dst = os.path.join(out_dir, "frames", item["layer"], folder)
     os.makedirs(dst, exist_ok=True)
     _say("\n── %s → %s (свежие ролики канала)" % (ch, folder))
@@ -254,7 +309,7 @@ def sweep_channel(item, out_dir, per_object, clip_len, deadline, per_video=3):
             # прочтёт как один кадр, повторённый двенадцать раз.
             want_here = min(per_video, per_object - len(kept))
             got, why = grab_sections(vid, dur, dst, "%s_%s" % (day or "00000000", vid[:6]),
-                                     clip_len, want_here, seen_md5)
+                                     clip_len, want_here, seen_md5, brand=brand)
             for g in got:
                 _say("      + %s  ← %s · %s" % (os.path.basename(g), day, title[:40]))
             kept += got
@@ -271,7 +326,7 @@ def sweep_channel(item, out_dir, per_object, clip_len, deadline, per_video=3):
         # ИМЯ НЕСЁТ ДАТУ: папка персоны живёт скользящим окном, и свежее
         # вытесняет старое само, без правок боевого фетча
         got, why = cut_clips(raw, dst, "%s_%s" % (day or "00000000", vid[:6]),
-                             clip_len, per_object - len(kept), seen_md5)
+                             clip_len, per_object - len(kept), seen_md5, brand=brand)
         os.remove(raw)
         if why:
             _say("      %s: %s" % (vid, why))
@@ -284,7 +339,7 @@ def sweep_channel(item, out_dir, per_object, clip_len, deadline, per_video=3):
             "files": [os.path.relpath(p, out_dir) for p in kept]}
 
 
-def grab_sections(vid, dur, dst_dir, base_name, clip_len, want, seen_md5):
+def grab_sections(vid, dur, dst_dir, base_name, clip_len, want, seen_md5, brand=False):
     """КУСКИ КАЧАЕМ ГОТОВЫМИ, БЕЗ ПЕРЕКОДИРОВАНИЯ (локальный режим).
 
     Машину пользователя считать нельзя (его прямое слово 23.10), а YouTube
@@ -311,6 +366,20 @@ def grab_sections(vid, dur, dst_dir, base_name, clip_len, want, seen_md5):
         w, h, cdur = probe(dst)
         if w < MIN_W or h < MIN_H:
             os.remove(dst); _say("      кусок %d: мелкий %dx%d" % (i, w, h)); continue
+        # ЗДЕСЬ кусок пришёл готовым, без перекодирования, поэтому рез знака
+        # стоит отдельного прохода (замер 05.11: 3,4-4,4 с на кусок 12 с).
+        # Платим его только тем каналам, которые без реза дают ноль.
+        if brand:
+            tmp = dst + ".cut.mp4"
+            rc = _run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", dst,
+                       "-vf", brand_vf(w, h), "-an", "-c:v", "libx264",
+                       "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+                       tmp], 300)
+            if rc and os.path.exists(tmp) and os.path.getsize(tmp) > 20000:
+                os.replace(tmp, dst)
+                w, h, cdur = probe(dst)
+            elif os.path.exists(tmp):
+                os.remove(tmp)
         if cdur < MIN_CLIP:
             os.remove(dst); _say("      кусок %d: короткий %.1f с" % (i, cdur)); continue
         try:
@@ -363,7 +432,8 @@ def harvest_one(item, out_dir, per_object, clip_len, deadline):
                 _say("      %s: не скачалось (%s)" % (vid, msg.replace("\n", " ")))
                 continue
             got, why = cut_clips(raw, dst, "v_%s" % vid[:6], clip_len,
-                                 per_object - len(kept), seen_md5)
+                                 per_object - len(kept), seen_md5,
+                                 brand=brand_cut_on(ch.get("id"), item["_plan"]))
             os.remove(raw)
             if why:
                 _say("      %s: %s" % (vid, why))
