@@ -643,7 +643,14 @@ def main():
                    for sc in data["scenes"]
                    if str(sc.get("fx", "")).strip().lower() in FX_KINDS)
     if _want:
-        _plan = CHANNEL.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
+        # У КАЖДОГО КАНАЛА СВОЙ НАБОР ВИДОВ (05.11): кнопка вида 2 —
+        # «5 МИНУТ», всё остальное — ПЛАНЕТА.
+        _ch = CHANNEL.strip().upper().replace("Ё", "Е")
+        _allow = {"subscribe2": ("5 МИНУТ",)}
+        _want = [(i, k) for i, k in _want
+                 if _ch in tuple(x.upper().replace("Ё", "Е")
+                                 for x in _allow.get(k, ("ПЛАНЕТА",)))]
+        _plan = bool(_want)
         if not _plan:
             print("эффекты: канал «%s» — НЕ ставлю (его слово 03.11: только "
                   "ПЛАНЕТА). Сцены %s пойдут обычным кадром"

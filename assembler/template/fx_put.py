@@ -70,6 +70,28 @@ AUTO_TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 FX_MAX = 3          # на каждый ВИД
 
 
+# КАКОЙ ВИД НА КАКОМ КАНАЛЕ (05.11, его слово по второй кнопке: «эту кнопку
+# применяем… на канале „5 минут“. Это не Планета. На Планете другая кнопка»).
+# До этого дня правило было одно для всех видов — «эффекты только на ПЛАНЕТЕ»
+# (03.11), и оно остаётся для всего, что здесь не перечислено отдельно.
+CHANNEL_FX = {"subscribe2": ("5 МИНУТ",)}
+DEFAULT_CHANNELS = ("ПЛАНЕТА",)
+AUTO_CHANNELS = ("ПЛАНЕТА", "5 МИНУТ")
+
+
+def _norm_chan(c):
+    return str(c or "").strip().upper().replace("Ё", "Е")
+
+
+def _chan_ok(kind, chan):
+    allowed = CHANNEL_FX.get(kind, DEFAULT_CHANNELS)
+    return _norm_chan(chan) in tuple(_norm_chan(x) for x in allowed)
+
+
+def _chan_names(kind):
+    return " / ".join(CHANNEL_FX.get(kind, DEFAULT_CHANNELS))
+
+
 def _probe(ffprobe, src):
     r = subprocess.run([ffprobe, "-v", "error", "-select_streams", "v:0",
                         "-show_entries", "stream=width,height",
@@ -124,9 +146,19 @@ def main():
         return _die("в файле нет сцен")
 
     chan = str((data or {}).get("channel", "") or "") if isinstance(data, dict) else ""
-    if not a.off and chan.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
-        return _die("канал «%s» — эффект ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
-                    % (chan or "не указан в scenes.json"))
+    if not a.off:
+        if a.auto:
+            if _norm_chan(chan) not in tuple(_norm_chan(x)
+                                             for x in AUTO_CHANNELS):
+                return _die("канал «%s» — автоматическая расстановка есть "
+                            "только для %s"
+                            % (chan or "не указан в scenes.json",
+                               " / ".join(AUTO_CHANNELS)))
+        elif not _chan_ok(kind, chan):
+            return _die("канал «%s» — вид «%s» ставится только на %s "
+                        "(его слово: на каждом канале своя кнопка)"
+                        % (chan or "не указан в scenes.json", kind,
+                           _chan_names(kind)))
 
     if a.auto:
         return _auto(a, data, scenes)
@@ -254,7 +286,7 @@ def main():
     return 0
 
 
-def _put_subscribe(scenes, by_id, first, n):
+def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
     """КНОПКА «ПОДПИШИСЬ» — ТРИ РАЗА НА ДЛИНУ РОЛИКА (05.11, его слово при
     приёмке: «используем её три раза на длину видео. Один раз в правом углу,
     другой раз в левом, один раз в правом. В верхнем углу»).
@@ -270,7 +302,7 @@ def _put_subscribe(scenes, by_id, first, n):
     просто пересобирают.
     """
     sub_have = [int(x.get("id", 0)) for x in scenes
-                if str(x.get("fx", "")).strip().lower() == "subscribe"]
+                if str(x.get("fx", "")).strip().lower() == kind]
     sub_need = max(0, FX_MAX - len(sub_have))
     if not sub_need:
         return []
@@ -288,7 +320,7 @@ def _put_subscribe(scenes, by_id, first, n):
             break
         put.append(min(cand, key=lambda x: (abs(x - t), x)))
     for sid in put:
-        by_id[sid]["fx"] = "subscribe"
+        by_id[sid]["fx"] = kind
     if put:
         _ang = ["ПРАВЫЙ", "ЛЕВЫЙ"]
         for i, sid in enumerate(sorted(set(sub_have) | set(put))):
@@ -334,6 +366,20 @@ def _auto(a, data, scenes):
                            for h in hit)
         src = str(by_id.get(sid, {}).get("source", ""))
         return src in ("press_photo", "web_search", "stock_photo", "local_library")
+
+    if _norm_chan(data.get("channel") if isinstance(data, dict) else "") \
+            == _norm_chan("5 МИНУТ"):
+        # НА «5 МИНУТ» ЕСТЬ ТОЛЬКО КНОПКА ВИДА 2 (05.11). Переходы — приём
+        # ПЛАНЕТЫ, сюда они не идут: он назвал каналы раздельно.
+        put = _put_subscribe(scenes, by_id, first, len(scenes), "subscribe2")
+        if put:
+            _save(a.scenes, data)
+            print("канал «5 МИНУТ»: кнопок вида 2 в ролике %d"
+                  % sum(1 for s in scenes
+                        if str(s.get("fx", "")).strip().lower() == "subscribe2"))
+        else:
+            print("канал «5 МИНУТ»: кнопки уже стоят или ставить некуда")
+        return 0
 
     have = sorted(s["id"] for s in scenes
                   if str(s.get("fx", "")).strip().lower() in KINDS)

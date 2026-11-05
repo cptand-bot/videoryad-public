@@ -429,10 +429,20 @@ def main():
             if v and str(sc.get("source", "")).startswith(CARD_PREFIX):
                 bad.append("сцена %s: эффект на рисованную карточку (%s) не "
                            "кладём" % (sc.get("id"), sc.get("source")))
-        if a.channel.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
-            bad.append("эффекты стоят на сценах %s, а канал «%s» — "
-                       "эффекты ТОЛЬКО на ПЛАНЕТЕ (его слово 03.11)"
-                       % (", ".join(str(i) for i in _fx_sids), a.channel))
+        _ch = a.channel.strip().upper().replace("Ё", "Е")
+        _allow = {"subscribe2": ("5 МИНУТ",)}
+        _wrong = [sc.get("id") for sc in scenes
+                  if str(sc.get("fx", "")).strip().lower() in _ok_fx
+                  and _ch not in tuple(
+                      x.upper().replace("Ё", "Е")
+                      for x in _allow.get(
+                          str(sc.get("fx", "")).strip().lower(),
+                          ("ПЛАНЕТА",)))]
+        if _wrong:
+            bad.append("на сценах %s стоят эффекты, которых на канале «%s» "
+                       "нет: у каждого канала свой набор (кнопка вида 2 — "
+                       "«5 МИНУТ», остальное — ПЛАНЕТА)"
+                       % (", ".join(str(i) for i in _wrong), a.channel))
         # ПОТОЛОК ТРИ — НА КАЖДЫЙ ВИД (04.11, его уточнение по первому
         # боевому ролику: «не больше 3 раз ОДНОГО эффекта»). Утром считали
         # на все виды вместе, он посмотрел и сказал, что этого мало.
