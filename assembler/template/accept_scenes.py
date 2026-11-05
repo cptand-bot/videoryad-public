@@ -23,6 +23,7 @@
 import argparse
 import json
 import os
+import glob
 import io
 import re
 import sys
@@ -215,13 +216,37 @@ def main():
         if autofix:
             _lib0 = _media_lib(os.path.dirname(os.path.abspath(a.out or a.src)))
             _before = len(scenes)
+            _keep = [dict(x) for x in scenes]
             scenes, fixlog = autofix(scenes, a.srt, _lib0)
             fixed_n = len(fixlog)
             for _ln in fixlog:
                 print("  ПОЧИНЕНО:", _ln)
             if _before != len(scenes):
-                print("  ПОЧИНЕНО: сцен было %d, стало %d — номера и тайминг "
-                      "пересчитаны подряд" % (_before, len(scenes)))
+                # СКЛЕЙКА СЦЕН ПОСЛЕ ФЕТЧА — КАТАСТРОФА, А НЕ ПОЧИНКА (05.11,
+                # улов `usuario-f4`). Кадры лежат на диске как
+                # `images/scene_NNN.*`, всплывашки — ключами по id, задания
+                # карточек — `cards/queue/scene_NNN.json`. Убрали одну сцену —
+                # и КАЖДЫЙ кадр после неё встал на чужую сцену, молча: файл
+                # валидный, линт чист, `selfcheck` зелёный. До фетча склейка
+                # полезна, после — запрещена.
+                _imgd = os.path.join(
+                    os.path.dirname(os.path.abspath(a.src)) or ".", "images")
+                _have_frames = bool(glob.glob(os.path.join(
+                    _imgd, "scene_*.*"))) if os.path.isdir(_imgd) else False
+                if _have_frames:
+                    scenes = _keep
+                    print("  !! СКЛЕЙКА СЦЕН ОТМЕНЕНА: рядом лежат скачанные "
+                          "кадры (images/scene_*.*), а склейка сдвинула бы "
+                          "номера — каждый кадр после места склейки встал бы "
+                          "на ЧУЖУЮ сцену. Сцен оставлено %d, как было. "
+                          "Короткие сцены правь руками или пересобирай "
+                          "раскадровку ДО фетча." % len(scenes))
+                    fixlog = [x for x in fixlog if "скле" not in x.lower()]
+                    fixed_n = len(fixlog)
+                else:
+                    print("  ПОЧИНЕНО: сцен было %d, стало %d — номера и "
+                          "тайминг пересчитаны подряд"
+                          % (_before, len(scenes)))
 
     bad, warn = [], []
     # --- поля ---

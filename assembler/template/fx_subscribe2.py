@@ -19,7 +19,8 @@
   * надпись НАБИРАЕТСЯ по букве, в разрядку, как заголовок;
   * под надписью черта-акцент ПРОЧЕРЧИВАЕТСЯ слева направо;
   * на нажатии от кнопки расходится ВОЛНА и в стороны летят ИСКРЫ,
-    пластина переворачивается на красную грань и обратно;
+    а по пластине косой кромкой НАБЕГАЕТ новая заливка: тёмная → красная →
+    тёмная (силуэт при этом не меняется, надпись читается всегда);
   * по периметру бежит световая жила, между нажатиями проходит блик.
 
 ГРАНИЦЫ КАНАЛА те же: глитча и тряски нет (двигаются только искра, блик и
@@ -47,7 +48,7 @@ ACCENT = (6, 199, 199)          # фирменная бирюза канала
 WHITE = (255, 255, 255)
 
 TAPS = (0.55, 1.35, 2.15)       # когда курсор дожимает
-FLIP = 0.26                     # длительность переворота
+FILL = 0.30                     # за сколько новая заливка набегает
 TAP_DOWN = 0.09
 T_IN = 0.46
 T_LEAVE = 3.10
@@ -163,46 +164,51 @@ def _press(t):
     return 0.0
 
 
-def _flip_state(t):
-    """Угол переворота (0…pi) и какая грань видна."""
-    ang = 0.0
-    face = 0                       # 0 — тёмная, 1 — красная
+def _fill_state(t):
+    """Какая грань сейчас, какая была и насколько новая заливка набежала.
+
+    ПЕРЕВОРОТ ПЛАСТИНЫ ОТМЕНЁН (05.11, по листу кадров): при сжатии силуэта
+    кнопка на четверть секунды превращалась в узкий блок с нечитаемой
+    надписью — на стоп-кадре это выглядит сбоем, а не приёмом. Вместо
+    поворота цвет НАБЕГАЕТ по пластине слева направо косой кромкой: силуэт
+    не меняется, надпись читается всегда, а смена состояния видна.
+    """
+    face, prev, prog = 0, 0, 1.0
     for i, tap in enumerate(TAPS):
-        if t >= tap + FLIP:
+        if t >= tap + FILL:
             face = (i + 1) % 2
         elif t >= tap:
-            q = (t - tap) / FLIP
-            ang = math.pi * _ease(q)
-            face = i % 2 if q < 0.5 else (i + 1) % 2
-            return ang, face
-    return ang, face
+            prev = i % 2
+            face = (i + 1) % 2
+            prog = (t - tap) / FILL
+            return face, prev, _ease(prog)
+    return face, face, 1.0
 
 
-def _mark(d, cx, cy, r, t, face):
-    """Круг-знак канала и вращающееся вокруг него пунктирное кольцо."""
-    import math as _m
-    col = WHITE if face else ACCENT
-    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col)
-    # треугольник «плей» внутри круга
-    d.polygon([(cx - r * 0.28, cy - r * 0.42), (cx - r * 0.28, cy + r * 0.42),
-               (cx + r * 0.44, cy)],
-              fill=(18, 20, 24) if not face else RED)
-    # пунктирное кольцо: 12 дуг, медленно крутится
-    rr = r + 9
-    base = (t * 70.0) % 360.0
-    for i in range(12):
-        a0 = base + i * 30.0
-        d.arc([cx - rr, cy - rr, cx + rr, cy + rr], a0, a0 + 17,
-              fill=col + (235,), width=4)
-
-
-def _face(face, w, h, glare, t=0.0, typed=1.0):
+def _face(face, w, h, glare, t=0.0, typed=1.0, prev=None,
+          prog=1.0):
+    prev = face if prev is None else prev
     """Грань пластины: заливка, черта-акцент, надпись, блик."""
     from PIL import Image, ImageDraw
     im = Image.new("RGBA", (int(w), int(h)), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     bg = RED if face else DARK
-    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=RADIUS, fill=bg)
+    old_bg = RED if prev else DARK
+    d.rounded_rectangle([0, 0, w - 1, h - 1], radius=RADIUS, fill=old_bg)
+    if prog < 1.0:
+        # косая кромка новой заливки — она и «проливает» кнопку
+        edge = -w * 0.18 + (w * 1.18) * prog
+        lay = Image.new("RGBA", (int(w), int(h)), (0, 0, 0, 0))
+        ImageDraw.Draw(lay).polygon(
+            [(-2, h + 2), (edge - w * 0.10, h + 2),
+             (edge + w * 0.10, -2), (-2, -2)], fill=bg + (255,))
+        msk = Image.new("L", (int(w), int(h)), 0)
+        ImageDraw.Draw(msk).rounded_rectangle([0, 0, w - 1, h - 1],
+                                              radius=RADIUS, fill=255)
+        im.paste(Image.alpha_composite(im, lay), (0, 0), msk)
+        d = ImageDraw.Draw(im)
+    else:
+        d.rounded_rectangle([0, 0, w - 1, h - 1], radius=RADIUS, fill=bg)
     d.rounded_rectangle([0, 0, w - 1, h - 1], radius=RADIUS,
                         outline=(255, 255, 255, 60), width=2)
     # фирменная черта слева — как в наших надписях
@@ -244,7 +250,7 @@ def frame(t):
     d = ImageDraw.Draw(im)
 
     press = _press(t)
-    ang, face = _flip_state(t)
+    face, prev, prog = _fill_state(t)
     k = 1.0 - 0.03 * press
     bw, bh = BTN_W * k, BTN_H * k
     bx = BTN_X + (BTN_W - bw) / 2.0
@@ -257,15 +263,8 @@ def frame(t):
             glare = (t - g0) / 0.42
 
     typed = min(1.0, max(0.0, (t - 0.04) / 0.26))
-    face_im = _face(face, bw, bh, glare, t, typed)
-    # ПЛАСТИНА НЕ СХЛОПЫВАЕТСЯ В ПОЛОСКУ (05.11, по листу кадров): при
-    # сжатии до 6% она на миг превращается в красную щепку, и это читается
-    # как сбой картинки, а не как переворот. Держим минимум 28% ширины —
-    # силуэт меняется, но кнопка всё время остаётся кнопкой.
-    squeeze = max(0.28, abs(math.cos(ang)))
-    fw = max(2, int(bw * squeeze))
-    face_im = face_im.resize((fw, int(bh)), Image.BICUBIC)
-    fx0 = int(bx + (bw - fw) / 2.0)
+    face_im = _face(face, bw, bh, glare, t, typed, prev, prog)
+    fx0 = int(bx)
 
     d.rounded_rectangle([bx + 4, by + 6, bx + bw + 4, by + bh + 6],
                         radius=RADIUS, fill=(0, 0, 0, 95))
@@ -273,7 +272,7 @@ def frame(t):
 
     # ИСКРА ПО ПЕРИМЕТРУ — она ведёт взгляд к кнопке. Гаснет на перевороте:
     # пластина в этот момент стоит ребром, и дорожки у неё нет.
-    if ang < 0.2:
+    if True:
         pts = _ring_path(bx, by, bx + bw, by + bh, RADIUS, 200)
         head = (t * 0.75) % 1.0
         n = len(pts)
