@@ -135,6 +135,50 @@ def main():
         print("уже лежало (не трогал, --force перезапишет): %s"
               % ", ".join(skipped))
     print("исходная папка запомнена в .source_dir")
+
+    # ТОТ ЖЕ ТЕКСТ НА ДВУХ ВКЛАДКАХ — ЛОВИМ СРАЗУ (05.11, прямая претензия
+    # пользователя: «раздать один и тот же текст на две вкладки?»). Живой
+    # случай: один сценарий приехал в ДВУХ папках под разными именами
+    # («ЛЕВЫЕ ПРАВЫЕ и ТРАМП - ДОНОР 2» и «Листовки Киев варшавский договор»)
+    # и с разными озвучками — совпадение текста 100%, а по имени файла и
+    # ключу георадара это не видно. Две вкладки сутки шли по одному тексту и
+    # дрались за одни кадры. Сверяем новый SRT с текстом СОСЕДНИХ проектов.
+    try:
+        import glob as _glob, re as _re, difflib as _dl, io as _io
+
+        def _plain(path):
+            try:
+                t = _io.open(path, encoding="utf-8-sig", errors="ignore").read()
+            except OSError:
+                return ""
+            out = [ln for ln in t.split("\n")
+                   if ln.strip() and "-->" not in ln and not ln.strip().isdigit()]
+            return _re.sub(r"\s+", " ", " ".join(out)).strip().lower()
+
+        _srts = [f for f in os.listdir(a.dst) if f.lower().endswith(".srt")]
+        _mine = _plain(os.path.join(a.dst, _srts[0])) if _srts else ""
+        if _mine:
+            _twins = []
+            for _o in _glob.glob(os.path.expanduser("~/projects/*/*.srt")):
+                if os.path.abspath(os.path.dirname(_o)) == os.path.abspath(a.dst):
+                    continue
+                _t = _plain(_o)
+                if not _t or abs(len(_t) - len(_mine)) > len(_mine) * 0.1:
+                    continue
+                _r = _dl.SequenceMatcher(None, _mine[:4000], _t[:4000]).ratio()
+                if _r > 0.92:
+                    _twins.append((os.path.basename(os.path.dirname(_o)), _r))
+            if _twins:
+                print("")
+                print("!! ЭТОТ ЖЕ ТЕКСТ УЖЕ СОБИРАЕТ ДРУГАЯ ВКЛАДКА:")
+                for _n, _r in _twins:
+                    print("   %s — совпадение %.0f%%" % (_n, _r * 100))
+                print("   Имя файла и ключ георадара этого НЕ показывают:")
+                print("   у одного сценария бывают две озвучки на два канала.")
+                print("   СКАЖИ КООРДИНАТОРУ ДО РАСКАДРОВКИ: либо кадры делятся")
+                print("   между роликами, либо одна вкладка останавливается.")
+    except Exception as _e:
+        print("  (сверка текста с соседними роликами не отработала: %s)" % _e)
     ensure_env(a.dst, channel_of(a.src))
 
     srt = [f for f in os.listdir(a.dst) if f.lower().endswith(".srt")]

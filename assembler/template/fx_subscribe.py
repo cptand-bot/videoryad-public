@@ -5,35 +5,34 @@
     python3 fx_subscribe.py --frames <папка>            # PNG-последовательность
     python3 fx_subscribe.py <клип.mp4> <куда.mp4> [--at 0.3]   # наложить на клип
 
-Его заказ 05.11: «есть кнопка „Подпишись“, ютубовская — можешь сделать, чтобы
-она была анимированная?». Делаем своим кодом (PIL), как и всё остальное:
-никаких скачанных гифок и чужих шаблонов.
+Его заказ 05.11 и его же правка по первому показу, дословно: «Не, просто
+подпишись, и там палец как будто нажимает. Не надо „вы подписаны“, не надо
+статус менять. Просто подпишись и всё. Было красное, стало чёрное, красное,
+чёрное, вот так».
 
 ЧТО ПРОИСХОДИТ (3,4 с, 30 кадров в секунду):
-    0,00 с  кнопка ПОЯВЛЯЕТСЯ СРАЗУ, целиком — не выплывает и не мигает
-            (его правило: появление мгновенное);
-    0,00-0,45  курсор входит в кадр и идёт к кнопке;
-    0,45-0,55  нажатие: кнопка проседает на 4% и возвращается;
-    0,55    кнопка переключается в «ВЫ ПОДПИСАНЫ» и рядом встаёт колокольчик;
-    0,55-1,25  колокольчик качается с затуханием (±18°);
-    1,25-3,00  держится;
-    3,00-3,40  курсор уходит, в конце всё исчезает разом.
+    0,00 с   кнопка «ПОДПИШИСЬ» ПОЯВЛЯЕТСЯ СРАЗУ, целиком — не выплывает;
+    0,00-0,42  снизу входит палец;
+    дальше   палец нажимает раз за разом, и НА КАЖДОЕ нажатие кнопка
+             перекрашивается: красная → чёрная → красная → чёрная;
+    3,00-3,40  палец уходит, в конце всё исчезает разом.
 
-ГРАНИЦЫ КАНАЛА, соблюдены буквально:
-  * глитча и тряски нет: дрожит только колокольчик, и это его собственное
-    движение, а не камера;
-  * появление и уход — мгновенные, без выплывания;
-  * типографика наша: узкий гротеск из `template/fonts`, не жёлтый с обводкой;
-  * кнопка садится в ПРАВЫЙ ВЕРХНИЙ угол — внизу живут субтитры, слева
-    всплывашки, и перекрывать их нельзя.
+Надпись ВСЕГДА одна и та же — «ПОДПИШИСЬ». Ни «вы подписаны», ни колокольчика,
+ни смены состояния: первая версия их имела, и он это прямо отменил.
 
-ПОЧЕМУ КАДРЫ — ОТДЕЛЬНЫЕ PNG С АЛЬФОЙ, А НЕ ВИДЕО: mp4 прозрачность не
-несёт, а накладывать кнопку надо поверх живого кадра. Последовательность
-PNG ffmpeg берёт входом напрямую, и тот же набор кадров годится и для
-`build_overlays.py`, когда кнопку поставят по таймкоду ролика.
+ГРАНИЦЫ КАНАЛА:
+  * глитча и тряски нет: двигается только палец, кнопка лишь проседает
+    на 4% в момент нажатия;
+  * появление и уход мгновенные;
+  * типографика наша: узкий гротеск из `template/fonts`;
+  * правый верхний угол — внизу субтитры, слева всплывашки.
+
+ПОЧЕМУ КАДРЫ — ОТДЕЛЬНЫЕ PNG С АЛЬФОЙ: mp4 прозрачность не несёт, а кнопку
+надо класть поверх живого кадра. Последовательность PNG ffmpeg берёт входом
+напрямую, и тот же набор годится для `build_overlays.py`, когда кнопку
+повесят по таймкоду ролика.
 """
 import argparse
-import math
 import os
 import shutil
 import subprocess
@@ -43,21 +42,20 @@ import tempfile
 FPS = 30
 TOTAL_SEC = 3.4
 
-# холст накладки: кнопка + место курсору и размаху колокольчика
-CW, CH = 620, 210
-BTN_W, BTN_H = 430, 92
-BTN_X, BTN_Y = 10, 58          # кнопка в холсте
+# холст накладки: кнопка плюс место пальцу под ней
+CW, CH = 560, 250
+BTN_W, BTN_H = 392, 92
+BTN_X, BTN_Y = 10, 10
 RADIUS = 46
 
-RED = (214, 25, 22)            # «ПОДПИШИСЬ»
-GREY = (44, 44, 46)            # «ВЫ ПОДПИСАНЫ»
+RED = (214, 25, 22)
+BLACK = (16, 16, 18)
 WHITE = (255, 255, 255)
-DIM = (226, 226, 228)
 
-T_CLICK = 0.45                 # когда курсор дожал
-T_DOWN = 0.10                  # сколько держится нажатие
-T_RING = 0.70                  # сколько качается колокольчик
-T_LEAVE = 3.00                 # курсор уходит
+TAPS = (0.50, 1.05, 1.60, 2.15, 2.70)   # когда палец дожимает
+TAP_DOWN = 0.09                          # сколько длится просадка
+T_IN = 0.42                              # палец вошёл
+T_LEAVE = 3.00                           # палец уходит
 
 _FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 _FONTS = ["RobotoCondensed-Bold.ttf", "Montserrat-Bold.ttf", "Arimo-Bold.ttf"]
@@ -83,9 +81,8 @@ def _font(size):
     return ImageFont.load_default()
 
 
-def _fit_font(text, box_w, start=44, low=26):
-    """Размер подбираем ИЗМЕРЕНИЕМ, а не на глаз: «ВЫ ПОДПИСАНЫ» длиннее
-    «ПОДПИШИСЬ», и на фиксированном кегле вылезало за кнопку."""
+def _fit_font(text, box_w, start=52, low=28):
+    """Кегль подбираем ИЗМЕРЕНИЕМ, а не на глаз."""
     size = start
     while size > low:
         f = _font(size)
@@ -99,35 +96,33 @@ def _fit_font(text, box_w, start=44, low=26):
     return _font(low)
 
 
-def _bell(h=46):
-    """Колокольчик рисуем сами: купол, юбка, язычок. Отдельной картинкой —
-    чтобы крутить его вокруг верхней точки, а не вместе с кнопкой."""
-    from PIL import Image, ImageDraw
-    w = int(h * 0.95)
-    im = Image.new("RGBA", (w + 8, h + 14), (0, 0, 0, 0))
-    d = ImageDraw.Draw(im)
-    cx = (w + 8) / 2.0
-    d.ellipse([cx - 4, 2, cx + 4, 10], fill=DIM)                 # ушко
-    d.pieslice([cx - w * 0.42, 8, cx + w * 0.42, 8 + h * 0.95],
-               180, 360, fill=DIM)                               # купол
-    d.rectangle([cx - w * 0.42, 8 + h * 0.46, cx + w * 0.42, 8 + h * 0.72],
-                fill=DIM)                                        # стенки
-    d.rounded_rectangle([cx - w * 0.54, 8 + h * 0.70,
-                         cx + w * 0.54, 8 + h * 0.80],
-                        radius=4, fill=DIM)                      # юбка
-    d.ellipse([cx - 5, 8 + h * 0.82, cx + 5, 8 + h * 0.92], fill=DIM)
-    return im
+def _finger(scale=1.0):
+    """Палец, который нажимает: кисть с вытянутым указательным вверх.
 
-
-def _cursor(scale=1.0):
-    """Курсор-стрелка: белая с тёмной обводкой, как в системе."""
+    Рисуем сами, как и всё остальное. Белый силуэт с тёмной обводкой читается
+    на любом кадре — и на светлом небе, и на тёмном цеху.
+    """
     from PIL import Image, ImageDraw
-    pts = [(0, 0), (0, 34), (8, 26), (14, 39), (20, 36), (14, 24), (25, 23)]
-    pts = [(x * scale, y * scale) for x, y in pts]
-    im = Image.new("RGBA", (int(30 * scale), int(44 * scale)), (0, 0, 0, 0))
+    w, h = int(104 * scale), int(150 * scale)
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    d.polygon(pts, fill=(255, 255, 255, 255), outline=(20, 20, 20, 255))
-    d.line(pts + [pts[0]], fill=(20, 20, 20, 255), width=2)
+    s = scale
+    ink = (28, 28, 30, 255)
+    # указательный палец
+    d.rounded_rectangle([26 * s, 2 * s, 56 * s, 78 * s], radius=15 * s,
+                        fill=WHITE + (255,), outline=ink, width=int(3 * s))
+    # кисть
+    d.rounded_rectangle([18 * s, 56 * s, 92 * s, 140 * s], radius=26 * s,
+                        fill=WHITE + (255,), outline=ink, width=int(3 * s))
+    # костяшки согнутых пальцев
+    for i in range(3):
+        x0 = (56 + i * 12) * s
+        d.rounded_rectangle([x0, (64 + i * 2) * s, x0 + 14 * s, (92 + i * 2) * s],
+                            radius=7 * s, fill=WHITE + (255,), outline=ink,
+                            width=int(2 * s))
+    # стык пальца и кисти затираем, чтобы силуэт был один
+    d.rounded_rectangle([28 * s, 60 * s, 54 * s, 76 * s], radius=10 * s,
+                        fill=WHITE + (255,))
     return im
 
 
@@ -136,65 +131,54 @@ def _ease(x):
     return x * x * (3 - 2 * x)
 
 
+def _press(t):
+    """Сила нажатия 0…1 в момент t и номер нажатия (для цвета)."""
+    for i, tap in enumerate(TAPS):
+        if abs(t - tap) <= TAP_DOWN:
+            return 1.0 - abs(t - tap) / TAP_DOWN, i
+    return 0.0, -1
+
+
+def _color(t):
+    """КРАСНАЯ → ЧЁРНАЯ → КРАСНАЯ → ЧЁРНАЯ: цвет меняется на каждом нажатии."""
+    n = sum(1 for tap in TAPS if t >= tap)
+    return BLACK if n % 2 else RED
+
+
 def frame(t):
     """Один кадр накладки на момент t (секунды от начала показа)."""
     from PIL import Image, ImageDraw
     im = Image.new("RGBA", (CW, CH), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
 
-    done = t >= T_CLICK
-    # нажатие: кнопка проседает и возвращается — короткий, честный отклик
-    press = 0.0
-    if T_CLICK - T_DOWN <= t <= T_CLICK + T_DOWN:
-        press = 1.0 - abs(t - T_CLICK) / T_DOWN
+    press, _idx = _press(t)
     k = 1.0 - 0.04 * press
     bw, bh = BTN_W * k, BTN_H * k
     bx = BTN_X + (BTN_W - bw) / 2.0
     by = BTN_Y + (BTN_H - bh) / 2.0
 
-    # тень под кнопкой — иначе она лежит в одной плоскости с кадром
     d.rounded_rectangle([bx + 3, by + 5, bx + bw + 3, by + bh + 5],
                         radius=RADIUS, fill=(0, 0, 0, 90))
     d.rounded_rectangle([bx, by, bx + bw, by + bh], radius=RADIUS,
-                        fill=GREY if done else RED)
+                        fill=_color(t))
 
-    text = "ВЫ ПОДПИСАНЫ" if done else "ПОДПИШИСЬ"
-    pad = 92 if done else 46          # место колокольчику слева от текста
-    f = _fit_font(text, bw - pad)
+    text = "ПОДПИШИСЬ"
+    f = _fit_font(text, bw - 56)
     tw = f.getlength(text) if hasattr(f, "getlength") else f.getsize(text)[0]
-    tx = bx + (bw - tw) / 2.0 + (18 if done else 0)
-    d.text((tx, by + bh / 2.0), text, font=f,
-           fill=DIM if done else WHITE, anchor="lm")
+    d.text((bx + (bw - tw) / 2.0, by + bh / 2.0), text, font=f,
+           fill=WHITE, anchor="lm")
 
-    if done:
-        # КОЛОКОЛЬЧИК КАЧАЕТСЯ С ЗАТУХАНИЕМ, а не дрожит: одно движение,
-        # которое успокаивается, — это не тряска кадра, запрещённая правилом.
-        q = (t - T_CLICK) / T_RING
-        ang = 0.0
-        if q < 1.0:
-            ang = 18.0 * math.cos(q * math.pi * 3.0) * (1.0 - _ease(q))
-        bell = _bell(46)
-        rot = bell.rotate(ang, resample=Image.BICUBIC, expand=True,
-                          center=(bell.width / 2.0, 6))
-        im.alpha_composite(rot, (int(bx + 34 - (rot.width - bell.width) / 2),
-                                 int(by + bh / 2 - 30)))
-
-    # курсор: входит справа снизу, дожимает кнопку и уходит
-    cur = _cursor(1.25)
+    # палец: входит снизу, дожимает кнопку, уходит вниз
     if t < T_LEAVE + 0.4:
-        p_in = _ease(t / max(0.01, T_CLICK))
-        tx0, ty0 = CW + 30, CH + 20
-        tx1, ty1 = BTN_X + BTN_W * 0.62, BTN_Y + BTN_H * 0.60
-        cx = tx0 + (tx1 - tx0) * p_in
-        cy = ty0 + (ty1 - ty0) * p_in
+        fg = _finger(1.0)
+        p_in = _ease(t / max(0.01, T_IN))
+        y0, y1 = CH + 30, BTN_Y + BTN_H - 18
+        x = BTN_X + BTN_W * 0.58
+        y = y0 + (y1 - y0) * p_in
         if t > T_LEAVE:
-            p_out = _ease((t - T_LEAVE) / 0.4)
-            cx += (CW + 60 - cx) * p_out
-            cy += (CH + 40 - cy) * p_out
-        if press > 0:
-            cx += 3 * press
-            cy += 3 * press
-        im.alpha_composite(cur, (int(cx), int(cy)))
+            y += (CH + 40 - y) * _ease((t - T_LEAVE) / 0.4)
+        y += 10 * press                     # дожал — палец ушёл в кнопку
+        im.alpha_composite(fg, (int(x), int(y)))
     return im
 
 
