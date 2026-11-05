@@ -740,8 +740,14 @@ jobs:
           sc = json.load(open(sys.argv[1], encoding="utf-8"))
           scenes = sc["scenes"] if isinstance(sc, dict) else sc
           shard = int(sys.argv[2])
-          print(sum(1 for i, s in enumerate(scenes)
-                    if i % 12 == shard
+          # СЧЁТ ТЕМ ЖЕ КЛЮЧОМ, ЧТО И СБОРЩИК (05.11, улов `usuario-35`).
+          # Было `i % 12` — по НОМЕРУ В СПИСКЕ, а build_clips_1080.py делит
+          # работу по НОМЕРУ СЦЕНЫ (`sid % WORKER_COUNT`). Номера начинаются
+          # с 1, индексы с 0, поэтому охранник считал ЧУЖИЕ сцены: на малом
+          # ролике шард 0 падал с «пришлось 1 сцен, клипов ноль» при целом и
+          # правильном видео. Тот же сдвиг у любого ролика с дырами в номерах.
+          print(sum(1 for s in scenes
+                    if int(s.get("id", 0)) % 12 == shard
                     and not str(s.get("source", "")).startswith("card")))
           PYC
           )
@@ -1438,7 +1444,19 @@ jobs:
             || echo "contact_sheet не отработал — листов не будет, сборку не роняю"
           n=$(ls "$proj"/thumbs/sheet_*.jpg 2>/dev/null | wc -l)
           echo "контактных листов собрано: $n"
-          [ "$n" -gt 0 ] && tar czf "$NAME-thumbs.tgz" -C "$proj" thumbs || true
+          # ЛИСТ ЭФФЕКТОВ ИЗ ГОТОВОГО ВИДЕО (05.11, улов `usuario-35`): кадры
+          # сцен перехода не показывают, а вытащить их из mp4 на машине
+          # пользователя запрещено. Три кадра на каждый эффект — вход,
+          # середина, выход — чтобы вкладка смотрела приём глазами ДО показа.
+          _vid=$(ls "$proj"/*ВИДЕОРЯД.mp4 "$proj"/*-.mp4 2>/dev/null | head -1)
+          if [ -n "$_vid" ]; then
+            python3 assembler/template/fx_sheet.py "$sc" "$_vid" \
+              "$proj/thumbs/fx_sheet.jpg" \
+              || echo "лист эффектов не собрался — сборку не роняю"
+          else
+            echo "лист эффектов: готового видео в папке нет, пропускаю"
+          fi
+          [ -d "$proj/thumbs" ] && tar czf "$NAME-thumbs.tgz" -C "$proj" thumbs || true
 
       - name: Publish result as a Release
         if: success() || failure()

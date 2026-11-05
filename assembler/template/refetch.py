@@ -1232,8 +1232,25 @@ def main():
     if _ban:
         try:
             _EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")
+            # `scenes` ЗДЕСЬ — ПУТЬ К ФАЙЛУ, А НЕ СПИСОК СЦЕН (05.11, улов
+            # `usuario-e1`). Переменная приходит из `arg("--scenes")`, то есть
+            # это строка; цикл шёл по её БУКВАМ и падал на первой же —
+            # «'str' object has no attribute 'get'». Исключение ловилось
+            # строкой «проверка остатка папки не отработала», печаталось на
+            # КАЖДОМ вызове и выглядело мелочью, а по сути проверка не
+            # работала НИ РАЗУ с самого появления 04.11: предупреждение «после
+            # бана в папке не останется свободных файлов» не приходило никому.
+            _scenes_list = []
+            try:
+                _sj = json.load(open(scenes, encoding="utf-8"))
+                _scenes_list = (_sj.get("scenes", []) if isinstance(_sj, dict)
+                                else _sj)
+            except (OSError, ValueError, TypeError):
+                _scenes_list = []
             _warned = []
-            for _sc in scenes:
+            for _sc in _scenes_list:
+                if not isinstance(_sc, dict):
+                    continue
                 _sid = int(_sc.get("id", 0))
                 if _ban_sids and _sid not in _ban_sids:
                     continue

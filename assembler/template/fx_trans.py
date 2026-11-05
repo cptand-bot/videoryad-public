@@ -5,7 +5,7 @@
 прошлой сцены на свой, потом обычный плавный зум до конца сцены.
 
     python3 fx_trans.py <кадр прошлой сцены> <кадр своей сцены> <куда.mp4> \\
-        --kind mosaic|panels|wipe --seconds 11.5 [--trans 1.4] [--channel ПЛАНЕТА]
+        --kind mosaic|panels|wipe|depth --seconds 11.5 [--trans 1.4] [--channel ПЛАНЕТА]
 
 Образец пользователя — `D:\\ЗАГРУЗКИ\\Эффекты-1\\Эффекты-1.mp4`, четыре эффекта.
 Третий («врезка + круги») принят 03.11 и живёт в `fx_inset.py`; здесь — три
@@ -20,6 +20,11 @@
           разворот идёт слева направо с запаздыванием.
   wipe    (17,2-18,2 с) — новый кадр въезжает по диагонали, на стыке светлая
           линия с мягким ореолом.
+  depth   (наш, 05.11, в образце его нет) — новый кадр ВЫХОДИТ ИЗ ГЛУБИНЫ
+          плитой со светлой кромкой и тенью, а прошлый кадр остаётся на
+          месте и теряет резкость с затемнением. Это ход камеры, а не
+          геометрия: ни сетки (mosaic), ни разворота (panels), ни кромки
+          поперёк экрана (wipe) — чтобы вид читался своим, а не вариантом.
 
 ПОЧЕМУ ВЕСЬ КЛИП РИСУЕТСЯ ЗДЕСЬ, А НЕ СКЛЕИВАЕТСЯ ИЗ ДВУХ КУСКОВ: склейка двух
 mp4 демуксером `concat` требует побитового совпадения параметров и ломает
@@ -36,12 +41,15 @@ import sys
 import tempfile
 
 W, H, FPS = 1920, 1080, 30
-KINDS = ("mosaic", "panels", "wipe")
+KINDS = ("mosaic", "panels", "wipe", "depth")
 # Длительность самого перехода по умолчанию — замер по образцу.
-TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7}
+TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7, "depth": 1.1}
 
 MOS_COLS, MOS_ROWS = 6, 4
 PANELS_N = 5
+# плита нового кадра в начале перехода — доля экрана, и её снос от центра
+DEPTH_S0 = 0.40
+DEPTH_DRIFT = (0.045, 0.035)
 
 
 # ---------------------------------------------------------------- общий кадр
@@ -201,6 +209,60 @@ def _wipe_frame(p, A, Bc):
     return out
 
 
+# ------------------------------------------------------------------ глубина
+def _depth_frame(p, A, Ab, Bc):
+    """Новый кадр выходит из глубины плитой, прошлый уходит в расфокус.
+
+    ЗАЧЕМ ИМЕННО ТАК. Зум-аута в канале нет (его слово), поэтому «отъехать»
+    прошлым кадром нельзя — глубину даёт РАСФОКУС фона плюс растущая плита с
+    тенью: передний план приближается, задний остаётся на месте и размывается.
+    Плита идёт не из центра, а с небольшим сносом вправо-вниз — без сноса ход
+    читается как обычный зум картинки, а не как движение камеры.
+    """
+    from PIL import Image, ImageDraw, ImageEnhance
+    e = _smootherstep(p)
+    if A is None:
+        out = Image.new("RGB", (W, H), (8, 10, 12))
+    else:
+        k = min(1.0, e * 1.3)
+        if k <= 0.02 or Ab is None:
+            out = A.copy()
+        elif k >= 0.98:
+            out = Ab.copy()
+        else:
+            out = Image.blend(A, Ab, k)
+        if e > 0.01:
+            out = Image.blend(out, Image.new("RGB", (W, H), (0, 0, 0)),
+                              0.50 * e)
+    s = DEPTH_S0 + (1.0 - DEPTH_S0) * e
+    pw = max(2, int(round(W * s)))
+    ph = max(2, int(round(H * s)))
+    if pw >= W and ph >= H:
+        out.paste(Bc, (0, 0))
+        return out
+    dx = int(round(W * DEPTH_DRIFT[0] * (1.0 - e)))
+    dy = int(round(H * DEPTH_DRIFT[1] * (1.0 - e)))
+    x0, y0 = (W - pw) // 2 + dx, (H - ph) // 2 + dy
+    piece = Bc.resize((pw, ph), Image.BICUBIC)
+    # плита, пока она в глубине, стоит в тени — к концу выходит на полный свет
+    piece = ImageEnhance.Brightness(piece).enhance(0.80 + 0.20 * e)
+    # тень под плитой: без неё плита лежит в одной плоскости с фоном
+    sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rectangle([x0 + 10, y0 + 14, x0 + pw + 10, y0 + ph + 14],
+                                 fill=(0, 0, 0, int(120 * (1.0 - e))))
+    out = Image.alpha_composite(out.convert("RGBA"), sh).convert("RGB")
+    out.paste(piece, (x0, y0))
+    # светлая кромка — та же строгая черта, что в надписях канала; к концу
+    # перехода гаснет, чтобы на сцене остался ЧИСТЫЙ кадр без рамки
+    a = int(230 * (1.0 - e) ** 0.7)
+    if a > 3:
+        ed = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(ed).rectangle([x0, y0, x0 + pw - 1, y0 + ph - 1],
+                                     outline=(255, 255, 255, a), width=3)
+        out = Image.alpha_composite(out.convert("RGBA"), ed).convert("RGB")
+    return out
+
+
 # ------------------------------------------------------------------- сборка
 _ST = {}
 
@@ -219,6 +281,8 @@ def _one(arg):
                                _ST["oo"], _ST["oi"])
         elif kind == "panels":
             im = _panels_frame(p, _ST["A"], _ST["B"])
+        elif kind == "depth":
+            im = _depth_frame(p, _ST["A"], _ST.get("Ab"), _ST["B"])
         else:
             im = _wipe_frame(p, _ST["A"], _ST["B"])
     else:
@@ -245,13 +309,20 @@ def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10):
     # светло-зелёный «мониторный» налёт из образца
     Bg = Image.blend(B, Image.new("RGB", (W, H), (190, 255, 190)), 0.55)
     base = _cover(Image.open(img).convert("RGB"), W, H, headroom=1.12)
+    # размытую копию прошлого кадра считаем ОДИН РАЗ на весь переход: полный
+    # GaussianBlur по 1920x1080 на каждом кадре стоил бы дороже самой сцены.
+    Ab = None
+    if kind == "depth" and A is not None:
+        from PIL import ImageFilter
+        Ab = A.filter(ImageFilter.GaussianBlur(12))
     n = MOS_COLS * MOS_ROWS
     rnd = random.Random(20261104)
     oo = list(range(n)); rnd.shuffle(oo)
     oi = list(range(n)); rnd.shuffle(oi)
     total = int(round(seconds * FPS))
     tf = min(total - 2, int(round(trans * FPS)))
-    st = {"A": A, "B": B, "Bg": Bg, "base": base, "oo": oo, "oi": oi}
+    st = {"A": A, "B": B, "Bg": Bg, "base": base, "oo": oo, "oi": oi,
+          "Ab": Ab}
     args = [(i, total, tf, kind, zoom, out_dir) for i in range(total)]
     nw = min(_workers(), 8)
     if nw > 1 and total > 30:

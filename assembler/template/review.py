@@ -1606,7 +1606,8 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     # смотрит пользователь дашборд — без значка «эффект есть» было бы не
     # отличить от «забыли поставить», и спорить пришлось бы по готовому файлу.
     _FXL = {"inset": "🎯 ВРЕЗКА + КРУГИ", "mosaic": "🎯 МОЗАИКА ПЛИТОК",
-            "panels": "🎯 РАЗЛЁТ ПАНЕЛЕЙ", "wipe": "🎯 ДИАГОНАЛЬНЫЙ ВАЙП"}
+            "panels": "🎯 РАЗЛЁТ ПАНЕЛЕЙ", "wipe": "🎯 ДИАГОНАЛЬНЫЙ ВАЙП",
+            "depth": "🎯 КАДР ИЗ ГЛУБИНЫ"}
     _fxk = str(s.get("fx", "")).strip().lower()
     fx_badge = ('<span class="fxb">%s</span>' % _FXL[_fxk]) if _fxk in _FXL else ""
     if live:
@@ -2102,9 +2103,17 @@ poll();
     # сколько стоит и на каких сценах.
     _fx = [(s.get("id"), str(s.get("fx", "")).strip().lower()) for s in scenes
            if str(s.get("fx", "")).strip().lower()
-           in ("inset", "mosaic", "panels", "wipe")]
-    fx_hdr = ('<span class="sub">· ЭФФЕКТЫ: <b>%d из 3</b> (%s)</span>'
-              % (len(_fx), ", ".join("%s — %s" % (i, k) for i, k in _fx))) if _fx else ""
+           in ("inset", "mosaic", "panels", "wipe", "depth")]
+    # СЧЁТ В ШАПКЕ — ПО ВИДАМ, А НЕ «N из 3» (05.11). Потолок три — на КАЖДЫЙ
+    # вид (его уточнение 04.11), а видов уже пять, поэтому строка «12 из 3»
+    # читалась как перебор нормы там, где норма соблюдена.
+    _fxc = {}
+    for _i, _k in _fx:
+        _fxc[_k] = _fxc.get(_k, 0) + 1
+    fx_hdr = ('<span class="sub">· ЭФФЕКТЫ: <b>%d</b> — %s '
+              '(потолок 3 на каждый вид)</span>'
+              % (len(_fx), ", ".join("%s %d из 3" % kv
+                                     for kv in sorted(_fxc.items())))) if _fx else ""
     dossier_badge = ('<span class="sub">· ГЕОРАДАР — %s</span>'
                      % " · ".join(_parts)) if (_links or _dos or _rej) else (
         '<span class="sub">· ГЕОРАДАР: записи по теме нет</span>')
