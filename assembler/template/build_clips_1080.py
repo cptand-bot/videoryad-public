@@ -133,8 +133,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # диагональный вайп со светлой линией.
 # ПОТОЛОК ТРИ — НА ВСЕ ЭФФЕКТЫ ВМЕСТЕ, А НЕ НА КАЖДЫЙ ВИД: его слово звучало
 # «эффекты не больше 3 раз на видеоряд», то есть считается ролик целиком.
-FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth")
-FX_TRANS = ("mosaic", "panels", "wipe", "depth")
+FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear")
+FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
 INSET_SIDS = set()          # из них те, что «врезка» (для совместимости)

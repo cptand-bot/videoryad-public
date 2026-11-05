@@ -13,7 +13,9 @@
     panels  новый кадр разворачивается вертикальными панелями;
     wipe    новый кадр въезжает по диагонали со светлой линией на стыке;
     depth   новый кадр выходит из глубины плитой, прошлый теряет резкость
-            (наш пятый вид, 05.11 — в его образце такого нет).
+            (наш пятый вид, 05.11 — в его образце такого нет);
+    tear    прошлый кадр рвётся на семь кусков и уносится за край, под ним
+            остаётся новый (перенос его принятого элемента 21.10).
 Три последних — ПЕРЕХОДЫ: они начинаются с кадра ПРОШЛОЙ сцены, поэтому
 ставятся только на сцену-фотографию и только начиная со второй.
 
@@ -46,8 +48,8 @@ import sys
 
 MAX_MB = 8.0
 MAX_W = 1280
-KINDS = ("inset", "mosaic", "panels", "wipe", "depth")
-TRANS = ("mosaic", "panels", "wipe", "depth")
+KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear")
+TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
 # В АВТОМАТИЧЕСКУЮ РОТАЦИЮ ВИД ПОПАДАЕТ ТОЛЬКО ПОСЛЕ ЕГО «БЕРЁМ» (05.11).
 # Новый эффект ставится руками и показывается ему готовым mp4; до этого
 # `--auto` его не расставляет, иначе непринятый приём молча уедет в боевые
@@ -101,7 +103,7 @@ def main():
     if a.auto:
         kind = kind or "auto"
     if not a.off and not kind:
-        return _die("скажи, какой эффект: --kind inset|mosaic|panels|wipe|depth "
+        return _die("скажи, какой эффект: inset|mosaic|panels|wipe|depth|tear "
                     "(для inset дай ещё путь к видео-врезке)")
     if not a.off and kind == "inset" and not a.video:
         return _die("врезке нужен путь к видео (`inset` — это окно с видео "
@@ -322,19 +324,36 @@ def _auto(a, data, scenes):
              for i in range(_rest)]
     targets = [max(first + 2, first + int(n * (f + rnd.uniform(-0.02, 0.02))))
                for f in (_head + _tail)]
+    # ШАГ МЕЖДУ ЭФФЕКТАМИ УСТУПАЕТ НОРМЕ «КАЖДЫЙ ВИД ПО ТРИ» (05.11, его
+    # прямое слово по сданному ролику про Киев: «Нахуя я разрабатываю каждый
+    # раз новый эффект… чтобы применился один? Они все по 3 раза на
+    # видеоряд, чтобы ВСЕ эффекты присутствовали»). Шаг в четыре сцены стоял
+    # жёстко, и при пяти видах места кончались: на 56 сценах вставало 8
+    # эффектов вместо 15, причём виды выпадали целиком. Теперь шаг —
+    # уступающее правило: пробуем 4, потом 3, потом 2, и берём первый, при
+    # котором помещается ВСЯ норма. Ближе двух сцен не ставим никогда.
+    def _pick(gap):
+        _p = []
+        for t in targets:
+            cand = [x for x in ok if x not in _p]
+            if not cand:
+                break
+            _p.append(min(cand, key=lambda x: (abs(x - t), x)))
+        _p.sort()
+        _keep, _busy = [], list(have)
+        for x in _p:
+            if all(abs(x - y) >= gap for y in _busy):
+                _keep.append(x); _busy.append(x)
+        return _keep
+
     picked = []
-    for t in targets:
-        cand = [x for x in ok if x not in picked]
-        if not cand:
+    for _gap in (4, 3, 2):
+        picked = _pick(_gap)
+        if len(picked) >= free:
+            if _gap < 4:
+                print("шаг между эффектами уменьшен до %d сцен — иначе норма "
+                      "«%d каждого вида» не помещается" % (_gap, FX_MAX))
             break
-        picked.append(min(cand, key=lambda x: (abs(x - t), x)))
-    # соседние эффекты — не ближе четырёх сцен друг к другу и к уже стоящим
-    picked.sort()
-    keep, busy = [], list(have)
-    for x in picked:
-        if all(abs(x - y) >= 4 for y in busy):
-            keep.append(x); busy.append(x)
-    picked = keep
     if not picked:
         print("!! подходящие сцены есть, но все ближе четырёх сцен к уже "
               "стоящим эффектам — ставить не буду", file=sys.stderr)

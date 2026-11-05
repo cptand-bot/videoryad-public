@@ -5,7 +5,7 @@
 прошлой сцены на свой, потом обычный плавный зум до конца сцены.
 
     python3 fx_trans.py <кадр прошлой сцены> <кадр своей сцены> <куда.mp4> \\
-        --kind mosaic|panels|wipe|depth --seconds 11.5 [--trans 1.4] [--channel ПЛАНЕТА]
+        --kind mosaic|panels|wipe|depth|tear --seconds 11.5 [--trans 1.4] [--channel ПЛАНЕТА]
 
 Образец пользователя — `D:\\ЗАГРУЗКИ\\Эффекты-1\\Эффекты-1.mp4`, четыре эффекта.
 Третий («врезка + круги») принят 03.11 и живёт в `fx_inset.py`; здесь — три
@@ -20,6 +20,9 @@
           разворот идёт слева направо с запаздыванием.
   wipe    (17,2-18,2 с) — новый кадр въезжает по диагонали, на стыке светлая
           линия с мягким ореолом.
+  tear    (его принятый элемент второго сборщика, перенесён 05.11) — прошлый
+          кадр рвётся на семь кусков с толстой бумажной кромкой, все куски
+          уносит за край, под ними остаётся новый кадр как есть.
   depth   (наш, 05.11, в образце его нет) — новый кадр ВЫХОДИТ ИЗ ГЛУБИНЫ
           плитой со светлой кромкой и тенью, а прошлый кадр остаётся на
           месте и теряет резкость с затемнением. Это ход камеры, а не
@@ -41,15 +44,20 @@ import sys
 import tempfile
 
 W, H, FPS = 1920, 1080, 30
-KINDS = ("mosaic", "panels", "wipe", "depth")
+KINDS = ("mosaic", "panels", "wipe", "depth", "tear")
 # Длительность самого перехода по умолчанию — замер по образцу.
-TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7, "depth": 1.1}
+TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7, "depth": 1.1,
+             "tear": 1.3}
 
 MOS_COLS, MOS_ROWS = 6, 4
 PANELS_N = 5
 # плита нового кадра в начале перехода — доля экрана, и её снос от центра
 DEPTH_S0 = 0.40
 DEPTH_DRIFT = (0.045, 0.035)
+# разрыв на куски: сколько кусков, сколько кадр ещё цел, толщина кромки
+TEAR_PIECES = 7
+TEAR_HOLD = 0.16
+TEAR_EDGE = 15
 
 
 # ---------------------------------------------------------------- общий кадр
@@ -209,6 +217,111 @@ def _wipe_frame(p, A, Bc):
     return out
 
 
+# -------------------------------------------------------- разрыв на куски
+def _tear_seams(seed):
+    """Рубленые радиальные швы от центра — по ним кадр и рвётся.
+
+    Шов считается ОДИН РАЗ и используется ДВУМЯ соседними кусками, поэтому
+    куски стыкуются без щелей. Если ломать каждый кусок своей ломаной, между
+    ними остаётся светлая полоса нового кадра — разрыв виден ещё до разрыва.
+    """
+    import math
+    import random
+    rnd = random.Random(seed)
+    cx, cy = W * 0.5, H * 0.46
+    far = math.hypot(W, H) * 1.25
+    seams, step = [], math.tau / TEAR_PIECES
+    for i in range(TEAR_PIECES):
+        a = i * step + rnd.uniform(-0.16, 0.16)
+        pts = []
+        for j in range(10):
+            r = far * j / 9.0
+            aa = a + (0.0 if j == 0 else rnd.uniform(-0.085, 0.085))
+            pts.append((cx + math.cos(aa) * r, cy + math.sin(aa) * r))
+        seams.append((a, pts))
+    return seams, (cx, cy), far
+
+
+def _tear_pieces(A, seed):
+    """Куски прошлого кадра с ЗАПЕЧЁННОЙ бумажной кромкой — считаются один раз.
+
+    Кусок хранится обрезанным по своей рамке, а не во весь кадр: на каждом
+    кадре его только поворачивают и сдвигают, и поворот мелкой картинки стоит
+    в разы меньше поворота полного 1920x1080.
+    """
+    import math
+    from PIL import Image, ImageChops, ImageDraw, ImageFilter
+    seams, (cx, cy), far = _tear_seams(seed)
+    out, n = [], TEAR_PIECES
+    for i in range(n):
+        a0, p0 = seams[i]
+        a1, p1 = seams[(i + 1) % n]
+        if a1 < a0:
+            a1 += math.tau
+        poly = list(p0)
+        for j in range(5):                      # дуга далеко за кадром
+            aa = a0 + (a1 - a0) * (j + 1) / 6.0
+            poly.append((cx + math.cos(aa) * far * 1.05,
+                         cy + math.sin(aa) * far * 1.05))
+        poly += list(reversed(p1))
+        m = Image.new("L", (W, H), 0)
+        ImageDraw.Draw(m).polygon(poly, fill=255)
+        bb = m.getbbox()
+        if not bb:
+            continue
+        e = TEAR_EDGE + 4
+        bb = (max(0, bb[0] - e), max(0, bb[1] - e),
+              min(W, bb[2] + e), min(H, bb[3] + e))
+        mc = m.crop(bb)
+        k = TEAR_EDGE if TEAR_EDGE % 2 else TEAR_EDGE + 1
+        grown = mc.filter(ImageFilter.MaxFilter(k))
+        band = ImageChops.subtract(grown, mc)
+        piece = Image.new("RGB", (bb[2] - bb[0], bb[3] - bb[1]), (0, 0, 0))
+        piece.paste(A.crop(bb), (0, 0))
+        # КРОМКА БУМАЖНАЯ И ТОЛСТАЯ (21.10, его правка по разлёту кусков:
+        # «швы рубленые, чуть толще — как у фотографии, которая разъезжается»).
+        piece.paste(Image.new("RGB", piece.size, (242, 240, 234)), (0, 0), band)
+        rgba = piece.convert("RGBA")
+        rgba.putalpha(grown)
+        am = (a0 + a1) / 2.0
+        out.append({"img": rgba, "at": (bb[0], bb[1]),
+                    "dir": (math.cos(am), math.sin(am)),
+                    "spin": (13 if i % 2 else -11)})
+    return out, far
+
+
+def _tear_frame(p, A, pieces, far, Bc):
+    """Прошлый кадр рвётся на куски и уносится; под ним — новый кадр КАК ЕСТЬ.
+
+    Три его правила по этому приёму (21.10): улетают ВСЕ куски, центр тоже —
+    на месте ничего не держится; нижний слой не затемняем и не размываем;
+    куски уходят ЗА КРАЙ полностью, а не застревают у рамки (поэтому ход
+    больше диагонали кадра и с разгоном к концу).
+    """
+    from PIL import Image, ImageFilter
+    if p <= TEAR_HOLD or not pieces:
+        return (A if A is not None else Bc).copy()
+    sp = _smootherstep((p - TEAR_HOLD) / (1.0 - TEAR_HOLD))
+    out = Bc.copy()
+    for pc in pieces:
+        d = far * 1.1 * sp ** 1.7
+        ox = pc["dir"][0] * d
+        oy = pc["dir"][1] * d - 90 * sp
+        ang = pc["spin"] * sp
+        im = pc["img"]
+        if abs(ang) > 0.3:
+            im = im.rotate(ang, resample=Image.BICUBIC, expand=True)
+        x = int(round(pc["at"][0] + ox)) - (im.width - pc["img"].width) // 2
+        y = int(round(pc["at"][1] + oy)) - (im.height - pc["img"].height) // 2
+        if x > W or y > H or x + im.width < 0 or y + im.height < 0:
+            continue
+        al = im.getchannel("A")
+        sh = al.filter(ImageFilter.GaussianBlur(7)).point(lambda v: int(v * 0.5))
+        out.paste(Image.new("RGB", im.size, (0, 0, 0)), (x + 14, y + 18), sh)
+        out.paste(im.convert("RGB"), (x, y), al)
+    return out
+
+
 # ------------------------------------------------------------------ глубина
 def _depth_frame(p, A, Ab, Bc):
     """Новый кадр выходит из глубины плитой, прошлый уходит в расфокус.
@@ -283,6 +396,9 @@ def _one(arg):
             im = _panels_frame(p, _ST["A"], _ST["B"])
         elif kind == "depth":
             im = _depth_frame(p, _ST["A"], _ST.get("Ab"), _ST["B"])
+        elif kind == "tear":
+            im = _tear_frame(p, _ST["A"], _ST.get("pieces") or [],
+                             _ST.get("tfar") or 0.0, _ST["B"])
         else:
             im = _wipe_frame(p, _ST["A"], _ST["B"])
     else:
@@ -315,6 +431,10 @@ def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10):
     if kind == "depth" and A is not None:
         from PIL import ImageFilter
         Ab = A.filter(ImageFilter.GaussianBlur(12))
+    # куски разрыва тоже считаются ОДИН РАЗ на весь переход
+    pieces, tfar = [], 0.0
+    if kind == "tear":
+        pieces, tfar = _tear_pieces(A if A is not None else B, 20261105)
     n = MOS_COLS * MOS_ROWS
     rnd = random.Random(20261104)
     oo = list(range(n)); rnd.shuffle(oo)
@@ -322,7 +442,7 @@ def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10):
     total = int(round(seconds * FPS))
     tf = min(total - 2, int(round(trans * FPS)))
     st = {"A": A, "B": B, "Bg": Bg, "base": base, "oo": oo, "oi": oi,
-          "Ab": Ab}
+          "Ab": Ab, "pieces": pieces, "tfar": tfar}
     args = [(i, total, tf, kind, zoom, out_dir) for i in range(total)]
     nw = min(_workers(), 8)
     if nw > 1 and total > 30:
