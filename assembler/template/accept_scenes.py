@@ -788,6 +788,42 @@ def main():
     print(f"сцен: {n}, общая длительность {total:.1f} с")
     print(f"источники: press/web {sum(1 for s in scenes if s.get('source') in ('press_photo','web_search'))}, "
           f"сток {stock}, карточек {len(cards)}")
+    # ПАПКА БИБЛИОТЕЧНОЙ СЦЕНЫ ДОЛЖНА БЫТЬ В МЕДИАТЕКЕ ЭТОГО КАНАЛА (05.11,
+    # улов `usuario-f4`). Каналы живут на РАЗНЫХ корнях (`media-library` и
+    # `media-library-2`), и сцена с папкой из чужого корня проходила приёмку:
+    # папка ведь существует. В облаке такая сцена оказывается пустой или
+    # молча подменяется поиском — видно только по пропавшему движению.
+    _ml = ""
+    for _d in (os.getcwd(), os.path.dirname(os.path.abspath(a.src))):
+        try:
+            for _l in io.open(os.path.join(_d, ".env"), encoding="utf-8"):
+                if _l.strip().startswith("MEDIA_LIBRARY_DIR"):
+                    _ml = _l.split("=", 1)[1].strip().strip('"').strip("'")
+        except OSError:
+            continue
+        if _ml:
+            break
+    if _ml:
+        if not os.path.isabs(_ml):
+            _ml = os.path.expanduser(os.path.join("~/projects", _ml))
+        _nodir = []
+        for sc in scenes:
+            if str(sc.get("source", "")).strip() != "local_library":
+                continue
+            _q = str(sc.get("source_query", "")).strip().strip("/")
+            if not _q or re.search(r"\.[A-Za-z0-9]{2,4}$", _q):
+                continue
+            if not any(os.path.isdir(os.path.join(_ml, _c))
+                       for _c in (_q, "БАЗА/" + _q)):
+                _nodir.append((sc.get("id"), _q))
+        if _nodir:
+            bad.append(
+                "ПАПКИ НЕТ В МЕДИАТЕКЕ ЭТОГО КАНАЛА (%s): сцены %s. У каналов "
+                "РАЗНЫЕ корни медиатеки, и папка из чужого корня даёт пустую "
+                "сцену в облаке или молчаливую подмену поиском. Проверь "
+                "`MEDIA_LIBRARY_DIR` в `.env` проекта и переназначь сцены."
+                % (_ml, ", ".join("%s → %s" % (i, q) for i, q in _nodir[:8])))
+
     # ЧИСЛА В ТЕКСТЕ — ЭТО КАРТОЧКА, А НЕ ФОТОГРАФИЯ (05.11, прямое слово
     # пользователя по сданному ролику: «там рассказываются цифры… там же цифр
     # до ебени матери, можно было графики вывести. Для чего я это всё делаю?

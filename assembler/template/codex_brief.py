@@ -111,13 +111,25 @@ def _media_library_dir(dest="."):
     ошибки нет, в манифесте `press_photo`, видно только по пропавшему
     движению в лиде. Читаем `.env` проекта, как это делает сам фетч.
     """
+    # `.env` ЛЕЖИТ В ПАПКЕ ПРОЕКТА, А НЕ В ПАПКЕ НА `D:` (05.11, улов
+    # `usuario-f4`). `--dest` — это папка пользователя на диске, `.env` там
+    # не бывает НИКОГДА: чтение молча проваливалось, и бриф брал библиотеку
+    # по умолчанию. На канале ПЕРЕВОД (медиатека `media-library-2`) в задание
+    # уехали папки ПЕРВОЙ библиотеки — `ПОЛИТИКА/АдГ`, `МЕРЦ`, `ТУСК`,
+    # `ФРАНЦИЯ`, которых у канала нет вовсе; приёмка и линт их пропустили
+    # (папка существует, просто в другом корне), и семь библиотечных сцен
+    # ушли бы в облако пустыми. Сначала смотрим ТЕКУЩУЮ папку (проект),
+    # потом `--dest`.
     ml = ""
-    try:
-        for line in io.open(os.path.join(dest, ".env"), encoding="utf-8"):
-            if line.strip().startswith("MEDIA_LIBRARY_DIR"):
-                ml = line.split("=", 1)[1].strip().strip('"').strip("'")
-    except OSError:
-        pass
+    for _d in (os.getcwd(), dest):
+        try:
+            for line in io.open(os.path.join(_d, ".env"), encoding="utf-8"):
+                if line.strip().startswith("MEDIA_LIBRARY_DIR"):
+                    ml = line.split("=", 1)[1].strip().strip('"').strip("'")
+        except OSError:
+            continue
+        if ml:
+            break
     ml = ml or os.environ.get("MEDIA_LIBRARY_DIR") or os.path.expanduser("~/projects/media-library")
     if not os.path.isabs(ml):
         ml = os.path.expanduser(os.path.join("~/projects", ml))
