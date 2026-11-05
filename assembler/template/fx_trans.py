@@ -56,7 +56,13 @@ DEPTH_S0 = 0.40
 DEPTH_DRIFT = (0.045, 0.035)
 # разрыв на куски: сколько кусков, сколько кадр ещё цел, толщина кромки
 TEAR_PIECES = 7
-TEAR_HOLD = 0.16
+# ХОД РАЗРЫВА ПОДОБРАН ПО ЛИСТУ КАДРОВ (05.11, первый прогон). Было
+# hold 0.16 и разгон ** 1.7: на середине перехода куски отъезжали всего
+# на 130 px — на кадре это читалось не как разрыв, а как белая звезда
+# трещин поверх ЦЕЛОЙ картинки, и нового кадра в щелях не было видно
+# вовсе. Теперь рвёт почти сразу и расходится ровнее: на середине
+# щели ~600 px, новый кадр виден, а к концу куски всё равно за краем.
+TEAR_HOLD = 0.08
 TEAR_EDGE = 15
 
 
@@ -91,9 +97,16 @@ def _mosaic_frame(p, A, Bc, Bg, order_out, order_in):
     from PIL import Image, ImageDraw
     n = MOS_COLS * MOS_ROWS
     cw, ch = W / MOS_COLS, H / MOS_ROWS
-    out = Image.new("RGB", (W, H), (0, 0, 0))
-    gone = int(_smootherstep(min(1.0, p / 0.30)) * n)          # гаснут плитки A
-    lit = int(_smootherstep(max(0.0, (p - 0.22) / 0.58)) * n)  # зажигаются B
+    # ПОДЛОЖКА — ПРИТЕМНЁННЫЙ НОВЫЙ КАДР, А НЕ ЧЁРНОЕ ПОЛЕ (05.11, дефект
+    # найден на листе эффектов, улов `usuario-35`). Плитки A гасли к p=0.30,
+    # плитки B зажигались с p=0.22 — на середине перехода экран уходил в
+    # ПОЛНЫЙ ЧЁРНЫЙ примерно на 0,3 с, и в ролике это читалось как мигание
+    # между сценами. Вид перехода не меняется: плитки те же, порядок тот же,
+    # — просто в прорехах теперь виден затемнённый кадр, который и так
+    # приедет через мгновение, а не пустота. Плюс B зажигаются раньше (0.12).
+    out = Bc.point(lambda v: int(v * 0.32)).convert("RGB")
+    gone = int(_smootherstep(min(1.0, p / 0.38)) * n)          # гаснут плитки A
+    lit = int(_smootherstep(max(0.0, (p - 0.12) / 0.62)) * n)  # зажигаются B
     tint = 1.0 - _smootherstep(max(0.0, (p - 0.66) / 0.34))    # налёт и рамки
     draw = ImageDraw.Draw(out)
     for idx in range(n):
@@ -286,7 +299,7 @@ def _tear_pieces(A, seed):
         am = (a0 + a1) / 2.0
         out.append({"img": rgba, "at": (bb[0], bb[1]),
                     "dir": (math.cos(am), math.sin(am)),
-                    "spin": (13 if i % 2 else -11)})
+                    "spin": (16 if i % 2 else -13)})
     return out, far
 
 
@@ -304,7 +317,7 @@ def _tear_frame(p, A, pieces, far, Bc):
     sp = _smootherstep((p - TEAR_HOLD) / (1.0 - TEAR_HOLD))
     out = Bc.copy()
     for pc in pieces:
-        d = far * 1.1 * sp ** 1.7
+        d = far * 1.15 * sp ** 1.2
         ox = pc["dir"][0] * d
         oy = pc["dir"][1] * d - 90 * sp
         ang = pc["spin"] * sp

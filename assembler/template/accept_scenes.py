@@ -504,6 +504,13 @@ def main():
             if d:
                 lib_dirs.setdefault(d, []).append(sc.get("id"))
             continue
+        # ВЛОЖЕНИЯ ОДНОГО ПОСТА — НЕ ПОВТОР ЗАПРОСА (05.11, улов `usuario-8f`).
+        # У `direct_url` в `source_query` лежит АДРЕС, и у двух фото одного
+        # поста начало адреса совпадает по определению: пост один, файла два.
+        # Приёмка видела «одинаковое начало запроса» и отбивала файл, хотя
+        # кадры разные. Проверка головной группы слов к адресам неприменима.
+        if src.strip() == "direct_url":
+            continue
         q = junk.sub("", str(sc.get("source_query", ""))).strip().lower()
         h = " ".join(q.split()[:3])
         if h:
