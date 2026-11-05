@@ -1,0 +1,325 @@
+{
+ "anchor": "top",
+ "1": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СНАЧАЛА БЫЛА ВЕНЕСУЭЛА",
+   "style": "plate"
+  },
+  "photo": "overlays/scene_001.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "2": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРОГНОЗ ИИ: БЫСТРАЯ ПОБЕДА",
+   "style": "plate"
+  },
+  "photo": "overlays/scene_002.jpg",
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "4": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ГОЛОСОВАНИЕ 3 НОЯБРЯ",
+   "style": "plate"
+  }
+ },
+ "5": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ТАК БЫВАЕТ ПОЧТИ ВСЕГДА",
+   "style": "plate"
+  }
+ },
+ "6": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ДВА ГОДА ПОСЛЕ ВЫБОРОВ ПРЕЗИДЕНТА",
+   "style": "plate"
+  }
+ },
+ "8": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДО СЛЕДУЮЩИХ ВЫБОРОВ — 2 ГОДА",
+   "style": "plate"
+  }
+ },
+ "10": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ТЕХАС · БАСТИОН РЕСПУБЛИКАНЦЕВ",
+   "style": "plate"
+  },
+  "photo": "overlays/scene_010.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "11": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ГУБЕРНАТОРСКАЯ ГОНКА ТОЖЕ ПРОИГРАНА",
+   "style": "plate"
+  },
+  "photo": "overlays/scene_011.jpg",
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ },
+ "12": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОКРУГА ПЕРЕКРАИВАЛИ ПОД СЕБЯ",
+   "style": "plate"
+  },
+  "photo": "overlays/scene_012.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0
+ },
+ "13": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "КАРТА СЫГРАЛА ПРОТИВ НИХ",
+   "style": "plate"
+  }
+ },
+ "14": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ПРИЧИНА — ВОЙНА С ИРАНОМ",
+   "style": "plate"
+  }
+ },
+ "16": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "БЫСТРАЯ СИЛОВАЯ ОПЕРАЦИЯ",
+   "style": "plate"
+  }
+ },
+ "18": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СТАВКА НА ВТОРУЮ БЫСТРУЮ ПОБЕДУ",
+   "style": "plate"
+  }
+ },
+ "20": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВОЙНА ЗАТЯНУЛАСЬ",
+   "style": "plate"
+  }
+ },
+ "21": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "АМЕРИКА ПРЕЖДЕ ВСЕГО",
+   "style": "plate"
+  }
+ },
+ "22": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "УДАР ПО СВОЕМУ ЖЕ ИЗБИРАТЕЛЮ",
+   "style": "plate"
+  }
+ },
+ "23": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СОВЕЩАНИЕ В БЕЛОМ ДОМЕ",
+   "style": "plate"
+  }
+ },
+ "24": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЛИНИЯ ВЭНСА: ЧЕТЫРЕ ПУНКТА",
+   "style": "plate"
+  }
+ },
+ "27": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СВОИ ЖЕ СТОРОННИКИ",
+   "style": "plate"
+  }
+ },
+ "28": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВПЕРЕДИ 2028 ГОД",
+   "style": "plate"
+  }
+ },
+ "30": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОБЕ ПАЛАТЫ У ДЕМОКРАТОВ",
+   "style": "plate"
+  }
+ },
+ "31": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРАВО ВЕТО ОСТАЁТСЯ",
+   "style": "plate"
+  }
+ },
+ "32": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СЛУШАНИЯ · КОМИТЕТЫ · РАССЛЕДОВАНИЯ",
+   "style": "plate"
+  }
+ },
+ "34": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПОМОЩЬ УКРАИНЕ · САНКЦИИ",
+   "style": "plate"
+  }
+ },
+ "35": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ВОЛШЕБНОЙ КНОПКИ НЕТ",
+   "style": "plate"
+  }
+ },
+ "36": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "БЕРЛИН ЖДЁТ БОЛЬШЕ ПОМОЩИ КИЕВУ",
+   "style": "plate"
+  }
+ },
+ "38": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ТОКИО ОПАСАЕТСЯ ЖЁСТКОСТИ",
+   "style": "plate"
+  }
+ },
+ "43": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДВА ГОДА ПАЛОК В КОЛЁСА",
+   "style": "plate"
+  }
+ },
+ "45": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ПОБЕДИТЕЛЯ 2028 ЕЩЁ НЕТ",
+   "style": "plate"
+  }
+ },
+ "47": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "2024: ФАВОРИТ ПРОИГРАЛ",
+   "style": "plate"
+  }
+ },
+ "51": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "2016: ТО ЖЕ САМОЕ",
+   "style": "plate"
+  }
+ },
+ "53": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЭТО НЕ ОБЫЧНАЯ ПОТЕРЯ МЕСТ",
+   "style": "plate"
+  }
+ },
+ "56": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОППОЗИЦИЯ ВЕРНУЛАСЬ В ОБЕ ПАЛАТЫ",
+   "style": "plate"
+  }
+ },
+ "59": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ГЛАВНАЯ УГРОЗА — ВНУТРИ СВОИХ",
+   "style": "plate"
+  }
+ },
+ "60": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "БОРЬБА ЗА НАСЛЕДСТВО",
+   "style": "plate"
+  }
+ },
+ "62": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДЕЛЁЖ НАСЛЕДСТВА НАЧАЛСЯ",
+   "style": "plate"
+  }
+ },
+ "17": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_017.jpg",
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0
+ }
+}
