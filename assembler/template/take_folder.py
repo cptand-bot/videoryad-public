@@ -28,6 +28,72 @@ TAKE = (".srt", ".mp3", ".wav", ".m4a", ".txt", ".ass", ".json")
 VOICE = (".mp3", ".wav", ".m4a")
 
 
+
+# МЕДИАТЕКА КАНАЛА — СТАВИТСЯ САМА (улов 05.11, `usuario-e4`).
+# В `template/.env` строки `MEDIA_LIBRARY_DIR` НЕТ ВООБЩЕ, а умолчание во всех
+# читателях — `media-library`. Значит вкладка канала 5 МИНУТ, честно
+# скопировав шаблон, молча получала ЧУЖУЮ медиатеку: сцены `local_library`
+# не находились, уезжали в поиск, и ошибка не кричала ничем. Важное
+# поведение не должно висеть на необязательном ключе, поэтому строка теперь
+# пишется ЗДЕСЬ — на обязательном первом шаге, где канал и так известен
+# из ПУТИ к его папке.
+# Раскладка каналов (память `feedback_media_library_channel_mapping`):
+#   media-library   — ПЛАНЕТА, ОЛЬКА
+#   media-library-2 — 5 МИНУТ, ДИПЛОМАТИЯ СИЛЫ, ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО
+LIB2 = ("5 МИНУТ", "ДИПЛОМАТИЯ СИЛЫ", "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+        "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО ЯЗЫКА")
+LIB1 = ("ПЛАНЕТА", "ОЛЬКА")
+
+
+def channel_of(path):
+    """Канал берётся из ПУТИ и только из пути — он главнее георадара и
+    главнее того, что написано в листе `Productions` (живой случай 28.10)."""
+    parts = [x.strip().upper() for x in os.path.abspath(path).replace("\\", "/").split("/")]
+    for want in LIB2 + LIB1:
+        if want in parts:
+            return want
+    return ""
+
+
+def ensure_env(dst, channel):
+    """Кладёт в папку проекта `.env` и ставит в нём медиатеку канала.
+    Чужое значение НЕ переписывает молча — говорит вслух."""
+    env = os.path.join(dst, ".env")
+    tmpl = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if not os.path.exists(env):
+        if not os.path.exists(tmpl):
+            print("!! нет шаблона %s — .env собери руками" % tmpl, file=sys.stderr)
+            return
+        shutil.copy2(tmpl, env)
+        print(".env взят из шаблона скилла")
+    if not channel:
+        print("!! КАНАЛ ИЗ ПУТИ НЕ УЗНАН — медиатеку в .env поставь сама "
+              "(MEDIA_LIBRARY_DIR=media-library | media-library-2)", file=sys.stderr)
+        return
+    want = "media-library-2" if channel in LIB2 else "media-library"
+    # ПУТЬ ПИШЕМ АБСОЛЮТНЫЙ: голое имя папки нормализует `fetch_assets_news`
+    # и `check_pins`, но читателей у ключа больше десятка, и ручаться за
+    # каждого нечем. Абсолютный путь одинаково понимают все.
+    want_path = os.path.expanduser("~/projects/" + want)
+    lines = open(env, encoding="utf-8").read().splitlines()
+    have = [i for i, ln in enumerate(lines) if ln.strip().startswith("MEDIA_LIBRARY_DIR=")]
+    if have:
+        cur = lines[have[0]].split("=", 1)[1].strip()
+        if os.path.basename(cur.rstrip("/")) != want:
+            print("!! в .env уже стоит MEDIA_LIBRARY_DIR=%s, а каналу %s нужна "
+                  "%s — не трогаю, разберись руками" % (cur, channel, want),
+                  file=sys.stderr)
+        else:
+            print("медиатека канала %s: %s (уже стояла)" % (channel, want))
+        return
+    lines.append("MEDIA_LIBRARY_DIR=%s" % want_path)
+    t = env + ".tmp"
+    with open(t, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    os.replace(t, env)
+    print("медиатека канала %s: %s (дописано в .env)" % (channel, want_path))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("src", help="папка пользователя (та, где лежит SRT)")
@@ -69,6 +135,7 @@ def main():
         print("уже лежало (не трогал, --force перезапишет): %s"
               % ", ".join(skipped))
     print("исходная папка запомнена в .source_dir")
+    ensure_env(a.dst, channel_of(a.src))
 
     srt = [f for f in os.listdir(a.dst) if f.lower().endswith(".srt")]
     nar = [f for f in os.listdir(a.dst)
