@@ -211,6 +211,20 @@ def build_trans_clip(ffmpeg, ffprobe, src, out_path, duration, sid, kind,
     return False
 
 
+def _sub_corner(sid):
+    """Угол кнопки для этой сцены: правый, левый, правый — по порядку в ролике.
+
+    Считается от ПОЛНОГО списка кнопок ролика, а не от шарда: каждый из 12
+    раннеров читает один и тот же scenes.json, поэтому очередь у всех
+    совпадает и ролик не меняет вид от прогона к прогону.
+    """
+    order = sorted(i for i, k in FX_OF.items() if k == "subscribe")
+    try:
+        return "right" if order.index(int(sid)) % 2 == 0 else "left"
+    except ValueError:
+        return "right"
+
+
 def build_subscribe_clip(ffmpeg, out_path, sid):
     """Кнопка «подпишись» поверх УЖЕ СОБРАННОГО клипа сцены.
 
@@ -220,7 +234,8 @@ def build_subscribe_clip(ffmpeg, out_path, sid):
     """
     tmp = out_path + ".sub.mp4"
     cmd = [sys.executable, os.path.join(HERE, "fx_subscribe.py"),
-           out_path, tmp, "--at", "0.3", "--ffmpeg", ffmpeg]
+           out_path, tmp, "--at", "0.3", "--ffmpeg", ffmpeg,
+           "--corner", _sub_corner(sid)]
     r = subprocess.run(cmd, capture_output=True, text=True)
     ok = (r.returncode == 0 and os.path.isfile(tmp)
           and os.path.getsize(tmp) > 0)

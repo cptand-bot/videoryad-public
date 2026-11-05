@@ -175,7 +175,8 @@ def main():
         if os.path.isfile(dst):
             os.remove(dst)
         _save(a.scenes, data)
-        print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ» ПОСТАВЛЕНА" % (a.sid, dur))
+        print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ» ПОСТАВЛЕНА "
+              "(угол выберет сборка: правый, левый, правый)" % (a.sid, dur))
         print("кнопок в ролике: %d из %d" % (len(set(same) | {a.sid}), FX_MAX))
         print("файлов не нужно: кадры кнопки рисует облако само")
         return 0
@@ -252,6 +253,54 @@ def main():
     return 0
 
 
+def _put_subscribe(scenes, by_id, first, n):
+    """КНОПКА «ПОДПИШИСЬ» — ТРИ РАЗА НА ДЛИНУ РОЛИКА (05.11, его слово при
+    приёмке: «используем её три раза на длину видео. Один раз в правом углу,
+    другой раз в левом, один раз в правом. В верхнем углу»).
+
+    Углы чередует САМА СБОРКА по очереди сцен, здесь только места: начало,
+    середина, ближе к концу. Кнопка — накладка, а не переход, но ключ `fx`
+    у сцены один, поэтому ей нужны сцены БЕЗ перехода и не короче 4,5 с
+    (вся анимация идёт 3,4 с).
+
+    Отдельной функцией, а не строчками внутри расстановки переходов: когда
+    переходы уже стоят по три, расстановка выходит из работы сразу — и
+    кнопки, будь они внутри, не появились бы НИКОГДА на ролике, который
+    просто пересобирают.
+    """
+    sub_have = [int(x.get("id", 0)) for x in scenes
+                if str(x.get("fx", "")).strip().lower() == "subscribe"]
+    sub_need = max(0, FX_MAX - len(sub_have))
+    if not sub_need:
+        return []
+    busy = set(int(x.get("id", 0)) for x in scenes
+               if str(x.get("fx", "")).strip())
+    ok = [int(x.get("id", 0)) for x in scenes
+          if int(x.get("id", 0)) not in busy
+          and float(x.get("duration_sec") or 0) >= 4.5
+          and not str(x.get("source", "")).startswith("card")]
+    put = []
+    for f in (0.12, 0.50, 0.85)[:sub_need]:
+        t = first + int(n * f)
+        cand = [x for x in ok if x not in put]
+        if not cand:
+            break
+        put.append(min(cand, key=lambda x: (abs(x - t), x)))
+    for sid in put:
+        by_id[sid]["fx"] = "subscribe"
+    if put:
+        _ang = ["ПРАВЫЙ", "ЛЕВЫЙ"]
+        for i, sid in enumerate(sorted(set(sub_have) | set(put))):
+            if sid in put:
+                print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ» — %s верхний угол"
+                      % (sid, float(by_id[sid].get("duration_sec") or 0),
+                         _ang[i % 2]))
+    elif not sub_have:
+        print("!! кнопку «подпишись» ставить некуда: нужны сцены без перехода "
+              "длиннее 4,5 с", file=sys.stderr)
+    return put
+
+
 def _auto(a, data, scenes):
     """Расставить три перехода по ролику — его слово 04.11: «поставь эти
     эффекты на ролики, это на канал ПЛАНЕТА, и не больше 3 на ролик».
@@ -298,7 +347,10 @@ def _auto(a, data, scenes):
     for k in AUTO_TRANS:
         need += [k] * max(0, FX_MAX - len(by_kind.get(k, [])))
     free = len(need)
+    _subs = _put_subscribe(scenes, by_id, first, len(scenes))
     if free <= 0:
+        if _subs:
+            _save(a.scenes, data)
         print("все переходы уже по %d раза — добавлять нечего" % FX_MAX)
         return 0
 
@@ -406,8 +458,10 @@ def _auto(a, data, scenes):
     _order = [k for _r in range(FX_MAX) for k in _kinds]
     for i, sid in enumerate(picked):
         by_id[sid]["fx"] = _order[i % len(_order)]
+
     _save(a.scenes, data)
-    allfx = sorted(set(have) | set(picked))
+    allfx = sorted(int(x.get("id", 0)) for x in scenes
+                   if str(x.get("fx", "")).strip().lower() in KINDS)
     for sid in picked:
         print("сцена %d (%.1f с): переход «%s» ПОСТАВЛЕН"
               % (sid, float(by_id[sid].get("duration_sec") or 0),

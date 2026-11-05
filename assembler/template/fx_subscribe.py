@@ -25,7 +25,8 @@
     на 4% в момент нажатия;
   * появление и уход мгновенные;
   * типографика наша: узкий гротеск из `template/fonts`;
-  * правый верхний угол — внизу субтитры, слева всплывашки.
+  * только ВЕРХНИЕ углы — внизу субтитры; угол чередуется
+    по ролику: правый, левый, правый.
 
 ПОЧЕМУ КАДРЫ — ОТДЕЛЬНЫЕ PNG С АЛЬФОЙ: mp4 прозрачность не несёт, а кнопку
 надо класть поверх живого кадра. Последовательность PNG ffmpeg берёт входом
@@ -181,8 +182,15 @@ def render_frames(out_dir, seconds=TOTAL_SEC):
     return n
 
 
-def put_on_clip(ffmpeg, src, dst, at=0.3, margin=46, seconds=TOTAL_SEC):
-    """Наложить кнопку на готовый клип. Правый верхний угол."""
+def put_on_clip(ffmpeg, src, dst, at=0.3, margin=46, seconds=TOTAL_SEC,
+                corner="right"):
+    """Наложить кнопку на готовый клип. Верхний угол — правый или левый.
+
+    УГОЛ ЧЕРЕДУЕТСЯ ПО РОЛИКУ (05.11, его слово при приёмке): «используем её
+    три раза на длину видео. Один раз в правом углу, другой раз в левом,
+    один раз в правом. В верхнем углу». Низ не трогаем ни при каком угле —
+    там субтитры.
+    """
     tmp = tempfile.mkdtemp(prefix="sub_")
     try:
         n = render_frames(tmp, seconds)
@@ -192,8 +200,11 @@ def put_on_clip(ffmpeg, src, dst, at=0.3, margin=46, seconds=TOTAL_SEC):
                "-i", os.path.join(tmp, "sub_%04d.png"),
                "-filter_complex",
                "[1:v]setpts=PTS-STARTPTS+%.3f/TB[b];"
-               "[0:v][b]overlay=x=W-w-%d:y=%d:eof_action=pass:shortest=0[v]"
-               % (float(at), int(margin), int(margin)),
+               "[0:v][b]overlay=x=%s:y=%d:eof_action=pass:shortest=0[v]"
+               % (float(at),
+                  ("%d" % int(margin)) if str(corner).lower().startswith("l")
+                  else ("W-w-%d" % int(margin)),
+                  int(margin)),
                "-map", "[v]", "-an",
                "-c:v", "libx264", "-preset", "veryfast",
                "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
@@ -204,8 +215,12 @@ def put_on_clip(ffmpeg, src, dst, at=0.3, margin=46, seconds=TOTAL_SEC):
         if not ok:
             print("FAIL: " + (r.stderr or "")[-600:], file=sys.stderr)
         else:
-            print("кнопка «подпишись» поставлена: %s (%d кадров, старт %.2f с)"
-                  % (dst, n, at))
+            print("кнопка «подпишись» поставлена: %s (%d кадров, старт "
+                  "%.2f с, угол %s)"
+                  % (dst, n, at,
+                     "ЛЕВЫЙ ВЕРХНИЙ"
+                     if str(corner).lower().startswith("l")
+                     else "ПРАВЫЙ ВЕРХНИЙ"))
         return ok
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -219,6 +234,7 @@ def main():
     ap.add_argument("--at", type=float, default=0.3)
     ap.add_argument("--seconds", type=float, default=TOTAL_SEC)
     ap.add_argument("--margin", type=int, default=46)
+    ap.add_argument("--corner", default="right", choices=("right", "left"))
     ap.add_argument("--ffmpeg", default="ffmpeg")
     a = ap.parse_args()
     if a.frames:
@@ -233,7 +249,7 @@ def main():
         print("нет файла: %s" % a.src, file=sys.stderr)
         return 2
     return 0 if put_on_clip(a.ffmpeg, a.src, a.dst, a.at, a.margin,
-                            a.seconds) else 1
+                            a.seconds, a.corner) else 1
 
 
 if __name__ == "__main__":
