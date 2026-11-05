@@ -1702,8 +1702,18 @@ def lint(paths, strict=False, no_net=False):
         import subprocess
         _du = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            "dossier_use.py")
-        _tg = sorted(glob.glob(os.path.join(
+        # СНАПШОТ И ОТКАЗЫ — НЕ ВЫДАЧА `tg_media` (05.11, улов `usuario-f4`,
+        # вторая попытка). Маска в `dossier_use.py` не спасала: линт берёт
+        # ПЕРВЫЙ по алфавиту `tg*.json` и передаёт его ключом `--tg`, а
+        # первым оказывается `tg_snapshot.json` — разобранный снапшот ДНЯ,
+        # то есть материал чужих тем. Гейт честно требовал поставить в ролик
+        # полсотни чужих файлов и валил фетч у вкладки, сделавшей всё по
+        # инструкции. Фильтруем ДО выбора.
+        _tg = [x for x in sorted(glob.glob(os.path.join(
             os.path.dirname(os.path.abspath(paths[0])) or ".", "tg*.json")))
+            if not any(w in os.path.basename(x).lower()
+                       for w in ("snapshot", "снапшот", "snap", "reject",
+                                 "отказ", "source", "map"))]
         if _tg and os.path.exists(_du):
             print("\n=== материал досье (георадар) ===")
             _r = subprocess.run([sys.executable, _du] + list(paths)

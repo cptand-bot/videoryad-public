@@ -200,7 +200,15 @@ def main():
     if "--tg" in sys.argv:
         tg1 = sys.argv[sys.argv.index("--tg") + 1]
         args = [a for a in args if a != tg1]
-        tgs = [tg1]
+        # Та же маска, что и для глоба ниже: снапшот дня, отказы и служебные
+        # файлы `geo_links` выдачей `tg_media` не являются, даже если их
+        # передали ключом (05.11).
+        if any(w in os.path.basename(tg1).lower()
+               for w in ("snapshot", "снапшот", "snap", "reject", "отказ",
+                         "source", "map")):
+            tgs = []
+        else:
+            tgs = [tg1]
     here = os.path.dirname(os.path.abspath(args[0])) or "."
     # ВРЕМЕННЫЙ ФАЙЛ КРУГА ПРАВОК — НЕ СЦЕНАРИЙ (2026-10-31, улов `usuario-2e`,
     # дефект моей же правки). `refetch.py` кладёт правленые сцены в
