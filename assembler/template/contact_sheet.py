@@ -81,11 +81,54 @@ for s in scenes:
     if hits:
         p = hits[0]
         frame = p
-        if p.lower().endswith((".mp4", ".mov")):
+        if p.lower().endswith((".mp4", ".mov", ".webm", ".mkv")):
+            # ВИДЕО СМОТРИМ ПО ТРЁМ ТОЧКАМ, А НЕ ПО НУЛЕВОЙ СЕКУНДЕ (05.11,
+            # улов `usuario-ca`, брак доехал до ГОТОВОГО файла). Клип
+            # `ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ` первые десять секунд чист — общий план
+            # зала, — а на одиннадцатой приезжает вшитый титр трансляции с
+            # именем депутата латиницей во всю нижнюю треть. Миниатюра
+            # снималась с первой секунды, поэтому ни лист, ни внешний агент,
+            # ни субагенты этого не видели. У фото такой дыры нет.
             frame = os.path.join(out_dir, f"_f{sid:03d}.jpg")
-            subprocess.run(["ffmpeg", "-y", "-ss", "1", "-i", p, "-vframes", "1",
-                            "-vf", f"scale={TW}:{TH-BAR}:force_original_aspect_ratio=increase,crop={TW}:{TH-BAR}",
-                            frame], capture_output=True)
+            _dur = 0.0
+            try:
+                _r = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                     "format=duration", "-of", "csv=p=0", p],
+                                    capture_output=True, text=True, timeout=30)
+                _dur = float((_r.stdout or "0").strip() or 0)
+            except Exception:
+                _dur = 0.0
+            _parts, _tmp = [], []
+            if _dur > 3:
+                _cw = TW // 3
+                for _i, _frac in enumerate((0.08, 0.5, 0.88)):
+                    _f = os.path.join(out_dir, f"_f{sid:03d}_{_i}.jpg")
+                    subprocess.run(["ffmpeg", "-y", "-ss", "%.2f" % (_dur * _frac),
+                                    "-i", p, "-vframes", "1", "-vf",
+                                    f"scale={_cw}:{TH-BAR}:force_original_aspect_ratio=increase,"
+                                    f"crop={_cw}:{TH-BAR}", _f],
+                                   capture_output=True)
+                    if os.path.exists(_f):
+                        _parts.append(_f)
+                    _tmp.append(_f)
+            if len(_parts) >= 2:
+                _strip = Image.new("RGB", (TW, TH - BAR), (30, 30, 34))
+                for _i, _f in enumerate(_parts):
+                    try:
+                        _im = Image.open(_f).convert("RGB")
+                        _strip.paste(_im, (_i * (TW // 3), 0))
+                    except OSError:
+                        pass
+                _strip.save(frame, quality=88)
+                for _f in _tmp:
+                    try:
+                        os.remove(_f)
+                    except OSError:
+                        pass
+            else:
+                subprocess.run(["ffmpeg", "-y", "-ss", "1", "-i", p, "-vframes", "1",
+                                "-vf", f"scale={TW}:{TH-BAR}:force_original_aspect_ratio=increase,crop={TW}:{TH-BAR}",
+                                frame], capture_output=True)
         try:
             ph = Image.open(frame).convert("RGB")
             ph.thumbnail((TW, TH - BAR))
