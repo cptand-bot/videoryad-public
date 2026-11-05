@@ -23,6 +23,7 @@
 import argparse
 import json
 import os
+import io
 import re
 import sys
 
@@ -787,12 +788,123 @@ def main():
     print(f"сцен: {n}, общая длительность {total:.1f} с")
     print(f"источники: press/web {sum(1 for s in scenes if s.get('source') in ('press_photo','web_search'))}, "
           f"сток {stock}, карточек {len(cards)}")
+    # СЦЕНЫ ПРОВЕРЯЕМ ПРОТИВ ОЗВУЧКИ, А НЕ ТОЛЬКО ПРОТИВ САМИХ СЕБЯ (05.11,
+    # прямая претензия пользователя по сданному ролику: «картинки появляются
+    # раньше, чем идёт озвучка… Пашинян выскакивает до того, как он это самое,
+    # карта Варшавского договора ещё раньше выскочила»).
+    # Как это проходило мимо всех проверок: сумма длительностей сходилась с
+    # озвучкой до десятых, `start_sec` шли подряд без дыр — формально файл
+    # безупречен. А РАСПРЕДЕЛЕНИЕ внутри уехало: агент резал сцены «на глаз»,
+    # и к середине ролика картинка обгоняла голос на 30 секунд (замер по
+    # `varshava-0511`: сцена 8 — 67,7 против 75,8; сцена 28 «карта Варшавского
+    # договора» — 296,6 против 326,6; сцена 46 — 510,0 против 518,5).
+    # Лечение одно: привязать каждую сцену к МЕСТУ ЕЁ ТЕКСТА в SRT.
+    _ENDS = []
+
+    def _cues(path):
+        out = []
+        try:
+            raw = io.open(path, encoding="utf-8-sig", errors="ignore").read()
+        except OSError:
+            return out
+        for blk in re.split(r"\n\s*\n", raw):
+            m = re.search(r"(\d\d):(\d\d):(\d\d),(\d+)\s*-->"
+                          r"\s*(\d\d):(\d\d):(\d\d),(\d+)", blk)
+            if not m:
+                continue
+            t = (int(m.group(1)) * 3600 + int(m.group(2)) * 60
+                 + int(m.group(3)) + int(m.group(4)) / 1000.0)
+            _e = (int(m.group(5)) * 3600 + int(m.group(6)) * 60
+                  + int(m.group(7)) + int(m.group(8)) / 1000.0)
+            _ENDS.append(_e)
+            txt = " ".join(l for l in blk.split("\n")
+                           if "-->" not in l and not l.strip().isdigit()).strip()
+            if txt:
+                out.append((t, txt))
+        return out
+
+    _cu = _cues(a.srt) if getattr(a, "srt", "") else []
+    _drift = []
+    if _cu:
+        import difflib as _dl
+        _prev = 0.0
+        for sc in scenes:
+            _tx = re.sub(r"\s+", " ", str(sc.get("text", ""))).strip().lower()[:60]
+            if len(_tx) < 15:
+                continue
+            _best = (0.0, None)
+            for _t, _c in _cu:
+                if _t < _prev - 20:
+                    continue
+                _r = _dl.SequenceMatcher(None, _tx, _c.lower()[:60]).ratio()
+                if _r > _best[0]:
+                    _best = (_r, _t)
+            if _best[0] >= 0.5 and _best[1] is not None:
+                _prev = _best[1]
+                _d = _best[1] - float(sc.get("start_sec") or 0)
+                _drift.append((sc.get("id"), round(_best[1], 1), _d))
+        _big = [x for x in _drift if abs(x[2]) > 4.0]
+        if _big:
+            _w = max(_big, key=lambda x: abs(x[2]))
+            msg = ("КАРТИНКА РАСХОДИТСЯ С ОЗВУЧКОЙ: у %d сцен из %d начало не "
+                   "совпадает с местом их текста в SRT больше чем на 4 с "
+                   "(худшая — сцена %s: в файле %.1f с, в озвучке %.1f с, "
+                   "разница %+.1f с). Сумма при этом сходится — проверять "
+                   "надо РАСПРЕДЕЛЕНИЕ. Чинится `--fix`: тайминг снимается с "
+                   "SRT по тексту каждой сцены."
+                   % (len(_big), len(_drift), _w[0],
+                      _w[1] - _w[2], _w[1], _w[2]))
+            (bad if not a.fix else warn).append(msg)
+
     for w in warn:
         print("  ВНИМАНИЕ:", w)
     for b in bad:
         print("  ОШИБКА:", b, file=sys.stderr)
 
     if a.fix:
+        if _drift and len([x for x in _drift if abs(x[2]) > 4.0]):
+            # ТАЙМИНГ СНИМАЕМ С ОЗВУЧКИ ЦЕЛИКОМ, А НЕ ТОЧЕЧНО. Старт сцены —
+            # место её текста в SRT; у сцен без надёжного совпадения (карточки,
+            # короткие подписи) старт берётся ЛИНЕЙНОЙ ВСТАВКОЙ между
+            # соседями, иначе цепочка рвётся и сумма уезжает. Длительность —
+            # строго до старта следующей, у последней — до конца озвучки.
+            _pts = {i: t for i, t, _d in _drift}
+            _tot = (max(_ENDS) if _ENDS else (_cu[-1][0] + 4.0)) if _cu else None
+            _ids = [sc.get("id") for sc in scenes]
+            _st = []
+            for _n, _sid in enumerate(_ids):
+                _st.append(_pts.get(_sid))
+            # вставка пропусков
+            for _n in range(len(_st)):
+                if _st[_n] is not None:
+                    continue
+                _l = next((m for m in range(_n - 1, -1, -1) if _st[m] is not None), None)
+                _r = next((m for m in range(_n + 1, len(_st)) if _st[m] is not None), None)
+                if _l is None and _r is None:
+                    _st[_n] = 0.0
+                elif _l is None:
+                    _st[_n] = max(0.0, _st[_r] - 6.0 * (_r - _n))
+                elif _r is None:
+                    _st[_n] = _st[_l] + 6.0 * (_n - _l)
+                else:
+                    _st[_n] = _st[_l] + (_st[_r] - _st[_l]) * (_n - _l) / float(_r - _l)
+            # монотонность и минимальная длина сцены
+            for _n in range(1, len(_st)):
+                if _st[_n] < _st[_n - 1] + 2.0:
+                    _st[_n] = _st[_n - 1] + 2.0
+            _end = _tot if _tot else (_st[-1] + 6.0)
+            if _end < _st[-1] + 2.0:
+                _end = _st[-1] + 2.0
+            for _n, sc in enumerate(scenes):
+                sc["start_sec"] = round(_st[_n], 2)
+                _nx = _st[_n + 1] if _n + 1 < len(_st) else _end
+                sc["duration_sec"] = round(_nx - _st[_n], 2)
+            print("  тайминг снят с ОЗВУЧКИ по тексту сцен: привязано %d из %d, "
+                  "остальные вставкой между соседями"
+                  % (len(_pts), len(scenes)))
+            print("  сумма после привязки: %.1f с (озвучка %.1f с)"
+                  % (sum(float(x.get("duration_sec") or 0) for x in scenes),
+                     _end))
         t = 0.0
         for sc in scenes:
             sc["start_sec"] = round(t, 2)
