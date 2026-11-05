@@ -185,6 +185,21 @@ def _fill_state(t):
     return face, face, 1.0
 
 
+def _mark(d, cx, cy, r, t, face):
+    """Круг-знак канала и вращающееся вокруг него пунктирное кольцо."""
+    col = WHITE if face else ACCENT
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col)
+    d.polygon([(cx - r * 0.28, cy - r * 0.42), (cx - r * 0.28, cy + r * 0.42),
+               (cx + r * 0.44, cy)],
+              fill=(18, 20, 24) if not face else RED)
+    rr = r + 9
+    base = (t * 70.0) % 360.0
+    for i in range(12):
+        a0 = base + i * 30.0
+        d.arc([cx - rr, cy - rr, cx + rr, cy + rr], a0, a0 + 17,
+              fill=col + (235,), width=4)
+
+
 def _face(face, w, h, glare, t=0.0, typed=1.0, prev=None,
           prog=1.0):
     prev = face if prev is None else prev
