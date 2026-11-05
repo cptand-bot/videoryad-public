@@ -421,6 +421,16 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                    if _chan.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
                    or not _chan.strip() else "top")
     anchor = str(ov.get("anchor", _def_anchor)).lower()   # общий на ролик, его перебивает ключ сцены
+    # НИЗ ВНЕ ПЛАНЕТЫ ЗАПРЕЩЁН ПОЛНОСТЬЮ (05.11, прямое слово пользователя:
+    # «надписи ни в коем случае не выводить внизу. Или в середине, или
+    # вверху. Внизу идут субтитры», «там идут комментарии»). Раньше дефолт
+    # был по каналу, но ЯВНЫЙ `bottom` (старый файл, рука, чужой пресет)
+    # проходил насквозь. Теперь поднимаем и говорим вслух.
+    if anchor == "bottom" and _chan.strip() and \
+            _chan.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
+        print("якорь `bottom` на канале «%s» ЗАПРЕЩЁН (внизу идут субтитры) "
+              "— поднимаю наверх" % _chan.strip(), flush=True)
+        anchor = "top"
     if "anchor" not in ov:
         print("якорь всплывашек по каналу «%s»: %s (ключа `anchor` в "
               "overlays.json нет)" % (_chan or "не указан", anchor), flush=True)
@@ -438,6 +448,9 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         sc_anchor = str(spec.get("anchor") or anchor).lower()
         if sc_anchor not in ("top", "middle", "bottom"):
             sc_anchor = anchor
+        if sc_anchor == "bottom" and _chan.strip() and \
+                _chan.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
+            sc_anchor = "top"      # тот же запрет, но и для ключа СЦЕНЫ
         clip = os.path.join(clips_dir, f"clip_{sid:03d}.mp4")
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
         photo = resolve_photo(spec.get("photo") or "")

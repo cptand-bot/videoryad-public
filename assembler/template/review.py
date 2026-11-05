@@ -445,14 +445,15 @@ def drop_ticker(sid):
 
 _POS2STYLE = {"left": "left", "right": "right", "center": "up-center"}
 
-def _ovcell_cur(spec, anchor="bottom"):
+def _ovcell_cur(spec, anchor=""):
     """Клетка схемы 3×3 для ФОТО-всплывашки: горизонталь из style,
     вертикаль из anchor записи (или общего ключа ролика).
     Кнопочная схема вместо выпадающих списков — прямая просьба пользователя
     17.10: «тык нажал — центр, тык нажал — слева… а не списки, в которых я
     должен ковыряться». Такая же сетка уже была у всплывашки-СЛОВА."""
     h = _ovpos_cur(spec)                      # left | center | right
-    v = str((spec or {}).get("anchor") or anchor).lower()
+    v = _anchor_ok((spec or {}).get("anchor") or anchor,
+                   os.path.basename(os.getcwd()))
     if v not in ("top", "middle", "bottom"):
         v = "bottom"
     return {"top": "t", "middle": "m", "bottom": "b"}[v] + \
@@ -467,7 +468,7 @@ def _ovpos_cur(spec):
         return "right"
     return "center"
 
-def overlay_geom(sid, spec, photo_path=None, anchor="bottom"):
+def overlay_geom(sid, spec, photo_path=None, anchor=""):
     """Where the pop-up will sit in the 1920x1080 frame — mirrors
     build_overlays.py's seeded layout EXACTLY (draw order matters, so the RNG
     stays in step). Height-driven, 1/3..1/2 of the frame; box hugs the photo's
@@ -521,7 +522,7 @@ def overlay_geom(sid, spec, photo_path=None, anchor="bottom"):
         x = W - dw - margin
     else:
         x = (W - dw) // 2
-    _a = str(anchor).lower()
+    _a = _anchor_ok(anchor, os.path.basename(os.getcwd()))
     y = margin if _a == "top" else ((H - dh) // 2 if _a == "middle" else H - dh - margin)
     _v = "сверху" if _a == "top" else ("по середине" if _a == "middle" else "снизу")
     ru = {"left": f"{_v} слева", "right": f"{_v} справа", "up-center": f"{_v} по центру",
@@ -614,7 +615,7 @@ def build_scene_preview(sid, images_dir, scenes_path):
     has_photo = isinstance(ent, dict) and ent.get("photo") and os.path.exists(ent["photo"])
     if ent and (has_photo or has_txt):
         ovj = os.path.join(tmp, "ov.json")
-        json.dump({"anchor": ov.get("anchor", "bottom"), str(sid): ent},
+        json.dump({"anchor": _anchor_ok(ov.get("anchor"), os.path.basename(os.getcwd())), str(sid): ent},
                   open(ovj, "w", encoding="utf-8"), ensure_ascii=False)
         # 2. всплывашка(и) поверх клипа  (перезаписывает clip_NNN.mp4)
         subprocess.run(["python3", _script("build_overlays.py"), "overlay", sub,
@@ -1112,6 +1113,37 @@ def _scene_meta(sid, scenes, images_dir, kind):
     return meta
 
 
+# ЯКОРЬ ВСПЛЫВАШКИ: ДЕФОЛТ ПО КАНАЛУ, А НЕ «bottom» (05.11, прямое слово
+# пользователя через `usuario-1a`: «надписи ни в коем случае не выводить внизу.
+# Или в середине, или вверху. Внизу идут субтитры», «там идут комментарии»).
+# `build_overlays.py` канал учитывал с 04.11, а ДАШБОРД — нет: здесь в пяти
+# местах стоял жёсткий `bottom`, и ролик 5 МИНУТ показывался с нижними
+# надписями, хотя в `overlays.json` стоял общий ключ `top` и selfcheck был
+# зелёный. Вкладка лечила это, проставляя anchor КАЖДОЙ из 37 записей.
+def _anchor_default(project=""):
+    try:
+        ch = (_channel_of(project) or "").strip().upper().replace("Ё", "Е")
+    except Exception:
+        ch = ""
+    return "bottom" if (ch == "ПЛАНЕТА" or not ch) else "top"
+
+
+def _anchor_ok(value, project=""):
+    """Низ на 5 МИНУТ запрещён ПОЛНОСТЬЮ: там идут субтитры и комментарии.
+    Поэтому `bottom` для этого канала не просто не дефолт — он поднимается
+    наверх, откуда бы ни пришёл (общий ключ, запись сцены, старый файл)."""
+    v = str(value or "").lower()
+    if v not in ("top", "middle", "bottom"):
+        v = _anchor_default(project)
+    try:
+        ch = (_channel_of(project) or "").strip().upper().replace("Ё", "Е")
+    except Exception:
+        ch = ""
+    if v == "bottom" and ch and ch != "ПЛАНЕТА":
+        return "top"
+    return v
+
+
 def _channel_of(project):
     """Канал ролика — для журнала отказов. Берём из `.source_dir`, который
     ship.sh кладёт в кэш: там путь вида D:\\YouTube\\НОВОСТИ\\<канал>\\…
@@ -1408,7 +1440,8 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     # её менять»). Раньше верх/низ задавался ОДНИМ ключом anchor на весь ролик
     # (top для всех каналов кроме ПЛАНЕТЫ) и на дашборде его не было вообще —
     # менялась только горизонталь. Теперь запись сцены перебивает общий ключ.
-    _ov_anchor = str(ov_cur.get("anchor") or overlays.get("anchor", "bottom")).lower()
+    _ov_anchor = _anchor_ok(ov_cur.get("anchor") or overlays.get("anchor"),
+                            os.path.basename(os.getcwd()))
     is_vid = planned_is_video(s)
     label, cls = badge_for(s.get("source", ""), is_vid)
     q = s.get("source_query", "")
@@ -1571,7 +1604,16 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
                  f'{_ovb}</span>')
                 if ph and os.path.exists(ph)
                 else f'<img class="ovprev" id="ovprev{sid}" alt="" hidden>')
-        _tcol = _tw.get("color", "yellow")
+        # ЦВЕТ ПО УМОЛЧАНИЮ — ЦИКЛ, А НЕ ЖЁЛТЫЙ (05.11, прямое слово
+        # пользователя: «Почему жёлтая только? Рандомные должны быть, разные
+        # надписи… Цвета всегда рандомно»). Здесь стояло жёсткое "yellow", и
+        # дашборд показывал жёлтым КАЖДУЮ запись, у которой вкладка цвет не
+        # задавала, — а дальше пользователь утверждал карточку, и жёлтый
+        # уезжал в ролик. Сборка (`build_overlays.text_color_for`) всё это
+        # время крутила цикл из пяти цветов по номеру сцены; теперь обе
+        # стороны берут ОДНО И ТО ЖЕ, иначе готовый ролик разойдётся с
+        # утверждённой карточкой.
+        _tcol = _tw.get("color") or text_color_for(sid)
         _tfont = str(_tw.get("font") or "default").lower()
         if _tfont not in TEXT_FONT_FILES:
             _tfont = "default"
@@ -3226,7 +3268,7 @@ def run_live(scenes_path, images_dir, port):
         # fetch considered done when every scene id is in the manifest
         fetch_done = len(man) >= len(scenes) and len(man) > 0
         ovs = load_overlays()
-        _anchor = str(ovs.get("anchor", "bottom")).lower()
+        _anchor = _anchor_ok(ovs.get("anchor"), os.path.basename(os.getcwd()))
         for k, v in ovs.items():
             if not str(k).isdigit():
                 continue
