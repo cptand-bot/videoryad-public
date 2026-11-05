@@ -45,6 +45,35 @@ MAX_UP = 2.2
 MAX_COVER_UP = 1.35
 
 
+def video_fit_mode(vw, vh, sid):
+    """Как ставить ВИДЕО в рамку 16:9: ("fill"|"cover", ширина, высота).
+
+    `fill` — кадр как есть по центру, поля — размытая притемнённая копия;
+    `cover` — кадр накрывает рамку целиком (лёгкий апскейл допустим).
+
+    Два повода уйти в `fill`:
+      · пропорция не 16:9 (узкое, вертикальное, срезанный знак) — с 30.10;
+      · ВЛОЖЕНИЕ ТЕЛЕГРАМА, которому нужен апскейл больше MAX_COVER_UP
+        (05.11, прямое решение пользователя «и видео из Telegram так же»).
+        Пропорция у вложения обычно родная (848x464 — это 1,83), поэтому
+        прежняя ветка по пропорции его НЕ ловила: ffmpeg растягивал кадр во
+        весь экран в 2,26 раза, и это то самое мыло, из-за которого вложения
+        считались негодными в сцену.
+    Вынесено отдельной функцией, чтобы решение проверялось без ffmpeg.
+    """
+    ratio = (vw / float(vh)) if vh else (W / float(H))
+    cover = max(W / float(vw), H / float(vh)) if (vw and vh) else 1.0
+    # Ниже 720p по высоте — ровно то, что прежний гейт фетчера ОТКЛОНЯЛ, то
+    # есть прибавка, а не переделка: 720p и выше по-прежнему накрывают рамку
+    # целиком, как накрывали, и ни одна уже собранная сцена не меняется.
+    tg_lowres = ((sid in DIRECT_SIDS) and vh and vh < 700
+                 and cover > MAX_COVER_UP)
+    if ratio < 1.70 or tg_lowres:
+        fw, fh = _fit_box(vw, vh, W, H)
+        return "fill", fw, fh
+    return "cover", W, H
+
+
 def _fit_box(w, h, W, H):
     """(ширина, высота) переднего кадра: вписать в FILL_K рамки, не мылить."""
     if not w or not h:
@@ -68,6 +97,13 @@ W, H, FPS = 1920, 1080, 30
 # как приём. Набор заполняется в main() из scenes.json; пустой — поведение
 # ровно прежнее.
 CARD_SIDS = set()
+
+# Сцены, кадр которых приехал ГОТОВЫМ АДРЕСОМ из досье (source «direct_url» —
+# вложение телеграм-поста). Для них порог сцены 800 px по длинной стороне, и
+# мелкое видео ставится РОДНЫМ размером с размытой заливкой полей, а не
+# растягивается во весь экран (05.11, прямое решение пользователя: «и видео
+# из Telegram так же»). Набор заполняется в main() из scenes.json.
+DIRECT_SIDS = set()
 
 
 # ЭФФЕКТ №3 «ВРЕЗКА + КРУГИ-РАДАР + ПЛАВНЫЙ ЗУМ» В ШТАТНОЙ СБОРКЕ (04.11).
@@ -504,11 +540,13 @@ def build_video_clip(ffmpeg, ffprobe, src, out_path, duration):
         _vw, _vh = _img_wh(ffprobe, src)
     except Exception:
         _vw, _vh = W, H
-    _ratio = (_vw / _vh) if _vh else (W / H)
-    if _ratio < 1.70:
-        _fw, _fh = _fit_box(_vw, _vh, W, H)
-        print("  узкое видео %dx%d → %dx%d (%.2f× рамки по ширине)"
-              % (_vw, _vh, _fw, _fh, _fw / float(W)), flush=True)
+    _mode, _fw, _fh = video_fit_mode(_vw, _vh, int(_m.group(1)) if _m else -1)
+    if _mode == "fill":
+        print("  видео %dx%d → %dx%d (%.2f× рамки по ширине), поля — размытая "
+              "копия%s" % (_vw, _vh, _fw, _fh, _fw / float(W),
+                           "; вложение досье" if (_m and int(_m.group(1))
+                                                  in DIRECT_SIDS) else ""),
+              flush=True)
         vf = (f"[0:v]setpts=PTS-STARTPTS,fps={FPS},split=2[bg][fg];"
               f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
               f"boxblur=24:2,eq=brightness=-0.12:saturation=0.65[bgb];"
@@ -542,6 +580,11 @@ def main():
 
     CARD_SIDS.update(s["id"] for s in data["scenes"]
                      if str(s.get("source", "")).startswith("card"))
+    DIRECT_SIDS.update(s["id"] for s in data["scenes"]
+                       if str(s.get("source", "")) == "direct_url")
+    if DIRECT_SIDS:
+        print("вложения досье (мелкое видео — родным размером с заливкой "
+              "полей): " + ", ".join(str(i) for i in sorted(DIRECT_SIDS)))
     if CARD_SIDS:
         print("карточки арсенала (без эффектов): "
               + ", ".join(str(i) for i in sorted(CARD_SIDS)))

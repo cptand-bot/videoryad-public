@@ -159,14 +159,26 @@ def main():
         is_overlay = os.path.basename(os.path.dirname(os.path.abspath(f))) == "overlays"
         is_map = "КАРТЫ/" in sq.replace("\\", "/") or "/КАРТЫ" in sq.replace("\\", "/")
         is_lib = src == "local_library"
+        is_direct = src == "direct_url"
 
         why = []
         w_min = MIN_W_OVERLAY if is_overlay else MIN_W
-        if w < w_min:
-            if not is_overlay and w >= FILL_W:
+        w_cmp = w
+        # ВЛОЖЕНИЕ ТЕЛЕГРАМА МЕРИМ ПОРОГОМ 800 px ПО ДЛИННОЙ СТОРОНЕ (05.11,
+        # прямое решение пользователя). Телеграм отдаёт ВЕБ-ПРЕВЬЮ, и это
+        # максимум 800 px (промер 18 файлов 28.10) — порогом полного экрана
+        # такой кадр помечался браком ВСЕГДА, то есть вкладка жгла круги
+        # правок на то, чего в посте физически нет. В сцене он стоит родным
+        # размером по центру, поля — размытая копия, поэтому ширина здесь не
+        # повод для замены.
+        if is_direct and not is_overlay:
+            w_min, w_cmp = 800, max(w, h)
+        if w_cmp < w_min:
+            if not is_overlay and not is_direct and w >= FILL_W:
                 pass   # узкий, но соберётся родным размером с заливкой полей
             else:
-                why.append(f"ширина {w} < {w_min}")
+                why.append(f"ширина {w} < {w_min}" if not is_direct
+                           else f"вложение {w}x{h} < {w_min} по длинной стороне")
         if dens < MIN_DENS and not is_map:
             why.append(f"плотность {dens:.3f} < {MIN_DENS}")
         # У ВСПЛЫВАШКИ АПСКЕЙЛ ВИДЕН ТОЛЬКО ЕСЛИ ЕЙ НЕЧЕГО УЖИМАТЬ (23.10,
