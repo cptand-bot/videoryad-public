@@ -80,6 +80,26 @@ def used_strings(paths):
             print("!! не прочитать %s: %s" % (p, e))
             continue
         scenes = d.get("scenes", d) if isinstance(d, dict) else d
+        # СЛОВАРНЫЙ ФОРМАТ `overlays.json` ТОЖЕ РАЗБИРАЕМ (05.11, улов
+        # `usuario-9e`, стоил четырёх попыток). Боевой `overlays.json` — это
+        # НЕ список сцен, а отображение `{"<sid>": {"photo": …}}`. Здесь он
+        # молча отбрасывался (`not isinstance(list)` → `continue`), и гейт
+        # держал «материал досье лежит без дела», хотя файл стоял всплывашкой.
+        # Вкладка обходила дублированием записи внутрь сцены.
+        if isinstance(scenes, dict):
+            _flat = []
+            for _k, _v in scenes.items():
+                if not isinstance(_v, dict):
+                    continue
+                _e = dict(_v)
+                _e.setdefault("source", "overlay")
+                _flat.append(_e)
+                # вложенные кусочки записи (text/photo/video) несут свои пути
+                for _sub in ("text", "photo", "video", "overlay"):
+                    _x = _v.get(_sub)
+                    if isinstance(_x, dict):
+                        _flat.append(_x)
+            scenes = _flat
         if not isinstance(scenes, list):
             continue
         for s in scenes:
@@ -119,6 +139,10 @@ def used_strings(paths):
                         for k in ("photo", "file", "url", "asset", "path"):
                             if _t.get(k):
                                 blob.append(str(_t[k]))
+            # записи словарного `overlays.json` в СЧЁТ СЦЕН не идут: это
+            # всплывашки, их адреса нужны только для сверки с досье
+            if src == "overlay":
+                continue
             stats["total"] += 1
             if src == "direct_url":
                 stats["direct_url"] += 1
