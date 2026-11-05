@@ -1,0 +1,491 @@
+{
+ "anchor": "top",
+ "1": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СНАЧАЛА БЫЛА ВЕНЕСУЭЛА",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "mashinka",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "photo": "overlays/scene_001.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true,
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "2": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРОГНОЗ ИИ: БЫСТРАЯ ПОБЕДА",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pshik",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "photo": "overlays/scene_002.jpg",
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "approved": true,
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "4": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ГОЛОСОВАНИЕ 3 НОЯБРЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "5": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ТАК БЫВАЕТ ПОЧТИ ВСЕГДА",
+   "color": "green",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "6": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ДВА ГОДА ПОСЛЕ ВЫБОРОВ ПРЕЗИДЕНТА",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "mashinka",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "8": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДО СЛЕДУЮЩИХ ВЫБОРОВ — 2 ГОДА",
+   "color": "green",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "10": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ТЕХАС · БАСТИОН РЕСПУБЛИКАНЦЕВ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "photo": "overlays/scene_010.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "11": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ГУБЕРНАТОРСКАЯ ГОНКА ТОЖЕ ПРОИГРАНА",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "12": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОКРУГА ПЕРЕКРАИВАЛИ ПОД СЕБЯ",
+   "style": "plate",
+   "color": "green",
+   "pos": "tc"
+  },
+  "photo": "overlays/scene_012.jpg",
+  "shape": "rect",
+  "style": "left",
+  "size": "m",
+  "scale": 1.0,
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "13": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "КАРТА СЫГРАЛА ПРОТИВ НИХ",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "14": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ПРИЧИНА — ВОЙНА С ИРАНОМ",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "16": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "БЫСТРАЯ СИЛОВАЯ ОПЕРАЦИЯ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "18": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СТАВКА НА ВТОРУЮ БЫСТРУЮ ПОБЕДУ",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "20": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВОЙНА ЗАТЯНУЛАСЬ",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "21": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "АМЕРИКА ПРЕЖДЕ ВСЕГО",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "22": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "УДАР ПО СВОЕМУ ЖЕ ИЗБИРАТЕЛЮ",
+   "style": "plate",
+   "color": "yellow",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "23": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СОВЕЩАНИЕ В БЕЛОМ ДОМЕ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "24": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЛИНИЯ ВЭНСА: ЧЕТЫРЕ ПУНКТА",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "27": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СВОИ ЖЕ СТОРОННИКИ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "28": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ВПЕРЕДИ 2028 ГОД",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "30": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОБЕ ПАЛАТЫ У ДЕМОКРАТОВ",
+   "style": "plate",
+   "color": "green",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "31": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПРАВО ВЕТО ОСТАЁТСЯ",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "32": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "СЛУШАНИЯ · КОМИТЕТЫ · РАССЛЕДОВАНИЯ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "34": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ПОМОЩЬ УКРАИНЕ · САНКЦИИ",
+   "style": "plate",
+   "color": "yellow",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "35": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ВОЛШЕБНОЙ КНОПКИ НЕТ",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "36": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "БЕРЛИН ЖДЁТ БОЛЬШЕ ПОМОЩИ КИЕВУ",
+   "style": "plate",
+   "color": "yellow",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "38": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ТОКИО ОПАСАЕТСЯ ЖЁСТКОСТИ",
+   "style": "plate",
+   "color": "green",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "43": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДВА ГОДА ПАЛОК В КОЛЁСА",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "45": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ПОБЕДИТЕЛЯ 2028 ЕЩЁ НЕТ",
+   "style": "plate",
+   "color": "green",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "47": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "2024: ФАВОРИТ ПРОИГРАЛ",
+   "style": "plate",
+   "color": "yellow",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "51": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "2016: ТО ЖЕ САМОЕ",
+   "style": "plate",
+   "color": "white",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "53": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ЭТО НЕ ОБЫЧНАЯ ПОТЕРЯ МЕСТ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "56": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "ОППОЗИЦИЯ ВЕРНУЛАСЬ В ОБЕ ПАЛАТЫ",
+   "style": "plate",
+   "color": "green",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "59": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ГЛАВНАЯ УГРОЗА — ВНУТРИ СВОИХ",
+   "style": "plate",
+   "color": "yellow",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "60": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "text": {
+   "words": "БОРЬБА ЗА НАСЛЕДСТВО",
+   "style": "plate",
+   "color": "red",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "62": {
+  "sound": "pop",
+  "at": 1.8,
+  "text": {
+   "words": "ДЕЛЁЖ НАСЛЕДСТВА НАЧАЛСЯ",
+   "style": "plate",
+   "color": "orange",
+   "pos": "tc"
+  },
+  "anchor": "top",
+  "pos": "tc"
+ },
+ "17": {
+  "sound": "whoosh",
+  "at": 1.8,
+  "photo": "overlays/scene_017.jpg",
+  "shape": "rect",
+  "style": "right",
+  "size": "m",
+  "scale": 1.0,
+  "anchor": "top"
+ }
+}
