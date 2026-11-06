@@ -1,0 +1,89 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 3,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "direct_url",
+   "source_query": "",
+   "visual_prompt": "скриншот публикации The Telegraph о большой сделке",
+   "local_ready": true
+  },
+  {
+   "id": 9,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "Александр Лукашенко у микрофонов на пресс-подходе в Минске, реальное фото",
+   "visual_prompt": "Александр Лукашенко у микрофонов на пресс-подходе в Минске, реальное фото"
+  },
+  {
+   "id": 14,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "Владимир Мединский, портрет на переговорах, 2025",
+   "visual_prompt": "Владимир Мединский, портрет на переговорах, 2025"
+  },
+  {
+   "id": 29,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "direct_url",
+   "source_query": "",
+   "visual_prompt": "село под Киевом: частные дома и грунтовая улица",
+   "local_ready": true
+  },
+  {
+   "id": 34,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "тёмные окна киевской многоэтажки во время отключения света, 2026",
+   "visual_prompt": "тёмные окна киевской многоэтажки во время отключения света, 2026"
+  },
+  {
+   "id": 44,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "избирательный участок в США на промежуточных выборах, ноябрь 2026",
+   "visual_prompt": "избирательный участок в США на промежуточных выборах, ноябрь 2026"
+  },
+  {
+   "id": 52,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/qL6-rzdwGfp4flVyCl-QUJ-HHo9MNWcWniQLMPQif0K2hNL98QiPjKdXEe6B6YgYe4DHG5MbpiD74CQ8KF0N70-hubbZuSJBRBvm53UTilZet-KTZi5qtuAF39MN34v-qdu92XKfymwWMVK8L5R0h69_3QyP6eneCVS6UYF877InECS4JQYeHBVws3hZFw_v7XhSFLl62UQJinB1cRkSjk_Z1H1kjB-AbRbB_CVzuDg8CkY4TB20hGbMnUza8S_hZwipYYX2tM-UEluaV0kpbVk708X0Zb9Ejtsedvrtp3Vhg5bDnCA5xSx8VT7EEh3FnI26_ObrhsOacpCtkgSqkg.jpg",
+   "visual_prompt": "скриншот твита Джареда Кушнера о новой архитектуре безопасности",
+   "local_ready": true
+  },
+  {
+   "id": 53,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "direct_url",
+   "source_query": "",
+   "visual_prompt": "скриншот публикации о плане Москвы и перемирии",
+   "local_ready": true
+  },
+  {
+   "id": 58,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "транспортный самолёт C-17 ВВС США на стоянке авиабазы Рамштайн, реальное фото",
+   "visual_prompt": "транспортный самолёт C-17 ВВС США на стоянке авиабазы Рамштайн, реальное фото"
+  },
+  {
+   "id": 64,
+   "text": "",
+   "duration_sec": 3.0,
+   "source": "web_search",
+   "source_query": "бомбардировщик B-52 ВВС США на стоянке аэродрома, реальное фото",
+   "visual_prompt": "бомбардировщик B-52 ВВС США на стоянке аэродрома, реальное фото"
+  }
+ ]
+}
