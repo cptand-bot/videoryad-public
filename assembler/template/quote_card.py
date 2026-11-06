@@ -262,14 +262,36 @@ def main():
     # Норма пользователя (22.10): ОДНА карточка на 15 сцен, допуск ±1; между
     # двумя карточками не меньше 8 сцен, две подряд — никогда. Считается от
     # числа сцен ролика, а не на глаз, поэтому считает инструмент.
-    others = sorted(int(x.get("id", 0)) for x in scenes
-                    if str(x.get("source", "")).startswith("card")
-                    and int(x.get("id", -1)) != a.sid)
-    norm = max(1, round(len(scenes) / PER_SCENES))
-    near = [i for i in others if abs(i - a.sid) < MIN_GAP]
+    others = {int(x.get("id", 0)): str(x.get("source", ""))[5:].strip()
+              for x in scenes
+              if str(x.get("source", "")).startswith("card")
+              and int(x.get("id", -1)) != a.sid}
+    # НОРМА И ЗАЗОР — ИЗ ОБЩЕГО СПИСКА ОБЯЗАТЕЛЬНЫХ (06.11, улов
+    # `usuario-80`). Здесь оставалась старая константа 8, и обязательный A35
+    # на сцене 10 отбивался соседом на 16 — то есть ДВЕНАДЦАТЬ обязательных
+    # элементов этой дверью не ставились в принципе, а `card_put.py` и
+    # `element_put.py` те же сцены пропускали. Вкладка уходила либо в
+    # `--force`, либо во вторую дверь.
+    _ob = None
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import obyazatelno as _ob
+        norm = _ob.норма(len(scenes))
+    except Exception:
+        norm = max(1, round(len(scenes) / PER_SCENES))
+
+    def _gap_to(_other_sid):
+        _vid = "split" if a.photo else "quote"
+        try:
+            return _ob.зазор_вида(_vid, len(scenes), others.get(_other_sid))
+        except Exception:
+            return MIN_GAP
+
+    near = [i for i in others if abs(i - a.sid) < _gap_to(i)]
     if near:
-        msg = (f"карточка слишком близко к соседней (сцены {', '.join(map(str, near))}): "
-               f"между карточками держим не меньше {MIN_GAP} сцен, две подряд — никогда.")
+        _g = min((_gap_to(i) for i in near), default=MIN_GAP)
+        msg = (f"карточка слишком близко к соседней (сцены {', '.join(map(str, sorted(near)))}): "
+               f"между карточками этой семьи держим не меньше {_g} сцен.")
         if not a.force:
             _fail(2, msg, "  выбери сцену подальше или сними ключом --force")
         print("ВНИМАНИЕ:", msg)

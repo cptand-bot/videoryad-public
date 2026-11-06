@@ -1082,27 +1082,65 @@ def main():
     _drift = []
     if _cu:
         import difflib as _dl
+
+        # ЯКОРЬ ИЩЕМ ПОДСТРОКОЙ, А ИЗ НЕСКОЛЬКИХ БЕРЁМ БЛИЖАЙШИЙ К
+        # ЗАЯВЛЕННОМУ НАЧАЛУ (06.11, БЛОКЕР вкладки `usuario-80`).
+        # Было: похожесть `difflib` по первым 60 знакам. На живом ролике
+        # сцена 6 («Кушнер… новая архитектура безопасности… раунд в Абу
+        # Даби», ровно одно вхождение на 51,4 с) села на ПОЗДНЕЕ место
+        # 549,7 с, где звучит «И здесь Кушнер со своей новой архитектурой
+        # безопасности…»: набор слов перевесил. Один неверный якорь утащил
+        # блок сцен 6-17 на +409…+495 с, а `--fix` напечатал «принято» и
+        # отдал файл, где картинка обгоняет голос на восемь минут — то есть
+        # чинилка ломала ИСПРАВНЫЙ файл.
+        # Теперь: нормализованный поток реплик, точное вхождение первых
+        # 60 знаков сцены, выбор ближайшего кандидата к `start_sec`.
+        def _norm(x):
+            return re.sub(r"[^0-9a-zа-яё ]+", " ",
+                          re.sub(r"\s+", " ", str(x)).lower()).strip()
+
+        _stream, _pos = "", []          # поток и (смещение, время) по репликам
+        for _t, _c in _cu:
+            _n = _norm(_c)
+            if not _n:
+                continue
+            _pos.append((len(_stream), _t))
+            _stream += _n + " "
+
+        def _time_at(off):
+            _last = _pos[0][1] if _pos else 0.0
+            for _o, _t in _pos:
+                if _o > off:
+                    break
+                _last = _t
+            return _last
+
         _prev = 0.0
         for sc in scenes:
-            _tx = re.sub(r"\s+", " ", str(sc.get("text", ""))).strip().lower()[:60]
+            _tx = _norm(sc.get("text", ""))[:60]
             if len(_tx) < 15:
                 continue
-            _best = (0.0, None)
-            for _t, _c in _cu:
-                # ТОЛЬКО ВПЕРЁД ОТ ПРЕДЫДУЩЕГО ЯКОРЯ (05.11, улов
-                # `usuario-f4`): допуск «назад на 20 с» давал якорю
-                # возможность сесть на ЧУЖУЮ реплику, и кадр уезжал на
-                # соседний текст — Мерц на реплику про АдГ, Ле Пен на
-                # вступление, где её не называют.
-                if _t < _prev:
+            _want = float(sc.get("start_sec") or 0)
+            _cands = []
+            _i = _stream.find(_tx)
+            while _i >= 0:
+                _cands.append(_time_at(_i))
+                _i = _stream.find(_tx, _i + 1)
+            if not _cands:
+                # точного вхождения нет (агент перефразировал) — старый путь
+                # похожести, но тоже с выбором ближайшего к заявленному
+                _near = [(abs(_t - _want), _t) for _t, _c in _cu
+                         if _t >= _prev - 0.5
+                         and _dl.SequenceMatcher(None, _tx,
+                                                 _norm(_c)[:60]).ratio() >= 0.62]
+                if not _near:
                     continue
-                _r = _dl.SequenceMatcher(None, _tx, _c.lower()[:60]).ratio()
-                if _r > _best[0]:
-                    _best = (_r, _t)
-            if _best[0] >= 0.62 and _best[1] is not None:
-                _prev = _best[1]
-                _d = _best[1] - float(sc.get("start_sec") or 0)
-                _drift.append((sc.get("id"), round(_best[1], 1), _d))
+                _best_t = min(_near)[1]
+            else:
+                _best_t = min(_cands, key=lambda _t: abs(_t - _want))
+            _prev = max(_prev, _best_t)
+            _d = _best_t - _want
+            _drift.append((sc.get("id"), round(_best_t, 1), _d))
         _big = [x for x in _drift if abs(x[2]) > 4.0]
         if _big:
             _w = max(_big, key=lambda x: abs(x[2]))

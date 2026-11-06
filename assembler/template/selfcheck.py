@@ -121,6 +121,28 @@ for i in ids:
         if _b < 45:
             _ph.append("сцена %s: %s — %d КБ, средняя яркость %.0f из 255"
                        % (i, os.path.basename(f), os.path.getsize(f) // 1024, _b))
+# КАРТОЧКА БЕЗ КЛИПА — ЭТО НЕ «ЗАГЛУШКА», А НЕНАРИСОВАННЫЙ ЭЛЕМЕНТ (06.11,
+# улов `usuario-a3`). Виды режима `cli` (`bars`, `slider`) рисуются ТОЛЬКО
+# клипом, превью у них не бывает; если задание упало в облаке, в `images/`
+# остаётся прежняя заглушка — и проверка кричала «тёмная заглушка», уводя
+# вкладку искать кадр вместо того, чтобы перерисовать карточку.
+_card_no_clip = []
+for _s in scenes:
+    if not str(_s.get("source", "")).startswith("card"):
+        continue
+    _i = int(_s.get("id", 0))
+    if not glob.glob(f"{images}/scene_{_i:03d}.mp4"):
+        _card_no_clip.append(_i)
+if _card_no_clip:
+    _nums = ", ".join(map(str, _card_no_clip))
+    FAIL.append("КАРТОЧКА НЕ НАРИСОВАНА (сцены %s): источник `card:*`, а клипа "
+                "в images/ нет. Это НЕ брак кадра — задание не отрисовалось "
+                "или не разложено. Прогони `python3 ~/.claude/skills/"
+                "news-video/fullcycle/cards_cloud.py <ролик>.scenes.json` — "
+                "уже готовые карточки заново не рисуются." % _nums)
+    _ph = [x for x in _ph
+           if not any(("сцена %d:" % i) in x for i in _card_no_clip)]
+
 if _ph:
     FAIL.append("ТЁМНАЯ ЗАГЛУШКА ВМЕСТО КАДРА (" + "; ".join(_ph) +
                 "). Это заглушка облака, а не фотография: в готовом ролике "
@@ -205,7 +227,16 @@ for i, s in ((s["id"], s) for s in scenes):
 # 3. дубли одного файла (no-repeat, SKILL.md rule 4/5)
 h = {}
 for f in glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*"):
-    if f.endswith((".json", ".text.png") + TMP_SUFFIX):  # .text.png — рендер слова, дубли норм
+    # `.ready`/`.lock` — СЛУЖЕБНЫЕ МЕТКИ, А НЕ КАДРЫ (06.11): они пустые и,
+    # естественно, совпадают по md5 между собой — проверка дублей кричала
+    # «одинаковый файл» на метках, которые вкладка ставит по нашей же
+    # инструкции. Нулевой файл в сравнение дублей не берём вообще.
+    if f.endswith((".json", ".text.png", ".ready", ".lock") + TMP_SUFFIX):
+        continue
+    try:
+        if os.path.getsize(f) == 0:
+            continue
+    except OSError:
         continue
     # ПУТЬ ЦЕЛИКОМ, А НЕ ОДНО ИМЯ (2026-10-20, улов `usuario-40`). Было
     # `os.path.basename(f)`, и дубль «images/scene_044.jpg + overlays/scene_073.jpg»
@@ -368,7 +399,8 @@ else:
     # Разрешение на конкретный ролик: положить в папку файл `.text-overlays-ok`
     # (пользователь попросил надписи явно). Пустой файл, содержимое не важно.
     _texts = [k for k, v in ov.items()
-              if str(k).isdigit() and isinstance(v, dict) and v.get("text")]
+              if str(k).isdigit() and isinstance(v, dict)
+              and (v.get("text") or v.get("words"))]
     if _texts and ch and "5 МИНУТ" not in ch and not os.path.exists(".text-overlays-ok"):
         FAIL.append(
             f"ТЕКСТОВЫЕ ВСПЛЫВАШКИ НА КАНАЛЕ {ch}: их {len(_texts)} "
@@ -377,6 +409,47 @@ else:
             f"на остальных каналах только по ПРЯМОЙ просьбе пользователя. "
             f"Убрать их из overlays.json, либо — если он попросил явно — "
             f"создать в папке ролика пустой файл .text-overlays-ok")
+
+    # НА «5 МИНУТ» НАДПИСИ ОБЯЗАТЕЛЬНЫ (06.11, его прямое слово, зло:
+    # «почему при сборке на „Планету“ пропали надписи… надписей не должно
+    # быть ТОЛЬКО на „Планете“, а на „5 минут“ надписи ДОЛЖНЫ быть, я их не
+    # убирал»). Что случилось: 05.11 норму всплывашек переписали на «около
+    # десяти», вкладки стали считать этим числом ВСЁ — и надписи исчезли
+    # совсем. Замер по сданным: до 05.11 их ставили по 30-40 на ролик, с
+    # 05.11 — НОЛЬ на всех роликах подряд, включая «5 МИНУТ».
+    # Запрет на других каналах уже держался кодом, а обязательность здесь —
+    # нет: правило существовало только текстом и поэтому потерялось.
+    # НАДПИСЬ ВНИЗУ — ЭТО МЕСТО СУБТИТРОВ (его слово 28.10 и ещё раз 06.11:
+    # «они должны идти в верхней части или в середине»). `build_overlays.py`
+    # низ поднимает сам, но ловим ДО дашборда: иначе вкладка увидит на экране
+    # не то, что задумала, и спишет это на перекрытие.
+    _low = sorted(k for k, v in ov.items()
+                  if str(k).isdigit() and isinstance(v, dict)
+                  and (v.get("text") or v.get("words"))
+                  and str(v.get("pos", "tc")).lower().startswith("b"))
+    if _low:
+        FAIL.append(
+            "НАДПИСЬ ВНИЗУ КАДРА (сцены %s): там идут субтитры, они будут "
+            "перекрыты. Надписи только ВЕРХ или СЕРЕДИНА — `pos` из "
+            "t*/m* (tl/tc/tr/ml/mc/mr)." % ", ".join(_low[:10]))
+
+    # ИСКЛЮЧЕНИЕ НА КОНКРЕТНЫЙ РОЛИК — ПУСТОЙ ФАЙЛ `.no-text-overlays-ok`
+    # (06.11, его прямое слово по роликам в работе: «это для следующих
+    # сборок, сейчас ничего не меняем, оставляем как есть»). Правило
+    # обязательных надписей вступило в силу посреди смены, и три готовых
+    # ролика переделывать он не захотел — каждый стоил бы полутора часов.
+    if ch and "5 МИНУТ" in ch and not _texts and os.path.exists(".no-text-overlays-ok"):
+        WARN.append("надписей нет, но стоит разрешение `.no-text-overlays-ok` "
+                    "(его решение по этому ролику) — пропускаю")
+    elif ch and "5 МИНУТ" in ch and not _texts:
+        _need = max(10, int(total / 60 * 3)) if total else 30
+        FAIL.append(
+            "НА «5 МИНУТ» НЕТ НИ ОДНОЙ НАДПИСИ. Это фишка канала и его прямое "
+            "требование: норма ~3 на минуту, на этом ролике это около %d штук. "
+            "Ставятся в overlays.json ключом `words` (вид закреплён 21.10: "
+            "тёмная пластина, цветная черта слева, белый Roboto Condensed "
+            "капсом). Фото-всплывашки их не заменяют — это РАЗНЫЕ слои."
+            % _need)
 
     # НАДПИСИ АГЕНТА ПОТЕРЯЛИСЬ ПО ДОРОГЕ (28.10, улов Flamingo — пользователь
     # поймал это САМ, двумя заходами). Codex кладёт надписи ВНУТРЬ сцен:
@@ -825,8 +898,25 @@ try:
     import time as _t
     _ban_raw = json.load(open(_ban_path, encoding="utf-8"))
     _today = _t.strftime("%Y-%m-%d")
-    _ban = {m for m, e in _ban_raw.items()
-            if not (isinstance(e, dict) and e.get("until")) or e["until"] >= _today}
+    # ЧУЖОЙ ВРЕМЕННЫЙ БАН — НЕ НАШЕ ДЕЛО (06.11, улов `usuario-c8`: восемь
+    # активных чужих банов на чистых кадрах, и ВЕСЬ второй круг ушёл на них).
+    # Временный бан рефетча означает «не возвращай этот кадр В ТОМ ролике»;
+    # с 06.11 в записи стоит `project`. Вечный бан (`--ban`, без срока)
+    # остаётся общим: такой кадр плох сам по себе.
+    _proj_now = os.environ.get("VIDEORYAD_PROJECT") or os.path.basename(os.path.abspath("."))
+    _ban = set()
+    for m, e in _ban_raw.items():
+        if not isinstance(e, dict):
+            _ban.add(m)
+            continue
+        _until = e.get("until")
+        if _until and _until < _today:
+            continue
+        _own = str(e.get("project") or "")
+        if _until and _own and _own != _proj_now \
+                and _own.rstrip("-cloud") != _proj_now.rstrip("-cloud"):
+            continue
+        _ban.add(m)
 except (OSError, ValueError):
     _ban_raw, _ban = {}, set()
 # СЦЕНЫ-КАРТОЧКИ ИЗ СВЕРКИ ИСКЛЮЧЕНЫ (04.11, улов `usuario-af`). Облако

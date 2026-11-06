@@ -113,12 +113,26 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg fonts-dejavu-core || true
           }
+          # ЗАПАСНОЙ ИСТОЧНИК И ЖЁСТКИЕ ТАЙМАУТЫ (06.11, улов `usuario-b9`):
+          # шард шесть минут висел на `johnvansickle.com` (curl 28, «Failed to
+          # connect after 135002 ms»), шаг вышел по таймауту, прогон стал
+          # `failure` — хотя остальные десять шардов карточки отрисовали.
+          # Теперь: соединение не дольше 10 с, попытка одна, и если зеркало
+          # молчит — берём сборку с GitHub (BtbN), она лежит рядом с нами.
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            curl -fsSL --retry 3 --max-time 180 \
+            curl -fsSL --retry 1 --connect-timeout 10 --max-time 90 \
               https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
               -o /tmp/ff.tar.xz \
               && mkdir -p /tmp/ffbin && tar -xJf /tmp/ff.tar.xz -C /tmp/ffbin --strip-components=1 \
               && sudo install -m755 /tmp/ffbin/ffmpeg /tmp/ffbin/ffprobe /usr/local/bin/ || true
+          fi
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            echo "зеркало johnvansickle не ответило — беру сборку с GitHub"
+            curl -fsSL --retry 2 --connect-timeout 10 --max-time 120 \
+              https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz \
+              -o /tmp/ff2.tar.xz \
+              && mkdir -p /tmp/ffbin2 && tar -xJf /tmp/ff2.tar.xz -C /tmp/ffbin2 --strip-components=1 \
+              && sudo install -m755 /tmp/ffbin2/bin/ffmpeg /tmp/ffbin2/bin/ffprobe /usr/local/bin/ || true
           fi
           command -v ffmpeg >/dev/null 2>&1 || { echo "::error::ffmpeg не установлен"; exit 1; }
       - uses: actions/setup-python@v5

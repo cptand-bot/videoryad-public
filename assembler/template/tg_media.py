@@ -294,6 +294,36 @@ def main():
                   "файл выбрасывай сразу (улов 06.11).")
         if not (r["photos"] or r["videos"] or r["notes"]):
             print("   вложений нет")
+    # СОСЕД ПО ЗАПИСИ УЖЕ МОГ ОТБРАКОВАТЬ ЭТИ ПОСТЫ (06.11, улов
+    # `usuario-80`). Два ролика дня шли по одному `SOURCE PACKAGE` георадара,
+    # и `tg_rejected.json` соседа снял три поста БЕЗ единого скачивания.
+    # Смотрим журналы отказов в соседних проектах и печатаем совпадения.
+    try:
+        import glob as _g
+        _mine = {r.get("url") for r in all_res}
+        _seen = {}
+        _here = os.path.abspath(".")
+        for _f in _g.glob(os.path.expanduser("~/projects/*/tg_rejected.json")):
+            if os.path.dirname(os.path.abspath(_f)) == _here:
+                continue
+            try:
+                _d = json.load(open(_f, encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            _items = _d.items() if isinstance(_d, dict) else \
+                [(x.get("url"), x.get("why") or x.get("reason")) for x in _d
+                 if isinstance(x, dict)]
+            for _u, _why in _items:
+                if _u in _mine:
+                    _seen[_u] = (os.path.basename(os.path.dirname(_f)), _why)
+        if _seen:
+            print("\nСОСЕДНИЙ РОЛИК УЖЕ СМОТРЕЛ ЭТИ ПОСТЫ (%d) — не качай "
+                  "заново:" % len(_seen))
+            for _u, (_proj, _why) in list(_seen.items())[:12]:
+                print("   %s → [%s] %s" % (_u, _proj, str(_why)[:80]))
+    except Exception:
+        pass
+
     if out:
         json.dump(all_res, open(out, "w", encoding="utf-8"),
                   ensure_ascii=False, indent=1)

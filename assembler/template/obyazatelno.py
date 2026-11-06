@@ -277,6 +277,54 @@ def зазор_вида(view, n_scenes, сосед=None):
     return max(1, min(своя, общий))
 
 
+def папка_кадра(photo_path):
+    """Папка медиатеки, из которой взят снимок, или пустая строка.
+
+    Нужна для проверки «одна папка — одна сцена» (06.11, улов `usuario-c8`):
+    на сданном ролике Пентагон стоял на сцене 70 базовым кадром из
+    `ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА` и на сцене 74 внутри `card:dof` — фото под
+    карточку вкладка взяла из ТОЙ ЖЕ папки. Ни один гейт этого не видел:
+    файлы разные по md5, а карточка проверяется как рисованный кадр, не как
+    кадр медиатеки.
+    """
+    p = os.path.realpath(os.path.expanduser(str(photo_path or "")))
+    if not p:
+        return ""
+    low = p.replace("\\", "/")
+    for marker in ("/media-library-2/", "/media-library/"):
+        if marker in low:
+            rest = low.split(marker, 1)[1]
+            parts = [x for x in rest.split("/") if x][:-1]   # без имени файла
+            if parts and parts[0] == "БАЗА":
+                parts = parts[1:]
+            return "/".join(parts[:2])
+    return ""
+
+
+def сосед_из_той_же_папки(scenes, sid, photo_path, окно=8):
+    """Соседние сцены (±окно), которые берут кадр из ТОЙ ЖЕ папки медиатеки."""
+    tag = папка_кадра(photo_path)
+    if not tag:
+        return []
+    out = []
+    for s in scenes:
+        try:
+            i = int(s.get("id", -1))
+        except (TypeError, ValueError):
+            continue
+        if i == int(sid) or abs(i - int(sid)) > окно:
+            continue
+        q = str(s.get("source_query", "")).replace("\\", "/")
+        src = str(s.get("source", ""))
+        if src == "local_library" and tag and tag.split("/")[-1].upper() in q.upper():
+            out.append(i)
+        elif src.startswith("card:"):
+            cph = (s.get("card") or {}).get("photo") or ""
+            if cph and папка_кадра(cph) == tag:
+                out.append(i)
+    return sorted(out)
+
+
 def _scenes(path):
     data = json.load(open(path, encoding="utf-8"))
     if isinstance(data, dict):

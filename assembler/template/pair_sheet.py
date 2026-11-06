@@ -68,10 +68,28 @@ def main():
     sheets, row, sheet_no = [], 0, 1
     img = Image.new("RGB", (CW, CH*ROWS), (12,12,12)); dr = ImageDraw.Draw(img)
     for sid in ids:
-        b = [p for p in glob.glob(os.path.join(proj,"images","scene_%03d.*"%sid))
-             if ".text." not in p and ".wmcrop." not in p]
-        o = [p for p in glob.glob(os.path.join(proj,"overlays","scene_%03d.*"%sid))
-             if ".text." not in p and ".wmcrop." not in p]
+        # СЛУЖЕБНЫЕ ФАЙЛЫ В ЛИСТ НЕ БЕРЁМ (06.11, улов `usuario-c8`).
+        # Рядом с кадром лежит пустая метка `scene_NNN.ready` (её ставит
+        # вкладка у подготовленных вложений досье), и если glob отдавал её
+        # первой, `frame()` падал на пустом файле — ячейка выходила ПУСТОЙ,
+        # будто сцена без кадра. Выглядело как «лист не рисует мелкие кадры».
+        def _real(paths):
+            out = []
+            for p_ in sorted(paths):
+                if ".text." in p_ or ".wmcrop." in p_:
+                    continue
+                if p_.endswith((".json", ".ready", ".lock")):
+                    continue
+                try:
+                    if os.path.getsize(p_) < 1024:
+                        continue
+                except OSError:
+                    continue
+                out.append(p_)
+            return out
+
+        b = _real(glob.glob(os.path.join(proj,"images","scene_%03d.*"%sid)))
+        o = _real(glob.glob(os.path.join(proj,"overlays","scene_%03d.*"%sid)))
         y = row*CH
         dr.rectangle([0,y,CW,y+18], fill=(0,0,0))
         dr.text((6,y+4), "СЦЕНА %d — слева КАДР, справа ВСПЛЫВАШКА" % sid, font=F, fill=(255,230,0))

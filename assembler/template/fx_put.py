@@ -42,6 +42,7 @@ import glob
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -74,7 +75,13 @@ FX_MAX = 3          # на каждый ВИД
 # применяем… на канале „5 минут“. Это не Планета. На Планете другая кнопка»).
 # До этого дня правило было одно для всех видов — «эффекты только на ПЛАНЕТЕ»
 # (03.11), и оно остаётся для всего, что здесь не перечислено отдельно.
+# КНОПКА «ПОДПИШИСЬ» — НА ВСЕХ КАНАЛАХ (06.11, его прямое слово: «можно ли
+# раскатать на все каналы… есть кнопка для Планеты и кнопка для 5 минут, они
+# разные»). Вид выбирается КАНАЛОМ: «5 МИНУТ» — вид 2, остальные — вид 1.
+# Переходы по-прежнему живут по своим замкам, это только про кнопку.
 CHANNEL_FX = {"subscribe2": ("5 МИНУТ",),
+              "subscribe": ("ПЛАНЕТА", "ОЛЬКА", "ДИПЛОМАТИЯ СИЛЫ",
+                            "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО", "РЕЗЕРВ"),
               # ЗАСВЕТ — НА ВСЕ КАНАЛЫ (06.11, его слово при внедрении
               # элементов с полки: «внедрить при следующей сборке на все
               # проекты. Планета, 5 минут, какие там будут ещё»). Палитры у
@@ -84,6 +91,10 @@ CHANNEL_FX = {"subscribe2": ("5 МИНУТ",),
                         "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО")}
 DEFAULT_CHANNELS = ("ПЛАНЕТА",)
 AUTO_CHANNELS = ("ПЛАНЕТА", "5 МИНУТ")
+# Кнопку расставляем автоматически ВЕЗДЕ (06.11): переходы остаются ПЛАНЕТЕ,
+# а призыв подписаться — общий приём всех каналов.
+AUTO_CHANNELS_BUTTON = ("ПЛАНЕТА", "5 МИНУТ", "ОЛЬКА", "ДИПЛОМАТИЯ СИЛЫ",
+                        "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО", "РЕЗЕРВ")
 
 
 def _norm_chan(c):
@@ -155,8 +166,12 @@ def main():
     chan = str((data or {}).get("channel", "") or "") if isinstance(data, dict) else ""
     if not a.off:
         if a.auto:
+            # КНОПКА РАСКАТАНА НА ВСЕ КАНАЛЫ (06.11): для не-ПЛАНЕТЫ
+            # автоматическая расстановка ставит ТОЛЬКО кнопку, переходы
+            # остаются приёмом ПЛАНЕТЫ. Поэтому пропускаем сюда все каналы
+            # из `AUTO_CHANNELS_BUTTON`, а не только два прежних.
             if _norm_chan(chan) not in tuple(_norm_chan(x)
-                                             for x in AUTO_CHANNELS):
+                                             for x in AUTO_CHANNELS_BUTTON):
                 return _die("канал «%s» — автоматическая расстановка есть "
                             "только для %s"
                             % (chan or "не указан в scenes.json",
@@ -310,9 +325,6 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
     """
     sub_have = [int(x.get("id", 0)) for x in scenes
                 if str(x.get("fx", "")).strip().lower() == kind]
-    sub_need = max(0, FX_MAX - len(sub_have))
-    if not sub_need:
-        return []
     busy = set(int(x.get("id", 0)) for x in scenes
                if str(x.get("fx", "")).strip())
     ok = [int(x.get("id", 0)) for x in scenes
@@ -320,6 +332,40 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
           and float(x.get("duration_sec") or 0) >= 4.5
           and not str(x.get("source", "")).startswith("card")]
     put = []
+
+    # КНОПКА ВСТАЁТ И ТАМ, ГДЕ СЛОВО ЗВУЧИТ (06.11, его прямое слово:
+    # «чтобы она появлялась, как сейчас, три раза рандомно, И ПЛЮС когда
+    # звучит фраза „подпишись“»). Это СВЕРХ трёх, а не вместо: зритель
+    # слышит призыв и видит кнопку на том же месте.
+    _said = []
+    for x in scenes:
+        _sid = int(x.get("id", 0))
+        if _sid in busy or _sid in sub_have:
+            continue
+        _t = str(x.get("text", "")).lower().replace("ё", "е")
+        if not re.search(r"подпис|подпиш|колокольчик", _t):
+            continue
+        if float(x.get("duration_sec") or 0) < 4.5:
+            print("!! сцена %d: звучит «подпишись», но она короче 4,5 с — "
+                  "кнопка не влезет (анимация 3,4 с)" % _sid, file=sys.stderr)
+            continue
+        if str(x.get("source", "")).startswith("card"):
+            print("!! сцена %d: звучит «подпишись», но там рисованный кадр — "
+                  "на него накладок не кладём" % _sid, file=sys.stderr)
+            continue
+        _said.append(_sid)
+    for _sid in _said:
+        by_id[_sid]["fx"] = kind
+        busy.add(_sid)
+        if _sid in ok:
+            ok.remove(_sid)
+        print("сцена %d: кнопка «ПОДПИШИСЬ» — в тексте ЗВУЧИТ призыв "
+              "(сверх трёх по ролику)" % _sid)
+    sub_have = sorted(set(sub_have) | set(_said))
+
+    sub_need = max(0, FX_MAX - len([i for i in sub_have if i not in _said]))
+    if not sub_need:
+        return _said
     for f in (0.12, 0.50, 0.85)[:sub_need]:
         t = first + int(n * f)
         cand = [x for x in ok if x not in put]
@@ -328,6 +374,7 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
         put.append(min(cand, key=lambda x: (abs(x - t), x)))
     for sid in put:
         by_id[sid]["fx"] = kind
+    put = sorted(set(put) | set(_said))
     if put:
         _ang = ["ПРАВЫЙ", "ЛЕВЫЙ"]
         for i, sid in enumerate(sorted(set(sub_have) | set(put))):
@@ -374,18 +421,26 @@ def _auto(a, data, scenes):
         src = str(by_id.get(sid, {}).get("source", ""))
         return src in ("press_photo", "web_search", "stock_photo", "local_library")
 
-    if _norm_chan(data.get("channel") if isinstance(data, dict) else "") \
-            == _norm_chan("5 МИНУТ"):
-        # НА «5 МИНУТ» ЕСТЬ ТОЛЬКО КНОПКА ВИДА 2 (05.11). Переходы — приём
-        # ПЛАНЕТЫ, сюда они не идут: он назвал каналы раздельно.
-        put = _put_subscribe(scenes, by_id, first, len(scenes), "subscribe2")
+    _ch_now = _norm_chan(data.get("channel") if isinstance(data, dict) else "")
+    if _ch_now != _norm_chan("ПЛАНЕТА"):
+        # НЕ ПЛАНЕТА — ПЕРЕХОДОВ НЕТ, НО КНОПКА ЕСТЬ (05.11 про «5 МИНУТ»,
+        # 06.11 расширено на все каналы его словом «раскатать на все»).
+        # Вид кнопки выбирает канал: «5 МИНУТ» — вид 2, остальные — вид 1.
+        _kind = "subscribe2" if _ch_now == _norm_chan("5 МИНУТ") else "subscribe"
+        if not any(_norm_chan(x) == _ch_now for x in AUTO_CHANNELS_BUTTON):
+            print("канал «%s» в списке кнопки не значится — ничего не ставлю"
+                  % (data.get("channel") if isinstance(data, dict) else "?"))
+            return 0
+        put = _put_subscribe(scenes, by_id, first, len(scenes), _kind)
         if put:
             _save(a.scenes, data)
-            print("канал «5 МИНУТ»: кнопок вида 2 в ролике %d"
-                  % sum(1 for s in scenes
-                        if str(s.get("fx", "")).strip().lower() == "subscribe2"))
+            print("канал «%s»: кнопок «%s» в ролике %d"
+                  % (data.get("channel"), _kind,
+                     sum(1 for s in scenes
+                         if str(s.get("fx", "")).strip().lower() == _kind)))
         else:
-            print("канал «5 МИНУТ»: кнопки уже стоят или ставить некуда")
+            print("канал «%s»: кнопки уже стоят или ставить некуда"
+                  % data.get("channel"))
         return 0
 
     have = sorted(s["id"] for s in scenes

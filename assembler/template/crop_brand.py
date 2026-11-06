@@ -213,6 +213,19 @@ def main():
                         "-ss", "1" if is_video else "0", "-i", out,
                         "-frames:v", "1", "-q:v", "3", a.check], check=False, timeout=120)
         print("кадр для глаз: " + a.check)
+        # НИЖНЯЯ ЧЕТВЕРТЬ ОТДЕЛЬНО И КРУПНО (06.11, улов `usuario-84`).
+        # Полоса вещателя («TEXT POTUS TO 45470…») оказалась ВЫШЕ среза 15%
+        # и уцелела верхней половиной: на стоп-кадре вложения её не видно, на
+        # плитке листа тем более, а в готовом ролике она есть. Поэтому после
+        # реза смотрим низ отдельно — там она читается сразу.
+        _bot = os.path.splitext(a.check)[0] + ".низ.jpg"
+        r2 = subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y",
+                             "-i", a.check, "-vf",
+                             "crop=iw:ih/4:0:ih*3/4,scale=iw*1.6:ih*1.6",
+                             "-q:v", "2", _bot], check=False, timeout=120)
+        if r2.returncode == 0 and os.path.exists(_bot):
+            print("нижняя четверть крупно: " + _bot
+                  + "  ← смотреть ОБЯЗАТЕЛЬНО: полоса вещателя выше, чем кажется")
 
 
 if __name__ == "__main__":

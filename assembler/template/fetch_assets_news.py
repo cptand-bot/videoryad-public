@@ -158,7 +158,17 @@ BANNED_LOG = os.environ.get("VIDEORYAD_BANNED_FILE") or os.path.expanduser(
     "~/projects/media-library/.banned_md5.json")
 
 
-def load_banned_md5():
+def load_banned_md5(this_project=""):
+    """Активные баны. ВРЕМЕННЫЙ БАН РЕФЕТЧА — ТОЛЬКО В СВОЁМ ПРОЕКТЕ (06.11,
+    улов `usuario-a3`, второй случай за один ролик).
+
+    Рефетч банит снятый кадр на два дня, чтобы поиск не вернул его сразу
+    обратно — это про ОДИН ролик. А бан лежал общим, и годный кадр (связист
+    ВСУ разворачивает антенну) выбивался у соседней вкладки, которой он
+    подходил. Поэтому у временных банов теперь есть поле `project`: если оно
+    стоит и это ЧУЖОЙ проект — бан не применяется. Явный `--ban` (без срока)
+    остаётся общим: такой кадр плох сам по себе, его не должно быть нигде.
+    """
     if not os.path.exists(BANNED_LOG):
         return set()
     try:
@@ -166,9 +176,23 @@ def load_banned_md5():
             log = json.load(f)
     except (OSError, ValueError):
         return set()
+    # ПРОЕКТ ОПРЕДЕЛЯЕМ САМИ, ЕСЛИ НЕ НАЗВАЛИ: иначе все прочие вызовы
+    # (`check_pins`, `fetch_parallel`, `selfcheck` через них) продолжали бы
+    # применять чужие временные баны — то есть правка работала бы только в
+    # одном месте из пяти.
+    if not this_project:
+        this_project = os.environ.get("VIDEORYAD_PROJECT") or \
+            os.path.basename(os.path.abspath("."))
     today = time.strftime("%Y-%m-%d")
-    return {md5 for md5, e in log.items()
-            if not e.get("until") or e["until"] >= today}
+    out = set()
+    for md5, e in log.items():
+        if e.get("until") and e["until"] < today:
+            continue
+        own = str(e.get("project") or "")
+        if own and e.get("until") and this_project and own != this_project:
+            continue              # чужой временный бан — не наше дело
+        out.add(md5)
+    return out
 
 
 # ХЭШ ПУСТОГО ФАЙЛА — ВЕЧНЫЙ БЕЛЫЙ СПИСОК (06.11, улов `usuario-a3`).
@@ -221,6 +245,12 @@ def ban_md5(md5, path="", reason="", days=None):
         except (OSError, ValueError):
             log = {}
     entry = {"path": path, "reason": reason, "date": time.strftime("%Y-%m-%d")}
+    # ВРЕМЕННЫЙ БАН ПОМЕЧАЕМ ПРОЕКТОМ (06.11): он про «не возвращай этот кадр
+    # В ЭТОМ ролике», а не «кадр плох». Имя берём из названия рабочей папки —
+    # так же, как считает кулдаун.
+    if days:
+        entry["project"] = os.environ.get("VIDEORYAD_PROJECT") or \
+            os.path.basename(os.path.abspath("."))
     if days:
         entry["days"] = int(days)
         entry["until"] = time.strftime("%Y-%m-%d", time.localtime(time.time() + int(days) * 86400))
@@ -244,7 +274,7 @@ def load_blocked_md5(this_project):
     """md5s of library files used in the last COOLDOWN_VIDEOS *other* projects,
     plus anything permanently banned (see BANNED_LOG above)."""
     if not os.path.exists(USAGE_LOG):
-        return load_banned_md5(), {}
+        return load_banned_md5(this_project), {}
     with open(USAGE_LOG, encoding="utf-8") as f:
         log = json.load(f)
     # newest projects first, excluding the one we're building now
@@ -257,7 +287,7 @@ def load_blocked_md5(this_project):
     recent = {p for p, _ in sorted(proj_dates.items(), key=lambda kv: kv[1], reverse=True)[:COOLDOWN_VIDEOS]}
     blocked = {md5 for md5, entries in log.items()
                if any(e["project"] in recent for e in entries)}
-    blocked |= load_banned_md5()   # permanent + not-yet-expired timed bans, on top of the rolling window above
+    blocked |= load_banned_md5(this_project)   # вечные + свои временные баны
     return blocked, log
 
 
