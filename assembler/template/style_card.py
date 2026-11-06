@@ -20,6 +20,10 @@
     bullets  — тезисы разбора, до 5 пунктов, строки проявляются по очереди
     forces   — расстановка сил: кто и чего хочет, РОВНО 3 строки
     timeline — хронология: линия прочерчивается, засечки зажигаются
+    photo    — слабое фото маленьким: снимок слева в своём окне (не
+               растягивается выше своего разрешения), справа до 4 фактов;
+               движение — зум ВНУТРИ окна снимка (A34 с полки библиотеки,
+               внедрён 06.11)
 
 Пользоваться так (из папки проекта, ПЕРЕД ship.sh):
 
@@ -35,6 +39,11 @@
         --row "ВАШИНГТОН=нужна сделка до выборов" \\
         --row "КИЕВ=нужны деньги и гарантии" \\
         --row "БРЮССЕЛЬ=нужно остаться за столом"
+
+    python3 … 22 photo --photo images/scene_022.jpg \\
+        --kick "КАДР С МЕСТА" --title "Что на снимке" \\
+        --item "Колонна стоит второй день" \\
+        --item "Проверки идут выборочно"
 
     python3 … 67 timeline --kick "КАК ЭТО ШЛО" --title "Три недели" \\
         --event "28 сентября=первый звонок" \\
@@ -70,6 +79,16 @@ LIMITS = {
     "bullets":  {"items": (2, 5), "item_chars": 62, "kick_chars": 34},
     "forces":   {"items": (3, 3), "item_chars": 46, "kick_chars": 34},
     "timeline": {"items": (3, 6), "item_chars": 40, "kick_chars": 34},
+    # A34 С ПОЛКИ БИБЛИОТЕКИ — «слабое фото маленьким» (внедрён 06.11 по
+    # его прямому слову: «что нужно внедрить при следующей сборке на все
+    # проекты… в соответствующей цветовой гамме»). Единственный вид здесь,
+    # которому нужен СНИМОК: фото стоит слева в своём окне и НИКОГДА не
+    # растягивается выше собственного разрешения, справа кикер, заголовок и
+    # строки фактов. Поэтому узкий или мелкий кадр не портится апскейлом —
+    # он просто маленький, а остальную площадь держит текст.
+    # Фактов до ЧЕТЫРЁХ: пятая строка уезжает под подвал (считано по
+    # `fullcycle/photo_card.py` — строка 44 px плюс 12 отступа от y≈400).
+    "photo":    {"items": (1, 4), "item_chars": 46, "kick_chars": 34},
 }
 
 # ШИРИНУ МЕРЯЕМ В ПИКСЕЛЯХ, А НЕ В ЗНАКАХ (23.10, улов `usuario-fa`).
@@ -84,8 +103,13 @@ PIX = {
     "bullets":  ("F_HEAD", 72),
     "forces":   ("F_ALT", 50),
     "timeline": ("F_HEAD", 40),
+    "photo":    ("F_HEAD", 34),
 }
 PIX_AVAIL = 1920 - 264 - 60          # левое поле + правый запас
+# У `photo` поле СВОЁ И ВТРОЕ УЖЕ: слева стоит окно снимка. Считано по
+# `fullcycle/photo_card.py`: окно 0,40 ширины кадра от x=150, текст начинается
+# за ним (tx = 150 + 768 + 92) и держит правый запас 140 px.
+PIX_AVAIL_BY_KIND = {"photo": 1920 - (150 + int(1920 * 0.40) + 92) - 140}
 
 # Расстановка по ролику. Норма карточек общая на ВСЕ виды (одна на 15 сцен,
 # 22.10), но у видов разная динамика, поэтому подряд одинаковые не ставим.
@@ -131,6 +155,9 @@ def main():
                     help="строка forces: «КТО=чего хочет»")
     ap.add_argument("--event", action="append", default=[],
                     help="событие timeline: «дата=что было» или «дата=что было|hot»")
+    ap.add_argument("--photo", default="",
+                    help="снимок для вида photo: ставится слева в своём окне "
+                         "и НЕ растягивается выше своего разрешения")
     ap.add_argument("--note", default="", help="сноска внизу (золотая)")
     ap.add_argument("--source", default="", help="первоисточник, можно пустым")
     ap.add_argument("--images", default="images")
@@ -184,8 +211,22 @@ def main():
     lim = LIMITS[a.kind]
 
     # --- ПРОВЕРКА 1: содержимое под вид -----------------------------------
-    raw = {"bullets": a.item, "forces": a.row, "timeline": a.event}[a.kind]
-    flag = {"bullets": "--item", "forces": "--row", "timeline": "--event"}[a.kind]
+    raw = {"bullets": a.item, "forces": a.row, "timeline": a.event,
+           "photo": a.item}[a.kind]
+    flag = {"bullets": "--item", "forces": "--row", "timeline": "--event",
+            "photo": "--item"}[a.kind]
+    # СНИМОК ПРОВЕРЯЕМ ДО ВСЕГО ОСТАЛЬНОГО: без него вид `photo` рисует пустое
+    # окно, и видно это только на постере — то есть после облачного прогона.
+    if a.kind == "photo":
+        if not a.photo:
+            _fail(2, "виду «photo» нужен снимок: --photo <файл>",
+                  "  это композиция ДЛЯ СЛАБОГО кадра: фото слева в окне, "
+                  "справа факты. Без файла рисовать нечего.")
+        if not os.path.isfile(a.photo):
+            _fail(2, f"нет файла снимка: {a.photo}")
+    elif a.photo:
+        print("ВНИМАНИЕ: --photo читает только вид «photo», здесь он "
+              "пропущен")
     lo, hi = lim["items"]
     if not lo <= len(raw) <= hi:
         _fail(2, f"виду «{a.kind}» нужно от {lo} до {hi} строк ({flag}), "
@@ -204,14 +245,15 @@ def main():
             fname, size = PIX[a.kind]
             fpath = getattr(_sc, fname, None) or _sc.F_HEAD
             w = _sc._f(fpath, size).getlength(text)
-            return (w, PIX_AVAIL) if w > PIX_AVAIL else None
+            avail = PIX_AVAIL_BY_KIND.get(a.kind, PIX_AVAIL)
+            return (w, avail) if w > avail else None
         except Exception:
             return None            # нет шрифтов — остаётся счёт в знаках ниже
 
     long_lines = []
     items, rows, events = [], [], []
     for r in raw:
-        if a.kind == "bullets":
+        if a.kind in ("bullets", "photo"):
             items.append(r)
             _wide = _too_wide(r)
             if _wide:
@@ -271,11 +313,32 @@ def main():
         src = str(x.get("source", ""))
         if src.startswith("card") and int(x.get("id", -1)) != a.sid:
             others[int(x.get("id", 0))] = src.split(":", 1)[-1]
-    norm = max(1, round(len(scenes) / PER_SCENES))
-    near = [i for i in others if abs(i - a.sid) < MIN_GAP]
+    # НОРМА И ЗАЗОР БЕРУТСЯ ИЗ ОБЩЕГО СПИСКА ОБЯЗАТЕЛЬНЫХ (06.11). Пока они
+    # были константами здесь, одиннадцать обязательных элементов и норма
+    # «одна карточка на 15 сцен» противоречили друг другу: инструмент сам
+    # требовал поставить кадр и сам же ругался, что кадров больше нормы.
+    _norm, _gap = None, MIN_GAP
+    _ob = None
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import obyazatelno as _ob
+        _norm, _gap = _ob.норма(len(scenes)), _ob.зазор(len(scenes))
+    except Exception:
+        pass
+    norm = _norm if _norm else max(1, round(len(scenes) / PER_SCENES))
+    MIN_GAP_EFF = _gap
+    # ЗАЗОР СЧИТАЕМ ПО СЕМЬЯМ (06.11, улов `usuario-a3`): плоский зазор на
+    # ролике в 101 сцену отбивал законную пару «фото в окне» + «стена улик»
+    # через 6 сцен, и вкладка жала `--force` на ОБЯЗАТЕЛЬНОМ элементе.
+    def _gap_to(_sid_other):
+        try:
+            return _ob.зазор_вида(a.kind, len(scenes), others.get(_sid_other))
+        except Exception:
+            return MIN_GAP_EFF
+    near = [i for i in others if abs(i - a.sid) < _gap_to(i)]
     if near:
         msg = (f"карточка слишком близко к соседней (сцены {', '.join(map(str, sorted(near)))}): "
-               f"держим не меньше {MIN_GAP} сцен между любыми карточками.")
+               f"держим не меньше {MIN_GAP_EFF} сцен между любыми карточками.")
         if not a.force:
             _fail(2, msg, "  выбери сцену подальше или сними ключом --force")
         print("ВНИМАНИЕ:", msg)
@@ -327,7 +390,21 @@ def main():
     poster = os.path.join("cards", f"scene_{a.sid:03d}.jpg")
 
     common = dict(kick=a.kick, source=a.source, watermark=watermark)
-    if a.kind == "bullets":
+    if a.kind == "photo":
+        # A34: рисует `fullcycle/photo_card.py`, фон берёт у канала тем же
+        # `sc.canvas()` — отдельной палитры заводить не нужно, гамма приходит
+        # из `CHANNEL_PALETTES` по каналу сцены.
+        sys.path.insert(0, FULLCYCLE)
+        import photo_card as _pc
+        fn = _pc.photo_card
+        kwargs = dict(common, photo=a.photo, title=a.title,
+                      lines=tuple(items))
+        # НАЕЗД НА ВЕСЬ КАДР ЗДЕСЬ ВРЕДЕН (слово пользователя 21.10, стоит в
+        # шапке самой рисовалки): «зум для общей сцены не нужен… зум можно
+        # применить к фотографии внутри». Движение у вида своё — ступенчатый
+        # зум ВНУТРИ окна снимка, подписи при этом стоят на месте.
+        a.tail_zoom = 0.0
+    elif a.kind == "bullets":
         fn = sc.bullets
         kwargs = dict(common, items=tuple(items), note=a.note or None)
     elif a.kind == "forces":
@@ -350,7 +427,8 @@ def main():
     _lines = items or [r["want"] for r in rows] or [e["text"] for e in events]
     _card = {k: v for k, v in dict(
         kind=a.kind, kick=a.kick, title=a.title, lines=_lines, note=a.note,
-        src=a.source, watermark=watermark, anim=a.anim).items()
+        src=a.source, watermark=watermark, anim=a.anim,
+        photo=a.photo if a.kind == "photo" else "").items()
         if v not in ("", None, [])}
     if not cq.local_allowed():
         _jq = cq.queue(a.scenes, a.sid, a.kind, dur, watermark, channel,

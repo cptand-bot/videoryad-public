@@ -112,6 +112,16 @@ def main():
     ap.add_argument("--kick", default="", help="кикер: место · дата")
     ap.add_argument("--title", default="", help="короткий заголовок над лоскутом")
     ap.add_argument("--author", default="", help="кто сказал; закадровый текст автора — без автора")
+    # A35 С ПОЛКИ БИБЛИОТЕКИ — ЦИТАТА-СПЛИТ (внедрена 06.11 его прямым словом).
+    # Тот же инструмент, другая форма: с `--photo` лоскут бумаги заменяется
+    # двумя половинами и одной красной границей — слева лицо говорящего,
+    # справа слова, имя своим закреплённым цветом. Повод — ИМЕННОЕ заявление,
+    # когда лицо опознаётся и его стоит показать. Без ключа всё как раньше.
+    ap.add_argument("--photo", default="",
+                    help="лицо говорящего: цитата рисуется сплитом (A35) — "
+                         "слева снимок, справа слова")
+    ap.add_argument("--role", default="",
+                    help="должность НА МОМЕНТ заявления (только со --photo)")
     ap.add_argument("--source", default="", help="первоисточник (SOURCES.md), можно пустым")
     ap.add_argument("--images", default="images")
     ap.add_argument("--anim", type=float, default=2.0, help="секунд рисовать покадрово")
@@ -150,20 +160,46 @@ def main():
     except Exception as e:                       # в облаке этого файла нет — и не надо
         _fail(3, f"не загрузить рисовалку из {FULLCYCLE}: {e}")
 
-    # --- ПРОВЕРКА 1: текст влезает в лоскут --------------------------------
-    font = sc._f(sc.F_HEAD, FSIZE)
-    pw = int(sc.W * PAPER_W_FRAC)
-    maxw = pw - 2 * PAD
-    lines = _wrap(a.text, font, maxw)
-    room = PAPER_H - TEXT_Y_OFF - BOTTOM_KEEP - (AUTHOR_GAP + 34 if a.author else 0)
-    n_max = max(1, int(room // LINE_STEP) + 1)
+    # --- ПРОВЕРКА 1: текст влезает в кадр ----------------------------------
+    # У СПЛИТА (A35) СВОЯ ГЕОМЕТРИЯ, И МЕРИТЬ ЕГО ЛОСКУТОМ НЕЛЬЗЯ: половину
+    # кадра занимает снимок, текст идёт колонкой 844 px кеглем 58 с шага 78
+    # от y=320 до подвала (1006). Числа взяты из `quote_variants.quote_split`
+    # и `style_cards.FOOT_Y`, а не на глаз: мера чужого вида пропустила бы
+    # текст, который рисовалка обрежет молча.
+    if a.photo:
+        if not os.path.isfile(a.photo):
+            _fail(2, f"нет файла снимка: {a.photo}",
+                  "  сплит без лица — это половина пустого кадра")
+        font = sc._f(sc.F_HEAD, 58)
+        maxw = sc.W - (884 + 72) - 120
+        # СЧИТАЕМ СТРОКИ ТЕМ ЖЕ ПЕРЕНОСОМ, ЧТО И РИСОВАЛКА. `quote_split`
+        # зовёт `_wrap_keep`, который НЕ РВЁТ фразу под маркером: она целиком
+        # уезжает на следующую строку. Если мерить обычным переносом, проверка
+        # «акцент разорван» бракует карточку, которую рисовалка собрала бы
+        # правильно (поймано 06.11 на первой же пробе сплита).
+        try:
+            import quote_variants as _qv0
+            lines = _qv0._wrap_keep(a.text, font, maxw, a.accent or None)
+        except Exception:
+            lines = _wrap(a.text, font, maxw)
+        room = sc.FOOT_Y - 40 - 320 - (116 if a.author else 0)
+        n_max = max(1, int(room // 78))
+    else:
+        font = sc._f(sc.F_HEAD, FSIZE)
+        pw = int(sc.W * PAPER_W_FRAC)
+        maxw = pw - 2 * PAD
+        lines = _wrap(a.text, font, maxw)
+        room = PAPER_H - TEXT_Y_OFF - BOTTOM_KEEP - (AUTHOR_GAP + 34 if a.author else 0)
+        n_max = max(1, int(room // LINE_STEP) + 1)
     if len(lines) > n_max:
         _fail(2,
               f"цитата не влезает в лоскут: {len(lines)} строк, помещается {n_max}.",
               f"  строки: " + " / ".join(lines),
               "  укороти текст примерно на "
               f"{sum(len(l) for l in lines[n_max:]) + 1} знаков "
-              "(лоскут не растягивается — это лист бумаги, а не плашка).")
+              + ("(у сплита текст стоит в правой половине кадра — шире он "
+                 "не станет)." if a.photo else
+                 "(лоскут не растягивается — это лист бумаги, а не плашка)."))
 
     # --- АКЦЕНТ ПО УМОЛЧАНИЮ: БЕРЁМ САМИ, А НЕ ВЫПУСКАЕМ БЕЗ МАРКЕРА ------
     # 04.11, его прямое слово по двум сданным роликам: «почему не подчёркнуто
@@ -256,9 +292,18 @@ def main():
     out_mp4 = os.path.join(a.images, f"scene_{a.sid:03d}.mp4")
     poster = os.path.join("cards", f"scene_{a.sid:03d}.jpg")
 
-    kwargs = dict(kick=a.kick, title=a.title, text=a.text, author=a.author,
-                  source=a.source, accent=a.accent or None, watermark=watermark,
-                  seed=a.seed)
+    if a.photo:
+        # У сплита НЕТ ни кикера, ни заголовка, ни лоскута: на правой половине
+        # стоят кавычка, текст, имя и должность. Лишние ключи рисовалка не
+        # примет (TypeError в облаке на уже отправленном задании), поэтому
+        # собираем свой набор, а не добавляем к общему.
+        kwargs = dict(photo=a.photo, text=a.text, author=a.author, role=a.role,
+                      source=a.source, accent=a.accent or None,
+                      watermark=watermark)
+    else:
+        kwargs = dict(kick=a.kick, title=a.title, text=a.text, author=a.author,
+                      source=a.source, accent=a.accent or None, watermark=watermark,
+                      seed=a.seed)
 
     # --- НА МАШИНЕ ПОЛЬЗОВАТЕЛЯ НЕ СЧИТАЕМ (его прямое слово 2026-10-23) ---
     # Замер 22.10: лоскут на 7,4 с = 50,9 с счёта локально, ~6,9 с на секунду
@@ -266,15 +311,17 @@ def main():
     # все карточки ролика (fullcycle/cards_cloud.py). Локальный рендер —
     # крайний случай: только с явного VIDEORYAD_LOCAL_OK=1, с оповещением.
     import cards_queue as cq
+    _view = "split" if a.photo else "quote"
     _card = {k: v for k, v in dict(
-        kind="quote", kick=a.kick, title=a.title, text=a.text, accent=a.accent,
-        author=a.author, src=a.source, watermark=watermark).items()
+        kind=_view, kick=a.kick, title=a.title, text=a.text, accent=a.accent,
+        author=a.author, role=a.role, photo=a.photo, src=a.source,
+        watermark=watermark).items()
         if v not in ("", None, [])}
     if not cq.local_allowed():
-        _jq = cq.queue(a.scenes, a.sid, "quote", dur, watermark, channel,
+        _jq = cq.queue(a.scenes, a.sid, _view, dur, watermark, channel,
                        dict(kwargs), anim=a.anim, tail_zoom=a.tail_zoom,
                        card=_card)
-        cq.report(_jq, a.sid, "quote", a.scenes)
+        cq.report(_jq, a.sid, _view, a.scenes)
         return
     cq.notify_local(f"рендер цитаты-лоскута на сцене {a.sid}, {dur:.0f} с видео "
                     "(разрешено VIDEORYAD_LOCAL_OK=1)")
@@ -282,11 +329,17 @@ def main():
           "Облачный путь: убери VIDEORYAD_LOCAL_OK и повтори команду.")
 
     t0 = time.time()
-    qp.quote_paper(out=poster, **kwargs)         # постер — он же проверка глазами
+    if a.photo:
+        sys.path.insert(0, FULLCYCLE)
+        import quote_variants as _qv
+        _fn = _qv.quote_split
+    else:
+        _fn = qp.quote_paper
+    _fn(out=poster, **kwargs)                    # постер — он же проверка глазами
     # ВАЖНО: fps БОЕВОЙ (30), а не 25 как по умолчанию у рисовалки — сборщик
     # клипов работает на 30, и смешение частот в concat уже однажды растянуло
     # готовый ролик на 20%.
-    sc.render_anim(qp.quote_paper, kwargs, dur, out_mp4, fps=30,
+    sc.render_anim(_fn, kwargs, dur, out_mp4, fps=30,
                    anim_seconds=a.anim, tail_zoom=a.tail_zoom, sfx_out=False)
     took = time.time() - t0
 

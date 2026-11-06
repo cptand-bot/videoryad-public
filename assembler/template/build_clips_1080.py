@@ -136,9 +136,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # `subscribe` — не переход и не врезка: кнопка ложится ПОВЕРХ уже
 # собранного клипа сцены (его заказ 05.11). Поэтому она есть в FX_KINDS
 # (чтобы попасть в разбор и в потолок), но нет в FX_TRANS.
-FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear",
+FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear", "flash",
             "subscribe", "subscribe2")
-FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear")
+FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear", "flash")
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
 INSET_SIDS = set()          # из них те, что «врезка» (для совместимости)
@@ -646,7 +646,10 @@ def main():
         # У КАЖДОГО КАНАЛА СВОЙ НАБОР ВИДОВ (05.11): кнопка вида 2 —
         # «5 МИНУТ», всё остальное — ПЛАНЕТА.
         _ch = CHANNEL.strip().upper().replace("Ё", "Е")
-        _allow = {"subscribe2": ("5 МИНУТ",)}
+        _allow = {"subscribe2": ("5 МИНУТ",),
+                  # засвет (A73, 06.11) — на всех каналах, см. fx_put.py
+                  "flash": ("ПЛАНЕТА", "5 МИНУТ", "ОЛЬКА",
+                            "ДИПЛОМАТИЯ СИЛЫ", "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО")}
         _want = [(i, k) for i, k in _want
                  if _ch in tuple(x.upper().replace("Ё", "Е")
                                  for x in _allow.get(k, ("ПЛАНЕТА",)))]

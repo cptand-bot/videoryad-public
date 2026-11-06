@@ -60,6 +60,60 @@ def crop_expr(w, h, side, pct):
     return f"crop={w}:{h - cut_h}:0:0", (w, h - cut_h)
 
 
+def kept_box(w, h, side=None, pct=15, center=False):
+    """Какая ЧАСТЬ исходного кадра остаётся: (x0, y0, x1, y1) в пикселях."""
+    if center:
+        nw = (w - 2 * ((w * pct) // 100)) // 2 * 2
+        nh = (h - 2 * ((h * pct) // 100)) // 2 * 2
+        x0, y0 = (w - nw) // 2, (h - nh) // 2
+        return x0, y0, x0 + nw, y0 + nh
+    cut_w = (w * pct) // 100 // 2 * 2
+    cut_h = (h * pct) // 100 // 2 * 2
+    if side == "left":
+        return cut_w, 0, w, h
+    if side == "right":
+        return 0, 0, w - cut_w, h
+    if side == "top":
+        return 0, cut_h, w, h
+    return 0, 0, w, h - cut_h
+
+
+def _parse_mark(raw, w, h):
+    """«x0,y0,x1,y1» — в пикселях или долями 0..1. Возвращает пиксели."""
+    parts = [float(x.strip()) for x in str(raw).replace(";", ",").split(",")]
+    if len(parts) != 4:
+        raise ValueError("нужно четыре числа: x0,y0,x1,y1")
+    if max(parts) <= 1.0:
+        parts = [parts[0] * w, parts[1] * h, parts[2] * w, parts[3] * h]
+    x0, y0, x1, y1 = [int(round(v)) for v in parts]
+    return min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)
+
+
+def mark_verdict(w, h, mark, box):
+    """Срезан ли знак и сколько процентов нужно срезать, если нет.
+
+    Зачем (06.11, улов `usuario-ad`): инструмент печатал «готово» и
+    «соотношение 1.45, сборщик поставит родным размером» НЕЗАВИСИМО от того,
+    остался ли знак в кадре. На ролике про космос знак телеграм-канала стоял
+    по левой трети на высоте 64% и тянулся на 36% ширины: срез 18% прошёл
+    «чисто», а на `--check` кадре знак был на месте — круг правок впустую.
+    """
+    mx0, my0, mx1, my1 = mark
+    x0, y0, x1, y1 = box
+    gone = (mx1 <= x0 or mx0 >= x1 or my1 <= y0 or my0 >= y1)
+    if gone:
+        return True, "знак срезан целиком", 0
+    # сколько процентов надо срезать с каждой стороны, чтобы знак ушёл
+    need = {
+        "left": 100.0 * mx1 / w,
+        "right": 100.0 * (w - mx0) / w,
+        "top": 100.0 * my1 / h,
+        "bottom": 100.0 * (h - my0) / h,
+    }
+    side, pct = min(need.items(), key=lambda kv: kv[1])
+    return False, side, int(pct + 0.999)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("src")
@@ -75,6 +129,10 @@ def main():
                     help="сколько процентов стороны срезать (по умолчанию 15)")
     ap.add_argument("--out", default="", help="куда писать; по умолчанию рядом, с суффиксом __cut")
     ap.add_argument("--check", default="", help="куда положить кадр для глаз")
+    ap.add_argument("--mark", default="",
+                    help="где стоит знак: «x0,y0,x1,y1» в пикселях или долями "
+                         "0..1 ИСХОДНОГО кадра. Инструмент скажет, срезан ли "
+                         "он и сколько процентов нужно срезать, если нет")
     a = ap.parse_args()
 
     if not os.path.exists(a.src):
@@ -111,10 +169,43 @@ def main():
     else:
         print("было %dx%d → стало %dx%d (срезано %d%% с края: %s)"
               % (w, h, nw, nh, a.pct, a.side))
+    # ПОСЛЕ РЕЗА КАДР МОЖЕТ УПАСТЬ НИЖЕ ПОРОГА СЦЕНЫ (06.11, улов
+    # `usuario-c8`): видео вложения 854x480 после `--center --pct 12` стало
+    # 650x366, то есть ниже 800 px — в сцену не годится, только всплывашкой.
+    # Инструмент об этом молчал, и кадр терялся уже на фетче.
+    _long = max(nw, nh)
+    if _long < 800:
+        print("!! ПОСЛЕ РЕЗА %dx%d — длинная сторона %d px, это НИЖЕ порога "
+              "сцены (800 px). В базовую сцену такой кадр не пойдёт: ставь "
+              "его всплывашкой или режь одной стороной, а не центром."
+              % (nw, nh, _long))
+    elif _long < 1000:
+        print("   длинная сторона %d px — впритык к порогу сцены 800; "
+              "центральный рез на таком исходнике больше не применяй."
+              % _long)
     print("соотношение %.2f — %s" % (
         nw / nh,
         "уже 16:9, сборщик поставит родным размером с размытой заливкой"
         if nw / nh < 1.76 else "то же 16:9 или шире, заливки не будет"))
+    if a.mark:
+        try:
+            _mk = _parse_mark(a.mark, w, h)
+        except ValueError as e:
+            print("!! --mark не разобрать (%s) — вердикт по знаку не дам" % e)
+        else:
+            _box = kept_box(w, h, None if a.center else a.side, a.pct, a.center)
+            _gone, _side, _need = mark_verdict(w, h, _mk, _box)
+            if _gone:
+                print("ЗНАК СРЕЗАН: он весь лежал за пределами оставленной части")
+            elif _need > 25:
+                print("!! ЗНАК ОСТАЛСЯ В КАДРЕ. Чтобы убрать его срезом с «%s», "
+                      "нужно %d%% — это больше 25%%, кадр так НЕ ЛЕЧИТСЯ: "
+                      "бракуй его и ищи тот же сюжет у другого канала досье."
+                      % (_side, _need))
+            else:
+                print("!! ЗНАК ОСТАЛСЯ В КАДРЕ. Повтори с "
+                      "`--side %s --pct %d` — этого хватит."
+                      % (_side, _need))
     print(out)
 
     if a.check:

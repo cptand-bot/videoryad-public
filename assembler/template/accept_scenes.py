@@ -199,6 +199,33 @@ def main():
     if not scenes:
         sys.exit("ОШИБКА: в файле нет сцен")
 
+    # ИМЕНА ПОЛЕЙ ПРОВЕРЯЕМ ДО ВСЕГО ОСТАЛЬНОГО (06.11, улов `usuario-84`).
+    # Агент иногда называет поля `sid` / `start` / `dur`. Проверки читают
+    # `id` / `start_sec` / `duration_sec`, получают None и 0.0 — и `--fix`
+    # МОЛЧА схлопывал ролик в ноль сцен («сцена None (0.0 с) короче трёх
+    # секунд — склеил со следующей» 73 раза, потом «сцен было 73, стало 0»).
+    # Наружу это выглядело как успешная починка: код 0, файл на месте, сцен
+    # нет. Правильное поведение — отказ с именами полей.
+    _ALIASES = {"id": ("sid", "scene", "n", "num", "number"),
+                "duration_sec": ("dur", "duration", "sec", "seconds", "len"),
+                "start_sec": ("start", "from", "t0", "begin")}
+    _s0 = scenes[0] if isinstance(scenes[0], dict) else {}
+    _wrong = []
+    for _need, _alts in _ALIASES.items():
+        if _need in _s0:
+            continue
+        for _alt in _alts:
+            if _alt in _s0:
+                _wrong.append((_alt, _need))
+                break
+    if _wrong:
+        sys.exit("ОШИБКА: поля сцен названы не так, как читает сборка — "
+                 "переименуй и повтори:\n"
+                 + "\n".join("  «%s» → «%s»" % (a_, b_) for a_, b_ in _wrong)
+                 + "\n  (это НЕ чинится ключом --fix: с чужими именами "
+                   "длительность читается как 0 с, и починка схлопнула бы "
+                   "ролик в ноль сцен молча)")
+
     # АВТОПОЧИНКА МЕХАНИЧЕСКИХ ОТКАЗОВ (04.11). Замер по 28 сырым файлам
     # агента: приёмка не пропускает 8, и каждый отказ стоит ЗАХОДА к нему
     # (13 минут). Четыре причины из пяти чинятся без него — см.
@@ -383,6 +410,20 @@ def main():
             _known |= set(re.findall(r'"([a-z_]+)":\s*\{', _lb.group(1)))
     except Exception:
         pass
+    # РЕЕСТРОВ СТАЛО ТРИ (06.11). Общая дверь элементов арсенала
+    # `template/element_put.py` держит свою таблицу (`wall`, `dof`, `poster`,
+    # `bars`, `slider` и всё, что он назовёт дальше). Не прочитать её здесь —
+    # значит отбивать приёмкой сцену, которую мы сами же и поставили: тот же
+    # класс «реестров два, приёмка знает один», что поймали 02.11.
+    try:
+        _ep = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "element_put.py")
+        _et = open(_ep, encoding="utf-8").read()
+        _eb = re.search(r"ЭЛЕМЕНТЫ = \{(.*?)\n\}", _et, re.S)
+        if _eb:
+            _known |= set(re.findall(r'"([a-z_]+)":\s*\{', _eb.group(1)))
+    except Exception:
+        pass
     for i in cards:
         _view = str(scenes[i].get("source", ""))[len(CARD_PREFIX):].strip()
         if not _view:
@@ -406,9 +447,25 @@ def main():
         # Четыре вида из его образца: врезка (03.11) и три перехода (04.11).
         # ПОТОЛОК ТРИ СЧИТАЕТСЯ НА ВСЕ ВИДЫ ВМЕСТЕ — «эффекты не больше 3 раз
         # на видеоряд».
-        _ok_fx = {"inset", "mosaic", "panels", "wipe", "depth", "tear",
-                  "subscribe", "subscribe2"}
-        _trans = {"mosaic", "panels", "wipe", "depth", "tear"}
+        # СПИСОК ВИДОВ ЧИТАЕМ У САМОЙ ДВЕРИ (06.11, БЛОКЕР вкладки
+        # `usuario-84`). Пока он был переписан здесь руками, седьмой вид
+        # `flash` раскатался НАПОЛОВИНУ: `fx_put.py` его ставил, обязательный
+        # список требовал, а приёмка отбивала «эффекта не существует» — то
+        # есть поставить нельзя и не поставить нельзя. Тот же класс, что
+        # «реестров два, приёмка знает один».
+        try:
+            import importlib.util as _ilu
+            _fp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "fx_put.py")
+            _sp = _ilu.spec_from_file_location("_fx_put", _fp)
+            _fx_mod = _ilu.module_from_spec(_sp)
+            _sp.loader.exec_module(_fx_mod)
+            _ok_fx = set(_fx_mod.KINDS)
+            _trans = set(_fx_mod.TRANS)
+        except Exception:
+            _ok_fx = {"inset", "mosaic", "panels", "wipe", "depth", "tear",
+                      "flash", "subscribe", "subscribe2"}
+            _trans = {"mosaic", "panels", "wipe", "depth", "tear", "flash"}
         _first = min((int(sc.get("id", 0)) for sc in scenes), default=0)
         for sc in scenes:
             v = str(sc.get("fx", "")).strip().lower()
@@ -430,7 +487,14 @@ def main():
                 bad.append("сцена %s: эффект на рисованную карточку (%s) не "
                            "кладём" % (sc.get("id"), sc.get("source")))
         _ch = a.channel.strip().upper().replace("Ё", "Е")
+        # ЗАМОК КАНАЛОВ — ТОЖЕ ИЗ `fx_put.py` (06.11, та же мина, что со
+        # списком видов): таблица была переписана здесь руками, и `flash`,
+        # разрешённый на всех каналах, отбивался на «5 МИНУТ» как чужой.
         _allow = {"subscribe2": ("5 МИНУТ",)}
+        try:
+            _allow = dict(_fx_mod.CHANNEL_FX)
+        except Exception:
+            pass
         _wrong = [sc.get("id") for sc in scenes
                   if str(sc.get("fx", "")).strip().lower() in _ok_fx
                   and _ch not in tuple(
@@ -480,15 +544,48 @@ def main():
     _view_of = lambda i: str(scenes[i].get("source", ""))[len(CARD_PREFIX):].strip()
     picts = [i for i in cards if _view_of(i) in PICT]
     texts = [i for i in cards if _view_of(i) not in PICT]
-    for name, group, per, gap in (("текстовых", texts, 15, 8),
-                                  ("изобразительных", picts, 9, 4)):
-        nrm = max(1, round(n / per))
-        if len(group) > nrm + 1:
-            warn.append(f"карточек {name} {len(group)} при норме {nrm} (+1 допуск)")
-        for x, y in zip(group, group[1:]):
-            if y - x < gap:
+    # НОРМА И ЗАЗОР — ИЗ ОБЩЕГО СПИСКА ОБЯЗАТЕЛЬНЫХ (06.11, улов
+    # `usuario-84`). Константы 15/8 и 9/4 писались до того, как он сделал
+    # двенадцать элементов обязательными: приёмка печатала четыре ложных
+    # «ближе 8 сцен» и «карточек 5 при норме 5» на ОБЯЗАТЕЛЬНЫХ кадрах,
+    # которые сама же требует. Ложное предупреждение на каждом ролике — это
+    # предупреждение, которое перестают читать.
+    _gap_all, _norm_all = None, None
+    try:
+        import importlib.util as _ilu2
+        _op = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "obyazatelno.py")
+        _sp2 = _ilu2.spec_from_file_location("_obyaz", _op)
+        _ob = _ilu2.module_from_spec(_sp2)
+        _sp2.loader.exec_module(_ob)
+        _gap_all, _norm_all = _ob.зазор(n), _ob.норма(n)
+    except Exception:
+        pass
+    if _norm_all:
+        # один счёт на все виды: зритель видит рисованные кадры общим числом
+        if len(cards) > _norm_all + 1:
+            warn.append("рисованных кадров %d при норме %d (+1 допуск) — "
+                        "норма считается от списка обязательных"
+                        % (len(cards), _norm_all))
+        for x, y in zip(cards, cards[1:]):
+            # по семьям: две изобразительные через 4 сцены — норма
+            try:
+                _g = _ob.зазор_вида(_view_of(x), n, _view_of(y))
+            except Exception:
+                _g = _gap_all
+            if y - x < _g:
                 warn.append(f"карточки на сценах {scenes[x]['id']} и "
-                            f"{scenes[y]['id']} ближе {gap} сцен друг к другу")
+                            f"{scenes[y]['id']} ближе {_g} сцен друг к другу")
+    else:
+        for name, group, per, gap in (("текстовых", texts, 15, 8),
+                                      ("изобразительных", picts, 9, 4)):
+            nrm = max(1, round(n / per))
+            if len(group) > nrm + 1:
+                warn.append(f"карточек {name} {len(group)} при норме {nrm} (+1 допуск)")
+            for x, y in zip(group, group[1:]):
+                if y - x < gap:
+                    warn.append(f"карточки на сценах {scenes[x]['id']} и "
+                                f"{scenes[y]['id']} ближе {gap} сцен друг к другу")
 
     # --- ШАБЛОННОСТЬ: уникальность по СМЫСЛУ, а не по приписке (23.10) ---
     # Живой случай: агент получил замечание «запросы повторяются» и приписал к
@@ -877,7 +974,12 @@ def main():
               r"двадцат|тридцат|сорок|пятьдесят|шестьдесят|семьдесят|"
               r"восемьдесят|девяност|ст[оа]|двест|трист|четырест|пятьсот|"
               r"тысяч|миллион|миллиард")
-    _MEAS = (r"процент|%|миллиард|млрд|миллион|млн|тысяч|тыс\.|доллар|евро|"
+    # «ТЫСЯЧ» МЕРОЙ НЕ СЧИТАЕТСЯ (06.11, БЛОКЕР вкладки `usuario-a3`). Год
+    # прописью — «в две тысячи двадцать втором году» — ловился как числовой
+    # факт, хотя в правиле прямо сказано, что даты не считаются. Само слово
+    # остаётся в `_NUM_W` (оно часть числа), но мерой быть перестаёт: сумма
+    # всё равно опознаётся по «миллион», «евро», «человек».
+    _MEAS = (r"процент|%|миллиард|млрд|миллион|млн|доллар|евро|"
              r"рубл|гривен|вдво|втро|в разы|кратн|раза|раз в |километр|км |"
              r"тонн|штук|единиц|человек|бойц|военнослужащ|самолёт|самолет|"
              r"ракет|дрон|беспилотн|комплекс")
@@ -888,9 +990,31 @@ def main():
         _t = str(sc.get("text", "")).lower()
         if not _t:
             continue
+        # ОДНО ЧИСЛО ПРОПИСЬЮ — ОДИН ФАКТ, А НЕ ЧЕТЫРЕ (06.11, БЛОКЕР
+        # вкладки `usuario-a3`). Счёт шёл ПО СЛОВАМ, поэтому «четыреста
+        # тридцать семь миллионов евро» давало 4 факта, «четыре миллиарда
+        # триста шестьдесят миллионов… двести миллионов» — 7 вместо двух, и
+        # приёмка отбивала сцены, где настоящих фактов один-два. Правило
+        # писалось про «три и больше числовых ФАКТА», а не про слова.
+        # Поэтому соседние числительные склеиваются в ОДНУ цепочку: если
+        # следующее совпадение начинается не дальше чем через 3 знака
+        # (пробел, дефис, «и»), это то же самое число.
+        _spans = [(_m.start(), _m.end())
+                  for _m in re.finditer(r"(\d+[.,]?\d*|(?:%s)\w*)" % _NUM_W, _t)]
+        _chains = []
+        for _a, _b in _spans:
+            if _chains and _a - _chains[-1][1] <= 3:
+                _chains[-1] = (_chains[-1][0], _b)
+            else:
+                _chains.append((_a, _b))
         _facts = 0
-        for _m in re.finditer(r"(\d+[.,]?\d*|(?:%s)\w*)" % _NUM_W, _t):
-            _w = _t[max(0, _m.start() - 40):_m.end() + 40]
+        for _a, _b in _chains:
+            # ДАТА — НЕ ЧИСЛОВОЙ ФАКТ: «в две тысячи двадцать втором году»,
+            # «к сентябрю двадцать пятого года». Смотрим, не стоит ли сразу
+            # за цепочкой слово «год» в любой форме.
+            if re.match(r"\s*(год|г\.|году|года|годом|годах)", _t[_b:_b + 10]):
+                continue
+            _w = _t[max(0, _a - 40):_b + 40]
             if re.search(_MEAS, _w):
                 _facts += 1
         if _facts >= 2:

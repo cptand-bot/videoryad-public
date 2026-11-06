@@ -92,14 +92,29 @@ def _lib_alt(lib):
 def _lib_has(lib, rel):
     """Есть ли тег в библиотеке канала ИЛИ в соседней — как у фетчера.
 
+    ПРИНИМАЕМ ОБА НАПИСАНИЯ ПАПКИ БАЗЫ (06.11, улов `usuario-ad`):
+    `ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА` и `БАЗА/ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА`.
+    `folder_sheet.py` и `catalog.py --check-dir` это умели (и печатают папку
+    БЕЗ префикса), а пины — нет: четыре библиотечные сцены получили «НЕТ
+    ТАКОЙ ПАПКИ», и без ручной правки уехали бы в веб-водопад, оставив в
+    манифесте `source: local_library` — то есть вранье в дашборде.
+    Инструменты обязаны понимать одно и то же.
+
     Возвращает путь, по которому нашлось (или пустую строку).
     """
+    rels = [rel]
+    _r = str(rel).strip("/")
+    if not _r.upper().startswith("БАЗА/"):
+        rels.append("БАЗА/" + _r)
+    else:
+        rels.append(_r[5:])
     for base in (lib, _lib_alt(lib)):
         if not base:
             continue
-        p = os.path.join(base, rel)
-        if os.path.isdir(p) or os.path.isfile(p):
-            return p
+        for _rel in rels:
+            p = os.path.join(base, _rel)
+            if os.path.isdir(p) or os.path.isfile(p):
+                return p
     return ""
 
 

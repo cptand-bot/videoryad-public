@@ -54,7 +54,8 @@ LEAD = 0.4                 # всплывашка появляется чере�
 # отодвигается за конец перехода. Длительности — те же, что в `fx_trans.py`.
 FX_TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7,
                 "depth": 1.1,   # пятый вид, 05.11
-                "tear": 1.3}    # шестой вид, 05.11 (разрыв на куски)
+                "tear": 1.3,    # шестой вид, 05.11 (разрыв на куски)
+                "flash": 0.6}   # седьмой вид, 06.11 (засвет, A73)
 FX_MIN_AT = {}             # sid -> не раньше этой секунды; заполняется в do_overlay
 
 
@@ -399,13 +400,32 @@ def burn_caps(ffmpeg, clip, sid):
 def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
     ffprobe = "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1))
     ov = json.load(open(ov_path, encoding="utf-8"))
+    # НА НАШ РИСОВАННЫЙ КАДР НИЧЕГО НЕ КЛАДЁМ (06.11, прямое слово
+    # пользователя по дашборду: «наши элементы идут уже без дополнительных
+    # спецэффектов, без надписей, без всплывашек, без всего. Если это уже наш
+    # элемент — он должен быть без дополнительных деталей. Её нужно было бы
+    # куда-то в другое место пиздануть»). Эффекты на карточку не ложились и
+    # раньше (проверка в `card_put.py` и в приёмке), а всплывашки —
+    # ложились: на сцене 4 ролика про Абу-Даби она встала поверх карточки.
+    _card_sids = set()
     try:
         for _sc in json.load(open(scenes_path, encoding="utf-8"))["scenes"]:
             _k = str(_sc.get("fx", "")).strip().lower()
             if _k in FX_TRANS_SEC:
                 FX_MIN_AT[int(_sc["id"])] = FX_TRANS_SEC[_k] + 0.2
+            if str(_sc.get("source", "")).startswith("card"):
+                _card_sids.add(int(_sc["id"]))
     except (OSError, ValueError, KeyError, TypeError):
         pass
+    if _card_sids:
+        _drop = [k for k in list(ov) if str(k).isdigit() and int(k) in _card_sids]
+        for k in _drop:
+            ov.pop(k, None)
+        if _drop:
+            print("всплывашки СНЯТЫ с рисованных кадров (сцены %s): наш элемент "
+                  "идёт без всплывашек, надписей и эффектов — его слово 06.11. "
+                  "Перенеси их на соседние сцены с обычным кадром."
+                  % ", ".join(sorted(_drop, key=int)), flush=True)
     if FX_MIN_AT:
         print("всплывашки на сценах с переходом сдвинуты за его конец: "
               + ", ".join("%d→%.1f с" % (i, v)

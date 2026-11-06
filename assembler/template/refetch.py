@@ -50,7 +50,10 @@ import subprocess
 import sys
 import time
 
-SKIP_EXT = (".json", ".text.png", ".lock")
+# `.ready` — МЕТКА готовности подготовленного кадра (06.11), не кадр:
+# банилка брала её md5 и однажды записала в ОБЩИЙ бан-лист хэш пустого
+# файла, после чего все метки на машине числились забаненными.
+SKIP_EXT = (".json", ".text.png", ".lock", ".ready")
 
 
 def arg(name, default=None):
@@ -117,7 +120,10 @@ def restore_missing(d, ids):
         # `selfcheck` ловил это строкой «ЗАБАНЕННЫЙ КАДР В СБОРКЕ» и валил
         # прогон, а в выводе рефетча стояло безобидное «ВЕРНУЛ прежний кадр».
         # Теперь возврат отменяется и говорится, что делать.
-        if _md5(src) in _banned_now():
+        # ЗАГЛУШКА — НЕ ЗАБАНЕННЫЙ КАДР (06.11, улов `usuario-ad`): её md5
+        # одинаков для одного номера сцены во ВСЕХ роликах, и чужой бан своей
+        # заглушки поднимал тревогу на нашей.
+        if _md5(src) in _banned_now() and not _is_placeholder(src):
             print("  !! БЛОКЕР: сцена %d осталась БЕЗ кадра — замена не "
                   "нашлась, а прежний кадр ЗАБАНЕН (вернуть его нельзя, "
                   "сборка упадёт на «ЗАБАНЕННЫЙ КАДР В СБОРКЕ»)." % sid)
@@ -145,6 +151,18 @@ def restore_missing(d, ids):
             print("  !! сцена %d без кадра, вернуть не вышло: %s" % (sid, e))
 
 
+def _is_placeholder(path):
+    """Тёмный мелкий файл — заглушка облака (признак тот же, что в selfcheck)."""
+    try:
+        if os.path.getsize(path) > 60000:
+            return False
+        from PIL import Image, ImageStat
+        with Image.open(path) as im:
+            return ImageStat.Stat(im.convert("L")).mean[0] < 45
+    except Exception:
+        return False
+
+
 def _banned_now():
     """Актуальный бан-лист (срочные записи с истёкшим `until` не считаются).
 
@@ -165,8 +183,15 @@ def _banned_now():
 
 
 def _md5(path):
+    """md5 файла. ПУСТОЙ ИЛИ ИСЧЕЗНУВШИЙ ФАЙЛ — None, а не хэш пустоты
+    (06.11, улов `usuario-a3`): иначе в бан уезжает
+    `d41d8cd98f00b204e9800998ecf8427e`, и он совпадает с ЛЮБЫМ пустым файлом
+    на машине — в том числе с метками `images/scene_NNN.ready` у вложений
+    досье. Один такой бан отбивал сдачу у всех вкладок сразу."""
     import hashlib
     try:
+        if os.path.getsize(path) == 0:
+            return None
         return hashlib.md5(open(path, "rb").read()).hexdigest()
     except OSError:
         return None

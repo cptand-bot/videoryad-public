@@ -55,7 +55,21 @@ ids = [s["id"] for s in scenes]
 total = sum(s["duration_sec"] for s in scenes)
 
 def asset(i):
-    return [f for f in glob.glob(f"{images}/scene_{i:03d}.*") if not f.endswith(".json")]
+    """Файлы кадра сцены. `.ready` — МЕТКА подготовленного вложения (06.11),
+    а не кадр: вкладка кладёт её рядом по нашей же инструкции, и без этого
+    исключения каждая такая сцена давала ложное «в images/ ДВА файла».
+    Нулевой файл тоже не кадр."""
+    out = []
+    for f in glob.glob(f"{images}/scene_{i:03d}.*"):
+        if f.endswith((".json", ".ready", ".lock")):
+            continue
+        try:
+            if os.path.getsize(f) == 0:
+                continue
+        except OSError:
+            continue
+        out.append(f)
+    return out
 
 needs = {}
 if os.path.exists("needs_upload.json"):
@@ -889,6 +903,41 @@ if a1 and not a1[0].endswith((".mp4", ".mov")):
     else:
         WARN.append("во всём ролике нет ни одного видео — весь видеоряд из фото (Ken Burns). "
                     "Ок для канала на поиске-только; для ПЛАНЕТЫ так быть не должно.")
+
+# 6-бис. ВСПЛЫВАШКА НА НАШЕМ РИСОВАННОМ КАДРЕ — ОТКАЗ (06.11, прямое слово
+# пользователя по дашборду ролика про Абу-Даби: «наши элементы идут уже без
+# дополнительных спецэффектов, без надписей, без всплывашек, без всего»).
+# `build_overlays.py` такие записи теперь снимает сам, но ловить надо ДО
+# дашборда: на экране у него это выглядит как недоделка, а не как мелочь.
+try:
+    _ovp = "overlays.json"
+    if os.path.exists(_ovp):
+        _ovd = json.load(open(_ovp, encoding="utf-8"))
+        _cards = {int(s.get("id", -1)) for s in scenes
+                  if str(s.get("source", "")).startswith("card")}
+        _bad_ov = sorted(int(k) for k in _ovd
+                         if str(k).isdigit() and int(k) in _cards)
+        if _bad_ov:
+            FAIL.append(
+                "ВСПЛЫВАШКА НА РИСОВАННОМ КАДРЕ (сцены %s) — наш элемент идёт "
+                "без всплывашек, надписей и эффектов (его слово 06.11). Сними "
+                "её (`drop_overlay.py`) и перенеси на соседнюю сцену с обычным "
+                "кадром." % ", ".join(map(str, _bad_ov)))
+except Exception as _e:
+    WARN.append("не проверить всплывашки на карточках (%s)" % _e)
+
+# 7. ОБЯЗАТЕЛЬНЫЕ ЭЛЕМЕНТЫ (06.11, его прямое слово: «сделать эти элементы
+# обязательными при сборке»). Список один на все гейты и лежит отдельно —
+# `template/obyazatelno.py`; здесь только гейт ДАШБОРДА. Перед полной сборкой
+# тот же список спрашивает `cloud/ship.sh`, с гейтом `video`.
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import obyazatelno as _ob
+    for _b in _ob.check(scenes, str(meta.get("channel", "")), "dashboard"):
+        FAIL.append(_b)
+except Exception as _e:                  # список не прочитался — скажем вслух
+    WARN.append("не проверить обязательные элементы (%s: %s) — посмотри "
+                "`template/obyazatelno.py`" % (type(_e).__name__, _e))
 
 print("=" * 60)
 print(f"САМОПРОВЕРКА: {scenes_path}  ({len(scenes)} сцен, {total:.0f}с, канал {meta.get('channel','?')})")

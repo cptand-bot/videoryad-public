@@ -304,9 +304,26 @@ def main():
     def _why(m):
         return rej.get(m["url"]) or rej.get(m.get("post") or "")
 
-    unused = [m for m in media if m["url"] not in blob and not _why(m)]
-    used = len([m for m in media if m["url"] in blob])
-    dropped = [m for m in media if m["url"] not in blob and _why(m)]
+    # УЧЁТ ТОЖЕ ПО ТРЁМ КЛЮЧАМ, А НЕ ПО ОДНОМУ (06.11, улов `usuario-a3`,
+    # стоил вкладке круга). Для ОТКАЗОВ адрес поста уже годился с 01.11, а
+    # для УЧЁТА — нет: сцена честно несла `t.me/<канал>/<номер>` (так велит и
+    # бриф, и наша инструкция), а сверка искала только cdn-адрес ФАЙЛА — и
+    # гейт печатал «поставлено 0, лежит без дела 11» при шести реально
+    # поставленных вложениях. Плюс третий ключ: ИМЯ ФАЙЛА. Боевой
+    # `overlays.json` адресов не несёт вовсе (только `photo`/`sound`/`at`),
+    # поэтому всплывашка из досье не засчитывалась НИКОГДА; по имени файла
+    # она опознаётся, если кадр лёг под своим именем.
+    def _used(m):
+        if m["url"] in blob:
+            return True
+        if (m.get("post") or "") and m["post"] in blob:
+            return True
+        _bn = os.path.basename(str(m["url"]).split("?")[0])
+        return bool(_bn) and len(_bn) > 6 and _bn in blob
+
+    unused = [m for m in media if not _used(m) and not _why(m)]
+    used = len([m for m in media if _used(m)])
+    dropped = [m for m in media if not _used(m) and _why(m)]
     print("=== МАТЕРИАЛ ДОСЬЕ ===")
     print("файлов во вложениях постов: %d (фото %d, видео %d)" % (
         len(media), sum(1 for m in media if m["kind"] == "фото"),

@@ -171,11 +171,49 @@ def load_banned_md5():
             if not e.get("until") or e["until"] >= today}
 
 
+# ХЭШ ПУСТОГО ФАЙЛА — ВЕЧНЫЙ БЕЛЫЙ СПИСОК (06.11, улов `usuario-a3`).
+# Банилка взяла md5 файла, которого уже не было на диске, получила хэш пустоты
+# и записала его в ОБЩИЙ бан-лист. Последствие шире одного ролика: пустой файл
+# есть у каждой вкладки (метки `images/scene_NNN.ready` у вложений досье), и
+# `selfcheck` отбивал бы сдачу «забаненный кадр в сборке» на ровном месте.
+EMPTY_MD5 = "d41d8cd98f00b204e9800998ecf8427e"
+
+
+def looks_like_placeholder(path):
+    """Это заглушка облака, а не кадр? (06.11, улов `usuario-ad`)
+
+    Заглушка не байт-в-байт одинакова между проектами — в неё впечатан номер
+    сцены, поэтому md5 у сцены 46 один и тот же В РАЗНЫХ роликах. Из-за этого
+    чужой проект, забанивший свою заглушку, делал «забаненным кадром» нашу —
+    предупреждение верное по механике и пустое по смыслу, а вкладка на нём
+    встаёт. Признак тот же, что у `selfcheck`: мелкий файл и темнота.
+    """
+    try:
+        if os.path.getsize(path) > 60000:
+            return False
+        from PIL import Image, ImageStat
+        with Image.open(path) as im:
+            return ImageStat.Stat(im.convert("L")).mean[0] < 45
+    except Exception:
+        return False
+
+
 def ban_md5(md5, path="", reason="", days=None):
     """Blacklist a file by md5 — permanently (default) or for `days` days.
     `path` is just a human-readable breadcrumb (relative library path or
     source URL) — matching is always by md5, never by path, so a renamed/
     re-downloaded copy stays banned for as long as the entry is active."""
+    if path and os.path.exists(path) and looks_like_placeholder(path):
+        print("  бан ПРОПУЩЕН: %s — это ЗАГЛУШКА облака, а не кадр. У неё свой "
+              "md5 на каждый номер сцены, и бан сделал бы «забаненной» чужую "
+              "заглушку того же номера в других роликах."
+              % os.path.basename(path), flush=True)
+        return
+    if str(md5).lower() == EMPTY_MD5:
+        print("  бан ПРОПУЩЕН: это хэш ПУСТОГО файла (%s). Такой бан запретил "
+              "бы все метки `.ready` на машине — проверь, существовал ли файл "
+              "в момент бана." % (path or "путь не назван"), flush=True)
+        return
     log = {}
     if os.path.exists(BANNED_LOG):
         try:
@@ -1763,6 +1801,22 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
                 return False, (_LIB_HARD + "832x464 ровно на %.2f с — это "
                                "серия AI-генерации (флаг на фоне неба), "
                                "в кадр не идёт" % d)
+            # ВТОРАЯ СЕРИЯ ТОЙ ЖЕ ПРИРОДЫ (06.11, промер по улову
+            # `usuario-a3`): файлы `резерв2 (N).mp4` в `media-library-2` —
+            # 854x480 и РОВНО 10,000000 с, таких 49 штук, и у каждого БЕЛЫЙ
+            # водяной знак в правом нижнем углу (промер угла: максимум 250
+            # при средней 47, тонкие штрихи). Машинная ровность длительности
+            # до шестого знака — подпись генератора, живая съёмка так не
+            # ложится. Отказ жёсткий и по той же причине, что у первой серии:
+            # AI-генерация в конвейере запрещена, а знак в кадре — чужое
+            # клеймо. Снять: VIDEORYAD_ALLOW_AI_CLIPS=1.
+            _nm = os.path.basename(path).lower()
+            if (("резерв2" in _nm or "резерв 2" in _nm)
+                    and 9.95 <= (d or 0) <= 10.05
+                    and os.environ.get("VIDEORYAD_ALLOW_AI_CLIPS") != "1"):
+                return False, (_LIB_HARD + "«%s» — серия AI-генерации "
+                               "854x480 ровно на %.2f с, у всех белый знак в "
+                               "правом нижнем углу" % (os.path.basename(path), d))
             if w < _lib_min_vw:
                 return False, "%d px по ширине при пороге %d" % (w, _lib_min_vw)
             if d and d + 0.2 < need:
