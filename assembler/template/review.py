@@ -1610,7 +1610,14 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
             "depth": "🎯 КАДР ИЗ ГЛУБИНЫ",
             "tear": "🎯 РАЗРЫВ НА КУСКИ",
             "subscribe": "🎯 КНОПКА «ПОДПИШИСЬ»",
-            "subscribe2": "🎯 КНОПКА (ВИД 2)"}
+            "subscribe2": "🎯 КНОПКА (ВИД 2)",
+            # шесть приёмов канала «5 МИНУТ» (06.11)
+            "player": "🎯 ОКНА ПЛЕЕРА",
+            "curl": "🎯 СНИМОК С ЗАГИБОМ",
+            "slides": "🎯 ЛЕНТА СЛАЙДОВ",
+            "stamps": "🎯 СТЕНА МАРОК",
+            "torn": "🎯 ВЫРВАННЫЙ КЛОК",
+            "filmwin": "🎯 ОКОШКИ ПЛЁНКИ"}
     _fxk = str(s.get("fx", "")).strip().lower()
     fx_badge = ('<span class="fxb">%s</span>' % _FXL[_fxk]) if _fxk in _FXL else ""
     if live:
@@ -2106,7 +2113,8 @@ poll();
     # сколько стоит и на каких сценах.
     _fx = [(s.get("id"), str(s.get("fx", "")).strip().lower()) for s in scenes
            if str(s.get("fx", "")).strip().lower()
-           in ("inset", "mosaic", "panels", "wipe", "depth", "tear",
+           in ("player", "curl", "slides", "stamps", "torn", "filmwin",
+               "inset", "mosaic", "panels", "wipe", "depth", "tear",
                "subscribe", "subscribe2")]
     # СЧЁТ В ШАПКЕ — ПО ВИДАМ, А НЕ «N из 3» (05.11). Потолок три — на КАЖДЫЙ
     # вид (его уточнение 04.11), а видов уже пять, поэтому строка «12 из 3»

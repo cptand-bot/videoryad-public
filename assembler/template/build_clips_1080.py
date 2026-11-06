@@ -136,9 +136,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # `subscribe` — не переход и не врезка: кнопка ложится ПОВЕРХ уже
 # собранного клипа сцены (его заказ 05.11). Поэтому она есть в FX_KINDS
 # (чтобы попасть в разбор и в потолок), но нет в FX_TRANS.
+# Шесть приёмов канала «5 МИНУТ» (06.11) рисует ДРУГОЙ модуль — `fx_trans5.py`.
+# Принятые приёмы ПЛАНЕТЫ в нём не трогаются вовсе, регрессии невозможны.
+FX_FIVE = ("player", "curl", "slides", "stamps", "torn", "filmwin")
 FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear", "flash",
-            "subscribe", "subscribe2")
-FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear", "flash")
+            "subscribe", "subscribe2") + FX_FIVE
+FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear", "flash") + FX_FIVE
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
 INSET_SIDS = set()          # из них те, что «врезка» (для совместимости)
@@ -191,7 +194,8 @@ def build_trans_clip(ffmpeg, ffprobe, src, out_path, duration, sid, kind,
                             prev_src, "-frames:v", "1", tmpf],
                            capture_output=True, text=True)
         prev = tmpf if (r.returncode == 0 and os.path.isfile(tmpf)) else "-"
-    cmd = [sys.executable, os.path.join(HERE, "fx_trans.py"), prev, src,
+    mod = "fx_trans5.py" if kind in FX_FIVE else "fx_trans.py"
+    cmd = [sys.executable, os.path.join(HERE, mod), prev, src,
            out_path, "--kind", kind, "--seconds", f"{float(duration):.3f}",
            "--channel", CHANNEL or "ПЛАНЕТА", "--ffmpeg", ffmpeg]
     r = subprocess.run(cmd, capture_output=True, text=True)
@@ -646,6 +650,14 @@ def main():
         # У КАЖДОГО КАНАЛА СВОЙ НАБОР ВИДОВ (05.11): кнопка вида 2 —
         # «5 МИНУТ», всё остальное — ПЛАНЕТА.
         _ch = CHANNEL.strip().upper().replace("Ё", "Е")
+        # ТАБЛИЦА КАНАЛОВ БЕРЁТСЯ ИЗ `fx_put.py`, А НЕ ПЕРЕПИСЫВАЕТСЯ ЗДЕСЬ
+        # (06.11). Копия ниже — только запасная, на случай, если модуль не
+        # поднялся. Живой случай того же дня: шесть приёмов канала «5 МИНУТ»
+        # были вписаны в `fx_put.CHANNEL_FX`, а здешняя копия про них не
+        # знала и выдавала им дефолт «ПЛАНЕТА» — на «5 МИНУТ» все шесть
+        # молча отбрасывались, сборка проходила «успешно», и в готовом файле
+        # не было ни одного приёма. Ровно та же мина уже жила в
+        # `accept_scenes.py` и была там вылечена так же.
         _allow = {"subscribe2": ("5 МИНУТ",),
                   # кнопка вида 1 — на всех каналах, кроме «5 МИНУТ» (06.11)
                   "subscribe": ("ПЛАНЕТА", "ОЛЬКА", "ДИПЛОМАТИЯ СИЛЫ",
@@ -653,6 +665,12 @@ def main():
                   # засвет (A73, 06.11) — на всех каналах, см. fx_put.py
                   "flash": ("ПЛАНЕТА", "5 МИНУТ", "ОЛЬКА",
                             "ДИПЛОМАТИЯ СИЛЫ", "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО")}
+        try:
+            sys.path.insert(0, HERE)
+            import fx_put as _fxp
+            _allow = dict(_fxp.CHANNEL_FX)
+        except Exception as _e:
+            print("  !! таблицу каналов беру запасную (%s)" % _e)
         _want = [(i, k) for i, k in _want
                  if _ch in tuple(x.upper().replace("Ё", "Е")
                                  for x in _allow.get(k, ("ПЛАНЕТА",)))]

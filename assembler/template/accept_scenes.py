@@ -463,9 +463,11 @@ def main():
             _ok_fx = set(_fx_mod.KINDS)
             _trans = set(_fx_mod.TRANS)
         except Exception:
+            _five = {"player", "curl", "slides", "stamps", "torn", "filmwin"}
             _ok_fx = {"inset", "mosaic", "panels", "wipe", "depth", "tear",
-                      "flash", "subscribe", "subscribe2"}
-            _trans = {"mosaic", "panels", "wipe", "depth", "tear", "flash"}
+                      "flash", "subscribe", "subscribe2"} | _five
+            _trans = {"mosaic", "panels", "wipe", "depth", "tear",
+                      "flash"} | _five
         _first = min((int(sc.get("id", 0)) for sc in scenes), default=0)
         for sc in scenes:
             v = str(sc.get("fx", "")).strip().lower()
