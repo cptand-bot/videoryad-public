@@ -140,6 +140,22 @@ jobs:
           python-version: '3.11'
       - name: библиотеки
         run: pip install --quiet pillow numpy
+      - name: маска фигуры — ставится ТОЛЬКО под вырезку по контуру
+        # `rembg` плюс модель `u2net_human_seg` (176 МБ) стоят полторы-две
+        # минуты на каждой машине матрицы, а нужны ровно ОДНОМУ виду из
+        # полутора десятков. Поэтому шаг смотрит в задание и при отсутствии
+        # вырезки по контуру не делает ничего — обычный ролик не дорожает.
+        # Модель тянется здесь, а не в рисовалке: падение сети должно быть
+        # видно отдельным красным шагом, а не «карточка не нарисована».
+        timeout-minutes: 8
+        run: |
+          if grep -q 'vyrezka.figura' cards_render/jobs.json 2>/dev/null; then
+            pip install --quiet "rembg[cpu]"
+            python3 -c "from rembg import new_session; new_session('u2net_human_seg')"
+            echo "маска фигуры готова"
+          else
+            echo "вырезки по контуру в задании нет — модель не нужна"
+          fi
       - name: рендер карточек
         env:
           VIDEORYAD_FONTS: ${{ github.workspace }}/cards_render/fonts
