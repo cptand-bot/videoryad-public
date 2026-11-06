@@ -1,0 +1,270 @@
+[
+ {
+  "scene": 4,
+  "view": "split",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Соглашение будет большим. Настолько большим, что затронет не только Украину, но едва ли не всю Европу",
+   "author": "Дональд Трамп",
+   "role": "президент США",
+   "photo": "images/scene_015.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "slider",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "Сколько осталось по Лукашенко",
+   "min": 0.0,
+   "max": 12.0,
+   "low": 2.0,
+   "high": 6.0,
+   "value": 4.0,
+   "seconds": 11.2,
+   "range_label": "ОЦЕНКА ЛУКАШЕНКО: БЛИЖАЙШИЕ МЕСЯЦЫ",
+   "source": "",
+   "marker_value": 4.0,
+   "marker_display": "месяцы",
+   "caption": "иначе — ядерная история"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "film.film_strip",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "images/scene_007.jpg",
+    "images/scene_012.jpg",
+    "images/scene_027.jpg"
+   ],
+   "title": "Хроника прежних переговоров",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "marker_serif",
+  "dur": 11.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Представление о командной верности становится гораздо менее романтичным",
+   "accent": "командной верности",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "film.film_single",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_031.jpg",
+   "title": "Петропавловская Борщаговка, ноябрь 2026",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "cinematic.evidence_wall",
+  "dur": 11.97,
+  "anim": 11.97,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "images/scene_027.jpg",
+     240,
+     250,
+     -4,
+     "Белый дом"
+    ],
+    [
+     "images/scene_012.jpg",
+     800,
+     250,
+     3,
+     "Кремль"
+    ],
+    [
+     "images/scene_017.jpg",
+     1360,
+     250,
+     -2,
+     "Офис президента Украины"
+    ],
+    [
+     "images/scene_008.jpg",
+     240,
+     580,
+     4,
+     "Еврокомиссия"
+    ]
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 42,
+  "view": "pull",
+  "dur": 8.9,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Разговоры, будто у Вашингтона вообще нет способов давить на Киев, звучат слишком самоуверенно",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/src/luka.jpg",
+   "title": "Развилка по Лукашенко",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 54,
+  "view": "cinematic.dossier",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "Список Москвы",
+   "rows": [
+    "Территории",
+    "Статус Украины",
+    "НАТО",
+    "Санкции",
+    "Безопасность в Европе"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/src/putin.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "bars",
+  "dur": 10.1,
+  "anim": 10.1,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Чем Европа может заменить США",
+   "caption": "соотношение, а не точная цифра",
+   "seconds": 10.1,
+   "bars": [
+    {
+     "label": "США: ПОЛНЫЙ КОНТУР ПОДДЕРЖКИ",
+     "value": 1.0,
+     "color": "B92526"
+    },
+    {
+     "label": "ЕВРОПА: СВОЯ ПРОМЫШЛЕННОСТЬ",
+     "value": 0.45,
+     "color": "EABD23"
+    },
+    {
+     "label": "РАЗВЕДКА И ЛОГИСТИКА",
+     "value": 0.2,
+     "color": "8C8C92"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 67,
+  "view": "poster.poster",
+  "dur": 10.6,
+  "anim": 10.6,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "Абу-Даби, 10-11 ноября",
+   "bottom": "кому принесут счёт первым",
+   "facts": [
+    {
+     "label": "США",
+     "value": "Уиткофф и Кушнер"
+    },
+    {
+     "label": "Россия",
+     "value": "Мединский"
+    },
+    {
+     "label": "Украина",
+     "value": "делегация"
+    },
+    {
+     "label": "Тема",
+     "value": "безопасность Европы"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 72,
+  "view": "photo",
+  "dur": 9.3,
+  "anim": 9.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "tg_ready/kushner_small.jpg",
+   "title": "Джаред Кушнер — спецпосланник США",
+   "lines": [
+    "новая архитектура безопасности Европы",
+    "консультации в Брюсселе с НАТО и Киевом",
+    "в Абу-Даби — со Стивом Уиткоффом"
+   ]
+  }
+ }
+]
