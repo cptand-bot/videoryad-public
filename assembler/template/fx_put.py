@@ -319,20 +319,32 @@ def main():
     return 0
 
 
+SUB_MAX = 5          # кнопок на ролик — ПОТОЛОК, его слово 07.11
+SUB_MIN_GAP = 6      # сцен между кнопками: «подряд» запрещено
+
+
 def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
-    """КНОПКА «ПОДПИШИСЬ» — ТРИ РАЗА НА ДЛИНУ РОЛИКА (05.11, его слово при
-    приёмке: «используем её три раза на длину видео. Один раз в правом углу,
-    другой раз в левом, один раз в правом. В верхнем углу»).
+    """КНОПКА «ПОДПИШИСЬ»: ПЕРВАЯ — НА ПРИЗЫВЕ, ДАЛЬШЕ РОВНО, ВСЕГО ≤ 5.
 
-    Углы чередует САМА СБОРКА по очереди сцен, здесь только места: начало,
-    середина, ближе к концу. Кнопка — накладка, а не переход, но ключ `fx`
-    у сцены один, поэтому ей нужны сцены БЕЗ перехода и не короче 4,5 с
-    (вся анимация идёт 3,4 с).
+    ЕГО ПРЯМОЕ СЛОВО 07.11, зло, по готовому дашборду: «на всех сборщиках,
+    на всех каналах не надо ставить кнопки „подпишись“ подряд. В самом
+    начале первая кнопка должна идти только там, где призыв подписаться.
+    Потом их разбрасываем равномерно, и всего должно быть не больше пяти
+    кнопок на видеоряд».
 
-    Отдельной функцией, а не строчками внутри расстановки переходов: когда
-    переходы уже стоят по три, расстановка выходит из работы сразу — и
-    кнопки, будь они внутри, не появились бы НИКОГДА на ролике, который
-    просто пересобирают.
+    Что было до этого и почему вышла «куча»: правило 05.11 ставило три
+    кнопки по длине ролика, а правило 06.11 добавляло кнопку КАЖДОЙ сцене,
+    где звучит слово «подпишись», — СВЕРХ трёх. На ролике, где автор
+    призывает дважды, выходило пять-восемь штук, и соседние сцены с
+    призывом давали их подряд. Теперь оба правила сведены в одно:
+
+    1. ПЕРВАЯ кнопка — самая ранняя сцена, где призыв ЗВУЧИТ. Нет такой
+       сцены — первая встаёт по равномерной сетке.
+    2. Остальные добираются равномерно по оставшейся длине.
+    3. Между кнопками не меньше SUB_MIN_GAP сцен — подряд запрещено.
+    4. Всего не больше SUB_MAX на ролик, считая уже стоящие.
+
+    Правило общее для ВСЕХ каналов и всех сборщиков.
     """
     sub_have = [int(x.get("id", 0)) for x in scenes
                 if str(x.get("fx", "")).strip().lower() == kind]
@@ -342,12 +354,8 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
           if int(x.get("id", 0)) not in busy
           and float(x.get("duration_sec") or 0) >= 4.5
           and not str(x.get("source", "")).startswith("card")]
-    put = []
 
-    # КНОПКА ВСТАЁТ И ТАМ, ГДЕ СЛОВО ЗВУЧИТ (06.11, его прямое слово:
-    # «чтобы она появлялась, как сейчас, три раза рандомно, И ПЛЮС когда
-    # звучит фраза „подпишись“»). Это СВЕРХ трёх, а не вместо: зритель
-    # слышит призыв и видит кнопку на том же месте.
+    # где призыв ЗВУЧИТ в тексте
     _said = []
     for x in scenes:
         _sid = int(x.get("id", 0))
@@ -365,30 +373,58 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
                   "на него накладок не кладём" % _sid, file=sys.stderr)
             continue
         _said.append(_sid)
-    for _sid in _said:
-        by_id[_sid]["fx"] = kind
+    _said.sort()
+
+    chosen = sorted(sub_have)
+
+    def _fits(sid):
+        return all(abs(sid - c) >= SUB_MIN_GAP for c in chosen)
+
+    # 1. ПЕРВАЯ — на призыве
+    if _said and len(chosen) < SUB_MAX:
+        _first_sid = _said[0]
+        if _fits(_first_sid):
+            chosen.append(_first_sid)
+            busy.add(_first_sid)
+            if _first_sid in ok:
+                ok.remove(_first_sid)
+            print("сцена %d: кнопка «ПОДПИШИСЬ» — ПЕРВАЯ, здесь ЗВУЧИТ призыв"
+                  % _first_sid)
+
+    # 2. остальные сцены с призывом — по очереди, если не подряд и есть запас
+    for _sid in _said[1:]:
+        if len(chosen) >= SUB_MAX:
+            break
+        if not _fits(_sid):
+            print("сцена %d: призыв звучит, но кнопка рядом (ближе %d сцен) — "
+                  "пропускаю, подряд не ставим" % (_sid, SUB_MIN_GAP))
+            continue
+        chosen.append(_sid)
         busy.add(_sid)
         if _sid in ok:
             ok.remove(_sid)
-        print("сцена %d: кнопка «ПОДПИШИСЬ» — в тексте ЗВУЧИТ призыв "
-              "(сверх трёх по ролику)" % _sid)
-    sub_have = sorted(set(sub_have) | set(_said))
+        print("сцена %d: кнопка «ПОДПИШИСЬ» — здесь ЗВУЧИТ призыв" % _sid)
 
-    sub_need = max(0, FX_MAX - len([i for i in sub_have if i not in _said]))
-    if not sub_need:
-        return _said
-    for f in (0.12, 0.50, 0.85)[:sub_need]:
-        t = first + int(n * f)
-        cand = [x for x in ok if x not in put]
-        if not cand:
+    # 3. добираем РАВНОМЕРНО до потолка
+    for f in (0.20, 0.40, 0.60, 0.80, 0.95):
+        if len(chosen) >= SUB_MAX:
             break
-        put.append(min(cand, key=lambda x: (abs(x - t), x)))
+        t = first + int(n * f)
+        cand = [x for x in ok if x not in chosen and _fits(x)]
+        if not cand:
+            continue
+        pick = min(cand, key=lambda x: (abs(x - t), x))
+        chosen.append(pick)
+        busy.add(pick)
+        ok.remove(pick)
+
+    chosen = sorted(set(chosen))
+    put = [sid for sid in chosen if sid not in sub_have]
     for sid in put:
         by_id[sid]["fx"] = kind
-    put = sorted(set(put) | set(_said))
     if put:
         _ang = ["ПРАВЫЙ", "ЛЕВЫЙ"]
-        for i, sid in enumerate(sorted(set(sub_have) | set(put))):
+        for i, sid in enumerate(chosen):
             if sid in put:
                 print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ» — %s верхний угол"
                       % (sid, float(by_id[sid].get("duration_sec") or 0),
@@ -474,6 +510,13 @@ def _auto(a, data, scenes):
         need += [k] * max(0, FX_MAX - len(by_kind.get(k, [])))
     free = len(need)
     _subs = _put_subscribe(scenes, by_id, first, len(scenes), _sub_kind)
+    # ПЕРЕХОДЫ НЕ ЗАТИРАЮТ ТОЛЬКО ЧТО ПОСТАВЛЕННЫЕ КНОПКИ (07.11). Список
+    # занятых сцен `have` собирался ДО расстановки кнопок, поэтому переход
+    # вставал поверх кнопки — ключ `fx` у сцены один. Живой замер: печать
+    # обещала пять кнопок (8, 14, 20, 29, 39), а в файле оставалось три —
+    # на 14 легла мозаика, на 29 вайп. Со стороны это выглядит как «кнопок
+    # меньше, чем сказано», и найти причину можно только сверкой файла.
+    have = sorted(set(have) | set(_subs))
     if free <= 0:
         if _subs:
             _save(a.scenes, data)

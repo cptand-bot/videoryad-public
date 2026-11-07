@@ -265,6 +265,42 @@ else:
     # а зритель уходит именно там. Повод: два ролика подряд начинались с
     # 11-й сцены (`planeta-nato1997-2710` и `planeta-kiev-zima-2710`).
     # Лечится ОДНОЙ всплывашкой, а не перестановкой — поэтому блокер.
+    # НАШ ЭЛЕМЕНТ ИДЁТ ЧИСТЫМ — ГЕЙТ, А НЕ ТОЛЬКО ПРАВИЛО В ИНСТРУКЦИИ
+    # (07.11, его прямое слово по дашборду 8801: «Зачем всплывашка там, где
+    # применяется наш элемент из библиотеки? Зачем её было ставить, тратить
+    # ресурсы?»). Правило живёт с 06.11 — на рисованный кадр не кладём
+    # НИЧЕГО: ни всплывашку, ни надпись, ни переход. Карточка самодостаточна,
+    # она уже несёт информацию, и вторая поверх неё спорит с первой.
+    # Проверки в коде не было ВООБЩЕ, только строка в SKILL.md — поэтому и
+    # доехало до его глаз. Теперь это блокер: дашборд не отдаётся.
+    _card_ids = {int(sc["id"]) for sc in scenes
+                 if str(sc.get("source", "")).startswith("card:")}
+    _dirty = []
+    for _k, _v in ov.items():
+        if not str(_k).isdigit() or int(_k) not in _card_ids:
+            continue
+        _kind = []
+        if isinstance(_v, dict):
+            if (_v.get("text") or {}).get("words"):
+                _kind.append("надпись")
+            if _v.get("photo") or _v.get("query") or _v.get("source"):
+                _kind.append("всплывашка")
+        _dirty.append("%s (%s)" % (_k, ", ".join(_kind) or "запись"))
+    if _dirty:
+        FAIL.append(
+            "НА РИСОВАННЫЙ КАДР ПОЛОЖЕНО ЛИШНЕЕ — сцены %s. На `card:*` не "
+            "кладём ни всплывашку, ни надпись, ни переход (правило 06.11, "
+            "повторено пользователем 07.11). Сними записи из overlays.json."
+            % "; ".join(_dirty))
+    _fx_dirty = sorted(int(sc["id"]) for sc in scenes
+                       if str(sc.get("source", "")).startswith("card:")
+                       and sc.get("fx"))
+    if _fx_dirty:
+        FAIL.append(
+            "НА РИСОВАННОМ КАДРЕ СТОИТ ПЕРЕХОД — сцены %s. Эффекты на "
+            "`card:*` не ложатся: убери поле `fx` у этих сцен."
+            % _fx_dirty)
+
     _ov_ids = sorted(int(k) for k in ov if k.isdigit())
     if _ov_ids and _ov_ids[0] > 4:
         FAIL.append(
