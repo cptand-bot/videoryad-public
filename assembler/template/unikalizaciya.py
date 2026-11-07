@@ -143,6 +143,9 @@ def main():
     ap.add_argument("target_project", help="проект второго ролика (сцены рерайта)")
     ap.add_argument("--seed", type=int, default=0, help="зерно случайности")
     ap.add_argument("--no-mirror", action="store_true", help="не зеркалить вовсе")
+    ap.add_argument("--share", type=int, default=80,
+                    help="сколько процентов сцен закрывать кадрами донора "
+                         "(по умолчанию 80, остальное — своё)")
     args = ap.parse_args()
     rnd = random.Random(args.seed or None)
 
@@ -214,9 +217,20 @@ def main():
             pairs.append((score, tid, sid, m))
     pairs.sort(key=lambda x: -x[0])
 
+    # ДОНОР ЗАКРЫВАЕТ НЕ БОЛЬШЕ 80% СЦЕН (07.11, его слово по дашборду
+    # 8802): «если мы взяли 100% кадров, поменяли канал и поменяли их
+    # местами — фигня какая-то. Нужно хотя бы процентов 20 добавлять
+    # других. Или на место них делать свои эффекты, цитаты».
+    # Иначе второй ролик — перекрашенная копия первого: те же кадры в том
+    # же порядке, только зеркальные. Оставшаяся пятая часть закрывается
+    # СВОИМ: кадром своей медиатеки или своим элементом — в `card_put.py`
+    # двадцать два вида, а в деле сегодня девять.
+    _limit = max(1, int(len(targets) * max(10, min(100, args.share)) / 100.0))
     assigned = {}          # сцена -> (донор, запись манифеста)
     busy_donors = set()
     for score, tid, sid, m in pairs:
+        if len(assigned) >= _limit:
+            break
         if tid in assigned or sid in busy_donors:
             continue
         assigned[tid] = (sid, m)
@@ -233,7 +247,7 @@ def main():
 
     for sc in targets:
         tid = int(sc["id"])
-        if tid in assigned:
+        if tid in assigned or len(assigned) >= _limit:
             continue
         b = bag(sc)
         best, best_score = None, -1e9
@@ -256,7 +270,8 @@ def main():
             report.append("сцена %d — рисованный кадр, донор не нужен" % tid)
             continue
         if tid not in assigned:
-            report.append("сцена %d — донора не нашлось" % tid)
+            report.append("сцена %d — СВОЁ: кадр медиатеки своего канала или "
+                          "свой элемент (donor не ставим по правилу 80%%)" % tid)
             continue
         sid, m = assigned[tid]
         # ФАЙЛ ИЩЕМ ПО ШАБЛОНУ, А НЕ ПО ИМЕНИ ИЗ МАНИФЕСТА (07.11, тот же
@@ -293,6 +308,13 @@ def main():
     print("перенесено кадров: %d из %d сцен" % (len(new_man), len(tgt_scenes)))
     print("доноров: %d, использовано %d, свободных осталось %d"
           % (len(donors), len({v[0] for v in assigned.values()}), _free))
+    _own = len(targets) - len(new_man)
+    print("своих сцен оставлено: %d из %d (%d%%) — закрывай их кадром своей "
+          "медиатеки или СВОИМ элементом" % (_own, len(targets),
+                                             round(100 * _own / max(1, len(targets)))))
+    print("виды элементов, которые у нас есть и почти не идут в дело: "
+          "quote, doc, duel, strike, paper_typed, paper_hand, slope, line, "
+          "pie, map_regions, map_dist, vyrezka, vyrezka_kontur")
     print("поиск не запускался — фетч этому ролику не нужен")
 
 

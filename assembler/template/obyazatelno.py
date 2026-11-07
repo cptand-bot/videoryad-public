@@ -404,6 +404,39 @@ def main():
             print("  - " + b)
         return 1
     print("✅ обязательные элементы на месте (%s)" % a.gate)
+
+    # ОБЯЗАТЕЛЬНЫЙ СПИСОК — ЭТО МИНИМУМ, А НЕ ПОТОЛОК (07.11, его слово,
+    # зло: «ну как это лежат без дела? Зачем мы их разрабатываем, если
+    # используешь только девять? Давай один, почему не один?»).
+    # Что произошло: список из двенадцати обязательных стал и потолком —
+    # вкладки ставили ровно его и ничего больше, и во всех шести роликах
+    # дня были одни и те же девять видов, при том что в `card_put.py` их
+    # ДВАДЦАТЬ ДВА. Разработанное и принятое лежало без дела.
+    # Поэтому: сверх обязательных в ролике должно стоять не меньше ТРЁХ
+    # ДРУГИХ видов. Это предупреждение, а не блокер: он снимает лишнее на
+    # дашборде сам, но молчать об этом нельзя.
+    _obyaz_views = {el.get("view") for el in ОБЯЗАТЕЛЬНЫЕ if el.get("view")}
+    _in_film = set()
+    for _s in scenes:
+        _src = str(_s.get("source", ""))
+        if _src.startswith("card:"):
+            _in_film.add(_src.split(":", 1)[1])
+    _extra = sorted(_in_film - _obyaz_views)
+    _ALL_VIEWS = ["quote", "split", "tape", "doc", "strike", "duel", "pull",
+                  "marker_serif", "paper_typed", "paper_hand", "slope", "line",
+                  "map", "map_regions", "bubbles", "map_dist", "pie", "dossier",
+                  "film", "film_frame", "vyrezka", "vyrezka_kontur"]
+    _unused = [v for v in _ALL_VIEWS if v not in _in_film]
+    print("видов в ролике: %d (обязательных %d + своих %d)"
+          % (len(_in_film), len(_in_film & _obyaz_views), len(_extra)))
+    if _extra:
+        print("   сверх обязательных: %s" % ", ".join(_extra))
+    if len(_extra) < 3:
+        print("⚠ СВЕРХ ОБЯЗАТЕЛЬНЫХ ВСЕГО %d ВИДОВ — нужно не меньше трёх."
+              % len(_extra))
+        print("   Обязательный список это МИНИМУМ, а не потолок: разработано "
+              "и принято 22 вида, и они должны идти в дело.")
+        print("   Не заняты в этом ролике: %s" % ", ".join(_unused[:14]))
     return 0
 
 
