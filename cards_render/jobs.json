@@ -1,0 +1,270 @@
+[
+ {
+  "scene": 5,
+  "view": "split",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Евросоюзу нужен один человек, который будет разговаривать с Путиным от имени Европы",
+   "author": "Джорджа Мелони",
+   "role": "премьер-министр Италии",
+   "photo": "images/scene_047.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "film.film_single",
+  "dur": 12.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_027.jpg",
+   "kick": "США и Европа · много лет",
+   "title": "ОДНА ОБЩАЯ КОНСТРУКЦИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "poster.poster",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ЛОГИКА ВАШИНГТОНА",
+   "title": "ЧТО НУЖНО АМЕРИКЕ",
+   "bottom": "Договорённость дешевле бесконечной конфронтации",
+   "facts": [
+    {
+     "label": "Деньги",
+     "value": "рынки и сделки"
+    },
+    {
+     "label": "Ресурсы",
+     "value": "контроль потоков"
+    },
+    {
+     "label": "Влияние",
+     "value": "без лишних расходов"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 26,
+  "view": "pull",
+  "dur": 13.5,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Отлично, продолжайте. Мы вышли",
+   "kick": "Что Европа может услышать из Вашингтона",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "film.film_strip",
+  "dur": 10.2,
+  "anim": 10.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "images/scene_021.jpg",
+    "images/scene_034.jpg",
+    "images/scene_030.jpg"
+   ],
+   "kick": "Украина · европейская безопасность",
+   "title": "ДВА РАЗНЫХ ЭТАЖА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "cinematic.depth_of_field",
+  "dur": 10.65,
+  "anim": 10.65,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_039.jpg",
+   "kick": "Абу-Даби · следующая неделя",
+   "title": "ПЕРЕГОВОРЩИКИ ДРУГ ДРУГА ЗНАЮТ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 49,
+  "view": "bars",
+  "dur": 7.4,
+  "anim": 7.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "А ПОГОВОРИТЬ С ПУТИНЫМ НЕКОМУ",
+   "caption": "",
+   "seconds": 7.4,
+   "bars": [
+    {
+     "label": "27 СТРАН",
+     "value": 1.0,
+     "color": "B92526"
+    },
+    {
+     "label": "4 ИНСТИТУТА",
+     "value": 0.3,
+     "color": "EABD23"
+    },
+    {
+     "label": "1 ПЕРЕГОВОРЩИК",
+     "value": 0.04,
+     "color": "8C8C92"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 55,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.45,
+  "anim": 9.45,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "images/scene_024.jpg",
+     240,
+     250,
+     -4,
+     "Брюссель"
+    ],
+    [
+     "images/scene_018.jpg",
+     800,
+     250,
+     3,
+     "Вашингтон"
+    ],
+    [
+     "images/scene_034.jpg",
+     1360,
+     250,
+     -2,
+     "оружие"
+    ],
+    [
+     "images/scene_070.jpg",
+     240,
+     580,
+     4,
+     "Москва"
+    ]
+   ],
+   "kick": "ПЯТЬ ЛЕТ ВЛОЖЕНИЙ",
+   "title": "РАДИ ЧЕГО ЭТО СТРОИЛОСЬ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 61,
+  "view": "photo",
+  "dur": 7.9,
+  "anim": 7.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ВАШИНГТОН · НОЯБРЬ 2026",
+   "watermark": "5 МИНУТ",
+   "photo": "dossier/mp_a_crop.jpg",
+   "title": "НОВЫЙ КОНГРЕСС",
+   "lines": [
+    "Каждый шаг станет предметом спора",
+    "Демократы получают рычаги давления",
+    "Европе это даёт время"
+   ]
+  }
+ },
+ {
+  "scene": 66,
+  "view": "slider",
+  "dur": 20.8,
+  "anim": 20.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "БЕЗ АМЕРИКАНСКОГО ПЛЕЧА",
+   "min": 0.0,
+   "max": 100.0,
+   "low": 60.0,
+   "high": 90.0,
+   "marker_value": 78.0,
+   "marker_display": "78",
+   "seconds": 20.8,
+   "range_label": "от спокойного до опасного",
+   "caption": "Чем меньше американского участия, тем выше цена ошибки",
+   "source": ""
+  }
+ },
+ {
+  "scene": 71,
+  "view": "charts.cartogram",
+  "dur": 12.65,
+  "anim": 12.65,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "США",
+    "Россия"
+   ],
+   "kick": "БЫЛА ОДНА ГЕОМЕТРИЯ",
+   "title": "СТАЛА ДРУГАЯ",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 76,
+  "view": "marker_serif",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Там будут тяжёлые разговоры. Там будут красные линии",
+   "accent": "красные линии",
+   "kick": "Абу-Даби",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
