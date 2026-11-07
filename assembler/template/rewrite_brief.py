@@ -152,18 +152,70 @@ def main():
     path = latest_geo()
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
 
+    # Ключ бывает трёх видов, и живут они на РАЗНЫХ листах (правило скилла):
+    #   PROD_… — запись в `Productions`;
+    #   ARM_…  — авторский master в `AuthorReasoning`;
+    #   AN_…   — заметка в `AuthorNotes`.
+    # Искать только в Productions нельзя: 07.11 два ключа дня из трёх были
+    # ARM_, и инструмент честно отвечал «записи нет» на живой записи.
     prods = [p for p in sheet_rows(wb, "Productions")
              if txt(p.get("production_id")) == args.key]
-    if not prods:
+    if prods:
+        prod = prods[0]
+    else:
+        prod = None
+        for r in sheet_rows(wb, "AuthorReasoning"):
+            if txt(r.get("reasoning_id")) == args.key:
+                prod = {"production_id": args.key,
+                        "title": txt(r.get("article_or_topic")),
+                        "channel": "", "created_at": txt(r.get("captured_at")),
+                        "main_storyline_id": txt(r.get("related_geo2_ids")),
+                        "angle": txt(r.get("editorial_choice"))}
+                break
+        if prod is None:
+            for n in sheet_rows(wb, "AuthorNotes"):
+                if txt(n.get("author_note_id")) == args.key:
+                    prod = {"production_id": args.key,
+                            "title": txt(n.get("machine_interpretation"))[:120],
+                            "channel": "", "created_at": txt(n.get("authored_at")),
+                            "main_storyline_id": txt(n.get("storylines_detected")),
+                            "angle": ""}
+                    break
+    if prod is None:
         sys.exit("записи %s в георадаре нет (копия %s). Работать дальше можно, "
                  "но без авторских мыслей — скажи об этом вслух."
                  % (args.key, os.path.basename(path)))
-    prod = prods[0]
+
+    # Сам master-ключ — это и есть авторская мысль верхнего уровня; при
+    # поиске по сюжетной линии он не всегда попадает в выборку, поэтому
+    # добавляем его явно.
+    # Сам master плюс те записи, на которые он ССЫЛАЕТСЯ. У каждой темы
+    # 07.11 master сборки видео (…_VIDEO_ASSEMBLY_…) отдельно, а смысловой
+    # master статьи (…_AUDIT_MASTER_…) — отдельной записью, и именно там
+    # лежит авторская гипотеза. Без перехода по `related_geo2_ids` рерайт
+    # получил бы правила медиа вместо мыслей автора.
+    _self = []
+    _want = {args.key}
+    if args.key.startswith("ARM_"):
+        rows = sheet_rows(wb, "AuthorReasoning")
+        for r in rows:
+            if txt(r.get("reasoning_id")) == args.key:
+                _self.append(r)
+                for part in re.split(r"[;,\s]+", txt(r.get("related_geo2_ids"))):
+                    if part.startswith("ARM_"):
+                        _want.add(part)
+        for r in rows:
+            if txt(r.get("reasoning_id")) in _want and r not in _self:
+                _self.append(r)
 
     rules = [r for r in sheet_rows(wb, "EditorialRules")
              if txt(r.get("priority")).upper() in ("CRITICAL", "HIGH")
              and txt(r.get("status")).lower() not in ("off", "disabled", "archived")]
     notes, reasoning, weak = pick_author_material(wb, prod)
+    for r in _self:
+        if r not in reasoning:
+            reasoning.insert(0, r)
+            weak = False
 
     # ── режим аудитора ────────────────────────────────────────────────
     # Аудитор ВСЕГДА другой агент, не тот, что писал: писатель свой текст
@@ -243,7 +295,13 @@ def main():
     L.append("-" * 70)
     L.append("Тот же сюжет, та же подача, ДРУГИЕ СЛОВА. Это канал-клон:")
     L.append("новых углов, новых фактов и новых выводов НЕ добавлять.")
-    L.append("Длина — та же, что у оригинала (±10%%): %d знаков." % len(text))
+    # Длину требовать ДИАПАЗОНОМ В ЗНАКАХ, а не словом «столько же»: два
+    # рерайта из двух 07.11 пришли на 14% и 23% длиннее оригинала, и оба
+    # пришлось гонять на сокращение отдельным заходом.
+    L.append("ДЛИНА: строго от %d до %d знаков (у оригинала %d). Это не "
+             "пожелание: по длине считается хронометраж ролика. Посчитай "
+             "знаки готового текста перед ответом."
+             % (int(len(text) * 0.95), int(len(text) * 1.05), len(text)))
     L.append("Числа писать ПРОПИСЬЮ с нужным падежом — текст идёт в озвучку,")
     L.append("цифрами сервис склоняет неверно.")
     L.append("Тире в тексте озвучки не ставить (правило фильтра TTS).")
