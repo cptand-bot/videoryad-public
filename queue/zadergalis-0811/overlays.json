@@ -1,0 +1,630 @@
+{
+ "anchor": "top",
+ "2": {
+  "photo": "overlays/scene_002.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "14": {
+  "photo": "overlays/scene_014.jpg",
+  "sound": "whoosh",
+  "at": 2.5,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "18": {
+  "photo": "overlays/scene_018.jpg",
+  "sound": "zatvor",
+  "at": 2.8,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "20": {
+  "photo": "overlays/scene_020.jpg",
+  "sound": "ding",
+  "at": 3.1,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "21": {
+  "photo": "overlays/scene_021.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "sound": "whoosh",
+  "at": 2.5,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "38": {
+  "photo": "overlays/scene_038.jpg",
+  "sound": "zatvor",
+  "at": 2.8,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "51": {
+  "photo": "overlays/scene_051.jpg",
+  "sound": "ding",
+  "at": 3.1,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "58": {
+  "photo": "overlays/scene_058.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "65": {
+  "photo": "overlays/scene_065.jpg",
+  "sound": "whoosh",
+  "at": 2.5,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "68": {
+  "photo": "overlays/scene_068.jpg",
+  "sound": "zatvor",
+  "at": 2.8,
+  "approved": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "1": {
+  "text": {
+   "words": "ЕВРОПА СЛЕДИТ ЗА РУКАМИ ТРАМПА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "3": {
+  "text": {
+   "words": "СОЮЗНИКИ НЕРВНИЧАЮТ ИЗ-ЗА СОЮЗНИКА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "4": {
+  "text": {
+   "words": "МЕРЦ: СОГЛАСОВАТЬ СДЕЛКУ СО ВСЕМ НАТО",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "6": {
+  "text": {
+   "words": "ОСТАНЕТСЯ ТОЛЬКО ИСКАТЬ СВОЮ ФАМИЛИЮ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "7": {
+  "text": {
+   "words": "ВСЕ СОЮЗНИКИ. ВСЕ ЗА ОДНО?",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "8": {
+  "text": {
+   "words": "МЕРЦ: БЕЗ НАС НЕ ПОДПИСЫВАТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "9": {
+  "text": {
+   "words": "МОСКВА: ПРЕДЛОЖЕНИЙ ЕВРОПЫ НЕ ВИДЕЛИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "10": {
+  "text": {
+   "words": "МЕСТО ТРЕБУЮТ, ПРЕДЛОЖЕНИЯ НЕТ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "13": {
+  "text": {
+   "words": "США ДЕРЖАЛИ ОБЩИЙ КАРКАС",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "16": {
+  "text": {
+   "words": "АМЕРИКА ПОСМОТРЕЛА НА ЧАСЫ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "17": {
+  "text": {
+   "words": "РАСЧЁТ СТРОИЛСЯ НА СОВМЕСТНОЙ КОНСТРУКЦИИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "22": {
+  "text": {
+   "words": "ЦЕЛЬ — ДОСТУП К РЕСУРСАМ РОССИИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "24": {
+  "text": {
+   "words": "ЧТО КОНКРЕТНО ПОЛУЧИТ АМЕРИКА?",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "25": {
+  "text": {
+   "words": "ХОТИТЕ ПРОДОЛЖАТЬ — ПРОДОЛЖАЙТЕ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "27": {
+  "text": {
+   "words": "ВАШИНГТОН: МЫ ВЫШЛИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "28": {
+  "text": {
+   "words": "ТРЕБОВАНИЕ МЕРЦА ЗВУЧИТ ИНАЧЕ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "29": {
+  "text": {
+   "words": "НАТО БЕЗ США — НАТО НА БУМАГЕ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "30": {
+  "text": {
+   "words": "ФЛАЖКИ ОСТАНУТСЯ. ТЯЖЕСТЬ — НЕТ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "31": {
+  "text": {
+   "words": "КУШНЕР: РАЗГОВОР ШИРЕ УКРАИНЫ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "32": {
+  "text": {
+   "words": "УЧИТЫВАТЬ И РОССИЙСКИЕ ИНТЕРЕСЫ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "36": {
+  "text": {
+   "words": "МАЛО ЗАЯВИТЬ — НАДО МОЧЬ ОСТАНОВИТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "37": {
+  "text": {
+   "words": "ДАЛЬШЕ НАЧИНАЕТСЯ АРИФМЕТИКА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "39": {
+  "text": {
+   "words": "ПЕРЕГОВОРЩИКИ ДРУГ ДРУГА ЗНАЮТ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "42": {
+  "text": {
+   "words": "ТЕРРИТОРИИ. ГАРАНТИИ. КОНТРОЛЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "43": {
+  "text": {
+   "words": "ПРЕДМЕТ ТОРГА ДАВНО ИЗВЕСТЕН",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "45": {
+  "text": {
+   "words": "ВАШИНГТОН ГОВОРИТ С МОСКВОЙ НАПРЯМУЮ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "46": {
+  "text": {
+   "words": "ИЗ ХОЗЯЕВ — В УЧАСТНИКИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "47": {
+  "text": {
+   "words": "МЕЛОНИ: НУЖЕН ОДИН ПЕРЕГОВОРЩИК",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "48": {
+  "text": {
+   "words": "ГОВОРИТЬ ОТ ИМЕНИ ЕВРОПЫ НЕКОМУ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "50": {
+  "text": {
+   "words": "ИНТЕРЕСЫ ВНУТРИ БЛОКА РАЗНЫЕ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "52": {
+  "text": {
+   "words": "ПУТИН СПРОСИТ: ТОЧНО ЗА ВСЕХ?",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "54": {
+  "text": {
+   "words": "ТРАМП СТРОИТ СВОЮ СДЕЛКУ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "56": {
+  "text": {
+   "words": "ПОСИДЕТЬ РЯДОМ — ЕЩЁ НЕ ВЛАСТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "57": {
+  "text": {
+   "words": "ПРАВО СКАЗАТЬ НЕТ — ЭТО ВЛАСТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "59": {
+  "text": {
+   "words": "ДЕНЬГИ. САНКЦИИ. РАССЛЕДОВАНИЯ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "60": {
+  "text": {
+   "words": "ТРАМПУ ВЫГОДНО УСПЕТЬ СЕЙЧАС",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "62": {
+  "text": {
+   "words": "ЕВРОПА МОЖЕТ ПРОСТО ПОДОЖДАТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "63": {
+  "text": {
+   "words": "У ТРАМПА ЕЩЁ ОДИН СТОЛ — ДОМА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "64": {
+  "text": {
+   "words": "ДАВИТЕ САМИ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "67": {
+  "text": {
+   "words": "ИНТЕРЕСЫ ВАШИНГТОНА И МОСКВЫ СОВПАДАЮТ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "70": {
+  "text": {
+   "words": "США ГОВОРЯТ С ТЕМ, ПРОТИВ КОГО СТРОИЛИ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "73": {
+  "text": {
+   "words": "КТО БУДЕТ ОПРЕДЕЛЯТЬ ПРАВИЛА?",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "74": {
+  "text": {
+   "words": "ЕВРОПА ПОЛУЧИТ ПРАВО ВЕТО?",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "75": {
+  "text": {
+   "words": "УКРАИНА — ЧАСТЬ, А НЕ ВСЯ КАРТИНА",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "77": {
+  "text": {
+   "words": "РАЗГОВОР О СИСТЕМЕ ПОСЛЕ КОНФЛИКТА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "78": {
+  "text": {
+   "words": "США — ОТДЕЛЬНАЯ СТРАНА",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "80": {
+  "text": {
+   "words": "ЧТО ЕВРОПА БУДЕТ ДЕЛАТЬ САМА?",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "81": {
+  "text": {
+   "words": "НЕ ТРЕБОВАТЬ. НЕ ПРИЗЫВАТЬ. ДЕЛАТЬ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "82": {
+  "text": {
+   "words": "САМОСТОЯТЕЛЬНОСТЬ — ЭТО ОПЛАТИТЬ СЧЁТ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ }
+}
