@@ -222,10 +222,19 @@ def main():
                   if str(s.get("fx", "")).strip().lower() in KINDS)
     same = sorted(s["id"] for s in scenes
                   if str(s.get("fx", "")).strip().lower() == kind)
-    if a.sid not in same and len(same) >= FX_MAX:
+    # У КНОПКИ СВОЙ ПОТОЛОК, НЕ «ТРИ НА ВИД» (07.11, улов вкладки
+    # `usuario-2c`). Правило кнопок 07.11 разрешает ПЯТЬ, и `--auto` ставит
+    # пять, а ручной режим отбивал четвёртую потолком переходов — вкладке
+    # пришлось вписывать кнопку прямо в scenes.json. Потолки берутся из
+    # одного места: переходы FX_MAX, кнопка SUB_MAX.
+    _cap = SUB_MAX if kind in ("subscribe", "subscribe2") else FX_MAX
+    _cap_word = ("ПЯТЬ КНОПОК НА РОЛИК" if _cap == SUB_MAX
+                 else "ТРИ НА КАЖДЫЙ ВИД")
+    if a.sid not in same and len(same) >= _cap:
         return _die("вида «%s» на ролике уже %d (сцены %s) — потолок его "
-                    "словом ТРИ НА КАЖДЫЙ ВИД, четвёртый не ставлю"
-                    % (kind, len(same), ", ".join(str(i) for i in same)))
+                    "словом %s, следующий не ставлю"
+                    % (kind, len(same), ", ".join(str(i) for i in same),
+                       _cap_word))
 
     if kind in ("subscribe", "subscribe2"):
         # КНОПКА — НЕ ПЕРЕХОД: ей не нужен ни кадр прошлой сцены, ни файл.
@@ -243,7 +252,7 @@ def main():
         print("сцена %d (%.1f с): кнопка «ПОДПИШИСЬ»%s ПОСТАВЛЕНА "
               "(угол выберет сборка: правый, левый, правый)"
               % (a.sid, dur, " (вид 2)" if kind == "subscribe2" else ""))
-        print("кнопок в ролике: %d из %d" % (len(set(same) | {a.sid}), FX_MAX))
+        print("кнопок в ролике: %d из %d" % (len(set(same) | {a.sid}), SUB_MAX))
         print("файлов не нужно: кадры кнопки рисует облако само")
         return 0
 
@@ -379,6 +388,29 @@ def _put_subscribe(scenes, by_id, first, n, kind="subscribe"):
 
     def _fits(sid):
         return all(abs(sid - c) >= SUB_MIN_GAP for c in chosen)
+
+    # ПРИЗЫВ НА РИСОВАННОМ КАДРЕ — КНОПКА СДВИГАЕТСЯ ВПЕРЁД, А НЕ В
+    # СЕРЕДИНУ РОЛИКА (07.11, улов вкладки `usuario-2c`). На теме 3 призыв
+    # звучал на сцене 10, а это `card:split`: кнопку на карточку класть
+    # нельзя, и автомат молча ставил первую кнопку на 18 — правило «первая
+    # там, где призыв» не выполнялось, и выглядело это как сбой правила.
+    # Теперь при занятой сцене берём БЛИЖАЙШУЮ свободную СРАЗУ ПОСЛЕ
+    # призыва: зритель слышит призыв и видит кнопку через кадр, а не через
+    # восемь.
+    _said_raw = []
+    for x in scenes:
+        _t = str(x.get("text", "")).lower().replace("ё", "е")
+        if re.search(r"подпис|подпиш|колокольчик", _t):
+            _said_raw.append(int(x.get("id", 0)))
+    if _said_raw and (not _said or _said[0] > _said_raw[0]):
+        _after = [sid for sid in ok if sid >= _said_raw[0]]
+        if _after:
+            _near = min(_after)
+            if _near not in _said:
+                _said.insert(0, _near)
+                print("сцена %d: призыв звучит на сцене %d, но она занята — "
+                      "кнопка встаёт на ближайшую свободную после неё"
+                      % (_near, _said_raw[0]))
 
     # 1. ПЕРВАЯ — на призыве
     if _said and len(chosen) < SUB_MAX:
