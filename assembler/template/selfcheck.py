@@ -434,9 +434,34 @@ else:
     # такое не держится — держит только код.
     # Разрешение на конкретный ролик: положить в папку файл `.text-overlays-ok`
     # (пользователь попросил надписи явно). Пустой файл, содержимое не важно.
+    # НАДПИСЬ ИЗ-ПОД МАСКИ — НЕ «ТЕКСТОВАЯ ВСПЛЫВАШКА 5 МИНУТ» (07.11).
+    # Он выбрал этот приём из витрины кандидатов и сказал прямо: «попробуем
+    # применить на канал ПЛАНЕТА, будет примерно собираться так же, как и
+    # на канал 5 МИНУТ» → «ставь в сборку на завтра». Это заголовок блока
+    # внутри ролика (смена темы), а не поток коротких фактов капсом, из-за
+    # которых запрет 21.10 и появился. Поэтому маски из счёта исключены —
+    # иначе два правила убивают друг друга: обязательный элемент N-текст
+    # ставится, и тот же ролик валится запретом надписей на ПЛАНЕТЕ.
+    _MASK_ST = ("mask", "mask_plate")
+
+    def _is_mask(v):
+        t = v.get("text")
+        return isinstance(t, dict) and \
+            str(t.get("style", "")).strip().lower() in _MASK_ST
+
+    _masks = [k for k, v in ov.items()
+              if str(k).isdigit() and isinstance(v, dict) and _is_mask(v)]
     _texts = [k for k, v in ov.items()
               if str(k).isdigit() and isinstance(v, dict)
-              and (v.get("text") or v.get("words"))]
+              and (v.get("text") or v.get("words")) and not _is_mask(v)]
+    # ПОТОЛОК НА МАСКИ: это акцент на смену темы, а не фон. Больше четырёх
+    # на ролик — приём перестаёт читаться как рубеж. Предупреждение, не
+    # блокер: сколько их нужно, решает он на дашборде.
+    if len(_masks) > 4:
+        WARN.append(
+            "НАДПИСЕЙ ИЗ-ПОД МАСКИ %d (сцены %s). Это заголовок блока на "
+            "смену темы — больше четырёх на ролик, и рубеж перестаёт "
+            "читаться." % (len(_masks), ", ".join(sorted(_masks, key=int)[:10])))
     if _texts and ch and "5 МИНУТ" not in ch and not os.path.exists(".text-overlays-ok"):
         FAIL.append(
             f"ТЕКСТОВЫЕ ВСПЛЫВАШКИ НА КАНАЛЕ {ch}: их {len(_texts)} "
@@ -1088,7 +1113,10 @@ except Exception as _e:
 try:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import obyazatelno as _ob
-    for _b in _ob.check(scenes, str(meta.get("channel", "")), "dashboard"):
+    # путь к сценам нужен элементам-НАДПИСЯМ: они живут в `overlays.json`
+    # рядом, а не в `scenes.json` (07.11, надпись из-под маски)
+    for _b in _ob.check(scenes, str(meta.get("channel", "")), "dashboard",
+                        scenes_path):
         FAIL.append(_b)
 except Exception as _e:                  # список не прочитался — скажем вслух
     WARN.append("не проверить обязательные элементы (%s: %s) — посмотри "

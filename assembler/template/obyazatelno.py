@@ -48,6 +48,30 @@ MIN_GAP_БАЗА = 8
 #   чем    — команда, которой элемент ставится (идёт в текст отказа)
 ОБЯЗАТЕЛЬНЫЕ = [
     {
+        # ДОБАВЛЕНО 07.11 ПО ЕГО СЛОВУ: «пускай будет у нас n-текст с
+        # заливкой, попробуем применить на канал ПЛАНЕТА. Будет примерно
+        # собираться так же, как и на канал 5 МИНУТ» → «ставь в сборку на
+        # завтра». Единственный приём, принятый им из витрины кандидатов.
+        #
+        # ЭТО НЕ КАДР, А НАЛОЖЕНИЕ, поэтому ищется не в `scenes.json`, а в
+        # `overlays.json` рядом с ним — по стилю всплывашки.
+        #
+        # ПОКА ТОЛЬКО ПЛАНЕТА (он назвал этот канал). Расширить на другой
+        # канал — дописать его имя в "каналы" ниже; цвет подтянется сам.
+        "код": "N-текст",
+        "имя": "надпись из-под маски с заливкой: плашка в гамме канала "
+               "выезжает слева направо, по краю маски едет полоса",
+        "overlay_style": "mask_plate",
+        "min": 1,
+        "gate": "dashboard",
+        "каналы": ["ПЛАНЕТА"],
+        "чем": ('в `overlays.json` сцене: {"text": {"words": "ЗАГОЛОВОК", '
+                '"sub": "подзаголовок", "style": "mask_plate", "pos": "ml", '
+                '"at": 0.5}} — без заливки "style": "mask"'),
+        "когда": ("смена темы внутри ролика, заголовок блока: место, где "
+                  "зритель должен понять, что пошла новая часть"),
+    },
+    {
         # ДОБАВЛЕНО 07.11 ПО ЕГО СЛОВУ: «в библиотеке добавилось два
         # элемента, N38 и N39. Я хочу, чтобы они были внедрены при сборке».
         # Решают главную проблему лиц: рисованные портреты политиков кодом
@@ -396,9 +420,39 @@ def _channel(meta, path):
     return ""
 
 
-def check(scenes, channel="", gate="dashboard"):
+def _overlay_styles(scenes_path):
+    """Сколько каких НАДПИСЕЙ стоит в `overlays.json` рядом со сценами.
+
+    Наложение живёт не в `scenes.json`, а в `overlays.json`, поэтому для
+    таких элементов смотрим туда. Файла нет — считаем, что надписей ноль:
+    это честный отказ, а не поломка гейта.
+    """
+    out = {}
+    if not scenes_path:
+        return out
+    ov = os.path.join(os.path.dirname(os.path.abspath(scenes_path)),
+                      "overlays.json")
+    try:
+        d = json.load(open(ov, encoding="utf-8"))
+    except (OSError, ValueError):
+        return out
+    for k, spec in (d or {}).items():
+        if not isinstance(spec, dict):
+            continue
+        ts = spec.get("text")
+        if not isinstance(ts, dict):
+            continue
+        st = str(ts.get("style", "")).strip().lower()
+        if st:
+            out[st] = out.get(st, 0) + 1
+    return out
+
+
+def check(scenes, channel="", gate="dashboard", scenes_path=""):
     """Чего не хватает. Возвращает список строк отказа (пустой — всё стоит)."""
     have, have_fx = {}, {}
+    have_ov = (_overlay_styles(scenes_path)
+               if any(e.get("overlay_style") for e in ОБЯЗАТЕЛЬНЫЕ) else {})
     for s in scenes:
         src = str(s.get("source", ""))
         if src.startswith("card:"):
@@ -413,8 +467,12 @@ def check(scenes, channel="", gate="dashboard"):
         if el["каналы"] and channel and channel.upper() not in [
                 c.upper() for c in el["каналы"]]:
             continue
-        n = (have_fx.get(el["fx"], 0) if el.get("fx")
-             else have.get(el["view"], 0))
+        if el.get("overlay_style"):
+            n = have_ov.get(el["overlay_style"], 0)
+        elif el.get("fx"):
+            n = have_fx.get(el["fx"], 0)
+        else:
+            n = have.get(el["view"], 0)
         if n >= el["min"]:
             continue
         bad.append(
@@ -436,7 +494,9 @@ def main():
     if a.list or not a.scenes:
         print("ОБЯЗАТЕЛЬНЫЕ ЭЛЕМЕНТЫ (гейт → код → вид → сколько):")
         for el in ОБЯЗАТЕЛЬНЫЕ:
-            метка = ("fx:" + el["fx"]) if el.get("fx") else ("card:" + el["view"])
+            метка = ("надпись:" + el["overlay_style"] if el.get("overlay_style")
+                     else "fx:" + el["fx"] if el.get("fx")
+                     else "card:" + el["view"])
             print("  %-9s %-4s %-17s x%d  %s"
                   % (el["gate"], el["код"], метка, el["min"], el["имя"]))
         return 0
@@ -445,7 +505,7 @@ def main():
         print("нет файла сцен: %s" % a.scenes, file=sys.stderr)
         return 2
     scenes, meta = _scenes(a.scenes)
-    bad = check(scenes, _channel(meta, a.scenes), a.gate)
+    bad = check(scenes, _channel(meta, a.scenes), a.gate, a.scenes)
     if a.json:
         print(json.dumps({"gate": a.gate, "ok": not bad, "нет": bad},
                          ensure_ascii=False, indent=1))
