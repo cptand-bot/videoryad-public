@@ -1690,6 +1690,50 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     real = [f for f in files if not _is_stylized(f, ())]
     if real:
         files = real
+
+    # СОБЫТИЙНЫЙ КАДР СТАРШЕ НЕДЕЛИ В РОЛИК НЕ ИДЁТ (07.11, его прямое
+    # слово: «пять дней прошло — нахрен этот ролик… событие перестало быть
+    # актуальным, оно уже всратое. Библиотека должна быть динамичной, как
+    # динамичные новости»).
+    # Слои `ТЕМЫ`, `ПЕРСОНЫ`, `ВЕДОМСТВА` — это конкретные события и люди на
+    # мероприятиях, они стареют. Здания, флаги, карты, техника, улицы не
+    # стареют и не фильтруются вовсе.
+    # Фильтр стоит ЗДЕСЬ, а не только в ночной чистке: чистка идёт раз в
+    # сутки, а ролики собираются весь день — между ними просроченный кадр
+    # успел бы уехать в эфир.
+    # Если после фильтра в папке не осталось НИЧЕГО — берём что есть:
+    # приевшийся кадр лучше пустой сцены (то же правило, что у чистки).
+    _PERISH = ("ТЕМЫ", "ПЕРСОНЫ", "ВЕДОМСТВА")
+    _fresh_days = int(os.environ.get("LIB_FRESH_DAYS", "7"))
+    _rel = os.path.relpath(tag_dir, media_library_dir).replace("\\", "/")
+    _layer = _rel.split("/")[1] if _rel.startswith("БАЗА/") else _rel.split("/")[0]
+    if _layer in _PERISH and _fresh_days > 0:
+        import datetime as _dt
+        import re as _re
+
+        def _age(fn):
+            _m = _re.match(r"(20\d{6})[_-]", fn)
+            if _m:
+                try:
+                    return (_dt.datetime.now() - _dt.datetime.strptime(
+                        _m.group(1), "%Y%m%d")).days
+                except ValueError:
+                    pass
+            try:
+                return (_dt.datetime.now() - _dt.datetime.fromtimestamp(
+                    os.path.getmtime(os.path.join(tag_dir, fn)))).days
+            except OSError:
+                return 0
+
+        _young = [f for f in files if _age(f) <= _fresh_days]
+        if _young and len(_young) < len(files):
+            print("    свежесть: %d из %d кадров папки старше %d дней — "
+                  "не беру (событие протухло)"
+                  % (len(files) - len(_young), len(files), _fresh_days))
+            files = _young
+        elif not _young and files:
+            print("    свежесть: в папке ВСЁ старше %d дней — беру как есть, "
+                  "папке нужен добор" % _fresh_days)
     # ПЛОСКАЯ КАРТА — ЭТО НЕ КАРТА (02.11, улов `usuario-3c`). Из пяти
     # карт-всплывашек ролика ТРИ приехали контуром без единой подсветки
     # (`КАРТЫ/МИР`, `КАРТЫ/ЕВРОПА`, `КАРТЫ/УКРАИНА`): «светлое на светлом»,
