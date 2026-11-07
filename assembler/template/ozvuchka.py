@@ -41,6 +41,27 @@ import subprocess
 import sys
 import time
 
+
+def read_text(path):
+    """Прочитать текст В ЛЮБОЙ ИЗ НАШИХ КОДИРОВОК.
+
+    МИНА, ПОЙМАННАЯ 07.11.2026 ДО ПЕРВОГО БОЕВОГО ПРОГОНА: все тексты
+    озвучки пользователя лежат в Windows-1251 (их пишет его цепочка в
+    ChatGPT, кодировка прямо указана в записи георадара). Чтение как
+    utf-8 с errors="replace" НЕ ПАДАЕТ — оно молча превращает весь русский
+    текст в символы замены. Проверка при этом бодро печатает «текст 13333
+    знака, цифр нет», а в сервис озвучки уехал бы мусор.
+    Поэтому кодировка подбирается, а не предполагается.
+    """
+    raw = open(path, "rb").read()
+    for enc in ("utf-8-sig", "utf-8", "cp1251", "koi8-r"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("cp1251", "replace")
+
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ENV_FILE = os.path.join(HERE, ".env")
 
@@ -120,7 +141,7 @@ def find_text(folder):
 # ──────────────────────────────────────────────────────────────────────
 def check_text(path):
     """Возвращает (ошибки, замечания). Ошибка = не отправляем."""
-    text = open(path, encoding="utf-8-sig", errors="replace").read()
+    text = read_text(path)
     errors, notes = [], []
 
     if len(text.strip()) < 200:
@@ -279,7 +300,7 @@ def check_result(mp3, srt, text_path):
     if vol < -50:
         problems.append("файл немой (max_volume %.1f dB)" % vol)
 
-    srt_text = open(srt, encoding="utf-8", errors="replace").read() \
+    srt_text = read_text(srt) \
         if os.path.exists(srt) else ""
     blocks = len(re.findall(r"-->", srt_text))
     if blocks < 5:
@@ -290,7 +311,7 @@ def check_result(mp3, srt, text_path):
                         "текст озвучен не целиком" % (tail, dur))
 
     # Последние слова текста должны встретиться в хвосте субтитров.
-    text = open(text_path, encoding="utf-8-sig", errors="replace").read()
+    text = read_text(text_path)
     words = re.findall(r"[А-Яа-яЁё]{4,}", text)
     if words and srt_text:
         last = words[-1].lower()
@@ -343,7 +364,7 @@ def do_folder(folder, args, env):
         print("    = озвучка уже лежит рядом, пропускаю (--force перезапишет)")
         return True
 
-    text = open(src, encoding="utf-8-sig", errors="replace").read()
+    text = read_text(src)
     t0 = time.time()
     audio, subs = synth(text, tpl, env)
     open(mp3, "wb").write(audio)

@@ -121,6 +121,9 @@ template/voice_note.py
 template/wm_sheet.py
 template/zoom.py
 template/ozvuchka.py
+template/rewrite_brief.py
+template/rewrite_lint.py
+template/unikalizaciya.py
 template/take_folder.py
 template/final_sheet.py
 template/fx_sheet.py

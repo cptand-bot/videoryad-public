@@ -1,0 +1,217 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""ВТОРОЙ РОЛИК НА ТЕХ ЖЕ КАДРАХ — БЕЗ ПОИСКА (07.11.2026).
+
+    python3 unikalizaciya.py <проект-оригинала> <проект-рерайта> [--seed 7]
+
+ЗАЧЕМ. Каналы-клоны берут одну тему, и поиск по второму тексту всё равно
+принесёт те же самые кадры — только потратив на это всё время фетча и весь
+трафик. Его прямое слово 07.11: «не бегать и не занимать время и токены
+другими изображениями, просто что-то уникализировать, да и всё».
+
+ЧТО ДЕЛАЕМ. Берём готовые кадры первого ролика, раскладываем под сцены
+второго и меняем их ТЕХНИЧЕСКИ:
+  · зеркало по горизонтали — но только там, где в кадре нет текста
+    (вывеска, титр, флаг с надписью в отражении читаются как брак, поэтому
+    перед зеркалом кадр проверяется распознаванием);
+  · другая крупность — лёгкий срез с одной из сторон меняет композицию;
+  · другой порядок внутри группы взаимозаменяемых сцен.
+
+ЧЕГО НЕ ДЕЛАЕМ. Не двигаем кадр далеко от его сцены: он подбирался под
+смысл конкретной реплики, и уехав на три сцены вперёд, он перестанет
+соответствовать тексту. Перестановка — только внутри группы сцен с
+близким визуальным заданием.
+
+Эффекты, переходы и карточки сюда не входят: их ставит `fx_put.py --auto`,
+он сам знает канал и сам даёт второму каналу другой набор.
+"""
+import argparse
+import json
+import os
+import random
+import re
+import shutil
+import subprocess
+import sys
+
+STOP = set("и в во не на с со а но что как для от до по за из у о об к "
+           "это этот эта эти тот та те над под при про без через между".split())
+
+
+def load_scenes(path):
+    d = json.load(open(path, encoding="utf-8"))
+    return d["scenes"] if isinstance(d, dict) else d
+
+
+def scenes_path(project):
+    cands = [os.path.join(project, n) for n in os.listdir(project)
+             if n.endswith(".scenes.json")]
+    if not cands:
+        sys.exit("нет .scenes.json в %s" % project)
+    return max(cands, key=os.path.getsize)
+
+
+def bag(scene):
+    """Значимые слова сцены: по ним ищем, какой кадр ей подходит."""
+    s = " ".join(str(scene.get(k) or "") for k in
+                 ("visual_prompt", "source_query", "text"))
+    return {w for w in re.findall(r"[А-Яа-яЁёA-Za-z]{4,}", s.lower())
+            if w not in STOP}
+
+
+# Распознавание стоит не в системе, а разложенным вручную: на этой машине
+# нет apt и sudo (см. fetch_assets_news.py). Звать просто «tesseract» нельзя —
+# его нет в PATH, вызов падает FileNotFoundError, функция честно отвечает
+# «текст есть», и зеркало не применяется НИКОГДА. Ровно это и случилось при
+# первой проверке 07.11: 12 кадров из 12 «с текстом».
+_TESS = os.path.expanduser("~/tools/tesseract/usr/bin/tesseract")
+_TESS_LIB = os.path.expanduser("~/tools/tesseract/usr/lib/x86_64-linux-gnu")
+_TESS_DATA = os.path.expanduser("~/tools/tesseract/usr/share/tesseract-ocr/5/tessdata")
+
+
+def _tess_env():
+    env = os.environ.copy()
+    if os.path.isdir(_TESS_LIB):
+        env["LD_LIBRARY_PATH"] = _TESS_LIB + ":" + env.get("LD_LIBRARY_PATH", "")
+    if os.path.isdir(_TESS_DATA):
+        env["TESSDATA_PREFIX"] = _TESS_DATA
+    return env
+
+
+def has_text(path):
+    """Есть ли в кадре читаемый текст — зеркалить такой нельзя."""
+    if not path.lower().endswith((".jpg", ".jpeg", ".png")):
+        return True          # видео не проверяем, зеркалим осторожно: считаем «есть»
+    # Читаем не просто текст, а таблицу с УВЕРЕННОСТЬЮ: на обычной
+    # фотографии распознавание всегда выдаёт мусорные «слова» из шума
+    # (проверено 07.11 — 12 кадров из 12 ложно объявлялись текстовыми, и
+    # зеркало не применялось никогда). Уверенность отсекает шум.
+    try:
+        binary = _TESS if os.path.exists(_TESS) else "tesseract"
+        out = subprocess.run([binary, path, "-", "-l", "rus+eng",
+                              "--psm", "11", "tsv"],
+                             capture_output=True, text=True, timeout=60,
+                             env=_tess_env()).stdout
+    except (OSError, subprocess.SubprocessError):
+        return True          # нет распознавания — считаем, что текст есть
+    good = 0
+    for line in out.splitlines()[1:]:
+        cols = line.split("\t")
+        if len(cols) < 12:
+            continue
+        try:
+            conf = float(cols[10])
+        except ValueError:
+            continue
+        word = cols[11].strip()
+        if conf >= 70 and len(re.findall(r"[A-Za-zА-Яа-яЁё]", word)) >= 4:
+            good += 1
+    return good >= 2
+
+
+def transform(src, dst, mirror, crop_pct):
+    """Зеркало и срез — одним проходом ffmpeg, и для фото, и для видео."""
+    filters = []
+    if crop_pct:
+        k = 1.0 - crop_pct / 100.0
+        filters.append("crop=iw*%.4f:ih*%.4f:(iw-iw*%.4f)*%s:(ih-ih*%.4f)*%s"
+                       % (k, k, k, "0" if crop_pct % 2 else "1",
+                          k, "1" if crop_pct % 2 else "0"))
+    if mirror:
+        filters.append("hflip")
+    if not filters:
+        shutil.copy2(src, dst)
+        return "копия"
+    cmd = ["ffmpeg", "-y", "-v", "error", "-i", src, "-vf", ",".join(filters)]
+    if dst.lower().endswith(".mp4"):
+        cmd += ["-c:v", "libx264", "-crf", "20", "-preset", "veryfast",
+                "-threads", "2", "-c:a", "copy"]
+    else:
+        cmd += ["-q:v", "2"]
+    cmd.append(dst)
+    r = subprocess.run(["nice", "-n", "19"] + cmd, capture_output=True, text=True)
+    if r.returncode != 0 or not os.path.exists(dst):
+        shutil.copy2(src, dst)
+        return "копия (ffmpeg не справился)"
+    return ("зеркало" if mirror else "") + (" + срез %d%%" % crop_pct if crop_pct else "")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("source_project", help="проект первого ролика (с images/)")
+    ap.add_argument("target_project", help="проект второго ролика (сцены рерайта)")
+    ap.add_argument("--seed", type=int, default=0, help="зерно случайности")
+    ap.add_argument("--no-mirror", action="store_true", help="не зеркалить вовсе")
+    args = ap.parse_args()
+    rnd = random.Random(args.seed or None)
+
+    src_imgs = os.path.join(args.source_project, "images")
+    man_path = os.path.join(src_imgs, "manifest.json")
+    if not os.path.exists(man_path):
+        sys.exit("у первого ролика нет images/manifest.json — кадры ещё не найдены")
+    man = {int(m["id"]): m for m in json.load(open(man_path, encoding="utf-8"))
+           if m.get("status") == "ok" and m.get("file")}
+
+    src_scenes = {int(s["id"]): s for s in load_scenes(scenes_path(args.source_project))}
+    tgt_path = scenes_path(args.target_project)
+    tgt_scenes = load_scenes(tgt_path)
+
+    dst_imgs = os.path.join(args.target_project, "images")
+    os.makedirs(dst_imgs, exist_ok=True)
+
+    # мешки слов кадров-доноров
+    donors = []
+    for sid, m in man.items():
+        sc = src_scenes.get(sid)
+        if sc is None:
+            continue
+        donors.append((sid, bag(sc), m))
+
+    used, new_man, report = [], [], []
+    for sc in tgt_scenes:
+        tid = int(sc["id"])
+        if str(sc.get("source", "")).startswith("card:"):
+            report.append((tid, "рисованный кадр — кадр не нужен"))
+            continue
+        b = bag(sc)
+        best, best_score = None, -1.0
+        for sid, db, m in donors:
+            if sid in used[-2:]:          # соседние сцены не повторяют кадр
+                continue
+            inter = len(b & db)
+            score = inter / max(1, len(b | db)) + 0.001 * rnd.random()
+            # кадр, стоявший рядом по счёту, предпочтительнее далёкого:
+            # он подбирался под соседний по смыслу кусок текста
+            score -= 0.002 * abs(sid - tid)
+            if score > best_score:
+                best, best_score = (sid, m), score
+        if best is None:
+            report.append((tid, "донора не нашлось"))
+            continue
+        sid, m = best
+        used.append(sid)
+        src_file = os.path.join(src_imgs, m["file"])
+        if not os.path.exists(src_file):
+            report.append((tid, "файл донора пропал: %s" % m["file"]))
+            continue
+        ext = os.path.splitext(m["file"])[1]
+        name = "scene_%03d%s" % (tid, ext)
+        dst_file = os.path.join(dst_imgs, name)
+
+        mirror = (not args.no_mirror) and rnd.random() < 0.6 and not has_text(src_file)
+        crop = rnd.choice([0, 3, 4, 6])
+        how = transform(src_file, dst_file, mirror, crop)
+        new_man.append({"id": tid, "file": name, "source": m.get("source", "reuse"),
+                        "status": "ok", "reused_from": sid})
+        report.append((tid, "сцена %d ← кадр сцены %d, %s" % (tid, sid, how or "как есть")))
+
+    json.dump(new_man, open(os.path.join(dst_imgs, "manifest.json"), "w",
+                            encoding="utf-8"), ensure_ascii=False, indent=2)
+    for tid, line in report:
+        print("  %s" % line)
+    print("перенесено кадров: %d из %d сцен" % (len(new_man), len(tgt_scenes)))
+    print("поиск не запускался — фетч этому ролику не нужен")
+
+
+if __name__ == "__main__":
+    main()
