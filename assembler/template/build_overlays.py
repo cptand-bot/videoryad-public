@@ -241,6 +241,97 @@ def _render_text_png(words, color, out_path, fkey="default", style="plate"):
         return False
 
 
+# КАНАЛ РОЛИКА — ЧИТАЕТСЯ В `do_overlay` ИЗ scenes.json И ЖИВЁТ ЗДЕСЬ.
+# Нужен надписи из-под маски: цвет плашки приходит ПО КАНАЛУ, как у всех
+# наших элементов (его слово 07.11 про ПЛАНЕТУ: «будет примерно собираться
+# так же, как и на канал 5 МИНУТ»).
+CHANNEL_NOW = ""
+
+
+def _apply_mask_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
+    """НАДПИСЬ ИЗ-ПОД МАСКИ — приём, принятый им 07.11 из витрины кандидатов.
+
+    Отличие от обычной текстовой всплывашки: это не один PNG с наплывом, а
+    КОРОТКАЯ PNG-СЕКВЕНЦИЯ (0,9 с) — надпись выезжает из-под маски слева
+    направо, по краю маски едет полоса. Дальше `eof_action=repeat` держит
+    последний кадр до конца сцены, поэтому секвенция короткая и дешёвая.
+
+    Вид задаётся стилем всплывашки в overlays.json:
+        "style": "mask"        — без заливки (белый засечный + подзаголовок);
+        "style": "mask_plate"  — с заливкой в гамме канала.
+    Подзаголовок — ключ "sub" (не обязателен).
+    """
+    import shutil
+    import tempfile
+    try:
+        import nadpis_maska as NM
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import nadpis_maska as NM
+
+    head = str(ts.get("words") or ts.get("text") or "").strip().upper()
+    if not head:
+        return False
+    sub = str(ts.get("sub") or "").strip()
+    plate = str(ts.get("style", "")).lower() == "mask_plate"
+    try:
+        msc = max(0.4, min(2.4, float(ts.get("scale", 1.0))))
+    except (TypeError, ValueError):
+        msc = 1.0
+
+    at = float(ts.get("at", LEAD))
+    at = _floor_at(sid, at, dur)
+    at = max(0.0, min(at, max(0.0, dur - 1.4)))
+    t3 = max(at + 1.2, dur)
+    t2 = max(at + 1.0, t3 - 0.35)
+
+    pos = str(ts.get("pos", "tc")).lower()
+    if pos[:1] == "b":
+        print(f"  [надпись-маска] pos={pos} — НИЗ ЗАПРЕЩЁН (субтитры), "
+              f"поднял в t{pos[1:] or 'c'}", flush=True)
+        pos = "t" + (pos[1:] or "c")
+    yk = pos[0] if pos[:1] in ("t", "m") else "t"
+    xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
+
+    tmp = tempfile.mkdtemp(prefix="maska-")
+    try:
+        fps = FPS
+        n, tw, th = NM.sequence(tmp, head, sub, scale=2.0 * msc,
+                                channel=CHANNEL_NOW, fps=fps, plate=plate)
+        if tw > int(W * 0.92):          # длинная строка — ужимаем, не режем
+            k = (W * 0.92) / tw
+            shutil.rmtree(tmp, ignore_errors=True)
+            tmp = tempfile.mkdtemp(prefix="maska-")
+            n, tw, th = NM.sequence(tmp, head, sub, scale=2.0 * msc * k,
+                                    channel=CHANNEL_NOW, fps=fps, plate=plate)
+        mg = 60
+        px = {"l": mg, "c": int((W - tw) / 2), "r": int(W - tw - mg)}[xk]
+        py = {"t": mg, "m": int((H - th) / 2)}[yk]
+
+        fc = (f"[1:v]format=rgba,"
+              f"fade=t=out:st={t2:.3f}:d=0.3:alpha=1[t];"
+              f"[0:v][t]overlay=x={px}:y={py}:eof_action=repeat:"
+              f"enable='between(t,{at:.3f},{t3:.3f})',format=yuv420p[v]")
+        tmp_mp4 = out_mp4 + ".mtmp.mp4"
+        cmd = [ffmpeg, "-y", *_threads_args(), "-i", base_mp4,
+               "-itsoffset", f"{at:.3f}", "-framerate", str(fps),
+               "-i", os.path.join(tmp, "pl_%03d.png"),
+               "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
+               "-c:v", "libx264", "-preset", "veryfast",
+               "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
+               "-pix_fmt", "yuv420p", "-t", f"{dur:.3f}", tmp_mp4]
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode == 0 and os.path.exists(tmp_mp4):
+            os.replace(tmp_mp4, out_mp4)
+            return True
+        if os.path.exists(tmp_mp4):
+            os.remove(tmp_mp4)
+        print("   надпись-маска FAIL:", r.stderr[-300:])
+        return False
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     """Отдельная всплывашка-СЛОВО поверх клипа: сетка 9 позиций
     (pos = tl/tc/tr/ml/mc/mr/bl/bc/br), плавное появление/исчезновение,
@@ -248,6 +339,10 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     words = ts.get("words") or ts.get("text") or ""
     if not str(words).strip():
         return False
+    # НАДПИСЬ ИЗ-ПОД МАСКИ — свой путь: там секвенция, а не один PNG
+    if str(ts.get("style", "")).lower() in ("mask", "mask_plate"):
+        return _apply_mask_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts,
+                                   dur, sid)
     try:
         msc = max(0.4, min(2.4, float(ts.get("scale", 1.0))))
     except (TypeError, ValueError):
@@ -448,6 +543,8 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         _chan = str(_d.get("channel", "") if isinstance(_d, dict) else "")
     except (OSError, ValueError):
         _chan = ""
+    global CHANNEL_NOW
+    CHANNEL_NOW = _chan
     _def_anchor = ("bottom"
                    if _chan.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
                    or not _chan.strip() else "top")

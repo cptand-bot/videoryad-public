@@ -131,3 +131,14 @@ template/fx_subscribe.py
 template/fx_subscribe2.py
 template/obyazatelno.py
 template/element_put.py
+template/nadpis_maska.py
+template/fonts/ArialBlack.ttf
+template/prevyu.py
+template/prevyu_text.py
+template/upakovka.py
+template/upakovka_dash.py
+template/upakovka_lib/arhiv-5min.txt
+template/upakovka_lib/arhiv-geo2.txt
+template/upakovka_lib/bank.txt
+template/upakovka_lib/slova.json
+template/upakovka_lib/zhurnal.json
