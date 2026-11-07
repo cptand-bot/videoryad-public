@@ -763,7 +763,20 @@ else:
             if not _words:
                 continue
             sid = int(k)
-            _base_q = (_by_id.get(sid, {}).get("source_query", "") or "").lower()
+            # У СЦЕНЫ `direct_url` СВЕРЯТЬ НАДО `visual_prompt`, А НЕ
+            # `source_query` (07.11, улов вкладки `usuario-65`). В
+            # `source_query` у таких сцен лежит адрес `cdn4.telesco.pe/...`,
+            # в котором имени нет по устройству — и проверка честно не
+            # находила «КАЛЛАС» в ссылке, ругаясь на кадр, где Каллас и
+            # изображена. Три ложных срабатывания из трёх на одном ролике.
+            # Описание вложения вкладка кладёт в `visual_prompt`, оттуда и
+            # берём. Для прочих источников порядок прежний.
+            _sc_row = _by_id.get(sid, {})
+            _base_q = (_sc_row.get("source_query", "") or "").lower()
+            if (str(_sc_row.get("source", "")).startswith("direct_url")
+                    or _base_q.startswith("http")):
+                _base_q = ((_sc_row.get("visual_prompt", "") or "").lower()
+                           or _base_q)
             for _tok in _re.findall(r"[А-ЯЁІЇЄҐ]{5,}", _words):
                 _stem = _tok.lower()[:5]
                 if _stem not in _name_pool or _is_geo(_tok):

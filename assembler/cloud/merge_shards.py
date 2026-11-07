@@ -147,6 +147,18 @@ def _collect_overlays(images_dir, proj):
                 continue
             if not glob.glob(os.path.join(dst, f"scene_{int(k):03d}.*")):
                 lost[k] = e
+                # НА `--fetch-only` ЗАПИСЬ ОСТАЁТСЯ (07.11, улов вкладки
+                # `usuario-65`). Удаление ломало круг правок по всплывашке:
+                # фото не нашлось → запись исчезла → на следующем круге кадр
+                # пришёл, а записи для него нет, и `ship.sh` встаёт с
+                # «файлы без записи (сироты)», предлагая унести КАДР в
+                # `.trash` — то есть лечить потерей того, что только что
+                # добыли. При `--fetch-only` сборки ещё не было, сирота
+                # никому не мешает: этот режим сам печатает «записей без
+                # файла N — это и есть задание», значит запись без файла
+                # здесь ЗАКОННА. Удаляем только перед НАСТОЯЩЕЙ сборкой.
+                if os.path.isfile(os.path.join(proj, ".fetch-only")):
+                    continue
                 ov.pop(k)
                 dropped.append(k)
         json.dump(ov, open(ovj, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
