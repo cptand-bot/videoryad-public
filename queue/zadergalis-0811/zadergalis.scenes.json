@@ -1,0 +1,667 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 7.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП"
+  },
+  {
+   "id": 2,
+   "start_sec": 7.8,
+   "duration_sec": 15.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/САМОЛЁТ-AIR-FORCE"
+  },
+  {
+   "id": 3,
+   "start_sec": 23.1,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/e18b0a404a.mp4",
+   "visual_prompt": "видео 870x520, Трамп у трапа ночью отвечает про Россию (пост t.me/OstashkoNews/228280, срезаны субтитры и знак ПУЛ N3)"
+  },
+  {
+   "id": 4,
+   "start_sec": 33.6,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "web_search",
+   "source_query": "кортеж Фридриха Мерца у ведомства канцлера, Берлин, 2026"
+  },
+  {
+   "id": 5,
+   "start_sec": 43.3,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка"
+  },
+  {
+   "id": 6,
+   "start_sec": 54.2,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО"
+  },
+  {
+   "id": 7,
+   "start_sec": 63.8,
+   "duration_sec": 14.0,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/I0p6Bf9MJ5a1DagRFo4iamCHzIjbjchZXTW2kGdrgkQqzEAGZLR_kEOz0Wfv7uKakM8J3mYFoqAvUsYh_LVaKS3ssKgjIeODs3OmwQGdQJhgiCU2oNb7uJv7wfNy7hJf-nLR5ctiEPkd_PWRnQuTJKqlcOs2e8MKMUWuMdF7rP33tScyHyAPYagYOPuLva_YcPgs81zPz08-EbM6yZlpS0J5XKX_GiBbWg9KXAfEdYTW9blrrZQJv3RHFQzkxVZFUVj9yoYeg6mJdV3beAuX3xvgmiJbzDAmabJTxm3MtJ1jj2YT5mjIheeK-l-asAKps0rSfJNiC_PlFW7Y8L7AYg.jpg",
+   "visual_prompt": "фото 800x450, Макрон, Мерц и Мелони у трибун с флагами (пост t.me/BILD_Russian/33156)"
+  },
+  {
+   "id": 8,
+   "start_sec": 77.8,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ"
+  },
+  {
+   "id": 9,
+   "start_sec": 87.3,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО"
+  },
+  {
+   "id": 10,
+   "start_sec": 99.4,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "парадный двор Палаццо Киджи, Джорджа Мелони, Рим, 2026"
+  },
+  {
+   "id": 11,
+   "start_sec": 110.6,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОКОМИССИЯ"
+  },
+  {
+   "id": 12,
+   "start_sec": 121.1,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка"
+  },
+  {
+   "id": 13,
+   "start_sec": 134.0,
+   "duration_sec": 7.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ГОСДЕП-США"
+  },
+  {
+   "id": 14,
+   "start_sec": 141.3,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/АРМИЯ-США"
+  },
+  {
+   "id": 15,
+   "start_sec": 154.4,
+   "duration_sec": 7.65,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО"
+  },
+  {
+   "id": 16,
+   "start_sec": 162.05,
+   "duration_sec": 7.65,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА"
+  },
+  {
+   "id": 17,
+   "start_sec": 169.7,
+   "duration_sec": 16.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Вестминстерский дворец на берегу Темзы, Лондон, 2026"
+  },
+  {
+   "id": 18,
+   "start_sec": 185.8,
+   "duration_sec": 15.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/КАПИТОЛИЙ-ВАШИНГТОНЕ-ДНЁМ"
+  },
+  {
+   "id": 19,
+   "start_sec": 201.3,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка"
+  },
+  {
+   "id": 20,
+   "start_sec": 213.8,
+   "duration_sec": 16.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БРИФИНГ-ЗАЛ-БЕЛОГО-ДОМА"
+  },
+  {
+   "id": 21,
+   "start_sec": 230.7,
+   "duration_sec": 16.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ"
+  },
+  {
+   "id": 22,
+   "start_sec": 247.1,
+   "duration_sec": 9.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Путин осматривает современное промышленное предприятие, Москва, 2026"
+  },
+  {
+   "id": 23,
+   "start_sec": 256.4,
+   "duration_sec": 5.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/КОНТЕЙНЕРНЫЙ-ПОРТ-ЛОС-АНДЖЕЛЕСА"
+  },
+  {
+   "id": 24,
+   "start_sec": 261.9,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ"
+  },
+  {
+   "id": 25,
+   "start_sec": 272.1,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Овальный кабинет Дональда Трампа, Белый дом, Вашингтон, 2026"
+  },
+  {
+   "id": 26,
+   "start_sec": 282.3,
+   "duration_sec": 13.5,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка"
+  },
+  {
+   "id": 27,
+   "start_sec": 295.8,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ"
+  },
+  {
+   "id": 28,
+   "start_sec": 308.4,
+   "duration_sec": 5.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Фридрих Мерц за кафедрой Бундестага, Берлин, 2026"
+  },
+  {
+   "id": 29,
+   "start_sec": 313.6,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ"
+  },
+  {
+   "id": 30,
+   "start_sec": 325.2,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО"
+  },
+  {
+   "id": 31,
+   "start_sec": 334.9,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/Pewg41TZW51EHApcm3YaKDIFYfwuztXxJdHsHiYGgxUo2juYE-YmZjrLrdfhUUK6qpQiTZFmIPojxIXkRP1iKJgAZIv1oM3oRbNFe2DndU5ePkmWrmn8aTSkeTTITGMGd8sdq4kpZkcxaKBaLV7pNUs1dsU8mVnBGvGBmTvZRjfTdsoVT32_Um3aEWimUboJ2ZwGj0boL9SaP_UVDXeaLP09CBXmFuN73K0-NUGJaILVMFrP27XCobYRIjjURIUu16FVdc_BfMoxg2rTE8K00dXzfFyV5Er2C0t9uOoP0RKKtryaUl2d2t6X_j8-bbuoPBxGQcNnGB82aeb-4hGvfQ.jpg",
+   "visual_prompt": "фото 621x396, Джаред Кушнер выступает (пост t.me/Media_Post_UA/34945, заголовок статьи срезан)"
+  },
+  {
+   "id": 32,
+   "start_sec": 340.9,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЕЛИСЕЙСКИЙ-ДВОРЕЦ-ПАРИЖЕ"
+  },
+  {
+   "id": 33,
+   "start_sec": 352.9,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка"
+  },
+  {
+   "id": 34,
+   "start_sec": 363.1,
+   "duration_sec": 17.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА"
+  },
+  {
+   "id": 35,
+   "start_sec": 381.0,
+   "duration_sec": 9.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "коридор Кремля перед выходом Владимира Путина, Москва, 2026"
+  },
+  {
+   "id": 36,
+   "start_sec": 390.2,
+   "duration_sec": 14.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ"
+  },
+  {
+   "id": 37,
+   "start_sec": 405.0,
+   "duration_sec": 8.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Европарламента имени Луизы Вайс, Страсбург, 2026"
+  },
+  {
+   "id": 38,
+   "start_sec": 413.7,
+   "duration_sec": 10.1,
+   "text": "",
+   "source": "web_search",
+   "source_query": "небоскрёбы Корниш и правительственный квартал, Абу-Даби, 2026"
+  },
+  {
+   "id": 39,
+   "start_sec": 423.8,
+   "duration_sec": 10.65,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Кирилл Буданов входит в правительственное здание, Киев, 2026"
+  },
+  {
+   "id": 40,
+   "start_sec": 434.45,
+   "duration_sec": 10.65,
+   "text": "",
+   "source": "card:dof",
+   "source_query": "карточка"
+  },
+  {
+   "id": 41,
+   "start_sec": 445.1,
+   "duration_sec": 18.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН"
+  },
+  {
+   "id": 42,
+   "start_sec": 463.2,
+   "duration_sec": 6.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "автомобиль Кирилла Буданова у правительственного квартала, Киев, 2026"
+  },
+  {
+   "id": 43,
+   "start_sec": 469.5,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Георгиевский зал Кремля, Владимир Путин, Москва, 2026"
+  },
+  {
+   "id": 44,
+   "start_sec": 482.1,
+   "duration_sec": 16.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-ПАРЛАМЕНТА-ФИНЛЯНДИИ"
+  },
+  {
+   "id": 45,
+   "start_sec": 498.5,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп за столом Resolute в Овальном кабинете, Белый дом, 2026"
+  },
+  {
+   "id": 46,
+   "start_sec": 508.7,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон покидает Елисейский дворец, Париж, 2026"
+  },
+  {
+   "id": 47,
+   "start_sec": 521.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Джорджа Мелони выступает в Палаццо Киджи, Рим, 2026"
+  },
+  {
+   "id": 48,
+   "start_sec": 533.5,
+   "duration_sec": 14.9,
+   "text": "",
+   "source": "web_search",
+   "source_query": "вход Еврокомиссии, Урсула фон дер Ляйен, Брюссель, 2026"
+  },
+  {
+   "id": 49,
+   "start_sec": 548.4,
+   "duration_sec": 7.4,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка"
+  },
+  {
+   "id": 50,
+   "start_sec": 555.8,
+   "duration_sec": 16.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон на совместной пресс-конференции, Париж, 2026"
+  },
+  {
+   "id": 51,
+   "start_sec": 572.0,
+   "duration_sec": 16.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "правительственная колонна Дональда Туска, Варшава, 2026"
+  },
+  {
+   "id": 52,
+   "start_sec": 588.0,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Владимир Путин в рабочем кабинете Кремля, Москва, 2026"
+  },
+  {
+   "id": 53,
+   "start_sec": 597.7,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "купол Капитолия после промежуточных выборов, Вашингтон, 2026"
+  },
+  {
+   "id": 54,
+   "start_sec": 610.8,
+   "duration_sec": 9.45,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Дональд Трамп возвращается в Белый дом, Вашингтон, 2026"
+  },
+  {
+   "id": 55,
+   "start_sec": 620.25,
+   "duration_sec": 9.45,
+   "text": "",
+   "source": "card:wall",
+   "source_query": "карточка"
+  },
+  {
+   "id": 56,
+   "start_sec": 629.7,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "зал заседаний Европейского совета перед саммитом, Брюссель, 2026"
+  },
+  {
+   "id": 57,
+   "start_sec": 642.2,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микрофоны Белого дома перед выходом Дональда Трампа, Вашингтон, 2026"
+  },
+  {
+   "id": 58,
+   "start_sec": 651.2,
+   "duration_sec": 17.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "сенаторы Демократической партии США у Капитолия, Вашингтон, 2026"
+  },
+  {
+   "id": 59,
+   "start_sec": 668.4,
+   "duration_sec": 8.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "коридоры Капитолия после победы Демократической партии США, Вашингтон, 2026"
+  },
+  {
+   "id": 60,
+   "start_sec": 676.7,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Дональд Трамп в Овальном кабинете после выборов, Вашингтон, 2026"
+  },
+  {
+   "id": 61,
+   "start_sec": 685.7,
+   "duration_sec": 7.9,
+   "text": "",
+   "source": "card:photo",
+   "source_query": "карточка",
+   "_card_photo": true,
+   "url": "https://cdn4.telesco.pe/file/MRRUb_eAfC5bO4-8jUF_ac06PvpR1mQqwgPRnXS2HSiqENE1SG-0w_RtgsAwDYrNaMl1hzPqe-H0f5hCceSD6YBSYg4fAvlUROkIyLtTqQYDHelZpE8EpwyZHDU5mUaD3XdK4CEyDAK_c9RXM7rhFtV__2yUQw4A_0Odst7CaabVmyEWEd67nPtGvPw0P0dCJwu4vizdB8Wsvhn-2acF292tzJe8fsEOgx3gYmdKpD4C0fPZSohEjNDMUacN41d5KhljtP-2Oq8Ig4kulzes3SovWEjNc4uOZFb0UC-hiObskEWCBrgAC78uLh632pKl8t6PYmq65eq1C-PnsaD-Ew.jpg"
+  },
+  {
+   "id": 62,
+   "start_sec": 693.6,
+   "duration_sec": 15.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "коридор Капитолия и законодатели, Вашингтон, 2026"
+  },
+  {
+   "id": 63,
+   "start_sec": 708.8,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Южная лужайка Белого дома, Дональд Трамп, Вашингтон, 2026",
+   "fx": "flash"
+  },
+  {
+   "id": 64,
+   "start_sec": 721.6,
+   "duration_sec": 7.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "европейские чиновники у здания Еврокомиссии, Брюссель, 2026"
+  },
+  {
+   "id": 65,
+   "start_sec": 729.5,
+   "duration_sec": 8.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "танк Leopard 2 бундесвера на полигоне Графенвёр, 2026"
+  },
+  {
+   "id": 66,
+   "start_sec": 738.4,
+   "duration_sec": 20.8,
+   "text": "",
+   "source": "card:slider",
+   "source_query": "карточка"
+  },
+  {
+   "id": 67,
+   "start_sec": 759.2,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Белый дом с лужайки, Вашингтон, 2026"
+  },
+  {
+   "id": 68,
+   "start_sec": 770.4,
+   "duration_sec": 14.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп с экономическими советниками, Вашингтон, 2026"
+  },
+  {
+   "id": 69,
+   "start_sec": 784.5,
+   "duration_sec": 7.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ДОМ-ПРАВИТЕЛЬСТВА-РОССИИ"
+  },
+  {
+   "id": 70,
+   "start_sec": 791.9,
+   "duration_sec": 16.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "колонна автомобилей у МИД России, Москва, 2026"
+  },
+  {
+   "id": 71,
+   "start_sec": 808.3,
+   "duration_sec": 12.65,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка"
+  },
+  {
+   "id": 72,
+   "start_sec": 820.95,
+   "duration_sec": 12.65,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Рейхстаг под флагом Германии вечером, Берлин, 2026"
+  },
+  {
+   "id": 73,
+   "start_sec": 833.6,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "дворец Каср-аль-Ватан в Абу-Даби, 2026"
+  },
+  {
+   "id": 74,
+   "start_sec": 845.8,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пресс-брифинг в зале Джеймса Брейди, Белый дом, Вашингтон, 2026"
+  },
+  {
+   "id": 75,
+   "start_sec": 858.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Кирилл Буданов у правительственного офиса, Киев, 2026"
+  },
+  {
+   "id": 76,
+   "start_sec": 868.9,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка"
+  },
+  {
+   "id": 77,
+   "start_sec": 879.8,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/АБУ-ДАБИ-ПЕРЕГОВОРЫ"
+  },
+  {
+   "id": 78,
+   "start_sec": 889.7,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп проходит по Белому дому, Вашингтон, 2026"
+  },
+  {
+   "id": 79,
+   "start_sec": 902.0,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "web_search",
+   "source_query": "кортеж Дональда Трампа возле Белого дома, Вашингтон, 2026"
+  },
+  {
+   "id": 80,
+   "start_sec": 914.4,
+   "duration_sec": 7.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц один перед микрофонами, Берлин, 2026"
+  },
+  {
+   "id": 81,
+   "start_sec": 921.6,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "депутаты Бундестага выходят из Рейхстага, Берлин, 2026"
+  },
+  {
+   "id": 82,
+   "start_sec": 932.5,
+   "duration_sec": 13.08,
+   "text": "",
+   "source": "web_search",
+   "source_query": "подсвеченный Берлаймон после рабочего дня, Брюссель, 2026"
+  }
+ ]
+}
