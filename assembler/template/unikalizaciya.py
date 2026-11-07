@@ -143,6 +143,9 @@ def main():
     ap.add_argument("target_project", help="проект второго ролика (сцены рерайта)")
     ap.add_argument("--seed", type=int, default=0, help="зерно случайности")
     ap.add_argument("--no-mirror", action="store_true", help="не зеркалить вовсе")
+    ap.add_argument("--wrap", type=int, default=35,
+                    help="сколько процентов кадров донора ОБЕРНУТЬ в наш "
+                         "элемент вместо прямой постановки (по умолчанию 35)")
     ap.add_argument("--share", type=int, default=80,
                     help="сколько процентов сцен закрывать кадрами донора "
                          "(по умолчанию 80, остальное — своё)")
@@ -308,10 +311,58 @@ def main():
     print("перенесено кадров: %d из %d сцен" % (len(new_man), len(tgt_scenes)))
     print("доноров: %d, использовано %d, свободных осталось %d"
           % (len(donors), len({v[0] for v in assigned.values()}), _free))
-    _own = len(targets) - len(new_man)
+    # ── КАДР ДОНОРА УХОДИТ В НАШ ЭЛЕМЕНТ, А НЕ НА ВЕСЬ ЭКРАН ──────────
+    # Его слово 07.11, после сдачи шести роликов: «визуальный ряд получился
+    # очень близким, один в один. Можно эти картинки брать, но не вставлять
+    # как есть. На „5 МИНУТ“ картинка была прямо на экран, а на ПЛАНЕТУ эта
+    # же картинка уходит в наш элемент конструктора — где картинка слева,
+    # справа надписи. Вот это совершенно другой визуал, хотя исходник тот
+    # же. А ставить один к одному, пускай даже с разными эффектами, — это
+    # совсем не то».
+    # Зеркало и срез меняют кадр технически, но композиция остаётся той же,
+    # и два ролика читаются как один. Элемент меняет САМ КАДР: снимок
+    # становится частью композиции с текстом, рамкой и своей гаммой канала.
+    # Поэтому часть перенесённых кадров помечается «в элемент»: файл
+    # откладывается отдельно, а в отчёт идёт готовая команда.
+    _wrap_n = int(len(new_man) * max(0, min(80, args.wrap)) / 100.0)
+    _wrap_dir = os.path.join(args.target_project, "cards", "photo")
+    _wrapped = []
+    if _wrap_n:
+        os.makedirs(_wrap_dir, exist_ok=True)
+        # берём те, что РОВНО подходят под окно: фотографии, не видео
+        _cand = [m for m in new_man if not m["file"].lower().endswith(".mp4")]
+        rnd.shuffle(_cand)
+        _views = ["photo", "split", "dof", "wall", "film_frame", "vyrezka"]
+        for i, m in enumerate(_cand[:_wrap_n]):
+            src_p = os.path.join(dst_imgs, m["file"])
+            dst_p = os.path.join(_wrap_dir, m["file"])
+            try:
+                shutil.move(src_p, dst_p)
+            except OSError:
+                continue
+            m["wrap"] = _views[i % len(_views)]
+            _wrapped.append((m["id"], m["wrap"], dst_p))
+        new_man = [m for m in new_man if "wrap" not in m]
+
+    _own = len(targets) - len(new_man) - len(_wrapped)
     print("своих сцен оставлено: %d из %d (%d%%) — закрывай их кадром своей "
           "медиатеки или СВОИМ элементом" % (_own, len(targets),
                                              round(100 * _own / max(1, len(targets)))))
+    if _wrapped:
+        print("")
+        print("В ЭЛЕМЕНТ (кадр донора НЕ на весь экран, а внутри композиции): "
+              "%d шт." % len(_wrapped))
+        print("Файлы отложены в cards/photo/. Поставь каждый своей командой,")
+        print("текст возьми из реплики этой сцены:")
+        for sid, view, path in _wrapped:
+            rel = os.path.relpath(path, args.target_project)
+            if view in ("photo", "split"):
+                print("  сцена %-3d %-11s style_card.py <scenes> %d %s "
+                      "--photo %s --item \"...\" --item \"...\""
+                      % (sid, view, sid, view, rel))
+            else:
+                print("  сцена %-3d %-11s element_put.py <scenes> %d --view %s "
+                      "--photo %s" % (sid, view, sid, view, rel))
     print("виды элементов, которые у нас есть и почти не идут в дело: "
           "quote, doc, duel, strike, paper_typed, paper_hand, slope, line, "
           "pie, map_regions, map_dist, vyrezka, vyrezka_kontur")
