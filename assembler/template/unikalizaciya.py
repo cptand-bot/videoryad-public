@@ -26,6 +26,7 @@
 он сам знает канал и сам даёт второму каналу другой набор.
 """
 import argparse
+import glob
 import json
 import os
 import random
@@ -167,34 +168,95 @@ def main():
             continue
         donors.append((sid, bag(sc), m))
 
-    used, new_man, report = [], [], []
+    # ── ПОДБОР ДОНОРОВ: ГЛОБАЛЬНО, С УЧЁТОМ ЗАНЯТОСТИ ──────────────────
+    # ЖАДНО «ПО ОДНОЙ СЦЕНЕ» НЕЛЬЗЯ (07.11, улов вкладки `usuario-2c`).
+    # Первая версия шла по сценам подряд и каждой давала лучшего донора, не
+    # помня, что он уже отдан: из 82 кадров донора использовался 61, двадцать
+    # один не тронут вовсе, четырнадцать поставлены по два-три раза, а восемь
+    # сцен остались ВООБЩЕ без кадра. Плюс дубль файла внутри ролика — на нём
+    # встаёт `selfcheck` (внутри сборки файл ровно один раз).
+    # Поэтому считаем ВСЕ пары «сцена-донор», сортируем по качеству совпадения
+    # и раздаём сверху вниз: занятый донор выбывает, занятая сцена тоже.
+    targets = [sc for sc in tgt_scenes
+               if not str(sc.get("source", "")).startswith("card:")]
+    for sc in tgt_scenes:
+        if str(sc.get("source", "")).startswith("card:"):
+            pass
+
+    pairs = []
+    for sc in targets:
+        tid = int(sc["id"])
+        b = bag(sc)
+        for sid, db, m in donors:
+            inter = len(b & db)
+            score = inter / max(1, len(b | db))
+            # кадр соседней по счёту сцены ближе по смыслу, чем далёкий
+            score -= 0.002 * abs(sid - tid)
+            score += 0.0001 * rnd.random()
+            pairs.append((score, tid, sid, m))
+    pairs.sort(key=lambda x: -x[0])
+
+    assigned = {}          # сцена -> (донор, запись манифеста)
+    busy_donors = set()
+    for score, tid, sid, m in pairs:
+        if tid in assigned or sid in busy_donors:
+            continue
+        assigned[tid] = (sid, m)
+        busy_donors.add(sid)
+
+    # ДОНОРЫ КОНЧИЛИСЬ — ТОЛЬКО ТОГДА ПОВТОР, И НЕ БЛИЖЕ 90 СЕКУНД.
+    # Это правило «c» боевого конвейера: один и тот же кадр дважды допустим
+    # лишь разнесённым по времени, рядом стоящие повторы — брак.
+    def _start(tid):
+        for sc in targets:
+            if int(sc["id"]) == tid:
+                return float(sc.get("start_sec") or 0)
+        return 0.0
+
+    for sc in targets:
+        tid = int(sc["id"])
+        if tid in assigned:
+            continue
+        b = bag(sc)
+        best, best_score = None, -1e9
+        for sid, db, m in donors:
+            far = all(abs(_start(tid) - _start(t)) > 90
+                      for t, (s2, _m2) in assigned.items() if s2 == sid)
+            if not far:
+                continue
+            score = len(b & db) / max(1, len(b | db)) - 0.002 * abs(sid - tid)
+            if score > best_score:
+                best, best_score = (sid, m), score
+        if best:
+            assigned[tid] = best
+
+    # ── ПЕРЕНОС ФАЙЛОВ ────────────────────────────────────────────────
+    new_man, report = [], []
     for sc in tgt_scenes:
         tid = int(sc["id"])
         if str(sc.get("source", "")).startswith("card:"):
-            report.append((tid, "рисованный кадр — кадр не нужен"))
+            report.append("сцена %d — рисованный кадр, донор не нужен" % tid)
             continue
-        b = bag(sc)
-        best, best_score = None, -1.0
-        for sid, db, m in donors:
-            if sid in used[-2:]:          # соседние сцены не повторяют кадр
-                continue
-            inter = len(b & db)
-            score = inter / max(1, len(b | db)) + 0.001 * rnd.random()
-            # кадр, стоявший рядом по счёту, предпочтительнее далёкого:
-            # он подбирался под соседний по смыслу кусок текста
-            score -= 0.002 * abs(sid - tid)
-            if score > best_score:
-                best, best_score = (sid, m), score
-        if best is None:
-            report.append((tid, "донора не нашлось"))
+        if tid not in assigned:
+            report.append("сцена %d — донора не нашлось" % tid)
             continue
-        sid, m = best
-        used.append(sid)
+        sid, m = assigned[tid]
+        # ФАЙЛ ИЩЕМ ПО ШАБЛОНУ, А НЕ ПО ИМЕНИ ИЗ МАНИФЕСТА (07.11, тот же
+        # улов): в манифесте стояло `scene_076.jpg`, а на диске лежал
+        # `scene_076.mp4` — кадр молча терялся с сообщением «файл донора
+        # пропал». Манифест и диск расходятся по расширению всегда, когда
+        # сцену переделали из фото в видео.
         src_file = os.path.join(src_imgs, m["file"])
         if not os.path.exists(src_file):
-            report.append((tid, "файл донора пропал: %s" % m["file"]))
-            continue
-        ext = os.path.splitext(m["file"])[1]
+            alt = sorted(glob.glob(os.path.join(src_imgs,
+                                                "scene_%03d.*" % sid)))
+            alt = [a for a in alt if ".ovthumb." not in a and ".text." not in a]
+            if alt:
+                src_file = alt[0]
+            else:
+                report.append("сцена %d — файл донора %d не найден" % (tid, sid))
+                continue
+        ext = os.path.splitext(src_file)[1]
         name = "scene_%03d%s" % (tid, ext)
         dst_file = os.path.join(dst_imgs, name)
 
@@ -203,15 +265,32 @@ def main():
         how = transform(src_file, dst_file, mirror, crop)
         new_man.append({"id": tid, "file": name, "source": m.get("source", "reuse"),
                         "status": "ok", "reused_from": sid})
-        report.append((tid, "сцена %d ← кадр сцены %d, %s" % (tid, sid, how or "как есть")))
+        report.append("сцена %d ← кадр сцены %d, %s" % (tid, sid, how or "как есть"))
 
     json.dump(new_man, open(os.path.join(dst_imgs, "manifest.json"), "w",
                             encoding="utf-8"), ensure_ascii=False, indent=2)
-    for tid, line in report:
+    for line in report:
         print("  %s" % line)
+    _free = len(donors) - len({v[0] for v in assigned.values()})
     print("перенесено кадров: %d из %d сцен" % (len(new_man), len(tgt_scenes)))
+    print("доноров: %d, использовано %d, свободных осталось %d"
+          % (len(donors), len({v[0] for v in assigned.values()}), _free))
     print("поиск не запускался — фетч этому ролику не нужен")
 
 
 if __name__ == "__main__":
-    main()
+    # НЕНУЛЕВОЙ КОД ВОЗВРАТА НА ЛЮБОМ СБОЕ (БЛОКЕР 07.11, улов вкладки
+    # `usuario-2c`). Инструмент упал на `NameError` и всё равно отчитался
+    # `exited with code 0` — то есть обёртка, проверяющая код возврата,
+    # отправила бы в сборку ролик с одним кадром из пятидесяти семи.
+    # Это тот самый класс «успех может значить ничего не сделано»: без
+    # честного кода возврата инструмент нельзя ставить в конвейер вообще.
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as exc:
+        import traceback
+        traceback.print_exc()
+        print("СБОЙ УНИКАЛИЗАТОРА: %s — кадры НЕ перенесены" % exc)
+        sys.exit(1)

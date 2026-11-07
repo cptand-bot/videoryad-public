@@ -1000,6 +1000,16 @@ jobs:
           # отпечатки готовых всплывашек этой машины — по ним assemble поймёт,
           # что переделывать нечего (а чего нет — дорисует сам)
           cp "$proj/clips"/.overlaid.*.json ovl-out/ 2>/dev/null || true
+          # И ОТМЕТКИ ВЖИГАНИЯ СУБТИТРОВ — БЕЗ НИХ ВСЯ МАТРИЦА ВХОЛОСТУЮ
+          # (07.11, улов вкладки `usuario-65`, цена 14 минут КАЖДОМУ ролику).
+          # Матрица честно рисовала всплывашки и вжигала субтитры, но в
+          # артефакт клала только клипы и `.overlaid.*.json`. Сборка не
+          # находила ни одного `.capped.*.json`, честно говорила «субтитры
+          # ВКЛЮЧЕНЫ и ещё не вожжены — шаг всплывашек не пропускаю» и
+          # перерисовывала ВСЕ всплывашки в одиночку: 59 штук за 823 с
+          # против 2,2 минуты на двенадцати машинах. С 03.11 субтитры
+          # обязательны в каждой сдаче, значит условие выполнялось ВСЕГДА.
+          cp "$proj/clips"/.capped.*.json ovl-out/ 2>/dev/null || true
           n=$(ls ovl-out/clip_*.mp4 2>/dev/null | wc -l)
           echo "отдаю клипов: $n"
           echo "count=$n" >> "$GITHUB_OUTPUT"
@@ -1201,7 +1211,11 @@ jobs:
           if ls ovl-out/clip_*.mp4 >/dev/null 2>&1; then
             cp ovl-out/clip_*.mp4 "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
             cp ovl-out/.overlaid.*.json "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
-            echo "со всплывашками пришло: $(ls ovl-out/clip_*.mp4 2>/dev/null | wc -l), отпечатков: $(ls ovl-out/.overlaid.*.json 2>/dev/null | wc -l)"
+            # отметки вжигания субтитров (07.11) — вторая половина починки:
+            # без них сборка не знает, что матрица уже всё вожгла, и
+            # перерисовывает всплывашки заново (823 с против 2,2 минуты)
+            cp ovl-out/.capped.*.json "queue/${{ needs.setup.outputs.name }}/clips/" 2>/dev/null || true
+            echo "со всплывашками пришло: $(ls ovl-out/clip_*.mp4 2>/dev/null | wc -l), отпечатков: $(ls ovl-out/.overlaid.*.json 2>/dev/null | wc -l), отметок субтитров: $(ls ovl-out/.capped.*.json 2>/dev/null | wc -l)"
           else
             echo "матрица всплывашек ничего не отдала — рисую здесь, как раньше"
           fi
