@@ -140,6 +140,8 @@ template/fonts/ArialBlack.ttf
 template/prevyu.py
 template/prevyu_text.py
 template/upakovka.py
+template/upakovka_lib/svyazki.jsonl
+template/svyazka.py
 template/upakovka_lib/vybor_drive.json
 template/vybor_svod.py
 template/upakovka_lib/vybor.jsonl
