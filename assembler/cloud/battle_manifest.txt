@@ -122,6 +122,7 @@ template/wm_sheet.py
 template/zoom.py
 template/ozvuchka.py
 template/rewrite_brief.py
+template/rewrite_fix.py
 template/rewrite_lint.py
 template/unikalizaciya.py
 template/take_folder.py
