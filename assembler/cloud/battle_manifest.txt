@@ -69,6 +69,8 @@ template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
 template/codex_ask.sh
+template/upakovka_lib/codex_zahody.tsv
+template/codex_raskhod.py
 template/codex_brief.py
 template/contact_sheet.py
 template/crop_brand.py
