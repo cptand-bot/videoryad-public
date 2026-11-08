@@ -133,6 +133,7 @@ template/fx_subscribe2.py
 template/obyazatelno.py
 template/element_put.py
 template/nadpis_maska.py
+template/nadpisi_spread.py
 template/fonts/ArialBlack.ttf
 template/prevyu.py
 template/prevyu_text.py

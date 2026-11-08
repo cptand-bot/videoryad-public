@@ -337,6 +337,29 @@ else:
               for k, v in ov.items() if k != "anchor" and isinstance(v.get("text"), dict)
               and ((v.get("text") or {}).get("words") or (v.get("text") or {}).get("text"))]
     _tcols = [c for c in _tcols if c]
+    # СЧИТАТЬ НАДО ДОЛЮ, А НЕ ЧИСЛО РАЗНЫХ ЦВЕТОВ (08.11, его слово по
+    # готовому дашборду: «снова тексты идут одного цвета, только белый и
+    # только позиция вверху… старая грабли»). Проверка ниже смотрела, сколько
+    # РАЗНЫХ цветов, и молчала на ролике, где цветов было восемь, но белых
+    # 18 из 31, а клетка `tc` занимала 25 из 31. Монотонность — это
+    # ПРЕОБЛАДАНИЕ, а не бедность набора. Лечится одной командой:
+    # `template/nadpisi_spread.py overlays.json`.
+    _tpos = [str((v.get("text") or {}).get("pos") or "").lower()
+             for k, v in ov.items() if k != "anchor" and isinstance(v.get("text"), dict)
+             and not str((v.get("text") or {}).get("style") or "").startswith("mask")
+             and ((v.get("text") or {}).get("words") or (v.get("text") or {}).get("text"))]
+    _tpos = [x for x in _tpos if x]
+    for _что, _ряд in (("ЦВЕТ", _tcols), ("МЕСТО", _tpos)):
+        if len(_ряд) < 6:
+            continue
+        _top = max(set(_ряд), key=_ряд.count)
+        _доля = round(100 * _ряд.count(_top) / len(_ряд))
+        if _доля > 60:
+            FAIL.append(
+                "НАДПИСИ ОДНООБРАЗНЫ ПО «%s»: %s занимает %d%% (%d из %d). "
+                "Потолок 60%%. Развести одной командой: python3 "
+                "~/.claude/skills/news-video/template/nadpisi_spread.py "
+                "overlays.json" % (_что, _top, _доля, _ряд.count(_top), len(_ряд)))
     if len(_tcols) >= 5 and len(set(_tcols)) < 3:
         WARN.append(
             "надписей %d, а цветов всего %d (%s) — пользователь просил РАЗНЫЕ "
