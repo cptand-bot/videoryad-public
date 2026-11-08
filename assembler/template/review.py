@@ -3348,14 +3348,45 @@ def run_live(scenes_path, images_dir, port):
                 # вкладкой пачкой, на плитках не показывались вовсе — он
                 # видел их впервые в готовом ролике. Рисуем недостающие при
                 # сборке страницы: это доли секунды на надпись.
+                _стиль = str(tb.get("style") or "").lower()
                 if not os.path.exists(tpng):
                     try:
                         os.makedirs("overlays", exist_ok=True)
-                        render_text_png(str(tb.get("words") or tb.get("text") or ""),
-                                        str(tb.get("color") or "white"), tpng,
-                                        str(tb.get("font") or "default"))
-                    except Exception:
-                        pass
+                        if _стиль.startswith("mask"):
+                            # НАДПИСЬ ИЗ-ПОД МАСКИ РИСУЕТСЯ СВОЕЙ РИСОВАЛКОЙ
+                            # (08.11, КРИТИЧЕСКОЕ, его слово: «на канал
+                            # ПЛАНЕТА не используется этот формат надписей,
+                            # другой формат мы вчера разработали и утвердили,
+                            # он отличается в корне дизайном»). Утром я начал
+                            # дорисовывать недостающие картинки надписей на
+                            # плитки — и рисовал их ОБЫЧНЫМ стилем «5 МИНУТ»,
+                            # хотя на ПЛАНЕТЕ стоит `mask_plate`. На дашборде
+                            # это выглядело как чужой формат. Теперь стиль
+                            # решает, кто рисует: маске — `nadpis_maska`,
+                            # берём последний кадр её секвенции.
+                            import tempfile, glob as _g
+                            import nadpis_maska as _NM
+                            _tmp = tempfile.mkdtemp(prefix="maska-prev-")
+                            try:
+                                _NM.sequence(_tmp,
+                                             str(tb.get("words") or ""),
+                                             str(tb.get("sub") or ""),
+                                             scale=2.0 * float(tb.get("scale", 1.0) or 1.0),
+                                             channel=str(data.get("channel") or ""),
+                                             fps=12,
+                                             plate=_стиль == "mask_plate")
+                                _кадры = sorted(_g.glob(os.path.join(_tmp, "*.png")))
+                                if _кадры:
+                                    shutil.copy2(_кадры[-1], tpng)
+                            finally:
+                                shutil.rmtree(_tmp, ignore_errors=True)
+                        else:
+                            render_text_png(str(tb.get("words") or tb.get("text") or ""),
+                                            str(tb.get("color") or "white"), tpng,
+                                            str(tb.get("font") or "default"))
+                    except Exception as _e:
+                        print("  превью надписи сцены %s не нарисовалось: %s"
+                              % (k, _e), flush=True)
                 v["_tv"] = int(os.path.getmtime(tpng)) if os.path.exists(tpng) else 0
                 v["_tpng"] = tpng if os.path.exists(tpng) else ""
                 try:
