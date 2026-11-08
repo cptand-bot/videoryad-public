@@ -195,6 +195,24 @@ out="${brief%.txt}.ОТВЕТ.txt"
   # Поэтому теперь: одинаковый бриф — строго по очереди (замок по его имени),
   # разные брифы — параллельно, но не больше `CODEX_PARALLEL` (по умолчанию
   # три: дальше упираемся в лимит его подписки, а не в машину).
+  # ВТОРОЙ АККАУНТ АГЕНТА — ТОТ ЖЕ ПРИЁМ, ЧТО С ШЕСТЬЮ ТРУБАМИ GITHUB
+  # (08.11). У Codex CLI есть `CODEX_HOME`: каждый каталог держит свою
+  # авторизацию. Значит второй аккаунт — это отдельная папка и своё
+  # пятичасовое окно, а переключение идёт переменной, без входа-выхода.
+  #   CODEX_ACCOUNT=eva  → ~/.codex-eva   (разово: CODEX_HOME=~/.codex-eva codex login)
+  #   без переменной     → ~/.codex       (основной аккаунт, как было)
+  if [ -n "${CODEX_ACCOUNT:-}" ]; then
+    _ch="$HOME/.codex-${CODEX_ACCOUNT}"
+    if [ -f "$_ch/auth.json" ]; then
+      export CODEX_HOME="$_ch"
+      echo "агент: аккаунт ${CODEX_ACCOUNT} ($_ch)" >&2
+    else
+      echo "!! аккаунта «${CODEX_ACCOUNT}» нет: $_ch/auth.json не найден." >&2
+      echo "   Разовый вход: CODEX_HOME=$_ch codex login" >&2
+      exit 5
+    fi
+  fi
+
   _slots="${CODEX_PARALLEL:-3}"
   _bk="$(printf '%s' "$brief" | md5sum | cut -c1-16)"
   exec 8>"/tmp/videoryad-codex-brief-$_bk.lock"
