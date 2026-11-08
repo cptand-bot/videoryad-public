@@ -35,6 +35,7 @@
 """
 import argparse
 import json
+import io
 import os
 import re
 import subprocess
@@ -469,6 +470,43 @@ def needs_voice(folder):
     return True
 
 
+
+# ОТКАЗ СЕРВИСА ДОЛЖЕН БЫТЬ ВИДЕН СНАРУЖИ (08.11, улов вкладки `usuario-47`).
+# Хост озвучки `api.qw1voicegencore.pro` перестал принимать соединения на 443
+# (код 000, при живых github и cloudflare). Сторож при этом продолжал
+# бодро писать «готово к озвучке» и молча ронять каждый круг: за полтора
+# часа по всему дереву НОВОСТИ не появилось ни одного mp3, и понять это
+# можно было только по отсутствию файлов. Теперь он оставляет метку рядом с
+# корнем — её видит любая вкладка и координатор.
+СБОЙ_ФАЙЛ = "/tmp/videoryad-ozvuchka-sboy.txt"
+
+
+def _сбой_наружу(root, exc):
+    """Пишем причину в файл-метку и повторяем её в консоль одной строкой."""
+    txt = ("%s\nкорень: %s\nпричина: %s: %s\n"
+           % (time.strftime("%Y-%m-%d %H:%M:%S"), root,
+              type(exc).__name__, str(exc)[:300]))
+    try:
+        with io.open(СБОЙ_ФАЙЛ, "w", encoding="utf-8") as f:
+            f.write(txt)
+    except OSError:
+        pass
+    _сеть = ("Network is unreachable" in str(exc)
+             or "URLError" in type(exc).__name__
+             or "timed out" in str(exc).lower())
+    if _сеть:
+        print("   ^^ ЭТО ОТКАЗ СЕРВИСА, А НЕ ТЕКСТА: темы будут висеть "
+              "«готово к озвучке», пока хост не оживёт.")
+        print("   метка для вкладок: %s" % СБОЙ_ФАЙЛ)
+
+
+def _сбой_снять():
+    try:
+        os.remove(СБОЙ_ФАЙЛ)
+    except OSError:
+        pass
+
+
 def watch(root, args, env):
     """СТОРОЖ: озвучка отвязана от вкладок.
 
@@ -494,8 +532,10 @@ def watch(root, args, env):
                 print("\n[%s] новая тема" % time.strftime("%H:%M:%S"))
                 if do_folder(t, args, env):
                     seen.add(t)
+                    _сбой_снять()        # сервис жив — метку убираем
         except Exception as exc:  # сторож не должен падать насовсем
             print("[%s] сбой круга: %s" % (time.strftime("%H:%M:%S"), exc))
+            _сбой_наружу(root, exc)
         time.sleep(args.every)
 
 
