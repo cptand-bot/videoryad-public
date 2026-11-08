@@ -3339,6 +3339,23 @@ def run_live(scenes_path, images_dir, port):
             tb = v.get("text") if isinstance(v.get("text"), dict) else None
             if tb and str(tb.get("words") or tb.get("text") or "").strip():
                 tpng = os.path.join("overlays", f"scene_{int(k):03d}.text.png")
+                # НАДПИСЬ ЛОЖИТСЯ НА ПРЕДПРОСМОТР СЦЕНЫ СРАЗУ (08.11, его
+                # прямая просьба: «по надписям надо ложить их сразу, вот как
+                # всплывашки, на то место, где они будут показываться, чтобы
+                # я видел, куда они ложатся, что они будут перекрывать»).
+                # Раньше картинка надписи рисовалась ТОЛЬКО когда он сам
+                # сохранял её панелью дашборда; надписи, расставленные
+                # вкладкой пачкой, на плитках не показывались вовсе — он
+                # видел их впервые в готовом ролике. Рисуем недостающие при
+                # сборке страницы: это доли секунды на надпись.
+                if not os.path.exists(tpng):
+                    try:
+                        os.makedirs("overlays", exist_ok=True)
+                        render_text_png(str(tb.get("words") or tb.get("text") or ""),
+                                        str(tb.get("color") or "white"), tpng,
+                                        str(tb.get("font") or "default"))
+                    except Exception:
+                        pass
                 v["_tv"] = int(os.path.getmtime(tpng)) if os.path.exists(tpng) else 0
                 v["_tpng"] = tpng if os.path.exists(tpng) else ""
                 try:
