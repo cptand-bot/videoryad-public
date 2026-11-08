@@ -1,149 +1,54 @@
 [
  {
-  "scene": 5,
-  "view": "cinematic.depth_of_field",
-  "dur": 16.9,
-  "anim": 16.9,
-  "tail_zoom": 0.0,
+  "scene": 6,
+  "view": "pull",
+  "dur": 10.5,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "photo": "images/scene_005.jpg",
-   "title": "«ПОТЕРПИТЕ»",
-   "watermark": "5 МИНУТ"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 10,
-  "view": "split",
-  "dur": 12.3,
-  "anim": 2.0,
-  "tail_zoom": 0.06,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {
-   "photo": "images/scene_010.jpg",
-   "text": "Вопрос о помощи немцам рядом с помощью Украине — чуть ли не пощёчина тем, кто страдает от конфликта.",
-   "author": "Йоханн Вадефуль",
-   "role": "министр иностранных дел Германии",
-   "source": "Бундестаг",
-   "accent": "Вопрос о помощи немцам рядом с",
+   "text": "За оставшиеся два года демократы не смогут просто взять и отменить всё.",
+   "kick": "Белый дом — своим сторонникам",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 15,
-  "view": "charts.cartogram",
-  "dur": 16.0,
-  "anim": 16.0,
+  "scene": 9,
+  "view": "marker_serif",
+  "dur": 8.1,
+  "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Германия=200 млн €",
-    "Германия за всё время=100 млрд €"
-   ],
-   "kick": "ноябрь 2026",
-   "title": "ПАКЕТ ПОМОЩИ КИЕВУ",
-   "mode": "bubble",
+   "text": "Это не трагедия века, а обычное американское бодание. Просто теперь внутри последних двух лет срока.",
+   "accent": "обычное американское бодание",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 19,
-  "view": "slider",
-  "dur": 10.8,
-  "anim": 10.8,
-  "tail_zoom": 0.0,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {},
-  "mode": "cli",
-  "script": "build_chart_slider.py",
-  "cfg": {
-   "title": "ПЕНСИИ В ЕВРОПЕ",
-   "min": 0.0,
-   "max": 100.0,
-   "low": 0.0,
-   "high": 100.0,
-   "marker_value": 70.0,
-   "marker_display": "70",
-   "seconds": 10.8,
-   "range_label": "от заморозки выплат до пересчёта возраста",
-   "caption": "направление одно: платить осторожнее",
-   "source": ""
-  }
- },
- {
-  "scene": 23,
-  "view": "photo",
-  "dur": 8.2,
-  "anim": 8.2,
-  "tail_zoom": 0.0,
+  "scene": 12,
+  "view": "vyrezka.gazeta",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "watermark": "5 МИНУТ",
-   "photo": "images/scene_023.jpg",
-   "title": "СДЕЛКА С ГОСУДАРСТВОМ",
-   "lines": [
-    "всю жизнь платишь в систему",
-    "взамен обещают не бросить",
-    "счёт предъявляют в конце"
-   ]
-  }
- },
- {
-  "scene": 27,
-  "view": "cinematic.evidence_wall",
-  "dur": 13.8,
-  "anim": 13.8,
-  "tail_zoom": 0.0,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {
-   "shots": [
-    [
-     "images/scene_020.jpg",
-     240,
-     250,
-     -4,
-     "Великобритания"
-    ],
-    [
-     "images/scene_021.jpg",
-     800,
-     250,
-     3,
-     "Румыния"
-    ],
-    [
-     "images/scene_022.jpg",
-     1360,
-     250,
-     -2,
-     "Чехия"
-    ],
-    [
-     "images/scene_026.jpg",
-     240,
-     580,
-     4,
-     "Германия"
-    ]
-   ],
-   "title": "ГДЕ РЕЖУТ СОЦИАЛЬНОЕ",
+   "photo": "images/kadr_hegset.jpg",
+   "author": "ПИТ ХЕГСЕТ",
+   "role": "министр обороны США",
+   "kick": "первая проверка конструкции",
+   "title": "Вашингтон",
    "watermark": "5 МИНУТ"
-  },
-  "mode": "frame"
+  }
  },
  {
-  "scene": 31,
+  "scene": 16,
   "view": "bars",
-  "dur": 11.4,
-  "anim": 11.4,
+  "dur": 19.9,
+  "anim": 19.9,
   "tail_zoom": 0.0,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
@@ -151,93 +56,79 @@
   "mode": "cli",
   "script": "build_chart_bars.py",
   "cfg": {
-   "title": "РЕЙТИНГ МЕРЦА",
-   "caption": "82 из 100 говорят «нет»",
-   "seconds": 11.4,
+   "title": "НОВЫЙ ПАКЕТ ДЕМОКРАТОВ",
+   "caption": "пятнадцать миллиардов долларов",
+   "seconds": 19.9,
    "bars": [
     {
-     "label": "НЕДОВОЛЬНЫ",
-     "value": 0.82,
+     "label": "ПАКЕТ ПОМОЩИ УКРАИНЕ",
+     "value": 1.0,
      "color": "B92526"
     },
     {
-     "label": "ДОВОЛЬНЫ",
-     "value": 0.13,
+     "label": "ИДЁТ ЧЕРЕЗ НОВЫЙ КОНГРЕСС",
+     "value": 0.45,
      "color": "EABD23"
     }
    ]
   }
  },
  {
-  "scene": 36,
-  "view": "charts.pie",
-  "dur": 11.4,
-  "anim": 11.4,
-  "tail_zoom": 0.045,
+  "scene": 19,
+  "view": "split",
+  "dur": 10.5,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "segments": [
-    {
-     "label": "АдГ",
-     "value": 29.0
-    },
-    {
-     "label": "ХДС/ХСС",
-     "value": 19.0
-    },
-    {
-     "label": "СДПГ",
-     "value": 14.0
-    },
-    {
-     "label": "остальные",
-     "value": 38.0
-    }
-   ],
-   "kick": "ноябрь 2026",
-   "title": "ОПРОС В ГЕРМАНИИ",
+   "photo": "images/scene_017.jpg",
+   "text": "Расследовать надо самих демократов — за угрозы импичментом.",
+   "author": "Дональд Трамп",
+   "role": "президент США",
+   "source": "Вашингтон",
+   "accent": "Расследовать надо самих",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 40,
-  "view": "marker_serif",
-  "dur": 10.13,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {
-   "text": "Вопрос уже не про Мерца. Мерц сегодня есть, завтра будет другой канцлер. Речь о механизме.",
-   "accent": "Речь о механизме",
-   "watermark": "5 МИНУТ"
-  }
- },
- {
-  "scene": 44,
+  "scene": 22,
   "view": "poster.poster",
-  "dur": 11.9,
-  "anim": 11.9,
+  "dur": 12.4,
+  "anim": 12.4,
   "tail_zoom": 0.0,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "title": "АКТИВЫ ПОД ВНЕШНИМ УПРАВЛЕНИЕМ",
-   "hero_photo": "images/scene_044.jpg",
-   "bottom": "политика пришла в бухгалтерию",
+   "title": "ЧТО ВИДЯТ В БЕРЛИНЕ",
+   "hero_photo": "images/kadr_22.jpg",
+   "bottom": "не с мечтой о прежней Америке, а с этим",
+   "features": [
+    {
+     "text": "ждать смены власти бессмысленно"
+    },
+    {
+     "text": "решения идут указами"
+    },
+    {
+     "text": "Конгресс перестал быть рычагом"
+    },
+    {
+     "text": "считать придётся самим"
+    }
+   ],
    "facts": [
     {
-     "label": "Japan Tobacco",
-     "value": "4 компании"
+     "label": "срок Трампа",
+     "value": "ещё два года"
     },
     {
-     "label": "бренды",
-     "value": "Winston, Camel"
+     "label": "Конгресс",
+     "value": "можно обойти"
     },
     {
-     "label": "до неё",
-     "value": "Nestlé, Metro, Auchan"
+     "label": "союзникам",
+     "value": "работать с этим"
     }
    ],
    "watermark": "5 МИНУТ"
@@ -245,160 +136,250 @@
   "mode": "frame"
  },
  {
-  "scene": 48,
+  "scene": 25,
+  "view": "vyrezka.figura",
+  "dur": 10.98,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/kadr_rutte.jpg",
+   "author": "МАРК РЮТТЕ",
+   "role": "генеральный секретарь НАТО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "charts.pie",
+  "dur": 14.8,
+  "anim": 14.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "покупают сами",
+     "value": 60.0
+    },
+    {
+     "label": "осуждают покупку",
+     "value": 40.0
+    }
+   ],
+   "kick": "российские энергоносители в ЕС",
+   "title": "ЧЕЙ ЭТО РЕСУРС",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "cinematic.evidence_wall",
+  "dur": 14.7,
+  "anim": 14.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "images/scene_030.jpg",
+     240,
+     380,
+     -4,
+     "Макрон и прежняя Европа"
+    ],
+    [
+     "images/scene_031.jpg",
+     800,
+     380,
+     3,
+     "Елисейский дворец"
+    ],
+    [
+     "images/scene_033.jpg",
+     1360,
+     380,
+     -2,
+     "охрана президента"
+    ]
+   ],
+   "title": "ДВЕ НОВОСТИ РЯДОМ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 35,
   "view": "film.film_strip",
-  "dur": 11.2,
-  "anim": 11.2,
+  "dur": 13.0,
+  "anim": 13.0,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
    "shots": [
-    "images/scene_045.jpg",
-    "images/scene_050.jpg",
-    "images/scene_053.jpg"
+    "images/scene_034.jpg",
+    "images/scene_036.jpg",
+    "images/scene_037.jpg"
    ],
-   "title": "КТО УЖЕ ПОПАЛ",
+   "title": "ГДЕ ПРОПАЛ СИГНАЛ",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 52,
-  "view": "pull",
-  "dur": 11.9,
-  "anim": 2.6,
-  "tail_zoom": 0.05,
+  "scene": 39,
+  "view": "slider",
+  "dur": 14.6,
+  "anim": 14.6,
+  "tail_zoom": 0.0,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
-  "kwargs": {
-   "text": "Пережидать надо было вместе с ключами от предприятия.",
-   "kick": "европейский бизнес в России",
-   "watermark": "5 МИНУТ"
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "ПОТОЛОК ДАЛЬНОСТИ",
+   "min": 0.0,
+   "max": 2000.0,
+   "low": 0.0,
+   "high": 2000.0,
+   "marker_value": 2000.0,
+   "marker_display": "2000",
+   "seconds": 14.6,
+   "range_label": "от добровольного ограничения до отказа от него",
+   "caption": "две тысячи километров больше не предел",
+   "source": ""
   }
  },
  {
-  "scene": 56,
-  "view": "charts.waterfall",
-  "dur": 12.5,
-  "anim": 12.5,
-  "tail_zoom": 0.045,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {
-   "start": {
-    "label": "цена газа",
-    "value": 69.0
-   },
-   "steps": [
-    {
-     "label": "ВВП в тяжёлом сценарии",
-     "value": -15.6
-    }
-   ],
-   "end": {
-    "label": "ИТОГ"
-   },
-   "kick": "расчёты партнёров по ЕАЭС · Армения",
-   "title": "ЦЕНА ВЫХОДА ИЗ ЕАЭС",
-   "watermark": "5 МИНУТ"
-  }
- },
- {
-  "scene": 61,
-  "view": "timeline",
-  "dur": 19.1,
-  "anim": 19.1,
-  "tail_zoom": 0.06,
-  "watermark": "5 МИНУТ",
-  "channel": "5 МИНУТ",
-  "kwargs": {
-   "kick": "ТУРЦИЯ ИДЁТ В ЕВРОСОЮЗ",
-   "watermark": "5 МИНУТ",
-   "events": [
-    {
-     "date": "1987",
-     "text": "подана заявка"
-    },
-    {
-     "date": "1999",
-     "text": "статус кандидата"
-    },
-    {
-     "date": "2005",
-     "text": "начались переговоры",
-     "hot": true
-    },
-    {
-     "date": "2026",
-     "text": "всё ещё кандидат"
-    }
-   ]
-  }
- },
- {
-  "scene": 65,
-  "view": "vyrezka.figura",
-  "dur": 12.5,
+  "scene": 42,
+  "view": "film.film_single",
+  "dur": 13.8,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "photo": "images/scene_065.jpg",
-   "author": "НИКОЛ ПАШИНЯН",
-   "role": "премьер-министр Армении",
+   "photo": "images/scene_041.jpg",
+   "title": "РАКЕТНЫЕ ГОРОДА",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 70,
+  "scene": 45,
   "view": "charts.cartogram",
-  "dur": 10.4,
-  "anim": 10.4,
+  "dur": 10.7,
+  "anim": 10.7,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
    "data": [
-    "Армения",
-    "Россия",
-    "Турция",
-    "Грузия",
-    "Иран"
+    "Оман",
+    "Иран",
+    "ОАЭ"
    ],
-   "kick": "маршруты торговли",
-   "title": "ГДЕ НАХОДИТСЯ АРМЕНИЯ",
+   "kick": "Оманский залив",
+   "title": "ГДЕ ЛЕЖАТ КАБЕЛИ",
    "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 74,
-  "view": "film.film_single",
-  "dur": 12.9,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
+  "scene": 48,
+  "view": "cinematic.depth_of_field",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.0,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "photo": "images/scene_074.jpg",
-   "title": "СЧЁТ ПРИХОДИТ ЕМУ",
+   "photo": "images/scene_047.jpg",
+   "title": "ДРУГОЙ ИНСТРУМЕНТ ДАВЛЕНИЯ",
    "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 51,
+  "view": "photo",
+  "dur": 13.7,
+  "anim": 13.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "images/scene_050.jpg",
+   "title": "КАРТИНА ЦЕЛИКОМ",
+   "lines": [
+    "в Вашингтоне выясняют, кого снимать",
+    "в Европе спорят про ресурс",
+    "в заливе ходят вокруг кабелей"
+   ]
   }
  },
  {
-  "scene": 79,
-  "view": "vyrezka.gazeta",
-  "dur": 14.3,
-  "anim": 2.6,
+  "scene": 54,
+  "view": "timeline",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ПРИВЫЧНАЯ СХЕМА ЗАПАДА",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "шаг 1",
+     "text": "одна большая задача"
+    },
+    {
+     "date": "шаг 2",
+     "text": "под неё коалиция"
+    },
+    {
+     "date": "шаг 3",
+     "text": "назначают виноватого",
+     "hot": true
+    },
+    {
+     "date": "шаг 4",
+     "text": "выпускают заявление"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "charts.radar",
+  "dur": 8.6,
+  "anim": 8.6,
   "tail_zoom": 0.045,
   "watermark": "5 МИНУТ",
   "channel": "5 МИНУТ",
   "kwargs": {
-   "photo": "images/scene_079.jpg",
-   "author": "ФРИДРИХ МЕРЦ",
-   "role": "канцлер Германии",
-   "kick": "кто уйдёт",
-   "title": "Германия",
+   "axes": [
+    "деньги",
+    "заявления",
+    "люди в кабинетах",
+    "внимание"
+   ],
+   "series": [
+    {
+     "label": "ЧЕГО НЕ ХВАТАЕТ ЗАПАДУ",
+     "values": [
+      80.0,
+      90.0,
+      70.0,
+      25.0
+     ]
+    }
+   ],
+   "title": "ЧЕГО НЕ ХВАТАЕТ ЗАПАДУ",
    "watermark": "5 МИНУТ"
   }
  }
