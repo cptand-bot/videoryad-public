@@ -1342,6 +1342,12 @@ def main():
                     # только не даём ей превысить новую длительность
                     _q["anim"] = (round(_new, 2) if _anim_was >= _was - 0.05
                                   else round(min(_anim_was, _new), 2))
+                    # У cli-видов длительность лежит ЕЩЁ И ВНУТРИ cfg —
+                    # рисовалка слушает именно её (08.11, улов `usuario-47`:
+                    # поправили dur, а клип вышел на старые 9,2 с при сцене
+                    # 14,0 и раскладка его отбила).
+                    if isinstance(_q.get("cfg"), dict) and _q["cfg"].get("seconds"):
+                        _q["cfg"]["seconds"] = round(_new, 2)
                     json.dump(_q, open(_qf, "w", encoding="utf-8"),
                               ensure_ascii=False)
                     _правлено.append("%d: %.1f→%.1f с" % (_sid, _was, _new))

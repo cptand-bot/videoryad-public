@@ -98,8 +98,22 @@ for s in scenes:
                 _dur = float((_r.stdout or "0").strip() or 0)
             except Exception:
                 _dur = 0.0
+            # РИСОВАННЫЙ КАДР СМОТРИМ В КОНЦЕ АНИМАЦИИ (08.11, улов вкладки
+            # `usuario-47`). Наши карточки печатают текст по строкам, и на
+            # листе, снятом с начала клипа, видна СЕРЕДИНА анимации — внешний
+            # аудит честно читает это как «текст обрезан, начинается с
+            # середины слова» и выдаёт ложную тревогу на КАЖДОЙ карточке
+            # каждого ролика. Живой случай: сцены 36 и 61, обе целые.
+            # Поэтому для `card:*` берём один кадр на 85% длительности.
+            _карточка = str(s.get("source", "")).startswith("card:")
             _parts, _tmp = [], []
-            if _dur > 3:
+            if _карточка and _dur > 1:
+                subprocess.run(["ffmpeg", "-y", "-ss", "%.2f" % (_dur * 0.85),
+                                "-i", p, "-vframes", "1", "-vf",
+                                f"scale={TW}:{TH-BAR}:force_original_aspect_ratio=increase,"
+                                f"crop={TW}:{TH-BAR}", frame],
+                               capture_output=True)
+            elif _dur > 3:
                 _cw = TW // 3
                 for _i, _frac in enumerate((0.08, 0.5, 0.88)):
                     _f = os.path.join(out_dir, f"_f{sid:03d}_{_i}.jpg")
