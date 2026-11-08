@@ -140,6 +140,7 @@ template/fonts/ArialBlack.ttf
 template/prevyu.py
 template/prevyu_text.py
 template/upakovka.py
+template/upakovka_lib/vybor.jsonl
 template/upakovka_dash.py
 template/upakovka_lib/arhiv-5min.txt
 template/upakovka_lib/arhiv-geo2.txt

@@ -20,6 +20,7 @@ import os
 import shutil
 import socketserver
 import subprocess
+import time
 import threading
 
 # Агент на машине ОДИН — два задания одновременно он не тянет.
@@ -267,13 +268,47 @@ function unfold(descId,btnId){
   if(m){ m.style.display='none'; }
   if(b){ b.textContent='копировать описание'; b.classList.remove('done'); }
 }
+function zhurnal(kind, text, item){
+  try{ fetch('/zhurnal', {method:'POST', headers:{'Content-Type':'application/json'},
+       body: JSON.stringify({kind:kind, text:text, item:item||0})}); }catch(e){}
+}
 function copyLi(li){
+  zhurnal(li.dataset.k || 'строка', li.dataset.t, li.dataset.i || 0);
   navigator.clipboard.writeText(li.dataset.t).then(function(){
     var o=li.style.color; li.style.color='#4a9d5f';
     setTimeout(function(){li.style.color=o},900);
   });
 }
 """
+
+
+ЖУРНАЛ = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                      "upakovka_lib", "vybor.jsonl")
+
+
+def записать_выбор(событие):
+    """ЧТО ОН ВЫБРАЛ И ЧТО ВПИСАЛ — КОПИМ (08.11, его прямое слово).
+
+    «Надо не просто выдавать варианты, а фиксировать, записывать логику, как
+    это работает, по какой логике я их отбираю, какие вношу правки и какие
+    надписи. Чтобы оно накапливалось… потом уже переобучить будет проще.
+    Чтобы ты мне выдавал те варианты, которые меня устраивали бы».
+
+    Его оценка выдачи на сегодня: «на девяносто процентов не соответствует
+    тому, что я хотел бы видеть». Объяснять словами долго — значит собираем
+    ПРИМЕРЫ: что выбрано, что вписано руками, что отвергнуто («ещё десять»).
+    `upakovka.py` подкладывает последние принятые варианты в задание агенту,
+    и выдача подтягивается к его вкусу без долгих объяснений.
+
+    Пишем строками JSON — файл только дополняется, ничего не перезаписывается.
+    """
+    try:
+        os.makedirs(os.path.dirname(ЖУРНАЛ), exist_ok=True)
+        событие.setdefault("когда", time.strftime("%Y-%m-%d %H:%M:%S"))
+        with open(ЖУРНАЛ, "a", encoding="utf-8") as f:
+            f.write(json.dumps(событие, ensure_ascii=False) + "\n")
+    except Exception:
+        pass          # журнал не имеет права ломать работу дашборда
 
 
 def page(items, day):
@@ -340,8 +375,12 @@ def page(items, day):
             P.append('<div id="%s">' % _bid)
             P.append('<div class="lab">%s</div><ol>' % lab)
             for r in rows:
-                P.append('<li data-t="%s" onclick="copyLi(this)">%s</li>'
-                         % (html.escape(r, quote=True), html.escape(r)))
+                # data-k и data-i — чтобы журнал знал, ЧТО именно выбрано
+                # и по какому ролику (08.11)
+                P.append('<li data-t="%s" data-k="%s" data-i="%d" '
+                         'onclick="copyLi(this)">%s</li>'
+                         % (html.escape(r, quote=True), key,
+                            items.index(it), html.escape(r)))
             P.append('</ol>')
             P.append('<div class="row">'
                      '<button onclick="fold(\'%s\')">скрыть — с этим '
@@ -586,7 +625,29 @@ def main():
                 return self.more()
             if self.path == "/make":
                 return self.do_make()
+            if self.path == "/zhurnal":
+                return self.do_zhurnal()
             return self.send_error(404)
+
+        def do_zhurnal(self):
+            """Клик по строке = выбор. Пишем, что именно он скопировал."""
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                req = json.loads(self.rfile.read(n).decode("utf-8"))
+                it = items[int(req.get("item", 0))] if items else {}
+                записать_выбор({"событие": req.get("kind") or "строка",
+                                "канал": it.get("канал", ""),
+                                "тема": it.get("тема", ""),
+                                "выбрано": req.get("text", "")[:300],
+                                "предложено": (it.get(req.get("kind") or "") or [])[:10]})
+            except Exception:
+                pass
+            out = b'{"ok":true}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
 
         def more(self):
             """ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ (07.11, его заказ: «не подошли мне эти,
@@ -598,6 +659,10 @@ def main():
                 req = json.loads(self.rfile.read(n).decode("utf-8"))
                 it = items[int(req["item"])]
                 kind = req.get("kind") or "заголовки"
+                записать_выбор({"событие": "ещё_десять", "вид": kind,
+                                "канал": it.get("канал", ""),
+                                "тема": it.get("тема", ""),
+                                "отвергнуто": (it.get(kind) or [])[:10]})
                 folder = it.get("превью_папка") or ""
                 text = _up.read_text(_up.find_text(folder))
                 было = it.get(kind) or []
@@ -736,6 +801,15 @@ def main():
                 shutil.copy2(dst, web)
                 _bad = _opechatki(_t) + _opechatki(_b)
                 _gram = _grammatika(_t) + _grammatika(_b)
+                записать_выбор({
+                    "событие": "превью",
+                    "канал": it.get("канал", ""), "тема": it.get("тема", ""),
+                    "выбран_вариант": num,
+                    "надпись_сверху": _t, "надпись_снизу": _b,
+                    "предложенные_надписи": (it.get("надписи") or [])[:10],
+                    "вписал_сам": bool(_t and _t not in
+                                       [x.upper() for x in (it.get("надписи") or [])]),
+                })
                 body = {"ok": True,
                         "accent": ch_color(it.get("канал", ""))[0],
                         "opechatki": _bad,
