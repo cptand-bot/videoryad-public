@@ -178,8 +178,8 @@ def used_phrases(days=10):
     out = []
     for r in rows:
         if str(r.get("дата", "")) >= edge:
-            out += r.get("заголовки", [])[:3] + r.get("надписи", [])[:3]
-    return out[-60:]
+            out += r.get("заголовки", []) + r.get("надписи", [])
+    return out[-200:]
 
 
 def write_zhurnal(folder, data):
@@ -190,11 +190,17 @@ def write_zhurnal(folder, data):
             rows = json.load(open(ZHURNAL, encoding="utf-8"))
         except (OSError, ValueError):
             rows = []
+    # ХРАНИМ ВСЁ ВЫДАННОЕ, А НЕ ПЕРВУЮ ТРОЙКУ (08.11, улов вкладки
+    # `usuario-47`). Было `[:3]`, а выдаётся по десять — семь надписей и
+    # семь заголовков из каждой пачки в журнал не попадали вовсе, и запрет
+    # «не повторять фразы последних десяти дней» их не видел. Живой случай:
+    # надпись «Стол уже готов» пришла слово в слово из вчерашней упаковки
+    # донора и была снята вручную.
     rows.append({"дата": dt.date.today().isoformat(),
                  "тема": os.path.basename(folder),
                  "канал": data.get("канал", ""),
-                 "заголовки": data.get("заголовки", [])[:3],
-                 "надписи": data.get("надписи", [])[:3]})
+                 "заголовки": data.get("заголовки", [])[:12],
+                 "надписи": data.get("надписи", [])[:12]})
     os.makedirs(LIB, exist_ok=True)
     json.dump(rows[-300:], open(ZHURNAL, "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
@@ -380,6 +386,24 @@ def do_one(folder):
         print("  ✗ в ответе нет блока ОПИСАНИЕ — формат не соблюдён")
         return False
     data["канал"], data["тема"], data["папка"] = ch, title, folder
+
+    # ДОСЛОВНЫЙ ПОВТОР СНИМАЕМ САМИ (08.11). Просьба «не повторяй фразы
+    # последних дней» стоит в задании, но агент её нарушает — значит
+    # проверяем результат, а не надеемся на исполнение. Сверяем по
+    # упрощённой форме: регистр, ё/е и знаки не считаются.
+    def _ключ(x):
+        return re.sub(r"[^а-яa-z0-9 ]", "",
+                      (x or "").lower().replace("ё", "е")).strip()
+
+    _было = {_ключ(x) for x in used_phrases(10) if _ключ(x)}
+    for _поле in ("заголовки", "надписи"):
+        _чисто, _снято = [], []
+        for _x in data.get(_поле) or []:
+            (_снято if _ключ(_x) in _было else _чисто).append(_x)
+        if _снято:
+            data[_поле] = _чисто
+            print("  · снял дословные повторы последних дней (%s): %s"
+                  % (_поле, " · ".join(_снято)))
 
     json.dump(data, open(os.path.join(folder, "УПАКОВКА.json"), "w",
                          encoding="utf-8"), ensure_ascii=False, indent=1)
