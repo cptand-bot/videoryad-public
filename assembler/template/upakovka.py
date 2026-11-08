@@ -57,7 +57,7 @@ def lib_text(name, limit=0):
                              "upakovka_lib", "vybor.jsonl")
 
 
-def выбор_его(n=14):
+def выбор_его(n=14, канал=""):
     """ЧТО ОН ВЫБИРАЛ И ЧТО ОТВЕРГАЛ — В ЗАДАНИЕ АГЕНТУ (08.11).
 
     Его слово: «то, что ты мне выдаёшь, на девяносто процентов не
@@ -75,6 +75,11 @@ def выбор_его(n=14):
             try:
                 e = json.loads(line)
             except ValueError:
+                continue
+            # АУДИТОРИИ КАНАЛОВ РАЗНЫЕ (08.11): учимся на примерах СВОЕГО
+            # канала, чужие не подмешиваем — то, что залетело на «5 МИНУТ»,
+            # не обязано зайти на ПЛАНЕТЕ.
+            if канал and str(e.get("канал") or "").upper() != канал.upper():
                 continue
             с = e.get("событие")
             # СИЛА СИГНАЛА РАЗНАЯ (08.11, его поправка: «не, ту что скопировал
@@ -107,6 +112,8 @@ def выбор_его(n=14):
     try:
         import svyazka as _sv
         for с in _sv.связки():
+            if канал and str(с.get("канал") or "").upper() != канал.upper():
+                continue
             з = с.get("замер") or {}
             строка = "%s | надписи: %s" % (с.get("заголовок") or "—",
                                            " / ".join(с.get("надписи") or []) or "—")
@@ -330,7 +337,7 @@ def do_one(folder):
              else "(пока пусто, это первый ролик)",
         samples=lib_text("arhiv-geo2.txt", 2600) + "\n" +
                 lib_text("arhiv-5min.txt", 3200),
-        vybor=выбор_его(),
+        vybor=выбор_его(канал=ch or ""),
         bank=lib_text("bank.txt"))
 
     tmp = os.path.join(folder, "ЗАДАНИЕ-УПАКОВКА.txt")

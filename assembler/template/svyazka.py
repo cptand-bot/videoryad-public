@@ -77,7 +77,12 @@ def связки():
         elif e.get("событие") == "заголовки" and not с["заголовок"]:
             с["заголовок"] = "(скопировал из списка) " + (e.get("выбрано") or "")
     замеры, описания, файлы = {}, {}, {}
+    пакеты = {}
     for z in _читать(СВЯЗКИ):
+        for поле in ("суть", "актуальность", "подача", "паттерн",
+                     "хронометраж", "день", "описание_ролика"):
+            if z.get(поле):
+                пакеты.setdefault(z["id"], {})[поле] = z[поле]
         if z.get("описание_превью"):
             описания[z["id"]] = z["описание_превью"]
         if z.get("вердикт") or z.get("просмотры"):
@@ -88,8 +93,44 @@ def связки():
     for к, с in по_теме.items():
         с["замер"] = замеры.get(к)
         с["описание_превью"] = описания.get(к, "")
+        с.update(пакеты.get(к, {}))
         с["файл_превью"] = файлы.get(к, "")
     return list(по_теме.values())
+
+
+
+def из_папки(folder):
+    """Что можно взять из папки темы без вопросов: паттерн упаковки,
+    хронометраж озвучки, канал и день публикации из пути."""
+    из = {}
+    if not folder or not os.path.isdir(folder):
+        return из
+    try:
+        up = os.path.join(folder, "УПАКОВКА.json")
+        if os.path.exists(up):
+            d = json.load(io.open(up, encoding="utf-8"))
+            из["паттерн"] = d.get("паттерн") or d.get("pattern") or ""
+            из["описание_ролика"] = (d.get("описание") or "")[:400]
+    except Exception:
+        pass
+    try:
+        import subprocess
+        mp3 = [f for f in os.listdir(folder) if f.lower().endswith(".mp3")]
+        if mp3:
+            r = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                "format=duration", "-of", "csv=p=0",
+                                os.path.join(folder, mp3[0])],
+                               capture_output=True, text=True, timeout=20)
+            сек = float((r.stdout or "0").strip() or 0)
+            если = int(сек)
+            из["хронометраж"] = "%d:%02d" % (если // 60, если % 60)
+    except Exception:
+        pass
+    части = os.path.abspath(folder).replace("\\", "/").split("/")
+    for ч in части:
+        if len(ч) == 5 and ч[2] == "-" and ч.replace("-", "").isdigit():
+            из["день"] = ч
+    return из
 
 
 def дней_прошло(дата):
@@ -109,6 +150,30 @@ def main():
     ap.add_argument("--ctr", type=float, default=0.0)
     ap.add_argument("--вердикт", default="", choices=("",) + ВЕРДИКТЫ)
     ap.add_argument("--заметка", default="")
+    # СТАТИСТИКА РАЗНАЯ ПО КАНАЛАМ (08.11, его слово: «на одном канале одна
+    # аудитория, на другом другая; один канал ютуб рекомендует в одной хрени,
+    # другой в другой; там больше мужиков, там больше из России, а там с
+    # Украиной больше»). Поэтому замер хранит и состав аудитории, а обучение
+    # идёт ПО КАНАЛУ, а не общим котлом.
+    ap.add_argument("--аудитория", default="", dest="aud",
+                    help="состав: «РФ 62%%, Украина 18%%, муж 71%%, 45+ 40%%»")
+    ap.add_argument("--удержание", default="", dest="udr",
+                    help="среднее удержание, если есть: «42%%» или «4:10»")
+    ap.add_argument("--по-каналам", action="store_true", dest="by_ch",
+                    help="сводка: что залетало на каждом канале")
+    # ПОЛНЫЙ ПАКЕТ, А НЕ ТОЛЬКО КАРТИНКА (08.11, его слово: «привязывать это
+    # всё вместе, связывать с темой ролика: превью, надписи на превью,
+    # заголовок, сама тема, её актуальность, её подача, её востребованность —
+    # в общем, полный пакет»). Тема, канал, паттерн и хронометраж тянутся
+    # сами из папки темы; суть, актуальность и подачу вписываем словами.
+    ap.add_argument("--суть", default="", dest="sut",
+                    help="о чём ролик одной строкой")
+    ap.add_argument("--актуальность", default="", dest="akt",
+                    help="сегодняшнее событие / вчерашнее / старая тема / вечная")
+    ap.add_argument("--подача", default="", dest="pod",
+                    help="как подано: разбор, издёвка, предупреждение, счёт по фактам…")
+    ap.add_argument("--папка", default="", dest="folder",
+                    help="папка темы — из неё подтянутся паттерн и хронометраж")
     ap.add_argument("--описание", default="", dest="opis",
                     help="ЧТО НАРИСОВАНО на превью: кто в кадре, эмоция, план, "
                          "цвет, объекты. Пишется отдельной записью к связке")
@@ -123,6 +188,18 @@ def main():
             for с in все:
                 print("  %s" % с["id"])
             return 2
+        пакет = {k: v for k, v in (("суть", a.sut), ("актуальность", a.akt),
+                                   ("подача", a.pod)) if v}
+        пакет.update(из_папки(a.folder))
+        if пакет:
+            пакет.update({"id": a.mark, "когда": time.strftime("%Y-%m-%d %H:%M:%S")})
+            os.makedirs(os.path.dirname(СВЯЗКИ), exist_ok=True)
+            with io.open(СВЯЗКИ, "a", encoding="utf-8") as f:
+                f.write(json.dumps(пакет, ensure_ascii=False) + "\n")
+            print("пакет темы записан: %s" % ", ".join(
+                k for k in пакет if k not in ("id", "когда")))
+            if not a.opis and not a.вердикт and not a.просмотры:
+                return 0
         if a.opis:
             os.makedirs(os.path.dirname(СВЯЗКИ), exist_ok=True)
             with io.open(СВЯЗКИ, "a", encoding="utf-8") as f:
@@ -136,6 +213,7 @@ def main():
             return print("нужен хотя бы --просмотры или --вердикт") or 2
         запись = {"id": a.mark, "когда": time.strftime("%Y-%m-%d %H:%M:%S"),
                   "просмотры": a.просмотры or None, "ctr": a.ctr or None,
+                  "аудитория": a.aud or None, "удержание": a.udr or None,
                   "вердикт": a.вердикт or ("залетело" if a.просмотры else ""),
                   "заметка": a.заметка}
         os.makedirs(os.path.dirname(СВЯЗКИ), exist_ok=True)
@@ -147,6 +225,27 @@ def main():
 
     if not все:
         print("связок пока нет: он ещё не выбирал заголовки и превью")
+        return 0
+
+    if a.by_ch:
+        по_каналам = {}
+        for с in все:
+            по_каналам.setdefault(с["канал"] or "(без канала)", []).append(с)
+        for канал, список in sorted(по_каналам.items()):
+            замеренные = [x for x in список if x.get("замер")]
+            залетели = [x for x in замеренные
+                        if (x["замер"] or {}).get("вердикт") == "залетело"]
+            print("=== %s: связок %d, с замером %d, залетело %d"
+                  % (канал, len(список), len(замеренные), len(залетели)))
+            for x in залетели:
+                з = x["замер"] or {}
+                print("   ✓ %s" % (x.get("заголовок") or x["тема"])[:90])
+                print("     надписи: %s" % (" / ".join(x.get("надписи") or []) or "—"))
+                if з.get("просмотры"):
+                    print("     просмотров: %s%s" % (з["просмотры"],
+                          (", аудитория: " + з["аудитория"]) if з.get("аудитория") else ""))
+            if замеренные and not залетели:
+                print("   (пока ни одна не залетела)")
         return 0
 
     for с in все:
@@ -165,6 +264,11 @@ def main():
         print("   превью:    %s   %s" % (с["превью"] or "—", статус))
         if с.get("описание_превью"):
             print("   на превью: %s" % с["описание_превью"][:160])
+        пакет = " · ".join("%s: %s" % (k, с[k]) for k in
+                           ("суть", "актуальность", "подача", "паттерн",
+                            "хронометраж") if с.get(k))
+        if пакет:
+            print("   тема:      %s" % пакет[:200])
     if a.ждут:
         print("\nвписать результат: svyazka.py --замер \"<id>\" --просмотры N --вердикт залетело")
     return 0
