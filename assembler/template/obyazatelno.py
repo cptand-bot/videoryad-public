@@ -62,7 +62,12 @@ MIN_GAP_БАЗА = 8
         "имя": "надпись из-под маски с заливкой: плашка в гамме канала "
                "выезжает слева направо, по краю маски едет полоса",
         "overlay_style": "mask_plate",
+        # НОРМА СЧИТАЕТСЯ ОТ ДЛИНЫ РОЛИКА (08.11, его слово: «количество этих
+        # надписей нужно сделать чуть больше — там на 60 сцен всего две-три.
+        # Чтобы было примерно СЕМЬ на 60 сцен»). Это одна надпись на
+        # ~8-9 сцен; на 90 сценах выходит 10, на 60 — 7, на 40 — 5.
         "min": 1,
+        "на_сцен": 8.5,
         "gate": "dashboard",
         "каналы": ["ПЛАНЕТА"],
         "чем": ('в `overlays.json` сцене: {"text": {"words": "ЗАГОЛОВОК", '
@@ -473,6 +478,7 @@ def _overlay_styles(scenes_path):
 
 
 def check(scenes, channel="", gate="dashboard", scenes_path=""):
+    n_scenes = len(scenes or [])
     """Чего не хватает. Возвращает список строк отказа (пустой — всё стоит)."""
     have, have_fx = {}, {}
     have_ov = (_overlay_styles(scenes_path)
@@ -497,13 +503,16 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
             n = have_fx.get(el["fx"], 0)
         else:
             n = have.get(el["view"], 0)
-        if n >= el["min"]:
+        _норма = el["min"]
+        if el.get("на_сцен") and n_scenes:
+            _норма = max(el["min"], int(round(n_scenes / float(el["на_сцен"]))))
+        if n >= _норма:
             continue
         bad.append(
             "ОБЯЗАТЕЛЬНЫЙ ЭЛЕМЕНТ %s («%s») стоит %d раз при норме %d.\n"
             "    когда уместен: %s\n"
             "    чем ставится: %s"
-            % (el["код"], el["имя"], n, el["min"], el["когда"], el["чем"]))
+            % (el["код"], el["имя"], n, _норма, el["когда"], el["чем"]))
     return bad
 
 
