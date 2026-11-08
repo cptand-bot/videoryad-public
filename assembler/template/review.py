@@ -2913,7 +2913,12 @@ function ovEdit(id){{
 }}
 async function ovClear(id){{
   _justCleared.add(id);
-  await fetch("overlay?id="+id+"&clear=1", {{method:"POST"}});
+  const _r = await fetch("overlay?id="+id+"&clear=1", {{method:"POST"}});
+  // ПРЕДУПРЕЖДЕНИЕ ПРО ПЕРВУЮ ВСПЛЫВАШКУ — СРАЗУ НА ЭКРАН (08.11)
+  try{{
+    const _j = await _r.json();
+    if(_j && _j.warn){{ alert("ВНИМАНИЕ: " + _j.warn); }}
+  }}catch(e){{}}
   const w = document.getElementById("ovwrap"+id);
   w.dataset.touched = ""; w.hidden = true;
   const b = document.getElementById("ovb"+id); if(b) b.hidden = true;
@@ -3489,7 +3494,29 @@ def run_live(scenes_path, images_dir, port):
                     return self._reply(400, b"no")
                 if qs.get("clear"):
                     drop_overlay(sid)
-                    return self._reply(200)
+                    # СНЯЛ ПЕРВУЮ ВСПЛЫВАШКУ — СКАЗАТЬ СРАЗУ, А НЕ НА ГЕЙТЕ
+                    # (08.11, улов `usuario-cd`, повтор случая 03.11). Он
+                    # снимает всплывашки на дашборде, среди них оказывается
+                    # ПЕРВАЯ, и правило «первая не позже четвёртой сцены»
+                    # валит ролик уже ПОСЛЕ слова «собирай». Теперь ответ
+                    # несёт предупреждение, и вкладка закрывает дыру сразу.
+                    _пред = ""
+                    try:
+                        with _overlays_txn() as _ov2:
+                            _ост = sorted(int(k) for k, v in _ov2.items()
+                                          if str(k).isdigit() and isinstance(v, dict)
+                                          and v.get("photo"))
+                        if int(sid) <= 4 and (not _ост or min(_ост) > 4):
+                            _пред = ("снята ПЕРВАЯ всплывашка: следующая теперь "
+                                     "на сцене %s, а правило требует её не позже "
+                                     "четвёртой. Поставь кадр на одну из первых "
+                                     "четырёх сцен СЕЙЧАС, иначе сборка встанет."
+                                     % (min(_ост) if _ост else "—"))
+                            print("  !! %s" % _пред, flush=True)
+                    except Exception:
+                        pass
+                    return self._reply(200, json.dumps(
+                        {"ok": True, "warn": _пред}, ensure_ascii=False).encode())
                 n = int(self.headers.get("Content-Length", 0) or 0)
                 try:
                     spec = json.loads(self.rfile.read(n) or b"{}")
