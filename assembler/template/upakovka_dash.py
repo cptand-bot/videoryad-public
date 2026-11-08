@@ -119,15 +119,20 @@ JS = """
 // «выбираю один, кликаю, появляется диалоговое окно — запись вверху и
 // запись внизу, нажимаю ОК, и ты генерируешь только его»).
 var CUR = null;
-function openDlg(item, n, src, titles){
-  CUR = {item:item, n:n};
+function openDlg(item, n, src, titles, sig, where){
+  CUR = {item:item, n:n, sig:sig||''};
+  // ЧТО ИМЕННО ПОЙДЁТ В РАБОТУ — НАДПИСЬЮ В ШАПКЕ ОКНА (08.11): канал,
+  // тема и НОМЕР варианта. Раньше окно показывало только картинку, и
+  // проверить, тот ли это вариант, было нечем.
+  var cap = document.getElementById('dlg-where');
+  if(cap){ cap.textContent = where || ''; }
   // ПОЛЯ ОЧИЩАЮТСЯ ПРИ КАЖДОМ ОТКРЫТИИ (07.11): раньше надписи прошлой
   // темы оставались в полях, и следующий вариант получал чужой текст.
   document.getElementById('dlg-top').value = '';
   document.getElementById('dlg-bottom').value = '';
   var ok = document.getElementById('dlg-ok');
   ok.textContent = 'ОК'; ok.disabled = false;
-  document.getElementById('dlg-img').src = src;
+  document.getElementById('dlg-img').src = src + '?t=' + (sig||Date.now());
   var sel = document.getElementById('dlg-pick');
   sel.innerHTML = '<option value="">— выбрать из готовых надписей —</option>';
   (titles||[]).forEach(function(t){
@@ -159,7 +164,8 @@ function makeIt(){
   var btn = document.getElementById('dlg-ok');
   btn.textContent = 'делаю…'; btn.disabled = true;
   fetch('/make', {method:'POST', headers:{'Content-Type':'application/json'},
-                  body: JSON.stringify({item:CUR.item, n:CUR.n, top:top, bottom:bot})})
+                  body: JSON.stringify({item:CUR.item, n:CUR.n, sig:CUR.sig,
+                                        top:top, bottom:bot})})
    .then(function(r){ return r.json(); })
    .then(function(d){
       btn.textContent='ОК'; btn.disabled=false;
@@ -435,20 +441,34 @@ def page(items, day):
             _titles = json.dumps((it.get("надписи") or [])[:10],
                                  ensure_ascii=False)
             _done = it.get("превью_готовые") or {}
+            # НОМЕР ВАРИАНТА = НОМЕР ФАЙЛА, А НЕ ПОЗИЦИЯ В СЕТКЕ (08.11):
+            # стоит пропасть одному ПРЕВЬЮ-N, и позиции съезжают, а сервер
+            # открывает файл по номеру — плитка и результат расходятся.
+            _nums = it.get("превью_номера") or list(range(1, len(shots) + 1))
             for k, u in enumerate(shots, 1):
                 # ЕСЛИ ВАРИАНТ УЖЕ СДЕЛАН С НАДПИСЬЮ — В СЕТКЕ СТОИТ ОН
                 # (07.11, его слово: «чтобы я понимал: вот этот вариант я
                 # не сделал, а вот этот у меня с надписью»). Готовый
                 # подсвечен рамкой в цвете канала.
-                _src = _done.get(k) or u
-                _ready = k in _done
-                P.append('<img id="p-%d-%d" src="%s" '
-                         'onclick=\'openDlg(%d,%d,"%s",%s)\' '
+                # ГОТОВОЕ ИЩЕМ ПО НОМЕРУ ФАЙЛА, А НЕ ПО ПОЗИЦИИ
+                _num = _nums[k - 1] if k - 1 < len(_nums) else k
+                _src = _done.get(_num) or u
+                _ready = _num in _done
+                # НОМЕР ВАРИАНТА, ОТПЕЧАТОК ФАЙЛА И ИМЯ ТЕМЫ ЕДУТ ВМЕСТЕ С
+                # КЛИКОМ (08.11). Раньше уезжал только номер — и если перед
+                # ним была устаревшая страница, надпись ложилась на другую
+                # картинку молча.
+                _sig = (it.get("превью_отпечатки") or {}).get(_num, "")
+                _where = "%s · %s · вариант %d" % (it.get("канал", ""),
+                                                   it.get("тема", ""), _num)
+                P.append('<img id="p-%d-%d" src="%s?t=%s" '
+                         'onclick=\'openDlg(%d,%d,"%s",%s,"%s","%s")\' '
                          'title="нажми, чтобы наложить надписи" '
                          'style="width:100%%;border-radius:6px;cursor:pointer;'
                          'border:%s">'
-                         % (items.index(it), k, _src, items.index(it), k, u,
-                            _titles,
+                         % (items.index(it), _num, _src, _sig,
+                            items.index(it), _num, u, _titles, _sig,
+                            _where.replace('"', "'"),
                             ("3px solid %s" % _accent) if _ready
                             else "1px solid var(--line)"))
             P.append('</div>')
@@ -460,7 +480,10 @@ def page(items, day):
  <div style="background:#17171a;border:1px solid #33333a;border-radius:10px;
       padding:18px;width:min(760px,92vw);max-height:92vh;overflow:auto">
   <div style="display:flex;align-items:center;justify-content:space-between">
-    <div class="lab" style="margin-top:0">надписи на превью</div>
+    <div>
+      <div class="lab" style="margin-top:0">надписи на превью</div>
+      <div id="dlg-where" class="hint" style="margin-top:2px"></div>
+    </div>
     <button onclick="closeDlg()" title="закрыть"
        style="font-size:18px;line-height:1;padding:4px 11px">×</button>
   </div>
@@ -486,6 +509,18 @@ def page(items, day):
  </div>
 </div>""")
     return "\n".join(P)
+
+
+
+def _otpechatok(path):
+    """Короткий отпечаток файла: им страница и сервер сверяют, что речь об
+    ОДНОЙ И ТОЙ ЖЕ картинке (08.11). Берём размер и время правки — читать
+    трёхмегабайтный png на каждый клик незачем."""
+    try:
+        st = os.stat(path)
+        return "%d-%d" % (st.st_size, int(st.st_mtime))
+    except OSError:
+        return ""
 
 
 def main():
@@ -521,10 +556,15 @@ def main():
         vdir = os.path.join(folder, "превью-варианты")
         if not os.path.isdir(vdir):
             vdir = folder
-        for n in range(1, 9):
+        _nums, _sigs = [], {}
+        # ДИАПАЗОН ШИРЕ ВОСЬМИ (08.11): после «ещё 10 вариантов» файлы
+        # бывают с номерами за десяток, и сетка их просто не показывала.
+        for n in range(1, 41):
             src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % n)
             if not os.path.isfile(src):
                 continue
+            _nums.append(n)
+            _sigs[n] = _otpechatok(src)
             sub = os.path.join(d, "prevyu", str(i))
             os.makedirs(sub, exist_ok=True)
             dst = os.path.join(sub, "%d.png" % n)
@@ -536,13 +576,15 @@ def main():
             except OSError:
                 pass
         it["превью_файлы"] = urls
+        it["превью_номера"] = _nums
+        it["превью_отпечатки"] = _sigs
         # УЖЕ СДЕЛАННЫЕ С НАДПИСЬЮ — ищем в корне темы по имени ролика
         ready = {}
         try:
             name = _pt_name(folder)
         except Exception:
             name = ""
-        for n in range(1, 9):
+        for n in range(1, 41):
             f = os.path.join(folder, "%s ПРЕВЬЮ-%d.png" % (name, n))
             if name and os.path.isfile(f):
                 sub = os.path.join(d, "prevyu", str(i))
@@ -653,6 +695,19 @@ def main():
     class Handler(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a):
             pass
+
+        # НИЧЕГО НЕ КЭШИРУЕМ (08.11, его улов: «выбираю картинку, делаю
+        # надписи, а применяется к другой»). Порт 8811 поднимается каждый
+        # день заново, адреса плиток при этом ОДНИ И ТЕ ЖЕ
+        # (`prevyu/<номер темы>/<номер варианта>.png`). Браузер честно
+        # показывал вчерашнюю картинку из своего кэша, а клик уходил на
+        # сегодняшний файл с тем же номером — отсюда «применилось к другой».
+        def end_headers(self):
+            self.send_header("Cache-Control",
+                             "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+            http.server.SimpleHTTPRequestHandler.end_headers(self)
 
         def do_POST(self):
             if self.path == "/more":
@@ -813,6 +868,19 @@ def main():
                     src = os.path.join(folder, "ПРЕВЬЮ-%d.png" % num)
                 if not os.path.isfile(src):
                     raise FileNotFoundError(src)
+                # СТРАНИЦА ОБЯЗАНА НАЗВАТЬ ТО ЖЕ, ЧТО ВИДИТ ПОЛЬЗОВАТЕЛЬ
+                # (08.11). Вместе с номером она присылает отпечаток
+                # картинки, которую показала в окне. Не совпал — значит
+                # перед ним устаревшая страница, и МЫ НИЧЕГО НЕ ДЕЛАЕМ:
+                # молча наложить надпись на другую картинку хуже отказа.
+                _есть = _otpechatok(src)
+                _ждали = (req.get("sig") or "").strip()
+                if _ждали and _ждали != _есть:
+                    raise ValueError(
+                        "страница показывает не тот вариант, что лежит на "
+                        "диске (вариант %d темы «%s»). Обнови страницу "
+                        "(Ctrl+F5) и выбери картинку заново — надписи на "
+                        "чужой кадр я не кладу." % (num, it.get("тема", "")))
                 ch = (it.get("канал") or "").upper()
                 gamma = _pt.GAMMA.get(ch, _pt.DEFAULT)
                 # ГОТОВОЕ — В КОРЕНЬ ТЕМЫ, рядом с озвучкой, имя ПО
