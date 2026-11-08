@@ -175,6 +175,9 @@ def main():
                     help="диаграмма: «подпись=доля 0..1», от 2 до 5 раз")
     ap.add_argument("--fact", action="append", default=[],
                     help="плакат: «что=значение», до 4 раз")
+    ap.add_argument("--feature", action="append", default=[],
+                    help="плакат: строка правой колонки «особенности», до 4 раз; "
+                         "без неё фото занимает и правую треть")
     ap.add_argument("--kick", default="")
     ap.add_argument("--title", default="")
     ap.add_argument("--sub", default="")
@@ -303,9 +306,13 @@ def main():
                   "  а прогон отчитается успехом. Возьми кадр этой же сцены",
                   "  (или вынь его из клипа: ffmpeg -ss 80% длительности).")
         facts = [_pair(x, "факт плаката") for x in a.fact]
+        # ПРАВАЯ КОЛОНКА ПЛАКАТА (08.11): `--feature «текст»` до четырёх раз.
+        # Без неё фотография сама занимает правую треть — пустого места в
+        # кадре не остаётся ни при каком раскладе.
         kwargs = {"kick": a.kick, "title": a.title, "subtitle": a.sub,
                   "hero_photo": a.photo, "bottom": a.bottom,
                   "source": a.source,
+                  "features": [{"text": x} for x in (a.feature or [])[:4]],
                   "facts": [{"label": k, "value": v} for k, v in facts]}
         if a.photo and not os.path.isfile(a.photo):
             _fail(2, f"нет файла кадра: {a.photo}")
