@@ -124,6 +124,7 @@ template/voice_note.py
 template/wm_sheet.py
 template/zoom.py
 template/ozvuchka.py
+template/chernovoy_srt.py
 template/rewrite_brief.py
 template/rewrite_cut.py
 template/rewrite_fix.py
