@@ -140,22 +140,45 @@ jobs:
           python-version: '3.11'
       - name: библиотеки
         run: pip install --quiet pillow numpy
-      - name: маска фигуры — ставится ТОЛЬКО под вырезку по контуру
-        # `rembg` плюс модель `u2net_human_seg` (176 МБ) стоят полторы-две
-        # минуты на каждой машине матрицы, а нужны ровно ОДНОМУ виду из
-        # полутора десятков. Поэтому шаг смотрит в задание и при отсутствии
-        # вырезки по контуру не делает ничего — обычный ролик не дорожает.
-        # Модель тянется здесь, а не в рисовалке: падение сети должно быть
-        # видно отдельным красным шагом, а не «карточка не нарисована».
+      - name: маска фигуры — только на шарде, где лежит вырезка по контуру
+        # ДВА УРОКА 08.11 (улов `usuario-45`, шесть шардов из десяти в мусор).
+        # 1. Шаг смотрел в задание ЦЕЛИКОМ, а не в свою часть. Вырезка по
+        #    контуру в ролике ОДНА и живёт на ОДНОМ шарде — остальные девять
+        #    машин тянули 176 МБ впустую. Теперь шард считает свою долю тем же
+        #    правилом, что и рисовалка (k % n == i-1), и чужую модель не берёт.
+        # 2. Любая сетевая осечка GitHub (504 на релизе rembg — обычное дело)
+        #    роняла ВЕСЬ шард вместе с его обычными карточками: у вкладки так
+        #    погибли плёнка, стена улик и плакат, к маске отношения не имеющие.
+        #    Теперь три попытки, а неудача НЕ валит шард: шаг помечен
+        #    `continue-on-error`, и вслух падает ровно вырезка по контуру —
+        #    прямоугольной вырезкой она не подменяется (правило скилла).
+        continue-on-error: true
         timeout-minutes: 8
         run: |
-          if grep -q 'vyrezka.figura' cards_render/jobs.json 2>/dev/null; then
-            pip install --quiet "rembg[cpu]"
-            python3 -c "from rembg import new_session; new_session('u2net_human_seg')"
-            echo "маска фигуры готова"
-          else
-            echo "вырезки по контуру в задании нет — модель не нужна"
+          need=$(python3 - <<'PY'
+          import json
+          i, n = ${{ matrix.shard }}, ${{ needs.plan.outputs.total }}
+          try:
+              jobs = json.load(open("cards_render/jobs.json", encoding="utf-8"))
+          except Exception:
+              jobs = []
+          mine = [j for k, j in enumerate(jobs) if k % n == (i - 1)]
+          print("yes" if any("vyrezka.figura" in str(j.get("view", "")) for j in mine) else "no")
+          PY
+          )
+          if [ "$need" != "yes" ]; then
+            echo "в этой части вырезки по контуру нет — модель не нужна"
+            exit 0
           fi
+          pip install --quiet "rembg[cpu]"
+          for try in 1 2 3; do
+            if python3 -c "from rembg import new_session; new_session('u2net_human_seg')"; then
+              echo "маска фигуры готова (попытка $try)"; exit 0
+            fi
+            echo "модель не скачалась (попытка $try из 3), жду 15 с"; sleep 15
+          done
+          echo "!! МОДЕЛЬ МАСКИ НЕ СКАЧАЛАСЬ ТРИЖДЫ — упадёт только вырезка по контуру, остальные карточки этой части рисуются" >&2
+          exit 1
       - name: рендер карточек
         env:
           VIDEORYAD_FONTS: ${{ github.workspace }}/cards_render/fonts
