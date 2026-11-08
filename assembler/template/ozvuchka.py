@@ -413,9 +413,29 @@ def do_folder(folder, args, env):
 
     text = read_text(src)
     t0 = time.time()
-    audio, subs = synth(text, tpl, env)
-    open(mp3, "wb").write(audio)
-    open(srt, "w", encoding="utf-8").write(subs)
+    try:
+        audio, subs = synth(text, tpl, env)
+        open(mp3, "wb").write(audio)
+        open(srt, "w", encoding="utf-8").write(subs)
+    except Exception as _сеть:
+        # СЕРВИС НЕДОСТУПЕН С ЭТОЙ МАШИНЫ — УХОДИМ В ОБЛАКО (08.11).
+        # Провайдер закрыл два адреса, на которые указывает домен сервиса
+        # (проверено с трёх точек: WSL, Windows, раннер GitHub — из облака
+        # сервис отвечает). Руками это лечится `cloud/ozvuchka_cloud.sh`, но
+        # сторож работает без человека, поэтому переходит сам: иначе тема
+        # висит «готовой к озвучке» до утра, как было в этот вечер.
+        if not _сетевой_отказ(_сеть):
+            raise
+        print("    сервис недоступен с этой машины (%s) — озвучиваю ЧЕРЕЗ "
+              "ОБЛАКО" % type(_сеть).__name__)
+        _сбой_наружу(folder, _сеть)
+        if not _облаком(src):
+            print("    ✗ облачная озвучка не удалась — тема ждёт")
+            return False
+        _сбой_снять()
+        if not os.path.exists(mp3):
+            print("    ✗ облако отработало, но файла нет рядом — проверь вручную")
+            return False
 
     dur, problems = check_result(mp3, srt, src)
     print("    звук %d:%02d, сделано за %d с" % (dur // 60, dur % 60, time.time() - t0))
@@ -512,6 +532,34 @@ def _сбой_снять():
         os.remove(СБОЙ_ФАЙЛ)
     except OSError:
         pass
+
+
+
+def _сетевой_отказ(exc):
+    """Отличаем «не дозвонились» от «сервис ответил отказом»."""
+    t = "%s %s" % (type(exc).__name__, exc)
+    return any(x in t for x in ("URLError", "Network is unreachable",
+                                "timed out", "Connection refused",
+                                "Temporary failure in name resolution",
+                                "No route to host"))
+
+
+def _облаком(src):
+    """Позвать `cloud/ozvuchka_cloud.sh` — он сам положит mp3 и srt рядом."""
+    import subprocess
+    скрипт = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "cloud", "ozvuchka_cloud.sh")
+    if not os.path.exists(скрипт):
+        print("    (облачного пути нет: %s)" % скрипт)
+        return False
+    r = subprocess.run(["bash", скрипт, src], capture_output=True, text=True,
+                       timeout=3600)
+    for line in (r.stdout or "").strip().splitlines()[-4:]:
+        print("      %s" % line)
+    if r.returncode != 0:
+        for line in (r.stderr or "").strip().splitlines()[-4:]:
+            print("      %s" % line)
+    return r.returncode == 0
 
 
 def watch(root, args, env):
