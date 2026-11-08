@@ -76,9 +76,19 @@ def связки():
             с["заголовок"] = e.get("выбрано", "")
         elif e.get("событие") == "заголовки" and not с["заголовок"]:
             с["заголовок"] = "(скопировал из списка) " + (e.get("выбрано") or "")
-    замеры = {z["id"]: z for z in _читать(СВЯЗКИ)}
+    замеры, описания, файлы = {}, {}, {}
+    for z in _читать(СВЯЗКИ):
+        if z.get("описание_превью"):
+            описания[z["id"]] = z["описание_превью"]
+        if z.get("вердикт") or z.get("просмотры"):
+            замеры[z["id"]] = z
+    for e in _читать(ЖУРНАЛ):
+        if e.get("файл_превью"):
+            файлы["%s|%s" % (e.get("канал", ""), e.get("тема", ""))] = e["файл_превью"]
     for к, с in по_теме.items():
         с["замер"] = замеры.get(к)
+        с["описание_превью"] = описания.get(к, "")
+        с["файл_превью"] = файлы.get(к, "")
     return list(по_теме.values())
 
 
@@ -99,6 +109,9 @@ def main():
     ap.add_argument("--ctr", type=float, default=0.0)
     ap.add_argument("--вердикт", default="", choices=("",) + ВЕРДИКТЫ)
     ap.add_argument("--заметка", default="")
+    ap.add_argument("--описание", default="", dest="opis",
+                    help="ЧТО НАРИСОВАНО на превью: кто в кадре, эмоция, план, "
+                         "цвет, объекты. Пишется отдельной записью к связке")
     a = ap.parse_args()
 
     все = связки()
@@ -110,6 +123,15 @@ def main():
             for с in все:
                 print("  %s" % с["id"])
             return 2
+        if a.opis:
+            os.makedirs(os.path.dirname(СВЯЗКИ), exist_ok=True)
+            with io.open(СВЯЗКИ, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"id": a.mark, "описание_превью": a.opis,
+                                    "когда": time.strftime("%Y-%m-%d %H:%M:%S")},
+                                   ensure_ascii=False) + "\n")
+            print("описание превью записано: %s" % a.mark)
+            if not a.вердикт and not a.просмотры:
+                return 0
         if not a.вердикт and not a.просмотры:
             return print("нужен хотя бы --просмотры или --вердикт") or 2
         запись = {"id": a.mark, "когда": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -141,6 +163,8 @@ def main():
         print("   заголовок: %s" % (с["заголовок"] or "—"))
         print("   надписи:   %s" % (" / ".join(с["надписи"]) or "—"))
         print("   превью:    %s   %s" % (с["превью"] or "—", статус))
+        if с.get("описание_превью"):
+            print("   на превью: %s" % с["описание_превью"][:160])
     if a.ждут:
         print("\nвписать результат: svyazka.py --замер \"<id>\" --просмотры N --вердикт залетело")
     return 0
