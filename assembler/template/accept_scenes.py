@@ -1168,17 +1168,44 @@ def main():
                 _last = _t
             return _last
 
+        # ПОИСК ИДЁТ ВПЕРЁД ПО КУРСОРУ, А НЕ «БЛИЖЕ К ЗАЯВЛЕННОМУ» (08.11,
+        # замер вкладки `usuario-47`). Прежняя логика выбирала вхождение,
+        # ближайшее к `start_sec` из файла, — и это верно, пока тайминг в
+        # файле хотя бы примерно правильный. Но при ПОЗДНЕЙ озвучке (черновой
+        # srt, потом настоящий) заявленное время смещено целиком: у неё
+        # черновик был 698 с против настоящих 814, и привязка дала 57 сцен из
+        # 61 при среднем сдвиге 1,54 с, худший случай 4,39 с.
+        # Текст сцен идёт в том же порядке, что речь, поэтому правильнее
+        # брать ПЕРВОЕ вхождение после предыдущей сцены и вести курсор.
+        # Ключ ищем сначала длинный (60 знаков), потом короткий (первые
+        # четыре слова) — агент иногда перефразирует хвост фразы.
         _prev = 0.0
+        _cursor = 0
         for sc in scenes:
-            _tx = _norm(sc.get("text", ""))[:60]
+            _full = _norm(sc.get("text", ""))
+            _tx = _full[:60]
             if len(_tx) < 15:
                 continue
             _want = float(sc.get("start_sec") or 0)
             _cands = []
-            _i = _stream.find(_tx)
-            while _i >= 0:
-                _cands.append(_time_at(_i))
-                _i = _stream.find(_tx, _i + 1)
+            for _key in (_tx, " ".join(_full.split()[:4])):
+                if len(_key) < 12:
+                    continue
+                _i = _stream.find(_key, _cursor)
+                if _i < 0:
+                    _i = _stream.find(_key)          # хвост мог уйти назад
+                while _i >= 0:
+                    _cands.append((_i, _time_at(_i)))
+                    _i = _stream.find(_key, _i + 1)
+                if _cands:
+                    break
+            if _cands:
+                # первое вхождение ПОСЛЕ курсора; нет такого — ближайшее к
+                # заявленному времени, как раньше
+                _after = [c for c in _cands if c[0] >= _cursor]
+                _off, _best_t = (_after[0] if _after
+                                 else min(_cands, key=lambda c: abs(c[1] - _want)))
+                _cursor = _off + 1
             if not _cands:
                 # точного вхождения нет (агент перефразировал) — старый путь
                 # похожести, но тоже с выбором ближайшего к заявленному
@@ -1189,8 +1216,6 @@ def main():
                 if not _near:
                     continue
                 _best_t = min(_near)[1]
-            else:
-                _best_t = min(_cands, key=lambda _t: abs(_t - _want))
             _prev = max(_prev, _best_t)
             _d = _best_t - _want
             _drift.append((sc.get("id"), round(_best_t, 1), _d))
@@ -1284,6 +1309,48 @@ def main():
             print("  тайминг снят с ОЗВУЧКИ по тексту сцен: привязано %d из %d, "
                   "остальные вставкой между соседями"
                   % (len(_pts), len(scenes)))
+            # ЗАДАНИЯ КАРТОЧЕК ПРОТУХАЮТ ВМЕСТЕ С ТАЙМИНГОМ (08.11, улов
+            # вкладки `usuario-47`). Карточка рисуется НА ТОЧНУЮ длительность
+            # сцены, и эта длительность вшита в задание (`dur`, `anim`).
+            # Пересобрали тайминг по настоящей озвучке — все задания стали
+            # короче своих сцен: у неё озвучка пришла на 814 с против
+            # черновых 698, и все восемнадцать карточек оказались короче на
+            # 17% (сцена 29: было 7,6 с, стало 17,5). Инструменты об этом
+            # молчали: `card_put` проверяет длительность в момент постановки,
+            # `selfcheck` сверяет готовые клипы, которых ещё нет.
+            # Раз новая длительность уже посчитана — чиним сами.
+            _qdir = os.path.join(os.path.dirname(os.path.abspath(a.out or a.src)),
+                                 "cards", "queue")
+            _правлено = []
+            if os.path.isdir(_qdir):
+                _длит = {int(sc.get("id")): float(sc.get("duration_sec") or 0)
+                         for sc in scenes}
+                for _qf in sorted(glob.glob(os.path.join(_qdir, "scene_*.json"))):
+                    try:
+                        _q = json.load(open(_qf, encoding="utf-8"))
+                    except (OSError, ValueError):
+                        continue
+                    _sid = int(_q.get("scene") or 0)
+                    _new = _длит.get(_sid)
+                    if not _new or abs(float(_q.get("dur") or 0) - _new) < 0.05:
+                        continue
+                    _was = float(_q.get("dur") or 0)
+                    _anim_was = float(_q.get("anim") or 0)
+                    _q["dur"] = round(_new, 2)
+                    # анимация: если рисовалась ВСЯ сцена — тянем за ней,
+                    # если была короче (цитаты, мазки) — оставляем как есть,
+                    # только не даём ей превысить новую длительность
+                    _q["anim"] = (round(_new, 2) if _anim_was >= _was - 0.05
+                                  else round(min(_anim_was, _new), 2))
+                    json.dump(_q, open(_qf, "w", encoding="utf-8"),
+                              ensure_ascii=False)
+                    _правлено.append("%d: %.1f→%.1f с" % (_sid, _was, _new))
+            if _правлено:
+                print("  задания карточек обновлены под новый тайминг (%d): %s"
+                      % (len(_правлено), ", ".join(_правлено[:6])
+                         + (" …" if len(_правлено) > 6 else "")))
+                print("  карточки надо ПЕРЕВЫПУСТИТЬ: cards_cloud.py — иначе "
+                      "клип короче сцены и в конце будет чёрный хвост")
             print("  сумма после привязки: %.1f с (озвучка %.1f с)"
                   % (sum(float(x.get("duration_sec") or 0) for x in scenes),
                      _end))
