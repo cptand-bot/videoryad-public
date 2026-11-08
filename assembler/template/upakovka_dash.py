@@ -268,6 +268,22 @@ function unfold(descId,btnId){
   if(m){ m.style.display='none'; }
   if(b){ b.textContent='копировать описание'; b.classList.remove('done'); }
 }
+// СВОЙ ВАРИАНТ ЗАГОЛОВКА (08.11, его просьба: «чтобы было поле, не
+// обязательное, куда бы я мог вставить свой вариант, который я взял и сделал
+// для этой статьи. Чтобы ты понимал, что я беру, что я сделал сам»).
+// Это самый ценный материал для обучения: не выбор из наших десяти, а то,
+// что он написал сам, когда ни один не подошёл.
+function svoy(item, kind, id, btn){
+  var el = document.getElementById(id);
+  var t = (el && el.value || '').trim();
+  if(!t){ el && el.focus(); return; }
+  btn.disabled = true; var was = btn.textContent; btn.textContent = '…';
+  fetch('/zhurnal', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({kind:'свой_'+kind, text:t, item:item})})
+   .then(function(){ btn.textContent = 'записано ✓'; btn.classList.add('done');
+                     el.readOnly = true; })
+   .catch(function(){ btn.disabled = false; btn.textContent = was; });
+}
 function zhurnal(kind, text, item){
   try{ fetch('/zhurnal', {method:'POST', headers:{'Content-Type':'application/json'},
        body: JSON.stringify({kind:kind, text:text, item:item||0})}); }catch(e){}
@@ -382,6 +398,24 @@ def page(items, day):
                          % (html.escape(r, quote=True), key,
                             items.index(it), html.escape(r)))
             P.append('</ol>')
+            # ПОЛЕ «МОЙ ВАРИАНТ» — ТОЛЬКО У ЗАГОЛОВКОВ (08.11, его поправка:
+            # «для надписей на превью этого поля не надо. Когда я ввожу сами
+            # надписи, работая с превью, нет смысла мне её туда писать, и
+            # неудобно — там две надписи. Ты должен поймать их уже с самого
+            # превью, когда я его делаю»). Надписи и так пишутся в журнал при
+            # нажатии «ОК» в окне превью: и верхняя, и нижняя, и пометка
+            # «вписал сам», если текст не из наших десяти.
+            _sid = "own-%s-%d" % (key, items.index(it))
+            if key == "заголовки":
+              P.append('<div class="row" style="margin-top:8px">'
+                     '<input id="%s" placeholder="%s — вставь свой вариант, '
+                     'если взял не из списка" '
+                     'style="flex:1;min-width:280px;padding:8px 10px;'
+                     'border:1px solid var(--line);border-radius:6px;'
+                     'background:#101014;color:inherit;font-size:13px">'
+                     '<button onclick=\'svoy(%d,"%s","%s",this)\'>'
+                     'записать мой вариант</button></div>'
+                     % (_sid, "заголовок", items.index(it), key, _sid))
             P.append('<div class="row">'
                      '<button onclick="fold(\'%s\')">скрыть — с этим '
                      'закончил</button>'
