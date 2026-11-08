@@ -1,0 +1,405 @@
+[
+ {
+  "scene": 5,
+  "view": "cinematic.depth_of_field",
+  "dur": 16.9,
+  "anim": 16.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_005.jpg",
+   "title": "«ПОТЕРПИТЕ»",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 10,
+  "view": "split",
+  "dur": 12.3,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_010.jpg",
+   "text": "Вопрос о помощи немцам рядом с помощью Украине — чуть ли не пощёчина тем, кто страдает от конфликта.",
+   "author": "Йоханн Вадефуль",
+   "role": "министр иностранных дел Германии",
+   "source": "Бундестаг",
+   "accent": "Вопрос о помощи немцам рядом с",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "charts.cartogram",
+  "dur": 16.0,
+  "anim": 16.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Германия=200 млн €",
+    "Германия за всё время=100 млрд €"
+   ],
+   "kick": "ноябрь 2026",
+   "title": "ПАКЕТ ПОМОЩИ КИЕВУ",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "slider",
+  "dur": 10.8,
+  "anim": 10.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "ПЕНСИИ В ЕВРОПЕ",
+   "min": 0.0,
+   "max": 100.0,
+   "low": 0.0,
+   "high": 100.0,
+   "marker_value": 70.0,
+   "marker_display": "70",
+   "seconds": 10.8,
+   "range_label": "от заморозки выплат до пересчёта возраста",
+   "caption": "направление одно: платить осторожнее",
+   "source": ""
+  }
+ },
+ {
+  "scene": 23,
+  "view": "photo",
+  "dur": 8.2,
+  "anim": 8.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "images/scene_023.jpg",
+   "title": "СДЕЛКА С ГОСУДАРСТВОМ",
+   "lines": [
+    "всю жизнь платишь в систему",
+    "взамен обещают не бросить",
+    "счёт предъявляют в конце"
+   ]
+  }
+ },
+ {
+  "scene": 27,
+  "view": "cinematic.evidence_wall",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "images/scene_020.jpg",
+     240,
+     250,
+     -4,
+     "Великобритания"
+    ],
+    [
+     "images/scene_021.jpg",
+     800,
+     250,
+     3,
+     "Румыния"
+    ],
+    [
+     "images/scene_022.jpg",
+     1360,
+     250,
+     -2,
+     "Чехия"
+    ],
+    [
+     "images/scene_026.jpg",
+     240,
+     580,
+     4,
+     "Германия"
+    ]
+   ],
+   "title": "ГДЕ РЕЖУТ СОЦИАЛЬНОЕ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 31,
+  "view": "bars",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "РЕЙТИНГ МЕРЦА",
+   "caption": "82 из 100 говорят «нет»",
+   "seconds": 11.4,
+   "bars": [
+    {
+     "label": "НЕДОВОЛЬНЫ",
+     "value": 0.82,
+     "color": "B92526"
+    },
+    {
+     "label": "ДОВОЛЬНЫ",
+     "value": 0.13,
+     "color": "EABD23"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 36,
+  "view": "charts.pie",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "АдГ",
+     "value": 29.0
+    },
+    {
+     "label": "ХДС/ХСС",
+     "value": 19.0
+    },
+    {
+     "label": "СДПГ",
+     "value": 14.0
+    },
+    {
+     "label": "остальные",
+     "value": 38.0
+    }
+   ],
+   "kick": "ноябрь 2026",
+   "title": "ОПРОС В ГЕРМАНИИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "marker_serif",
+  "dur": 10.13,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вопрос уже не про Мерца. Мерц сегодня есть, завтра будет другой канцлер. Речь о механизме.",
+   "accent": "Речь о механизме",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "poster.poster",
+  "dur": 11.9,
+  "anim": 11.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "АКТИВЫ ПОД ВНЕШНИМ УПРАВЛЕНИЕМ",
+   "hero_photo": "images/scene_044.jpg",
+   "bottom": "политика пришла в бухгалтерию",
+   "facts": [
+    {
+     "label": "Japan Tobacco",
+     "value": "4 компании"
+    },
+    {
+     "label": "бренды",
+     "value": "Winston, Camel"
+    },
+    {
+     "label": "до неё",
+     "value": "Nestlé, Metro, Auchan"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 48,
+  "view": "film.film_strip",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "images/scene_045.jpg",
+    "images/scene_050.jpg",
+    "images/scene_053.jpg"
+   ],
+   "title": "КТО УЖЕ ПОПАЛ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "pull",
+  "dur": 11.9,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Пережидать надо было вместе с ключами от предприятия.",
+   "kick": "европейский бизнес в России",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "charts.waterfall",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "цена газа",
+    "value": 69.0
+   },
+   "steps": [
+    {
+     "label": "ВВП в тяжёлом сценарии",
+     "value": -15.6
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "kick": "расчёты партнёров по ЕАЭС · Армения",
+   "title": "ЦЕНА ВЫХОДА ИЗ ЕАЭС",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "timeline",
+  "dur": 19.1,
+  "anim": 19.1,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ТУРЦИЯ ИДЁТ В ЕВРОСОЮЗ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "1987",
+     "text": "подана заявка"
+    },
+    {
+     "date": "1999",
+     "text": "статус кандидата"
+    },
+    {
+     "date": "2005",
+     "text": "начались переговоры",
+     "hot": true
+    },
+    {
+     "date": "2026",
+     "text": "всё ещё кандидат"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 65,
+  "view": "vyrezka.figura",
+  "dur": 12.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_065.jpg",
+   "author": "НИКОЛ ПАШИНЯН",
+   "role": "премьер-министр Армении",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "charts.cartogram",
+  "dur": 10.4,
+  "anim": 10.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Армения",
+    "Россия",
+    "Турция",
+    "Грузия",
+    "Иран"
+   ],
+   "kick": "маршруты торговли",
+   "title": "ГДЕ НАХОДИТСЯ АРМЕНИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 74,
+  "view": "film.film_single",
+  "dur": 12.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_074.jpg",
+   "title": "СЧЁТ ПРИХОДИТ ЕМУ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 79,
+  "view": "vyrezka.gazeta",
+  "dur": 14.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "images/scene_079.jpg",
+   "author": "ФРИДРИХ МЕРЦ",
+   "role": "канцлер Германии",
+   "kick": "кто уйдёт",
+   "title": "Германия",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
