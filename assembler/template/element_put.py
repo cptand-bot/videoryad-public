@@ -149,6 +149,20 @@ def _layout(n):
     return out
 
 
+
+def _chislo(v):
+    """Число из ключа командной строки: запятая и пробелы прощаются."""
+    t = str(v).replace("\u00a0", "").replace(" ", "").replace(",", ".")
+    try:
+        return float(t)
+    except ValueError:
+        raise argparse.ArgumentTypeError(
+            "«%s» — не число. Шкала слайдера задаётся ТОЛЬКО числами: "
+            "--min 0 --max 100 --value 38.4 (запятая тоже годится). "
+            "Словесный диапазон сюда не кладётся — слова идут в --sub и "
+            "--caption." % v)
+
+
 def main():
     ap = argparse.ArgumentParser(description="элемент арсенала на сцену ролика")
     ap.add_argument("scenes", nargs="?", default="")
@@ -169,11 +183,21 @@ def main():
     ap.add_argument("--caption", default="",
                     help="диаграмма: подпись-ВЫВОД под числом (у слайдера это "
                          "`caption`, а подпись диапазона над шкалой — --sub)")
-    ap.add_argument("--min", type=float, default=0.0)
-    ap.add_argument("--max", type=float, default=100.0)
-    ap.add_argument("--low", type=float, default=None)
-    ap.add_argument("--high", type=float, default=None)
-    ap.add_argument("--value", type=float, default=None)
+    # ШКАЛА ПРИНИМАЕТ ТОЛЬКО ЧИСЛА, И ТЕПЕРЬ ОНА ОБ ЭТОМ ГОВОРИТ (08.11,
+    # улов `usuario-45`): словесный диапазон падал голым «invalid float
+    # value» от argparse, и было непонятно, чего от тебя хотят. Заодно
+    # принимаем запятую как десятичный разделитель — его тексты пишутся
+    # с запятой («4,36»), и спотыкаться на этом незачем.
+    ap.add_argument("--min", type=_chislo, default=0.0,
+                    help="слайдер: НАЧАЛО шкалы, только число (0, 12.5, 4,36)")
+    ap.add_argument("--max", type=_chislo, default=100.0,
+                    help="слайдер: КОНЕЦ шкалы, только число")
+    ap.add_argument("--low", type=_chislo, default=None,
+                    help="слайдер: нижняя граница подсвеченного диапазона, число")
+    ap.add_argument("--high", type=_chislo, default=None,
+                    help="слайдер: верхняя граница диапазона, число")
+    ap.add_argument("--value", type=_chislo, default=None,
+                    help="слайдер: где стоит маркер, число")
     ap.add_argument("--watermark", default="")
     ap.add_argument("--anim", type=float, default=0.0,
                     help="секунд рисовать покадрово; 0 — вся сцена")
