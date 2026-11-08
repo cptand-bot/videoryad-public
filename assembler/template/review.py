@@ -3585,8 +3585,46 @@ def run_live(scenes_path, images_dir, port):
                     tblock["scale"] = max(0.4, min(2.4, round(float(spec.get("scale", 1.0)), 2)))
                 except (TypeError, ValueError):
                     tblock["scale"] = 1.0
+                # СТИЛЬ НАДПИСИ ПЕРЕЖИВАЕТ ПРАВКУ НА ДАШБОРДЕ (08.11,
+                # КРИТИЧЕСКОЕ, улов `usuario-cd` и его же ругань: «формат
+                # записи надписи не тот, дизайн совершенно не тот»).
+                # Редактор собирал блок заново из полей формы и ТЕРЯЛ
+                # `style: mask_plate` и подзаголовок `sub` — надпись из-под
+                # маски превращалась в обычную. Дальше гейт ругался с двух
+                # сторон сразу: «на ПЛАНЕТЕ текстовых всплывашек быть не
+                # должно» и «обязательной маски ноль», а в кадре вместо
+                # утверждённого 07.11 дизайна появлялась серая плашка.
+                # Поэтому: что дашборд не редактирует — то и не трогает.
+                with _overlays_txn() as _ovs0:
+                    _было = ((_ovs0.get(str(sid)) or {}).get("text")
+                             if isinstance(_ovs0.get(str(sid)), dict) else {}) or {}
+                for _поле in ("style", "sub"):
+                    _зн = spec.get(_поле, _было.get(_поле))
+                    if _зн:
+                        tblock[_поле] = _зн
                 os.makedirs("overlays", exist_ok=True)
-                render_text_png(words, color, png, fkey)  # для превью дашборда
+                if str(tblock.get("style") or "").startswith("mask"):
+                    # маску рисует её собственная рисовалка, иначе на плитке
+                    # окажется чужой формат
+                    try:
+                        import tempfile as _tf, glob as _g
+                        import nadpis_maska as _NM
+                        _t = _tf.mkdtemp(prefix="maska-save-")
+                        try:
+                            _NM.sequence(_t, words, str(tblock.get("sub") or ""),
+                                         scale=2.0 * float(tblock.get("scale", 1.0) or 1.0),
+                                         channel=_channel_of(os.path.basename(os.getcwd())),
+                                         fps=12,
+                                         plate=str(tblock["style"]).lower() == "mask_plate")
+                            _к = sorted(_g.glob(os.path.join(_t, "*.png")))
+                            if _к:
+                                shutil.copy2(_к[-1], png)
+                        finally:
+                            shutil.rmtree(_t, ignore_errors=True)
+                    except Exception as _e:
+                        print("  маска не перерисовалась: %s" % _e, flush=True)
+                else:
+                    render_text_png(words, color, png, fkey)  # для превью дашборда
                 with _overlays_txn() as ovs:
                     cur = ovs.get(str(sid), {})
                     _prev_text = cur.get("text") if isinstance(cur.get("text"), dict) else {}
