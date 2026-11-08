@@ -1,0 +1,34 @@
+name: ozvuchka
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: текст озвучки, сжатый gzip и закодированный base64
+        required: true
+      template:
+        description: имя шаблона голоса в сервисе
+        required: true
+      name:
+        description: имя файлов результата
+        required: true
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: распаковать текст
+        run: |
+          mkdir -p in out
+          printf '%s' '${{ inputs.payload }}' | base64 -d | gunzip > "in/${{ inputs.name }}.txt"
+          wc -c "in/${{ inputs.name }}.txt"
+      - name: озвучить
+        env:
+          VOICEGEN_API_KEY: ${{ secrets.VOICEGEN_API_KEY }}
+          VOICEGEN_API_URL: ${{ secrets.VOICEGEN_API_URL }}
+        run: python3 ozvuchka/ozvuchka_job.py "in/${{ inputs.name }}.txt" "${{ inputs.template }}" out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ozvuchka
+          path: out/
+          retention-days: 1

@@ -158,3 +158,6 @@ template/upakovka_lib/arhiv-geo2.txt
 template/upakovka_lib/bank.txt
 template/upakovka_lib/slova.json
 template/upakovka_lib/zhurnal.json
+cloud/ozvuchka_cloud.sh
+cloud/ozvuchka_job.py
+cloud/workflows/ozvuchka.yml
