@@ -344,6 +344,24 @@ def main():
             _wrapped.append((m["id"], m["wrap"], dst_p))
         new_man = [m for m in new_man if "wrap" not in m]
 
+    # ЧИСЛО КАДРОВ, РОЖДЁННЫХ КЛОНИРОВАНИЕМ, ПИШЕМ В SCENES.JSON (08.11).
+    # Иначе двери (`card_put`, `element_put`) считают их перебором над нормой,
+    # и вкладка ставит каждый через `--force`, глуша заодно проверку зазора.
+    # `obyazatelno.норма`/`зазор` читают этот ключ и прибавляют его к
+    # обязательным — ролик-клон живёт по своей норме, а не по норме оригинала.
+    if _wrapped:
+        try:
+            _d = json.load(open(tgt_path, encoding="utf-8"))
+            if isinstance(_d, dict):
+                _d["clone_wrapped"] = len(_wrapped)
+                json.dump(_d, open(tgt_path, "w", encoding="utf-8"),
+                          ensure_ascii=False, indent=1)
+                print("в %s записано clone_wrapped=%d — норма рисованных "
+                      "кадров поднята на столько же"
+                      % (os.path.basename(tgt_path), len(_wrapped)))
+        except Exception as _e:
+            print("  !! не смог записать clone_wrapped: %s" % _e)
+
     _own = len(targets) - len(new_man) - len(_wrapped)
     print("своих сцен оставлено: %d из %d (%d%%) — закрывай их кадром своей "
           "медиатеки или СВОИМ элементом" % (_own, len(targets),
@@ -354,15 +372,34 @@ def main():
               "%d шт." % len(_wrapped))
         print("Файлы отложены в cards/photo/. Поставь каждый своей командой,")
         print("текст возьми из реплики этой сцены:")
+        # КОМАНДЫ ПЕЧАТАЮТСЯ ПОД ФАКТИЧЕСКИЕ ИНТЕРФЕЙСЫ (08.11, улов вкладки
+        # `usuario-cd`). Раньше три подсказки из шести не работали ни в каком
+        # виде: `style_card` не знает вида `split` (у него bullets, forces,
+        # photo, timeline), у `element_put` вид идёт ПОЗИЦИОННО, а не ключом
+        # `--view`, а `film_frame` и `vyrezka` живут вообще в другой двери —
+        # `fullcycle/card_put.py`. Вкладка после такой печати гадает по
+        # справкам, то есть подсказка стоила круга вместо того, чтобы его
+        # сэкономить. Каждый вид теперь печатает СВОЮ дверь.
+        _S = "~/.claude/skills/news-video"
         for sid, view, path in _wrapped:
             rel = os.path.relpath(path, args.target_project)
-            if view in ("photo", "split"):
-                print("  сцена %-3d %-11s style_card.py <scenes> %d %s "
-                      "--photo %s --item \"...\" --item \"...\""
-                      % (sid, view, sid, view, rel))
+            if view == "photo":
+                cmd = ('python3 %s/template/style_card.py <scenes> %d photo '
+                       '--photo %s --item "..." --item "..."' % (_S, sid, rel))
+            elif view == "split":
+                cmd = ('python3 %s/template/quote_card.py <scenes> %d '
+                       '--photo %s --text "..." --author "Фамилия"'
+                       % (_S, sid, rel))
+            elif view in ("dof", "wall"):
+                cmd = ('python3 %s/template/element_put.py <scenes> %d %s '
+                       '--photo %s' % (_S, sid, view, rel))
+            elif view == "vyrezka":
+                cmd = ('python3 %s/fullcycle/card_put.py <scenes> %d vyrezka '
+                       '--photo %s --author "Фамилия"' % (_S, sid, rel))
             else:
-                print("  сцена %-3d %-11s element_put.py <scenes> %d --view %s "
-                      "--photo %s" % (sid, view, sid, view, rel))
+                cmd = ('python3 %s/fullcycle/card_put.py <scenes> %d %s '
+                       '--photo %s' % (_S, sid, view, rel))
+            print("  сцена %-3d %-11s %s" % (sid, view, cmd))
     print("виды элементов, которые у нас есть и почти не идут в дело: "
           "quote, doc, duel, strike, paper_typed, paper_hand, slope, line, "
           "pie, map_regions, map_dist, vyrezka, vyrezka_kontur")

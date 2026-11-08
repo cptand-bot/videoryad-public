@@ -329,7 +329,8 @@ def main():
     _ob = None
     try:
         import obyazatelno as _ob
-        MIN_GAP, НОРМА = _ob.зазор(len(scenes)), _ob.норма(len(scenes))
+        _кл = _ob.клонов_в(data)
+        MIN_GAP, НОРМА = _ob.зазор(len(scenes), _кл), _ob.норма(len(scenes), _кл)
     except Exception:
         MIN_GAP, НОРМА = 8, max(1, round(len(scenes) / 15))
     others = {int(x.get("id", 0)): str(x.get("source", ""))[5:]
@@ -338,7 +339,7 @@ def main():
               and int(x.get("id", -1)) != a.sid}
     def _gap_to(_other_sid):
         try:
-            return _ob.зазор_вида(вид, len(scenes), others.get(_other_sid))
+            return _ob.зазор_вида(вид, len(scenes), others.get(_other_sid), _кл)
         except Exception:
             return MIN_GAP
     near = [i for i in others if abs(i - a.sid) < _gap_to(i)]
