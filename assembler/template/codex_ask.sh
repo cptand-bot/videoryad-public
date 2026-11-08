@@ -121,6 +121,31 @@ if [ "${#imgs[@]}" -gt 16 ]; then
   exit 2
 fi
 
+# ВЫБОР АККАУНТА АГЕНТА — ДО ВСЕГО ОСТАЛЬНОГО (08.11).
+# У Codex CLI каждая папка `CODEX_HOME` держит свою авторизацию и своё
+# пятичасовое окно лимита. Значит второй аккаунт — это ровно тот же приём,
+# что шесть труб GitHub: отдельная папка и переключение переменной.
+#   CODEX_ACCOUNT=eva  → ~/.codex-eva   (разовый вход: CODEX_HOME=~/.codex-eva codex login)
+#   без переменной     → ~/.codex       (основной, как было)
+# ПРОВЕРКА СТОИТ ЗДЕСЬ, А НЕ ВНУТРИ ПАЙПЛАЙНА: ниже весь вывод агента идёт
+# через `2>&1 | tee ... >/dev/null`, и объяснение «аккаунта нет, вот команда
+# входа» уходило в никуда — скрипт просто молча отдавал код 5 (поймано
+# живьём 08.11 при подготовке второго аккаунта).
+if [ -n "${CODEX_ACCOUNT:-}" ]; then
+  _ch="$HOME/.codex-${CODEX_ACCOUNT}"
+  if [ -f "$_ch/auth.json" ]; then
+    export CODEX_HOME="$_ch"
+    echo "агент: аккаунт ${CODEX_ACCOUNT} ($_ch)" >&2
+  else
+    echo "!! аккаунта «${CODEX_ACCOUNT}» нет: $_ch/auth.json не найден." >&2
+    echo "   Разовый вход одной строкой (откроет браузер):" >&2
+    echo "     CODEX_HOME=$_ch codex login" >&2
+    echo "   После входа этой же командой ничего делать не надо —" >&2
+    echo "   конвейер сам будет брать свободный аккаунт." >&2
+    exit 5
+  fi
+fi
+
 workdir="$(cd "$(dirname "$brief")" && pwd)"
 # КОПИИ ПРИЛОЖЕННЫХ ФАЙЛОВ УБИРАЕМ ЗА СОБОЙ (01.11, улов `usuario-49`).
 # Задание пишется В ПАПКУ РОЛИКА на `D:`, значит и копия вложения ложится
@@ -201,17 +226,8 @@ out="${brief%.txt}.ОТВЕТ.txt"
   # пятичасовое окно, а переключение идёт переменной, без входа-выхода.
   #   CODEX_ACCOUNT=eva  → ~/.codex-eva   (разово: CODEX_HOME=~/.codex-eva codex login)
   #   без переменной     → ~/.codex       (основной аккаунт, как было)
-  if [ -n "${CODEX_ACCOUNT:-}" ]; then
-    _ch="$HOME/.codex-${CODEX_ACCOUNT}"
-    if [ -f "$_ch/auth.json" ]; then
-      export CODEX_HOME="$_ch"
-      echo "агент: аккаунт ${CODEX_ACCOUNT} ($_ch)" >&2
-    else
-      echo "!! аккаунта «${CODEX_ACCOUNT}» нет: $_ch/auth.json не найден." >&2
-      echo "   Разовый вход: CODEX_HOME=$_ch codex login" >&2
-      exit 5
-    fi
-  fi
+  # (сам выбор аккаунта сделан ВЫШЕ, до пайплайна: здесь его stderr
+  #  уехал бы в `tee ... >/dev/null` и подсказка про вход пропала бы)
 
   _slots="${CODEX_PARALLEL:-3}"
   _bk="$(printf '%s' "$brief" | md5sum | cut -c1-16)"
