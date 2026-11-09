@@ -33,17 +33,16 @@ import sys
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-# ЦВЕТ ПО КАНАЛУ. Таблица повторяет `fullcycle/style_cards.CHANNEL_ACCENT`
-# один в один — и это осознанный дубль: `fullcycle/` в облако основной
-# сборки не уезжает, импортировать оттуда на раннере нечего. Меняешь цвет
-# канала — меняй В ОБОИХ местах.
-CHANNEL_ACCENT = {
-    "ПЛАНЕТА":                    (74, 144, 226),    # сталь
-    "ОЛЬКА":                      (168, 130, 232),   # сирень
-    "5 МИНУТ":                    (224, 179, 58),    # золото
-    "ДИПЛОМАТИЯ СИЛЫ":            (72, 187, 120),    # зелень
-    "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО": (6, 199, 199),     # бирюза
-}
+# ЦВЕТ ПО КАНАЛУ — ИЗ ОДНОЙ ТАБЛИЦЫ ПАЛИТРЫ (`template/palitra.py`, 09.11).
+# Было: здесь лежал ОСОЗНАННЫЙ ДУБЛЬ `fullcycle/style_cards.CHANNEL_ACCENT`
+# с примечанием «меняешь цвет канала — меняй В ОБОИХ местах». Так и
+# разъехалось: третий такой список (плашка субтитров) про зелёный ДС не
+# знал и красил канал бирюзой ПЛАНЕТЫ. Теперь таблица одна и лежит в
+# `template/`, то есть доезжает и до раннера.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import palitra
+
+CHANNEL_ACCENT = {ch: palitra.KANALY[ch]["accent"] for ch in palitra.KANALY}
 RED = (185, 37, 38)
 
 DEJAVU = "/usr/share/fonts/truetype/dejavu/"
@@ -69,20 +68,21 @@ _FC = {}
 
 
 def accent(channel=None):
-    key = (channel or "").strip().upper()
-    for name, col in CHANNEL_ACCENT.items():
-        if key and (key.startswith(name) or name.startswith(key)):
-            return col
-    return RED
+    """Цвет канала. Неизвестный канал — красный и голос в stderr: красный
+    ничьим фирменным цветом не является, молчать тут нельзя."""
+    return palitra.accent(channel, inache=RED)
 
 
 def channel_of(path):
-    """Канал из ПУТИ — как везде в сборщике, отдельно его не спрашиваем."""
+    """Канал из ПУТИ — как везде в сборщике, отдельно его не спрашиваем.
+
+    Сверка идёт палитрой, поэтому «ОЛЬКА НОВОСТИ» в пути узнаётся как
+    ОЛЬКА (прежний поиск по точному совпадению ключа её терял)."""
     parts = [p.strip().upper() for p in os.path.abspath(str(path)).split(os.sep)]
     for p in parts:
-        for name in CHANNEL_ACCENT:
-            if p == name or p.startswith(name):
-                return name
+        ch = palitra.kanal(p)
+        if ch:
+            return ch
     return ""
 
 
