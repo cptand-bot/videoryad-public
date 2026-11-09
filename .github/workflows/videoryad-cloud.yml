@@ -1586,7 +1586,49 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
+      contents: write           # дворник сносит и папку очереди, см. первый шаг
     steps:
+      # ПАПКА ОЧЕРЕДИ СНОСИТСЯ ВСЕГДА, А НЕ ТОЛЬКО ПОСЛЕ СБОРКИ (2026-11-09).
+      # Было: `git rm queue/<имя>` жил ТОЛЬКО в джобе `assemble`, у которого
+      # условие `needs.setup.result == 'success'`. Значит любой отказ в
+      # `setup` (гард «scenes.json не классифицирован», «still not
+      # classified», отвалившийся `pip`) или отмена прогона оставляли папку
+      # ролика в репозитории НАСОВСЕМ — с озвучкой, субтитрами и кадрами,
+      # до следующей ручной уборки. Живьём так и лежало: `cptand/svo-zvuk` и
+      # `andiv/luka-zvuk` провисели сутками. Дворник идёт с `always()`,
+      # поэтому здесь это закрывается на всех путях.
+      # Сносим РОВНО СВОЮ папку (`setup.outputs.name` считается первым же
+      # шагом `pick`, то есть есть даже при упавшем `setup`), а не `queue/*`:
+      # в очереди может лежать следующий ролик, который ждёт своего прогона.
+      # Идемпотентно: если `assemble` уже убрал слот, шаг молча ничего не
+      # делает. `[skip ci]` в сообщении — чтобы коммит не родил лишний прогон.
+      - uses: actions/checkout@v4
+        if: needs.setup.outputs.name != ''
+        with: { fetch-depth: 1 }
+
+      - name: Снести папку очереди, даже если сборка не дошла до конца
+        if: needs.setup.outputs.name != ''
+        env:
+          NAME: ${{ needs.setup.outputs.name }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git fetch -q --depth 1 origin "$BRANCH" || true
+          git reset -q --hard FETCH_HEAD || true
+          if [ ! -d "queue/$NAME" ]; then
+            echo "папка queue/$NAME уже снята — дворнику делать нечего"; exit 0
+          fi
+          git config user.name  "videoryad-cloud"
+          git config user.email "actions@users.noreply.github.com"
+          git rm -rq --ignore-unmatch "queue/$NAME"
+          git commit -q -m "дворник: снял queue/$NAME (сборка до уборки не дошла) [skip ci]" \
+            || { echo "нечего коммитить"; exit 0; }
+          for i in 1 2 3; do
+            git push -q origin "HEAD:$BRANCH" && { echo "queue/$NAME снята дворником"; exit 0; }
+            git fetch -q --depth 1 origin "$BRANCH" && git rebase -q FETCH_HEAD || true
+            sleep 3
+          done
+          echo "::warning::дворник не смог снять queue/$NAME — убери вручную"
+
       - name: Delete this run's scratch artifacts
         env:
           GH_TOKEN: ${{ github.token }}

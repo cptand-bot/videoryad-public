@@ -89,10 +89,47 @@ def _dirs(dest, keep, work, cache_file):
     return out
 
 
+def _bring(dest, where):
+    """Положить в забор НАСТОЯЩИЙ .srt, когда оттуда не приехало ничего.
+
+    С 09.11 `ship.sh` вообще не отправляет `.srt` в очередь: раннеру он не
+    нужен, а в публичном репозитории его ИМЯ — рабочее название ролика,
+    и оно оставалось в истории git навсегда. Значит после `get.sh` в заборе
+    `.srt` не бывает; раньше туда приезжала заглушка и `fix()` подменял её
+    настоящим файлом. Чтобы вкладка не осталась без субтитрового исходника,
+    делаем то же самое без заглушки — просто приносим настоящий."""
+    best, best_from, best_sz = "", "", 0
+    for label, d in where:
+        for f in srts(d):
+            if is_stub(f):
+                continue
+            sz = os.path.getsize(f)
+            if sz > best_sz:
+                best, best_from, best_sz = f, "%s (%s)" % (label, d), sz
+        if best:
+            break
+    if not best:
+        return 0                      # нечего приносить — молчим, как раньше
+    dst = os.path.join(dest, os.path.basename(best))
+    try:
+        shutil.copy2(best, dst)
+    except OSError:
+        return 0
+    print("  .srt в облако не отправляется (09.11) — настоящий положил в "
+          "забор из %s" % best_from)
+    print("     %s — %d байт, реплик %d"
+          % (os.path.basename(dst), os.path.getsize(dst), cues(dst)))
+    return 0
+
+
 def fix(dest, keep="", work="", cache_file=""):
     here = srts(dest)
     if not here:
-        return 0                      # .srt в заборе нет вовсе — не наше дело
+        # .srt в заборе нет вовсе — приносим настоящий из рабочей папки или
+        # из папки темы пользователя (см. _bring). Падать тут нельзя: у
+        # ролика без субтитров (VIDEORYAD_NO_CAPTIONS=1) брать нечего, и это
+        # нормальный исход.
+        return _bring(dest, _dirs(dest, keep, work, cache_file))
     real_here = [f for f in here if not is_stub(f)]
     stubs = [f for f in here if is_stub(f)]
     if not stubs:
