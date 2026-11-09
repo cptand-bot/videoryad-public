@@ -175,3 +175,4 @@ template/palitra.py
 template/faza.sh
 template/tikho.sh
 template/naydi.py
+template/smena_pora.py
