@@ -460,7 +460,14 @@ def find_targets(root, depth=5):
         out.append(root)
     base = root.rstrip("/").count("/")
     for cur, dirs, _files in os.walk(root):
-        dirs[:] = [d for d in dirs if d not in ("thumbs", "images", "clips", "cards")]
+        dirs[:] = [d for d in dirs if d not in ("thumbs", "images", "clips", "cards",
+                                           "превью-варианты", "превью", "dossier",
+                                           "queue", "sfx")]
+        # СЛУЖЕБНЫЕ ПОДПАПКИ ТЕМЫ — НЕ ТЕМЫ (09.11). В `превью-варианты`
+        # лежит заметка `ОТКУДА.txt` о происхождении превью; сторож считал
+        # её текстом озвучки, валил на цифрах и заходил снова каждые 45 с —
+        # 187 холостых заходов за два часа, лог на 127 КБ, реальная работа в
+        # двух строках. Папка темы здесь ровно одна, подпапки служебные.
         # В ПАПКУ БЕЗ КАНАЛА НЕ ЗАХОДИМ ВООБЩЕ (починено 08.11). Гейт шаблона
         # не давал озвучить чужую папку, но ОБХОД дерева в неё всё равно шёл:
         # под корнем `НОВОСТИ` лежит зеркало кода `CLAUDE CODE/04_КОД-СБОРЩИКОВ`
@@ -572,9 +579,25 @@ def watch(root, args, env):
     готовой парой mp3+srt."""
     print("СТОРОЖ: %s, проверка каждые %d с. Ctrl+C — выход." % (root, args.every))
     seen = set()
+    # НЕУДАЧА ТОЖЕ ПОМЕЧАЕТСЯ (09.11). Раньше `seen.add` стоял только в ветке
+    # успеха, и тема, которую проверка не пускает (цифры в тексте, нет «ё»),
+    # всплывала каждый круг вечно. Помечаем её ОТПЕЧАТКОМ текста: пока текст не
+    # тронут — молчим, правит пользователь текст — отпечаток меняется и тема
+    # подхватывается сама, без перезапуска сторожа.
+    плохие = {}
+
+    def _отпечаток(folder):
+        try:
+            return tuple(sorted((os.path.basename(x), os.path.getsize(x),
+                                 int(os.path.getmtime(x))) for x in find_text(folder)))
+        except OSError:
+            return ()
+
     while True:
         try:
-            fresh = [t for t in find_targets(root) if needs_voice(t) and t not in seen]
+            fresh = [t for t in find_targets(root)
+                     if needs_voice(t) and t not in seen
+                     and плохие.get(t) != _отпечаток(t)]
             # Старый архив не всплывает: сторож берёт только то, что положено
             # недавно. Иначе одна команда на корне канала переозвучила бы
             # месяц и сожгла пакет знаков.
@@ -587,7 +610,12 @@ def watch(root, args, env):
                 print("\n[%s] новая тема" % time.strftime("%H:%M:%S"))
                 if do_folder(t, args, env):
                     seen.add(t)
+                    плохие.pop(t, None)
                     _сбой_снять()        # сервис жив — метку убираем
+                else:
+                    плохие[t] = _отпечаток(t)
+                    print("      тема отложена до правки текста — круги на неё "
+                          "больше не тратятся")
         except Exception as exc:  # сторож не должен падать насовсем
             print("[%s] сбой круга: %s" % (time.strftime("%H:%M:%S"), exc))
             _сбой_наружу(root, exc)
