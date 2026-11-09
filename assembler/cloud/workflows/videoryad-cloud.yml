@@ -115,6 +115,70 @@ jobs:
           test -d assembler/template || { echo "assembler/ missing — run cloud/sync_assembler.sh"; exit 1; }
           ln -sfn assembler _assembler   # classify_prompt.md refers to _assembler/
 
+      # ── СУБТИТРЫ ПРИЕЗЖАЮТ ВХОДОМ ЗАПУСКА, А НЕ ФАЙЛОМ В РЕПОЗИТОРИИ ──
+      # (2026-11-09, закрытие утечки). Разбор и все объяснения — в
+      # `assembler/cloud/caps_in.py`; здесь только вызов, чтобы значение
+      # входа жило ТОЛЬКО в переменной окружения и не попало в текст шага:
+      # лог публичного репозитория открыт всем, и подстановка `${{ … }}`
+      # прямо в команду просто перенесла бы утечку из истории git в логи.
+      #
+      # Порядок доверия: файл уже в очереди (вкладка со старым `ship.sh` —
+      # путь намеренно оставлен рабочим) → вход этого запуска → кэш
+      # `caps-<имя>` следующим шагом (его читают прогоны БЕЗ входа: ночной
+      # cron, «Re-trigger if more projects are queued», повтор после
+      # упавшего джоба — без кэша такой прогон молча собрал бы ролик без
+      # субтитров, ровно класс «успех значит ничего не сделано»).
+      - name: Субтитры мимо репозитория — вход запуска
+        if: steps.pick.outputs.have == 'true'
+        env:
+          CAPS: ${{ inputs.caps }}
+          CAPS_FOR: ${{ inputs.caps_for }}
+        run: |
+          python3 assembler/cloud/caps_in.py \
+            "${{ steps.pick.outputs.proj }}" "${{ steps.pick.outputs.name }}"
+
+      # Есть ли уже субтитры на руках. Нужно ОТДЕЛЬНЫМ шагом, потому что
+      # следующий шаг — `uses:`, а у него условие вычисляется до запуска и
+      # файловую систему спросить не может.
+      - name: Субтитры — есть ли уже на руках
+        id: capsq
+        if: steps.pick.outputs.have == 'true'
+        env: { PROJ: "${{ steps.pick.outputs.proj }}" }
+        run: |
+          h=0; [ -s "$PROJ/captions.ass" ] && h=1
+          echo "have=$h" >> "$GITHUB_OUTPUT"
+
+      # Кэш именованный по РОЛИКУ, а не по прогону: его читает повторный
+      # прогон того же ролика, у которого входа нет (ночной cron, re-trigger,
+      # повтор после упавшего джоба). Анонимно содержимое кэша не скачать —
+      # это не публичный ассет релиза.
+      # ТОЛЬКО КОГДА СУБТИТРОВ НА РУКАХ НЕТ: восстановление кэша пишет файл
+      # поверх существующего, и СТАРЫЙ кэш того же имени ролика затёр бы
+      # ПРАВЛЕНЫЕ субтитры повторной отправки — ролик уехал бы с прошлой
+      # версией текста, и видно это стало бы только в готовом файле.
+      - uses: actions/cache@v4
+        if: steps.pick.outputs.have == 'true' && steps.capsq.outputs.have != '1'
+        continue-on-error: true
+        with:
+          path: ${{ steps.pick.outputs.proj }}/captions.ass
+          key: caps-${{ steps.pick.outputs.name }}
+
+      - name: Субтитры — что в итоге взято
+        if: steps.pick.outputs.have == 'true'
+        env: { PROJ: "${{ steps.pick.outputs.proj }}" }
+        run: |
+          n=0
+          [ -f "$PROJ/captions.ass" ] && n=$(grep -c '^Dialogue' "$PROJ/captions.ass" || echo 0)
+          if [ "${n:-0}" -ge 1 ]; then
+            echo "субтитры ВКЛЮЧЕНЫ, строк: $n"
+          else
+            # пустышку не оставляем: само НАЛИЧИЕ файла — это включатель
+            # субтитров ниже по конвейеру, и пустой файл дал бы ноль строк
+            # на весь ролик, видимых только в готовом видео.
+            rm -f "$PROJ/captions.ass"
+            echo "субтитры выключены (ни файла в очереди, ни входа, ни кэша)"
+          fi
+
       - name: Env facts (is the Claude token configured?)
         id: facts
         if: steps.pick.outputs.have == 'true'

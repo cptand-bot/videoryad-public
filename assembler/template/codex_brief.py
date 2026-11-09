@@ -625,45 +625,133 @@ def main():
     # ЛИСТЫ ЛЕЖАТ В ТРЁХ РАЗНЫХ ПАПКАХ (24.10, улов `usuario-dd`):
     # `contact_sheet.py` кладёт в `sheet.html/`, `pair_sheet.py` — в
     # `pair_sheet/`, а сюда их до сих пор копировали руками. Ищем во всех.
-    def _find(pat):
-        out = []
-        # `contact_sheet.py` КЛАДЁТ ЛИСТЫ В `<имя>.html/sheet_N.jpg` (03.11,
-        # улов `usuario-b5`): здесь перечислялись только четыре папки, и
-        # `--stage zamena` валился «нет thumbs/sheet-zameny.jpg», хотя листы
-        # лежали рядом — вкладка копировала файл руками. Это тот же класс, что
-        # «два генератора листов кладут файлы по разным схемам имён».
-        _dirs = [a.thumbs, "sheet.html", "pair_sheet", "thumbs"]
-        _dirs += sorted(d for d in glob.glob("*.html") if os.path.isdir(d))
-        for d in _dirs:
-            out += glob.glob(os.path.join(d, pat))
+    #
+    # ИСКАЛИ ОТ ТЕКУЩЕЙ ПАПКИ, А НЕ ОТ ПАПКИ РОЛИКА (09.11, улов диспетчера).
+    # Симптом: `--stage zamena` печатал «листа замен нет» и ту же подсказку по
+    # кругу, хотя листы лежали ровно там, куда он сам велит их класть —
+    # `zameny.html/sheet_1.jpg` от его же `contact_sheet.py --out zameny.html`.
+    # Причина двойная, и вторая половина не видна из сообщения:
+    #  1. все `glob` шли по ОТНОСИТЕЛЬНЫМ путям, то есть от cwd. Скрипты
+    #     сборщика зовутся из `template/` (копировать их в проект запрещено),
+    #     поэтому искалось в `template/thumbs`, а не в папке ролика;
+    #  2. даже из папки ролика с явным `--thumbs zameny.html` лист терялся:
+    #     уникальность считалась по ИМЕНИ файла, а список путей сортировался
+    #     целиком — «thumbs/sheet_1.jpg» идёт раньше «zameny.html/sheet_1.jpg»
+    #     по алфавиту, и лист замен вылетал как «уже видели такое имя».
+    # Теперь папки сверяются в порядке приоритета (явный `--thumbs` первым),
+    # каждая ищется и в папке ролика, и в cwd, а `--thumbs` принимается и
+    # ПАПКОЙ, и ФАЙЛОМ — ровно та же путаница «файл или папка», что у `--dest`.
+    def _nat(path):
+        """sheet_10 после sheet_9, а не между sheet_1 и sheet_2."""
+        return [int(t) if t.isdigit() else t
+                for t in re.split(r"(\d+)", os.path.basename(path))]
+
+    _thumbs_arg = a.thumbs or "thumbs"
+    _thumbs_set = _thumbs_arg not in ("", "thumbs")   # ключ дан вкладкой явно
+
+    def _as_paths(d):
+        """Путь и от папки ролика, и от текущей — что существует, то и берём."""
+        if os.path.isabs(d):
+            return [d]
+        return [os.path.join(project, d), d]
+
+    def _scan_dirs():
+        # РОДОВЫЕ ПАПКИ ИЩЕМ ТОЛЬКО В ПАПКЕ РОЛИКА (09.11): `template/` сам
+        # обрастает `thumbs/` и `zameny.html/` от прошлых запусков, и листы
+        # ЧУЖОГО ролика подхватились бы молча. Явный `--thumbs` — исключение:
+        # там вкладка сказала путь сама, его берём и от текущей папки.
+        out = list(_as_paths(_thumbs_arg))
+        _roots = [project]
+        if os.path.abspath(project) != os.path.abspath("."):
+            pass          # cwd не папка ролика — родовые имена оттуда не берём
+        else:
+            _roots.append(".")
+        for d in ("thumbs", "sheet.html", "pair_sheet"):
+            for r in _roots:
+                out.append(os.path.join(r, d))
+        for root in _roots:
+            out += sorted((g for g in glob.glob(os.path.join(root, "*.html"))
+                           if os.path.isdir(g)))
         seen, uniq = set(), []
-        for f in sorted(out):
-            b = os.path.basename(f)
-            if b not in seen:
-                seen.add(b); uniq.append(f)
+        for d in out:
+            # `--thumbs` мог указывать на ФАЙЛ: тогда ищем в его папке
+            if os.path.isfile(d):
+                d = os.path.dirname(d) or "."
+            if not os.path.isdir(d):
+                continue
+            k = os.path.abspath(d)
+            if k in seen:
+                continue
+            seen.add(k); uniq.append(d)
         return uniq
+
+    def _find(pat, skip=()):
+        out, seen = [], set()
+        _skip = {os.path.abspath(d) for d in skip}
+        for d in _scan_dirs():
+            if os.path.abspath(d) in _skip:
+                continue
+            for f in sorted(glob.glob(os.path.join(d, pat)), key=_nat):
+                b = os.path.basename(f)
+                if b in seen:
+                    continue      # тот же лист, скопированный в другую папку
+                seen.add(b); out.append(f)
+        return out
+
+    def _zam_sheets():
+        """Листы ЗАМЕН: явный ключ, потом имя файла, потом имя папки.
+
+        Принимаем ОБА вида и ОБА способа указания: `--thumbs zameny.html`
+        (папка с `sheet_N.jpg`), `--thumbs .../sheet-zameny.jpg` (файл),
+        путь относительно папки ролика или абсолютный, а без ключа —
+        находим сами по слову «замены» в имени файла или папки.
+        """
+        if _thumbs_set:
+            for cand in _as_paths(_thumbs_arg):
+                if os.path.isfile(cand):
+                    return [cand], "ключ --thumbs (файл)"
+                if os.path.isdir(cand):
+                    got = sorted(glob.glob(os.path.join(cand, "sheet*.jpg")),
+                                 key=_nat)
+                    if got:
+                        return got, "ключ --thumbs (папка)"
+        got = _find("sheet-zameny*.jpg")
+        if got:
+            return got, "имя файла sheet-zameny*.jpg"
+        # `contact_sheet.py` имени `sheet-zameny.jpg` не создаёт никогда — он
+        # кладёт `sheet_N.jpg` в папку `<имя>.html`. Берём папку, в имени
+        # которой слышно «замены», и говорим вслух, что именно взяли.
+        for d in _scan_dirs():
+            low = os.path.basename(os.path.abspath(d)).lower()
+            if "zamen" in low or "замен" in low:
+                got = sorted(glob.glob(os.path.join(d, "sheet*.jpg")), key=_nat)
+                if got:
+                    return got, "папка «%s»" % os.path.basename(d)
+        return [], ""
 
     sheets = _find("sheet_*.jpg")
     pairs = _find("pair_*.jpg")
-    _z = _find("sheet-zameny.jpg")
-    zam = _z[0] if _z else os.path.join(a.thumbs, "sheet-zameny.jpg")
+    zam_src, zam_why = ([], "")
+    if a.stage == "zamena":
+        zam_src, zam_why = _zam_sheets()
+        # листы замен в общий счёт аудита не идут: иначе одно и то же имя
+        # `sheet_1.jpg` копируется в `thumbs/` дважды и затирает лист аудита
+        # и сама ПАПКА замен из счёта аудита выпадает: иначе её `sheet_1.jpg`
+        # занимал имя и аудитный лист с тем же именем терялся
+        sheets = _find("sheet_*.jpg",
+                       skip={os.path.dirname(f) or "." for f in zam_src})
     if a.stage == "audit" and not sheets:
         sys.exit("листов нет — сначала contact_sheet.py (и pair_sheet.py)")
-    if a.stage == "zamena" and not os.path.exists(zam):
-        # ЛИСТ ЗАМЕН МОЖЕТ НАЗЫВАТЬСЯ ИНАЧЕ. `contact_sheet.py` имени
-        # `sheet-zameny.jpg` не создаёт никогда — он кладёт `sheet_N.jpg` в
-        # папку `<имя>.html`. Берём лист из папки, в имени которой слышно
-        # «замены», и говорим вслух, что именно взяли.
-        _cand = [f for f in _find("sheet_*.jpg")
-                 if "zamen" in f.lower() or "замен" in f.lower()]
-        if _cand:
-            zam = _cand[0]
-            print("лист замен взят как %s (имени sheet-zameny.jpg "
-                  "contact_sheet.py не создаёт)" % zam)
-        else:
-            sys.exit("листа замен нет. Собери его: python3 contact_sheet.py "
-                     "<сцены замен> --out zameny.html — файлы лягут в "
-                     "zameny.html/sheet_N.jpg, и этот ключ их найдёт сам")
+    if a.stage == "zamena" and not zam_src:
+        sys.exit("листа замен нет (искал в %s). Собери его: python3 "
+                 "contact_sheet.py <сцены замен> --out zameny.html — файлы "
+                 "лягут в zameny.html/sheet_N.jpg, и этот ключ их найдёт сам. "
+                 "Лист лежит не в папке ролика — укажи его прямо: "
+                 "--thumbs <папка с листами> либо --thumbs <путь к листу.jpg>"
+                 % ", ".join(win(d) for d in _scan_dirs()) or "нигде")
+    if zam_src:
+        print("листы замен (%s): %s"
+              % (zam_why, ", ".join(os.path.basename(f) for f in zam_src)))
 
     dest_thumbs = os.path.join(a.dest, "thumbs")
     # `--no-copy` НЕ ДОЛЖЕН ОСТАВЛЯТЬ БРИФ БЕЗ СПИСКА СЦЕН (24.10, улов
@@ -671,13 +759,36 @@ def main():
     # `--no-copy` файл не создавался — агент получал указание на то, чего нет.
     # Теперь список пишется В ПАПКУ ПРОЕКТА даже когда листы не копируем.
     if a.no_copy:
-        os.makedirs(a.thumbs, exist_ok=True)
-        dest_thumbs = a.thumbs
+        # `--thumbs` БЫВАЕТ ФАЙЛОМ И БЫВАЕТ ОТНОСИТЕЛЬНЫМ (09.11): на файле
+        # `makedirs` падал, а при запуске из `template/` список сцен уезжал в
+        # `template/thumbs` рядом со скриптом — в скилле заводилась мусорная
+        # папка, а бриф ссылался на то, чего в папке ролика нет.
+        _nc = next((c for c in _as_paths(_thumbs_arg) if os.path.exists(c)),
+                   None) or os.path.join(project, _thumbs_arg)
+        if os.path.isfile(_nc):
+            _nc = os.path.dirname(_nc) or "."
+        os.makedirs(_nc, exist_ok=True)
+        dest_thumbs = _nc
     if True:
         os.makedirs(dest_thumbs, exist_ok=True)
         n = 0
+        # ЛИСТ ЗАМЕН КОПИРУЕТСЯ ПОД СВОИМ ИМЕНЕМ (09.11): `contact_sheet.py`
+        # зовёт его `sheet_1.jpg`, то есть ровно как лист аудита, и копия
+        # затирала аудитный лист в `thumbs/`. Переименовываем на копировании и
+        # НАЗЫВАЕМ эти имена в брифе — раньше бриф звал агента смотреть
+        # `sheet-zameny.jpg`, которого на диске не было.
+        zam_names = []
         if not a.no_copy:
-            for f in sheets + pairs + ([zam] if os.path.exists(zam) else []):
+            for i, f in enumerate(zam_src, 1):
+                _nm = ("sheet-zameny.jpg" if len(zam_src) == 1
+                       else "sheet-zameny-%d.jpg" % i)
+                _dst = os.path.join(dest_thumbs, _nm)
+                if os.path.abspath(f) != os.path.abspath(_dst):
+                    shutil.copy2(f, _dst)
+                zam_names.append(_nm)
+                n += 1
+        if not a.no_copy:
+            for f in sheets + pairs:
                 # КОПИРОВАНИЕ ФАЙЛА В САМОГО СЕБЯ — НЕ ОШИБКА, А ПУСТАЯ РАБОТА
                 # (2026-10-27, улов `usuario-b5`): с тех пор как папку ролика на
                 # `D:` трогать нельзя, `--dest` указывает на сам проект, и
@@ -853,8 +964,18 @@ def main():
              "там ищи повтор одного и того же субъекта. " % len(pairs)) if pairs else "",
             "; ".join(skip) or "ничего", EXCEPTIONS))
     else:
-        brief = ("""Посмотри %s\\thumbs\\sheet-zameny.jpg — это кадры из круга правок, их ещё
+        # ИМЕНА ФАЙЛОВ — РЕАЛЬНЫЕ, А НЕ ЗАШИТЫЕ (09.11): замен бывает два
+        # листа и больше, а бриф звал смотреть один несуществующий файл.
+        if a.no_copy:
+            _zam_where = "\n".join(win(f) for f in zam_src)
+        else:
+            _zam_where = "\n".join(
+                "%s\\thumbs\\%s" % (win(a.dest).rstrip("\\"), nm)
+                for nm in (zam_names or ["sheet-zameny.jpg"]))
+        brief = ("""Посмотри эти листы — это кадры из круга правок, их ещё
 никто не проверял. Номер сцены и запрос подписаны под каждой плиткой.
+
+%s
 
 Назови номера с браком и одной строкой причину. Не разобрать — так и пиши.
 
@@ -865,7 +986,7 @@ def main():
 
 Правила те же, что в основном аудите. Напоминание: надпись на самом объекте
 (указатель, табличка, маркировка) — не брак, язык её значения не имеет;
-браковать надо то, что нанесено ПОВЕРХ кадра.%s""" % (win(a.dest), EXCEPTIONS))
+браковать надо то, что нанесено ПОВЕРХ кадра.%s""" % (_zam_where, EXCEPTIONS))
 
     # ФАЙЛОМ, А НЕ ТОЛЬКО В КОНСОЛЬ (24.10, прямое слово пользователя: «я чокнусь,
     # это всё копировать»). Он прикладывает файл в чат Codex одним движением.

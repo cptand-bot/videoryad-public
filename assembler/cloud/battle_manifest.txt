@@ -169,3 +169,4 @@ template/srt_keep.py
 # эту папку пропускает намеренно.
 template/merge_work.py
 template/zanyato.py
+cloud/caps_in.py
