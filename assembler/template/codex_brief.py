@@ -267,6 +267,24 @@ def dest_parts(raw):
     return d, ""
 
 
+# КАТАЛОГ СКИЛЛА — ЗАПРЕТНАЯ ЗОНА ДЛЯ ЛЮБОЙ ЗАПИСИ (09.11, улов диспетчера).
+# В каталоге скилла появились `thumbs/СПИСОК-СЦЕН.txt` и `zameny.html/
+# СПИСОК-СЦЕН.txt`: относительные пути считались от ТЕКУЩЕЙ папки, а скрипты
+# сборщика зовут из `template/` — копировать их в проект запрещено. Эти файлы
+# остановили раскатку на шесть целей, и вписать их в манифест НЕЛЬЗЯ: внутри
+# текст сцен, а каталог уезжает в ПУБЛИЧНЫЕ репозитории. Поэтому запись внутрь
+# скилла теперь физически невозможна, а не «не принято».
+_SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _in_skill(path):
+    """Путь ведёт внутрь каталога скилла (или в него самого)?"""
+    if not path:
+        return False
+    p = os.path.abspath(path)
+    return p == _SKILL or p.startswith(_SKILL + os.sep)
+
+
 def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАДРОВКА.txt"):
     """Задание на раскадровку: числа цифрами + ЖИВОЙ список мин линтера."""
     total = srt_end_sec(srt)
@@ -585,11 +603,31 @@ def main():
     # в stdout и терялся. Разбираем один раз здесь — дальше весь код работает
     # с папкой, как и раньше, а имя файла (если оно задано) перебивает
     # стандартное «БРИФ-ДЛЯ-CODEX.txt».
-    a.dest, _dest_file = dest_parts(a.dest)
+    # ОТНОСИТЕЛЬНЫЙ `--dest` СЧИТАЕТСЯ ОТ ПАПКИ РОЛИКА, А НЕ ОТ CWD (09.11).
+    # Разбор «файл или папка» идёт УЖЕ ПОСЛЕ этого: иначе `zameny.html`,
+    # которая в папке ролика есть папкой, из каталога скилла выглядела файлом
+    # с расширением, и бриф уходил в «.» — то есть в сам скилл.
+    _raw = str(a.dest or "")
+    _proj = os.path.dirname(os.path.abspath(a.scenes)) if a.scenes else ""
+    if _raw and not os.path.isabs(_raw):
+        _here = os.path.exists(_raw) and not _in_skill(_raw)
+        if _proj and (os.path.exists(os.path.join(_proj, _raw)) or not _here):
+            _raw = os.path.join(_proj, _raw)
+            print("--dest дан относительным («%s») — считаю его от папки "
+                  "ролика: %s" % (a.dest, win(_raw)))
+    a.dest, _dest_file = dest_parts(_raw)
     if _dest_file:
         print("--dest указывает на ФАЙЛ: пишу бриф прямо в «%s», папкой ролика "
               "считаю «%s» (папка тоже принимается, как раньше)"
               % (_dest_file, win(a.dest)))
+    if _in_skill(a.dest):
+        sys.exit("--dest ведёт ВНУТРЬ каталога скилла (%s) — туда рабочим "
+                 "файлам нельзя: каталог уезжает в ПУБЛИЧНЫЕ репозитории, а "
+                 "в брифе и в СПИСОК-СЦЕН.txt лежит текст ролика; плюс "
+                 "предохранитель манифеста встаёт на незнакомых файлах и "
+                 "держит раскатку. Дай АБСОЛЮТНЫЙ путь к папке ролика (путь "
+                 "ФАЙЛА в ней тоже принимается)."
+                 % win(os.path.abspath(a.dest)))
 
     # --stage scenes: задание на раскадровку, ещё ДО того как сцены есть.
     # Первым аргументом в этом режиме передают любой путь-заглушку.
@@ -736,10 +774,17 @@ def main():
         zam_src, zam_why = _zam_sheets()
         # листы замен в общий счёт аудита не идут: иначе одно и то же имя
         # `sheet_1.jpg` копируется в `thumbs/` дважды и затирает лист аудита
-        # и сама ПАПКА замен из счёта аудита выпадает: иначе её `sheet_1.jpg`
-        # занимал имя и аудитный лист с тем же именем терялся
-        sheets = _find("sheet_*.jpg",
-                       skip={os.path.dirname(f) or "." for f in zam_src})
+        # ПАПКА замен из счёта аудита выпадает (иначе её `sheet_1.jpg` занимал
+        # имя и аудитный лист с тем же именем терялся), а вот когда лист замен
+        # лежит В САМОЙ `thumbs/` под именем `sheet-zameny*.jpg`, выбрасывать
+        # всю папку нельзя — там же и аудитные листы. Поэтому папку отбрасываем
+        # только если «замены» слышно в ЕЁ имени, а сами файлы — всегда.
+        _zs = {os.path.abspath(f) for f in zam_src}
+        _skip = {d for d in (os.path.dirname(f) or "." for f in zam_src)
+                 if any(w in os.path.basename(os.path.abspath(d)).lower()
+                        for w in ("zamen", "замен"))}
+        sheets = [f for f in _find("sheet_*.jpg", skip=_skip)
+                  if os.path.abspath(f) not in _zs]
     if a.stage == "audit" and not sheets:
         sys.exit("листов нет — сначала contact_sheet.py (и pair_sheet.py)")
     if a.stage == "zamena" and not zam_src:
@@ -767,9 +812,19 @@ def main():
                    None) or os.path.join(project, _thumbs_arg)
         if os.path.isfile(_nc):
             _nc = os.path.dirname(_nc) or "."
+        if _in_skill(_nc):
+            sys.exit("папка листов ведёт внутрь каталога скилла (%s) — писать "
+                     "туда нельзя (публичные репозитории, предохранитель "
+                     "манифеста). Дай --thumbs абсолютным путём."
+                     % win(os.path.abspath(_nc)))
         os.makedirs(_nc, exist_ok=True)
         dest_thumbs = _nc
     if True:
+        if _in_skill(dest_thumbs):
+            sys.exit("листы легли бы внутрь каталога скилла (%s) — нельзя: "
+                     "текст ролика попал бы в публичный репозиторий. Дай "
+                     "--dest абсолютным путём в папку ролика."
+                     % win(os.path.abspath(dest_thumbs)))
         os.makedirs(dest_thumbs, exist_ok=True)
         n = 0
         # ЛИСТ ЗАМЕН КОПИРУЕТСЯ ПОД СВОИМ ИМЕНЕМ (09.11): `contact_sheet.py`
