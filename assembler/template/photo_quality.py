@@ -6,7 +6,11 @@
 Зеленского снимаем — еле заметно, что это он». И сплошная, а не точечная:
 «пересмотреть качество всех фотографий».
 
-    python3 photo_quality.py [images] [--strict]
+    python3 photo_quality.py [<ролик>.scenes.json] [images] [--strict]
+
+Порядок ключей любой: инструмент сам различает ПАПКУ кадров и ФАЙЛ СЦЕН по
+расширению. Файл сцен необязателен — без него он ищет его сам рядом с папкой,
+— но если назван, берётся ИМЕННО ОН (см. `_scene_sources`).
 
 Считает по КАЖДОМУ кадру три числа и печатает список подозрительных:
 
@@ -51,8 +55,16 @@ MIN_W_OVERLAY = 800
 FILL_W = 1000
 
 
-def _scene_sources(images_dir):
+def _scene_sources(images_dir, scenes_path=None):
     """{id сцены: (источник, путь-запрос)} — из scenes.json рядом с папкой.
+
+    НАЗВАННЫЙ ФАЙЛ СЦЕН СИЛЬНЕЕ УГАДАННОГО (09.11, расхождение кода и брифа).
+    Весь конвейер зовётся как `<инструмент> <scenes.json> images`, а эта
+    проверка принимала ОДНУ папку и падала от argparse на второй аргумент —
+    вкладка читала это как сломанный инструмент. Теперь файл сцен можно
+    назвать, и тогда он идёт первым: угадывание «самый большой по числу
+    сцен» уже один раз выбрало не тот файл и вывело мутный кадр из-под
+    брака (04.11, улов `usuario-31`).
 
     Нужно для двух поправок 23.10: карты из медиатеки по определению имеют
     низкую плотность (две заливки и линия границы), а библиотечные пины
@@ -83,7 +95,11 @@ def _scene_sources(images_dir):
         except Exception:
             return 0
     _own.sort(key=_n, reverse=True)
-    for sp in (_own or _all):
+    порядок = _own or _all
+    if scenes_path and os.path.isfile(scenes_path):
+        порядок = [scenes_path] + [x for x in порядок
+                                   if os.path.abspath(x) != os.path.abspath(scenes_path)]
+    for sp in порядок:
         try:
             data = json.load(open(sp, encoding="utf-8"))
         except (OSError, ValueError):
@@ -127,18 +143,35 @@ def detail_ratio(path):
 
 def main():
     ap = argparse.ArgumentParser(description="сплошная проверка качества кадров")
-    ap.add_argument("images", nargs="?", default="images")
+    # ДВЕ ФОРМЫ ВЫЗОВА, ОБЕ РАБОЧИЕ (09.11). Было: один позиционный «папка»,
+    # а бриф вкладки и все соседние инструменты (`selfcheck`, `check_lead`,
+    # `review`, `contact_sheet`) зовутся `<scenes.json> images`. Вкладка
+    # писала привычную форму и получала «unrecognized arguments: images» —
+    # расхождение кода и документа, которое стоит круга на пустом месте.
+    # Различаем по расширению, порядок не важен.
+    ap.add_argument("пути", nargs="*", default=[], metavar="ПУТЬ",
+                    help="папка кадров (по умолчанию images) и/или <ролик>.scenes.json")
     ap.add_argument("--strict", action="store_true", help="exit 1 при находках")
     a = ap.parse_args()
+    a.images, a.scenes = "images", ""
+    for _p in a.пути:
+        if _p.lower().endswith(".json"):
+            a.scenes = _p
+        else:
+            a.images = _p
     if not os.path.isdir(a.images):
         sys.exit(f"нет папки: {a.images}")
+    if a.scenes and not os.path.isfile(a.scenes):
+        sys.exit(f"нет файла сцен: {a.scenes}")
 
     try:
         from PIL import Image
     except Exception:
         sys.exit("нет PIL — проверить нечем")
 
-    srcs = _scene_sources(a.images)
+    srcs = _scene_sources(a.images, a.scenes)
+    if a.scenes:
+        print("файл сцен взят названный: %s" % a.scenes)
     rows, bad, lib_bad = [], [], []
     for f in sorted(glob.glob(os.path.join(a.images, "scene_*.*"))):
         low = f.lower()

@@ -154,8 +154,13 @@ def main():
             reason = reason_kw
         reason = reason if reason.strip() else BLANK_REASON
         for md5 in hashes:
-            ban_md5(md5, path="", reason=reason, days=days)
-            print(f"забанено {until_msg} (md5 {md5}): {reason}")
+            # ОТЧЁТ ПО ФАКТУ, А НЕ ПО НАМЕРЕНИЮ (09.11): `ban_md5` отказывает
+            # понизить вечный бан до срочного, и печатать «забанено на 2 дн.»
+            # после отказа значило бы врать вызывающему рефетчу.
+            if ban_md5(md5, path="", reason=reason, days=days):
+                print(f"забанено {until_msg} (md5 {md5}): {reason}")
+            else:
+                print(f"НЕ записано (md5 {md5}): остался прежний бан")
         return
 
     if reason_kw is None:
@@ -186,8 +191,10 @@ def main():
 
     for path in paths:
         md5 = file_md5(path)
-        ban_md5(md5, path=path, reason=reason, days=days)
-        print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason}")
+        if ban_md5(md5, path=path, reason=reason, days=days):
+            print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason}")
+        else:
+            print(f"НЕ записано: {path}  (md5 {md5}) — остался прежний бан")
     _siblings_hint(paths[-1])
 
 

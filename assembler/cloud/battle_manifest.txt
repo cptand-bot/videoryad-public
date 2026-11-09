@@ -69,7 +69,6 @@ template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
 template/codex_ask.sh
-template/upakovka_lib/codex_zahody.tsv
 template/codex_raskhod.py
 template/codex_brief.py
 template/contact_sheet.py
@@ -145,22 +144,26 @@ template/prevyu.py
 template/prevyu_klon.py
 template/prevyu_text.py
 template/upakovka.py
-template/upakovka_lib/avtorskoe.jsonl
 template/avtorskoe.py
-template/upakovka_lib/svyazki.jsonl
 template/svyazka.py
-template/upakovka_lib/vybor_drive.json
 template/vybor_svod.py
-template/upakovka_lib/vybor.jsonl
 template/upakovka_dash.py
-template/upakovka_lib/arhiv-5min.txt
-template/upakovka_lib/arhiv-geo2.txt
-template/upakovka_lib/bank.txt
-template/upakovka_lib/slova.json
-template/upakovka_lib/zhurnal.json
 cloud/ozvuchka_cloud.sh
 cloud/ozvuchka_job.py
 cloud/workflows/ozvuchka.yml
 template/podmena.py
 template/cards_keep.py
 template/srt_keep.py
+
+# `template/upakovka_lib/` ЗДЕСЬ БОЛЬШЕ НЕТ И БЫТЬ НЕ ДОЛЖНО (2026-11-09).
+# Это накопители упаковки и превью: его личный выбор заголовков и надписей
+# (`vybor.jsonl`), авторский банк кликбейтных формулировок (`bank.txt`),
+# журнал, словарь, состояние дашборда. Десять таких файлов стояли в
+# манифесте и уезжали в ПУБЛИЧНЫЕ репозитории открытым текстом — против
+# закрытия 14.10 (в публичном репозитории нет ключей, озвучки, рабочих
+# заметок и текста сценария).
+# Теперь папку не везёт ни rsync, ни предохранитель её не считает, поэтому
+# манифест не должен обещать того, чего мы не везём: иначе он разойдётся с
+# кодом и перестанет что-либо значить.
+# НОВЫЙ НАКОПИТЕЛЬ СЮДА НЕ ВПИСЫВАТЬ. Он не свалит раскатку — предохранитель
+# эту папку пропускает намеренно.

@@ -121,40 +121,49 @@ def cover_crop(im, w, h):
 # tw = th * пропорция PNG (клампы W*0.92), поле 60, сетка 9 позиций,
 # и `force_original_aspect_ratio=decrease` — то есть картинка ВПИСЫВАЕТСЯ в
 # tw x th с сохранением пропорций, реальный размер меньше.
-def text_geom(sid, spec, tmp_dir):
+def text_geom(sid, spec, tmp_dir, proj=""):
     ts = spec.get("text") or {}
     words = str(ts.get("words") or "").strip()
     if not words:
         return None
-    try:
-        from build_overlays import _render_text_png
-    except Exception:
-        return None
+    # НАДПИСЬ ИЗ-ПОД МАСКИ СЧИТАЕТСЯ НЕ ЗДЕСЬ, А ТАМ ЖЕ, ГДЕ ДАШБОРД И
+    # СБОРКА (09.11). Лист перекрытий с этого дня — ТРЕТИЙ обязательный слой
+    # осмотра кадров: по нему решают, не легла ли плашка на лицо или на окно
+    # видеовставки. А он мерил маску формулой обычной надписи (`th = H/6`) и
+    # рисовал её ОБЫЧНЫМ стилем «5 МИНУТ» — то есть показывал проверяющему не
+    # ту картинку не на том месте. На живом ролике ПЛАНЕТЫ расхождение по
+    # ширине доходило до 800 px: лист рисовал почти во весь кадр (1766) там,
+    # где в видео ляжет 966. Ложное «чисто» на тесном кадре рождается именно
+    # так. Поэтому тут ровно один механизм на три места: место и размер даёт
+    # `review.overlay_text_geom`, картинку — `review.mask_text_png`, оба
+    # зеркалят `build_overlays._apply_mask_overlay`. Ветвлений по каналу нет:
+    # канал решает только цвет внутри рисовалки.
     png = os.path.join(tmp_dir, "ovl_%03d.png" % sid)
     try:
-        if not _render_text_png(words, ts.get("color", "white"), png,
-                                ts.get("font", "default")):
-            return None
-        from PIL import Image as _I
-        with _I.open(png) as _im:
-            pw, ph = _im.size
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from review import mask_text_png, overlay_text_geom
+        if str(ts.get("style") or "").lower().startswith("mask"):
+            # маску рисует её собственная рисовалка — иначе на листе окажется
+            # чужой формат (обычная плашка 5 МИНУТ вместо золотой маски)
+            if not mask_text_png(ts, png, proj)[0]:
+                return None
+        else:
+            from build_overlays import _render_text_png
+            if not _render_text_png(words, ts.get("color", "white"), png,
+                                    ts.get("font", "default")):
+                return None
+        # МЕСТО И РАЗМЕР — ОДНОЙ ФУНКЦИЕЙ НА ТРИ МЕСТА (09.11). Своего счёта
+        # здесь не осталось НИ У ОДНОГО вида надписи: разбор `pos` тоже уходит
+        # в `review._pos_ok`, который поднимает низ наверх ровно так, как это
+        # делает сборка. Прежний разбор низ ПРИНИМАЛ — и на первом же ролике с
+        # `pos: bc` лист нарисовал бы надпись внизу, тогда как в видео она
+        # уезжает вверх: проверка перекрытий соврала бы в опасную сторону,
+        # показав «чисто» там, где надпись ложится на лицо.
+        g = overlay_text_geom(ts, png, sid)
     except Exception:
         return None
-    try:
-        msc = max(0.4, min(2.4, float(ts.get("scale", 1.0))))
-    except (TypeError, ValueError):
-        msc = 1.0
-    pos = str(ts.get("pos", "bc")).lower()
-    yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
-    xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
-    th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
-    tw = min(int(th * (pw / ph if ph else 6)), int(W * 0.92))
-    k = min(tw / pw, th / ph) if pw and ph else 1.0
-    rw, rh = max(1, int(pw * k)), max(1, int(ph * k))
-    mg = 60
-    x = mg if xk == "l" else (W - rw) // 2 if xk == "c" else W - rw - mg
-    y = mg if yk == "t" else (H - rh) // 2 if yk == "m" else H - rh - mg
-    return x, y, rw, rh, png
+    return (int(round(g["xf"] * W)), int(round(g["yf"] * H)),
+            int(round(g["wf"] * W)), int(round(g["hf"] * H)), png)
 
 
 def main():
@@ -171,6 +180,9 @@ def main():
             print("ОШИБКА: %r — не папка и не scenes.json" % proj, file=sys.stderr)
             sys.exit(2)
 
+    # ИМЯ ПРОЕКТА НУЖНО НАДПИСИ ИЗ-ПОД МАСКИ: цвет приходит ПО КАНАЛУ, а
+    # канал весь сборщик берёт ИЗ ПУТИ (09.11). Отдельного ключа не заводим.
+    _projname = os.path.basename(os.path.abspath(proj))
     ov_path = os.path.join(proj, "overlays.json")
     images_dir = os.path.join(proj, "images")
     out_dir = os.path.join(proj, "overlap_check")
@@ -208,7 +220,7 @@ def main():
             draw.rectangle([x, y, x + dw, y + dh], outline=(255, 0, 0), width=8)
         # ТЕКСТОВАЯ — кладём НАСТОЯЩИЙ отрендеренный текст, а не рамку:
         # проверяющий должен видеть ровно то, что ляжет на кадр
-        tg = text_geom(sid, spec, _tmp)
+        tg = text_geom(sid, spec, _tmp, _projname)
         if tg:
             tx, ty, tw_, th_, tpng = tg
             try:
@@ -253,7 +265,8 @@ def main():
           + (f"  (свой anchor у сцен: {_own})" if _own else "")
           + f"  ->  {out_dir}/")
     print("  красная рамка = фото-всплывашка, голубая = ТЕКСТОВАЯ "
-          "(показан настоящий рендер, не схема)")
+          "(показан настоящий рендер, не схема; надпись из-под маски — "
+          "своим видом и своим размером, как в видео)")
     # ПОРЯДОК ПРОБ — СНАЧАЛА СТОРОНА, ПОТОМ ЯКОРЬ (03.11, замер `usuario-1f`
     # на двух сценах одного ролика). `anchor: "top"` на кадре с людьми часто
     # не спасает, а ПЕРЕНОСИТ рамку с туловищ на ГОЛОВЫ: ряд делегатов стоит

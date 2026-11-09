@@ -232,12 +232,12 @@ def ban_md5(md5, path="", reason="", days=None):
               "md5 на каждый номер сцены, и бан сделал бы «забаненной» чужую "
               "заглушку того же номера в других роликах."
               % os.path.basename(path), flush=True)
-        return
+        return False
     if str(md5).lower() == EMPTY_MD5:
         print("  бан ПРОПУЩЕН: это хэш ПУСТОГО файла (%s). Такой бан запретил "
               "бы все метки `.ready` на машине — проверь, существовал ли файл "
               "в момент бана." % (path or "путь не назван"), flush=True)
-        return
+        return False
     log = {}
     if os.path.exists(BANNED_LOG):
         try:
@@ -254,12 +254,35 @@ def ban_md5(md5, path="", reason="", days=None):
     if days:
         entry["days"] = int(days)
         entry["until"] = time.strftime("%Y-%m-%d", time.localtime(time.time() + int(days) * 86400))
+    # ВРЕМЕННЫЙ БАН НЕ КЛАДЁТСЯ ПОВЕРХ ВЕЧНОГО (09.11, улов на разборе
+    # ИИ-генерации в медиатеке). Запись шла простым `log[md5] = entry`, без
+    # оглядки на то, что там лежало, — и рефетч ролика, снявший кадр со
+    # сцены, ПОНИЖАЛ вечный бан до двухдневного. Живой случай: сгенерированный
+    # Sora клип `ПОЛИТИКА/ЕВРОПА/7-1 (2).mp4` забанили навсегда утром, к обеду
+    # рефетч `planeta-forma-1011-cloud` положил поверх `days: 2`, и 11.11 клип
+    # снова пошёл бы в сцены. Ни ошибки, ни строки в логе — заметно это было
+    # только тем, что сито метаданных нашло «живой» файл с подписью Sora.
+    #
+    # Правило: срок НИКОГДА не кладётся поверх бессрочного; бессрочный поверх
+    # срочного кладётся и ПОВЫШАЕТ запись (кадр плох сам по себе — он не
+    # должен вернуться ни в одном ролике); два временных ведут себя как
+    # раньше. Отказ не молчит: он печатается, потому что вызывающий рефетч
+    # иначе отчитается «забанено на 2 дн.» о том, чего не произошло.
+    # Возврат: True — записано, False — отказ понижать.
+    prev = log.get(md5)
+    if days and isinstance(prev, dict) and not prev.get("until"):
+        print("  бан НЕ ПОНИЖЕН до %d дн.: на этот md5 уже стоит ВЕЧНЫЙ бан "
+              "(%s). Вечный строже и остаётся в силе — кадр не вернётся ни в "
+              "этом ролике, ни в соседних."
+              % (int(days), prev.get("reason") or "без причины"), flush=True)
+        return False
     log[md5] = entry
     os.makedirs(os.path.dirname(BANNED_LOG), exist_ok=True)
     tmp = BANNED_LOG + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=1)
     os.replace(tmp, BANNED_LOG)
+    return True
 
 
 def file_md5(path):

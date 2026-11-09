@@ -33,10 +33,10 @@
         --title "Кто сколько даёт" --bar "ФРГ=0.9" --bar "ФРАНЦИЯ=0.55" \\
         --bar "ИТАЛИЯ=0.3"
 
-    # A5 — слайдер-диапазон
+    # A5 — слайдер-диапазон (--unit приписывает единицу к числу под маркером)
     python3 element_put.py planeta.scenes.json 51 A5 \\
         --title "Оценки расходятся" --min 0 --max 140 --low 28 --high 135 \\
-        --value 60
+        --value 60 --unit "млрд евро"
 
     # A6 — плакат-инфографика: весь сюжет одним кадром
     python3 element_put.py planeta.scenes.json 8 A6 \\
@@ -210,6 +210,12 @@ def main():
                     help="слайдер: верхняя граница диапазона, число")
     ap.add_argument("--value", type=_chislo, default=None,
                     help="слайдер: где стоит маркер, число")
+    # ЕДИНИЦА ИЗМЕРЕНИЯ БЫЛА ТОЛЬКО У ДВОЙНИКА (09.11, улов `usuario-e6`).
+    # `card_put.py` знает `--unit` с самого начала, а эта дверь — нет, и
+    # слайдер A5 (обязательный элемент) уезжал с голым числом: «60» вместо
+    # «60 млрд евро». Ключ назван и подсказан ОДИН В ОДИН с двойником, иначе
+    # вкладка будет помнить два разных имени для одного и того же.
+    ap.add_argument("--unit", default="", help="график: единица измерения, например « млн т»")
     ap.add_argument("--watermark", default="")
     ap.add_argument("--anim", type=float, default=0.0,
                     help="секунд рисовать покадрово; 0 — вся сцена")
@@ -402,6 +408,14 @@ def main():
         if not a.max > a.min:
             _fail(2, f"у слайдера --max ({a.max}) должен быть больше --min ({a.min})")
         _disp = ("%d" % val) if float(val).is_integer() else ("%.1f" % val)
+        # ПРАВИЛО ПРОБЕЛА — ТО ЖЕ, ЧТО В `fullcycle/charts.py::_unit` (09.11):
+        # у «%», «°», «₽», «$» единица прилипает к числу, у словесной —
+        # отделяется пробелом. Своего формата здесь не изобретаем: у двойника
+        # `card_put.py` единица уходит в `charts.py` и печатается именно так,
+        # а рисовалка слайдера своего поля `unit` не знает вовсе — число под
+        # маркером она берёт из `marker_display` готовой строкой.
+        if a.unit:
+            _disp += (a.unit if a.unit in ("%", "°", "₽", "$") else " " + a.unit)
         cfg = {"title": a.title, "min": a.min, "max": a.max,
                "low": a.low if a.low is not None else a.min,
                "high": a.high if a.high is not None else a.max,

@@ -656,16 +656,30 @@ def overlay_text_geom(tspec, png_path=None, sid=None):
                 "color": tspec.get("color") or "white"}
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
-    ar = 6.0
+    # РАЗМЕР НАДПИСИ — ВПИСАННЫЙ, А НЕ КОРОБКА (09.11). `tw x th` — это
+    # коробка, в которую ffmpeg ВПИСЫВАЕТ картинку
+    # (`scale=tw:th:force_original_aspect_ratio=decrease`), а в выражениях
+    # `overlay=x=(W-w)/2` буквы `w`/`h` значат размер УЖЕ ВПИСАННОЙ картинки.
+    # То есть реальный прямоугольник в кадре — вписанный, и считать место
+    # надо от него. Дашборд считал от коробки: на широких надписях, которые
+    # упёрлись в 0,92 кадра, высота расходилась с видео на 28-42 px, и
+    # надпись с `pos=t*` вставала на 21 px ниже, чем ляжет. Лист перекрытий
+    # эту арифметику знал с 18.10 и был прав; теперь она ОДНА на три места —
+    # лист своего счёта больше не держит.
+    pw, ph = 0, 0
     if png_path and os.path.exists(png_path):
         try:
             from PIL import Image
             with Image.open(png_path) as _im:
-                ar = _im.width / _im.height if _im.height else 6.0
+                pw, ph = _im.width, _im.height
         except Exception:
-            pass
+            pw, ph = 0, 0
+    if not (pw and ph):
+        pw, ph = 6000, 1000          # пропорция по умолчанию 6:1, как в сборке
     th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
-    tw = min(int(th * ar), int(W * 0.92))
+    tw = min(int(th * (pw / ph)), int(W * 0.92))
+    _k = min(tw / pw, th / ph)
+    tw, th = max(1, int(pw * _k)), max(1, int(ph * _k))
     mg = 60
     x = {"l": mg, "c": (W - tw) // 2, "r": W - tw - mg}[xk]
     y = {"t": mg, "m": (H - th) // 2, "b": H - th - mg}[yk]

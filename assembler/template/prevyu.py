@@ -11,8 +11,10 @@
 
 КАК ЭТО РАБОТАЕТ. Внешний агент (Codex) умеет рисовать: инструмент
 `image_gen`. Сохранить файл сам он НЕ МОЖЕТ — у него файловая система
-только для чтения, — но картинка ложится в `~/.codex/generated_images/`,
-и мы забираем её оттуда. Проверено запуском 07.11.
+только для чтения, — но картинка ложится в `generated_images/` ВНУТРИ
+каталога того аккаунта агента, которым мы его позвали, и мы забираем её
+оттуда. Проверено запуском 07.11. Каталог считается от `CODEX_HOME` /
+`CODEX_ACCOUNT` тем же механизмом, что в `codex_ask.sh` (см. `_codex_home`).
 
 ЧТО КЛАДЁТ: `превью-варианты/ПРЕВЬЮ-1.png` … `-5.png` — В ОТДЕЛЬНУЮ
 ПОДПАПКУ (07.11, его слово: «чтобы не загромождать всю эту срань в папке,
@@ -30,7 +32,6 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VARIANTS = "превью-варианты"        # подпапка сырых вариантов
-GEN = os.path.expanduser("~/.codex/generated_images")
 SKIP_TXT = ("ЗАДАНИЕ", "БРИФ", "ОТВЕТ", "ПРОМПТ", "РЕРАЙТ", "ДОСЬЕ",
             "АУДИТ", "УПАКОВКА", "ГЕОРАДАР", "ПРЕВЬЮ")
 
@@ -62,16 +63,70 @@ def find_text(folder):
     return max(c, key=os.path.getsize) if c else ""
 
 
+def _codex_home():
+    """Каталог аккаунта агента — ровно так же, как его выбирает `codex_ask.sh`.
+
+    МИНА, ПОЙМАННАЯ ЖИВЬЁМ 09.11.2026 НА ТРЕТЬЕМ ЭКЗЕМПЛЯРЕ СТАТЬИ ПО
+    ТЕМЕ «ПРИШЛА ЖЁСТКАЯ РАСПЛАТА»: путь к картинкам был зашит строкой
+    `~/.codex/generated_images`, а все статьи и упаковка с 08.11 идут на
+    ВТОРОЙ аккаунт агента (`CODEX_ACCOUNT=eva`) — у него своя папка
+    `~/.codex-eva`, и рисует он туда. Снаружи это выглядело как «агент не
+    нарисовал»: пять превью существовали, а `fresh_images` искала их в
+    пустом каталоге основного аккаунта и честно отвечала «картинок не
+    появилось». Вкладка в тот день обошлась симлинком
+    `~/.codex-eva/generated_images → ~/.codex/generated_images`, но обход
+    умирает на третьем аккаунте и при переносе машины, причём МОЛЧА.
+
+    Механизм выбора берём ОДИН В ОДИН у `codex_ask.sh`, своего не
+    изобретаем: сильнее всего готовый `CODEX_HOME`, иначе
+    `CODEX_ACCOUNT` → `~/.codex-<имя>` (и только если там лежит
+    `auth.json`, то есть аккаунт действительно заведён), иначе
+    `~/.codex` — поведение как было до правки.
+    """
+    home = os.environ.get("CODEX_HOME")
+    if home:
+        return os.path.expanduser(home)
+    acct = os.environ.get("CODEX_ACCOUNT")
+    if acct:
+        cand = os.path.expanduser("~/.codex-%s" % acct)
+        if os.path.exists(os.path.join(cand, "auth.json")):
+            return cand
+    return os.path.expanduser("~/.codex")
+
+
+def gen_dirs():
+    """Каталоги, в которых ищем свежие картинки. Первый — выбранного аккаунта.
+
+    ОСТАЛЬНЫЕ АККАУНТЫ ТОЖЕ СМОТРИМ, И ЭТО НЕ ПЕРЕСТРАХОВКА: у
+    `codex_ask.sh` есть собственное переключение на резервный аккаунт,
+    когда пятичасовое окно основного израсходовано на 80%. Переменную он
+    экспортирует ВНУТРИ СЕБЯ, и мы, запустив его подпроцессом, об этом
+    не знаем — то есть тот же самый дефект вернулся бы при пустой
+    `CODEX_ACCOUNT`. Лишние каталоги ничем не грозят: `fresh_images`
+    отбирает файлы по ВРЕМЕНИ и ничего старше начала нашего запроса не
+    возьмёт.
+    """
+    dirs = [os.path.join(_codex_home(), "generated_images")]
+    seen = {os.path.realpath(dirs[0])}
+    for d in sorted(glob.glob(os.path.expanduser("~/.codex*/generated_images"))):
+        r = os.path.realpath(d)
+        if r not in seen:
+            seen.add(r)
+            dirs.append(d)
+    return dirs
+
+
 def fresh_images(since):
     """Картинки, появившиеся у агента ПОСЛЕ начала нашего запроса.
     Берём по времени файла, а не по имени: имя у него случайное."""
     out = []
-    for f in glob.glob(os.path.join(GEN, "*", "*.png")):
-        try:
-            if os.path.getmtime(f) >= since:
-                out.append(f)
-        except OSError:
-            continue
+    for g in gen_dirs():
+        for f in glob.glob(os.path.join(g, "*", "*.png")):
+            try:
+                if os.path.getmtime(f) >= since:
+                    out.append(f)
+            except OSError:
+                continue
     return sorted(out, key=os.path.getmtime)
 
 

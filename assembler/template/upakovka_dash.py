@@ -204,11 +204,34 @@ function makeIt(){
    .catch(function(e){ btn.textContent='ОК'; btn.disabled=false; alert(e); });
 }
 
+// ЕГО ВЫБОР И СВЁРНУТЫЙ ВИД ЖИВУТ НА ДИСКЕ (09.11, его прямое слово: «то,
+// что я уже сделал, я не хочу ещё раз сворачивать, но меня бесит вот это…
+// чтобы оно уже пришло с моим выбором, вот в этом свёрнутом варианте»).
+// Пишем КАЖДОЕ действие сразу, а не в конце: вкладку он закрывает когда
+// захочет, и «конца работы» у дашборда нет — он пересобирается весь день.
+function sost(item, patch){
+  try{ fetch('/sostoyanie', {method:'POST',
+       headers:{'Content-Type':'application/json'},
+       body: JSON.stringify({item:item, patch:patch})}); }catch(e){}
+}
+// СВЕРНУТЬ / РАЗВЕРНУТЬ ВСЮ КАРТОЧКУ. Прячутся ДЕВЯТЬ отвергнутых
+// вариантов и сетка превью; его выбор и описание с кнопкой «копировать»
+// остаются на виду — «мне только осталось скопировать описание».
+function cardFold(item){
+  var v = document.getElementById('vars-' + item);
+  var b = document.getElementById('foldbtn-' + item);
+  if(!v){ return; }
+  var hide = (v.style.display !== 'none');
+  v.style.display = hide ? 'none' : 'block';
+  if(b){ b.textContent = hide ? 'развернуть варианты'
+                              : 'свернуть — с этим закончил'; }
+  sost(item, {'свёрнута': hide});
+}
 // СКОПИРОВАЛ ОПИСАНИЕ → ОНО СВОРАЧИВАЕТСЯ (07.11, его заказ: «чтобы я
 // понимал, что это я уже сделал, это будет мне сигналом»). Карточка
 // остаётся, но описание прячется и помечается галочкой — видно с одного
 // взгляда, что по этому ролику описание уже ушло на YouTube.
-function copy(txt,el,descId){
+function copy(txt,el,descId,item){
   navigator.clipboard.writeText(txt).then(function(){
     el.textContent='скопировано';
     el.classList.add('done');
@@ -220,6 +243,7 @@ function copy(txt,el,descId){
         if(m){ m.style.display='block'; }
         el.textContent='описание скопировано ✓';
       }
+      if(item!==undefined){ sost(item, {'описание_скопировано': true}); }
     } else {
       setTimeout(function(){el.textContent='копировать';el.classList.remove('done')},1200);
     }
@@ -229,17 +253,19 @@ function copy(txt,el,descId){
 // описанием: «чтобы тоже мне не мешало, чтобы я понимал, что с этим я
 // уже закончил»). Блок сворачивается в узкую строку с галочкой, клик по
 // ней разворачивает обратно.
-function fold(id){
+function fold(id, item, kind){
   var b=document.getElementById(id);
   var m=document.getElementById(id+'-mark');
   if(b){ b.style.display='none'; }
   if(m){ m.style.display='block'; }
+  if(kind){ var p={}; p['скрыто_'+kind]=true; sost(item, p); }
 }
-function unfoldBlock(id){
+function unfoldBlock(id, item, kind){
   var b=document.getElementById(id);
   var m=document.getElementById(id+'-mark');
   if(b){ b.style.display='block'; }
   if(m){ m.style.display='none'; }
+  if(kind){ var p={}; p['скрыто_'+kind]=false; sost(item, p); }
 }
 // ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ (07.11). Агент думает около минуты — пишем об
 // этом прямо, чтобы кнопка не выглядела залипшей.
@@ -266,13 +292,14 @@ function more(item, kind, blockId, btn){
    .catch(function(e){ btn.disabled=false; btn.textContent='ещё 10 вариантов';
                        hint.textContent = 'сбой: ' + e; });
 }
-function unfold(descId,btnId){
+function unfold(descId,btnId,item){
   var d=document.getElementById(descId);
   var m=document.getElementById(descId+'-mark');
   var b=document.getElementById(btnId);
   if(d){ d.style.display='block'; }
   if(m){ m.style.display='none'; }
   if(b){ b.textContent='копировать описание'; b.classList.remove('done'); }
+  if(item!==undefined){ sost(item, {'описание_скопировано': false}); }
 }
 // СВОЙ ВАРИАНТ ЗАГОЛОВКА (08.11, его просьба: «чтобы было поле, не
 // обязательное, куда бы я мог вставить свой вариант, который я взял и сделал
@@ -345,6 +372,126 @@ def записать_выбор(событие):
         pass
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# ЕГО ВЫБОР И СВЁРНУТЫЙ ВИД ЖИВУТ НА ДИСКЕ (09.11.2026)
+#
+# Его прямое слово: «Вот этот мой выбор нужно будет запомнить. И каждый раз,
+# если у нас какое-то обновление этого дашборда… чтобы оно уже пришло с моим
+# выбором, вот в этом свёрнутом варианте, который сейчас. То есть то, что я
+# уже сделал, я не хочу ещё раз сворачивать, но меня бесит вот это».
+#
+# Дашборд за день пересобирается несколько раз — по мере того, как
+# появляются новые темы. До сегодня каждая сборка приходила ЧИСТОЙ: уже
+# закрытые карточки приходилось закрывать заново. Поэтому состояние
+# карточки пишется на диск при КАЖДОМ действии руками (вкладку он закрывает
+# когда захочет, «в конце» не бывает) и восстанавливается при сборке.
+#
+# Ключ — канал + тема + день: тема с тем же номером и названием бывает и на
+# другой день, и на другом канале.
+# ══════════════════════════════════════════════════════════════════════════
+СОСТОЯНИЕ = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "upakovka_lib", "sostoyanie.json")
+_сост_замок = threading.Lock()
+
+
+def ключ_карточки(канал, тема, день):
+    return "%s | %s | %s" % ((канал or "").strip(), (тема or "").strip(),
+                             день)
+
+
+def читать_состояние():
+    """Весь файл словарём. Правили руками и сломали — работаем как с
+    чистого листа, а не падаем: состояние это удобство, а не данные."""
+    try:
+        d = json.load(open(СОСТОЯНИЕ, encoding="utf-8"))
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def писать_состояние(ключ, патч):
+    """Доливаем поля в запись карточки. Подмена файла через os.replace —
+    он открыт на чтение сборкой страницы, рвать его на половине нельзя."""
+    if not ключ or not патч:
+        return
+    try:
+        with _сост_замок:
+            всё = читать_состояние()
+            зап = всё.get(ключ) or {}
+            зап.update(патч)
+            зап["когда"] = time.strftime("%Y-%m-%d %H:%M:%S")
+            всё[ключ] = зап
+            os.makedirs(os.path.dirname(СОСТОЯНИЕ), exist_ok=True)
+            tmp = СОСТОЯНИЕ + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(всё, f, ensure_ascii=False, indent=1,
+                          sort_keys=True)
+            os.replace(tmp, СОСТОЯНИЕ)
+    except Exception:
+        pass          # состояние не имеет права ломать работу дашборда
+
+
+def из_журнала(канал, тема, день):
+    """ПРЕЖНИЕ КЛИКИ — ТОЖЕ СОСТОЯНИЕ (09.11).
+
+    `vybor.jsonl` пишется с 08.11 и уже знает, что он выбрал. Это ЖУРНАЛ:
+    только дополняется, переписывать его нельзя — но читать можно и нужно,
+    иначе первая сборка с этой правкой пришла бы пустой по уже сделанным
+    темам (а сделана, например, 5 МИНУТ «1-Украина Новая форма ПЕРЕГОВОРЫ»:
+    превью-3 и свой заголовок).
+
+    Дня в журнале нет, зато у события «превью» есть ПУТЬ к файлу, а в пути
+    стоит папка дня — по ней и отличаем сегодняшнюю тему от одноимённой
+    вчерашней. У выбора заголовка пути нет: там берём последнюю запись по
+    каналу и теме.
+    """
+    st = {}
+    try:
+        строки = open(ЖУРНАЛ, encoding="utf-8").read().splitlines()
+    except OSError:
+        return st
+    ck = (канал or "").strip().upper()
+    tk = (тема or "").strip().upper()
+    for line in строки:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            ev = json.loads(line)
+        except ValueError:
+            continue
+        if (ev.get("канал") or "").strip().upper() != ck:
+            continue
+        if (ev.get("тема") or "").strip().upper() != tk:
+            continue
+        вид = ev.get("событие") or ""
+        if вид == "превью":
+            путь = (ev.get("файл_превью") or ev.get("готовый_файл")
+                    or "").replace("\\", "/")
+            if путь and ("/%s/" % день) not in путь:
+                continue              # одноимённая тема другого дня
+            st["выбрано_превью"] = ev.get("выбран_вариант")
+            st["надпись_сверху"] = ev.get("надпись_сверху") or ""
+            st["надпись_снизу"] = ev.get("надпись_снизу") or ""
+        elif вид == "свой_заголовки":
+            st["свой_заголовок"] = ev.get("выбрано") or ""
+        elif вид == "заголовки":
+            st["выбран_заголовок"] = ev.get("выбрано") or ""
+        elif вид == "надписи":
+            st["выбрана_надпись"] = ev.get("выбрано") or ""
+    return st
+
+
+def состояние_карточки(it, день, файл=None):
+    """Журнал даёт основу, файл состояния — последнее слово: руками он
+    сворачивает и разворачивает уже ПОСЛЕ выбора."""
+    ключ = ключ_карточки(it.get("канал", ""), it.get("тема", ""), день)
+    st = из_журнала(it.get("канал", ""), it.get("тема", ""), день)
+    всё = читать_состояние() if файл is None else файл
+    st.update(всё.get(ключ) or {})
+    return ключ, st
+
+
 def page(items, day):
     P = ['<!doctype html><meta charset="utf-8">',
          '<title>Упаковка роликов — %s</title>' % html.escape(day),
@@ -364,9 +511,29 @@ def page(items, day):
         P.append('<span style="color:%s;margin-right:14px">■ %s</span>'
                  % (a, html.escape(c)))
     P.append('</div></header><div class="wrap">')
-    for it in items:
+    # СОСТОЯНИЕ ЧИТАЕМ ОДИН РАЗ НА СТРАНИЦУ, а не на карточку
+    _сост_файл = читать_состояние()
+    for _i, it in enumerate(items):
         desc = it.get("описание", "")
         _accent, _bg = ch_color(it.get("канал", ""))
+        # ЕГО ВЫБОР И ВИД КАРТОЧКИ — С ДИСКА (09.11, см. блок выше)
+        _ключ, _st = состояние_карточки(it, day, _сост_файл)
+        _zag = (_st.get("свой_заголовок")
+                or _st.get("выбран_заголовок") or "").strip()
+        _nad_t = (_st.get("надпись_сверху") or "").strip()
+        _nad_b = (_st.get("надпись_снизу") or "").strip()
+        if not _nad_t and not _nad_b:
+            _nad_t = (_st.get("выбрана_надпись") or "").strip()
+        try:
+            _pn = int(_st.get("выбрано_превью") or 0)
+        except (TypeError, ValueError):
+            _pn = 0
+        # ВЫБОР СДЕЛАН — значит по этой теме он уже работал
+        _есть_выбор = bool(_zag or _nad_t or _nad_b or _pn)
+        # СВЁРНУТА ПО УМОЛЧАНИЮ ТАМ, ГДЕ ВЫБОР ЕСТЬ; руками свернул или
+        # развернул — его решение старше (пункт 5 его требования).
+        _сверн = bool(_st.get("свёрнута", _есть_выбор))
+        _desc_hid = bool(_st.get("описание_скопировано"))
         P.append('<div class="card" style="border-left:4px solid %s;'
                  'background:%s">' % (_accent, _bg))
         P.append('<span class="ch" style="color:%s;border:1px solid %s">%s</span>'
@@ -379,42 +546,95 @@ def page(items, day):
             P.append('<div style="font-size:12px;color:%s;margin:-8px 0 12px">'
                      'паттерн: %s</div>'
                      % (_accent, html.escape(it["паттерн"])))
-        _did = "d%d" % items.index(it)
+        # ── ТВОЙ ВЫБОР: РЕЗУЛЬТАТ, А НЕ ВАРИАНТЫ (09.11, его слово: «тема
+        # один у меня в принципе закончилась, мне только осталось
+        # скопировать описание и вставить на YouTube»). Сворачивание убирает
+        # ДЕВЯТЬ отвергнутых вариантов, а результат остаётся на виду и
+        # копируется одной кнопкой.
+        if _есть_выбор:
+            P.append('<div style="border:1px solid %s;border-radius:8px;'
+                     'padding:11px 13px;margin:0 0 15px;background:#0d0d10">'
+                     % _accent)
+            P.append('<div class="lab" style="margin:0 0 8px;color:%s">'
+                     'твой выбор</div>' % _accent)
+            if _zag:
+                P.append('<div style="font-size:15px;font-weight:600;'
+                         'margin-bottom:8px">%s</div>' % html.escape(_zag))
+                P.append('<div class="row" style="margin:0 0 9px">'
+                         '<button onclick=\'copy(%s,this)\'>копировать '
+                         'заголовок</button></div>'
+                         % json.dumps(_zag, ensure_ascii=False))
+            if _nad_t or _nad_b:
+                P.append('<div class="hint" style="margin-bottom:8px">'
+                         'надписи на превью: <b style="color:%s">%s</b></div>'
+                         % (_accent, html.escape(
+                             "  /  ".join([x for x in (_nad_t, _nad_b) if x]))))
+            # МИНИАТЮРА ВЫБРАННОГО ПРЕВЬЮ: с надписями, если готовое уже
+            # сделано, иначе чистый вариант.
+            _thumb = (it.get("превью_готовые") or {}).get(_pn)
+            if not _thumb and _pn:
+                for _u in (it.get("превью_файлы") or []):
+                    if _u.endswith("/%d.png" % _pn):
+                        _thumb = _u
+                        break
+            if _thumb:
+                P.append('<div style="display:flex;gap:11px;'
+                         'align-items:flex-start">')
+                P.append('<img src="%s?t=%s" style="width:200px;'
+                         'border-radius:6px;border:2px solid %s">'
+                         % (_thumb, int(time.time()), _accent))
+                P.append('<div class="hint">превью — вариант %d</div>' % _pn)
+                P.append('</div>')
+            elif _pn:
+                P.append('<div class="hint">превью — вариант %d</div>' % _pn)
+            P.append('</div>')
+        _did = "d%d" % _i
         _bid = _did + "-btn"
         P.append('<div class="lab">описание для YouTube</div>')
-        P.append('<div class="desc" id="%s">%s</div>'
-                 % (_did, html.escape(desc)))
-        P.append('<div id="%s-mark" style="display:none;padding:10px 12px;'
+        P.append('<div class="desc" id="%s"%s>%s</div>'
+                 % (_did, ' style="display:none"' if _desc_hid else '',
+                    html.escape(desc)))
+        P.append('<div id="%s-mark" style="display:%s;padding:10px 12px;'
                  'border:1px dashed %s;border-radius:7px;color:%s;'
-                 'font-size:13px;cursor:pointer" onclick="unfold(\'%s\',\'%s\')">'
+                 'font-size:13px;cursor:pointer" onclick="unfold(\'%s\',\'%s\',%d)">'
                  '✓ описание скопировано — нажми, чтобы раскрыть</div>'
-                 % (_did, _accent, _accent, _did, _bid))
-        P.append('<div class="row"><button id="%s" onclick=\'copy(%s,this,"%s")\'>'
-                 'копировать описание</button>'
+                 % (_did, "block" if _desc_hid else "none", _accent, _accent,
+                    _did, _bid, _i))
+        P.append('<div class="row"><button id="%s"%s '
+                 'onclick=\'copy(%s,this,"%s",%d)\'>%s</button>'
                  '<span class="hint">%d знаков</span></div>'
-                 % (_bid, json.dumps(desc, ensure_ascii=False), _did, len(desc)))
+                 % (_bid, ' class="done"' if _desc_hid else '',
+                    json.dumps(desc, ensure_ascii=False), _did, _i,
+                    "описание скопировано ✓" if _desc_hid
+                    else "копировать описание", len(desc)))
+        # ── ДЕСЯТЬ ВАРИАНТОВ И СЕТКА ПРЕВЬЮ — ЭТО И ЕСТЬ СВОРАЧИВАЕМАЯ
+        # ЧАСТЬ. Внутри остаётся всё как было, меняется только обёртка.
+        P.append('<div id="vars-%d" style="display:%s">'
+                 % (_i, "none" if _сверн else "block"))
         for key, lab in (("заголовки", "заголовки — 10 вариантов"),
                          ("надписи", "надписи на превью — 10 вариантов")):
             rows = it.get(key) or []
             if not rows:
                 continue
-            _bid = "%s%d" % ("t" if key == "заголовки" else "n",
-                             items.index(it))
-            P.append('<div id="%s-mark" style="display:none;padding:9px 12px;'
+            _bid = "%s%d" % ("t" if key == "заголовки" else "n", _i)
+            _скрыт = bool(_st.get("скрыто_" + key))
+            P.append('<div id="%s-mark" style="display:%s;padding:9px 12px;'
                      'margin-top:14px;border:1px dashed %s;border-radius:7px;'
                      'color:%s;font-size:13px;cursor:pointer" '
-                     'onclick="unfoldBlock(\'%s\')">✓ %s — скрыто, '
-                     'нажми чтобы раскрыть</div>' % (_bid, _accent, _accent,
-                                                     _bid, lab))
-            P.append('<div id="%s">' % _bid)
+                     'onclick="unfoldBlock(\'%s\',%d,\'%s\')">✓ %s — скрыто, '
+                     'нажми чтобы раскрыть</div>'
+                     % (_bid, "block" if _скрыт else "none", _accent, _accent,
+                        _bid, _i, key, lab))
+            P.append('<div id="%s"%s>'
+                     % (_bid, ' style="display:none"' if _скрыт else ''))
             P.append('<div class="lab">%s</div><ol>' % lab)
             for r in rows:
                 # data-k и data-i — чтобы журнал знал, ЧТО именно выбрано
                 # и по какому ролику (08.11)
                 P.append('<li data-t="%s" data-k="%s" data-i="%d" '
                          'onclick="copyLi(this)">%s</li>'
-                         % (html.escape(r, quote=True), key,
-                            items.index(it), html.escape(r)))
+                         % (html.escape(r, quote=True), key, _i,
+                            html.escape(r)))
             P.append('</ol>')
             # ПОЛЕ «МОЙ ВАРИАНТ» — ТОЛЬКО У ЗАГОЛОВКОВ (08.11, его поправка:
             # «для надписей на превью этого поля не надо. Когда я ввожу сами
@@ -423,27 +643,33 @@ def page(items, day):
             # превью, когда я его делаю»). Надписи и так пишутся в журнал при
             # нажатии «ОК» в окне превью: и верхняя, и нижняя, и пометка
             # «вписал сам», если текст не из наших десяти.
-            _sid = "own-%s-%d" % (key, items.index(it))
+            _sid = "own-%s-%d" % (key, _i)
             if key == "заголовки":
+              # УЖЕ ВПИСАННЫЙ ВАРИАНТ ВОЗВРАЩАЕТСЯ В ПОЛЕ (09.11): он его
+              # писал руками, это самый дорогой материал — терять нельзя.
+              _свой = (_st.get("свой_заголовок") or "").strip()
               P.append('<div class="row" style="margin-top:8px">'
                      '<input id="%s" placeholder="%s — вставь свой вариант, '
-                     'если взял не из списка" '
+                     'если взял не из списка" value="%s"%s '
                      'style="flex:1;min-width:280px;padding:8px 10px;'
                      'border:1px solid var(--line);border-radius:6px;'
                      'background:#101014;color:inherit;font-size:13px">'
-                     '<button onclick=\'svoy(%d,"%s","%s",this)\'>'
-                     'записать мой вариант</button></div>'
-                     % (_sid, "заголовок", items.index(it), key, _sid))
+                     '<button%s onclick=\'svoy(%d,"%s","%s",this)\'>'
+                     '%s</button></div>'
+                     % (_sid, "заголовок", html.escape(_свой, quote=True),
+                        " readonly" if _свой else "",
+                        ' class="done"' if _свой else "", _i, key, _sid,
+                        "записано ✓" if _свой else "записать мой вариант"))
             P.append('<div class="row">'
-                     '<button onclick="fold(\'%s\')">скрыть — с этим '
+                     '<button onclick="fold(\'%s\',%d,\'%s\')">скрыть — с этим '
                      'закончил</button>'
                      '<button onclick=\'more(%d,"%s","%s",this)\'>'
                      'ещё 10 вариантов</button>'
                      '<span class="hint" id="%s-hint"></span></div>'
-                     % (_bid, items.index(it), key, _bid, _bid))
+                     % (_bid, _i, key, _i, key, _bid, _bid))
             P.append('</div>')
         # ПРЕВЬЮ — САМИ КАРТИНКИ, А НЕ ПРОМПТ (07.11). Файлы лежат в папке
-        # темы как ПРЕВЬЮ-N.png; на страницу они отдаются по短 ссылке
+        # темы как ПРЕВЬЮ-N.png; на страницу они отдаются по короткой ссылке
         # /prevyu/<индекс>/<N>.png, которую раздаёт тот же сервер.
         shots = it.get("превью_файлы") or []
         if shots:
@@ -478,12 +704,19 @@ def page(items, day):
                          'title="нажми, чтобы наложить надписи" '
                          'style="width:100%%;border-radius:6px;cursor:pointer;'
                          'border:%s">'
-                         % (items.index(it), _num, _src, _sig,
-                            items.index(it), _num, u, _titles, _sig,
+                         % (_i, _num, _src, _sig, _i, _num, u, _titles, _sig,
                             _where.replace('"', "'"),
                             ("3px solid %s" % _accent) if _ready
                             else "1px solid var(--line)"))
             P.append('</div>')
+        P.append('</div>')          # конец vars-N
+        # КНОПКА СВОРАЧИВАНИЯ КАРТОЧКИ — И ЕЁ ПАМЯТЬ (09.11)
+        P.append('<div class="row" style="margin-top:12px">'
+                 '<button id="foldbtn-%d" onclick="cardFold(%d)">%s</button>'
+                 '<span class="hint">этот вид запомнится — следующая сборка '
+                 'придёт такой же</span></div>'
+                 % (_i, _i, "развернуть варианты" if _сверн
+                    else "свернуть — с этим закончил"))
         P.append('</div>')
     P.append('</div>')
     P.append("""
@@ -558,7 +791,13 @@ def main():
     _sp0.loader.exec_module(_pt0)
     _pt_name = _pt0.theme_name
 
-    d = os.path.join("/tmp", "upakovka-%s" % a.day)
+    # ДВА ДАШБОРДА ОДНОГО ДНЯ ДЕЛИЛИ ОДНУ ПАПКУ (09.11, живой случай при
+    # этой же правке): папка `/tmp/upakovka-<день>` зависит только от дня,
+    # поэтому проверочный сервер на своём порту перезаписывал `index.html`
+    # ЖИВОГО дашборда пользователя — тот начинал отдавать чужую страницу.
+    # Теперь папку можно увести переменной и проверять, никого не задев.
+    d = os.environ.get("VIDEORYAD_UPAK_TMP") or os.path.join(
+        "/tmp", "upakovka-%s" % a.day)
     os.makedirs(d, exist_ok=True)
     # КАРТИНКИ КЛАДЁМ РЯДОМ СО СТРАНИЦЕЙ: сервер раздаёт только свою папку,
     # а папки тем лежат на D: — ссылаться туда напрямую нельзя.
@@ -728,7 +967,33 @@ def main():
                 return self.do_make()
             if self.path == "/zhurnal":
                 return self.do_zhurnal()
+            if self.path == "/sostoyanie":
+                return self.do_sostoyanie()
             return self.send_error(404)
+
+        def _ok(self):
+            out = b'{"ok":true}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
+
+        def do_sostoyanie(self):
+            """ВИД КАРТОЧКИ РУКАМИ (09.11): свернул, развернул, скопировал
+            описание. Журнал этого не знает — он про ВЫБОР, а это про то,
+            что он уже закрыл. Пишем сразу, на каждое действие."""
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                req = json.loads(self.rfile.read(n).decode("utf-8"))
+                it = items[int(req.get("item", 0))]
+                писать_состояние(
+                    ключ_карточки(it.get("канал", ""), it.get("тема", ""),
+                                  a.day),
+                    req.get("patch") or {})
+            except Exception:
+                pass
+            return self._ok()
 
         def do_zhurnal(self):
             """Клик по строке = выбор. Пишем, что именно он скопировал."""
@@ -741,14 +1006,22 @@ def main():
                                 "тема": it.get("тема", ""),
                                 "выбрано": req.get("text", "")[:300],
                                 "предложено": (it.get(req.get("kind") or "") or [])[:10]})
+                # ЖУРНАЛ — ЭТО ИСТОРИЯ, СОСТОЯНИЕ — ЭТО «ЧТО СЕЙЧАС»
+                # (09.11). Один и тот же клик пишем в оба места: журнал
+                # копится для обучения выдачи, состояние возвращает карточке
+                # его выбор при следующей сборке.
+                _вид = req.get("kind") or ""
+                _поле = {"заголовки": "выбран_заголовок",
+                         "надписи": "выбрана_надпись",
+                         "свой_заголовки": "свой_заголовок"}.get(_вид)
+                if _поле:
+                    писать_состояние(
+                        ключ_карточки(it.get("канал", ""), it.get("тема", ""),
+                                      a.day),
+                        {_поле: (req.get("text") or "")[:300]})
             except Exception:
                 pass
-            out = b'{"ok":true}'
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(out)))
-            self.end_headers()
-            self.wfile.write(out)
+            return self._ok()
 
         def more(self):
             """ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ (07.11, его заказ: «не подошли мне эти,
@@ -930,6 +1203,14 @@ def main():
                     "вписал_сам": bool(_t and _t not in
                                        [x.upper() for x in (it.get("надписи") or [])]),
                 })
+                # ВЫБРАННОЕ ПРЕВЬЮ И НАДПИСИ — В СОСТОЯНИЕ (09.11):
+                # «картинка там применилась, заголовки я тоже применил, и
+                # всё свернул. Вот этот мой выбор нужно будет запомнить».
+                писать_состояние(
+                    ключ_карточки(it.get("канал", ""), it.get("тема", ""),
+                                  a.day),
+                    {"выбрано_превью": num, "надпись_сверху": _t,
+                     "надпись_снизу": _b})
                 body = {"ok": True,
                         "accent": ch_color(it.get("канал", ""))[0],
                         "opechatki": _bad,

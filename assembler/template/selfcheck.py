@@ -144,7 +144,8 @@ if _card_no_clip:
     _nums = ", ".join(map(str, _card_no_clip))
     FAIL.append("КАРТОЧКА НЕ НАРИСОВАНА (сцены %s): источник `card:*`, а клипа "
                 "в images/ нет. Это НЕ брак кадра — задание не отрисовалось "
-                "или не разложено. Прогони `python3 ~/.claude/skills/"
+                "или не разложено. Прогони `bash ~/.claude/skills/news-video/"
+                "cloud/va.sh <цель> python3 ~/.claude/skills/"
                 "news-video/fullcycle/cards_cloud.py <ролик>.scenes.json` — "
                 "уже готовые карточки заново не рисуются." % _nums)
     _ph = [x for x in _ph
@@ -318,6 +319,117 @@ if _карточки:
             "инструментом: `card_put.py <scenes.json> <сцена> <вид> …` или "
             "`element_put.py` — он сам положит задание в очередь."
             % ", ".join(_без))
+
+# 3-КВАТЕР. КАРТОЧКА С ФОТО, А ФОТО В КАДРЕ НЕТ (09.11, улов вкладки
+# `usuario-2c` на `planeta-ukraina-forma-1011`, сцены 70 и 100).
+# Снимки лежали в `images/card070.jpg` и `images/card100.jpg`, чистка папки
+# забора их снесла — и карточки отрисовались с ПУСТЫМ местом под фото: у
+# сплита чёрная левая половина, у досье тёмный прямоугольник вместо снимка.
+# Прогон отчитался успехом, эта проверка молчала (клип на месте, длительность
+# сходится), лист перекрытий тоже (он показывает постер, а пустое поле на
+# чёрной гамме ПЛАНЕТЫ читается как часть фона). Поймал пользователь глазами.
+# Путь снимка чинится в `cards_queue.keep_photo`, но ТРЕТИЙ РУБЕЖ обязан быть
+# независим от путей: смотрим сам КАДР. Если задание обещает фото, в рамке под
+# фото не может быть ровного пятна.
+#
+# ЧИСЛО: среднеквадратичное отклонение яркости в рамке ниже 12 из 255.
+# Замерено по 138 живым постерам карточек с фото (все ролики на диске):
+# у 137 из них разброс 23,2…100,7 (минимум — размытый фон у «глубины
+# резкости»); у 138-го, сцена 36 ролика `planeta-rasplata-0911-cloud`, ровно
+# 0,0 — и это НАСТОЯЩИЙ брак того же класса, уехавший в сданный ролик. Голый
+# фон канала в той же рамке даёт 1,1-2,2, бумага досье без снимка — 4,
+# тёмная заглушка облака — 0-3. Порог 12 стоит посреди зазора.
+_ФОТО_РАМКИ = {           # вид → рамки, где обязан лежать снимок (кадр 1920x1080)
+    # сплит: половина кадра с лицом; сторона бывает и левой, и правой
+    "split": [(40, 80, 560, 1000), (1360, 80, 1880, 1000)],
+    "quote_variants.quote_split": [(40, 80, 560, 1000), (1360, 80, 1880, 1000)],
+    # досье: окно снимка на бумаге, 330x230 от (750,470) на листе от (370,236)
+    "dossier": [(1130, 716, 1442, 928)],
+    "cinematic.dossier": [(1130, 716, 1442, 928)],
+    # слабое фото в своём окне: окно 0,40 ширины от x=150
+    "photo": [(170, 300, 898, 820)],
+    "photo_card.photo_card": [(170, 300, 898, 820)],
+    # кадр в рамке плёнки: 975x712 по центру, ниже на 74
+    "film_frame": [(500, 286, 1420, 942)],
+    "film.film_single": [(500, 286, 1420, 942)],
+    # глубина резкости: снимок во весь кадр, края трогает подпись
+    "dof": [(300, 180, 1620, 900)],
+    "cinematic.depth_of_field": [(300, 180, 1620, 900)],
+}
+_ПОРОГ_ФОТО = 12.0
+_пустые_карточки = []
+for _sc in scenes:
+    if not str(_sc.get("source", "")).startswith("card:"):
+        continue
+    _i = int(_sc.get("id", 0))
+    _зад = os.path.join("cards", "queue", "scene_%03d.json" % _i)
+    if not os.path.isfile(_зад):
+        continue                      # «карточка без задания» ловится выше
+    try:
+        _j = json.load(open(_зад, encoding="utf-8"))
+    except Exception:
+        continue
+    _рамки = _ФОТО_РАМКИ.get(str(_j.get("view", "")))
+    # фото не обещано (цитата, тезисы, карта, диаграмма) либо вид с
+    # неизвестной геометрией — такие не трогаем вовсе
+    if not _рамки or not (_j.get("kwargs") or {}).get("photo"):
+        continue
+    _кадр = os.path.join("cards", "scene_%03d.jpg" % _i)
+    _врем = None
+    if not os.path.isfile(_кадр):
+        _клип = os.path.join(images, "scene_%03d.mp4" % _i)
+        if not os.path.isfile(_клип):
+            continue                  # клипа нет — об этом кричит проверка выше
+        _врем = os.path.join("cards", ".photo_check_%03d.jpg" % _i)
+        try:
+            _d = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
+                                 "format=duration", "-of", "csv=p=0", _клип],
+                                capture_output=True, text=True, timeout=20)
+            _dur = float((_d.stdout or "").strip() or 0)
+            _ss = "%.2f" % (max(0.5, _dur * 0.85) if _dur > 1.0 else 0.5)
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", _ss, "-i", _клип,
+                            "-frames:v", "1", _врем], capture_output=True, timeout=60)
+        except Exception:
+            pass
+        if not os.path.isfile(_врем):
+            continue
+        _кадр = _врем
+    try:
+        import numpy as _np
+        from PIL import Image as _Im
+        with _Im.open(_кадр) as _im:
+            _im = _im.convert("L")
+            if _im.size != (1920, 1080):
+                _im = _im.resize((1920, 1080), _Im.LANCZOS)
+            _a = _np.asarray(_im, _np.float32)
+        _раз = max(float(_a[y0:y1, x0:x1].std()) for (x0, y0, x1, y1) in _рамки)
+    except Exception as _e:
+        WARN.append("сцена %d: фото карточки не проверено (%s: %s)"
+                    % (_i, type(_e).__name__, _e))
+        _раз = None
+    finally:
+        if _врем and os.path.isfile(_врем):
+            try:
+                os.remove(_врем)
+            except OSError:
+                pass
+    if _раз is not None and _раз < _ПОРОГ_ФОТО:
+        _пустые_карточки.append("сцена %d (%s, фото %s): разброс %.1f при "
+                                "пороге %.0f"
+                                % (_i, _j.get("view"),
+                                   os.path.basename((_j.get("kwargs") or {})["photo"]),
+                                   _раз, _ПОРОГ_ФОТО))
+if _пустые_карточки:
+    FAIL.append(
+        "У КАРТОЧКИ ОБЕЩАНО ФОТО, А МЕСТО ПОД НЕГО ПУСТОЕ — " +
+        "; ".join(_пустые_карточки) +
+        ". В рамке под снимком ровное пятно: у сплита это чёрная левая "
+        "половина, у досье тёмный прямоугольник. Снимок потерялся между "
+        "постановкой карточки и прогоном (чаще всего его снесла чистка папки "
+        "забора из `images/`). Положи снимок в `cards/photo/`, переставь "
+        "карточку тем же инструментом и перерисуй: "
+        "`python3 ~/.claude/skills/news-video/fullcycle/cards_cloud.py "
+        "<ролик>.scenes.json`.")
 
 # 4. overlays.json — ОБЯЗАН быть до дашборда, ~3/мин, anchor по каналу (SKILL.md 3b)
 if not os.path.exists("overlays.json"):
