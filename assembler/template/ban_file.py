@@ -9,8 +9,14 @@ file becomes usable again once N days have passed (2026-09-23: "не совсе�
 убивать... через 10 дней только его использовать").
 
 Usage:
-    python3 ban_file.py <path-to-file> ["причина"] [--days N]
-    python3 ban_file.py --md5 <hash> ["причина"] [--days N]   # file already gone
+    python3 ban_file.py <path-to-file> "причина" [--days N]
+    python3 ban_file.py --md5 <hash> "причина" [--days N]      # file already gone
+    python3 ban_file.py <файл> [<файл> ...] --why "причина"     # пачкой
+    python3 ban_file.py --md5 <hash> [<hash> ...] --why "причина"
+
+ПРИЧИНА ОБЯЗАТЕЛЬНА. Её можно передать позиционно (вторым аргументом) или
+ключом --why / --причина / --prichina / --reason. Без причины скрипт НЕ
+банит и объясняет, каким ключом её передать.
 
 <path-to-file> can be anything: a file under ~/projects/media-library/,
 a project's images/scene_NNN.* or overlays/scene_NNN.*, or any other local
@@ -44,6 +50,19 @@ except ImportError:                      # устаревшая копия ря�
     from fetch_assets_news import ban_md5, file_md5
 
 
+# ПРИЧИНУ ПРИНИМАЕМ ЛЮБЫМ ИЗ ЭТИХ ИМЁН (09.11, улов на осмотре медиатеки).
+# Живой случай: агент банил 21 файл базы и честно передавал причину ключом
+# `--why` — которого у скрипта не было. Разбор позиционный, поэтому слово
+# «--why» уехало в поле `reason` как ТЕКСТ ПРИЧИНЫ (15 записей с причиной
+# «--why»), а у остальных причина осталась пустой. Ни одна строка не упала,
+# бан прошёл, вкладка увидела «забанено» — и 21 кадр лёг в журнал
+# безымянным. Дорого это тем, что причина бана — единственное, что потом
+# отличает «вшитое клеймо стокового сайта» (навсегда) от «коллизия, рефетч»
+# (на два дня): без неё запись нельзя ни проверить, ни снять.
+# Поэтому: имена-синонимы ниже + отказ без причины (см. `_need_reason`).
+REASON_KEYS = ("--why", "--причина", "--prichina", "--reason", "--why-ru")
+
+
 def _take_days(argv):
     """Pull --days N out of argv in place, return (argv, days|None)."""
     if "--days" in argv:
@@ -61,29 +80,115 @@ def _take_days(argv):
     return argv, None
 
 
+def _take_reason(argv):
+    """Вынуть причину, переданную КЛЮЧОМ, вернуть (argv, причина|None).
+
+    None значит «ключа не было» — это не то же самое, что пустая строка
+    (её штатно передаёт кнопка 🚫 дашборда: там причина пишется в журнал
+    отказов отдельно, и ломать кнопку отказом нельзя).
+    """
+    for key in REASON_KEYS:
+        if key in argv:
+            i = argv.index(key)
+            if i + 1 >= len(argv):
+                print("ключ %s без текста причины — напиши её в кавычках: "
+                      "%s \"вшитое клеймо в углу\"" % (key, key),
+                      file=sys.stderr)
+                raise SystemExit(2)
+            reason = argv[i + 1]
+            del argv[i:i + 2]
+            return argv, reason
+    return argv, None
+
+
+def _need_reason(what):
+    """Причины нет вовсе — не банить молча, а объяснить, каким ключом её дать."""
+    print("ПРИЧИНА НЕ ПЕРЕДАНА — ничего не забанено (%s).\n"
+          "Причина бана это единственное, что потом отличает «вшитое клеймо "
+          "стокового сайта» (навсегда) от «коллизия, рефетч» (на два дня), "
+          "поэтому безымянные баны больше не принимаются.\n"
+          "Передай её вторым аргументом или ключом --why:\n"
+          "    python3 ban_file.py <файл> \"титры во весь кадр\"\n"
+          "    python3 ban_file.py <файл> [<файл> ...] --why \"титры во весь кадр\"\n"
+          "    python3 ban_file.py --md5 <hash> --why \"клеймо телеканала\"\n"
+          "Синонимы ключа: %s" % (what, ", ".join(REASON_KEYS)),
+          file=sys.stderr)
+    raise SystemExit(2)
+
+
+# ПУСТАЯ ПРИЧИНА ОТ КНОПКИ ДАШБОРДА — НЕ ОТКАЗ, НО И НЕ ПУСТОЕ ПОЛЕ (09.11).
+# `review.py` зовёт нас как `ban_file.py <файл> <причина>`, где причина бывает
+# пустой строкой (пользователь снял кадр, не комментируя — это разрешено,
+# дашборд пишет снятие с запросом в журнал отказов сам). Отказ там означал бы
+# 500 на кнопку 🚫, то есть сломанный дашборд. Поэтому слот есть — работаем,
+# но в журнал кладём опознаваемый текст, а не пустоту.
+BLANK_REASON = "причина не названа (снято без текста)"
+
+
 def main():
     argv = sys.argv[1:]
     if not argv:
         print(__doc__)
         raise SystemExit(1)
     argv, days = _take_days(argv)
+    argv, reason_kw = _take_reason(argv)
     until_msg = f"на {days} дн." if days else "навсегда"
 
-    if argv[0] == "--md5":
-        if len(argv) < 2:
+    if argv and argv[0] == "--md5":
+        hashes = [h for h in argv[1:] if h]
+        if not hashes:
             print(__doc__)
             raise SystemExit(1)
-        md5 = argv[1]
-        reason = argv[2] if len(argv) > 2 else ""
-        ban_md5(md5, path="", reason=reason, days=days)
-        print(f"забанено {until_msg} (md5 {md5}): {reason or '(без причины)'}")
+        if reason_kw is None:
+            # Старый разбор: <hash> ["причина"]. Хэшей больше одного здесь
+            # быть не может — иначе второй уехал бы в причину, как 09.11.
+            if len(hashes) > 2:
+                print("лишние аргументы: %s. Нескольким хэшам причину "
+                      "передавай ключом --why \"причина\"."
+                      % ", ".join(hashes[2:]), file=sys.stderr)
+                raise SystemExit(2)
+            if len(hashes) < 2:
+                _need_reason("md5 %s" % hashes[0])
+            hashes, reason = hashes[:1], hashes[1]
+        else:
+            reason = reason_kw
+        reason = reason if reason.strip() else BLANK_REASON
+        for md5 in hashes:
+            ban_md5(md5, path="", reason=reason, days=days)
+            print(f"забанено {until_msg} (md5 {md5}): {reason}")
         return
-    path = argv[0]
-    reason = argv[1] if len(argv) > 1 else ""
-    md5 = file_md5(path)
-    ban_md5(md5, path=path, reason=reason, days=days)
-    print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason or '(без причины)'}")
-    _siblings_hint(path)
+
+    if reason_kw is None:
+        # Старый разбор: <файл> ["причина"].
+        if len(argv) > 2:
+            print("лишние аргументы: %s. Пачку файлов бань так:\n"
+                  "    python3 ban_file.py <файл> [<файл> ...] --why \"причина\""
+                  % ", ".join(argv[2:]), file=sys.stderr)
+            raise SystemExit(2)
+        if len(argv) < 2:
+            _need_reason(argv[0])
+        paths, reason = argv[:1], argv[1]
+    else:
+        paths, reason = argv, reason_kw
+    if not paths:
+        print(__doc__)
+        raise SystemExit(1)
+    reason = reason if reason.strip() else BLANK_REASON
+
+    missing = [p for p in paths if not os.path.exists(p)]
+    if missing:
+        # ФАЙЛА НЕТ — ЭТО ОТКАЗ, А НЕ ТРЕЙСБЕК В СЕРЕДИНЕ ПАЧКИ: иначе
+        # половина списка забанена, половина нет, и вкладка этого не видит.
+        print("нет файла(ов): %s\nЕсли файл уже удалён, бань по хэшу: "
+              "ban_file.py --md5 <hash> --why \"причина\""
+              % ", ".join(missing), file=sys.stderr)
+        raise SystemExit(2)
+
+    for path in paths:
+        md5 = file_md5(path)
+        ban_md5(md5, path=path, reason=reason, days=days)
+        print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason}")
+    _siblings_hint(paths[-1])
 
 
 def _siblings_hint(path):

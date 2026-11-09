@@ -161,3 +161,6 @@ template/upakovka_lib/zhurnal.json
 cloud/ozvuchka_cloud.sh
 cloud/ozvuchka_job.py
 cloud/workflows/ozvuchka.yml
+template/podmena.py
+template/cards_keep.py
+template/srt_keep.py

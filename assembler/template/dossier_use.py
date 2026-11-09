@@ -21,15 +21,127 @@
 Ширина кадра поводом НЕ является: узкий кадр ставится в родном размере по
 центру с размытой заливкой полей (правило 30.10). Карты из постов идут в сцены
 первым делом — карта источника это информация, а не «кадр 800 px».
+
+КАДР ДОСЬЕ ВНУТРИ РИСОВАННОГО КАДРА — ПОСТАВЛЕННЫЙ (09.11, улов вкладки
+`usuario-2c` на ролике `planeta-ukraina-forma-1011`). Фото Умерова из вложений
+стояло в газетной вырезке на сцене 11, но источник сцены стал `card:vyrezka`:
+адрес вложения из сцены ушёл (у карточек он один на всех, `_CARD_QUERY`), путь
+к фото уехал в поле `card`, а сам файл — в `cards/photo/` под своим именем.
+Гейт объявил кадр «лежащим без дела при живых поисковых сценах» и ОТКАЗАЛ в
+фетче. Вкладка обошла это записью в `tg_rejected.json` «использован внутри
+карточки» — то есть ГОДНЫЙ кадр пошёл в брак, чего быть не должно.
+Поэтому сверяем не только адреса и имена, но и СОДЕРЖИМОЕ: md5 файла досье
+против md5 всего, что стоит в ролике, включая исходные фото рисованных кадров
+(`cards/photo/`, `cards/replaced/`, медиатека — путь берётся из задания
+карточки, а не из списка папок по памяти). Имя тут не помощник: кадр приезжает
+под именем вложения, а в карточку копируется под своим.
 """
 import ast
 import glob
+import hashlib
 import json
 import os
+import re
 import sys
 
 SEARCH = ("press_photo", "web_search", "wikimedia",
           "pexels_photo", "pexels_video", "pexels")
+
+# РАЗБОР ЗАДАНИЙ КАРТОЧЕК БЕРЁМ ГОТОВЫЙ, А НЕ ПИШЕМ ВТОРОЙ (09.11): путь к
+# фото лежит в трёх местах (`cards/queue/`, `cards/cards.json`, поле `card`
+# сцены) и у каждого вида свой ключ — `photo`, `hero_photo`, `shots`. Это
+# ровно тот список, который забывают по памяти, поэтому зовём
+# `povtor_kadrov.карточные_фото()`: он обходит задание целиком.
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from povtor_kadrov import карточные_фото
+except ImportError:
+    карточные_фото = None
+
+
+def _md5(path):
+    h = hashlib.md5()
+    try:
+        with open(path, "rb") as f:
+            for кусок in iter(lambda: f.read(1 << 20), b""):
+                h.update(кусок)
+    except OSError:
+        return None
+    return h.hexdigest()
+
+
+def в_ролике_по_md5(here):
+    """md5 → где этот файл стоит в ролике, человеческими словами.
+
+    Пережатая копия тем же md5 не будет — поэтому это ДОБАВКА к сверке по
+    адресу и имени, а не замена: видео досье приезжает в сцену обрезанным и
+    опознаётся по-прежнему по адресу.
+    """
+    где = {}
+    def добавить(path, что):
+        try:
+            if not os.path.isfile(path) or os.path.getsize(path) < 1024:
+                return
+        except OSError:
+            return
+        m = _md5(path)
+        if m:
+            где.setdefault(m, []).append(что)
+
+    for d, что in (("images", "кадром сцены"), ("overlays", "всплывашкой"),
+                   ("insets", "врезкой")):
+        for f in sorted(glob.glob(os.path.join(here, d, "*"))):
+            добавить(f, "%s (%s)" % (что, os.path.basename(f)))
+    if карточные_фото is None:
+        print("!! фото ВНУТРИ рисованных кадров не проверены: рядом нет "
+              "povtor_kadrov.py")
+        return где
+    for ap, места in sorted(карточные_фото(here).items()):
+        for sid, элемент in места:
+            добавить(ap, "внутри рисованного кадра «%s» на сцене %s (%s)"
+                     % (элемент, sid, os.path.basename(ap)))
+    return где
+
+
+def местные_копии(here):
+    """Имя файла → путь: где на диске лежит скачанное вложение."""
+    out = []
+    for d in ("dossier", "images", "overlays", "insets", "clips",
+              os.path.join("cards", "photo"), os.path.join("cards", "replaced")):
+        for f in sorted(glob.glob(os.path.join(here, d, "*"))):
+            if os.path.isfile(f):
+                out.append((os.path.basename(f).lower(), f))
+    return out
+
+
+def _подсказки(m):
+    """Под какими именами мог лечь на диск файл этого вложения.
+
+    Рабочая подсказка одна — `канал_номер` из адреса поста
+    (`t.me/OstashkoNews/228033` → `OstashkoNews_228033`): так вкладки и
+    называют скачанное. Адрес файла в телеграме — трёхсотзначный токен, под
+    таким именем файлов не бывает, но короткий огрызок (`3843e6786f.mp4`)
+    встречается, поэтому берём и его.
+    """
+    out = []
+    ч = re.search(r"t\.me/(?:s/)?([^/]+)/(\d+)", str(m.get("post") or ""))
+    if ч:
+        база = ("%s_%s" % (ч.group(1), ч.group(2))).lower()
+        i = m.get("i")
+        if i is not None:
+            буква = "f" if m.get("kind") == "фото" else "v"
+            out += ["%s_%s%d" % (база, буква, i),
+                    "%s_ph%d" % (база, i), "%s_%d" % (база, i)]
+        # БЕЗ НОМЕРА — ТОЛЬКО КОГДА ВЛОЖЕНИЕ В ПОСТЕ ОДНО: иначе подсказка
+        # указывает на пост, а не на файл, и соседнее вложение зачлось бы
+        # вместо этого.
+        if int(m.get("n") or 0) <= 1:
+            out.append(база)
+    стем = os.path.splitext(os.path.basename(
+        str(m["url"]).split("?")[0]))[0].lower()
+    if 6 < len(стем) <= 40:
+        out.append(стем)
+    return out
 
 
 def _urls(rec, key):
@@ -60,12 +172,19 @@ def load_tg(path):
         if not isinstance(r, dict):
             continue
         post = str(r.get("url") or "")
-        for u in _urls(r, "photos"):
+        # НОМЕР ВЛОЖЕНИЯ В ПОСТЕ И ИХ ЧИСЛО нужны сверке по содержимому: имя
+        # скачанного файла — `<канал>_<номер поста>_f0.jpg`, и без номера
+        # вложения постер видео зачёлся бы «поставленным» только потому, что
+        # в ролик ушло ДРУГОЕ вложение того же поста (поймано 09.11 на
+        # `planeta-ukraina-forma-1011`, запись OstashkoNews/227780).
+        _ф = _urls(r, "photos")
+        _в = _urls(r, "videos")
+        for i, u in enumerate(_ф):
             out.append({"url": u, "post": post, "kind": "фото",
-                        "notes": _notes(r)})
-        for u in _urls(r, "videos"):
+                        "notes": _notes(r), "i": i, "n": len(_ф)})
+        for i, u in enumerate(_в):
             out.append({"url": u, "post": post, "kind": "видео",
-                        "notes": _notes(r)})
+                        "notes": _notes(r), "i": i, "n": len(_в)})
     return out
 
 
@@ -111,6 +230,15 @@ def used_strings(paths):
             for k in ("file", "url", "asset", "path"):
                 if s.get(k):
                     blob.append(str(s[k]))
+            # ПОЛЕ `card` ЦЕЛИКОМ (09.11): у рисованной сцены путь к фото
+            # лежит там — `photo`, `hero_photo`, `shots`. Перечислять ключи
+            # нельзя (у каждого вида свои), поэтому в сверку идёт весь кусок
+            # как текст: если кадр лёг под именем вложения, этого уже хватит.
+            if isinstance(s.get("card"), dict):
+                try:
+                    blob.append(json.dumps(s["card"], ensure_ascii=False))
+                except (TypeError, ValueError):
+                    pass
             # ВСПЛЫВАШКИ ВНУТРИ СЦЕНЫ ТОЖЕ СЧИТАЮТСЯ (04.11, улов `usuario-af`
             # на «Газе»). Докстрока обещала «сценарий И ВСПЛЫВАШКИ», а
             # сканировался только уровень сцены — и два файла досье,
@@ -313,13 +441,46 @@ def main():
     # `overlays.json` адресов не несёт вовсе (только `photo`/`sound`/`at`),
     # поэтому всплывашка из досье не засчитывалась НИКОГДА; по имени файла
     # она опознаётся, если кадр лёг под своим именем.
+    # СВЕРКА ПО СОДЕРЖИМОМУ (09.11, см. шапку): кадр, попавший ВНУТРЬ
+    # рисованного кадра, по адресу и имени не находится — ни того, ни другого
+    # в сцене уже нет. Индекс считается один раз на запуск.
+    _в_ролике = в_ролике_по_md5(here)
+    _копии = местные_копии(here)
+    _md5_кэш = {}
+    _внутри = {}
+
+    _ВИДЕО = (".mp4", ".mov", ".webm", ".mkv", ".m4v")
+
+    def _по_содержимому(m):
+        for п in _подсказки(m):
+            for bn, path in _копии:
+                if п not in bn:
+                    continue
+                # фото не ищем среди видеофайлов и наоборот: у поста бывают и
+                # то и другое, и совпадение по подсказке ещё не совпадение по
+                # вложению
+                if (bn.endswith(_ВИДЕО)) != (m.get("kind") == "видео"):
+                    continue
+                if path not in _md5_кэш:
+                    _md5_кэш[path] = _md5(path)
+                где = _в_ролике.get(_md5_кэш[path] or "")
+                if где:
+                    return где
+        return None
+
     def _used(m):
         if m["url"] in blob:
             return True
         if (m.get("post") or "") and m["post"] in blob:
             return True
         _bn = os.path.basename(str(m["url"]).split("?")[0])
-        return bool(_bn) and len(_bn) > 6 and _bn in blob
+        if bool(_bn) and len(_bn) > 6 and _bn in blob:
+            return True
+        где = _по_содержимому(m)
+        if где:
+            _внутри[m["url"]] = где
+            return True
+        return False
 
     unused = [m for m in media if not _used(m) and not _why(m)]
     used = len([m for m in media if _used(m)])
@@ -333,6 +494,10 @@ def main():
     for m in dropped[:40]:
         print("  отклонено: %s из %s — %s"
               % (m["kind"], m["post"], _why(m) or "без причины"))
+    for m in media:
+        if m["url"] in _внутри:
+            print("  зачтено по содержимому файла (md5): %s из %s — стоит %s"
+                  % (m["kind"], m["post"], "; ".join(_внутри[m["url"]][:2])))
     print("сцен: всего %d — досье %d, медиатека %d, поиск %d, рисованных %d"
           % (st["total"], st["direct_url"], st["library"], st["search"],
              st["card"]))
