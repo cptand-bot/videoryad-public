@@ -176,3 +176,4 @@ template/faza.sh
 template/tikho.sh
 template/naydi.py
 template/smena_pora.py
+template/brak.py
