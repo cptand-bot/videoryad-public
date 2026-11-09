@@ -29,6 +29,11 @@ QUEUE = os.path.join("cards", "queue")
 # СВОЙ УГОЛ ДЛЯ СНИМКОВ КАРТОЧЕК (09.11, улов вкладки `usuario-2c`).
 # `cards/photo/` переживает уборку папки забора, `images/` — нет.
 PHOTO = os.path.join("cards", "photo")
+# ЧТО СЧИТАЕМ ФАЙЛОМ В ЗАДАНИИ. Список обязан совпадать с тем, по которому
+# `cards_cloud._files` кладёт файлы рядом с заданием, а `render_cards._local`
+# ищет их на раннере по ОДНОМУ ИМЕНИ, без каталога. Третьего списка заводить
+# нельзя: разойдутся — и файл уедет в облако, где его никто не ждёт.
+РАСШ = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov")
 JOURNAL = os.path.join("cards", "cards.json")
 LOCK = os.path.join("cards", ".scenes.lock")
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -560,6 +565,120 @@ def перенести_слои(scenes_path, sid, вид=""):
     return строки
 
 
+def keep_all_photos(sid, kwargs):
+    """ЗАБРАТЬ СЕБЕ **ВСЕ** КАДРЫ ЗАДАНИЯ, А НЕ ОДИН `photo` (09.11, вечер).
+
+    Первая версия (утро того же дня) копировала только одиночный `--photo` —
+    и виды с НЕСКОЛЬКИМИ кадрами остались как были. Живой случай вкладки
+    ДИПЛОМАТИЯ СИЛЫ: стена улик (`A56`, ключ `--shot «путь=подпись»`) и лента
+    плёнки (`film`, ключ `--images «a.jpg,b.jpg,c.jpg»`) положили в задание
+    сырой путь `kadry/d029.jpg`. На раннере каталог отбрасывается — файлы
+    ищутся по одному имени рядом с заданием (`render_cards._local`), — а сам
+    файл рядом не лежал: `FileNotFoundError: cards_render/d029.jpg`. Упал
+    ВЕСЬ шард, прогон отчитался `failure` при 14 готовых карточках из 17.
+    Виды с одним `--photo` выжили ровно потому, что их кадр уезжал копией.
+
+    Поэтому обход РЕКУРСИВНЫЙ и по виду строки, а не по именам ключей:
+    кадры сидят и в `photo`, и в `hero_photo`, и в `shots` списком строк
+    (плёнка), и в `shots` списком `[путь, x, y, угол, подпись]` (стена улик),
+    и в `screen.path`. Перечислять ключи — это ровно та мина, на которой
+    скилл подрывался уже трижды («забытое поле тихо убивает вид»).
+
+    Имена копий: первый найденный кадр — `card_NNN.<ext>` (как было у
+    одиночного `--photo`, старые задания и запасная ветка `cards_cloud` это
+    имя знают), остальные — `card_NNN_2.<ext>`, `card_NNN_3.<ext>` и так
+    далее. Один и тот же исходник копируется один раз. Подписи, координаты и
+    углы не трогаются вовсе: меняется только строка пути.
+    """
+    карта, цели = {}, []
+
+    def _взять(p):
+        check_photo(p)
+        ап = os.path.abspath(p)
+        if ап in карта:
+            return карта[ап]
+        if not os.path.isfile(p):
+            raise SystemExit(
+                "!! НЕТ ФАЙЛА КАДРА: %s\n"
+                "   Задание не записано. В облаке это был бы не отказ, а\n"
+                "   `FileNotFoundError` на раннере — и упал бы ВЕСЬ шард\n"
+                "   вместе с чужими готовыми карточками (живой случай 09.11:\n"
+                "   прогон `failure` при 14 готовых из 17)." % p)
+        os.makedirs(PHOTO, exist_ok=True)
+        ext = os.path.splitext(p)[1].lower() or ".jpg"
+        n = len(карта) + 1
+        имя = ("card_%03d%s" % (int(sid), ext) if n == 1
+               else "card_%03d_%d%s" % (int(sid), n, ext))
+        цель = os.path.join(PHOTO, имя)
+        if os.path.abspath(цель) != ап:
+            shutil.copy2(p, цель)
+            print("  кадр карточки забран себе: %s → %s" % (p, цель))
+        карта[ап] = цель
+        цели.append(os.path.abspath(цель))
+        return цель
+
+    def _ход(o):
+        if isinstance(o, str):
+            return _взять(o) if o.lower().endswith(РАСШ) else o
+        if isinstance(o, dict):
+            return {k: _ход(v) for k, v in o.items()}
+        if isinstance(o, list):
+            return [_ход(v) for v in o]
+        if isinstance(o, tuple):
+            return tuple(_ход(v) for v in o)
+        return o
+
+    kwargs = _ход(dict(kwargs or {}))
+    # прежние копии этой же сцены (перевыпуск карточки другим кадром) убираем,
+    # иначе в облако уедут и старые файлы, а на раннере возьмётся не тот
+    for старый in _glob.glob(os.path.join(PHOTO, "card_%03d.*" % int(sid))) + \
+            _glob.glob(os.path.join(PHOTO, "card_%03d_*.*" % int(sid))):
+        if os.path.abspath(старый) not in цели:
+            try:
+                os.remove(старый)
+            except OSError:
+                pass
+    return kwargs
+
+
+def preflight(sid, kwargs):
+    """ПРЕДПОЛЁТНАЯ: каждый файл задания существует и лежит в `cards/photo/`.
+
+    Тот же принцип, что у `check_photo`: отказ внятной строкой НА МЕСТЕ лучше,
+    чем падение шарда в облаке через пять минут. Проверка идёт ПОСЛЕ
+    копирования и ловит не вкладку, а нас самих: если какой-то путь прошёл
+    мимо `keep_all_photos` (новый ключ, новая форма задания), он останется
+    снаружи `cards/photo/` — и это видно здесь, а не в логе раннера.
+    """
+    беда = []
+
+    def _ход(o):
+        if isinstance(o, str):
+            if o.lower().endswith(РАСШ):
+                if not os.path.isfile(o):
+                    беда.append("%s — файла нет" % o)
+                elif os.path.sep + os.path.join("cards", "photo") + os.path.sep \
+                        not in os.path.abspath(o) + os.path.sep:
+                    беда.append("%s — лежит вне cards/photo/" % o)
+        elif isinstance(o, dict):
+            for v in o.values():
+                _ход(v)
+        elif isinstance(o, (list, tuple)):
+            for v in o:
+                _ход(v)
+
+    _ход(kwargs)
+    if беда:
+        raise SystemExit(
+            "!! ЗАДАНИЕ СЦЕНЫ %s ССЫЛАЕТСЯ НА ФАЙЛЫ, КОТОРЫХ ОБЛАКО НЕ УВИДИТ:\n"
+            "   %s\n"
+            "   На раннере каталог из пути отбрасывается, файл ищется по\n"
+            "   одному имени рядом с заданием. Чего нет в `cards/photo/` —\n"
+            "   того не будет и там: шард упадёт целиком, вместе с чужими\n"
+            "   готовыми карточками. Задание НЕ записано."
+            % (sid, "\n   ".join(беда)))
+
+
 def queue(scenes_path, sid, view, dur, watermark, channel, kwargs,
           anim=2.6, tail_zoom=0.045, card=None):
     """Положить задание в cards/queue/ и поставить сцене источник card:<вид>.
@@ -576,10 +695,8 @@ def queue(scenes_path, sid, view, dur, watermark, channel, kwargs,
     # СНИМОК — В СВОЙ УГОЛ, ДО ЗАПИСИ ЗАДАНИЯ (09.11). Общая дверь трёх
     # инструментов из четырёх (`quote_card`, `style_card`, `element_put`);
     # четвёртый, `card_put`, зовёт те же две функции у себя.
-    kwargs = dict(kwargs or {})
-    if kwargs.get("photo"):
-        check_photo(kwargs["photo"])
-        kwargs["photo"] = keep_photo(sid, kwargs["photo"])
+    kwargs = keep_all_photos(sid, kwargs)
+    preflight(sid, kwargs)
     job = {"scene": int(sid), "view": view, "dur": round(float(dur), 2),
            "anim": anim, "tail_zoom": tail_zoom,
            "watermark": watermark, "channel": channel,

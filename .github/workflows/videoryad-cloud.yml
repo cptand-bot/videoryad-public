@@ -134,6 +134,18 @@ jobs:
           CAPS: ${{ inputs.caps }}
           CAPS_FOR: ${{ inputs.caps_for }}
         run: |
+          # ЦЕЛЬ МОЖЕТ ОТСТАВАТЬ ПО КОДУ (09.11): workflow и `assembler/`
+          # приезжают одним синком, но целей десять и раскатывают их не
+          # одновременно. Нет скрипта — не роняем сборку; но если вход ЕСТЬ,
+          # кричим громко, потому что тогда субтитров не будет.
+          if [ ! -f assembler/cloud/caps_in.py ]; then
+            if [ -n "$CAPS" ]; then
+              echo "::error::вход caps пришёл, а assembler/cloud/caps_in.py на цели нет — раскатай код"
+              exit 1
+            fi
+            echo "caps_in.py на цели нет — путь не задействован, иду дальше"
+            exit 0
+          fi
           python3 assembler/cloud/caps_in.py \
             "${{ steps.pick.outputs.proj }}" "${{ steps.pick.outputs.name }}"
 
@@ -162,6 +174,32 @@ jobs:
         with:
           path: ${{ steps.pick.outputs.proj }}/captions.ass
           key: caps-${{ steps.pick.outputs.name }}
+
+      # ── ОЗВУЧКА ИЗ ПРИВАТНОГО ХРАНИЛИЩА (09.11, путь ВЫКЛЮЧЕН по
+      # умолчанию: без `narration.ptr` в задании шаг ничего не делает).
+      # Почему не входом запуска: 12-18 МБ mp3 это ~16,5 МБ base64 против
+      # предела 65 535 символов. Разбор — в `assembler/cloud/narration_in.py`.
+      # Токен приходит ТОЛЬКО переменной окружения и никуда не печатается:
+      # логи публичного репозитория открыты всем.
+      - name: Озвучка мимо репозитория — приватное хранилище
+        if: steps.pick.outputs.have == 'true'
+        env:
+          NARRATION_STORE_TOKEN: ${{ secrets.NARRATION_STORE_TOKEN }}
+          NARRATION_STORE_REPO: ${{ secrets.NARRATION_STORE_REPO }}
+        run: |
+          # Та же терпимость к отстающей цели, что и у субтитров. Указатель
+          # есть, а скрипта нет — это ОШИБКА (ролик уехал бы немым); нет ни
+          # того, ни другого — обычный старый путь, идём дальше молча.
+          _ptr="${{ steps.pick.outputs.proj }}/narration.ptr"
+          if [ ! -f assembler/cloud/narration_in.py ]; then
+            if [ -f "$_ptr" ]; then
+              echo "::error::в задании есть narration.ptr, а assembler/cloud/narration_in.py на цели нет — раскатай код"
+              exit 1
+            fi
+            echo "narration_in.py на цели нет — путь приватного хранилища не задействован"
+            exit 0
+          fi
+          python3 assembler/cloud/narration_in.py "${{ steps.pick.outputs.proj }}"
 
       - name: Субтитры — что в итоге взято
         if: steps.pick.outputs.have == 'true'

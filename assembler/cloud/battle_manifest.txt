@@ -170,3 +170,4 @@ template/srt_keep.py
 template/merge_work.py
 template/zanyato.py
 cloud/caps_in.py
+cloud/narration_in.py

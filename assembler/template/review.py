@@ -2739,6 +2739,7 @@ async function ovTextSave(id, approvedVal){{
   try{{
     const r=await fetch("overlay_text?id="+id,{{method:"POST",
       headers:{{"Content-Type":"application/json"}},body:JSON.stringify(body)}});
+    if(await _otkaz(r, m)) return;
     if(m) m.textContent = r.ok ? "сохранено ✓" : "ошибка";
     if(r.ok){{
       const mk=document.getElementById("txtmark"+id), mi=document.getElementById("txtmarkimg"+id);
@@ -2765,6 +2766,7 @@ async function ovPhotoPos(id,c){{
     const r = await fetch("overlay?id="+id, {{method:"POST",
       headers:{{"Content-Type":"application/json"}},
       body: JSON.stringify({{pos: H, anchor: V}})}});
+    if(await _otkaz(r, m)) return;
     if(m) m.textContent = r.ok ? "сохранено ✓" : "ошибка";
   }}catch(e){{ if(m) m.textContent = "ошибка"; }}
   setTimeout(()=>{{ if(m) m.textContent = ""; }}, 1800);
@@ -2835,12 +2837,30 @@ async function tkClear(id){{
     headers:{{"Content-Type":"application/json"}}, body: JSON.stringify({{clear:1}})}}); }}catch(e){{}}
   const w=document.getElementById("tkwrap"+id); if(w) w.remove();
 }}
+// ОТКАЗ С СЕРВЕРА — НА ЭКРАН ЦЕЛИКОМ, А НЕ «ошибка» (09.11). Сервер отвечает
+// 409 и телом {{ok:false, reason:"…"}}: ровно тот формат, которым уже отвечает
+// кнопка «выбрать вариант». Возвращает true, если это был отказ.
+async function _otkaz(r, el){{
+  if(r.ok) return false;
+  let j = null;
+  try{{ j = await r.json(); }}catch(e){{}}
+  const why = (j && (j.reason || j.warn)) || "";
+  if(why){{
+    // перевод строки берём кодом: весь этот скрипт лежит в python-f-строке,
+    // и обратный слэш в ней съедается ещё до браузера (поймано сразу, 09.11)
+    if(el) el.textContent = "✗ нельзя: " + why.split(String.fromCharCode(10))[0];
+    alert(why);
+    return true;
+  }}
+  return false;
+}}
 async function ovPhoto(id, inp){{
   const f = inp.files[0]; if(!f) return;
   const fn = document.getElementById("ovfile"+id); fn.textContent = "… загрузка";
   try{{
     const r = await fetch("overlay_photo?id="+id, {{method:"POST",
       headers:{{"X-Filename": encodeURIComponent(f.name)}}, body: f}});
+    if(await _otkaz(r, fn)){{ inp.value = ""; return; }}
     fn.textContent = r.ok ? f.name : "✗ не вышло";
     if(r.ok){{
       const pv = document.getElementById("ovprev"+id);
@@ -3146,7 +3166,9 @@ async function ovFind(id){{
       fn.textContent = "✓ нашёл: " + q;
       const pv = document.getElementById("ovprev"+id);
       pv.src = j.photo + "?t=" + Date.now(); pv.hidden = false;
-    }} else {{ fn.textContent = "✗ не нашёл — переформулируй или загрузи файл"; }}
+    }} else if(!(await _otkaz(r, fn))){{
+      fn.textContent = "✗ не нашёл — переформулируй или загрузи файл";
+    }}
   }}catch(e){{ fn.textContent = "✗ ошибка поиска"; }}
 }}
 function ovEdit(id){{
@@ -4476,6 +4498,15 @@ def run_live(scenes_path, images_dir, port):
                 target = str(spec.get("target", "scene"))
                 if not (sid and furl.startswith("http")):
                     return self._reply(400, b"no")
+                # ВАРИАНТ ВО ВСПЛЫВАШКУ НА РИСОВАННЫЙ КАДР — ОТКАЗ (09.11).
+                # Замена БАЗОВОГО кадра (`target != "overlay"`) тут не
+                # запрещена: если он решил, что на этой сцене нужно фото, а
+                # не наш элемент, он сначала снимает карточку, и это уже
+                # обычная сцена. Запрет ровно про СЛОЙ поверх карточки.
+                if target == "overlay":
+                    _нет = отказ_на_карточке(sid, "всплывашка", scenes_path)
+                    if _нет:
+                        return self._otkaz(_нет)
                 out_dir = "overlays" if target == "overlay" else images_dir
                 os.makedirs(out_dir, exist_ok=True)
                 ok = False
