@@ -1,0 +1,429 @@
+{
+  "anchor": "top",
+  "2": {
+    "photo": "overlays/scene_002.jpg",
+    "sound": "pop",
+    "at": 2.0,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "up-center",
+    "anchor": "middle",
+    "approved": true
+  },
+  "28": {
+    "photo": "overlays/scene_028.jpg",
+    "sound": "zatvor",
+    "at": 2.4,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "middle",
+    "approved": true
+  },
+  "37": {
+    "photo": "overlays/scene_037.jpg",
+    "sound": "pop",
+    "at": 2.8,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  },
+  "48": {
+    "photo": "overlays/scene_048.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "up-center",
+    "anchor": "middle",
+    "approved": true
+  },
+  "51": {
+    "photo": "overlays/scene_051.jpg",
+    "sound": "zatvor",
+    "at": 2.2,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "57": {
+    "photo": "overlays/scene_057.jpg",
+    "sound": "ding",
+    "at": 2.4,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "middle",
+    "approved": true
+  },
+  "60": {
+    "photo": "overlays/scene_060.jpg",
+    "sound": "whoosh",
+    "at": 2.8,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "top",
+    "approved": true
+  },
+  "66": {
+    "photo": "overlays/scene_066.jpg",
+    "sound": "zatvor",
+    "at": 2.0,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "middle",
+    "approved": true
+  },
+  "43": {
+    "photo": "overlays/scene_043.jpg",
+    "sound": "whoosh",
+    "at": 2.4,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "middle"
+  },
+  "1": {
+    "text": {
+      "words": "ТРИ ИСПЫТАНИЯ. КОСМОС",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "3": {
+    "text": {
+      "words": "ЧЕМ ЕЩЁ УДИВЯТ",
+      "color": "white",
+      "pos": "tl",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.15,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "6": {
+    "text": {
+      "words": "ЛОВИТЬ ЗА АТМОСФЕРОЙ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.3,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "zatvor"
+  },
+  "8": {
+    "text": {
+      "words": "СЛЕДУЮЩАЯ ЦЕЛЬ — ЗВЕЗДА СМЕРТИ",
+      "color": "green",
+      "pos": "ml",
+      "at": 2.45
+    },
+    "sound": "ding"
+  },
+  "10": {
+    "text": {
+      "words": "ДЕНЬГИ. ПОТОМ ЕЩЁ ДЕНЬГИ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.75,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "13": {
+    "text": {
+      "words": "РАБОТА ИДЁТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "zatvor"
+  },
+  "17": {
+    "text": {
+      "words": "ГДЕ ТУТ СТРЕЛЯТЬ?",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.15,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "ding"
+  },
+  "18": {
+    "text": {
+      "words": "ТЕПЕРЬ И ЧУЖИЕ ОБЪЕКТЫ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.3,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "21": {
+    "text": {
+      "words": "НАГРУЗКУ ОТДАЮТ БИЗНЕСУ",
+      "color": "green",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.45,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "25": {
+    "text": {
+      "words": "КУДА УПАДЁТ ТО, ЧТО СБИЛИ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.75,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "ding"
+  },
+  "29": {
+    "text": {
+      "words": "РАСЧЁТЫ НУЖНЫ АРМИИ",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.15,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "32": {
+    "text": {
+      "words": "ОЧЕРЕДЬ ОТ КИЕВА ДО ЛЬВОВА",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.45,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "ding"
+  },
+  "33": {
+    "text": {
+      "words": "И КОГО ТОГДА НАБЕРУТ?",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "41": {
+    "text": {
+      "words": "СПУСКАЕМСЯ НА ЗЕМЛЮ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "zatvor"
+  },
+  "45": {
+    "text": {
+      "words": "ЗАТО ЕХАТЬ БЕСПЛАТНО",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.15,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "ding"
+  },
+  "55": {
+    "text": {
+      "words": "ТОЛЬКО С ЛУНЫ",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "zatvor"
+  },
+  "62": {
+    "text": {
+      "words": "АВТОБУС НЕ ЗАПРАВИТСЯ САМ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.75,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "ding"
+  },
+  "65": {
+    "text": {
+      "words": "ПОСЛЕЗАВТРА — БЕСПЛАТНЫЙ АВТОБУС",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "7": {
+    "text": {
+      "words": "ЭТО НАДО ЧЕМ-ТО ЗАПУСКАТЬ",
+      "color": "orange",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.6,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "24": {
+    "text": {
+      "words": "А СТРЕЛЯТЬ КТО БУДЕТ?",
+      "color": "yellow",
+      "pos": "ml",
+      "at": 2.6
+    },
+    "sound": "zatvor"
+  },
+  "26": {
+    "text": {
+      "words": "ПЕТРОВИЧ, ПОВЫШЕНИЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "30": {
+    "text": {
+      "words": "ТЦК РАБОТАЕТ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.3,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "zatvor"
+  },
+  "39": {
+    "text": {
+      "words": "СБИТЬ — ЭТО ПОЛОВИНА ДЕЛА",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.75,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "47": {
+    "text": {
+      "words": "ТАКСИСТ БЕСПЛАТНО НЕ ПОВЕЗЁТ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.3,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "pop"
+  },
+  "53": {
+    "text": {
+      "words": "ГОРОД, ГДЕ ВСЁ ЭТО ПРОИСХОДИТ",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.45,
+      "scale": 1.0,
+      "approved": true
+    },
+    "sound": "whoosh"
+  },
+  "59": {
+    "photo": "overlays/scene_059.jpg",
+    "sound": "pop",
+    "at": 2.6,
+    "shape": "rect",
+    "size": "m",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "top",
+    "approved": true
+  }
+}
