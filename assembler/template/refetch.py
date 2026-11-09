@@ -264,6 +264,104 @@ def report_same_file(assets, before):
 # (иначе вернётся через поиск), запрос в scenes.json НЕ меняется — мы меняем
 # кадр, а не смысл сцены. Запас кончился — сцена называется числом, и по ней
 # идёт обычный круг с переписанным запросом.
+
+# ВЫБОР ИЗ ЗАПАСА — ПО ЧИСТОТЕ, А НЕ ПО ПЛОЩАДИ (09.11.2026).
+# Замер 21.10: повторные замены (вторая и третья правка ОДНОЙ сцены) составили
+# 9%, 25% и 36% по трём роликам — то есть каждая третья-четвёртая замена сама
+# оказывалась браком, и это полный круг правок (3 минуты и ~150 К токенов).
+# Причина была в одной строке: из запаса брался САМЫЙ БОЛЬШОЙ кандидат, а не
+# самый чистый. Теперь кандидаты проверяются до показа человеку: бан-лист,
+# вертикаль, мелочь, близнец уже стоящего кадра, клеймо в углах (OCR).
+_BANNED_CACHE = {}
+
+
+def _banned_md5():
+    """md5 из бан-листа медиатеки. Нет файла — пустой набор, не падаем."""
+    if _BANNED_CACHE:
+        return _BANNED_CACHE.get("set", set())
+    p = os.path.expanduser("~/projects/media-library/.banned_md5.json")
+    try:
+        d = json.load(open(p, encoding="utf-8"))
+        got = set(d.keys() if isinstance(d, dict) else d)
+    except Exception:
+        got = set()
+    _BANNED_CACHE["set"] = got
+    return got
+
+
+def _wh_from_name(f):
+    m = re.search(r"__\d+_(\d+)x(\d+)", os.path.basename(f))
+    return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+
+
+def _corner_brand(f):
+    """Клеймо/подпись в углах — True, если OCR что-то прочитал.
+
+    Зовём ту же функцию, которой проверяет фетч, чтобы критерий был ОДИН.
+    OCR не запускается — возвращаем False и говорим об этом вслух один раз:
+    молчаливое «чисто» при мёртвом OCR уже стоило нам четырёх уехавших
+    водяных знаков (24.10).
+    """
+    try:
+        here_ = os.path.dirname(os.path.abspath(__file__))
+        if here_ not in sys.path:
+            sys.path.insert(0, here_)
+        import fetch_assets_news as _F
+        if not _F._ocr_alive(_F._TESS_BIN):
+            if not _BANNED_CACHE.get("ocr_said"):
+                print("  (OCR не запускается — углы кандидатов не проверяю)")
+                _BANNED_CACHE["ocr_said"] = 1
+            return False
+        blob = _F._corner_watermark_blob(f, _F._TESS_BIN)
+        return bool(blob and len(str(blob).strip()) >= 3)
+    except Exception:
+        return False
+
+
+def _stash_pick(pool, assets, sid):
+    """Первый ЧИСТЫЙ кандидат по убыванию площади + список отбракованных.
+
+    Порядок проверок — от дешёвой к дорогой: имя файла, md5, и только потом
+    OCR (он секунда на кадр).
+    """
+    banned = _banned_md5()
+    stand = {}
+    for f in glob.glob(os.path.join(assets, "scene_*.jpg")):
+        h = _md5(f)
+        if h:
+            stand[h] = os.path.basename(f)
+    order = sorted(pool, key=lambda f: _wh_from_name(f)[0] * _wh_from_name(f)[1],
+                   reverse=True)
+    skipped = []
+    small = []
+    for f in order:
+        w, h = _wh_from_name(f)
+        if w and h and h > w:
+            skipped.append((f, "вертикаль %dx%d" % (w, h)))
+            continue
+        if w and h and max(w, h) < 800:
+            small.append(f)
+            continue
+        m = _md5(f)
+        if m and m in banned:
+            skipped.append((f, "в бан-листе"))
+            continue
+        if m and m in stand:
+            skipped.append((f, "близнец уже стоящего %s" % stand[m]))
+            continue
+        if _corner_brand(f):
+            skipped.append((f, "клеймо в углу (OCR)"))
+            continue
+        return f, skipped
+    # ничего чистого: мелкий кадр лучше, чем вертикаль или клеймо
+    for f in small:
+        m = _md5(f)
+        if m and (m in banned or m in stand):
+            continue
+        return f, skipped + [(None, "взят мелкий: чистых крупных не осталось")]
+    return (order[0] if order else None), skipped + [(None, "ЧИСТЫХ НЕТ — взят лучший по площади, проверь глазами")]
+
+
 def replace_from_stash(scenes_path, ids, assets="images"):
     here_ = os.path.dirname(os.path.abspath(__file__))
     cands = os.path.join(assets, "cands")
@@ -273,11 +371,12 @@ def replace_from_stash(scenes_path, ids, assets="images"):
         if not pool:
             empty.append(sid)
             continue
-        # лучший из запаса: по площади из имени файла (…__k_WxH.jpg)
-        def _area(f):
-            m = re.search(r"__\d+_(\d+)x(\d+)", os.path.basename(f))
-            return int(m.group(1)) * int(m.group(2)) if m else 0
-        pick = sorted(pool, key=_area, reverse=True)[0]
+        pick, skipped = _stash_pick(pool, assets, sid)
+        for f_, why_ in skipped:
+            print("    пропущен %s: %s" % (os.path.basename(f_) if f_ else "—", why_))
+        if not pick:
+            empty.append(sid)
+            continue
         old = [f for f in glob.glob(os.path.join(assets, "scene_%03d.*" % sid))
                if not f.endswith(SKIP_EXT) and ".ovthumb." not in f]
         for f in old:

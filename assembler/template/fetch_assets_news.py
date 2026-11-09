@@ -658,6 +658,43 @@ def _corner_watermark_blob(image_path, tess_bin):
     return " ".join(blob_parts)
 
 
+
+# ЧИСТЫЕ УГЛЫ — ЧАСТЬ СЧЁТА КАНДИДАТА (09.11.2026).
+# Замер 21.10: повторные замены одной сцены — 9%, 25% и 36% по трём роликам,
+# то есть каждая третья-четвёртая замена сама была браком, и каждая стоила
+# круга (3 минуты, ~150 К токенов). Разбор 09.11 на живом запасе: из 12
+# кандидатов 7 несли в углах чужой текст — «xab.info», телеметрию стрима
+# (speed/altitude/ussf-336), подписи схемы, — а выбор шёл ТОЛЬКО по площади,
+# поэтому грязный крупный кадр обгонял чистый.
+# Прежние сита этого не ловят: has_heavy_text_overlay требует >8 слов на
+# полном кадре, has_stock_watermark — слово из списка платных стоков.
+# Теперь грязные углы НЕ отбраковывают кадр (он уйдёт в запас), а понижают
+# его счёт в 3,3 раза — чистый кандидат побеждает сам.
+# Выключатель: VIDEORYAD_CORNER_SCORE=0. OCR недоступен (в облаке бывает) —
+# множитель всегда 1.0, поведение прежнее.
+_CORNER_CACHE = {}
+
+
+def _corner_penalty(path, md5_=None):
+    if os.environ.get("VIDEORYAD_CORNER_SCORE", "1") == "0":
+        return 1.0
+    key = md5_ or path
+    if key in _CORNER_CACHE:
+        return _CORNER_CACHE[key]
+    mult = 1.0
+    try:
+        tess = _TESS_BIN if os.path.exists(_TESS_BIN) else "tesseract"
+        if _ocr_alive(tess):
+            blob = _corner_watermark_blob(path, tess)
+            txt = "".join(ch for ch in str(blob or "") if ch.isalnum())
+            if len(txt) >= 4:
+                mult = 0.3
+    except Exception:
+        mult = 1.0
+    _CORNER_CACHE[key] = mult
+    return mult
+
+
 def _ocr_words(image_path):
     """Run tesseract over the full frame AND each corner/bottom-strip crop
     (see _corner_watermark_blob); return (real_word_count, full_lowercased_
@@ -1096,6 +1133,9 @@ def fetch_web_search(query, out_path, env=None):
         _ch = _chroma(tmp)
         if _ch < 4.5 and not _arch_ok:
             score *= 0.35          # ч/б на современный запрос — почти всегда архив
+        _cp = _corner_penalty(tmp, h5)
+        if _cp < 1.0:
+            score *= _cp           # чужой текст/клеймо в углу — в запас, не в кадр
         if best is None or score > best[0]:
             if best is not None:
                 # прежний лучший стал кандидатом — не удаляем, а откладываем
