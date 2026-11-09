@@ -172,3 +172,6 @@ template/zanyato.py
 cloud/caps_in.py
 cloud/narration_in.py
 template/palitra.py
+template/faza.sh
+template/tikho.sh
+template/naydi.py

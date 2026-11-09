@@ -35,6 +35,78 @@ import tempfile
 import threading
 import time
 
+# ─────────────────────────────────────────────────────────────────────────────
+# ПАМЯТЬ ДАШБОРДА: ЕЁ ЕЛИ АРЕНЫ glibc, А НЕ КАРТИНКИ (09.11, замерено)
+#
+# Сервер дашборда — поток на каждое соединение (ThreadingTCPServer). glibc
+# выдаёт КАЖДОМУ новому потоку собственную арену malloc и системе её обратно
+# уже не возвращает. Один и тот же проект (69 сцен), один и тот же обстрел —
+# 288 запросов вперемешку: страница, /state, полный кадр:
+#   последовательно, 100 сборок страницы .........  41 МБ
+#   36 потоков разом, как было ................... 337 МБ, и НЕ падает
+#   36 потоков разом, MALLOC_ARENA_MAX=2 .........  70 МБ
+# Статика и плитки тут невиновны: 69 полных кадров (82 МБ) подряд не двигают
+# RSS вообще — `SimpleHTTPRequestHandler` отдаёт файл потоком, а плитки лежат
+# готовыми в `images/.rev/`. Браузер же на ролике 70-90 сцен держит шесть
+# соединений и дёргает плитки, полные кадры, превью и /state одновременно —
+# отсюда и брались замеренные 600-780 МБ на дашборд (вторая половина тех
+# мегабайт — распознаватель речи, вынесенный в сайдкар утром того же дня).
+#
+# Лечится двумя ручками libc, без единой правки в логике страницы:
+#   mallopt(M_ARENA_MAX, 2) — потоки делят две арены вместо трёх десятков;
+#   malloc_trim(0) после ответа — освобождённое уходит системе, а не копится
+#   в куче процесса «на будущее».
+# ─────────────────────────────────────────────────────────────────────────────
+try:
+    import ctypes as _ctypes
+    _LIBC = _ctypes.CDLL("libc.so.6", use_errno=True)
+except Exception:
+    _LIBC = None
+
+_M_ARENA_MAX = -8
+_ПОСЛЕДНИЙ_ТРИМ = 0.0
+
+
+def _ограничить_арены(сколько=2):
+    """mallopt(M_ARENA_MAX, сколько). Необязательно и молча: не glibc —
+    просто ничего не делаем, дашборд работает как раньше."""
+    if _LIBC is None:
+        return False
+    try:
+        return _LIBC.mallopt(_M_ARENA_MAX, int(сколько)) == 1
+    except Exception:
+        return False
+
+
+def _вернуть_память(не_чаще=2.0):
+    """malloc_trim(0) — отдать системе уже освобождённое.
+
+    С горлышком по времени: обход кучи на каждый ответ бессмысленно
+    удорожает отдачу плиток, а раз в пару секунд его хватает с запасом.
+    """
+    global _ПОСЛЕДНИЙ_ТРИМ
+    if _LIBC is None:
+        return
+    try:
+        сейчас = time.monotonic()
+        if сейчас - _ПОСЛЕДНИЙ_ТРИМ < не_чаще:
+            return
+        _ПОСЛЕДНИЙ_ТРИМ = сейчас
+        _LIBC.malloc_trim(0)
+    except Exception:
+        pass
+
+
+_ограничить_арены()
+
+# СКОЛЬКО СТРАНИЦ СОБИРАЕМ ОДНОВРЕМЕННО (09.11). Сборка `review.html` —
+# самая дорогая по памяти операция сервера: на 69 сценах это ~0,9 МБ строки
+# плюс промежутки, и 64 сборки РАЗОМ дали пик 224 МБ. Браузер держит на хост
+# шесть соединений, поэтому шесть сборок — это запас, а не ограничение; всё
+# сверх становится в очередь на 30 с и, если очередь не двинулась, собирается
+# всё равно (страница не должна не отдаться НИКОГДА — это дороже памяти).
+_СБОРОК_РАЗОМ = threading.BoundedSemaphore(6)
+
 from PIL import Image
 
 # Sibling pipeline scripts (search_options.py, build_overlays.py, ...) are
@@ -1244,6 +1316,24 @@ def _thumb_seek(asset_path):
     return "%.2f" % min(dur - 0.5, max(1.0, dur * 0.8))
 
 
+def _vernut_pamyat():
+    """ОТДАТЬ СИСТЕМЕ ТО, ЧТО УЖЕ НЕ НУЖНО (2026-11-09).
+
+    Сборка плиток — единственное место дашборда, где память берётся пачкой:
+    69 кадров через PIL. Python эти буферы освобождает, но glibc держит их
+    у себя «на будущее», и RSS процесса остаётся на уровне ПИКА до самого
+    закрытия вкладки. На машине с 7,9 ГБ и четырьмя дашбордами это та самая
+    разница, из-за которой она начинает терять вывод команд.
+    `malloc_trim(0)` возвращает свободные страницы операционной системе.
+    Не работает — и не надо: это оптимизация, а не функция.
+    """
+    try:
+        import ctypes
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
 def make_thumb_bytes(asset_path):
     """480x270 cover-cropped JPEG bytes for a still or a late frame of a clip."""
     frame_src = asset_path
@@ -1257,7 +1347,23 @@ def make_thumb_bytes(asset_path):
              tmp], capture_output=True)
         frame_src = tmp
     try:
-        im = Image.open(frame_src).convert("RGB")
+        im = Image.open(frame_src)
+        # ПЛИТКА 480x270 НЕ ТРЕБУЕТ РАСПАКОВКИ КАДРА ЦЕЛИКОМ (2026-11-09).
+        # В папке ролика лежат снимки до 5467x3620 — это 59 МБ в RGB на одну
+        # штуку, и ровно они давали пик 60 МБ на сборке 69 плиток. `draft`
+        # просит у JPEG-декодера сразу ужатую картинку (он умеет делить на
+        # 2/4/8 прямо в DCT, то есть даром): берём с двукратным запасом к
+        # размеру плитки, резкость от этого не страдает, а памяти и времени
+        # уходит в разы меньше. На PNG и прочих форматах — тихо ничего.
+        try:
+            im.draft("RGB", (TW * 2, TH * 2))
+        except Exception:
+            pass
+        _src_im, im = im, im.convert("RGB")
+        try:
+            _src_im.close()       # не держим открытым файл на 5 МБ
+        except Exception:
+            pass
     except OSError:
         if tmp and os.path.exists(tmp):
             os.remove(tmp)
@@ -1867,7 +1973,22 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
         # утверждено ли уже — держим ровно так, как оставил юзер, не сбрасывая
         # при каждом ре-рендере дашборда (user, 2026-09-15, злился: «утвердил —
         # значит утвердил, не заставляй делать это по десять раз»)
-        _ov_approved = bool(ov_cur.get("approved")) and _photo_active
+        # СВЁРНУТА ТОЛЬКО ТА, КОТОРУЮ УТВЕРДИЛ ОН САМ (09.11, его прямое
+        # слово: «Почему неутверждённая всплывашка начала свёрнутой на
+        # дашборде? Мне надо сделать лишнее движение на каждую всплывашку —
+        # теперь её раскрыть, утвердить, чтобы она опять закрылась»).
+        # Причина была не в дашборде: `overlays.json` приезжал из очереди
+        # фетча с уже выставленным `"approved": true` на КАЖДОЙ
+        # фото-всплывашке (замер 09.11 на двух живых роликах: 12 из 12 и
+        # 13 из 13, файл при этом не менялся с момента фетча). Дашборд
+        # честно показывал «✓ всплывашка утверждена» и прятал панель — по
+        # кадру, которого он ни разу не видел. Сам рендер `approved` не
+        # читает вовсе (ни `build_overlays.py`, ни `ship.sh`), так что флаг
+        # из очереди не несёт смысла — это ТОЛЬКО состояние панели.
+        # Поэтому утверждение считается только с отметкой `dash_ok`, которую
+        # ставит роут `overlay` при нажатии «✓ Утвердить».
+        _ov_approved = (bool(ov_cur.get("approved"))
+                        and bool(ov_cur.get("dash_ok")) and _photo_active)
         # ТОТ ЖЕ НАБОР КНОПОК, ЧТО У ОСНОВНОГО КАДРА (user, 2026-10-17: «для
         # превьюшек тоже эти кнопки — отзеркалить, масштаб, угол разворота,
         # чёрно-белое, контрастность… чтобы функционал был такой же»).
@@ -3509,6 +3630,49 @@ def _touch_dashboard():
         pass          # след — удобство, дашборд из-за него не роняем
 
 
+def _снять_утверждение_очереди():
+    """Утверждение из очереди фетча — не утверждение: снимаем при старте.
+
+    ЗАЧЕМ (09.11, см. длинный комментарий у `_ov_approved` в `card_html`):
+    `overlays.json` приходит из очереди с `"approved": true` на фото-всплывашках,
+    и дашборд прятал панель по кадру, которого пользователь не видел. Здесь то же
+    правило приводится к ДАННЫМ, а не только к виду: без отметки `dash_ok`
+    утверждения не было, значит в файле ему делать нечего — иначе фантомное
+    «утверждено» уедет дальше через `refetch.py`/`merge_work.py`.
+    Текст-всплывашки (`text.approved`) НЕ ТРОГАЕМ: они из очереди приезжают без
+    утверждения, там флаг всегда его собственный.
+    Рендер `approved` не читает (ни `build_overlays.py`, ни `ship.sh`), поэтому
+    снятие флага не может ни выбросить кадр, ни остановить сборку.
+    """
+    try:
+        _ov = load_overlays()
+    except Exception:
+        return
+    _надо = []
+    for _k, _v in _ov.items():
+        if not str(_k).isdigit() or not isinstance(_v, dict):
+            continue
+        if not (_v.get("approved") and not _v.get("dash_ok")):
+            continue
+        _tw = _v.get("text") if isinstance(_v.get("text"), dict) else {}
+        _есть_текст = bool(str(_tw.get("words") or _tw.get("text") or "").strip())
+        if bool(_v.get("photo")) or not _есть_текст:   # это фото-панель
+            _надо.append(str(_k))
+    if not _надо:
+        return
+    try:
+        with _overlays_txn() as _ov2:
+            for _k in _надо:
+                if isinstance(_ov2.get(_k), dict) and not _ov2[_k].get("dash_ok"):
+                    _ov2[_k]["approved"] = False
+    except Exception as _e:
+        print("  !! не смог сверить утверждения всплывашек: %s" % _e, flush=True)
+        return
+    print("  всплывашки приходят РАЗВЁРНУТЫМИ (утверждения на дашборде не было, "
+          "флаг стоял из очереди фетча): сцены %s"
+          % ", ".join(sorted(_надо, key=int)), flush=True)
+
+
 def run_live(scenes_path, images_dir, port):
     import http.server
     import socketserver
@@ -3520,17 +3684,36 @@ def run_live(scenes_path, images_dir, port):
     project = os.path.basename(os.getcwd())
     thumbs_dir = os.path.join(images_dir, ".rev")
 
-    # Греем whisper заранее, в фоне: иначе первая же диктовка ждёт лишние
-    # 2-3 секунды на загрузку модели, и это ровно тот момент, когда
-    # пользователь смотрит на пустое поле и думает, что сломалось.
-    def _warm():
-        try:
-            from voice_note import _load
-            _load()
-        except Exception:
-            pass
-    threading.Thread(target=_warm, daemon=True).start()
+    # РАСПОЗНАВАТЕЛЬ БОЛЬШЕ НЕ ЖИВЁТ В ПАМЯТИ ДАШБОРДА (2026-11-09).
+    #
+    # Здесь стоял фоновый поток «погреть whisper», чтобы первая диктовка не
+    # ждала 2-3 секунды на загрузку модели. Цена этого грева замерена:
+    # дашборд целиком (страница, плитки, надписи, журнал отказов) занимает
+    # 31 МБ, а `WhisperModel("small", int8)` — ещё 594 МБ. Отсюда и брались
+    # те 600-780 МБ на ролик, из-за которых машина с 7,9 ГБ при четырёх
+    # открытых дашбордах начинала терять вывод команд: 97% веса — модель,
+    # которая молчит, пока пользователь не нажал микрофон.
+    #
+    # Теперь модель держит САЙДКАР — отдельный процесс, ОДИН на машину
+    # (ищется по сокету в /tmp, поэтому четыре вкладки пользуются одной
+    # копией модели вместо четырёх). Поднимается сам при первой диктовке и
+    # сам же выходит через VIDEORYAD_WHISPER_IDLE секунд тишины, возвращая
+    # память системе. Голосовой ввод работает как раньше; если сайдкар не
+    # поднялся, `voice_note.transcribe` расшифрует в этом же процессе —
+    # функция не теряется никогда.
+    #
+    # Грев вернуть можно: VIDEORYAD_WHISPER_WARM=1 — модель загрузится
+    # ЗАРАНЕЕ, но в сайдкаре, а не в сервере дашборда.
+    if os.environ.get("VIDEORYAD_WHISPER_WARM") == "1":
+        def _warm():
+            try:
+                from voice_note import warm_sidecar
+                warm_sidecar()
+            except Exception:
+                pass
+        threading.Thread(target=_warm, daemon=True).start()
     os.makedirs(thumbs_dir, exist_ok=True)
+    _снять_утверждение_очереди()
     open("review.html", "w", encoding="utf-8").write(
         build_page(scenes, project, live=True, images_dir=images_dir))
 
@@ -3543,6 +3726,7 @@ def run_live(scenes_path, images_dir, port):
             except (OSError, ValueError):
                 pass
         out, failed = [], 0
+        _plitok_sobrano = 0
         for s in scenes:
             sid = s["id"]
             ap = resolved_asset(images_dir, sid)
@@ -3557,6 +3741,7 @@ def run_live(scenes_path, images_dir, port):
                     b = make_thumb_bytes(ap)
                     if b:
                         open(tp, "wb").write(b)
+                        _plitok_sobrano += 1
                 # УСТАРЕВШЕЕ ПРЕВЬЮ ПЕРЕЖИВАЛО ЗАМЕНУ КАДРА (2026-10-29).
                 # `previewScene` собирает `/.rev/preview_NNN.mp4` и больше его
                 # никто не трогает: кадр перерисовали, превью рядом осталось
@@ -3590,6 +3775,9 @@ def run_live(scenes_path, images_dir, port):
                 except ValueError:
                     row["full"] = ap.replace(os.sep, "/")
             out.append(row)
+        if _plitok_sobrano:
+            # пачку плиток собрали — свободные страницы системе, а не себе
+            _vernut_pamyat()
         # fetch considered done when every scene id is in the manifest
         fetch_done = len(man) >= len(scenes) and len(man) > 0
         ovs = load_overlays()
@@ -3677,6 +3865,14 @@ def run_live(scenes_path, images_dir, port):
         def log_message(self, *a):
             pass
 
+        def finish(self):
+            # Ответ отдан — освобождённое отдаём системе (см. блок про
+            # арены glibc в начале файла). Горлышко внутри `_вернуть_память`.
+            try:
+                super().finish()
+            finally:
+                _вернуть_память()
+
         def do_GET(self):
             path = self.path.split("?")[0].rstrip("/")
             if path in ("/state", "state"):
@@ -3696,7 +3892,13 @@ def run_live(scenes_path, images_dir, port):
             # rolls anything back to how it looked when the server launched.
             # See SKILL.md gotcha "review.html served stale after reload".
             if path in ("", "/review.html", "review.html"):
-                body = build_page(scenes, project, live=True, images_dir=images_dir).encode("utf-8")
+                _место = _СБОРОК_РАЗОМ.acquire(timeout=30)
+                try:
+                    body = build_page(scenes, project, live=True,
+                                      images_dir=images_dir).encode("utf-8")
+                finally:
+                    if _место:
+                        _СБОРОК_РАЗОМ.release()
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
                 self.send_header("Cache-Control", "no-store")
@@ -3835,6 +4037,12 @@ def run_live(scenes_path, images_dir, port):
                         pass
                 if "approved" in spec:
                     patch["approved"] = bool(spec["approved"])
+                    # ОТМЕТКА «УТВЕРДИЛ ОН, А НЕ ОЧЕРЕДЬ» (09.11). Только она
+                    # сворачивает панель; `approved` из очереди фетча её не
+                    # получает и всплывашка приходит РАЗВЁРНУТОЙ. «изменить»
+                    # присылает approved:false — отметка снимается тем же
+                    # движением, панель открывается.
+                    patch["dash_ok"] = bool(spec["approved"])
                 _watch = ("style", "anchor", "shape", "scale", "at")
                 if any(k in patch for k in _watch):
                     _cur = load_overlays().get(str(sid), {}) or {}
@@ -4066,6 +4274,24 @@ def run_live(scenes_path, images_dir, port):
                             fh.write(raw)
                         from voice_note import transcribe
                         text = transcribe(tmp)
+                        # САЙДКАР МОГ НЕ ПОДНЯТЬСЯ — тогда `transcribe`
+                        # расшифровал здесь, и модель (594 МБ, замер 09.11)
+                        # осела бы в дашборде до конца смены. Отпускаем её
+                        # сразу: функция не теряется — следующая диктовка
+                        # снова пробует сайдкар, а при его отсутствии опять
+                        # расшифрует в процессе.
+                        try:
+                            import voice_note as _vn
+                            if getattr(_vn, "_model", None) is not None:
+                                _vn._model = None
+                                import gc as _gc
+                                _gc.collect()
+                                _вернуть_память(0)
+                                print("[voice] модель распознавателя выгружена "
+                                      "из дашборда (память отдана системе)",
+                                      flush=True)
+                        except Exception:
+                            pass
                         if not text:
                             print("[voice] расшифровка вернула пустой текст "
                                   "(запись %d байт) — скорее всего слишком "

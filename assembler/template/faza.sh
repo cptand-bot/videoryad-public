@@ -1,0 +1,530 @@
+#!/usr/bin/env bash
+# ФАЗА — одна команда вместо десятков шагов переписки (09.11.2026).
+#
+#   bash template/faza.sh final   <проект>
+#   bash template/faza.sh fetch   <проект> <труба> [nm-очереди]
+#   bash template/faza.sh krug    <проект> <сцены через запятую>
+#   bash template/faza.sh sdacha  <проект> <nm-очереди> <труба> "<папка на D:>"
+#
+# Зачем: расход токенов = ЧИСЛО ШАГОВ × РАЗМЕР ПЕРЕПИСКИ. Замер 09.11 дал 325
+# шагов на ролик, из них 52 — опрос облака «не готово ли» и десятки поштучных
+# вызовов одного и того же инструмента. Фаза делает всю последовательность
+# внутри ОДНОГО шага: подробности уходят в `<проект>/.faza-<nm>.log`,
+# в переписку печатается summary по строке на под-step.
+#
+# Договор вывода (его же читает монитор): каждая строка итога начинается с
+# `[ОК]` или `[ОТКАЗ]`; падение фазы печатает `ОШИБКА:` и возвращает rc 1.
+# Признаком готовности считается РЕЗУЛЬТАТ (файл, строка в логе), а не статус
+# прогона и не rc возврата обёртки.
+# ВНИМАНИЕ: имена переменных и функций ТОЛЬКО латиницей — bash отвергает
+# кириллические идентификаторы («not a valid identifier»), поймано 09.11.
+set -uo pipefail
+SK="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+T="$SK/template"
+FAZA="${1:-}"; shift || true
+PROJ="${1:-}"; shift || true
+[ -n "$FAZA" ] && [ -n "$PROJ" ] || { echo "ОШИБКА: faza.sh <final|fetch|krug|sdacha> <проект> …"; exit 1; }
+if [ "$FAZA" = "tema" ] || [ "$FAZA" = "start" ]; then
+    # здесь второй аргумент — КАНАЛ (tema) или ключ георадара (start)
+    CHANNEL="$PROJ"; PROJ="$HOME/projects"
+else
+    [ -d "$PROJ" ] || { echo "ОШИБКА: папки проекта нет: $PROJ"; exit 1; }
+    PROJ="$(cd "$PROJ" && pwd)"
+fi
+LOG="$PROJ/.faza-$FAZA.log"
+: > "$LOG"
+SCENES="$(ls "$PROJ"/*.scenes.json 2>/dev/null | grep -v iz_oblaka | head -1)"
+FAILED=0
+NOTES=0
+
+# step <nm> <команда…> — вывод в лог; в переписку: вердикт, число замечаний и
+# до трёх САМЫХ ЗНАЧИМЫХ строк. Код 0 ещё НЕ значит «чисто»: selfcheck и
+# photo_quality печатают находки и выходят нулём (поймано 09.11 на первом же
+# прогоне: «[ОК] selfcheck» спрятал в лог фантомное approved и две неверные
+# надписи). Решает не код возврата, а найденное в выводе.
+MARK='ОШИБКА|ОТКАЗ|ЗАПРЕТ|!!|НЕ ВЫТЯНУТА|ФАНТОМ|ПОСМОТРЕТЬ ГЛАЗАМИ|подозрит|ИСЧЕРПАНА|не совпал|битый|НЕ НАЙДЕН|лишн'
+step() {
+    local nm="$1"; shift
+    local out; out="$(mktemp)"
+    echo "=== $nm: $* ===" >> "$LOG"
+    local rc=0
+    "$@" > "$out" 2>&1 || rc=$?
+    cat "$out" >> "$LOG"
+    # строки-«всё хорошо» под маску не идут: «подозрительных нет», «повторов нет»
+    local n; n="$(grep -E "$MARK" "$out" 2>/dev/null | grep -cvE "(нет|чисто|ровное|не найдено)\s*$|ых нет" || true)"
+    [ -n "$n" ] || n=0
+    if [ "$rc" -ne 0 ]; then
+        echo "[ОТКАЗ] $nm (код $rc)"
+        grep -hE "$MARK" "$out" | grep -vE "(нет|чисто|ровное|не найдено)\s*$|ых нет" | head -3 | cut -c1-200 | sed 's/^[ \t-]*/        · /'
+        FAILED=$((FAILED+1))
+    elif [ "$n" -gt 0 ]; then
+        echo "[СМОТРИ] $nm — замечаний $n:"
+        grep -hE "$MARK" "$out" | grep -vE "(нет|чисто|ровное|не найдено)\s*$|ых нет" | head -3 | cut -c1-200 | sed 's/^[ \t-]*/        · /'
+        NOTES=$((NOTES+n))
+    else
+        echo "[ОК]    $nm"
+    fi
+    rm -f "$out"
+    return 0
+}
+
+# pick_pipe <проект> — свободная труба + ЗАМОК на неё. Без замка две вкладки,
+# стартовавшие в одну минуту, получали ОДНУ трубу: `gh run list` показывает
+# «completed» у обеих, пока ни одна ещё не запушила (поймано 09.11 на проверке).
+# Замок — каталог (атомарный mkdir) в base/truby/, старше 4 часов считается
+# брошенным. Освобождает `faza.sh sdacha` или `free_pipe`.
+LOCKS="$SK/base/truby"
+pick_pipe() {
+    local proj="$1" pp st
+    mkdir -p "$LOCKS"
+    for pp in cptand-pub andiv-pub olga-pub pyat shest rezerv; do
+        if [ -d "$LOCKS/$pp" ]; then
+            local age=$(( ( $(date +%s) - $(stat -c %Y "$LOCKS/$pp") ) / 60 ))
+            if [ "$age" -lt 240 ]; then continue; fi
+            rm -rf "$LOCKS/$pp"
+        fi
+        st="$(bash "$SK/cloud/va.sh" "$pp" gh run list --workflow videoryad-cloud.yml --limit 1 2>/dev/null | head -1 | cut -f1)"
+        [ "$st" = "completed" ] || continue
+        if mkdir "$LOCKS/$pp" 2>/dev/null; then
+            echo "$proj" > "$LOCKS/$pp/kto"
+            echo "$pp"; return 0
+        fi
+    done
+    return 1
+}
+free_pipe() {
+    local pp="$1"
+    [ -n "$pp" ] && rm -rf "$LOCKS/$pp" 2>/dev/null
+}
+
+summary() {
+    echo "--------------------------------------------------------------"
+    if [ "$FAILED" -eq 0 ]; then
+        if [ "$NOTES" -gt 0 ]; then
+            echo "ИТОГ фазы $FAZA: отказов нет, но ЗАМЕЧАНИЙ $NOTES — разобрать до дашборда. Лог: $LOG"
+        else
+            echo "ИТОГ фазы $FAZA: чисто. Подробности: $LOG"
+        fi
+    else
+        echo "ИТОГ фазы $FAZA: ОТКАЗОВ $FAILED — читай $LOG (grep -nE 'ОШИБКА|ОТКАЗ|!!')"
+    fi
+    [ "$FAILED" -eq 0 ] || return 1
+}
+
+case "$FAZA" in
+
+# ---------------------------------------------------------------- ФИНАЛ
+# Все машинные сита подряд. Раньше это 8-11 отдельных шагов переписки.
+final)
+    [ -n "$SCENES" ] || { echo "ОШИБКА: не нашёл <проект>.scenes.json в $PROJ"; exit 1; }
+    cd "$PROJ" || exit 1
+    step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
+    step "обязательные"     python3 "$T/obyazatelno.py" "$SCENES" --gate dashboard
+    step "слои на карточках" python3 "$T/cards_queue.py" --gate "$SCENES" "$PROJ"
+    step "дедуп"            python3 "$T/autodedup.py" "$SCENES" images
+    step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
+    step "качество фото"    python3 "$T/photo_quality.py" "$SCENES" images
+    step "клейма (лист)"    python3 "$T/wm_sheet.py" images
+    step "перекрытие слоёв" python3 "$T/check_overlay_overlap.py" "$PROJ"
+    summary
+    ;;
+
+# ---------------------------------------------------------------- ФЕТЧ
+# ship --fetch-only + ОЖИДАНИЕ ВНУТРИ ШАГА (get.sh --wait-fetch) + забор.
+# Раньше: отправка, затем 15-30 опросов `gh run view` из переписки.
+fetch)
+    PIPE="${1:-}"; QNAME="${2:-$(basename "$PROJ")}"
+    [ -n "$PIPE" ] || { echo "ОШИБКА: faza.sh fetch <проект> <труба> [имя]"; exit 1; }
+    step "отправка фетча"   bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME" --fetch-only
+    if [ "$FAILED" -eq 0 ]; then
+        step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait-fetch
+    fi
+    # признак результата — файлы, а не статус прогона
+    NFRAMES=$(ls "$PROJ/images"/scene_*.jpg "$PROJ/images"/scene_*.mp4 2>/dev/null | wc -l)
+    echo "[ОК]    кадров в images: $NFRAMES"
+    [ "$NFRAMES" -gt 0 ] || { echo "ОШИБКА: фетч не принёс ни одного кадра — смотри $LOG"; FAILED=$((FAILED+1)); }
+    summary
+    ;;
+
+# ---------------------------------------------------------------- КРУГ ПРАВОК
+# Замены ПАЧКОЙ из запаса кандидатов + кроп углов по каждому новому файлу +
+# три машинных сита. Раньше: refetch по одной сцене, ban_file по одному файлу,
+# zoom по одному кадру — 20-30 шагов.
+krug)
+    SIDS="${1:-}"
+    [ -n "$SIDS" ] || { echo "ОШИБКА: faza.sh krug <проект> <сцены через запятую>"; exit 1; }
+    [ -n "$SCENES" ] || { echo "ОШИБКА: не нашёл <проект>.scenes.json"; exit 1; }
+    cd "$PROJ" || exit 1
+    step "замена из запаса" python3 "$T/refetch.py" --scenes "$SCENES" --next "$SIDS"
+    # кроп углов обязателен по КАЖДОМУ новому файлу (улов 28.10), пачкой
+    for s in ${SIDS//,/ }; do
+        fb=$(printf "%s/images/scene_%03d" "$PROJ" "$s")
+        for e in jpg mp4; do
+            [ -f "$fb.$e" ] && step "углы scene_$s.$e" python3 "$T/zoom.py" "$fb.$e" --corners
+        done
+    done
+    step "клейма (лист)"    python3 "$T/wm_sheet.py" images
+    step "качество фото"    python3 "$T/photo_quality.py" "$SCENES" images
+    step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
+    summary
+    ;;
+
+# ---------------------------------------------------------------- СДАЧА
+# Субтитры → полная сборка → ожидание → забор → проверка по ГОТОВОМУ файлу →
+# доставка dd + сверка хэша → оповещение → отметка в реестре.
+sdacha)
+    QNAME="${1:-}"; PIPE="${2:-}"; DEST="${3:-}"
+    [ -n "$QNAME" ] && [ -n "$PIPE" ] && [ -n "$DEST" ] || { echo "ОШИБКА: faza.sh sdacha <проект> <имя> <труба> \"<папка на D:>\""; exit 1; }
+    [ -d "$DEST" ] || { echo "ОШИБКА: папки доставки нет: $DEST"; exit 1; }
+    cd "$PROJ" || exit 1
+    step "полная сборка"  bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME"
+    if [ "$FAILED" -eq 0 ]; then
+        step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait
+    fi
+    READY="$(ls -S "$PROJ"/*.mp4 2>/dev/null | head -1)"
+    if [ -z "$READY" ]; then
+        echo "ОШИБКА: готового .mp4 в проекте нет — сборка не доехала, смотри $LOG"
+        FAILED=$((FAILED+1)); summary; exit 1
+    fi
+    echo "[ОК]    готовый файл: $(basename "$READY") ($(du -m "$READY" | cut -f1) МБ)"
+    [ -n "$SCENES" ] && step "сито по готовому" python3 "$T/final_sheet.py" "$READY" --scenes "$SCENES"
+    TARGET="$DEST/$(basename "$READY")"
+    step "доставка dd" dd if="$READY" of="$TARGET" bs=1M conv=fsync status=none
+    A=$(md5sum "$READY" | cut -d' ' -f1); B=$(md5sum "$TARGET" 2>/dev/null | cut -d' ' -f1)
+    if [ "$A" = "$B" ] && [ -n "$B" ]; then
+        echo "[ОК]    хэш совпал · на диске $(du -m "$TARGET" | cut -f1) МБ"
+        bash "$SK/cloud/notify.sh" video "$TARGET" >> "$LOG" 2>&1 \
+            && echo "[ОК]    оповещение ушло" || echo "[ОТКАЗ] оповещение не ушло (см. лог)"
+        python3 "$T/zanyato.py" --sdat --iz-proekta "$PROJ" >> "$LOG" 2>&1 \
+            && echo "[ОК]    тема отмечена сданной" || echo "[ОТКАЗ] реестр не отметил"
+        free_pipe "$PIPE"
+        echo "[ОК]    труба $PIPE освобождена"
+    else
+        echo "ОШИБКА: хэш НЕ совпал ($A ≠ ${B:-нет файла}) — файл на D: битый"
+        FAILED=$((FAILED+1))
+    fi
+    summary
+    ;;
+
+# ---------------------------------------------------------------- СТАРТ ПО КЛЮЧУ
+# Он положил текст в папку темы и кинул вкладке ОДИН ключ георадара
+# (`PROD_…`/`ARM_…`/`AN_…`). Больше от него ничего не приходит: канал, папка,
+# труба и порт выясняются здесь. Его слово 09.11: «скидываю ей вот этот ID
+# записи в георадаре, и тогда она его подхватывает и начинает делать».
+start)
+    KEY="$CHANNEL"   # второй аргумент фазы start — это ключ
+    NEWS="${VIDEORYAD_NEWS_DIR:-/mnt/d/YouTube/НОВОСТИ}"
+    case "$KEY" in
+        PROD_*|ARM_*|AN_*) : ;;
+        *) echo "ОШИБКА: это не ключ георадара: '$KEY' (ждём PROD_… / ARM_… / AN_…)"; exit 1;;
+    esac
+    WAITMIN=45
+    if [ "${1:-}" = "--wait" ]; then WAITMIN="${2:-45}"; fi
+    echo "ключ досье: $KEY · ждать тему до $WAITMIN мин"
+    # САМАЯ СВЕЖАЯ тема с текстом по ВСЕМ каналам, кроме сданных и занятых:
+    # он кладёт текст прямо перед тем, как кинуть ключ, поэтому свежесть и есть
+    # признак «это она».
+    DEADLINE=$(( $(date +%s) + WAITMIN*60 ))
+    SAID=0
+    while :; do
+    CAND_LIST="$(python3 - "$NEWS" <<'PYEOF'
+import glob, os, sys
+news = sys.argv[1]
+rows = []
+for t in glob.glob(os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*")):
+    if not os.path.isdir(t):
+        continue
+    if glob.glob(os.path.join(t, "*ГОТОВО.mp4")):
+        continue
+    txt = [f for f in glob.glob(os.path.join(t, "*.txt"))
+           if not any(k in os.path.basename(f) for k in ("ЗАДАНИЕ", "БРИФ", "УПАКОВКА", "ОТВЕТ"))]
+    if not txt:
+        continue
+    rows.append((max(os.path.getmtime(f) for f in txt), t))
+rows.sort(reverse=True)
+for _, t in rows[:12]:
+    print(t)
+PYEOF
+)"
+    TAKEN=""; PRJ=""
+    while IFS= read -r td; do
+        [ -n "$td" ] || continue
+        CH="$(echo "$td" | sed "s|$NEWS/||" | cut -d/ -f1)"
+        DAY="$(echo "$td" | sed "s|$NEWS/||" | cut -d/ -f3)"
+        TNAME="$(basename "$td")"
+        SLUG="$(python3 - "$td" "$CH" "$DAY" <<'PYEOF'
+import re, sys, os
+t, ch, day = sys.argv[1], sys.argv[2], sys.argv[3]
+name = os.path.basename(t.rstrip("/"))
+tr = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"y",
+      "к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f",
+      "х":"h","ц":"c","ч":"ch","ш":"sh","щ":"sch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"}
+lat = lambda x: "".join(tr.get(c, c) for c in x.lower())
+chs = {"ПЛАНЕТА":"planeta","5 МИНУТ":"5min","ДИПЛОМАТИЯ СИЛЫ":"ds","ОЛЬКА НОВОСТИ":"olka",
+       "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО":"perevod"}.get(ch, lat(ch)[:8])
+w = [w for w in re.split(r"[^А-Яа-яЁёA-Za-z0-9]+", name) if w][:3]
+print("%s-%s-%s" % (chs, "-".join(lat(x) for x in w)[:34].strip("-"), day.replace("-","")))
+PYEOF
+)"
+        CAND="$HOME/projects/$SLUG"
+        mkdir -p "$CAND"
+        # КОДЫ take_folder: 0 — комплект полный · 1 — папка ЗАБРАНА, но в ней
+        # ещё нет srt/озвучки (сторож их сделает, раскадровка идёт по тексту) ·
+        # 2 — тему ведёт другая вкладка. Только 2 означает «не наша».
+        python3 "$T/take_folder.py" "$td" "$CAND" >> "$LOG" 2>&1; TFRC=$?
+        if [ "$TFRC" -eq 0 ] || [ "$TFRC" -eq 1 ]; then
+            TAKEN="$td"; PRJ="$CAND"; CHANNEL="$CH"
+            echo "[ОК]    тема взята: $CH · $TNAME (день $DAY)"
+            [ "$TFRC" -eq 1 ] && echo "        комплект пока неполный — полную сборку не начинать, сторож догонит"
+            break
+        else
+            rmdir "$CAND" 2>/dev/null
+            echo "  — $CH · $TNAME: ведёт другая вкладка"
+        fi
+    done <<< "$CAND_LIST"
+    [ -n "$TAKEN" ] && break
+    # свободной темы пока нет: либо текст второго канала ещё пишется, либо все
+    # темы разобраны. Ждём ВНУТРИ шага — это дешевле, чем опрашивать диск из
+    # переписки, и вкладку можно открыть сразу, не дожидаясь первой.
+    if [ "$(date +%s)" -ge "$DEADLINE" ]; then
+        echo "ОШИБКА: за $WAITMIN мин свободной темы так и не появилось (текст второго канала не пришёл или все темы заняты)"
+        exit 1
+    fi
+    [ "$SAID" -eq 0 ] && { echo "·· свободной темы нет — жду появления текста, проверяю каждые 30 с"; SAID=1; }
+    sleep 30
+    done
+    echo "$KEY" > "$PRJ/.geo_key"
+    echo "$CHANNEL" > "$PRJ/.channel"
+    PIPE_FREE="$(pick_pipe "$PRJ" || true)"
+    # ВТОРАЯ СТАТЬЯ, УПАКОВКА И ПРЕВЬЮ ЗАПУСКАЮТСЯ ЗДЕСЬ ЖЕ И В ФОНЕ.
+    # Его вопрос 09.11: «как будет приходить написание второго варианта статьи
+    # на канал ПЛАНЕТА? Я должен сидеть и ждать?» — нет: `tema_start.py` пускает
+    # три ветки параллельно и ничего не ждёт, вкладка в это же время ведёт
+    # видеоряд. Дважды не запустится: метка в папке темы + проверка, что в
+    # зеркальной папке текста ещё нет.
+    MIRROR=""
+    case "$CHANNEL" in
+        "5 МИНУТ") MIRROR="ПЛАНЕТА" ;;
+        "ПЛАНЕТА") MIRROR="5 МИНУТ" ;;
+    esac
+    if [ -n "$MIRROR" ]; then
+        MDIR="$NEWS/$MIRROR/$(echo "$TAKEN" | sed "s|$NEWS/$CHANNEL/||")"
+        MTXT="$(ls "$MDIR"/*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"
+        if [ -f "${TAKEN%/}/.tema_start" ]; then
+            echo "[ОК]    вторая статья и упаковка уже запускались (метка в папке темы)"
+        elif [ -n "$MTXT" ]; then
+            echo "[ОК]    на $MIRROR текст уже лежит — вторую статью не заказываю"
+        else
+            if [ "${VIDEORYAD_DRY:-0}" = "1" ]; then
+                echo "[ОК]    (проверка) запустил бы: tema_start.py ${TAKEN%/} --key $KEY --channel-2 $MIRROR"
+                echo "        зеркальная папка: $MDIR"
+                false
+            elif python3 "$T/tema_start.py" "${TAKEN%/}" --key "$KEY" --channel-2 "$MIRROR" >> "$LOG" 2>&1; then
+                date '+%Y-%m-%d %H:%M' > "${TAKEN%/}/.tema_start"
+                echo "[ОК]    запущены в фоне: вторая статья на $MIRROR · упаковка · пять превью"
+            elif [ "${VIDEORYAD_DRY:-0}" != "1" ]; then
+                echo "[СМОТРИ] вторая статья/упаковка не запустились — координатору строкой"
+                NOTES=$((NOTES+1))
+            fi
+        fi
+    fi
+
+    # сразу и подготовка: досье по ключу, вложения постов, линты
+    echo "·· подготовка по ключу"
+    bash "${BASH_SOURCE[0]}" podgotovka "$PRJ" "$KEY" 2>&1 | sed 's/^/   /'
+    echo "--------------------------------------------------------------"
+    echo "КАНАЛ:   $CHANNEL"
+    echo "ТЕМА:    $(basename "$TAKEN")"
+    echo "ПАПКА:   ${TAKEN%/}"
+    echo "ПРОЕКТ:  $PRJ"
+    echo "КЛЮЧ:    $KEY"
+    echo "ТРУБА:   ${PIPE_FREE:-все заняты, взять позже}"
+    echo "ФАЙЛЫ:   txt $(ls "$PRJ"/*.txt 2>/dev/null | wc -l) · srt $(ls "$PRJ"/*.srt 2>/dev/null | wc -l) · озвучка $(ls "$PRJ"/narration.* 2>/dev/null | wc -l) · вложений годных $(python3 - "$PRJ" <<'PYEOF'
+import glob, json, os, sys
+n = 0
+for f in glob.glob(os.path.join(sys.argv[1], "tg.json")):
+    try:
+        d = json.load(open(f, encoding="utf-8"))
+    except Exception:
+        continue
+    if isinstance(d, dict):
+        for v in d.values():
+            if isinstance(v, list):
+                n += len(v)
+    elif isinstance(d, list):
+        n += len(d)
+print(n)
+PYEOF
+)"
+    if ! ls "$PRJ"/narration.* >/dev/null 2>&1; then
+        echo "ЖДЁМ:    озвучки ещё нет — сторож делает её сам, раскадровку начинай по тексту"
+    fi
+    echo "ДАЛЬШЕ:  задание на раскадровку внешнему агенту → приёмка → faza.sh fetch $PRJ ${PIPE_FREE:-<труба>}"
+    summary
+    ;;
+
+# ---------------------------------------------------------------- ТЕМА
+# Вкладка сама берёт следующую СВОБОДНУЮ тему своего канала: реестр, папка,
+# проект, свободная труба. Раньше это раздавал координатор пятью строками
+# вручную на каждую тему (его слово 09.11: «это чисто ручная работа, блядь»).
+tema)
+    DAY_IN="${1:-}"
+    NEWS="${VIDEORYAD_NEWS_DIR:-/mnt/d/YouTube/НОВОСТИ}"
+    CH_DIR="$NEWS/$CHANNEL"
+    [ -d "$CH_DIR" ] || { echo "ОШИБКА: папки канала нет: $CH_DIR (канал пишется как в пути)"; exit 1; }
+    if [ -n "$DAY_IN" ]; then
+        DAYDIR="$(ls -d "$CH_DIR"/*/"$DAY_IN" 2>/dev/null | head -1)"
+    else
+        DAYDIR="$(ls -dt "$CH_DIR"/*/[0-3][0-9]-[01][0-9] 2>/dev/null | head -1)"
+    fi
+    [ -n "$DAYDIR" ] || { echo "ОШИБКА: папок дня у канала нет"; exit 1; }
+    DAY="$(basename "$DAYDIR")"
+    echo "канал: $CHANNEL · день: $DAY"
+    # ДВЕРЬ РЕЕСТРА ОДНА — `take_folder.py`: он сам отмечает тему занятой и
+    # отвечает кодом 2, если её уже ведёт другая вкладка. Отдельный
+    # `zanyato --vzyat` здесь делать НЕЛЬЗЯ: он займёт тему, и забор сам себе
+    # ответит «тему уже ведёт…» (поймано на первом же прогоне 09.11).
+    TAKEN=""; PRJ=""
+    for td in "$DAYDIR"/*/; do
+        [ -d "$td" ] || continue
+        TNAME="$(basename "$td")"
+        if ls "$td"*ГОТОВО.mp4 >/dev/null 2>&1; then
+            echo "  — $TNAME: уже сдана"; continue
+        fi
+        TXT="$(ls "$td"*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"
+        if [ -z "$TXT" ]; then echo "  — $TNAME: текста ещё нет"; continue; fi
+        SLUG="$(python3 - "$td" "$CHANNEL" "$DAY" <<'PYEOF'
+import re, sys, os
+t, ch, day = sys.argv[1], sys.argv[2], sys.argv[3]
+name = os.path.basename(t.rstrip("/"))
+tr = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"y",
+      "к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f",
+      "х":"h","ц":"c","ч":"ch","ш":"sh","щ":"sch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"}
+def lat(x):
+    return "".join(tr.get(c, c) for c in x.lower())
+chs = {"ПЛАНЕТА":"planeta","5 МИНУТ":"5min","ДИПЛОМАТИЯ СИЛЫ":"ds","ОЛЬКА НОВОСТИ":"olka",
+       "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО":"perevod"}.get(ch, lat(ch)[:8])
+w = [w for w in re.split(r"[^А-Яа-яЁёA-Za-z0-9]+", name) if w][:3]
+print("%s-%s-%s" % (chs, "-".join(lat(x) for x in w)[:34].strip("-"), day.replace("-","")))
+PYEOF
+)"
+        CAND="$HOME/projects/$SLUG"
+        mkdir -p "$CAND"
+        python3 "$T/take_folder.py" "$td" "$CAND" >> "$LOG" 2>&1; TFRC=$?
+        if [ "$TFRC" -eq 0 ] || [ "$TFRC" -eq 1 ]; then
+            TAKEN="$td"; PRJ="$CAND"
+            echo "[ОК]    взята тема: $TNAME → $PRJ"
+            [ "$TFRC" -eq 1 ] && echo "        комплект пока неполный — полную сборку не начинать, сторож догонит"
+            break
+        else
+            rmdir "$CAND" 2>/dev/null
+            echo "  — $TNAME: ведёт другая вкладка (реестр)"
+        fi
+    done
+    [ -n "$TAKEN" ] || { echo "ОШИБКА: свободных тем канала $CHANNEL за $DAY нет"; exit 1; }
+    SLUG="$(python3 - "$TAKEN" "$CHANNEL" "$DAY" <<'PYEOF'
+import re, sys, os
+t, ch, day = sys.argv[1], sys.argv[2], sys.argv[3]
+name = os.path.basename(t.rstrip("/"))
+tr = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"y",
+      "к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f",
+      "х":"h","ц":"c","ч":"ch","ш":"sh","щ":"sch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"}
+def lat(x):
+    return "".join(tr.get(c, tr.get(c.lower(), c).upper() if c.isupper() else c) for c in x.lower())
+chs = {"ПЛАНЕТА":"planeta","5 МИНУТ":"5min","ДИПЛОМАТИЯ СИЛЫ":"ds","ОЛЬКА НОВОСТИ":"olka",
+       "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО":"perevod"}.get(ch, lat(ch)[:8])
+w = [w for w in re.split(r"[^А-Яа-яЁёA-Za-z0-9]+", name) if w][:3]
+print("%s-%s-%s" % (chs, "-".join(lat(x) for x in w)[:34].strip("-"), day.replace("-","")))
+PYEOF
+)"
+    PIPE_FREE="$(pick_pipe "$PRJ" || true)"
+    echo "--------------------------------------------------------------"
+    echo "ТЕМА:    $(basename "$TAKEN")"
+    echo "ПАПКА:   ${TAKEN%/}"
+    echo "ПРОЕКТ:  $PRJ"
+    echo "ТРУБА:   ${PIPE_FREE:-все заняты, взять позже}"
+    echo "ФАЙЛЫ:   txt $(ls "$PRJ"/*.txt 2>/dev/null | wc -l) · srt $(ls "$PRJ"/*.srt 2>/dev/null | wc -l) · озвучка $(ls "$PRJ"/narration.* 2>/dev/null | wc -l)"
+    echo "ДАЛЬШЕ:  bash template/faza.sh podgotovka $PRJ [ключ георадара]"
+    summary
+    ;;
+
+# ---------------------------------------------------------------- ПОДГОТОВКА
+# Георадар → вложения постов → приёмка раскадровки → линты до чистого.
+# Раскадровку пишет внешний агент; эта фаза готовит ей вход и проверяет выход.
+podgotovka)
+    KEY="${1:-}"
+    cd "$PROJ" || exit 1
+    GEO="$(ls -t /mnt/d/_ГЕОРАДАР-КОПИЯ/*.xlsx 2>/dev/null | head -1)"
+    if [ -n "$KEY" ] && [ -n "$GEO" ]; then
+        # пустое или несуществующее досье — НЕ отказ фазы: ролик идёт дальше на
+        # поиске и базе, координатору уходит строка (правило 23.10)
+        GLOUT="$(mktemp)"
+        python3 "$T/geo_links.py" "$GEO" "$KEY" --out "$PROJ/links.txt" > "$GLOUT" 2>&1 || true
+        cat "$GLOUT" >> "$LOG"
+        grep -hE "НЕ ВСТРЕТИЛСЯ|НЕСУЩЕСТВУЮЩИЙ" "$GLOUT" | head -1 | cut -c1-200 | sed 's/^/        · /'
+        rm -f "$GLOUT"
+        if [ -s "$PROJ/links.txt" ]; then
+            echo "[ОК]    ссылки досье: $(wc -l < "$PROJ/links.txt") шт"
+            step "вложения постов" bash -c "cd '$PROJ' && python3 '$T/tg_media.py' --json tg.json \$(cat links.txt)"
+        else
+            echo "[СМОТРИ] досье по ключу $KEY пусто — работаем без вложений, координатору строкой"
+            NOTES=$((NOTES+1))
+        fi
+    else
+        echo "[ОК]    ключа досье нет — шаг георадара пропущен"
+    fi
+    if [ -z "$SCENES" ]; then
+        echo "--------------------------------------------------------------"
+        echo "РАСКАДРОВКИ ЕЩЁ НЕТ: отдай задание внешнему агенту, прими его файл"
+        echo "  python3 $T/accept_scenes.py <его.json> --srt <srt> --channel \"<КАНАЛ>\" --fix --out $(basename "$PROJ").scenes.json"
+        echo "  и повтори: bash template/faza.sh podgotovka $PROJ"
+        summary; exit 0
+    fi
+    step "линт запросов"  python3 "$T/query_lint.py" "$SCENES"
+    step "сверка пинов"   python3 "$T/check_pins.py" "$SCENES"
+    # учёт материала досье имеет смысл только когда вложения реально скачаны
+    if [ -f "$PROJ/tg.json" ]; then
+        step "материал досье" python3 "$T/dossier_use.py" "$SCENES"
+    else
+        echo "[ОК]    вложений досье нет — учёт пропущен"
+    fi
+    summary
+    ;;
+
+# ---------------------------------------------------------------- ПОСЛЕ ФЕТЧА
+# Карточки облаком → слои (всплывашки/надписи/эффекты) → контактные листы.
+posle_fetcha)
+    PIPE="${1:-}"
+    [ -n "$SCENES" ] || { echo "ОШИБКА: не нашёл <проект>.scenes.json"; exit 1; }
+    cd "$PROJ" || exit 1
+    if [ -n "$PIPE" ]; then
+        step "карточки облаком" bash "$SK/cloud/va.sh" "$PIPE" python3 "$SK/fullcycle/cards_cloud.py" "$SCENES"
+    else
+        echo "[СМОТРИ] труба не названа — карточки не отрисованы"; NOTES=$((NOTES+1))
+    fi
+    step "слои (всплывашки/надписи)" python3 "$T/build_overlays.py" build "$PROJ"
+    # fx_put --auto отвечает кодом 1 и когда ставить НЕЧЕГО (нормы соблюдены,
+    # зазор не позволяет) — это не отказ фазы, а штатный ответ
+    FXOUT="$(mktemp)"
+    python3 "$T/fx_put.py" "$SCENES" --auto > "$FXOUT" 2>&1; FXRC=$?
+    cat "$FXOUT" >> "$LOG"
+    if [ "$FXRC" -eq 0 ]; then
+        echo "[ОК]    эффекты"
+    elif grep -q "ставить не буду\|нечего\|уже сто" "$FXOUT"; then
+        echo "[ОК]    эффекты — ставить нечего (нормы соблюдены)"
+    else
+        echo "[ОТКАЗ] эффекты (код $FXRC)"; grep -hE "$MARK" "$FXOUT" | head -2 | cut -c1-200 | sed 's/^/        · /'
+        FAILED=$((FAILED+1))
+    fi
+    rm -f "$FXOUT"
+    step "контактные листы" python3 "$T/contact_sheet.py" "$SCENES" images thumbs
+    if [ -f "$PROJ/overlays.json" ]; then
+        step "листы парами" python3 "$T/pair_sheet.py" "$PROJ" thumbs
+    else
+        echo "[ОК]    всплывашек нет — листы парами не нужны"
+    fi
+    summary
+    ;;
+
+*) echo "ОШИБКА: неизвестная фаза '$FAZA' (start|tema|podgotovka|fetch|posle_fetcha|krug|final|sdacha)"; exit 1;;
+esac
