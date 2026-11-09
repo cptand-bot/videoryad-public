@@ -553,8 +553,18 @@ def _overlay_styles(scenes_path):
 
 
 def check(scenes, channel="", gate="dashboard", scenes_path=""):
-    n_scenes = len(scenes or [])
     """Чего не хватает. Возвращает список строк отказа (пустой — всё стоит)."""
+    n_scenes = len(scenes or [])
+    # НОРМА НАЛОЖЕНИЙ СЧИТАЕТСЯ ТОЛЬКО ПО ОБЫЧНЫМ СЦЕНАМ (09.11, его правило:
+    # «на наших элементах не должны быть ни надписей, ни всплывашек»). На
+    # рисованный кадр надпись запрещена и её снимает гейт, поэтому карточки в
+    # знаменателе нормы — это требование слоя, который тут же забракуют:
+    # вкладка попадает в вилку и теряет круг правок. У роликов 09-10.11
+    # карточек 15-17 из 67-71 сцены, то есть ЧЕТВЕРТЬ — норма выходила на
+    # две надписи больше, чем ролик физически может нести.
+    # Элементы-КАДРЫ (`view`) этим не затронуты: у них нормы без `на_сцен`.
+    обычных = len([s for s in (scenes or [])
+                   if not str(s.get("source", "")).startswith("card:")])
     have, have_fx = {}, {}
     have_ov = (_overlay_styles(scenes_path)
                if any(e.get("overlay_style") for e in ОБЯЗАТЕЛЬНЫЕ) else {})
@@ -579,8 +589,12 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
         else:
             n = have.get(el["view"], 0)
         _норма = el["min"]
-        if el.get("на_сцен") and n_scenes:
-            _норма = max(el["min"], int(round(n_scenes / float(el["на_сцен"]))))
+        if el.get("на_сцен"):
+            # наложение (надпись) — от ОБЫЧНЫХ сцен; кадр — от всех
+            _база = обычных if el.get("overlay_style") else n_scenes
+            if _база:
+                _норма = max(el["min"],
+                             int(round(_база / float(el["на_сцен"]))))
         if n >= _норма:
             continue
         bad.append(
@@ -611,6 +625,8 @@ def main():
             # «норма 1, потолок 4», пока вкладка ставила восемь ПО КОДУ и
             # шла их снимать по документу. Проверка не менялась, только вывод.
             _скл = ("x%d на ролик" % el["min"] if not el.get("на_сцен")
+                    else "x1 на %g обычн.сцен" % float(el["на_сцен"])
+                    if el.get("overlay_style")
                     else "x1 на %g сцен" % float(el["на_сцен"]))
             print("  %-9s %-4s %-17s %-13s %s"
                   % (el["gate"], el["код"], метка, _скл, el["имя"]))

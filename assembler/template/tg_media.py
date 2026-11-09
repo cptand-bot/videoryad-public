@@ -262,6 +262,30 @@ def main():
         out, args = args[1], args[2:]
     if not args:
         sys.exit(__doc__)
+
+    # РЕЕСТР ЗАНЯТЫХ ТЕМ — МЯГКОЕ ПРЕДУПРЕЖДЕНИЕ, НЕ ОТКАЗ (09.11).
+    # Утро 09.11: вложения досье одной темы параллельно разобрали ДВЕ вкладки,
+    # результат сошёлся кадр в кадр, а адреса телеграма живут около часа —
+    # второй заход мог прийти в пустоту. Печатаем ДО разбора постов: если
+    # материал уже лежит у соседа, смотреть надо его папку, а не качать снова.
+    try:
+        import os as _os
+        sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+        import zanyato as _z
+        _kan, _tem, _den = _z.iz_proekta(_os.getcwd())
+        # канал И тема обязательны: папка проекта без `.source_dir`
+        # (чужой каталог, ручной прогон) иначе засоряла бы реестр
+        # записями «КАНАЛ НЕ УЗНАН».
+        if _tem and _kan:
+            _chuzh, _out = _z.otmetitsya_myagko(_kan, _tem, _den,
+                                                rabota="досье",
+                                                proekt=_os.getcwd())
+            for _ln in _out:
+                print(_ln, file=sys.stderr)
+    except Exception as _e:
+        print("  (реестр занятых тем не отработал: %s — работаю дальше)" % _e,
+              file=sys.stderr)
+
     all_res = [post(u) for u in args]
     for r in all_res:
         print("— %s" % r["url"])

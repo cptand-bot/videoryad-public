@@ -3062,6 +3062,22 @@ def main():
         sid = scene["id"]
         source = scene["source"]  # "local_library" | "wikimedia" | "press_photo" | "pexels_photo" | "pexels_video" | "direct_url"
         query = scene["source_query"]
+        # ПИН С ВЕРТИКАЛЬНОЙ ЧЕРТОЙ — ЧИНИМ И ГОВОРИМ, А НЕ МОЛЧИМ (09.11,
+        # улов вкладки). Живой случай: пин был написан как «ПАПКА|файл.jpg»
+        # и три сцены приехали голым FAILED. Причина: признак адреса на диске
+        # — СЛЕШ (`_is_path` ниже), строка с чертой его не проходит и уезжает
+        # в веб-водопад КАК ФРАЗА, где, разумеется, ничего не находит. Почему
+        # черта вообще могла показаться рабочей: у `direct_url` она разделяет
+        # несколько адресов (см. `_press_waterfall` и комментарий к
+        # `source_query` выше) — поэтому правим ТОЛЬКО пин медиатеки.
+        if source == "local_library" and "|" in str(query or ""):
+            _был = str(query)
+            query = _был.replace("|", "/").strip()
+            print(f"[{sid:03d}] ПИН ЧЕРЕЗ ЧЕРТУ: '{_был}' → '{query}'. Пин "
+                  f"пишется ПОЛНЫМ ПУТЁМ 'ПАПКА/файл.jpg', вертикальная черта "
+                  f"не поддерживается — исправь в scenes.json, иначе то же "
+                  f"место на следующем прогоне опять читается как запрос",
+                  flush=True)
         ext = "mp4" if source == "pexels_video" else "jpg"
         out_path = os.path.join(images_dir, f"scene_{sid:03d}.{ext}")
 

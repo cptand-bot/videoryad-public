@@ -239,6 +239,34 @@ def _base_catalog(dest=".", match_text=""):
         return ""
 
 
+def dest_parts(raw):
+    """«--dest» ЖДЁТ ПАПКУ, НО ПРИНИМАЕТ И ГОТОВЫЙ ПУТЬ ФАЙЛА (09.11, улов
+    вкладки).
+
+    Живой случай. Вкладка дала `--dest ".../БРИФ-ЗАМЕНЫ.txt"` — и бриф
+    потерялся: `os.path.join(файл, имя)` даёт несуществующий путь, запись
+    падает с ENOTDIR, а инструмент печатал «не записать бриф в папку ролика»
+    и валил весь текст в stdout. То есть вызов выглядел успешным, файла не
+    было, и копировать бриф приходилось руками из вывода — ровно то, от чего
+    этот ключ 24.10 и заводился («я чокнусь, это всё копировать»).
+
+    Механика. Папка — работает как раньше. Если последний кусок пути папкой
+    НЕ является, а на имя файла похож (есть расширение) — пишем прямо в него,
+    а папкой ролика считаем его каталог. Возвращает (папка, имя файла или
+    пустая строка).
+    """
+    d = str(raw or "").rstrip("/\\")
+    if not d or os.path.isdir(d):
+        return (d or "."), ""
+    # РАСШИРЕНИЕ — ТОЛЬКО БУКВЫ (.txt, .md). Иначе под «файл» попадёт папка
+    # с датой в имени — `ИТОГ-СМЕНЫ-05.11` даёт «расширение» `.11`, а это
+    # папка, которой просто ещё нет.
+    _ext = os.path.splitext(os.path.basename(d))[1]
+    if 2 <= len(_ext) <= 5 and _ext[1:].isalpha():
+        return (os.path.dirname(d) or "."), os.path.basename(d)
+    return d, ""
+
+
 def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАДРОВКА.txt"):
     """Задание на раскадровку: числа цифрами + ЖИВОЙ список мин линтера."""
     total = srt_end_sec(srt)
@@ -542,7 +570,9 @@ def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАД�
 def main():
     ap = argparse.ArgumentParser(description="бриф и материалы для Codex")
     ap.add_argument("scenes", nargs="?", default="")
-    ap.add_argument("--dest", required=True, help="папка ролика на D:")
+    ap.add_argument("--dest", required=True,
+                    help="папка ролика на D: — или сразу путь ФАЙЛА "
+                         "(.../БРИФ-ЗАМЕНЫ.txt), тогда бриф ляжет прямо в него")
     ap.add_argument("--thumbs", default="thumbs")
     ap.add_argument("--stage", default="audit",
                     choices=("audit", "zamena", "scenes"))
@@ -551,12 +581,24 @@ def main():
     ap.add_argument("--no-copy", action="store_true", help="не копировать листы")
     a = ap.parse_args()
 
+    # --dest МОЖЕТ БЫТЬ И ФАЙЛОМ (09.11): на пути с расширением бриф уходил
+    # в stdout и терялся. Разбираем один раз здесь — дальше весь код работает
+    # с папкой, как и раньше, а имя файла (если оно задано) перебивает
+    # стандартное «БРИФ-ДЛЯ-CODEX.txt».
+    a.dest, _dest_file = dest_parts(a.dest)
+    if _dest_file:
+        print("--dest указывает на ФАЙЛ: пишу бриф прямо в «%s», папкой ролика "
+              "считаю «%s» (папка тоже принимается, как раньше)"
+              % (_dest_file, win(a.dest)))
+
     # --stage scenes: задание на раскадровку, ещё ДО того как сцены есть.
     # Первым аргументом в этом режиме передают любой путь-заглушку.
     if a.stage == "scenes":
         if not a.srt or not a.channel:
             sys.exit("для --stage scenes нужны --srt и --channel")
-        path, want, total = write_scenes_task(a.dest, a.srt, a.channel)
+        path, want, total = write_scenes_task(
+            a.dest, a.srt, a.channel,
+            _dest_file or "ЗАДАНИЕ-РАСКАДРОВКА.txt")
         print("задание на раскадровку: %s" % win(path))
         print("  канал %s, озвучка %.1f с, просим %d сцен, "
               "список мин линтера вклеен" % (a.channel, total, want))
@@ -827,14 +869,22 @@ def main():
 
     # ФАЙЛОМ, А НЕ ТОЛЬКО В КОНСОЛЬ (24.10, прямое слово пользователя: «я чокнусь,
     # это всё копировать»). Он прикладывает файл в чат Codex одним движением.
-    name = "БРИФ-ДЛЯ-CODEX.txt" if a.stage == "audit" else "БРИФ-ЗАМЕНЫ.txt"
+    name = _dest_file or ("БРИФ-ДЛЯ-CODEX.txt" if a.stage == "audit"
+                          else "БРИФ-ЗАМЕНЫ.txt")
     out = os.path.join(a.dest, name)
     try:
         open(out, "w", encoding="utf-8").write(brief.strip() + "\n")
         print("\nбриф положен файлом: %s" % win(out))
         print("пользователю: приложить этот файл в чат Codex, копировать ничего не надо")
     except OSError as e:
-        print("\nне записать бриф в папку ролика (%s) — текст ниже, копировать руками" % e)
+        # ПОЧЕМУ НЕ ЗАПИСАЛОСЬ — НАЗЫВАЕМ ПРИЧИНУ (09.11): «папки нет» и «путь
+        # занят файлом» лечатся по-разному, а строка была одна на оба случая.
+        print("\nне записать бриф по пути %s (%s)" % (win(out), e))
+        if not os.path.isdir(a.dest):
+            print("  папки «%s» не существует — создай её или дай --dest "
+                  "существующую папку ролика (путь ФАЙЛА тоже принимается)"
+                  % win(a.dest))
+        print("  текст ниже, копировать руками")
         print("\n" + "=" * 70)
         print(brief)
         print("=" * 70)
