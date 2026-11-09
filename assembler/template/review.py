@@ -553,9 +553,63 @@ def overlay_geom(sid, spec, photo_path=None, anchor=""):
             "shape": shape, "scale": round(msc, 2), "pos": pos}
 
 
+def mask_text_png(tspec, out_png, project=""):
+    """НАДПИСЬ ИЗ-ПОД МАСКИ ДЛЯ ПЛИТКИ — ТЕМ ЖЕ КОДОМ И ТЕМ ЖЕ РАЗМЕРОМ,
+    КАКИМ ОНА УЙДЁТ В ВИДЕО. Возвращает (ширина, высота) в кадре 1920x1080.
+
+    Зеркалит `build_overlays._apply_mask_overlay` целиком: масштаб 2.0×scale,
+    клапан scale в [0.4; 2.4], длинная строка УЖИМАЕТСЯ до 0,92 кадра (а не
+    режется), цвет приходит по каналу из пути. Рисуем сразу конечный кадр
+    (`frame(p=1.0)`) — это ровно последний кадр секвенции, но без тридцати
+    лишних файлов и временной папки.
+
+    Его слово 09.11 про дашборд ПЛАНЕТЫ: «их нужно наложить прямо на сцену,
+    чтобы я мог смотреть, где они лягут, что они перекрывают». Значит размер
+    обязан совпадать с видео ЧИСЛОМ, а не «на глаз»: отсюда ужимание и
+    клапан — без них надпись на плитке шире кадра, а в ролике нет.
+    """
+    try:
+        import nadpis_maska as NM
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import nadpis_maska as NM
+    W, H = 1920, 1080
+    tspec = tspec or {}
+    head = str(tspec.get("words") or tspec.get("text") or "").strip().upper()
+    if not head:
+        return (0, 0)
+    sub = str(tspec.get("sub") or "").strip()
+    plate = str(tspec.get("style") or "").lower() == "mask_plate"
+    try:
+        msc = max(0.4, min(2.4, float(tspec.get("scale", 1.0))))
+    except (TypeError, ValueError):
+        msc = 1.0
+    scale = 2.0 * msc
+    tw, th = NM.box_size(head, sub, scale)
+    if tw > int(W * 0.92):              # длинная строка — ужимаем, не режем
+        scale *= (W * 0.92) / tw
+        tw, th = NM.box_size(head, sub, scale)
+    ch = _channel_of(project or os.path.basename(os.getcwd()))
+    im = NM.frame(head, sub, 1.0, scale, ch or None, plate)
+    os.makedirs(os.path.dirname(os.path.abspath(out_png)), exist_ok=True)
+    tmp = out_png + ".part.png"
+    im.save(tmp, "PNG")
+    os.replace(tmp, out_png)            # плитка не ловит полуготовый файл
+    return (im.width, im.height)
+
+
 def overlay_text_geom(tspec, png_path=None, sid=None):
     """Прямоугольник текст-всплывашки в кадре 1920x1080 — зеркалит
-    build_overlays._apply_text_overlay (сетка 9, без seeded-раскладки)."""
+    build_overlays._apply_text_overlay (сетка 9, без seeded-раскладки).
+
+    НАДПИСЬ ИЗ-ПОД МАСКИ СЧИТАЕТСЯ ПО СВОЕМУ ЗАКОНУ (09.11): у неё размер
+    задан шрифтом внутри `nadpis_maska.box_size`, а не формулой H/6, — и
+    картинка, которую мы рисуем для плитки, УЖЕ лежит в пикселях кадра.
+    Поэтому берём её ширину и высоту как есть и ставим по тем же полям 60 px,
+    что и сборка. Один механизм на все каналы: вид решает `style`, место
+    считается одинаково, поэтому ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО и ДИПЛОМАТИЯ СИЛЫ
+    получают показ надписей сами, без второй ветки кода.
+    """
     W, H = 1920, 1080
     tspec = tspec or {}
     try:
@@ -563,6 +617,43 @@ def overlay_text_geom(tspec, png_path=None, sid=None):
     except (TypeError, ValueError):
         msc = 1.0
     pos = _pos_ok(tspec.get("pos"))
+    if str(tspec.get("style") or "").lower().startswith("mask"):
+        yk = pos[0] if pos[:1] in ("t", "m") else "t"
+        xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
+        tw = th = 0
+        if png_path and os.path.exists(png_path):
+            try:
+                from PIL import Image
+                with Image.open(png_path) as _im:
+                    tw, th = _im.width, _im.height
+            except Exception:
+                tw = th = 0
+        if not (tw and th):
+            try:
+                import nadpis_maska as _NM
+                _sc = 2.0 * msc
+                tw, th = _NM.box_size(
+                    str(tspec.get("words") or tspec.get("text") or "").upper(),
+                    str(tspec.get("sub") or ""), _sc)
+                if tw > int(W * 0.92):
+                    _sc *= (W * 0.92) / tw
+                    tw, th = _NM.box_size(
+                        str(tspec.get("words") or tspec.get("text") or "").upper(),
+                        str(tspec.get("sub") or ""), _sc)
+            except Exception:
+                tw, th = int(W * 0.5), int(H * 0.16)
+        tw = min(int(tw), int(W * 0.92))
+        th = min(int(th), int(H * 0.5))
+        mg = 60
+        x = {"l": mg, "c": (W - tw) // 2, "r": W - tw - mg}[xk]
+        y = {"t": mg, "m": (H - th) // 2}[yk]
+        ru_y = {"t": "верх", "m": "центр"}[yk]
+        ru_x = {"l": "слева", "c": "по центру", "r": "справа"}[xk]
+        return {"xf": round(x / W, 4), "yf": round(y / H, 4),
+                "wf": round(tw / W, 4), "hf": round(th / H, 4),
+                "pos": pos, "pos_ru": f"{ru_y} {ru_x} · из-под маски",
+                "words": tspec.get("words") or tspec.get("text") or "",
+                "color": tspec.get("color") or "white"}
     yk = pos[0] if pos[:1] in ("t", "m", "b") else "b"
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     ar = 6.0
@@ -1827,9 +1918,42 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     except Exception:
         tk_ui = ""
 
+    # НАДПИСЬ ЛЕЖИТ НА ПЛИТКЕ УЖЕ В РАЗМЕТКЕ (09.11, его слово про дашборд
+    # ПЛАНЕТЫ: «их нужно наложить прямо на сцену, чтобы я мог смотреть, где
+    # они лягут, что они перекрывают»). Раньше рамку надписи ставил только
+    # `poll()`, то есть живой сервер и не раньше первых 2,5 с; в статичной
+    # странице надписей не было видно вовсе. Теперь место считает та же
+    # `overlay_text_geom`, а в живом дашборде `poll()` просто обновляет уже
+    # стоящий элемент — вид на 5 МИНУТ от этого не меняется.
+    _tmk_attr = _tmk_img = ""
+    try:
+        _twst = ov_cur.get("text") if isinstance(ov_cur.get("text"), dict) else {}
+        if str(_twst.get("words") or _twst.get("text") or "").strip():
+            _tpng_st = os.path.join("overlays", f"scene_{sid:03d}.text.png")
+            if not os.path.exists(_tpng_st) \
+                    and str(_twst.get("style") or "").lower().startswith("mask"):
+                mask_text_png(_twst, _tpng_st, os.path.basename(os.getcwd()))
+            if os.path.exists(_tpng_st):
+                _G = overlay_text_geom(_twst, _tpng_st, sid)
+                _tmk_attr = (' style="left:%.4f%%;top:%.4f%%;'
+                             'width:%.4f%%;height:%.4f%%"'
+                             % (_G["xf"] * 100, _G["yf"] * 100,
+                                _G["wf"] * 100, _G["hf"] * 100))
+                if live:
+                    _tmk_img = (' src="%s?t=%d"'
+                                % (_tpng_st.replace(os.sep, "/"),
+                                   int(os.path.getmtime(_tpng_st))))
+                else:
+                    import base64 as _b64
+                    _tmk_img = (' src="data:image/png;base64,%s"'
+                                % _b64.b64encode(open(_tpng_st, "rb").read()).decode())
+    except Exception:
+        _tmk_attr = _tmk_img = ""      # надпись — не повод уронить карточку
+    _tmk_hidden = "" if _tmk_attr else " hidden"
+
     card_cls = "card needup" if need_reason else "card"
     return f"""<figure class="{card_cls}" data-id="{sid}">
-  <div class="{thumb_cls}" id="t{sid}">{thumb_inner}{ov_badge}{fx_badge}<div class="ovmark" id="ovmark{sid}" hidden><img id="ovmarkimg{sid}" alt=""></div><div class="txtmark" id="txtmark{sid}" hidden><img id="txtmarkimg{sid}" alt=""></div><div class="pvbox" id="pvbox{sid}" hidden></div></div>
+  <div class="{thumb_cls}" id="t{sid}">{thumb_inner}{ov_badge}{fx_badge}<div class="ovmark" id="ovmark{sid}" hidden><img id="ovmarkimg{sid}" alt=""></div><div class="txtmark" id="txtmark{sid}"{_tmk_attr}{_tmk_hidden}><img id="txtmarkimg{sid}"{_tmk_img} alt=""></div><div class="pvbox" id="pvbox{sid}" hidden></div></div>
   <figcaption>
     <div class="meta">СЦЕНА {sid:02d} · {fmt(t)}–{fmt(t + d)} · {d:.1f}с</div>
     <div class="srcq">{_h(srcq)}</div>
@@ -3362,29 +3486,21 @@ def run_live(scenes_path, images_dir, port):
                             # (08.11, КРИТИЧЕСКОЕ, его слово: «на канал
                             # ПЛАНЕТА не используется этот формат надписей,
                             # другой формат мы вчера разработали и утвердили,
-                            # он отличается в корне дизайном»). Утром я начал
-                            # дорисовывать недостающие картинки надписей на
-                            # плитки — и рисовал их ОБЫЧНЫМ стилем «5 МИНУТ»,
-                            # хотя на ПЛАНЕТЕ стоит `mask_plate`. На дашборде
-                            # это выглядело как чужой формат. Теперь стиль
-                            # решает, кто рисует: маске — `nadpis_maska`,
-                            # берём последний кадр её секвенции.
-                            import tempfile, glob as _g
-                            import nadpis_maska as _NM
-                            _tmp = tempfile.mkdtemp(prefix="maska-prev-")
-                            try:
-                                _NM.sequence(_tmp,
-                                             str(tb.get("words") or ""),
-                                             str(tb.get("sub") or ""),
-                                             scale=2.0 * float(tb.get("scale", 1.0) or 1.0),
-                                             channel=str(data.get("channel") or ""),
-                                             fps=12,
-                                             plate=_стиль == "mask_plate")
-                                _кадры = sorted(_g.glob(os.path.join(_tmp, "*.png")))
-                                if _кадры:
-                                    shutil.copy2(_кадры[-1], tpng)
-                            finally:
-                                shutil.rmtree(_tmp, ignore_errors=True)
+                            # он отличается в корне дизайном»).
+                            #
+                            # 09.11, ТУТ ЖЕ И ЛЕЖАЛА ПОЛОМКА: канал брался из
+                            # `data.get("channel")`, а никакого `data` в этой
+                            # функции НЕТ — ни в ней, ни в `run_live`, ни в
+                            # модуле. Каждая маска падала NameError'ом внутрь
+                            # `except` ниже, картинка не рисовалась, и плитка
+                            # оставалась пустой: на ПЛАНЕТЕ все 12 надписей
+                            # он впервые увидел бы только в готовом ролике.
+                            # «Успех» был тихим — в лог уходила одна строка.
+                            # Его слово 09.11: «их нужно наложить прямо на
+                            # сцену, чтобы я мог смотреть, где они лягут, что
+                            # они перекрывают». Канал теперь берётся оттуда,
+                            # откуда его берёт весь сборщик — ИЗ ПУТИ.
+                            mask_text_png(tb, tpng, project)
                         else:
                             render_text_png(str(tb.get("words") or tb.get("text") or ""),
                                             str(tb.get("color") or "white"), tpng,
@@ -3632,22 +3748,14 @@ def run_live(scenes_path, images_dir, port):
                 os.makedirs("overlays", exist_ok=True)
                 if str(tblock.get("style") or "").startswith("mask"):
                     # маску рисует её собственная рисовалка, иначе на плитке
-                    # окажется чужой формат
+                    # окажется чужой формат. С 09.11 это ОДНА дверь с показом
+                    # на плитке (`mask_text_png`): прежняя копия кода здесь
+                    # не знала про ужимание длинной строки до 0,92 кадра, и
+                    # правка масштаба руками давала на дашборде надпись шире
+                    # кадра — то есть опять не то место, что в видео.
                     try:
-                        import tempfile as _tf, glob as _g
-                        import nadpis_maska as _NM
-                        _t = _tf.mkdtemp(prefix="maska-save-")
-                        try:
-                            _NM.sequence(_t, words, str(tblock.get("sub") or ""),
-                                         scale=2.0 * float(tblock.get("scale", 1.0) or 1.0),
-                                         channel=_channel_of(os.path.basename(os.getcwd())),
-                                         fps=12,
-                                         plate=str(tblock["style"]).lower() == "mask_plate")
-                            _к = sorted(_g.glob(os.path.join(_t, "*.png")))
-                            if _к:
-                                shutil.copy2(_к[-1], png)
-                        finally:
-                            shutil.rmtree(_t, ignore_errors=True)
+                        mask_text_png(tblock, png,
+                                      os.path.basename(os.getcwd()))
                     except Exception as _e:
                         print("  маска не перерисовалась: %s" % _e, flush=True)
                 else:
