@@ -97,6 +97,22 @@ free_pipe() {
     [ -n "$pp" ] && rm -rf "$LOCKS/$pp" 2>/dev/null
 }
 
+# wait_pipe <проект> <минут> — ждать СВОБОДНУЮ трубу внутри одного шага.
+# Труб шесть, значит одновременно в полёте шесть роликов; седьмая вкладка не
+# должна падать — она ждёт, пока кто-то сдаст и освободит замок (его сценарий
+# 09.11: три статьи × два канала = шесть вкладок за полтора часа).
+wait_pipe() {
+    local proj="$1" mins="${2:-90}" pp
+    local deadline=$(( $(date +%s) + mins*60 )) said=0
+    while :; do
+        pp="$(pick_pipe "$proj" || true)"
+        [ -n "$pp" ] && { echo "$pp"; return 0; }
+        if [ "$(date +%s)" -ge "$deadline" ]; then return 1; fi
+        [ "$said" -eq 0 ] && { echo "·· все шесть труб заняты — жду свободную, проверяю каждые 60 с" >&2; said=1; }
+        sleep 60
+    done
+}
+
 summary() {
     echo "--------------------------------------------------------------"
     if [ "$FAILED" -eq 0 ]; then
@@ -134,7 +150,12 @@ final)
 # Раньше: отправка, затем 15-30 опросов `gh run view` из переписки.
 fetch)
     PIPE="${1:-}"; QNAME="${2:-$(basename "$PROJ")}"
-    [ -n "$PIPE" ] || { echo "ОШИБКА: faza.sh fetch <проект> <труба> [имя]"; exit 1; }
+    if [ -z "$PIPE" ] || [ "$PIPE" = "--wait" ]; then
+        # трубу не назвали — берём свободную сами и ЖДЁМ её, если все заняты
+        PIPE="$(wait_pipe "$PROJ" 90 || true)"
+        [ -n "$PIPE" ] || { echo "ОШИБКА: за 90 мин ни одна из шести труб не освободилась"; exit 1; }
+        echo "[ОК]    труба: $PIPE (взята замком)"
+    fi
     step "отправка фетча"   bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME" --fetch-only
     if [ "$FAILED" -eq 0 ]; then
         step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait-fetch
@@ -296,6 +317,7 @@ PYEOF
     echo "$KEY" > "$PRJ/.geo_key"
     echo "$CHANNEL" > "$PRJ/.channel"
     PIPE_FREE="$(pick_pipe "$PRJ" || true)"
+    [ -n "$PIPE_FREE" ] || echo "[СМОТРИ] все шесть труб заняты — фаза fetch дождётся свободной сама"
     # ВТОРАЯ СТАТЬЯ, УПАКОВКА И ПРЕВЬЮ ЗАПУСКАЮТСЯ ЗДЕСЬ ЖЕ И В ФОНЕ.
     # Его вопрос 09.11: «как будет приходить написание второго варианта статьи
     # на канал ПЛАНЕТА? Я должен сидеть и ждать?» — нет: `tema_start.py` пускает
@@ -438,6 +460,7 @@ print("%s-%s-%s" % (chs, "-".join(lat(x) for x in w)[:34].strip("-"), day.replac
 PYEOF
 )"
     PIPE_FREE="$(pick_pipe "$PRJ" || true)"
+    [ -n "$PIPE_FREE" ] || echo "[СМОТРИ] все шесть труб заняты — фаза fetch дождётся свободной сама"
     echo "--------------------------------------------------------------"
     echo "ТЕМА:    $(basename "$TAKEN")"
     echo "ПАПКА:   ${TAKEN%/}"
