@@ -434,8 +434,13 @@ def main():
     _ob = None
     try:
         import obyazatelno as _ob
+        # ТО ЖЕ, ЧТО У ДВОЙНИКА `card_put.py` (09.11): зазор на коротком
+        # ролике ужимается сам и говорит об этом строкой, а если ролик
+        # короче обязательного набора — отказ с числом «сколько влезает».
+        # Молчаливое ужатие вкладка читала как баг проверки.
         _кл = _ob.клонов_в(data)
-        MIN_GAP, НОРМА = _ob.зазор(len(scenes), _кл), _ob.норма(len(scenes), _кл)
+        MIN_GAP = _ob.зазор_или_отказ(len(scenes), _кл, "element_put %s" % вид)
+        НОРМА = _ob.норма(len(scenes), _кл)
     except Exception:
         MIN_GAP, НОРМА = 8, max(1, round(len(scenes) / 15))
     others = {int(x.get("id", 0)): str(x.get("source", ""))[5:]
