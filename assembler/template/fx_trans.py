@@ -58,6 +58,8 @@ TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7, "depth": 1.1,
 
 MOS_COLS, MOS_ROWS = 6, 4
 PANELS_N = 5
+# Потолок сцены для `panels` — см. разбор в main(). Длиннее = flash.
+PANELS_MAX_SEC = 10.0
 # плита нового кадра в начале перехода — доля экрана, и её снос от центра
 DEPTH_S0 = 0.40
 DEPTH_DRIFT = (0.045, 0.035)
@@ -530,6 +532,19 @@ def main():
         prev = ""
     if not os.path.isfile(a.img):
         sys.exit("нет файла: %s" % a.img)
+    # ПОТОЛОК ДЛИТЕЛЬНОСТИ ДЛЯ `panels` (10.11, два провала сборки ПЛАНЕТЫ).
+    # Приём задуман на сцены 6,3-8,6 с. На сцене 15,4 с он не падает, а ВИСИТ:
+    # каждый кадр разворачивает пять панелей перспективой, на раннере с одним
+    # свободным ядром это 17,5 минуты вместо 1,5-2, шард срезается лимитом, и
+    # без его кадров `assemble` не доделывается. Два прогона (42822100958 и
+    # 42837461101) потеряны целиком именно так — цена одной сцены.
+    # Поэтому на длинной сцене молча подменяем на ЗАСВЕТ: он разрешён на всех
+    # каналах и считается за секунды. Ровно это вкладка делала руками.
+    if a.kind == "panels" and a.seconds > PANELS_MAX_SEC:
+        print("!! panels на сцене %.1f с (потолок %.1f) — ставлю flash: "
+              "на длинной сцене panels вешает ffmpeg и срезается лимитом"
+              % (a.seconds, PANELS_MAX_SEC), file=sys.stderr)
+        a.kind = "flash"
     trans = a.trans or TRANS_SEC[a.kind]
     if a.seconds < trans + 1.0:
         trans = max(0.4, a.seconds - 1.0)
@@ -544,7 +559,17 @@ def main():
                "-c:v", "libx264", "-preset", "veryfast",
                "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
                "-pix_fmt", "yuv420p", a.out]
-        r = subprocess.run(cmd, capture_output=True, text=True)
+        # ffmpeg не висит молча: шард всё равно срежут лимитом, но тогда в
+        # журнале не остаётся причины. Потолок — вчетверо от длины сцены, но
+        # не меньше 300 с (10.11).
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True,
+                               timeout=max(300.0, a.seconds * 4))
+        except subprocess.TimeoutExpired:
+            print("FAIL: ffmpeg не ответил за %.0f с на сцене %.1f с, вид «%s»"
+                  % (max(300.0, a.seconds * 4), a.seconds, a.kind),
+                  file=sys.stderr)
+            return 1
         ok = r.returncode == 0 and os.path.isfile(a.out) and os.path.getsize(a.out) > 0
         print(("готово: %s (переход «%s» %.1f с из %.1f с сцены)"
                % (a.out, a.kind, tf / float(FPS), a.seconds)) if ok
