@@ -432,12 +432,50 @@ def step_overlays(proj, scenes_json):
                 _capped_ids |= {int(x) for x in (_d.get("вожжено") or [])}
             except Exception:
                 pass
-        if _capped_ids and not os.path.isfile(_capmark):
-            log("субтитры: отметки матрицы покрывают %d сцен — повторно не "
-                "вжигаю" % len(_capped_ids))
+        # СТРОКУ «ПОВТОРНО НЕ ВЖИГАЮ» ПЕЧАТАЕМ ТОЛЬКО ПОСЛЕ ПРОВЕРКИ ПОЛНОТЫ
+        # (10.11): раньше она стояла ДО неё и успокаивала при покрытии 11 из
+        # 71 — вкладка читала лог, видела «всё вожжено» и отдавала немой файл.
+        _capped_say = len(_capped_ids)
+    # ПОКРЫТИЕ СЧИТАЕМ ПО ВСЕМ СЦЕНАМ РОЛИКА, А НЕ ПО СЦЕНАМ СО ВСПЛЫВАШКАМИ
+    # (10.11, улов `usuario-58`, файл 469 МБ приехал немым на 60 сценах из 71).
+    # `ids` здесь — ключи `overlays.json`, то есть только сцены со
+    # всплывашками. Если матрица вожгла субтитры на 11 таких сценах, условие
+    # `_capped_ids >= ids` становилось истинным, шаг пропускался целиком, и
+    # остальные 60 сцен брались из КЭША КЛИПОВ — без субтитров. Снаружи это
+    # «успех»: джоб зелёный, размер нормальный, озвучка на месте, а брак виден
+    # только листом готового mp4. Берём полный список сцен из сценария.
+    _all_ids = set()
+    try:
+        _all_ids = {int(x["id"]) for x in json.load(
+            open(scenes_json, encoding="utf-8"))["scenes"]}
+    except Exception:
+        _all_ids = {int(k) for k in ids}
+    # И ЕЩЁ: СУБТИТРЫ МОГУТ БЫТЬ СДЕЛАНЫ ПОЗЖЕ КЛИПОВ. Штатный порядок —
+    # `captions.ass` после его «собирай», то есть после кругов фетча, когда
+    # клипы уже лежат в кэше очереди. Отметка о вжигании старее `captions.ass`
+    # означает, что вожжено по СТАРОМУ файлу (или до него) — гоним заново.
+    _caps_newer = False
+    try:
+        _ass = [f for f in glob.glob(os.path.join(_capdir, "*.ass"))] if _capdir else []
+        if _ass and _capped_ids:
+            _ass_m = max(os.path.getmtime(f) for f in _ass)
+            _marks = glob.glob(os.path.join(clips, ".capped.*.json"))
+            if _marks and _ass_m > max(os.path.getmtime(f) for f in _marks) + 1:
+                _caps_newer = True
+                log("субтитры: captions.ass НОВЕЕ отметок вжигания — "
+                    "кэшу клипов не доверяю, вжигаю заново")
+    except Exception:
+        pass
     _need_caps = bool(_capdir) and os.path.isdir(_capdir) \
         and not os.path.isfile(_capmark) \
-        and not (_capped_ids >= {int(k) for k in ids})
+        and (_caps_newer or not (_capped_ids >= _all_ids))
+    if bool(_capdir) and os.path.isdir(_capdir) and _capped_ids:
+        if _capped_ids >= _all_ids and not _caps_newer:
+            log("субтитры: отметки матрицы покрывают ВСЕ %d сцен — повторно "
+                "не вжигаю" % len(_all_ids))
+        else:
+            log("субтитры: вожжены на %d сценах из %d — добираю остальные"
+                % (len(_capped_ids), len(_all_ids)))
     if _need_caps:
         log("субтитры ВКЛЮЧЕНЫ и ещё не вожжены — шаг всплывашек не пропускаю")
     if not stale and prev and not _need_caps:
