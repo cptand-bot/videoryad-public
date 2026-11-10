@@ -1,0 +1,298 @@
+{
+ "16": {
+  "photo": "overlays/Media_Post_UA_34988.jpg",
+  "sound": "whoosh",
+  "at": 1.8,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right",
+  "anchor": "middle",
+  "text": {
+   "words": "ВЕРНУТЬ СТАРУЮ СИСТЕМУ",
+   "color": "white",
+   "pos": "tl",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "12": {
+  "photo": "overlays/ZeRada1_32968.jpg",
+  "sound": "whoosh",
+  "at": 2.1,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "anchor": "middle",
+  "text": {
+   "words": "ЕВРОПА БОИТСЯ ЗА СВОЁ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "1": {
+  "text": {
+   "words": "ПЯТЬ ЛЕТ НАЗАД — ТА ЖЕ ДВЕРЬ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0
+  }
+ },
+ "4": {
+  "text": {
+   "words": "АБУ-ДАБИ: ДВА ДНЯ ПЕРЕГОВОРОВ",
+   "color": "white",
+   "pos": "tl",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "7": {
+  "text": {
+   "words": "ВСЕ ПОБЕДИЛИ. ВСЕ МОЛОДЦЫ",
+   "color": "orange",
+   "pos": "mc",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "9": {
+  "text": {
+   "words": "КТО ПРОЛЕЗЕТ ЗА СТОЛ?",
+   "color": "yellow",
+   "pos": "ml",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "14": {
+  "text": {
+   "words": "А ЧТО ИМЕННО У ВАС ЕСТЬ?",
+   "color": "green",
+   "pos": "mc",
+   "font": "default",
+   "sound": "pop",
+   "at": 3.5,
+   "scale": 1.0
+  }
+ },
+ "19": {
+  "text": {
+   "words": "ГАРАНТИИ НУЖНЫ ВСЕМ СРАЗУ",
+   "color": "yellow",
+   "pos": "ml",
+   "font": "default",
+   "sound": "ding",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "22": {
+  "text": {
+   "words": "РУБИО СКАЗАЛ ПРОСТО",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "25": {
+  "text": {
+   "words": "ГАРАНТИЯ ИЛИ НОВАЯ ПРИЧИНА?",
+   "color": "red",
+   "pos": "mc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "28": {
+  "text": {
+   "words": "ПАУЗА ДО СЛЕДУЮЩЕГО РАУНДА",
+   "color": "orange",
+   "pos": "ml",
+   "font": "default",
+   "sound": "ding",
+   "at": 3.5,
+   "scale": 1.0
+  }
+ },
+ "31": {
+  "text": {
+   "words": "ГОЛОС ИДЁТ ИЗ ВАШИНГТОНА",
+   "color": "white",
+   "pos": "tl",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.3,
+   "scale": 1.0
+  },
+  "photo": "overlays/scene_031.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "anchor": "top"
+ },
+ "36": {
+  "text": {
+   "words": "СПОР БОЛЬШЕ, ЧЕМ УКРАИНА",
+   "color": "yellow",
+   "pos": "mc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "39": {
+  "text": {
+   "words": "ЕВРОПА ГОТОВИТСЯ К ВОЙНЕ",
+   "color": "red",
+   "pos": "tc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "41": {
+  "text": {
+   "words": "ПРЯМОЕ СТОЛКНОВЕНИЕ С НАТО",
+   "color": "red",
+   "pos": "tl",
+   "font": "default",
+   "sound": "ding",
+   "at": 3.2,
+   "scale": 1.0
+  },
+  "photo": "overlays/scene_041.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "anchor": "top"
+ },
+ "43": {
+  "text": {
+   "words": "ВОЗВРАЩАЕМСЯ В ДЕКАБРЬ 2021",
+   "color": "white",
+   "pos": "mc",
+   "font": "default",
+   "sound": "pop",
+   "at": 3.5,
+   "scale": 1.0
+  }
+ },
+ "45": {
+  "text": {
+   "words": "УЛЬТИМАТУМ 2.0",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.3,
+   "scale": 1.0
+  }
+ },
+ "48": {
+  "text": {
+   "words": "ОДИН НЕВЕРНЫЙ ШАГ",
+   "color": "red",
+   "pos": "ml",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.6,
+   "scale": 1.0
+  }
+ },
+ "50": {
+  "text": {
+   "words": "ПУСТЬ ОБЪЯВЯТ ПОБЕДУ",
+   "color": "orange",
+   "pos": "tl",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.9,
+   "scale": 1.0
+  }
+ },
+ "53": {
+  "text": {
+   "words": "УЛЫБНУЛИСЬ И РАЗЪЕХАЛИСЬ",
+   "color": "white",
+   "pos": "mc",
+   "font": "default",
+   "sound": "ding",
+   "at": 3.2,
+   "scale": 1.0
+  }
+ },
+ "55": {
+  "text": {
+   "words": "ЧАСЫ ПРОДОЛЖАЮТ ИДТИ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 3.5,
+   "scale": 1.0
+  }
+ },
+ "anchor": "top",
+ "3": {
+  "photo": "overlays/scene_003.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "anchor": "top"
+ },
+ "8": {
+  "photo": "overlays/scene_008.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right",
+  "anchor": "top"
+ },
+ "18": {
+  "photo": "overlays/scene_018.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right",
+  "anchor": "top"
+ },
+ "21": {
+  "photo": "overlays/scene_021.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "anchor": "top"
+ }
+}

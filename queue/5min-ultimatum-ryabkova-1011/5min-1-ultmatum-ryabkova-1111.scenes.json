@@ -1,0 +1,505 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 8.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/АБУ-ДАБИ-ПЕРЕГОВОРЫ"
+  },
+  {
+   "id": 2,
+   "start_sec": 8.5,
+   "duration_sec": 11.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН"
+  },
+  {
+   "id": 3,
+   "start_sec": 19.6,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Брюссель 2026 штаб-квартира НАТО фасад и флаги",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 4,
+   "start_sec": 29.8,
+   "duration_sec": 8.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Вашингтон 2026 здание Государственного департамента США фасад"
+  },
+  {
+   "id": 5,
+   "start_sec": 37.9,
+   "duration_sec": 7.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП"
+  },
+  {
+   "id": 6,
+   "start_sec": 45.8,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка «bars» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bars",
+    "код": "A4",
+    "title": "ЧТО СКАЖУТ ПОСЛЕ ВСТРЕЧИ",
+    "watermark": "5 МИНУТ",
+    "anim": 10.2
+   }
+  },
+  {
+   "id": 7,
+   "start_sec": 56.0,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/АРМИЯ-США"
+  },
+  {
+   "id": 8,
+   "start_sec": 66.8,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/МИНОБОРОНЫ-РОССИИ"
+  },
+  {
+   "id": 9,
+   "start_sec": 78.3,
+   "duration_sec": 5.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Абу-Даби 2026 делегации за столом переговоров"
+  },
+  {
+   "id": 10,
+   "start_sec": 83.9,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЕЛИСЕЙСКИЙ-ДВОРЕЦ-ПАРИЖЕ"
+  },
+  {
+   "id": 11,
+   "start_sec": 96.8,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 12,
+   "start_sec": 108.1,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 13,
+   "start_sec": 120.0,
+   "duration_sec": 13.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Европейского совета Брюссель 2026 фасад"
+  },
+  {
+   "id": 14,
+   "start_sec": 133.5,
+   "duration_sec": 13.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ",
+   "fx": "curl"
+  },
+  {
+   "id": 15,
+   "start_sec": 147.0,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен Брюссель 2026 официальный выход"
+  },
+  {
+   "id": 16,
+   "start_sec": 156.9,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Йоханн Вадефуль Берлин 2026 выступление в МИД Германии",
+   "fx": "filmwin"
+  },
+  {
+   "id": 17,
+   "start_sec": 170.0,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка «poster» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "poster",
+    "код": "A6",
+    "title": "ДЕКАБРЬ 2021",
+    "watermark": "5 МИНУТ",
+    "anim": 12.5
+   }
+  },
+  {
+   "id": 18,
+   "start_sec": 182.5,
+   "duration_sec": 19.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ"
+  },
+  {
+   "id": 19,
+   "start_sec": 202.0,
+   "duration_sec": 9.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ",
+   "fx": "stamps"
+  },
+  {
+   "id": 20,
+   "start_sec": 211.2,
+   "duration_sec": 14.2,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 21,
+   "start_sec": 225.4,
+   "duration_sec": 14.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Си Цзиньпин Пекин 2026 официальный приём"
+  },
+  {
+   "id": 22,
+   "start_sec": 239.6,
+   "duration_sec": 8.6,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/hHdddQRL6WACLWq9EQI3BbrIjf9VkyedPTdgGxznEf_WlJE0PfYgbTU75hYw5uxZeZn2FDOMFIeOIJCyraLnBVp7_qQS3OFwqce7uO92W3NgewTNSMb3alh7ejRHSY1ZGADDo5CsA1uX0-qjXy7H5jstMoVP7KmoolOJ1nNI0z53HarpFQ6aSHaTGXNBSo_1yOtJNf91Gewct2puYVkV9IhZmHwgnzvO5w6AlHWmrK3UipRXbi6sZo3eSdR4YhudlSsRbpfZ4Wsv6I4iUwiQPW_8qedcWbFVvgYYBBtvn2vf-ZJNmG6i0cR84jbsNAm0xHsU8REhn_L5bPNqchlsHg.jpg",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 23,
+   "start_sec": 248.2,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка «split» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 24,
+   "start_sec": 259.0,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО"
+  },
+  {
+   "id": 25,
+   "start_sec": 268.9,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Балтийское море 2026 корабль НАТО в патруле",
+   "fx": "slides"
+  },
+  {
+   "id": 26,
+   "start_sec": 279.8,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ"
+  },
+  {
+   "id": 27,
+   "start_sec": 290.3,
+   "duration_sec": 5.9,
+   "text": "",
+   "source": "card:slider",
+   "source_query": "карточка «slider» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "slider",
+    "код": "A5",
+    "title": "ПЯТЬ ЛЕТ МЕЖДУ ПОПЫТКАМИ",
+    "watermark": "5 МИНУТ",
+    "anim": 5.9
+   }
+  },
+  {
+   "id": 28,
+   "start_sec": 296.2,
+   "duration_sec": 14.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ЛЮДИ-ОФИСЕ-МОНИТОРАМИ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 29,
+   "start_sec": 311.0,
+   "duration_sec": 13.2,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 30,
+   "start_sec": 324.2,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/rctqvdpMm4M8Mxq40HijW8V6XDxTsSENoPg-T8qnxJRywFAH61c8hHWTBpCSdrzaSjeY5henB0eQ_mGIqhm5dH-9DRtLFqLkwXgXEJ3c6QmiYaAqGdLS5W5soDT-UhTalgUnrFKK0i8WkkPD1bTtiFCqG4VUmHW-tihQg5_CGo2yeVlSl-a3L5BG_3toYfXQZd0SC7L798IkMSyWVYhWQsN1kEeIUPgrtoAdtRotjdgmHkfqH_4El_wrwkVLjvHk-KA8e-AdHPQa9gDQ4jKsorw-yRRc44oAY1roA4cwDoLyaleZpUrV7x8SMsqAhP8t_bUi8R7Q0SZFw8wwVqzucQ.jpg"
+  },
+  {
+   "id": 31,
+   "start_sec": 335.6,
+   "duration_sec": 7.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО",
+   "fx": "torn"
+  },
+  {
+   "id": 32,
+   "start_sec": 343.4,
+   "duration_sec": 13.3,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 33,
+   "start_sec": 356.7,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ"
+  },
+  {
+   "id": 34,
+   "start_sec": 367.3,
+   "duration_sec": 13.2,
+   "text": "",
+   "source": "card:wall",
+   "source_query": "карточка «wall» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "wall",
+    "код": "A56",
+    "title": "ОДНОВРЕМЕННО",
+    "watermark": "5 МИНУТ",
+    "anim": 13.2
+   }
+  },
+  {
+   "id": 35,
+   "start_sec": 380.5,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Марко Рубио Белый дом Вашингтон 2026 официальный выход",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 36,
+   "start_sec": 392.6,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БРИФИНГ-ЗАЛ-БЕЛОГО-ДОМА"
+  },
+  {
+   "id": 37,
+   "start_sec": 404.3,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:dossier",
+   "source_query": "карточка «dossier» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 38,
+   "start_sec": 414.8,
+   "duration_sec": 10.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ФАСАД-ЗДАНИЯ-ВЕРХОВНОЙ"
+  },
+  {
+   "id": 39,
+   "start_sec": 424.9,
+   "duration_sec": 15.5,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/96ec927e69.mp4?token=lMzLhyWqmV1st3_lKJFN1UyVHXBw2GeUkwyozqDnxBvUGWEqnyI9TijXDaJy0B4b2eehM61Z15o8ysr6j6WqDdjFf1oUaw5urhDZM2I8X6tmORuvkXt51wglBG051KMEj-eIxi35eudXhf5fpqD2bQDEiIovvhlANtdFbYwZCcYjIUYCmOYRRoatvN8028st180DG2NqZeYbO5ndN9tgqhVSasO8Si2jeDm7THLSIBHkVF6R6LotcHp6MXWzILTvSiDPpVZ9uDTQkDFjjO0vXDrTUm4UojhUDVDJXalEBAModaUZgKHZDcF2riRALiLFYrNbHF-Er2H9l-m2YlTxmw",
+   "fx": "flash"
+  },
+  {
+   "id": 40,
+   "start_sec": 440.4,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "card:dof",
+   "source_query": "карточка «dof» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "dof",
+    "код": "A64",
+    "title": "РЯБКОВ",
+    "watermark": "5 МИНУТ",
+    "anim": 10.4
+   }
+  },
+  {
+   "id": 41,
+   "start_sec": 450.8,
+   "duration_sec": 13.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ"
+  },
+  {
+   "id": 42,
+   "start_sec": 464.4,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "card:vyrezka",
+   "source_query": "карточка «vyrezka» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 43,
+   "start_sec": 476.7,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "web_search",
+   "source_query": "здание МИД России Москва 2021 декабрь"
+  },
+  {
+   "id": 44,
+   "start_sec": 488.8,
+   "duration_sec": 13.9,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 45,
+   "start_sec": 502.7,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ДОМ-ПРАВИТЕЛЬСТВА-РОССИИ",
+   "fx": "player"
+  },
+  {
+   "id": 46,
+   "start_sec": 514.3,
+   "duration_sec": 11.0,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка «film_frame» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 47,
+   "start_sec": 525.3,
+   "duration_sec": 14.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО"
+  },
+  {
+   "id": 48,
+   "start_sec": 539.7,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Берлин 2026 бронемашины бундесвера на дороге",
+   "fx": "curl"
+  },
+  {
+   "id": 49,
+   "start_sec": 552.1,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 50,
+   "start_sec": 563.8,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "web_search",
+   "source_query": "президентский дворец Абу-Даби 2026 фасад"
+  },
+  {
+   "id": 51,
+   "start_sec": 574.3,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:vyrezka_kontur",
+   "source_query": "карточка «vyrezka_kontur» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 52,
+   "start_sec": 585.5,
+   "duration_sec": 15.0,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/f9fiQKpu-ft9rydVGSWizyeZhFhsgnwuNMGyTKieQ3P5gImJsct6QPu3Sr79eXpddd0GGuISBMGZhMey35-9Fz6ejdl5P9Uz6MRgelIZXcxNwNWDMP2YlEiKpHTT1QBdcPZ8VZJifHQ1gvMibRxESW5w3c67qRId40-MB9WZWVeeP00XnNKM-sw1Qr8AX-bVnvdAlvEDXmhHl9IlcBezRYHOMde6qv3wxbMl02qi7LwOgXKVdBPQq6O1SasBe3OnsbCEukX2KyVB4-lSIhu4dZ78Wubey_jOUX1oF749Co7yAxlXbisghjGWw_A2bXVNGIedzsKxFo-N3jIKPHAAbw.jpg"
+  },
+  {
+   "id": 53,
+   "start_sec": 600.5,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "web_search",
+   "source_query": "автомобили у президентского дворца Абу-Даби 2026",
+   "fx": "filmwin"
+  },
+  {
+   "id": 54,
+   "start_sec": 611.1,
+   "duration_sec": 14.2,
+   "text": "",
+   "source": "card:photo",
+   "source_query": "карточка «photo» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "photo",
+    "lines": [
+     "Пять лет назад дверь уже не открыли",
+     "После этого началась война",
+     "Теперь все снова стоят у той же двери"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 14.2,
+    "photo": "cards/photo/scene_054.jpg"
+   }
+  },
+  {
+   "id": 55,
+   "start_sec": 625.3,
+   "duration_sec": 10.96,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Смоленская площадь Москва 2026 здание МИД вечером"
+  }
+ ]
+}
