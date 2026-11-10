@@ -912,11 +912,65 @@ def sfx_list():
     return out
 
 
+def _css_preview(sid, images_dir, scenes_path):
+    """Данные для превью, которое рисует БРАУЗЕР: кадр, длительность, ход зума
+    и всплывашка. Ничего не кодируется — ни одной секунды процессора
+    пользователя (его прямое слово 23.10 и 10.11)."""
+    try:
+        scenes = json.load(open(scenes_path, encoding="utf-8"))["scenes"]
+        sc = next((x for x in scenes if int(x["id"]) == int(sid)), None)
+    except Exception:
+        sc = None
+    dur = float((sc or {}).get("duration_sec") or 0) or 8.0
+    img = None
+    for ext in (".mp4", ".jpg", ".jpeg", ".png", ".webp"):
+        cand = os.path.join(images_dir, f"scene_{int(sid):03d}{ext}")
+        if os.path.exists(cand):
+            img = f"{images_dir}/scene_{int(sid):03d}{ext}"
+            break
+    if img is None:
+        rev = os.path.join(images_dir, ".rev", f"{int(sid):03d}.jpg")
+        if os.path.exists(rev):
+            img = f"{images_dir}/.rev/{int(sid):03d}.jpg"
+    ov = load_overlays().get(str(sid)) or {}
+    ov_img = ov.get("photo") if isinstance(ov, dict) else None
+    if ov_img and not os.path.exists(ov_img):
+        ov_img = None
+    ov_txt = ""
+    if isinstance(ov, dict) and isinstance(ov.get("text"), dict):
+        ov_txt = str(ov["text"].get("words") or ov["text"].get("text") or "").strip()
+    return {"ok": True, "mode": "css", "img": img, "dur": round(dur, 2),
+            "ov_img": ov_img, "ov_text": ov_txt,
+            "note": "движение рисует браузер — на твоей машине ничего не считается"}
+
+
 def build_scene_preview(sid, images_dir, scenes_path):
     """Собрать РЕАЛЬНЫЙ кусок одной сцены как в финале: Ken Burns / нормализация
     видео → всплывашка (фото + текст) → звук всплывашки. Кладёт в
-    <images>/.rev/preview_NNN.mp4, возвращает URL. ~10-30 с на кадр."""
+    <images>/.rev/preview_NNN.mp4, возвращает URL.
+
+    СЧЁТ НА МАШИНЕ ПОЛЬЗОВАТЕЛЯ ЗАПРЕЩЁН (его прямое слово 23.10 и повтор
+    10.11: «опять идёт расшифровка на моей машине, долго… это давно должно
+    быть пофиксено»). Поэтому порядок такой:
+      1. готовое превью из облака   — <images>/.rev/preview_NNN.mp4;
+      2. готовый клип сцены          — <images>/scene_NNN.mp4 (карточки и
+         видео-сцены приезжают клипом, пересчитывать их незачем);
+      3. локальный ffmpeg — ТОЛЬКО при VIDEORYAD_LOCAL_OK=1.
+    Без выключателя отдаём 503 с понятной причиной: пусть лучше кнопка
+    скажет «превью считает облако», чем его процессор молотит 10-30 с."""
     import shutil
+    _rev0 = os.path.join(images_dir, ".rev")
+    _ready = os.path.join(_rev0, f"preview_{int(sid):03d}.mp4")
+    if os.path.exists(_ready) and os.path.getsize(_ready) > 1024:
+        return f"{images_dir}/.rev/preview_{int(sid):03d}.mp4"
+    _clip = os.path.join(images_dir, f"scene_{int(sid):03d}.mp4")
+    if os.path.exists(_clip) and os.path.getsize(_clip) > 1024:
+        return f"{images_dir}/scene_{int(sid):03d}.mp4"
+    if os.environ.get("VIDEORYAD_LOCAL_OK") != "1":
+        raise RuntimeError(
+            "превью на машине пользователя не считается (запрет 23.10): "
+            "готового клипа сцены нет, закажи превью в облаке или запусти "
+            "дашборд с VIDEORYAD_LOCAL_OK=1")
     scenes = json.load(open(scenes_path, encoding="utf-8"))["scenes"]
     sc = next((s for s in scenes if int(s["id"]) == int(sid)), None)
     if not sc:
@@ -1716,6 +1770,7 @@ figcaption{padding:10px 13px 13px}
 .pvbtn:hover{background:#3c2a63}
 .pvbox{position:absolute;inset:0;background:#000;z-index:8}
 .pvbox video{width:100%;height:100%;object-fit:contain;background:#000}
+@keyframes pvzoom {{ from {{ transform: scale(1.0); }} to {{ transform: scale(1.12); }} }}
 .pvclose{position:absolute;top:6px;right:6px;background:#000b;color:#fff;border:1px solid #777;
   border-radius:6px;padding:3px 10px;cursor:pointer;z-index:9;font-size:13px}
 /* РАССМОТРЕТЬ КАДР — ДВА СОСТОЯНИЯ, ПОЛОВИНА И ВЕСЬ ЭКРАН (2026-10-29).
@@ -2786,7 +2841,7 @@ document.addEventListener("keydown", e=>{{
 async function previewScene(id, ev){{
   if(ev) ev.stopPropagation();
   const b=document.getElementById("pvbtn"+id);
-  if(b){{ b.textContent="⏳ собираю… (может занять до минуты)"; b.disabled=true; }}
+  if(b){{ b.textContent="⏳ открываю…"; b.disabled=true; }}
   try{{
     const r=await fetch("preview?id="+id,{{method:"POST"}});
     const txt=await r.text();
@@ -2798,6 +2853,23 @@ async function previewScene(id, ev){{
       box.innerHTML='<video src="'+j.url+'?t='+Date.now()+'" controls autoplay playsinline></video>'
         +'<button class="pvclose" onclick="pvClose('+id+',event)">✕ закрыть</button>';
       if(b) b.textContent="▶ пересобрать превью";
+    }} else if(r.ok && j && j.mode==="css" && j.img){{
+      // ПРЕВЬЮ БЕЗ СЧЁТА НА ЕГО МАШИНЕ (23.10 и 10.11): тот же кадр, тот же
+      // ход зума, та же всплывашка — движение рисует браузер.
+      const box=document.getElementById("pvbox"+id);
+      box.hidden=false;
+      box.onclick=(e)=>e.stopPropagation();
+      const d=(j.dur||8);
+      const isVid=/[.]mp4$/i.test(j.img);
+      const media=isVid
+        ? '<video src="'+j.img+'?t='+Date.now()+'" autoplay muted loop playsinline style="width:100%;display:block"></video>'
+        : '<img src="'+j.img+'?t='+Date.now()+'" style="width:100%;display:block;animation:pvzoom '+d+'s linear forwards">';
+      const ovp=j.ov_img?'<img src="'+j.ov_img+'?t='+Date.now()+'" style="position:absolute;right:4%;bottom:12%;width:30%;border:2px solid #fff;border-radius:4px;box-shadow:0 4px 18px #000a">':'';
+      const ovt=j.ov_text?'<div style="position:absolute;left:4%;bottom:6%;font:700 15px/1.2 system-ui;color:#fff;text-shadow:0 2px 6px #000;background:#0008;padding:4px 8px;border-radius:3px">'+j.ov_text+'</div>':'';
+      box.innerHTML='<div style="position:relative;overflow:hidden">'+media+ovp+ovt+'</div>'
+        +'<div style="font:12px system-ui;color:#8ab;padding:3px 0">превью рисует браузер · на твоей машине ничего не считается · '+d.toFixed(1)+' с</div>'
+        +'<button class="pvclose" onclick="pvClose('+id+',event)">✕ закрыть</button>';
+      if(b) b.textContent="▶ превью";
     }} else {{
       if(b) b.textContent="✗ "+(txt||"не собралось").slice(0,40);
       console.warn("preview fail", r.status, txt);
@@ -3709,6 +3781,10 @@ def run_live(scenes_path, images_dir, port):
     scenes = load_scenes(scenes_path)
     project = os.path.basename(os.getcwd())
     thumbs_dir = os.path.join(images_dir, ".rev")
+    # Каталог скрытый и в облако не уезжает: после get.sh его в папке забора
+    # нет, и `state` падал FileNotFoundError на КАЖДОМ запросе — страница
+    # отдавала 200 и оставалась ПУСТОЙ (улов usuario-d3, 10.11).
+    os.makedirs(thumbs_dir, exist_ok=True)
 
     # РАСПОЗНАВАТЕЛЬ БОЛЬШЕ НЕ ЖИВЁТ В ПАМЯТИ ДАШБОРДА (2026-11-09).
     #
@@ -4541,17 +4617,23 @@ def run_live(scenes_path, images_dir, port):
                 return self._reply(200, body)
 
             if route == "preview":
-                # собрать РЕАЛЬНЫЙ кусок этой сцены (Ken Burns + всплывашка +
-                # текст + звук) и вернуть URL плеера. Долго (~10-30 с/кадр).
+                # Готовый клип (из облака или карточка) отдаём плеером. Если
+                # клипа нет — НЕ СЧИТАЕМ НА ЕГО МАШИНЕ (запрет 23.10, повтор
+                # 10.11: «опять идёт расшифровка на моей машине, долго»), а
+                # отдаём CSS-превью: тот же кадр с тем же ходом зума и той же
+                # всплывашкой, движение рисует браузер. Ноль счёта, мгновенно.
                 if not sid:
                     return self._reply(400, b"no")
+                url = None
                 try:
                     url = build_scene_preview(sid, images_dir, scenes_path)
                 except Exception as e:
-                    return self._reply(500, str(e).encode()[:300])
-                if not url:
-                    return self._reply(500, b"preview build failed")
-                return self._reply(200, json.dumps({"ok": True, "url": url}).encode())
+                    if os.environ.get("VIDEORYAD_LOCAL_OK") == "1":
+                        return self._reply(500, str(e).encode()[:300])
+                if url:
+                    return self._reply(200, json.dumps({"ok": True, "url": url}).encode())
+                return self._reply(200, json.dumps(_css_preview(sid, images_dir,
+                                                               scenes_path)).encode())
 
             if route == "mirror_ov":
                 # отзеркалить фото всплывашки (overlays/scene_NNN.jpg).

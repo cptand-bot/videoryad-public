@@ -1384,6 +1384,25 @@ except Exception as _e:                  # список не прочиталс�
     WARN.append("не проверить обязательные элементы (%s: %s) — посмотри "
                 "`template/obyazatelno.py`" % (type(_e).__name__, _e))
 
+# 8. ДЕТИ И ДЕТСКИЕ ПЛОЩАДКИ (10.11, его прямое слово по сданному ролику:
+# «не должно быть на дашборде, она не должна туда попадать»). Мины в запросах
+# этого не ловят: кадр приходит и из базы, и из вложения, и ручной подменой —
+# в тот раз запрос был чистый, а папка базы целиком состояла из площадок.
+# Поэтому смотрим САМ КАДР: `deti_gate.py listy` собирает листы, их смотрит
+# субагент, вердикт ложится в `deti/verdict.json`. Нет вердикта — дашборд не
+# отдаём. Обход: VIDEORYAD_NO_DETI=1 и только по его слову про этот ролик.
+try:
+    import subprocess as _sp
+    _dg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "deti_gate.py")
+    _pd = os.path.dirname(os.path.abspath(scenes_path)) or "."
+    _r = _sp.run([sys.executable, _dg, "check", _pd], capture_output=True, text=True)
+    if _r.returncode != 0:
+        FAIL.append((_r.stderr or _r.stdout or "ДЕТИ: проверка не пройдена").strip()
+                    .replace("\n", " · ")[:400])
+except Exception as _e:
+    WARN.append("не проверить «дети и площадки» (%s: %s) — посмотри "
+                "`template/deti_gate.py`" % (type(_e).__name__, _e))
+
 print("=" * 60)
 print(f"САМОПРОВЕРКА: {scenes_path}  ({len(scenes)} сцен, {total:.0f}с, канал {meta.get('channel','?')})")
 print("=" * 60)
