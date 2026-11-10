@@ -1,0 +1,11 @@
+{
+  "16": {
+    "photo": "overlays/Media_Post_UA_34988.jpg",
+    "sound": "whoosh",
+    "at": 1.8,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "middle"
+  }
+}
