@@ -34,6 +34,63 @@ import json, os, re, sys, subprocess, glob, random, shutil
 # В облаке потолок не нужен — раннер и должен занимать все ядра, поэтому он
 # включается только ВНЕ GitHub Actions. Переопределяется переменной
 # VIDEORYAD_FFMPEG_THREADS (0 = без ограничения).
+# ПОТОЛОК ВРЕМЕНИ НА КАЖДЫЙ ЗАПУСК ffmpeg (10.11, улов `usuario-ad`).
+# Повод: шард `overlays (4)` ролика ПЛАНЕТА · Ультиматум Рябкова встал на
+# сцене 052 и МОЛЧА простоял 19,5 минут при норме полторы, пока его не срезал
+# `timeout-minutes` джоба — и без его кадров не доделался `assemble`, то есть
+# зависание ОДНОГО кадра обнулило работу всех шардов. Ни один вызов ffmpeg
+# здесь не имел ни `timeout`, ни `-nostdin`: зависший процесс висел до конца
+# джоба, а в журнале после строки с размером всплывашки не было НИЧЕГО.
+# Теперь: своя смерть по времени, внятная строка в журнал и клип БЕЗ
+# всплывашки вместо потерянной сборки.
+FF_TIMEOUT = int(os.environ.get("VIDEORYAD_FF_TIMEOUT", "240"))
+
+
+def _kadr_chitaem(path, kak_video=False):
+    """Файл действительно картинка (или видео), а не страница ошибки.
+
+    Повод — сцена 052 ролика ПЛАНЕТА · Ультиматум Рябкова: под именем
+    `scene_052.jpg` лежал HTML «404 Not Found» на 161 байт. Проверяем ДО
+    ffmpeg, потому что он на таком входе не падает, а висит."""
+    try:
+        if not path or not os.path.exists(path) or os.path.getsize(path) < 800:
+            return False
+        with open(path, "rb") as fh:
+            head = fh.read(16).lstrip()
+        if head[:1] == b"<" or head[:5] == b"<?xml" or head[:9].lower() == b"<!doctype":
+            return False                      # страница ошибки под видом кадра
+        if kak_video:
+            r = subprocess.run(
+                ["ffprobe".join(os.environ.get("FFMPEG_BIN", "ffmpeg").rsplit("ffmpeg", 1)),
+                 "-v", "error", "-select_streams", "v:0",
+                 "-show_entries", "stream=codec_name", "-of", "csv=p=0", path],
+                capture_output=True, text=True, timeout=30)
+            return r.returncode == 0 and bool((r.stdout or "").strip())
+        from PIL import Image
+        with Image.open(path) as im:
+            im.verify()
+        return True
+    except Exception:
+        return False
+
+
+def _run_ff(cmd, sid=None, chto="ffmpeg", timeout=None):
+    """Запуск ffmpeg, который не может повиснуть навсегда."""
+    cmd = list(cmd)
+    if cmd and "-nostdin" not in cmd:
+        # без `-nostdin` ffmpeg умеет ждать ввода с терминала вечно
+        cmd.insert(1, "-nostdin")
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True,
+                              timeout=timeout or FF_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        met = f"[{sid:03d}] " if isinstance(sid, int) else ""
+        print(f"{met}ffmpeg ВИС {timeout or FF_TIMEOUT} с на шаге «{chto}» — снял его "
+              f"и иду дальше (сцена останется без этого слоя, сборка не встанет)",
+              flush=True)
+        return subprocess.CompletedProcess(cmd, 124, "", "timeout")
+
+
 def _threads_args():
     v = os.environ.get("VIDEORYAD_FFMPEG_THREADS")
     if v is None:
@@ -389,11 +446,12 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
         f"eval=init,format=yuv420p[v]"
     )
     tmp = out_mp4 + ".ttmp.mp4"
-    cmd = [ffmpeg, "-y", *_threads_args(), "-i", base_mp4, "-loop", "1", "-i", png,
+    cmd = [ffmpeg, "-y", *_threads_args(), "-i", base_mp4,
+           "-loop", "1", "-t", f"{dur + 1.0:.3f}", "-i", png,
            "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
            "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
            "-pix_fmt", "yuv420p", "-t", f"{dur:.3f}", tmp]
-    r = subprocess.run(cmd, capture_output=True, text=True)
+    r = _run_ff(cmd, sid, "текстовая всплывашка")
     try:
         os.remove(png)
     except OSError:
@@ -746,12 +804,40 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                 f"[0:v][ov]overlay=x='{xexpr}':y='{yexpr}':eval=frame,format=yuv420p[v]"
             )
         print(f"[{sid:03d}]  {cls}-size {bw}x{bh}  стиль={style} форма={shape} масштаб={msc}", flush=True)
-        _in2 = ["-stream_loop", "-1", "-i", photo] if ov_is_video else ["-loop", "1", "-i", photo]
+        # БИТЫЙ ФАЙЛ ВСПЛЫВАШКИ ДО ffmpeg НЕ ДОПУСКАЕМ (10.11, разбор зависшего
+        # шарда). На сцене 052 в `overlays/scene_052.jpg` лежала страница
+        # «404 Not Found» в 161 байт — скачавший её шаг сохранил ответ сервера
+        # как картинку. ffmpeg на таком входе с `-loop 1` не падает, а ВИСИТ
+        # (замерено: срезан по 40 с и с входным `-t`, и без него), и один
+        # такой кадр утащил всю сборку ролика.
+        if not _kadr_chitaem(photo, ov_is_video):
+            print(f"[{sid:03d}] всплывашка ПРОПУЩЕНА: файл не читается как "
+                  f"{'видео' if ov_is_video else 'картинка'} "
+                  f"({os.path.basename(photo)}, {os.path.getsize(photo) if os.path.exists(photo) else 0} б) "
+                  f"— сцена останется без неё, сборка идёт дальше", flush=True)
+            photo_ok = False
+            tspec = spec.get("text") if isinstance(spec, dict) else None
+            if tspec:
+                _apply_text_overlay(ffmpeg, "ffprobe".join(ffmpeg.rsplit("ffmpeg", 1)),
+                                    orig, clip, tspec, _dur, sid)
+            elif os.path.exists(orig) and not os.path.exists(clip):
+                os.replace(orig, clip)
+            continue
+        # ВХОД ОГРАНИЧЕН ПО ВРЕМЕНИ И ДО `-i` ТОЖЕ — но это лишь подстраховка.
+        # ЗАМЕРЕНО 10.11 на настоящем файле сцены 052: входной `-t` зависание
+        # НЕ снимает. Если картинка битая, ffmpeg крутится в декодере, кадров
+        # не выдаёт, выходного времени не набирает — и висит одинаково с `-t`
+        # и без него (оба прогона срезаны по 40 с). Реально держат два других
+        # рубежа: проверка файла ВЫШЕ (битый до ffmpeg не доходит) и потолок
+        # времени в `_run_ff`.
+        _lim = f"{_dur + 1.0:.3f}"
+        _in2 = (["-stream_loop", "-1", "-t", _lim, "-i", photo] if ov_is_video
+                else ["-loop", "1", "-t", _lim, "-i", photo])
         cmd = [ffmpeg, "-y", *_threads_args(), "-i", orig, *_in2,
                "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
                "-c:v", "libx264", "-preset", "veryfast", "-crf", os.environ.get("VIDEORYAD_CRF", "16"),
                "-pix_fmt", "yuv420p", "-t", f"{_dur:.3f}", _text_target]
-        r = subprocess.run(cmd, capture_output=True, text=True)
+        r = _run_ff(cmd, sid, "фото-всплывашка")
         ph_ok = os.path.exists(_text_target) and r.returncode == 0
         print(f"[{sid:03d}] всплывашка{' ВИДЕО' if ov_is_video else ''} @ {at}s "
               f"({os.path.basename(photo)}) -> "

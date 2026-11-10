@@ -1384,6 +1384,43 @@ except Exception as _e:                  # список не прочиталс�
     WARN.append("не проверить обязательные элементы (%s: %s) — посмотри "
                 "`template/obyazatelno.py`" % (type(_e).__name__, _e))
 
+# 9. БИТЫЕ ФАЙЛЫ КАДРОВ И ВСПЛЫВАШЕК (10.11, разбор зависшей сборки).
+# На сцене 052 ролика ПЛАНЕТА · Ультиматум Рябкова под именем
+# `overlays/scene_052.jpg` лежала страница «404 Not Found» в 161 байт. ffmpeg
+# на таком входе НЕ ПАДАЕТ, а висит: шард простоял 19,5 минут, его срезал
+# лимит джоба, и без его кадров не доделалась вся сборка. Ловим до дашборда.
+try:
+    from PIL import Image as _PILImage
+    _bityie = []
+    for _d in ("images", "overlays"):
+        _dir = os.path.join(os.path.dirname(os.path.abspath(scenes_path)) or ".", _d)
+        if not os.path.isdir(_dir):
+            continue
+        for _f in sorted(os.listdir(_dir)):
+            _fp = os.path.join(_dir, _f)
+            if not os.path.isfile(_fp) or _f.endswith((".json", ".revframe.jpg")):
+                continue
+            if not _f.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                continue
+            try:
+                if os.path.getsize(_fp) < 800:
+                    raise ValueError("файл меньше 800 байт")
+                with open(_fp, "rb") as _fh:
+                    _head = _fh.read(16).lstrip()
+                if _head[:1] == b"<" or _head[:9].lower() == b"<!doctype":
+                    raise ValueError("это веб-страница, а не картинка")
+                with _PILImage.open(_fp) as _im:
+                    _im.verify()
+            except Exception as _be:
+                _bityie.append("%s/%s (%s)" % (_d, _f, _be))
+    if _bityie:
+        FAIL.append("битые файлы кадров — ffmpeg на них ВИСНЕТ, заменить до сборки: "
+                    + " · ".join(_bityie[:8])
+                    + (" и ещё %d" % (len(_bityie) - 8) if len(_bityie) > 8 else ""))
+except Exception as _e:
+    WARN.append("не проверить файлы кадров на целость (%s: %s)"
+                % (type(_e).__name__, _e))
+
 # 8. ДЕТИ И ДЕТСКИЕ ПЛОЩАДКИ (10.11, его прямое слово по сданному ролику:
 # «не должно быть на дашборде, она не должна туда попадать»). Мины в запросах
 # этого не ловят: кадр приходит и из базы, и из вложения, и ручной подменой —

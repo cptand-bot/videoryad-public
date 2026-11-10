@@ -111,6 +111,7 @@ template/scenes_from_srt.py
 template/search_options.py
 template/selfcheck.py
 template/deti_gate.py
+template/zhurnal_zamen.py
 template/povtor_kadrov.py
 template/sfx/ding.mp3
 template/sfx/mashinka.mp3

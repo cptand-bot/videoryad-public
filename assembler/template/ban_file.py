@@ -31,6 +31,7 @@ already placed in an open project's images/ or overlays/. A --days entry
 stops being enforced automatically once it expires (checked by date, no
 cleanup step needed).
 """
+import glob
 import os
 import sys
 
@@ -193,9 +194,33 @@ def main():
         md5 = file_md5(path)
         if ban_md5(md5, path=path, reason=reason, days=days):
             print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason}")
+            _v_zhurnal(path, reason)
         else:
             print(f"НЕ записано: {path}  (md5 {md5}) — остался прежний бан")
     _siblings_hint(paths[-1])
+
+
+def _v_zhurnal(path, reason=""):
+    """ЗАМЕНА КАДРА ЧЕРЕЗ БАН — ТОЖЕ КРУГ ПРАВОК (10.11, его «где отсчёт?»).
+    Журнал вёл только `refetch.py`, а вкладки банят кадр и ставят новый руками
+    — и замер `brak.py` отвечал «данных нет» при четырёх кругах на ролик."""
+    try:
+        import re as _re
+        bn = os.path.basename(path)
+        m = _re.search(r"(?:scene_|_)(\d{2,3})\b", bn)
+        if not m:
+            return
+        sid = int(m.group(1))
+        pdir = os.path.dirname(os.path.dirname(os.path.abspath(path)))
+        if not glob.glob(os.path.join(pdir, "*.scenes.json")):
+            return                      # файл не из папки ролика (медиатека)
+        kind = "overlays" if os.sep + "overlays" + os.sep in os.path.abspath(path) \
+            else "images"
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from zhurnal_zamen import tikho
+        tikho(pdir, sid, kind=kind, how="ban_file", query=reason or "")
+    except Exception:
+        pass
 
 
 def _siblings_hint(path):

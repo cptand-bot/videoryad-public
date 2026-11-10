@@ -912,6 +912,18 @@ def sfx_list():
     return out
 
 
+def _v_zhurnal_zamen(sid, kind, how):
+    """Любая замена кадра С ДАШБОРДА — это круг правок, и её надо записать
+    (10.11, его «проверь брак… где отсчёт?»). До этого журнал вёл только
+    `refetch.py`, и замер видел «данных нет» при четырёх кругах на ролик."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from zhurnal_zamen import tikho
+        tikho(os.getcwd(), int(sid), kind=kind, how=how)
+    except Exception:
+        pass
+
+
 def _css_preview(sid, images_dir, scenes_path):
     """Данные для превью, которое рисует БРАУЗЕР: кадр, длительность, ход зума
     и всплывашка. Ничего не кодируется — ни одной секунды процессора
@@ -4338,6 +4350,7 @@ def run_live(scenes_path, images_dir, port):
                 need_msg = (f"файл в бане на {days} дн., нужна замена" if days
                             else "файл забанен навсегда, нужна замена")
                 save_need(sid, reason or need_msg)
+                _v_zhurnal_zamen(sid, "images", "бан с дашборда")
                 return self._reply(200)
 
             if route == "micdiag":
@@ -4910,6 +4923,9 @@ def run_live(scenes_path, images_dir, port):
                         ok = True
                 except Exception as e:
                     reason = reason or f"ошибка загрузки: {e}"
+                if ok:
+                    _v_zhurnal_zamen(sid, "overlays" if target == "overlay" else "images",
+                                     "замена с дашборда (поиск)")
                 body = json.dumps({"ok": ok, "reason": reason}).encode()
                 self.send_response(200 if ok else 502)
                 self.send_header("Content-Type", "application/json")
@@ -4940,6 +4956,7 @@ def run_live(scenes_path, images_dir, port):
                 with open(os.path.join(images_dir, f"scene_{sid:03d}{ext}"), "wb") as fh:
                     fh.write(data)
                 drop_need(sid)          # user supplied it — clear the ⚠️ flag
+                _v_zhurnal_zamen(sid, "images", "кадр загружен руками")
                 ok = True
             self.send_response(200 if ok else 400)
             self.send_header("Content-Length", "2")
