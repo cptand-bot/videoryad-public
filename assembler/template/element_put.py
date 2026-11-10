@@ -215,6 +215,35 @@ def _chislo(v):
             "--caption." % v)
 
 
+# НАШ ЭЛЕМЕНТ НЕ НОСИТ МЕТКУ «НУЖНО ТВОЁ ФОТО» (10.11, прямое замечание
+# пользователя с дашборда: «Почему на кадре 3 наш элемент и подсвечивается
+# "нужно твоё фото"? Все наши элементы не должны быть с этой меткой, это
+# утверждённые картинки»). Жёлтую метку пишет ОБЛАЧНЫЙ фетч, пока сцена
+# ещё поисковая; при пути «сцена провалилась в поиске → закрыли элементом»
+# запись в `needs_upload.json` переживала смену источника, потому что
+# чистка висела на СЛИЯНИИ шардов, а не на постановке элемента. Снимаем
+# здесь: сцена с нарисованным кадром фотографии от пользователя не ждёт.
+def снять_жёлтую_метку(sid, path="needs_upload.json"):
+    import json as _j
+    import os as _o
+    if not _o.path.exists(path):
+        return
+    try:
+        nu = _j.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    key = next((k for k in nu if str(k).lstrip("0") == str(sid).lstrip("0")
+                or str(k) == str(sid)), None)
+    if key is None:
+        return
+    nu.pop(key, None)
+    tmp = path + ".tmp"
+    _j.dump(nu, open(tmp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    _o.replace(tmp, path)
+    print("  needs_upload: снял метку «нужно твоё фото» со сцены %s — "
+          "её закрывает наш элемент" % sid)
+
+
 def main():
     ap = argparse.ArgumentParser(description="элемент арсенала на сцену ролика")
     ap.add_argument("scenes", nargs="?", default="")
@@ -580,6 +609,7 @@ def main():
         job["view"] = el["fn"]          # полное «модуль.функция» для реестра
     json.dump(job, open(jpath, "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
+    снять_жёлтую_метку(a.sid)
     cq.report(jpath, a.sid, вид, a.scenes)
     return 0
 

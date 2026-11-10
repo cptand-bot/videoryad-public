@@ -229,10 +229,37 @@ def text_sound_for(sid):
         return "pop"
 
 
+def _ovl_rel(v):
+    """АБСОЛЮТНЫЙ ПУТЬ В `overlays.json` ЧИТАЛСЯ КАК «ВСПЛЫВАШКИ НЕТ»
+    (10.11, прямое замечание пользователя с дашборда: «Сцена 6. Всплывашка
+    отображается на кадре пустой, и вообще её нет»). Файл был жив на
+    диске, но дашборд отдаёт картинки ТОЛЬКО по путям внутри папки
+    проекта, и рамка рисовалась пустой. Ни дашборд, ни `selfcheck`, ни
+    `check_overlay_overlap` на абсолютный путь не ругались — выглядело как
+    непоставленная всплывашка. Приводим путь к относительному здесь, при
+    чтении: вкладка могла записать его как угодно, показать обязаны
+    правильно."""
+    if not isinstance(v, dict):
+        return v
+    out = dict(v)
+    for ключ in ("photo", "file", "image", "src", "путь"):
+        п = out.get(ключ)
+        if not isinstance(п, str) or not os.path.isabs(п):
+            continue
+        try:
+            отн = os.path.relpath(п, os.getcwd())
+        except ValueError:                 # разные диски под Windows
+            continue
+        if отн.startswith(".."):           # файл вне проекта — не наш случай
+            continue
+        out[ключ] = отн.replace(os.sep, "/")
+    return out
+
+
 def load_overlays():
     try:
         with open(OVERLAY_FILE, encoding="utf-8") as f:
-            return {str(k): v for k, v in json.load(f).items()}
+            return {str(k): _ovl_rel(v) for k, v in json.load(f).items()}
     except (OSError, ValueError):
         return {}
 
@@ -3411,14 +3438,15 @@ function rjMic(){{
      порту — и на ЭТОМ порту навсегда включался медленный локальный
      whisper, а на соседнем всё оставалось быстрым. Отсюда и разница между
      каналами: у них просто разные порты. Теперь флаг живёт ЧАС. */
-  try{{
-    const _bad = localStorage.getItem("rjsr_bad");
-    if(_bad){{
-      const _age = Date.now() - (parseInt(_bad, 10) || 0);
-      if(_age < 3600000) return rjMicFile();
-      localStorage.removeItem("rjsr_bad");
-    }}
-  }}catch(e){{}}
+  /* 10.11, ЕГО ЗАМЕЧАНИЕ ТРЕТИЙ ДЕНЬ ПОДРЯД («нужна быстрая расшифровка на
+     ВСЕХ без исключения дашбордах»): ФЛАГ БОЛЬШЕ НЕ ЛАТЧИТСЯ ВООБЩЕ. Даже
+     часовой флаг лежал в localStorage, а тот привязан к ORIGIN, то есть к
+     ПОРТУ дашборда: одна осечка сервиса на порту ПЛАНЕТЫ сажала весь этот
+     порт на медленный локальный whisper (8-9 с), а соседний канал оставался
+     быстрым — ровно та разница между каналами, на которую он жалуется.
+     Платить за попытку нечем: откат на rjMicFile() происходит ВНУТРИ той же
+     диктовки, в onerror и в catch старта. Старый флаг чистим, если лежит. */
+  try{{ localStorage.removeItem("rjsr_bad"); }}catch(e){{}}
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR) return rjMicFile();        /* нет API — пишем файл и шлём whisper */
   const btn = document.getElementById("rjmic");
@@ -3453,7 +3481,6 @@ function rjMic(){{
       st.textContent = "микрофон запрещён в браузере — разреши доступ и повтори";
       return;
     }}
-    try{{ localStorage.setItem("rjsr_bad", String(Date.now())); }}catch(e){{}}
     st.textContent = "распознавание браузера недоступно — пишу локально…";
     rjMicFile();
   }};
@@ -3467,7 +3494,6 @@ function rjMic(){{
   }}catch(e){{
     /* бывает, что API объявлен, но стартовать не даёт — не теряем диктовку */
     _rjSR = null;
-    try{{ localStorage.setItem("rjsr_bad", String(Date.now())); }}catch(e2){{}}
     st.textContent = "распознавание браузера не стартовало — пишу локально…";
     return rjMicFile();
   }}

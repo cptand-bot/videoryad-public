@@ -1910,6 +1910,26 @@ def lint(paths, strict=False, no_net=False):
             _key_done = [f for f in ("links.txt", "tg_source.json",
                                      "links_topic.txt")
                          if os.path.exists(os.path.join(_pd, f))]
+            # ПУСТОЙ РАЗБОР — ЭТО НЕ «РАЗОБРАН» (улов 10.11, `usuario-8c`).
+            # Если запись по ключу в копии георадара не нашлась, `geo_links.py`
+            # всё равно кладёт links.txt и tg_source.json — пустыми, и мина
+            # поднималась ложно у каждой вкладки, чья копия старше ключа.
+            # Смотрим сам разбор: ссылок 0 по обоим счётчикам → записи нет,
+            # мягкое замечание, ролик идёт на базе и поиске.
+            _tgs = os.path.join(_pd, "tg_source.json")
+            if _key_done and os.path.exists(_tgs):
+                try:
+                    _m = json.load(open(_tgs, encoding="utf-8"))
+                    if not (_m.get("ссылок по идентификаторам") or 0) and \
+                       not (_m.get("ссылок по теме") or 0):
+                        print("  записи по ключу в копии георадара нет "
+                              "(разбор пуст) — это замечание, не мина. Копия "
+                              "могла быть снята ДО появления записи: сними "
+                              "свежую через MCP Drive и прогони geo_links "
+                              "заново, иначе работай без вложений.")
+                        _key_done = []
+                except Exception:
+                    pass
             if _key_done:
                 print("  МИНА: ключ записи уже разобран (%s рядом со "
                       "сценарием), а вложения постов не смотрели ни разу. "

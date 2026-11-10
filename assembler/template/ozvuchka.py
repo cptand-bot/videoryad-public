@@ -164,12 +164,21 @@ def check_text(path):
         errors.append("текст короче 200 знаков — похоже, это не озвучка")
 
     # ЦИФРЫ. Сервис произносит их сам и склоняет неверно.
+    # ЦИФРА В СОСТАВЕ ОБОЗНАЧЕНИЯ — НЕ ЧИСЛО (правка 10.11). PAC-2, PAC-3,
+    # F-16, S-400, Су-35, МиГ-29 — это маркировка техники, склонять там нечего,
+    # а гейт из-за неё ОТКЛАДЫВАЛ тему целиком («ЗЕ готов в Антарктиде»: два
+    # «числа» оказались PAC-2 и PAC-3, озвучки не было два часа). Как читать
+    # латиницу, предупреждает отдельная проверка ниже.
     digits = []
     for i, line in enumerate(text.splitlines(), 1):
         for m in re.finditer(r"\d[\d\s.,:/-]*", line):
             frag = m.group(0).strip(" .,:/-")
-            if frag:
-                digits.append((i, frag))
+            if not frag:
+                continue
+            пред = line[:m.start()].rstrip("-‑–")
+            if пред and (пред[-1].isalpha()):
+                continue          # приклеена к слову: PAC-2, Су-35, Mi-8
+            digits.append((i, frag))
     if digits:
         show = "; ".join("стр.%d «%s»" % (i, f) for i, f in digits[:8])
         errors.append("ЦИФРЫ в тексте (%d шт.): %s%s — писать прописью с "

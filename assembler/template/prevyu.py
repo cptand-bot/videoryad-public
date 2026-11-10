@@ -130,7 +130,11 @@ def fresh_images(since):
     return sorted(out, key=os.path.getmtime)
 
 
-def do_one(folder, keep=5):
+def do_one(folder, keep=5, pravka="", start=1):
+    """ПЯТЬ ПРЕВЬЮ. `pravka` — его замечание с дашборда (текстом или
+    наговорённое голосом): оно идёт ПОСЛЕ дословного промпта и весит
+    больше общих указаний. `start` — с какого номера нумеровать файлы,
+    чтобы перегенерация НЕ ЗАТИРАЛА уже показанные варианты (10.11)."""
     src = find_text(folder)
     if not src:
         print("  ✗ нет текста статьи: %s" % folder)
@@ -143,11 +147,18 @@ def do_one(folder, keep=5):
             + text[:6000] +
             "\n======================================================\n\n"
             + PROMPT_TAIL +
+            (("\n\nЕГО ПРАВКИ К ПРОШЛОМУ РЯДУ — ВАЖНЕЕ ОБЩИХ УКАЗАНИЙ ВЫШЕ:\n"
+              + pravka.strip()
+              + "\nПрошлые пять вариантов ему не подошли. Новые должны быть "
+                "ДРУГИМИ по замыслу, а не перерисовкой тех же кадров.")
+             if pravka.strip() else "") +
             "\n\nСгенерируй ВСЕ ПЯТЬ картинок инструментом image_gen, по одной "
             "за раз. После каждой напиши одну строку: «готово N из пяти».\n"
             "Сохранять файлы никуда не нужно — я заберу их сам.")
     os.makedirs(os.path.join(folder, VARIANTS), exist_ok=True)
-    tz = os.path.join(folder, VARIANTS, "ЗАДАНИЕ-ПРЕВЬЮ.txt")
+    tz = os.path.join(folder, VARIANTS,
+                      "ЗАДАНИЕ-ПРЕВЬЮ.txt" if start <= 1
+                      else "ЗАДАНИЕ-ПРЕВЬЮ-ЕЩЁ-%d.txt" % start)
     open(tz, "w", encoding="utf-8").write(task)
 
     print("  %s — рисую пять превью…" % title)
@@ -161,14 +172,14 @@ def do_one(folder, keep=5):
     vdir = os.path.join(folder, VARIANTS)
     os.makedirs(vdir, exist_ok=True)
     n = 0
-    for i, f in enumerate(got[:keep], 1):
+    for i, f in enumerate(got[:keep], start):
         dst = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % i)
         shutil.copy2(f, dst)
         n += 1
     print("  ✓ превью: %d шт. в %s/ (%s)"
           % (n, VARIANTS, ", ".join("%.1f МБ" % (os.path.getsize(
               os.path.join(vdir, "ПРЕВЬЮ-%d.png" % i)) / 1048576)
-              for i in range(1, n + 1))))
+              for i in range(start, start + n))))
     return n > 0
 
 
@@ -177,6 +188,11 @@ def main():
     ap.add_argument("folder")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--keep", type=int, default=5)
+    ap.add_argument("--pravka", default="",
+                    help="его замечание к прошлому ряду (текст с дашборда)")
+    ap.add_argument("--start", type=int, default=0,
+                    help="с какого номера нумеровать; 0 — продолжить "
+                         "существующие, не затирая их")
     a = ap.parse_args()
     root = os.path.abspath(a.folder)
     if a.all:
@@ -186,7 +202,21 @@ def main():
     else:
         targets = [root]
     print("ПРЕВЬЮ: %d тем" % len(targets))
-    ok = sum(1 for t in targets if do_one(t, a.keep))
+    def _start(folder):
+        if a.start:
+            return a.start
+        if not a.pravka:
+            return 1
+        # ПРОДОЛЖАЕМ НУМЕРАЦИЮ: перегенерация по его правке не затирает
+        # то, что он уже видел на дашборде.
+        было = [int(os.path.basename(f)[len("ПРЕВЬЮ-"):-4])
+                for f in glob.glob(os.path.join(folder, VARIANTS,
+                                                "ПРЕВЬЮ-*.png"))
+                if os.path.basename(f)[len("ПРЕВЬЮ-"):-4].isdigit()]
+        return (max(было) + 1) if было else 1
+
+    ok = sum(1 for t in targets
+             if do_one(t, a.keep, a.pravka, _start(t)))
     print("готово: %d из %d" % (ok, len(targets)))
     return 0 if ok == len(targets) else 1
 

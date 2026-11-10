@@ -186,9 +186,20 @@ def narration_duration(proj, scenes_json):
 
 
 def output_stem(proj, scenes_json):
+    # ИМЯ ГОТОВОГО ФАЙЛА НЕ МОЖЕТ БЫТЬ «narration» (10.11, его слово: «Что за
+    # название Narration MP4? Что это за приползло мне?»). С 04.11 take_folder
+    # кладёт озвучку в проект под ОБЕЗЛИЧЕННЫМ именем `narration.<ext>`, а имя
+    # отсюда шло первым делом от озвучки — и ролик уезжал как
+    # `narration-ВИДЕОРЯД.mp4`, из которого github по дороге вырезает кириллицу,
+    # оставляя `narration-.mp4`. Поэтому обезличенную основу пропускаем и берём
+    # имя темы: сначала .srt (он называется по теме), потом файл сцен.
     n = find_narration(proj)
     if n:
-        return os.path.splitext(os.path.basename(n))[0].replace("_1080p", "")
+        stem = os.path.splitext(os.path.basename(n))[0].replace("_1080p", "")
+        if stem.lower().lstrip("_-").startswith(("narration", "ozvuchka", "voice", "audio")):
+            stem = ""
+        if stem:
+            return stem
     srt = find_srt(proj)
     if srt:
         stem = os.path.splitext(os.path.basename(srt))[0]

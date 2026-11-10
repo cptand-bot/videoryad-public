@@ -72,6 +72,29 @@ def asset(i):
     return out
 
 needs = {}
+# АБСОЛЮТНЫЙ ПУТЬ ВО ВСПЛЫВАШКЕ — ОТКАЗ (10.11, прямое замечание
+# пользователя: «Сцена 6. Всплывашка отображается на кадре пустой, и вообще
+# её нет»). Дашборд отдаёт картинки только внутри папки проекта, поэтому при
+# абсолютном пути рамка рисуется пустой при живом файле на диске, и это
+# читается как непоставленная всплывашка. `review.py` такой путь теперь
+# показывает, но в сборку он уезжать не должен — пишем относительный.
+if os.path.exists("overlays.json"):
+    try:
+        _ovl = json.load(open("overlays.json", encoding="utf-8"))
+    except (OSError, ValueError):
+        _ovl = {}
+    for _sid, _v in (_ovl or {}).items():
+        if not isinstance(_v, dict):
+            continue
+        for _k in ("photo", "file", "image", "src", "путь"):
+            _p = _v.get(_k)
+            if isinstance(_p, str) and os.path.isabs(_p):
+                FAIL.append(
+                    f"всплывашка сцены {_sid}: путь {_k} абсолютный "
+                    f"({_p}) — дашборд покажет пустую рамку. Запиши путь "
+                    f"относительно папки проекта, например overlays/"
+                    f"{os.path.basename(_p)}")
+
 if os.path.exists("needs_upload.json"):
     needs = json.load(open("needs_upload.json", encoding="utf-8"))
 

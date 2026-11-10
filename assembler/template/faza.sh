@@ -32,8 +32,26 @@ else
     PROJ="$(cd "$PROJ" && pwd)"
 fi
 LOG="$PROJ/.faza-$FAZA.log"
+# ФАЗЫ `start` И `tema` РАБОТАЮТ ДО СОЗДАНИЯ ПРОЕКТА, и PROJ у них — ОБЩИЙ
+# `~/projects`. Общий лог каждая вкладка обнуляла на входе, и причина чужого
+# провала терялась (10.11: почему не заказалась вторая статья — выяснилось
+# только разбором кода). Поэтому у них лог СВОЙ, по номеру процесса.
+if [ "$FAZA" = "tema" ] || [ "$FAZA" = "start" ]; then
+    LOG="$PROJ/.faza-$FAZA-$$.log"
+fi
 : > "$LOG"
-SCENES="$(ls "$PROJ"/*.scenes.json 2>/dev/null | grep -v iz_oblaka | head -1)"
+# СЦЕНАРИЙ — ТОЛЬКО ПРИНЯТЫЙ ФАЙЛ ПРОЕКТА (10.11, улов `usuario-d3`,
+# полчаса потерь). Под глоб `*.scenes.json` попадал и СЫРОЙ ответ агента
+# `codex.scenes.json`: фаза молча линтовала его вместо принятого и упорно
+# отказывала по досье (59 поисковых сцен против 50), хотя `dossier_use`
+# на принятом файле отвечал «чисто». Сначала ищем `<имя проекта>.scenes.json`,
+# и только если его нет — любой другой, но сырые файлы агента не берём.
+SCENES="$PROJ/$(basename "$PROJ").scenes.json"
+if [ ! -f "$SCENES" ]; then
+  SCENES="$(ls "$PROJ"/*.scenes.json 2>/dev/null \
+            | grep -v iz_oblaka | grep -v '/codex\.' | head -1)"
+fi
+[ -f "$SCENES" ] || SCENES=""
 FAILED=0
 NOTES=0
 
@@ -271,8 +289,49 @@ start)
         *) echo "ОШИБКА: это не ключ георадара: '$KEY' (ждём PROD_… / ARM_… / AN_…)"; exit 1;;
     esac
     WAITMIN=45
-    if [ "${1:-}" = "--wait" ]; then WAITMIN="${2:-45}"; fi
-    echo "ключ досье: $KEY · ждать тему до $WAITMIN мин"
+    # КАНАЛ ВКЛАДКИ — ОБЯЗАТЕЛЕН (10.11, его слово: «Она должна была работать
+    # на канал Планета, а не на канал 5 минут. Я же все пометил, все вкладки
+    # подписал»). До этой правки `start` брал САМУЮ СВЕЖУЮ СВОБОДНУЮ тему ПО
+    # ВСЕМ КАНАЛАМ: подпись вкладки код не видел вовсе, и две вкладки менялись
+    # каналами просто по тому, кто раньше стартовал. Ключ один на все каналы,
+    # поэтому развести их может только канал, названный вслух.
+    WANT_CH="${VIDEORYAD_CHANNEL:-}"
+    while [ $# -gt 0 ]; do
+        case "${1:-}" in
+            --wait) WAITMIN="${2:-45}"; shift 2 || true ;;
+            --lyuboy-kanal) WANT_CH="ЛЮБОЙ"; shift ;;
+            "") shift ;;
+            *) [ -z "$WANT_CH" ] && WANT_CH="$1"; shift ;;
+        esac
+    done
+    if [ -z "$WANT_CH" ]; then
+        echo "ОШИБКА: не назван КАНАЛ вкладки — без него start уедет на чужой канал."
+        echo "  зови так:  faza.sh start $KEY \"ПЛАНЕТА\"   (или \"5 МИНУТ\", \"ДИПЛОМАТИЯ СИЛЫ\" …)"
+        echo "  канал пишется ТОЧНО как папка в $NEWS"
+        echo "  свободные темы по каналам:"
+        python3 - "$NEWS" <<'PYCH'
+import glob, os, sys
+news = sys.argv[1]
+by = {}
+for t in glob.glob(os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*")):
+    if not os.path.isdir(t):
+        continue
+    if [f for f in glob.glob(os.path.join(t, "*.mp4"))
+       if os.path.getsize(f) >= 100 * 1024 * 1024]:
+        continue
+    txt = [f for f in glob.glob(os.path.join(t, "*.txt"))
+           if not any(k in os.path.basename(f) for k in ("ЗАДАНИЕ", "БРИФ", "УПАКОВКА", "ОТВЕТ"))]
+    if not txt:
+        continue
+    ch = t[len(news):].strip(os.sep).split(os.sep)[0]
+    by.setdefault(ch, []).append(os.path.basename(t))
+for ch in sorted(by):
+    print("    %-18s %s" % (ch, ", ".join(sorted(by[ch])[:4])))
+PYCH
+        echo "  (осознанно взять любой канал: --lyuboy-kanal)"
+        exit 1
+    fi
+    echo "ключ досье: $KEY · канал вкладки: $WANT_CH · ждать тему до $WAITMIN мин"
     # САМАЯ СВЕЖАЯ тема с текстом по ВСЕМ каналам, кроме сданных и занятых:
     # он кладёт текст прямо перед тем, как кинуть ключ, поэтому свежесть и есть
     # признак «это она».
@@ -286,7 +345,13 @@ rows = []
 for t in glob.glob(os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*")):
     if not os.path.isdir(t):
         continue
-    if glob.glob(os.path.join(t, "*ГОТОВО.mp4")):
+    # ТЕМА СДАНА — СМОТРИМ РАЗМЕР, А НЕ ИМЯ (улов 10.11, `usuario-ad`):
+    # у каналов имя готового файла РАЗНОЕ — «…ГОТОВО.mp4», «… ВИДЕОРЯД.mp4»,
+    # «…ГОТОВОЕ_ВИДЕО.mp4», «… ГОТОВЫЙ С ОЗВУЧКОЙ.mp4». Фильтр по одному
+    # «*ГОТОВО.mp4» отдал вкладке СДАННУЮ тему ПЛАНЕТЫ вместо ожидания текста.
+    # Пробы и образцы в папках тем ≤ 53 МБ, готовый ролик от 152 МБ.
+    if [f for f in glob.glob(os.path.join(t, "*.mp4"))
+       if os.path.getsize(f) >= 100 * 1024 * 1024]:
         continue
     txt = [f for f in glob.glob(os.path.join(t, "*.txt"))
            if not any(k in os.path.basename(f) for k in ("ЗАДАНИЕ", "БРИФ", "УПАКОВКА", "ОТВЕТ"))]
@@ -304,6 +369,8 @@ PYEOF
         CH="$(echo "$td" | sed "s|$NEWS/||" | cut -d/ -f1)"
         DAY="$(echo "$td" | sed "s|$NEWS/||" | cut -d/ -f3)"
         TNAME="$(basename "$td")"
+        # ЧУЖОЙ КАНАЛ ПРОПУСКАЕМ МОЛЧА — см. правку 10.11 выше.
+        if [ "$WANT_CH" != "ЛЮБОЙ" ] && [ "$CH" != "$WANT_CH" ]; then continue; fi
         SLUG="$(python3 - "$td" "$CH" "$DAY" <<'PYEOF'
 import re, sys, os
 t, ch, day = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -376,7 +443,9 @@ PYEOF
                 date '+%Y-%m-%d %H:%M' > "${TAKEN%/}/.tema_start"
                 echo "[ОК]    запущены в фоне: вторая статья на $MIRROR · упаковка · пять превью"
             elif [ "${VIDEORYAD_DRY:-0}" != "1" ]; then
-                echo "[СМОТРИ] вторая статья/упаковка не запустились — координатору строкой"
+                echo "[СМОТРИ] вторая статья/упаковка не запустились — ЗАКАЖИ ЯВНО:"
+                echo "         python3 $T/tema_start.py \"${TAKEN%/}\" --key $KEY --channel-2 $MIRROR --only rewrite"
+                echo "         причина — в $LOG (строки с «!!»)"
                 NOTES=$((NOTES+1))
             fi
         fi
@@ -441,7 +510,8 @@ tema)
     for td in "$DAYDIR"/*/; do
         [ -d "$td" ] || continue
         TNAME="$(basename "$td")"
-        if ls "$td"*ГОТОВО.mp4 >/dev/null 2>&1; then
+        # СДАННОСТЬ ПО РАЗМЕРУ, НЕ ПО ИМЕНИ — см. тот же улов 10.11 выше.
+        if python3 -c 'import glob,os,sys; sys.exit(0 if [f for f in glob.glob(os.path.join(sys.argv[1],"*.mp4")) if os.path.getsize(f)>=100*1024*1024] else 1)' "$td" 2>/dev/null; then
             echo "  — $TNAME: уже сдана"; continue
         fi
         TXT="$(ls "$td"*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"

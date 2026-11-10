@@ -288,6 +288,72 @@ function more(item, kind, blockId, btn){
    .catch(function(e){ btn.disabled=false; btn.textContent='ещё 10 вариантов';
                        hint.textContent = 'сбой: ' + e; });
 }
+// ЕЩЁ ПЯТЬ КАРТИНОК ПО ЕГО ПРАВКЕ (10.11). Рисует агент — это минуты,
+// поэтому кнопка сразу говорит, что идёт работа.
+function pvMore(item){
+  var ta = document.getElementById('pv-' + item);
+  var btn = document.getElementById('pvbtn-' + item);
+  var hint = document.getElementById('pv-' + item + '-hint');
+  btn.disabled = true; btn.textContent = 'рисую…';
+  hint.textContent = 'агент рисует пять новых, это несколько минут';
+  fetch('/kartinki', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({item:item, pravka: ta.value})})
+   .then(function(r){ return r.json(); })
+   .then(function(d){
+      btn.disabled = false; btn.textContent = 'ещё 5 картинок';
+      if(!d.ok){ hint.textContent = 'не вышло: ' + (d.error||'?'); return; }
+      var grid = document.getElementById('pvgrid-' + item);
+      d.items.forEach(function(x){
+        var img = document.createElement('img');
+        img.id = 'p-' + item + '-' + x.num;
+        img.src = x.url + '?t=' + x.sig;
+        img.title = 'нажми, чтобы наложить надписи';
+        img.style.cssText = 'width:100%;border-radius:6px;cursor:pointer;'
+                          + 'border:2px solid ' + d.accent;
+        img.onclick = function(){
+          openDlg(item, x.num, x.url, d.titles, x.sig,
+                  d.where + ' · вариант ' + x.num);
+        };
+        if(grid){ grid.appendChild(img); }
+      });
+      hint.textContent = 'добавлено ' + d.items.length
+                       + ' — новые в рамке, прежние на месте';
+      ta.value = '';
+   })
+   .catch(function(e){ btn.disabled=false; btn.textContent='ещё 5 картинок';
+                       hint.textContent = 'сбой: ' + e; });
+}
+// ДИКТОВКА ПРАВКИ ГОЛОСОМ (10.11, его слово: «и текстом или голосом
+// тоже»). Распознаёт сам браузер; не умеет — честно говорим, а не
+// делаем вид, что кнопка работает.
+function pvGolos(item){
+  var ta = document.getElementById('pv-' + item);
+  var btn = document.getElementById('pvmic-' + item);
+  var hint = document.getElementById('pv-' + item + '-hint');
+  var R = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!R){ hint.textContent = 'этот браузер не слышит голос — открой дашборд '
+                           + 'в Chrome или Edge, либо впиши правку текстом';
+          return; }
+  if(window._pvRec){ window._pvRec.stop(); window._pvRec = null;
+                     btn.textContent = 'голосом'; return; }
+  var rec = new R();
+  rec.lang = 'ru-RU'; rec.interimResults = true; rec.continuous = true;
+  var base = ta.value ? ta.value + ' ' : '';
+  rec.onresult = function(e){
+    var t = '';
+    for(var i=0;i<e.results.length;i++){ t += e.results[i][0].transcript; }
+    ta.value = base + t;
+  };
+  rec.onerror = function(e){ hint.textContent = 'микрофон: ' + e.error;
+                             btn.textContent = 'голосом';
+                             window._pvRec = null; };
+  rec.onend = function(){ btn.textContent = 'голосом'; window._pvRec = null; };
+  rec.start();
+  window._pvRec = rec;
+  btn.textContent = 'стоп';
+  hint.textContent = 'говори — текст появится в поле; «стоп» закончит';
+}
 function unfold(descId,btnId,item){
   var d=document.getElementById(descId);
   var m=document.getElementById(descId+'-mark');
@@ -670,8 +736,9 @@ def page(items, day):
         shots = it.get("превью_файлы") or []
         if shots:
             P.append('<div class="lab">превью — %d вариантов</div>' % len(shots))
-            P.append('<div style="display:grid;grid-template-columns:'
-                     'repeat(auto-fit,minmax(150px,1fr));gap:8px">')
+            P.append('<div id="pvgrid-%d" style="display:grid;'
+                     'grid-template-columns:'
+                     'repeat(auto-fit,minmax(150px,1fr));gap:8px">' % _i)
             _titles = json.dumps((it.get("надписи") or [])[:10],
                                  ensure_ascii=False)
             _done = it.get("превью_готовые") or {}
@@ -705,6 +772,23 @@ def page(items, day):
                             ("3px solid %s" % _accent) if _ready
                             else "1px solid var(--line)"))
             P.append('</div>')
+            # ПЕРЕГЕНЕРАЦИЯ РЯДА ПО ЕГО ПРАВКЕ (10.11): поле правки,
+            # диктовка голосом и кнопка «ещё пять картинок». Старые
+            # варианты остаются на месте — новые встают следом.
+            P.append('<div class="row" style="margin-top:8px;gap:6px;'
+                     'align-items:flex-start;flex-wrap:nowrap">'
+                     '<textarea id="pv-%d" rows="2" placeholder="что не так '
+                     'с этим рядом и что нужно вместо него — текстом или '
+                     'голосом" style="flex:1;min-width:0;background:'
+                     'var(--bg);color:inherit;border:1px solid var(--line);'
+                     'border-radius:6px;padding:6px;font:inherit"></textarea>'
+                     '<button id="pvmic-%d" onclick="pvGolos(%d)" '
+                     'title="наговорить правку голосом">голосом</button>'
+                     '<button id="pvbtn-%d" onclick="pvMore(%d)">'
+                     'ещё 5 картинок</button></div>'
+                     '<div class="hint" id="pv-%d-hint">правка весит больше '
+                     'общих указаний промпта; рисует агент, это минуты</div>'
+                     % (_i, _i, _i, _i, _i, _i))
         P.append('</div>')          # конец vars-N
         # КНОПКА СВОРАЧИВАНИЯ КАРТОЧКИ — И ЕЁ ПАМЯТЬ (09.11)
         P.append('<div class="row" style="margin-top:12px">'
@@ -961,6 +1045,8 @@ def main():
                 return self.more()
             if self.path == "/make":
                 return self.do_make()
+            if self.path == "/kartinki":
+                return self.do_kartinki()
             if self.path == "/zhurnal":
                 return self.do_zhurnal()
             if self.path == "/sostoyanie":
@@ -1124,6 +1210,84 @@ def main():
                 body = {"ok": True, "items": got}
             except Exception as exc:
                 body = {"ok": False, "error": "%s: %s" % (type(exc).__name__, exc)}
+            out = json.dumps(body, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
+
+        def do_kartinki(self):
+            """ЕЩЁ ПЯТЬ КАРТИНОК ПРЕВЬЮ ПО ЕГО ПРАВКЕ (10.11, его заказ:
+            «мне полностью ряд из пяти не нравится… перегенерировать и свои
+            правки какие-то чтобы я мог внести, текстом или голосом»).
+
+            Правка едет как есть — голос страница уже превратила в текст.
+            Новые файлы НЕ ЗАТИРАЮТ показанные: нумерация продолжается с
+            последнего существующего, в сетке они встают следом."""
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                req = json.loads(self.rfile.read(n).decode("utf-8"))
+                i = int(req["item"])
+                it = items[i]
+                folder = it.get("превью_папка") or ""
+                pravka = (req.get("pravka") or "").strip()
+                vdir = os.path.join(folder, "превью-варианты")
+                os.makedirs(vdir, exist_ok=True)
+                было = sorted(it.get("превью_номера") or [])
+                start = (было[-1] + 1) if было else 1
+                записать_выбор({
+                    "событие": "ещё_картинки",
+                    "канал": it.get("канал", ""), "тема": it.get("тема", ""),
+                    "отвергнуто_вариантов": len(было),
+                    "его_правка": pravka,
+                })
+
+                def _restore_sighup():
+                    import signal as _sg
+                    try:
+                        _sg.signal(_sg.SIGHUP, _sg.SIG_DFL)
+                    except (ValueError, OSError):
+                        pass
+
+                cmd = [sys.executable, os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), "prevyu.py"),
+                    folder, "--start", str(start)]
+                if pravka:
+                    cmd += ["--pravka", pravka]
+                # ОДИН ВЫЗОВ АГЕНТА ЗА РАЗ — тот же замок, что у «ещё 10
+                # вариантов»: рисующий агент на машине один.
+                with _codex_lock:
+                    r = subprocess.run(cmd, capture_output=True, text=True,
+                                       timeout=3600,
+                                       preexec_fn=_restore_sighup)
+                новые = []
+                for num in range(start, start + 12):
+                    src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % num)
+                    if not os.path.isfile(src):
+                        continue
+                    sub = os.path.join(d, "prevyu", str(i))
+                    os.makedirs(sub, exist_ok=True)
+                    shutil.copy2(src, os.path.join(sub, "%d.png" % num))
+                    sig = _otpechatok(src)
+                    it.setdefault("превью_номера", []).append(num)
+                    it.setdefault("превью_отпечатки", {})[num] = sig
+                    it.setdefault("превью_файлы", []).append(
+                        "prevyu/%d/%d.png" % (i, num))
+                    новые.append({"num": num, "sig": sig,
+                                  "url": "prevyu/%d/%d.png" % (i, num)})
+                if not новые:
+                    raise RuntimeError(
+                        "картинок не появилось. %s"
+                        % ((r.stderr or r.stdout or "")[-200:]))
+                body = {"ok": True, "items": новые,
+                        "accent": ch_color(it.get("канал", ""))[0],
+                        "titles": (it.get("надписи") or [])[:10],
+                        "where": "%s · %s" % (it.get("канал", ""),
+                                              it.get("тема", ""))}
+            except Exception as exc:
+                body = {"ok": False, "error": "%s: %s"
+                        % (type(exc).__name__, exc)}
             out = json.dumps(body, ensure_ascii=False).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
