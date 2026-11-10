@@ -142,7 +142,33 @@ def _split_pair(raw, what):
     return left.strip(), right.strip()
 
 
+
+def _zamorozheno_stop(path_hint="."):
+    """УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО (10.11, Z-0019/Z-0020). После его
+    «утверждаю» инструменты правки на этом проекте не работают: находку несут
+    координатору, пересборку назначает пользователь."""
+    try:
+        import sys as _s, os as _o
+        _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+        from zamorozka import zamorozheno
+        pdir = _o.path.abspath(path_hint if _o.path.isdir(path_hint)
+                               else _o.path.dirname(_o.path.abspath(path_hint)) or ".")
+        for _ in range(3):
+            if _o.path.exists(_o.path.join(pdir, ".utverzhdeno.json")):
+                break
+            pdir = _o.path.dirname(pdir)
+        if zamorozheno(pdir):
+            print("ПРАВКИ ЗАПРЕЩЕНЫ: дашборд этого ролика утверждён. "
+                  "Находку неси координатору — пересборку назначает пользователь.",
+                  file=_s.stderr)
+            raise SystemExit(3)
+    except SystemExit:
+        raise
+    except Exception:
+        pass
+
 def main():
+    _zamorozheno_stop(".")
     ap = argparse.ArgumentParser(description="карточка разбора на сцену ролика")
     ap.add_argument("scenes")
     ap.add_argument("sid", type=int)

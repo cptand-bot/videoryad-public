@@ -126,8 +126,36 @@ def _need_reason(what):
 BLANK_REASON = "причина не названа (снято без текста)"
 
 
+
+def _zamorozheno_stop(path_hint="."):
+    """УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО (10.11, Z-0019/Z-0020). После того как
+    пользователь утвердил дашборд, инструменты правки на этом проекте не
+    работают: находку несут координатору, пересборку назначает он. Иначе
+    вкладка меняет кадры и упирается только на пуше, потеряв круг."""
+    try:
+        import sys as _s, os as _o
+        _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+        from zamorozka import zamorozheno
+        pdir = _o.path.abspath(path_hint if _o.path.isdir(path_hint)
+                               else _o.path.dirname(_o.path.abspath(path_hint)) or ".")
+        for _ in range(3):
+            if _o.path.exists(_o.path.join(pdir, ".utverzhdeno.json")):
+                break
+            pdir = _o.path.dirname(pdir)
+        if zamorozheno(pdir):
+            print("ПРАВКИ ЗАПРЕЩЕНЫ: дашборд этого ролика утверждён. "
+                  "Находку неси координатору — пересборку назначает пользователь.",
+                  file=_s.stderr)
+            raise SystemExit(3)
+    except SystemExit:
+        raise
+    except Exception:
+        pass
+
+
 def main():
     argv = sys.argv[1:]
+    _zamorozheno_stop(argv[0] if argv and not argv[0].startswith('-') else '.')
     if not argv:
         print(__doc__)
         raise SystemExit(1)
