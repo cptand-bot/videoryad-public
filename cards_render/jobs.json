@@ -1,0 +1,329 @@
+[
+ {
+  "scene": 1,
+  "view": "poster.poster",
+  "dur": 7.7,
+  "anim": 7.7,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "ШЕСТЬСОТ РАКЕТ ДЛЯ КИЕВА",
+   "hero_photo": "cards/photo/card_001.jpg",
+   "bottom": "Обещание расписано по годам",
+   "facts": [
+    {
+     "label": "ракеты Пи Эй Си два",
+     "value": "шестьсот"
+    },
+    {
+     "label": "годы поставки",
+     "value": "2027 и 2028"
+    },
+    {
+     "label": "производство",
+     "value": "Германия"
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 5,
+  "view": "film.film_single",
+  "dur": 13.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_005.jpg",
+   "kick": "Киев · ноябрь 2026",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "marker_serif",
+  "dur": 14.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Угроза бюджетом значит, что добровольного единства уже нет",
+   "accent": "добровольного единства уже нет",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 13,
+  "view": "charts.cartogram",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Германия",
+    "Венгрия",
+    "Словакия"
+   ],
+   "title": "КТО ПЛАТИТ, КТО ВОЗРАЖАЕТ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "cinematic.dossier",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "case": "КАЛЕНДАРЬ ВОЕННЫХ СТРУКТУР",
+   "rows": [
+    "миссия по обучению — продлена до ноября 2028",
+    "боевой опыт — анализ и обновление программ",
+    "координация — с европейскими штабами"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_019.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "vyrezka.gazeta",
+  "dur": 8.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_024.jpg",
+   "author": "Владимир Зеленский",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "cinematic.depth_of_field",
+  "dur": 8.9,
+  "anim": 8.9,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_028.jpg",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 33,
+  "view": "slider",
+  "dur": 14.6,
+  "anim": 14.6,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "СКОЛЬКО МОЖЕТ ДЛИТЬСЯ ОТКЛЮЧЕНИЕ",
+   "min": 0.0,
+   "max": 14.0,
+   "low": 7.0,
+   "high": 14.0,
+   "marker_value": 14.0,
+   "marker_display": "14  суток",
+   "seconds": 14.6,
+   "range_label": "от одной до двух недель",
+   "caption": "Две недели без света для мегаполиса — другая реальность",
+   "source": ""
+  }
+ },
+ {
+  "scene": 37,
+  "view": "photo",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "photo": "cards/photo/card_037.jpg",
+   "title": "СОЕДИНЕНИЯ С СЕТЬЮ",
+   "lines": [
+    "узел повреждён — город встаёт",
+    "вода и связь на одном контуре"
+   ]
+  }
+ },
+ {
+  "scene": 41,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.5,
+  "anim": 9.5,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_041.jpg",
+     240,
+     380,
+     -4,
+     "производители: 2027 и 2028"
+    ],
+    [
+     "cards/photo/card_041_2.jpg",
+     800,
+     380,
+     3,
+     "Берлин: до 2034"
+    ],
+    [
+     "cards/photo/card_041_3.jpg",
+     1360,
+     380,
+     -2,
+     "Брюссель: ноябрь 2028"
+    ]
+   ],
+   "title": "ЧЕЙ КАЛЕНДАРЬ ДЛИННЕЕ",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 45,
+  "view": "pull",
+  "dur": 8.6,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Голосование не способно приказать жителям Киева спокойно прожить две недели без электричества",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "bars",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "КТО БЫСТРЕЕ ДЕЛАЕТ РАКЕТЫ",
+   "caption": "Дефицит перехвата закрыть заявлением нельзя",
+   "seconds": 11.1,
+   "bars": [
+    {
+     "label": "РОССИЯ",
+     "value": 1.0,
+     "color": "4A90E2"
+    },
+    {
+     "label": "ЕВРОПА И США ВМЕСТЕ",
+     "value": 0.5,
+     "color": "48BB78"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 54,
+  "view": "split",
+  "dur": 13.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Зеленский готов встретиться с Путиным где угодно, хоть в Антарктиде",
+   "author": "Андрей Мельник",
+   "role": "постоянный представитель Украины при ООН",
+   "photo": "cards/photo/card_054.jpg",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "film.film_strip",
+  "dur": 15.0,
+  "anim": 15.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_059.jpg",
+    "cards/photo/card_059_2.jpg",
+    "cards/photo/card_059_3.jpg"
+   ],
+   "title": "ГДЕ ПОСТАВИТЬ СТОЛ",
+   "captions": [
+    "штаб",
+    "Брюссель",
+    "Страсбург"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "vyrezka.figura",
+  "dur": 11.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_066.jpg",
+   "author": "жители городов",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "timeline",
+  "dur": 13.4,
+  "anim": 13.4,
+  "tail_zoom": 0.06,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "title": "ЧЬИ СРОКИ",
+   "events": [
+    {
+     "date": "2034",
+     "text": "расходы Берлина"
+    },
+    {
+     "date": "ноябрь 2028",
+     "text": "миссия Брюсселя"
+    },
+    {
+     "date": "эта зима",
+     "text": "Киев"
+    }
+   ]
+  }
+ }
+]
