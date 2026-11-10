@@ -286,24 +286,43 @@
   }
  },
  {
-  "scene": 66,
+  "scene": 63,
+  "view": "charts.cartogram",
+  "dur": 8.7,
+  "anim": 8.7,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Киев",
+    "Днепр"
+   ],
+   "title": "ГДЕ ЖДУТ ОТКЛЮЧЕНИЙ",
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 67,
   "view": "vyrezka.figura",
-  "dur": 11.1,
+  "dur": 10.7,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "photo": "cards/photo/card_066.jpg",
+   "photo": "cards/photo/card_067.jpg",
    "author": "жители городов",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 70,
+  "scene": 71,
   "view": "timeline",
-  "dur": 13.4,
-  "anim": 13.4,
+  "dur": 11.15,
+  "anim": 11.15,
   "tail_zoom": 0.06,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
