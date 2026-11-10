@@ -916,8 +916,29 @@ def main():
     ap.add_argument("day", help="день в виде ДД-ММ, например 08-11")
     ap.add_argument("--port", type=int, default=8810)
     ap.add_argument("--out", help="сохранить html и не поднимать сервер")
+    # ТОЛЬКО ОДИН РОЛИК НА СТРАНИЦЕ (10.11, его слово по «ПЕРЕВОД с
+    # ДИПЛОМАТИЧЕСКОГО»: «положи на дашборд 8811 его. Только его, а остальные
+    # можешь не ложить. Там уже всё сделано, всё забрато»). Фильтр по
+    # подстроке канала или темы, несколько — через запятую. Без ключа всё
+    # как было: день целиком.
+    ap.add_argument("--tolko", help="оставить только ролики, где канал или "
+                                    "тема содержит эту подстроку "
+                                    "(несколько — через запятую)")
     a = ap.parse_args()
     items = collect(a.day)
+    if a.tolko:
+        masks = [m.strip().lower() for m in a.tolko.split(",") if m.strip()]
+        keep = []
+        for it in items:
+            hay = ("%s|%s" % (it.get("канал") or "", it.get("тема") or "")).lower()
+            if any(m in hay for m in masks):
+                keep.append(it)
+        if not keep:
+            sys.exit("--tolko %r не совпал ни с одним роликом дня %s: %s"
+                     % (a.tolko, a.day,
+                        "; ".join("%s|%s" % (i.get("канал"), i.get("тема"))
+                                  for i in items)))
+        items = keep
     if not items:
         sys.exit("за %s ни одной УПАКОВКА.json не нашлось — сначала "
                  "upakovka.py <папка дня> --all" % a.day)
