@@ -1,0 +1,32 @@
+{
+ "scenes": [
+  {
+   "id": 3,
+   "source": "press_photo",
+   "source_query": "заместитель министра иностранных дел России Сергей Рябков портрет 2026",
+   "duration_sec": 4.0,
+   "text": ""
+  },
+  {
+   "id": 8,
+   "source": "press_photo",
+   "source_query": "Джаред Кушнер и Стив Уиткофф переговоры 2026",
+   "duration_sec": 4.0,
+   "text": ""
+  },
+  {
+   "id": 18,
+   "source": "press_photo",
+   "source_query": "Сергей Лавров Москва декабрь 2021 проект договора с НАТО",
+   "duration_sec": 4.0,
+   "text": ""
+  },
+  {
+   "id": 41,
+   "source": "press_photo",
+   "source_query": "генеральный секретарь НАТО Марк Рютте Брюссель 2026 портрет",
+   "duration_sec": 4.0,
+   "text": ""
+  }
+ ]
+}
