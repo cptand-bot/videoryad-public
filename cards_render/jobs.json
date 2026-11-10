@@ -1,0 +1,360 @@
+[
+ {
+  "scene": 6,
+  "view": "bars",
+  "dur": 10.2,
+  "anim": 10.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "ЧТО СКАЖУТ ПОСЛЕ ВСТРЕЧИ",
+   "caption": "Победителями объявят себя все",
+   "seconds": 10.2,
+   "bars": [
+    {
+     "label": "РАЗГОВОР БЫЛ ПОЛЕЗНЫМ",
+     "value": 0.95,
+     "color": "EABD23"
+    },
+    {
+     "label": "СТОРОНЫ УСЛЫШАЛИ ДРУГ ДРУГА",
+     "value": 0.9,
+     "color": "B92526"
+    },
+    {
+     "label": "ИСТОРИЧЕСКИЙ ПРОГРЕСС",
+     "value": 0.85,
+     "color": "84848A"
+    },
+    {
+     "label": "МИР УЖЕ ЗА УГЛОМ",
+     "value": 0.8,
+     "color": "E8E8E8"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 11,
+  "view": "charts.cartogram",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Франция",
+    "Германия",
+    "Британия",
+    "Еврокомиссия",
+    "НАТО"
+   ],
+   "kick": "Абу-Даби · ноябрь 2026",
+   "title": "КТО ПРОЛЕЗАЕТ ЗА СТОЛ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "poster.poster",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "ДЕКАБРЬ 2021",
+   "subtitle": "Три требования Москвы",
+   "hero_photo": "cards/photo/card_017.jpg",
+   "bottom": "Ответ Запада: пересматривать нечего",
+   "facts": [
+    {
+     "label": "НАТО",
+     "value": "не расширяться на восток"
+    },
+    {
+     "label": "Вооружения",
+     "value": "убрать от границ"
+    },
+    {
+     "label": "Инфраструктура",
+     "value": "рубежи 1997 года"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 20,
+  "view": "charts.cartogram",
+  "dur": 14.2,
+  "anim": 14.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Белоруссия",
+    "Турция",
+    "Китай"
+   ],
+   "title": "КОМУ ЕЩЁ НУЖНЫ ГАРАНТИИ",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "split",
+  "dur": 10.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Гарантии безопасности Украины должны быть такими, чтобы с ними согласилась Россия",
+   "author": "Марко Рубио",
+   "role": "государственный секретарь США",
+   "photo": "cards/photo/card_023.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "slider",
+  "dur": 5.9,
+  "anim": 5.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "ПЯТЬ ЛЕТ МЕЖДУ ПОПЫТКАМИ",
+   "min": 2021.0,
+   "max": 2026.0,
+   "low": 2021.0,
+   "high": 2026.0,
+   "marker_value": 2026.0,
+   "marker_display": "2026",
+   "seconds": 5.9,
+   "range_label": "Та же дверь, другие ставки",
+   "caption": "Тогда спорили о возможном, теперь — о случившемся",
+   "source": ""
+  }
+ },
+ {
+  "scene": 29,
+  "view": "pull",
+  "dur": 13.2,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если одному хорошо только потому, что второму страшно — это не гарантия, а пауза до следующего раунда",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "marker_serif",
+  "dur": 13.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если вы сами вышли из комнаты, стул пустым не останется",
+   "accent": "стул пустым не останется",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "cinematic.evidence_wall",
+  "dur": 13.2,
+  "anim": 13.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_034.jpg",
+     240,
+     380,
+     -4,
+     "Вашингтон говорит с Москвой"
+    ],
+    [
+     "cards/photo/card_034_2.jpg",
+     800,
+     380,
+     3,
+     "Европа требует место за столом"
+    ],
+    [
+     "cards/photo/card_034_3.jpg",
+     1360,
+     380,
+     -2,
+     "Берлин: систему не трогать"
+    ]
+   ],
+   "title": "ОДНОВРЕМЕННО",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 37,
+  "view": "cinematic.dossier",
+  "dur": 10.5,
+  "anim": 10.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "О ЧЁМ НА САМОМ ДЕЛЕ СПОР",
+   "rows": [
+    "Где будут войска",
+    "Какие вооружения разместят",
+    "Какие учения проводят",
+    "Что считать угрозой"
+   ],
+   "kick": "Не линия фронта, а то, что после",
+   "title": "Не линия фронта, а то, что после",
+   "photo": "cards/photo/card_037.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "cinematic.depth_of_field",
+  "dur": 10.4,
+  "anim": 10.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_040.jpg",
+   "title": "РЯБКОВ",
+   "sub": "заместитель министра иностранных дел России",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 42,
+  "view": "vyrezka.gazeta",
+  "dur": 12.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_042.jpg",
+   "author": "Василий Небензя",
+   "role": "постоянный представитель России при ООН",
+   "kick": "Нью-Йорк · ООН",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "film.film_strip",
+  "dur": 13.9,
+  "anim": 13.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_044.jpg",
+    "cards/photo/card_044_2.jpg",
+    "cards/photo/card_044_3.jpg",
+    "cards/photo/card_044_4.jpg"
+   ],
+   "kick": "Те же вопросы, другая цена",
+   "captions": [
+    "Декабрь 2021",
+    "Ответ Запада",
+    "Военная инфраструктура",
+    "Ультиматум 2.0"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "film.film_single",
+  "dur": 11.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_046.jpg",
+   "kick": "Куба · 1962",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "quote",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если этот кризис не преодолеть, он неизбежно перерастёт в ядерную войну в Европе",
+   "kick": "Прогноз автора",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "vyrezka.figura",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_051.jpg",
+   "author": "Сергей Лавров",
+   "role": "министр иностранных дел России",
+   "kick": "Москва · МИД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "photo",
+  "dur": 14.2,
+  "anim": 14.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_054.jpg",
+   "lines": [
+    "Пять лет назад дверь уже не открыли",
+    "После этого началась война",
+    "Теперь все снова стоят у той же двери"
+   ]
+  }
+ }
+]
