@@ -1,0 +1,566 @@
+{
+  "3": {
+    "photo": "overlays/scene_003.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "circle",
+    "scale": 1.5,
+    "style": "up-center",
+    "anchor": "middle",
+    "approved": true,
+    "dash_ok": true
+  },
+  "9": {
+    "photo": "overlays/scene_009.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "16": {
+    "photo": "overlays/scene_016.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "35": {
+    "photo": "overlays/scene_035.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "41": {
+    "photo": "overlays/scene_041.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "bottom",
+    "approved": true,
+    "dash_ok": true
+  },
+  "52": {
+    "photo": "overlays/scene_052.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "57": {
+    "photo": "overlays/scene_057.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "63": {
+    "photo": "overlays/scene_063.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right",
+    "anchor": "middle",
+    "approved": true,
+    "dash_ok": true
+  },
+  "79": {
+    "photo": "overlays/scene_079.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "left",
+    "anchor": "top",
+    "approved": true,
+    "dash_ok": true
+  },
+  "anchor": "top",
+  "1": {
+    "text": {
+      "words": "ОСТАНОВИТЬСЯ — НО ЗАЧЕМ?",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "4": {
+    "text": {
+      "words": "РАЗГОВОР ШИРЕ УКРАИНЫ",
+      "color": "white",
+      "pos": "tl",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "5": {
+    "text": {
+      "words": "НЕ ТОЛЬКО МОСКВА И КИЕВ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "7": {
+    "text": {
+      "words": "РАКЕТЫ, БАЗЫ, ФЛОТЫ",
+      "color": "orange",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "8": {
+    "text": {
+      "words": "ОСТАНОВИЛИ. А ДАЛЬШЕ?",
+      "color": "green",
+      "pos": "ml",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "КОНФЛИКТ ГОРАЗДО ШИРЕ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "13": {
+    "text": {
+      "words": "УКРАИНА ПО ДОРОГЕ ПРИШЛАСЬ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "text": {
+      "words": "ПАУЗА — ЭТО ВРЕМЯ",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "17": {
+    "text": {
+      "words": "БОЕПРИПАСЫ. УКРЕПЛЕНИЯ. РЕЗЕРВЫ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "19": {
+    "text": {
+      "words": "У МОСКВЫ ДРУГИЕ ЦЕЛИ",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "20": {
+    "text": {
+      "words": "ПРИЧИНА — ВСЯ СИСТЕМА",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "23": {
+    "text": {
+      "words": "ДЕПУТАТ РАДЫ О ПЕРЕМИРИИ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "25": {
+    "text": {
+      "words": "НАТО СНОВА НА СТОЛЕ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "28": {
+    "text": {
+      "words": "РАЗНЫЕ ПЛОСКОСТИ",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "30": {
+    "text": {
+      "words": "КОНТРОЛЬ НАД ВООРУЖЕНИЯМИ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "32": {
+    "text": {
+      "words": "ВСЁ БЫЛО ОПУБЛИКОВАНО",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "33": {
+    "text": {
+      "words": "ЗАПАД КЛЮЧЕВОЕ НЕ ПРИНЯЛ",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "36": {
+    "text": {
+      "words": "СОЖГЛИ ПОЛОВИНУ АУДИТОРИИ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "37": {
+    "text": {
+      "words": "ПРЕДМЕТ РАЗГОВОРА ВЕРНУЛСЯ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "40": {
+    "text": {
+      "words": "ОТКРЫТОЕ НЕБО",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "42": {
+    "text": {
+      "words": "ИЗ ДОГОВОРОВ ВЫШЛИ ВСЕ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "43": {
+    "text": {
+      "words": "КУШНЕР: РОССИЯ ГОТОВА",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "45": {
+    "text": {
+      "words": "СПАСИБО, ДЖАРЕД",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "48": {
+    "text": {
+      "words": "ВОТ ГДЕ МЯСО",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "51": {
+    "text": {
+      "words": "ГАРАНТИИ ПОСЛЕ ВОЙНЫ",
+      "color": "white",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "54": {
+    "text": {
+      "words": "БЕЗ РОССИИ НЕ РАБОТАЕТ",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "56": {
+    "text": {
+      "words": "ДЕРЖИ, ПОДПИСЫВАЙ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "60": {
+    "text": {
+      "words": "ТА ЖЕ ТОЧКА",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "61": {
+    "text": {
+      "words": "БЕЗОПАСНОСТЬ ОДНОМУ НЕ БЫВАЕТ",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "64": {
+    "text": {
+      "words": "ПРАВИЛА ДЛЯ ВСЕХ СОСЕДЕЙ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "67": {
+    "text": {
+      "words": "ГАРАНТИИ ДОЛЖНЫ УСТРАИВАТЬ РОССИЮ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "69": {
+    "text": {
+      "words": "БОЛЬШЕ, ЧЕМ УКРАИНА",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "72": {
+    "text": {
+      "words": "ТОРГОВАТЬСЯ ПРИДЁТСЯ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "74": {
+    "text": {
+      "words": "ТРЕБОВАНИЯ ОСТАЮТСЯ НА СТОЛЕ",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "76": {
+    "text": {
+      "words": "ЭТОГО ДОБИТЬСЯ СЛОЖНЕЕ",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "78": {
+    "text": {
+      "words": "ЧТО ДОПУСТИМО, ЧТО ЗАПРЕЩЕНО",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "80": {
+    "text": {
+      "words": "ПРИДЁТСЯ РЕЗАТЬ ЕЩЁ РАЗ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "82": {
+    "text": {
+      "words": "ОДНОГО «НЕТ» УЖЕ МАЛО",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pshik",
+      "at": 1.8,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "22": {
+    "photo": "overlays/scene_022.jpg",
+    "sound": "pop",
+    "at": 2.4,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "29": {
+    "photo": "overlays/scene_029.jpg",
+    "sound": "whoosh",
+    "at": 2.4,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  }
+}

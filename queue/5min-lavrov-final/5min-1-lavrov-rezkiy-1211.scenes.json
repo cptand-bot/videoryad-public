@@ -1,0 +1,745 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 10.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН"
+  },
+  {
+   "id": 2,
+   "start_sec": 10.7,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ГОСДЕП-США"
+  },
+  {
+   "id": 3,
+   "start_sec": 20.4,
+   "duration_sec": 8.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/УНИВЕРСАЛЬНОЕ/ОПЕРАТОРЫ-КАМЕРАМИ-ПРЕСС-ПОДХОДЕ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 4,
+   "start_sec": 29.1,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "портрет Сергея Лаврова Москва 2026 заявление о безопасности Евразии"
+  },
+  {
+   "id": 5,
+   "start_sec": 40.3,
+   "duration_sec": 8.95,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "fx": "stamps"
+  },
+  {
+   "id": 6,
+   "start_sec": 49.25,
+   "duration_sec": 8.95,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 7,
+   "start_sec": 58.2,
+   "duration_sec": 8.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА",
+   "fx": "torn"
+  },
+  {
+   "id": 8,
+   "start_sec": 66.5,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО"
+  },
+  {
+   "id": 9,
+   "start_sec": 78.0,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ",
+   "fx": "filmwin"
+  },
+  {
+   "id": 10,
+   "start_sec": 87.4,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военная дорога Киев 2026 бетонные заграждения и техника"
+  },
+  {
+   "id": 11,
+   "start_sec": 96.4,
+   "duration_sec": 11.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ИСТРЕБИТЕЛЬ-EUROFIGHTER-РУЛЁЖКЕ",
+   "fx": "slides"
+  },
+  {
+   "id": 12,
+   "start_sec": 107.4,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/АРМИЯ-США"
+  },
+  {
+   "id": 13,
+   "start_sec": 117.3,
+   "duration_sec": 7.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "противотанковые ежи на блокпосту Киев 2026 бетонные заграждения",
+   "fx": "player"
+  },
+  {
+   "id": 14,
+   "start_sec": 124.8,
+   "duration_sec": 11.0,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка «split» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "split",
+    "text": "Немедленное прекращение огня без новой архитектуры безопасности неприемлемо",
+    "accent": "Немедленное прекращение огня",
+    "author": "Сергей Лавров",
+    "role": "министр иностранных дел России",
+    "photo": "dossier/kadr14.jpg",
+    "watermark": "5 МИНУТ"
+   }
+  },
+  {
+   "id": 15,
+   "start_sec": 135.8,
+   "duration_sec": 8.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "очередь военных грузовиков у склада боеприпасов Украина 2026"
+  },
+  {
+   "id": 16,
+   "start_sec": 144.0,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/БУНДЕСВЕР"
+  },
+  {
+   "id": 17,
+   "start_sec": 153.8,
+   "duration_sec": 8.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ГРУЗОВОЙ-ПОЕЗД-КОНТЕЙНЕРАМИ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 18,
+   "start_sec": 162.6,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 19,
+   "start_sec": 172.5,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Путин Москва 2026 совещание по вопросам безопасности",
+   "fx": "stamps"
+  },
+  {
+   "id": 20,
+   "start_sec": 184.8,
+   "duration_sec": 8.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "зенитная установка НАТО Варшава 2026 военная техника"
+  },
+  {
+   "id": 21,
+   "start_sec": 193.4,
+   "duration_sec": 8.3,
+   "text": "",
+   "source": "card:slider",
+   "source_query": "карточка «slider» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "slider",
+    "код": "A5",
+    "title": "сколько длится конфликт",
+    "watermark": "5 МИНУТ",
+    "anim": 8.3
+   }
+  },
+  {
+   "id": 22,
+   "start_sec": 201.7,
+   "duration_sec": 9.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ФУРЫ-ОЧЕРЕДИ-СКЛАДСКОМ"
+  },
+  {
+   "id": 23,
+   "start_sec": 211.0,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "портрет Егора Чернева Киев 2026 в Верховной раде",
+   "fx": "filmwin"
+  },
+  {
+   "id": 24,
+   "start_sec": 223.0,
+   "duration_sec": 8.2,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 25,
+   "start_sec": 231.2,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "автомобили делегаций у штаб-квартиры НАТО Брюссель 2026",
+   "fx": "slides"
+  },
+  {
+   "id": 26,
+   "start_sec": 242.4,
+   "duration_sec": 6.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/КИЕВ-БЕЗ-СВЕТА-3110_РЕМОНТНАЯ-БРИГАДА-ВОССТАНАВЛИВАЕТ"
+  },
+  {
+   "id": 27,
+   "start_sec": 249.1,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ПОРТ-НОВОРОССИЙСКА-ПРИЧАЛЫ"
+  },
+  {
+   "id": 28,
+   "start_sec": 259.3,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "ограда и пост охраны у здания МИД Москва 2026",
+   "fx": "flash"
+  },
+  {
+   "id": 29,
+   "start_sec": 271.4,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "редакция Файнэншл Таймс Лондон 2026 фасад здания"
+  },
+  {
+   "id": 30,
+   "start_sec": 283.6,
+   "duration_sec": 13.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "самолёт наблюдения Ту-214ОН Кубинка 2021 на аэродроме",
+   "fx": "player"
+  },
+  {
+   "id": 31,
+   "start_sec": 297.0,
+   "duration_sec": 13.7,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка «film_frame» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 32,
+   "start_sec": 310.7,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "вход в МИД России Москва 2021 служебные автомобили"
+  },
+  {
+   "id": 33,
+   "start_sec": 321.3,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пусковая установка ПРО Девеселу Румыния 2021 база",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 34,
+   "start_sec": 334.2,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "card:wall",
+   "source_query": "карточка «wall» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "wall",
+    "код": "A56",
+    "kick": "и чем ответили",
+    "title": "ДЕКАБРЬ 2021: ЧТО БЫЛО НА СТОЛЕ",
+    "watermark": "5 МИНУТ",
+    "anim": 12.3
+   }
+  },
+  {
+   "id": 35,
+   "start_sec": 346.5,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Европейского совета Брюссель 2026 современный фасад"
+  },
+  {
+   "id": 36,
+   "start_sec": 358.3,
+   "duration_sec": 13.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон Париж 2026 заявление для прессы",
+   "fx": "curl"
+  },
+  {
+   "id": 37,
+   "start_sec": 371.6,
+   "duration_sec": 13.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "флагштоки стран НАТО Брюссель 2026 стеклянный фасад"
+  },
+  {
+   "id": 38,
+   "start_sec": 384.8,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "патрульный самолёт НАТО Рига 2026 на военном аэродроме",
+   "fx": "stamps"
+  },
+  {
+   "id": 39,
+   "start_sec": 396.4,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров Москва 2021 пресс-конференция по гарантиям безопасности"
+  },
+  {
+   "id": 40,
+   "start_sec": 408.0,
+   "duration_sec": 15.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "подписание договора Открытое небо Хельсинки 1992 делегации за столом"
+  },
+  {
+   "id": 41,
+   "start_sec": 423.2,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "бронемашины армии США Варшава 2026 разгружают на аэродроме",
+   "fx": "torn"
+  },
+  {
+   "id": 42,
+   "start_sec": 433.6,
+   "duration_sec": 13.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "разведывательный самолёт США Берлин 2026 на аэродроме"
+  },
+  {
+   "id": 43,
+   "start_sec": 447.1,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Джаред Кушнер Вашингтон 2026 перед камерами журналистов",
+   "fx": ""
+  },
+  {
+   "id": 44,
+   "start_sec": 458.5,
+   "duration_sec": 13.2,
+   "text": "",
+   "source": "card:vyrezka",
+   "source_query": "карточка «vyrezka» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 45,
+   "start_sec": 471.7,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "web_search",
+   "source_query": "приезд Джареда Кушнера Москва 2026 у Кремля",
+   "fx": "filmwin"
+  },
+  {
+   "id": 46,
+   "start_sec": 482.6,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Овальный кабинет Вашингтон 2026 советники президента США"
+  },
+  {
+   "id": 47,
+   "start_sec": 495.7,
+   "duration_sec": 14.8,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 48,
+   "start_sec": 510.5,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микрофоны у кафедры Кремль Москва 2026 перед заявлением"
+  },
+  {
+   "id": 49,
+   "start_sec": 522.4,
+   "duration_sec": 12.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Георгиевский зал Кремль Москва 2026 накрытый стол с флагами",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 50,
+   "start_sec": 535.1,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:photo",
+   "source_query": "карточка «photo» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "photo",
+    "title": "Совместное заявление США, ЕС и Украины",
+    "lines": [
+     "суверенитет и территориальная целостность",
+     "гарантии безопасности для Киева",
+     "обновление европейской архитектуры"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 12.1,
+    "photo": "dossier/zayavlenie_x.jpg"
+   }
+  },
+  {
+   "id": 51,
+   "start_sec": 547.2,
+   "duration_sec": 13.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Стив Уиткофф Вашингтон 2026 заявление о европейских институтах"
+  },
+  {
+   "id": 52,
+   "start_sec": 560.5,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "правительственный квартал Киев 2026 фасады украинских министерств",
+   "fx": "curl"
+  },
+  {
+   "id": 53,
+   "start_sec": 573.0,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "card:vyrezka_kontur",
+   "source_query": "карточка «vyrezka_kontur» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 54,
+   "start_sec": 583.6,
+   "duration_sec": 14.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Государственный департамент США Вашингтон 2026 здание Гарри Трумэна"
+  },
+  {
+   "id": 55,
+   "start_sec": 597.7,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "представители США Европы Украины Вашингтон 2026 у Белого дома",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 56,
+   "start_sec": 609.4,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "стол в Кремле Москва 2026 перед дипломатическими консультациями"
+  },
+  {
+   "id": 57,
+   "start_sec": 622.5,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Банковая улица Киев 2026 административное здание"
+  },
+  {
+   "id": 58,
+   "start_sec": 635.1,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "бронемашины НАТО Рига 2026 на территории военной базы"
+  },
+  {
+   "id": 59,
+   "start_sec": 645.5,
+   "duration_sec": 14.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "переговоры делегаций США и Украины Вашингтон 2026 за столом"
+  },
+  {
+   "id": 60,
+   "start_sec": 660.4,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "колонна бронетехники ВСУ Запорожская область 2026 на дороге",
+   "fx": "slides"
+  },
+  {
+   "id": 61,
+   "start_sec": 671.8,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "генеральный секретарь НАТО Марк Рютте Брюссель 2026 пресс-конференция",
+   "fx": ""
+  },
+  {
+   "id": 62,
+   "start_sec": 683.2,
+   "duration_sec": 15.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "танки Leopard бундесвера на учениях Литва 2026 полигон"
+  },
+  {
+   "id": 63,
+   "start_sec": 698.3,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "радар ПВО Москва 2026 на военном аэродроме",
+   "fx": "player"
+  },
+  {
+   "id": 64,
+   "start_sec": 708.2,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "контрольный пункт НАТО Рига 2026 шлагбаум и техника"
+  },
+  {
+   "id": 65,
+   "start_sec": 721.0,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "самолёт НАТО Вильнюс 2026 взлёт с полосы"
+  },
+  {
+   "id": 66,
+   "start_sec": 732.9,
+   "duration_sec": 14.4,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка «poster» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "poster",
+    "код": "A6",
+    "title": "АРХИТЕКТУРА БЕЗОПАСНОСТИ",
+    "watermark": "5 МИНУТ",
+    "anim": 14.4
+   }
+  },
+  {
+   "id": 67,
+   "start_sec": 747.3,
+   "duration_sec": 13.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микрофоны перед Лавровым Москва 2026 в здании МИД"
+  },
+  {
+   "id": 68,
+   "start_sec": 761.2,
+   "duration_sec": 9.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Верховной Рады Киев 2026 общий фасад",
+   "fx": "torn"
+  },
+  {
+   "id": 69,
+   "start_sec": 770.4,
+   "duration_sec": 13.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "советники Белого дома Вашингтон 2026 входят в резиденцию"
+  },
+  {
+   "id": 70,
+   "start_sec": 783.7,
+   "duration_sec": 13.0,
+   "text": "",
+   "source": "card:dof",
+   "source_query": "карточка «dof» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "dof",
+    "код": "A64",
+    "title": "у каждого своя логика безопасности",
+    "watermark": "5 МИНУТ",
+    "anim": 13.0
+   }
+  },
+  {
+   "id": 71,
+   "start_sec": 796.7,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "госсекретарь Марко Рубио Вашингтон 2026 рядом с союзниками",
+   "fx": "curl"
+  },
+  {
+   "id": 72,
+   "start_sec": 808.4,
+   "duration_sec": 13.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "комплекс Кремля Москва 2026 вид с набережной"
+  },
+  {
+   "id": 73,
+   "start_sec": 821.8,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "правительственный кортеж Москва 2026 у Кремля"
+  },
+  {
+   "id": 74,
+   "start_sec": 834.7,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "вход в здание МИД России Москва 2026 флаг над подъездом"
+  },
+  {
+   "id": 75,
+   "start_sec": 846.1,
+   "duration_sec": 14.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "министр Сергей Лавров Москва 2026 спокойное выступление",
+   "fx": "flash"
+  },
+  {
+   "id": 76,
+   "start_sec": 860.2,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "кабинет министров Киев 2026 фасад на Грушевского"
+  },
+  {
+   "id": 77,
+   "start_sec": 870.6,
+   "duration_sec": 15.6,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка «bars» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bars",
+    "код": "A4",
+    "title": "ЧЬИ ОБЯЗАТЕЛЬСТВА",
+    "watermark": "5 МИНУТ",
+    "anim": 15.6
+   }
+  },
+  {
+   "id": 78,
+   "start_sec": 886.2,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пусковые установки НАТО Рига 2026 на полигоне"
+  },
+  {
+   "id": 79,
+   "start_sec": 899.3,
+   "duration_sec": 8.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "зал Генеральной Ассамблеи ООН Нью-Йорк 2026 общий вид"
+  },
+  {
+   "id": 80,
+   "start_sec": 908.0,
+   "duration_sec": 14.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание правительства России Москва 2026 вечерняя подсветка фасада"
+  },
+  {
+   "id": 81,
+   "start_sec": 922.4,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Спасская башня Кремля Москва 2021 зимний вечер"
+  },
+  {
+   "id": 82,
+   "start_sec": 934.3,
+   "duration_sec": 11.64,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "дипломаты России Москва 2026 входят в здание МИД"
+  }
+ ]
+}
