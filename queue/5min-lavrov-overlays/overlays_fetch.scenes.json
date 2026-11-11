@@ -1,0 +1,112 @@
+{
+ "scenes": [
+  {
+   "id": 201,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен Брюссель 2026 перед журналистами",
+   "for_scene": 3
+  },
+  {
+   "id": 202,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Марк Рютте Гаага 2026 выступление",
+   "for_scene": 9
+  },
+  {
+   "id": 203,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "склад боеприпасов ВСУ Украина 2026 ящики в ангаре",
+   "for_scene": 16
+  },
+  {
+   "id": 204,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц Берлин 2026 заявление для прессы",
+   "for_scene": 22
+  },
+  {
+   "id": 205,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон Елисейский дворец Париж 2026",
+   "for_scene": 29
+  },
+  {
+   "id": 206,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "подписание договора СНВ Прага 2010 делегации за столом",
+   "for_scene": 35
+  },
+  {
+   "id": 207,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "транспортный самолёт ВВС США авиабаза Рамштайн 2026",
+   "for_scene": 41
+  },
+  {
+   "id": 208,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дмитрий Песков Москва 2026 брифинг для журналистов",
+   "for_scene": 52
+  },
+  {
+   "id": 209,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский Киев 2026 обращение к нации",
+   "for_scene": 57
+  },
+  {
+   "id": 210,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "пусковая установка Искандер ВС России полигон Капустин Яр 2026",
+   "for_scene": 63
+  },
+  {
+   "id": 211,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Си Цзиньпин Пекин 2026 на переговорах",
+   "for_scene": 71
+  },
+  {
+   "id": 212,
+   "start_sec": 0.0,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Антониу Гутерриш Нью-Йорк 2026 пресс-подход",
+   "for_scene": 79
+  }
+ ]
+}
