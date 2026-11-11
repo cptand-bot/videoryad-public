@@ -185,3 +185,5 @@ template/baza_snos.py
 template/razlozhit_rerayt.py
 template/statistika.py
 template/whisper_derzhi.sh
+template/muzyka.py
+template/kadry_klon.py

@@ -111,7 +111,15 @@ for i in ids:
 # этом «с кадром», проверки молчат, а в сборку уезжает тот файл, который
 # первым попал в glob: на одиннадцати сценах это была бы чёрная заглушка.
 # Отличить можно только счётом файлов, поэтому проверка здесь.
-_TMP_SUF = (".wmcrop.jpg", ".ocrcrop.jpg", ".text.jpg", ".ovthumb.jpg")
+# `.revframe.jpg` — КАДР ВИДЕО ДЛЯ ДАШБОРДА, А НЕ ВТОРОЙ ФАЙЛ СЦЕНЫ (11.11).
+# Его кладёт `review.py` рядом с каждым видео и читает `deti_gate`; в двух
+# других местах этого же файла он давно исключён, а в списке проверки «два
+# файла на сцену» его не было — и ролик ПсД встал с ШЕСТНАДЦАТЬЮ ложными
+# нарушениями подряд, вкладка уносила кадры в `.placeholders`, дашборд
+# создавал их заново. Класс известный: белый список, дописанный по памяти.
+_TMP_SUF = (".wmcrop.jpg", ".ocrcrop.jpg", ".text.jpg", ".ovthumb.jpg",
+            ".before_crop.jpg", ".before_crop.png", ".before_crop.mp4",
+            ".revframe.jpg")
 for i in ids:
     _fs = [f for f in asset(i) if not f.endswith(_TMP_SUF)]
     if len(_fs) > 1:
@@ -140,15 +148,29 @@ for i in ids:
     for f in asset(i):
         if f.endswith(_TMP_SUF) or not f.lower().endswith((".jpg", ".jpeg", ".png")):
             continue
+        # ЛОВИМ И ПО РАЗБРОСУ ЯРКОСТИ, А НЕ ТОЛЬКО ПО ТЕМНОТЕ И РАЗМЕРУ
+        # (11.11, улов `usuario-45`, чуть не уехало в сборку). У неё 23 сцены
+        # `local_library` приехали из облака ОДНОРОДНОЙ заливкой 1920x1080,
+        # ~34 КБ, mean 28, stddev 1,3 — облако медиатеки не видит, она на D:.
+        # Прежние пороги её не брали: `photo_quality` библиотечные сцены не
+        # меряет вовсе («из медиатеки, МЕНЯТЬ НЕЛЬЗЯ»), а здесь всё держалось
+        # на яркости и 60 КБ — заливка бывает и светлее, и тяжелее.
+        # Разброс ниже 5 из 255 у НАСТОЯЩЕЙ фотографии не встречается: даже
+        # кадр неба или белой стены даёт десятки.
         try:
-            if os.path.getsize(f) > 60000:
-                continue
             from PIL import Image, ImageStat
             with Image.open(f) as _im:
-                _b = ImageStat.Stat(_im.convert("L")).mean[0]
+                _st = ImageStat.Stat(_im.convert("L"))
+                _b, _sd = _st.mean[0], _st.stddev[0]
         except Exception:
             continue
-        if _b < 45:
+        _maloe = os.path.getsize(f) <= 60000
+        if _sd < 5.0:
+            _ph.append("сцена %s: %s — %d КБ, РОВНАЯ ЗАЛИВКА (разброс яркости "
+                       "%.1f из 255, средняя %.0f)"
+                       % (i, os.path.basename(f), os.path.getsize(f) // 1024,
+                          _sd, _b))
+        elif _maloe and _b < 45:
             _ph.append("сцена %s: %s — %d КБ, средняя яркость %.0f из 255"
                        % (i, os.path.basename(f), os.path.getsize(f) // 1024, _b))
 # КАРТОЧКА БЕЗ КЛИПА — ЭТО НЕ «ЗАГЛУШКА», А НЕНАРИСОВАННЫЙ ЭЛЕМЕНТ (06.11,

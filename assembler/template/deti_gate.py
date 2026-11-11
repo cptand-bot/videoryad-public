@@ -112,17 +112,42 @@ def _state_verdict(pdir):
     return os.path.join(STATE_DIR, name + ".json")
 
 
-def _scenes_file(pdir):
-    """Рабочий scenes.json проекта (не сырой файл агента `codex*.json`)."""
-    cands = [f for f in glob.glob(os.path.join(pdir, "*.scenes.json"))
-             if not os.path.basename(f).startswith(("codex", "lib_", "raw"))]
+# СЛУЖЕБНЫЕ РАСКАДРОВКИ, КОТОРЫЕ ГЕЙТ ПРОВЕРЯТЬ НЕ ДОЛЖЕН (11.11, улов
+# `usuario-45`). `overlays_fetch.scenes.json` — это задание облаку на кадры
+# ВСПЛЫВАШЕК, 12 записей; по алфавиту он встал первым, и гейт детей честно
+# отрапортовал «листов: 1 (сцен 12 из 12)», проверив ДВЕНАДЦАТЬ всплывашек
+# вместо СЕМИДЕСЯТИ ДВУХ сцен ролика. Гейт при этом не упал и не
+# предупредил — чистый «успех значит ничего не сделано». В
+# `build_overlays.py` этот же файл отсекается явно, здесь фильтра не было.
+_NE_RASKADROVKA = ("overlays_fetch", "maps_fetch", "cards_fetch")
+
+
+def _scenes_file(pdir, tiho=True):
+    """Рабочий scenes.json проекта (не сырой файл агента `codex*.json`
+    и не служебное задание облаку на кадры всплывашек/карт)."""
+    def _svoy(f):
+        b = os.path.basename(f)
+        return (not b.startswith(("codex", "lib_", "raw"))
+                and not any(w in b for w in _NE_RASKADROVKA))
+
+    cands = sorted(f for f in glob.glob(os.path.join(pdir, "*.scenes.json"))
+                   if _svoy(f))
     if not cands:
-        cands = glob.glob(os.path.join(pdir, "*.scenes.json"))
+        # Ни одного своего — берём что есть, но СКАЗАВ об этом: молча
+        # проверять чужой файл нельзя, именно на этом обожглись 11.11.
+        cands = sorted(glob.glob(os.path.join(pdir, "*.scenes.json")))
+        if cands and not tiho:
+            print("  ВНИМАНИЕ: своей раскадровки в папке нет, беру %s"
+                  % os.path.basename(cands[0]))
+    if len(cands) > 1 and not tiho:
+        print("  в папке несколько раскадровок, проверяю %s (рядом: %s)"
+              % (os.path.basename(cands[0]),
+                 ", ".join(os.path.basename(x) for x in cands[1:])))
     return cands[0] if cands else None
 
 
-def _scene_ids(pdir):
-    sf = _scenes_file(pdir)
+def _scene_ids(pdir, tiho=True):
+    sf = _scenes_file(pdir, tiho=tiho)
     if not sf:
         return []
     try:
@@ -350,7 +375,7 @@ def _centr_ids(pdir, ids):
 def cmd_listy(args):
     from PIL import Image, ImageDraw
     pdir = _project_dir(args.project)
-    ids = _scene_ids(pdir)
+    ids = _scene_ids(pdir, tiho=False)
     if not ids:
         print("deti_gate: не нашёл scenes.json — нечего проверять", file=sys.stderr)
         return 2
@@ -457,7 +482,7 @@ def cmd_listy(args):
 def cmd_centr(args):
     """Диагностика: какие сцены требуют второго прохода и почему."""
     pdir = _project_dir(args.project)
-    ids = _scene_ids(pdir)
+    ids = _scene_ids(pdir, tiho=False)
     n = 0
     for sid in ids:
         try:
@@ -474,7 +499,7 @@ def cmd_centr(args):
 
 def cmd_verdikt(args):
     pdir = _project_dir(args.project)
-    ids = _scene_ids(pdir)
+    ids = _scene_ids(pdir, tiho=False)
     bad = []
     if args.bad:
         for part in str(args.bad).replace(";", ",").split(","):
@@ -554,7 +579,7 @@ def cmd_check(args):
         print("ДЕТИ: ролик начат до установки гейта (10.11 14:20) — пропускаю, "
               "проверка обязательна начиная со СЛЕДУЮЩЕГО ролика")
         return 0
-    ids = _scene_ids(pdir)
+    ids = _scene_ids(pdir, tiho=False)
     vp = os.path.join(pdir, VERDICT)
     otkuda = ""
     if not os.path.exists(vp):

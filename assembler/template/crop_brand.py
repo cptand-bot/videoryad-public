@@ -128,6 +128,10 @@ def main():
     ap.add_argument("--pct", type=int, default=15,
                     help="сколько процентов стороны срезать (по умолчанию 15)")
     ap.add_argument("--out", default="", help="куда писать; по умолчанию рядом, с суффиксом __cut")
+    ap.add_argument("--na-mesto", action="store_true", dest="na_mesto",
+                    help="заменить ИСХОДНЫЙ файл (старый ляжет рядом как "
+                         ".before_crop); для кадров в overlays/ включается сам — "
+                         "иначе ship.sh считает сосед-файл сиротой")
     ap.add_argument("--check", default="", help="куда положить кадр для глаз")
     ap.add_argument("--mark", default="",
                     help="где стоит знак: «x0,y0,x1,y1» в пикселях или долями "
@@ -146,7 +150,17 @@ def main():
     else:
         expr, (nw, nh) = crop_expr(w, h, a.side, a.pct)
     root, ext = os.path.splitext(a.src)
-    out = a.out or (root + "__cut" + ext)
+    # В СЛОЕ ВСПЛЫВАШЕК ФАЙЛ-СОСЕД — ЭТО СИРОТА, А НЕ ПОМОЩЬ (11.11, улов
+    # `usuario-45`, стоил круга). Инструмент всегда клал результат РЯДОМ как
+    # `<имя>__cut.jpg`; в `images/` это терпимо, а в `overlays/` ship.sh
+    # немедленно встаёт с «файл без записи в overlays.json». Поэтому для
+    # файлов из `overlays/` подменяем исходник НА МЕСТЕ (прежний кадр
+    # сохраняем рядом под `.before_crop`), а в остальных местах поведение
+    # прежнее; ключ `--na-mesto` включает замену где угодно.
+    _v_sloe = os.path.basename(os.path.dirname(os.path.abspath(a.src))) == "overlays"
+    _na_mesto = a.na_mesto or (_v_sloe and not a.out)
+    out = a.out or ((root + "__cut" + ext) if not _na_mesto
+                    else (root + ".cut_tmp" + ext))
     is_video = ext.lower() in (".mp4", ".mov", ".webm", ".mkv", ".m4v")
 
     cmd = ["ffmpeg", "-nostdin", "-v", "error", "-y"]
@@ -206,6 +220,22 @@ def main():
                 print("!! ЗНАК ОСТАЛСЯ В КАДРЕ. Повтори с "
                       "`--side %s --pct %d` — этого хватит."
                       % (_side, _need))
+    if _na_mesto:
+        _keep = root + ".before_crop" + ext
+        try:
+            if not os.path.exists(_keep):
+                os.replace(a.src, _keep)
+            else:
+                os.remove(a.src)
+            os.replace(out, a.src)
+            out = a.src
+            print("заменён НА МЕСТЕ (прежний кадр: %s)" % os.path.basename(_keep))
+            if _v_sloe:
+                print("  кадр лежит в overlays/ — файл-сосед там считается "
+                      "сиротой и валит ship.sh, поэтому замена на месте")
+        except OSError as e:
+            print("!! не удалось заменить на месте (%s) — результат остался %s"
+                  % (e, out))
     print(out)
 
     if a.check:
