@@ -1,0 +1,50 @@
+# Белый зал, вторая реализация (другая модель). Публичный репозиторий — минуты не тратятся.
+name: zal-fable
+on:
+  workflow_dispatch:
+    inputs:
+      scenes:
+        description: "какие приёмы считать, списком JSON"
+        default: '["G13"]'
+  push:
+    paths: ["zalf/**"]
+concurrency:
+  group: zalf-${{ github.sha }}
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  clip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        scene: ${{ fromJSON(github.event.inputs.scenes || '["G13"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Библиотеки
+        run: pip install --quiet --upgrade numpy pillow imageio-ffmpeg
+      - name: Собрать клип
+        env:
+          ZAL_FONTS: ${{ github.workspace }}/zalf/fonts
+        run: |
+          cd zalf
+          time python3 shard_fable.py "${{ matrix.scene }}" "$GITHUB_WORKSPACE/zalf_${{ matrix.scene }}.mp4"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zalf-${{ matrix.scene }}
+          path: zalf_${{ matrix.scene }}.mp4
+          retention-days: 1
+  pack:
+    needs: clip
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {path: clips, merge-multiple: true}
+      - env: {GH_TOKEN: "${{ github.token }}"}
+        run: |
+          ls -la clips
+          tag="zalf-${{ github.run_id }}"
+          gh release create "$tag" clips/*.mp4 -R "${{ github.repository }}" -t "$tag" -n "Белый зал: вторая реализация."
