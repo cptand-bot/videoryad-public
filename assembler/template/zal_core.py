@@ -415,3 +415,149 @@ def wire(canvas, cam, top_point, color=(118, 120, 124, 210), width=2):
     b = cam.proj(top_point)
     ImageDraw.Draw(canvas, "RGBA").line([(a[0], a[1]), (b[0], b[1])],
                                         fill=color, width=width)
+
+
+# ===========================================================================
+# ДОБАВЛЕНО 11.11 ПОД ШЕСТЬ СЦЕН `zal_scenes2.py` (G02, G10, G11, G12, G15, G26)
+# ---------------------------------------------------------------------------
+# Сюда переехали ТОЛЬКО примитивы, которые нужны больше чем одной сцене и
+# ничего не знают про текст ролика: отрезок времени, разбор строки на плитки
+# слов, белый макет здания и стеклянный куб. Всё, что знает про конкретную
+# сцену (постамент, столб плит, панель эфира), живёт в `zal_scenes2.py` —
+# иначе движок зала начал бы тащить за собой раскладку чужих кадров.
+# Ничего из прежнего здесь НЕ менялось: вид `zal` работает как работал.
+# ===========================================================================
+
+def seg(t, a, b):
+    """Доля отрезка [a, b], пройденная к моменту t: 0 до начала, 1 после."""
+    return clamp01((t - a) / max(1e-6, b - a))
+
+
+def word_tiles(lines, fsize=220, fname="ArialBlack.ttf", hl=None,
+               color=(14, 14, 16, 255), hl_color=(255, 212, 0, 255),
+               line_gap=16, pad=20):
+    """Строки → отдельные картинки СЛОВ и их места в общем блоке.
+
+    Возвращает (ширина блока, высота блока, [(картинка слова, cx, cy)]);
+    cx, cy — центр слова в координатах блока. Нужно там, где слова
+    появляются по одному и каждое живёт своей жизнью (встаёт, падает,
+    выезжает из пола), — одной картинкой строки этого не сделать.
+    """
+    f = font(fname, fsize)
+    d0 = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+    sp = d0.textlength(" ", font=f)
+    rows = []
+    for ln in lines:
+        ws = ln.split(" ")
+        bb = [d0.textbbox((0, 0), w, font=f) for w in ws]
+        width = sum(b[2] - b[0] for b in bb) + sp * (len(ws) - 1)
+        rows.append((ws, bb, width))
+    total_w = max(r[2] for r in rows) + pad * 2
+    hline = fsize * 1.02
+    total_h = len(rows) * hline + (len(rows) - 1) * line_gap + pad * 2
+    tiles = []
+    idx = 0
+    y = pad
+    for ws, bb, width in rows:
+        x = (total_w - width) / 2
+        for w, b in zip(ws, bb):
+            ww, hh = b[2] - b[0], b[3] - b[1]
+            mark = bool(hl and idx in hl)
+            tw = int(ww + fsize * 0.14)
+            th = int(hline)
+            tile = Image.new("RGBA", (max(tw, 4), max(th, 4)), (0, 0, 0, 0))
+            td = ImageDraw.Draw(tile)
+            if mark:
+                td.rectangle([0, hline * 0.12, tw, hline * 0.95], fill=hl_color)
+            td.text(((tw - ww) / 2 - b[0], (th - hh) / 2 - b[1]), w, font=f,
+                    fill=color)
+            tiles.append((tile, x + ww / 2, y + hline / 2))
+            x += ww + sp
+            idx += 1
+        y += hline + line_gap
+    return total_w, total_h, tiles
+
+
+def maket_tex(kind, px=420):
+    """Белый объёмный макет: `bank` (колоннада), `hospital` (корпус с
+    крестом), `power` (две опоры ЛЭП). Рисуется, а не берётся картинкой:
+    это предмет в зале, а не фотография чужого здания."""
+    img = Image.new("RGBA", (px, px), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    ink = (236, 238, 241, 255)
+    edge = (120, 124, 130, 255)
+    if kind == "bank":
+        d.polygon([(px * 0.06, px * 0.36), (px * 0.5, px * 0.10),
+                   (px * 0.94, px * 0.36)], fill=ink, outline=edge, width=3)
+        d.rectangle([px * 0.08, px * 0.36, px * 0.92, px * 0.44],
+                    fill=ink, outline=edge, width=3)
+        for i in range(5):
+            x = px * (0.15 + i * 0.175)
+            d.rectangle([x, px * 0.44, x + px * 0.075, px * 0.86],
+                        fill=ink, outline=edge, width=3)
+        d.rectangle([px * 0.05, px * 0.86, px * 0.95, px * 0.95],
+                    fill=ink, outline=edge, width=3)
+    elif kind == "hospital":
+        d.rectangle([px * 0.18, px * 0.22, px * 0.82, px * 0.95],
+                    fill=ink, outline=edge, width=3)
+        for r in range(4):
+            for c in range(3):
+                d.rectangle([px * (0.26 + c * 0.18), px * (0.32 + r * 0.15),
+                             px * (0.36 + c * 0.18), px * (0.42 + r * 0.15)],
+                            fill=(196, 200, 206, 255))
+        d.rectangle([px * 0.46, px * 0.06, px * 0.54, px * 0.22],
+                    fill=ink, outline=edge, width=3)
+        d.rectangle([px * 0.38, px * 0.11, px * 0.62, px * 0.17],
+                    fill=ink, outline=edge, width=3)
+    else:                                              # power — опоры ЛЭП
+        edge = (78, 80, 84, 255)
+        for sx in (0.28, 0.72):
+            d.line([(px * (sx - 0.14), px * 0.95), (px * sx, px * 0.16)],
+                   fill=edge, width=5)
+            d.line([(px * (sx + 0.14), px * 0.95), (px * sx, px * 0.16)],
+                   fill=edge, width=5)
+            d.line([(px * (sx - 0.11), px * 0.72), (px * (sx + 0.11), px * 0.72)],
+                   fill=edge, width=4)
+            d.line([(px * (sx - 0.07), px * 0.46), (px * (sx + 0.07), px * 0.46)],
+                   fill=edge, width=4)
+            d.line([(px * (sx - 0.13), px * 0.26), (px * (sx + 0.13), px * 0.26)],
+                   fill=edge, width=4)
+            for j in range(4):
+                y0 = px * (0.30 + j * 0.16)
+                y1 = px * (0.30 + (j + 1) * 0.16)
+                k0 = 0.07 + j * 0.022
+                k1 = 0.07 + (j + 1) * 0.022
+                d.line([(px * (sx - k0), y0), (px * (sx + k1), y1)], fill=edge, width=2)
+                d.line([(px * (sx + k0), y0), (px * (sx - k1), y1)], fill=edge, width=2)
+        d.line([(px * 0.28, px * 0.26), (px * 0.72, px * 0.30)], fill=edge, width=3)
+        d.line([(px * 0.28, px * 0.46), (px * 0.72, px * 0.50)], fill=edge, width=3)
+    return img
+
+
+def glass_cube(img, cam, center, size, t=0.0, wires=True):
+    """Стеклянный куб на тросах: полупрозрачные грани и тёмные рёбра.
+
+    Полупрозрачное рисуем ОТДЕЛЬНЫМ слоем и кладём `alpha_composite` —
+    мина 1 из шапки файла (`ImageDraw` по альфе не смешивает).
+    """
+    cx, cy, cz = center
+    s = size / 2
+    v = [(cx - s, cy - s, cz - s), (cx + s, cy - s, cz - s),
+         (cx + s, cy - s, cz + s), (cx - s, cy - s, cz + s),
+         (cx - s, cy + s, cz - s), (cx + s, cy + s, cz - s),
+         (cx + s, cy + s, cz + s), (cx - s, cy + s, cz + s)]
+    p = [cam.proj(q) for q in v]
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for f in ((0, 1, 5, 4), (1, 2, 6, 5), (3, 2, 6, 7), (0, 3, 7, 4)):
+        d.polygon([(p[i][0], p[i][1]) for i in f], fill=(214, 226, 240, 40))
+    for e0, e1 in ((0, 1), (1, 2), (2, 3), (3, 0), (4, 5), (5, 6), (6, 7),
+                   (7, 4), (0, 4), (1, 5), (2, 6), (3, 7)):
+        d.line([(p[e0][0], p[e0][1]), (p[e1][0], p[e1][1])],
+               fill=(52, 54, 58, 255), width=7)
+    if wires:
+        for i in (4, 5, 6, 7):
+            top = cam.proj((v[i][0], CEIL, v[i][2]))
+            d.line([(top[0], top[1]), (p[i][0], p[i][1])],
+                   fill=(120, 122, 126, 255), width=2)
+    img.alpha_composite(lay)

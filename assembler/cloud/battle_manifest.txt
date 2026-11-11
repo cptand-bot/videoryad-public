@@ -190,3 +190,8 @@ template/kadry_klon.py
 template/zal_core.py
 template/zal_scene.py
 template/kluchi.py
+template/nalichie.py
+template/latinka.py
+template/proverka_fayla.py
+template/o_chem.py
+template/storozh.py

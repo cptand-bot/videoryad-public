@@ -837,6 +837,30 @@ def step_qa(proj, scenes_json):
     for s in benign:
         info.append(f"шаг «{s}» пропущен штатно — {_BENIGN[s]}")
 
+    # --- ПРОВЕРКА ГОТОВОГО ФАЙЛА ЧИСЛАМИ (11.11.2026, перенос из cinecode) ---
+    # Все остальные проверки смотрят в раскадровку и в исходники, то есть в
+    # ЗАМЫСЕЛ. Что доехало до файла, до сих пор видел только он на дашборде —
+    # и через эту дыру проезжали немой ролик, статичное открытие и замершие
+    # куски. Счёт идёт ЗДЕСЬ, на раннере: процессор бесплатный, файл рядом,
+    # машина пользователя не трогается (его правило 23.10).
+    try:
+        if TPL not in sys.path:
+            sys.path.insert(0, TPL)   # модули сборщика лежат в assembler/template
+        import proverka_fayla
+        _видео = os.path.join(proj, _final_name(proj, scenes_json))
+        if os.path.isfile(_видео):
+            _t = time.time()
+            _наруш, _замеч, _инфо = proverka_fayla.проверить(_видео, scenes_json)
+            info.append("готовый файл: " + "; ".join(_инфо))
+            flags += [f"ГОТОВЫЙ ФАЙЛ: {x}" for x in _наруш]
+            info += [f"готовый файл: {x}" for x in _замеч]
+            log(f"[qa] проверка готового файла за {time.time() - _t:.0f} с: "
+                f"{len(_наруш)} нарушений, {len(_замеч)} замечаний")
+        else:
+            info.append("готовый файл не найден — проверка числами пропущена")
+    except Exception as e:
+        info.append(f"проверка готового файла не отработала: {e}")
+
     # --- write it ---
     rep = load_report(proj)
     rep["qa"] = {"flags": flags, "info": info, "scenes": N,

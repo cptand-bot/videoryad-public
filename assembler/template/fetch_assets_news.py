@@ -1414,6 +1414,30 @@ def _stash_candidate(out_path, src_path, w, h):
         return False
 
 
+def _latin_name(query):
+    """Имя субъекта латиницей для архивных источников, или None.
+
+    Отдельный модуль `latinka.py` (он же питает разведку `nalichie.py`).
+    Сетевой заход один, ответ кэшируется на прогон; любая осечка = None,
+    то есть прежнее поведение водопада.
+    """
+    try:
+        import latinka
+    except Exception:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import latinka
+        except Exception:
+            return None
+    try:
+        lat = latinka.обогатить(query, timeout=8)
+    except Exception:
+        return None
+    if lat:
+        print(f"  [архив говорит латиницей] «{query}» → «{lat}»", flush=True)
+    return lat
+
+
 def _press_waterfall(query, out_path, env):
     """The 'real photo' waterfall for `press_photo` / `wikimedia` scenes AND
     for a local_library tag folder that turned up empty. Order (user rule,
@@ -1421,14 +1445,29 @@ def _press_waterfall(query, out_path, env):
     Wikimedia blocks and returns junk, and auto-disables after its first miss
     (see fetch_wikimedia) — it must never be the step everything waits on.
     Returns (ok, source_name)."""
+    # АРХИВЫ ПОДПИСАНЫ ЛАТИНИЦЕЙ, А МЫ СПРАШИВАЕМ ПО-РУССКИ (11.11.2026).
+    # Замер на живом ролике: по русским запросам ВСЕ архивные источники давали
+    # ноль, и водопад всегда докатывался до картиночного поиска — то есть до
+    # рулетки с мимо-темой и чужими клеймами. «Роберт Фицо» на Викискладе 0,
+    # «Robert Fico» — 702. Поэтому перед последним шагом субъект переводится
+    # через Википедию и архивы спрашиваются ВТОРОЙ раз, уже их языком.
+    # Русский заход при этом остаётся первым: советский и российский архив
+    # подписан как раз по-русски, и переключаться целиком нельзя.
     steps = [
         ("dvids", lambda: fetch_dvids(query, env.get("DVIDS_API_KEY", ""), out_path)),
         ("openverse", lambda: fetch_openverse(query, out_path)),
         ("flickr_cc", lambda: fetch_flickr_cc(query, env.get("FLICKR_API_KEY", ""), out_path)),
         ("internet_archive", lambda: fetch_internet_archive(query, out_path)),
         ("wikimedia", lambda: fetch_wikimedia(query, out_path)),
-        ("web_search", lambda: fetch_web_search(query, out_path, env)),
     ]
+    lat = _latin_name(query)
+    if lat:
+        steps += [
+            ("openverse_lat", lambda: fetch_openverse(lat, out_path)),
+            ("internet_archive_lat", lambda: fetch_internet_archive(lat, out_path)),
+            ("wikimedia_lat", lambda: fetch_wikimedia(lat, out_path)),
+        ]
+    steps.append(("web_search", lambda: fetch_web_search(query, out_path, env)))
     for name, fn in steps:
         if _past_deadline():
             print(f"  [дедлайн] бросаю водопад на шаге «{name}» — время шарда "
