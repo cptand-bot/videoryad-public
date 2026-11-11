@@ -187,3 +187,6 @@ template/statistika.py
 template/whisper_derzhi.sh
 template/muzyka.py
 template/kadry_klon.py
+template/zal_core.py
+template/zal_scene.py
+template/kluchi.py
