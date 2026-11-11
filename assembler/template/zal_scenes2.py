@@ -1996,7 +1996,11 @@ def zal_schetchik(out=None, t=None, text="", accent="", value="",
     # плашку. Тот же механизм, что у подписей макетов (разбор 11.11).
     пол_низ = min((1 - SAFE) * H - 6, H - SCH_НИЗ)
     z_н = _глубина_пола(cam_l, пол_низ)
-    верх_пола = пол_низ - 0.17 * H
+    # НЕТ НИЖНЕЙ СТРОКИ — ПОЛОСУ ПОД НЕЁ НЕ ДЕРЖИМ (11.11, по кадру: на
+    # фразе в одно слово нижняя четверть кадра оставалась пустой, а панель
+    # зря ужималась). Дверь о коротком тексте предупреждает, но кадр
+    # обязан быть собранным и в этом случае.
+    верх_пола = (пол_низ - 0.17 * H) if низ else пол_низ
 
     # --- панель и плашка: считаем ОДНОЙ группой --------------------------
     # Группа = панель + зазор + плашка. Вписываем её коробку целиком, потом
@@ -2224,9 +2228,10 @@ def _екр_оформление(tt, text, say, author, role, source, bg, шаг
         d.text((x, y), txt, font=f, fill=fill)
 
     # --- шапка слева: вертикаль гаммы канала и источник ------------------
-    d.rectangle([x0, h * 0.072, x0 + 9, h * 0.150], fill=tuple(bg[:3]) + (255,))
     ист = str(source or "").strip()
     if ист:
+        d.rectangle([x0, h * 0.072, x0 + 9, h * 0.150],
+                    fill=tuple(bg[:3]) + (255,))
         fs = zc.font("Oswald-Bold.ttf", 52)
         while d.textlength(ист, font=fs) > w * 0.40 and fs.size > 18:
             fs = zc.font("Oswald-Bold.ttf", fs.size - 2)
@@ -2271,9 +2276,10 @@ def _екр_оформление(tt, text, say, author, role, source, bg, шаг
             fn = zc.font("ArialBlack.ttf", fn.size - 2)
         ld.text((x0, y0 + h * 0.072), имя, font=fn, fill=(26, 26, 30, 255))
         xч = x0 + max(w * 0.20, ld.textlength(имя, font=fn)) + w * 0.014
-        ld.line([(xч, y0 + h * 0.068), (xч, y0 + h * 0.124)],
-                fill=(120, 122, 130, 255), width=3)
         долж = str(role or "").strip()
+        if долж:                      # без должности черта делила бы пустоту
+            ld.line([(xч, y0 + h * 0.068), (xч, y0 + h * 0.124)],
+                    fill=(120, 122, 130, 255), width=3)
         fo = zc.font("Oswald-Bold.ttf", 46)
         while долж and ld.textlength(долж, font=fo) > (w * 0.86 - xч - w * 0.02) \
                 and fo.size > 16:
