@@ -362,11 +362,30 @@ def _stash_pick(pool, assets, sid):
     return (order[0] if order else None), skipped + [(None, "ЧИСТЫХ НЕТ — взят лучший по площади, проверь глазами")]
 
 
+def _user_bans():
+    """Сцены, кадр которых снял САМ ПОЛЬЗОВАТЕЛЬ на дашборде (метку пишет
+    `review.py`, 11.11). Добор по ним молчать не имеет права: запас — та же
+    поисковая выдача, следующий кадр легко окажется тем же браком, и
+    автоматика отменит его решение."""
+    try:
+        with open(".user_bans.json", encoding="utf-8") as f:
+            return json.load(f) or {}
+    except (OSError, ValueError):
+        return {}
+
+
 def replace_from_stash(scenes_path, ids, assets="images"):
     here_ = os.path.dirname(os.path.abspath(__file__))
     cands = os.path.join(assets, "cands")
     done, empty = [], []
+    ubans = _user_bans()
     for sid in ids:
+        _ub = ubans.get(str(sid))
+        if _ub:
+            print("  !! сцену %d снял ОН САМ на дашборде: «%s» (%s)"
+                  % (sid, _ub.get("reason", "без причины"), _ub.get("when", "")))
+            print("     запас — ТА ЖЕ выдача: следующий кадр может быть тем же")
+            print("     браком. Посмотри кандидата глазами или перепиши запрос.")
         pool = sorted(glob.glob(os.path.join(cands, "scene_%03d__*" % sid)))
         if not pool:
             empty.append(sid)

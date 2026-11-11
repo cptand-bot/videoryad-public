@@ -159,6 +159,28 @@ mem_check() {
     fi
 }
 
+# gotovyy_mp4 <папка> — путь к ГОТОВОМУ ролику, если он СВЕЖЕЕ исходников.
+# Зачем (11.11): `faza.sh sdacha` начиналась с полной сборки всегда, и вкладка,
+# повторившая фазу после чистки забора, снова ждала облако семь минут на уже
+# готовом файле. Свежесть решает mtime: правили сцены, слои, субтитры или кадры
+# ПОСЛЕ сборки — собирать заново; не правили — файл тот самый, идём к доставке.
+# Принудительно пересобрать: VIDEORYAD_SDACHA_REBUILD=1.
+gotovyy_mp4() {
+    local d="$1" mp4 t_mp4 t_src t f
+    mp4="$(ls -S "$d"/*.mp4 2>/dev/null | head -1)"
+    [ -n "$mp4" ] || return 1
+    t_mp4="$(stat -c %Y "$mp4" 2>/dev/null || echo 0)"
+    t_src=0
+    for f in "$d"/*.scenes.json "$d/overlays.json" "$d/captions.ass" \
+             $(ls -t "$d/images"/* 2>/dev/null | head -1); do
+        [ -f "$f" ] || continue
+        t="$(stat -c %Y "$f" 2>/dev/null || echo 0)"
+        [ "$t" -gt "$t_src" ] && t_src="$t"
+    done
+    [ "$t_mp4" -ge "$t_src" ] || return 1
+    echo "$mp4"
+}
+
 summary() {
     echo "--------------------------------------------------------------"
     if [ "$FAILED" -eq 0 ]; then
@@ -207,9 +229,20 @@ fetch)
     if [ "$FAILED" -eq 0 ]; then
         step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait-fetch
     fi
-    # признак результата — файлы, а не статус прогона
-    NFRAMES=$(ls "$PROJ/images"/scene_*.jpg "$PROJ/images"/scene_*.mp4 2>/dev/null | wc -l)
-    echo "[ОК]    кадров в images: $NFRAMES"
+    # ПРИЗНАК РЕЗУЛЬТАТА — ФАЙЛЫ, А НЕ СТАТУС ПРОГОНА. СЧИТАТЬ ТАМ, КУДА
+    # ЗАБОР РЕАЛЬНО ЛЁГ (11.11): `get.sh` кладёт его в
+    # `~/projects/<имя очереди>-cloud`, а счётчик смотрел только в
+    # `$PROJ/images` — и на каждом ролике, который ведётся из папки забора,
+    # печаталось «кадров в images: 0» при живом фетче. Ложная тревога на
+    # каждом ролике с суффиксом `-cloud`. Берём папку с НАИБОЛЬШИМ числом
+    # кадров из четырёх возможных.
+    NFRAMES=0; IMGDIR="$PROJ/images"
+    for d in "$PROJ" "$PROJ-cloud" "$HOME/projects/$QNAME-cloud" "${PROJ%-cloud}"; do
+        [ -d "$d/images" ] || continue
+        n=$(ls "$d/images"/scene_*.jpg "$d/images"/scene_*.mp4 2>/dev/null | wc -l)
+        [ "$n" -gt "$NFRAMES" ] && { NFRAMES="$n"; IMGDIR="$d/images"; }
+    done
+    echo "[ОК]    кадров: $NFRAMES ($IMGDIR)"
     [ "$NFRAMES" -gt 0 ] || { echo "ОШИБКА: фетч не принёс ни одного кадра — смотри $LOG"; FAILED=$((FAILED+1)); }
     summary
     ;;
@@ -223,7 +256,29 @@ krug)
     [ -n "$SIDS" ] || { echo "ОШИБКА: faza.sh krug <проект> <сцены через запятую>"; exit 1; }
     [ -n "$SCENES" ] || { echo "ОШИБКА: не нашёл <проект>.scenes.json"; exit 1; }
     cd "$PROJ" || exit 1
-    step "замена из запаса" python3 "$T/refetch.py" --scenes "$SCENES" --next "$SIDS"
+    # ИСЧЕРПАННЫЙ ЗАПАС — НЕ ОШИБКА ФАЗЫ (11.11). `refetch.py --next` отвечает
+    # кодом 1, когда НИ ОДНОЙ замены взять не удалось, а у сцен из поиска
+    # запаса кандидатов нет по устройству. Фаза печатала «[ОТКАЗ] замена из
+    # запаса» и валилась целиком — выглядело как поломка круга, хотя лечение
+    # другое и известное: переписать запрос и сходить за кадром в облако.
+    ZOUT="$(mktemp)"
+    python3 "$T/refetch.py" --scenes "$SCENES" --next "$SIDS" > "$ZOUT" 2>&1; ZRC=$?
+    echo "=== замена из запаса ===" >> "$LOG"; cat "$ZOUT" >> "$LOG"
+    if [ "$ZRC" -eq 0 ]; then
+        echo "[ОК]    замена из запаса"
+    elif grep -q "ИТОГ ПО ДИСКУ: заменено из запаса" "$ZOUT"; then
+        echo "[ОК]    ЗАПАС ИСЧЕРПАН — это не поломка круга:"
+        grep -h "запаса нет у сцен" "$ZOUT" | head -1 | cut -c1-200 | sed 's/^[ \t]*/        · /'
+        echo "        · лечение: ПЕРЕПИСАТЬ запрос этих сцен (субъект в запросе!)"
+        echo "          и сходить за кадром в облако: faza.sh fetch <проект> <труба>"
+        echo "          (ship.sh --fetch-only), запас на диске тут уже не поможет"
+        NOTES=$((NOTES+1))
+    else
+        echo "[ОТКАЗ] замена из запаса (код $ZRC)"
+        grep -hE "$MARK" "$ZOUT" | head -3 | cut -c1-200 | sed 's/^[ \t-]*/        · /'
+        FAILED=$((FAILED+1))
+    fi
+    rm -f "$ZOUT"
     # кроп углов обязателен по КАЖДОМУ новому файлу (улов 28.10), пачкой
     for s in ${SIDS//,/ }; do
         fb=$(printf "%s/images/scene_%03d" "$PROJ" "$s")
@@ -246,11 +301,25 @@ sdacha)
     [ -n "$QNAME" ] && [ -n "$PIPE" ] && [ -n "$DEST" ] || { echo "ОШИБКА: faza.sh sdacha <проект> <имя> <труба> \"<папка на D:>\""; exit 1; }
     [ -d "$DEST" ] || { echo "ОШИБКА: папки доставки нет: $DEST"; exit 1; }
     cd "$PROJ" || exit 1
-    step "полная сборка"  bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME"
-    if [ "$FAILED" -eq 0 ]; then
-        step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait
+    # СДАЧА НЕ НАЧИНАЕТСЯ СО СБОРКИ, ЕСЛИ ГОТОВЫЙ ФАЙЛ УЖЕ ЛЕЖИТ (11.11).
+    # Два случая за смену: вкладка повторяла `sdacha` на СВОЁМ ЖЕ собранном
+    # ролике — уходила вторая полная сборка и семь минут ожидания, а вердикт
+    # гейта детей к тому моменту уносила чистка забора, и фаза печатала
+    # «ПРОВЕРКА ДЕТИ НЕ ПРОЙДЕНА — СБОРКУ ДЕРЖУ» на уже доставленном ролике.
+    READY=""
+    if [ "${VIDEORYAD_SDACHA_REBUILD:-0}" != "1" ]; then
+        READY="$(gotovyy_mp4 "$PROJ" || true)"
     fi
-    READY="$(ls -S "$PROJ"/*.mp4 2>/dev/null | head -1)"
+    if [ -n "$READY" ]; then
+        echo "[ОК]    готовый файл уже собран и свежее сцен/слоёв — сборку пропускаю"
+        echo "        ($(basename "$READY"); пересобрать принудительно: VIDEORYAD_SDACHA_REBUILD=1)"
+    else
+        step "полная сборка"  bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME"
+        if [ "$FAILED" -eq 0 ]; then
+            step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait
+        fi
+        READY="$(ls -S "$PROJ"/*.mp4 2>/dev/null | head -1)"
+    fi
     if [ -z "$READY" ]; then
         echo "ОШИБКА: готового .mp4 в проекте нет — сборка не доехала, смотри $LOG"
         FAILED=$((FAILED+1)); summary; exit 1
@@ -300,12 +369,20 @@ start)
     # каналами просто по тому, кто раньше стартовал. Ключ один на все каналы,
     # поэтому развести их может только канал, названный вслух.
     WANT_CH="${VIDEORYAD_CHANNEL:-}"
+    # ТЕМУ НАЗЫВАЕТ ОН, А НЕ КОД (11.11, его прямое слово: «Ты должен был ей
+    # раздать последовательно, как я и говорил. Я же последовательно, специально
+    # открывал эти вкладки, давал конкретную инструкцию»). До этой правки
+    # `start` брал САМУЮ СВЕЖУЮ свободную тему канала по дате файла, и окно,
+    # которое он подписал «МОСТЫ», забрало «Лаврова» — просто потому, что текст
+    # Лаврова лёг на диск позже. Подпись окна код не видел вовсе.
+    WANT_TEMA="${VIDEORYAD_TEMA:-}"
     while [ $# -gt 0 ]; do
         case "${1:-}" in
             --wait) WAITMIN="${2:-45}"; shift 2 || true ;;
             --lyuboy-kanal) WANT_CH="ЛЮБОЙ"; shift ;;
+            --tema) WANT_TEMA="${2:-}"; shift 2 || true ;;
             "") shift ;;
-            *) [ -z "$WANT_CH" ] && WANT_CH="$1"; shift ;;
+            *) if [ -z "$WANT_CH" ]; then WANT_CH="$1"; elif [ -z "$WANT_TEMA" ]; then WANT_TEMA="$1"; fi; shift ;;
         esac
     done
     if [ -z "$WANT_CH" ]; then
@@ -335,7 +412,12 @@ PYCH
         echo "  (осознанно взять любой канал: --lyuboy-kanal)"
         exit 1
     fi
-    echo "ключ досье: $KEY · канал вкладки: $WANT_CH · ждать тему до $WAITMIN мин"
+    if [ -n "$WANT_TEMA" ]; then
+        echo "ключ досье: $KEY · канал: $WANT_CH · ТЕМА НАЗВАНА: $WANT_TEMA · ждать до $WAITMIN мин"
+    else
+        echo "ключ досье: $KEY · канал вкладки: $WANT_CH · ТЕМА НЕ НАЗВАНА (возьму самую свежую свободную) · ждать до $WAITMIN мин"
+        echo "  чтобы взять ИМЕННО свою тему:  faza.sh start $KEY \"$WANT_CH\" --tema \"2-Мосты приказ отдан\""
+    fi
     # САМАЯ СВЕЖАЯ тема с текстом по ВСЕМ каналам, кроме сданных и занятых:
     # он кладёт текст прямо перед тем, как кинуть ключ, поэтому свежесть и есть
     # признак «это она».
@@ -375,6 +457,19 @@ PYEOF
         TNAME="$(basename "$td")"
         # ЧУЖОЙ КАНАЛ ПРОПУСКАЕМ МОЛЧА — см. правку 10.11 выше.
         if [ "$WANT_CH" != "ЛЮБОЙ" ] && [ "$CH" != "$WANT_CH" ]; then continue; fi
+        # ТЕМА НАЗВАНА — БЕРЁМ ТОЛЬКО ЕЁ, свежесть больше ничего не решает.
+        # Сверка нестрогая по регистру и пробелам: он пишет «2-Мосты приказ
+        # отдан», в папке «2-МОСТЫ приказ отдан» — это одна и та же тема.
+        if [ -n "$WANT_TEMA" ]; then
+            if ! python3 - "$TNAME" "$WANT_TEMA" <<'PYT'
+import re, sys
+def key(x):
+    return re.sub(r"[^а-яёa-z0-9]", "", x.lower())
+have, want = key(sys.argv[1]), key(sys.argv[2])
+sys.exit(0 if (have == want or want in have or have in want) else 1)
+PYT
+            then continue; fi
+        fi
         SLUG="$(python3 - "$td" "$CH" "$DAY" <<'PYEOF'
 import re, sys, os
 t, ch, day = sys.argv[1], sys.argv[2], sys.argv[3]

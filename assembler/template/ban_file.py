@@ -188,6 +188,7 @@ def main():
             # после отказа значило бы врать вызывающему рефетчу.
             if ban_md5(md5, path="", reason=reason, days=days):
                 print(f"забанено {until_msg} (md5 {md5}): {reason}")
+                _snesti_iz_bazy([md5], reason, days)
             else:
                 print(f"НЕ записано (md5 {md5}): остался прежний бан")
         return
@@ -223,9 +224,50 @@ def main():
         if ban_md5(md5, path=path, reason=reason, days=days):
             print(f"забанено {until_msg}: {path}  (md5 {md5})  {reason}")
             _v_zhurnal(path, reason)
+            _snesti_iz_bazy([md5], reason, days)
         else:
             print(f"НЕ записано: {path}  (md5 {md5}) — остался прежний бан")
     _siblings_hint(paths[-1])
+
+
+def _snesti_iz_bazy(md5s, reason="", days=None):
+    """ВЕЧНЫЙ БАН СНОСИТ КАДР И ИЗ МЕДИАТЕКИ, А НЕ ТОЛЬКО ПИШЕТ В ЛИСТ.
+
+    Его слово 11.11.2026, дважды: «если я говорю в бан всплывашку или
+    картинку, то значит её в бан. Её надо сносить нафиг. И записывать
+    куда-то, чтобы она больше не появлялась».
+
+    Почему без этого бан не держал. Лист `.banned_md5.json` смотрит ФЕТЧ —
+    поиск забаненный кадр больше не приносит. Но тот же кадр лежит в `БАЗА/`
+    и приходит оттуда как `local_library`, мимо фетча и мимо листа. Промер
+    11.11: семь кадров, забаненных ИМ 04-07.11 словами «навсегда / для всех
+    сборок», всё ещё лежали в медиатеке; плюс 20 из банов 10-11.11. И в тот
+    же день `selfcheck` поймал у вкладки кадр с баном «навсегда» от 10.11
+    уже ПОСЛЕ утверждения дашборда.
+
+    СРОЧНЫЙ БАН НЕ СНОСИТ НИЧЕГО. `--days N` ставит рефетч, чтобы поиск не
+    вернул кадр на этом круге (`refetch.py` всегда зовёт с `--days 2`), —
+    выносить за это из базы нельзя, библиотека выпотрошится. Сносим только
+    бан БЕЗ срока: так банит дашборд, то есть ОН.
+    """
+    if days:
+        return
+    try:
+        import baza_snos
+    except Exception:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import baza_snos
+        except Exception as e:
+            print("  медиатеку не проверил (%r) — кадр может вернуться как "
+                  "local_library, снеси руками: python3 baza_snos.py --md5 %s"
+                  % (e, " ".join(md5s)), file=sys.stderr)
+            return
+    try:
+        baza_snos.снести(md5s, reason)
+    except Exception as e:
+        print("  снос из медиатеки не удался (%r): python3 baza_snos.py --md5 %s"
+              % (e, " ".join(md5s)), file=sys.stderr)
 
 
 def _v_zhurnal(path, reason=""):

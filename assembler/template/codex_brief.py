@@ -198,6 +198,119 @@ def _must_block():
     return out
 
 
+def _dossier_dir(*кандидаты):
+    """Первая папка, где лежит выдача `tg_media.py`."""
+    for d in кандидаты:
+        d = d or ""
+        if d and os.path.isdir(d) and _tg_files(d):
+            return d
+    return ""
+
+
+def _tg_files(d):
+    out = []
+    for c in sorted(glob.glob(os.path.join(d, "tg*.json"))):
+        b = os.path.basename(c).lower()
+        if any(w in b for w in ("reject", "отказ", "snapshot", "снапшот",
+                                "source", "map")):
+            continue
+        out.append(c)
+    return out
+
+
+def _dossier_block(project="."):
+    """ГОДНЫЕ ВЛОЖЕНИЯ ДОСЬЕ — ГОТОВЫМИ АДРЕСАМИ, ПРЯМО В ЗАДАНИЕ (11.11).
+
+    Было: во всём брифе про них одна строка «`direct_url` (вложения досье)» —
+    ни адресов, ни размеров. Агент физически не мог заказать `direct_url`,
+    материал георадара ложился без дела, и `dossier_use.py` потом валил фетч;
+    вкладки собирали этот список руками из `tg.json` на каждом ролике
+    (живой пример — `attach_dlya_zadaniya.txt` в `planeta-3-merc-poslali-1211`).
+    Вклеиваем так же, как каталог базы кадров: адрес целиком, размер, о чём
+    пост и чем кадр годен — сценой или только всплывашкой.
+    Пороги и отсев неприменимого берём у `dossier_use`, второй копии не заводим.
+    """
+    файлы = _tg_files(project)
+    if not файлы:
+        return ""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import dossier_use as _du
+    except Exception as e:
+        print("вложения досье в бриф не попали (%s)" % e, file=sys.stderr)
+        return ""
+    отказы = _du.load_rejected(project)
+    media, видано = [], set()
+    for t in файлы:
+        try:
+            for m in _du.load_tg(t):
+                if m["url"] in видано:
+                    continue
+                видано.add(m["url"])
+                media.append(m)
+        except Exception as e:
+            print("не прочитать %s (%s)" % (os.path.basename(t), e),
+                  file=sys.stderr)
+    # тексты постов — для строки «о чём пост»
+    тексты = {}
+    for t in файлы:
+        try:
+            d = json.load(open(t, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for r in (d if isinstance(d, list) else d.get("items") or []):
+            if isinstance(r, dict) and r.get("url"):
+                тексты[str(r["url"])] = re.sub(r"\s+", " ",
+                                               str(r.get("text") or "")).strip()
+    годные, мелкие = [], 0
+    for m in media:
+        if отказы.get(m["url"]) or отказы.get(m.get("post") or ""):
+            continue
+        if _du.неприменим(m):
+            мелкие += 1
+            continue
+        годные.append(m)
+    if not годные:
+        return ""
+    out = [
+        "ВЛОЖЕНИЯ ДОСЬЕ — ГОТОВЫЕ КАДРЫ. ЗАКАЗЫВАЙ ИХ ПЕРВЫМИ, ДО ПОИСКА.",
+        "Порядок источников не обсуждается: досье → медиатека и база → поиск.",
+        "Сцена с таким кадром выглядит так:",
+        '  {"source": "direct_url", "source_query": "<адрес ЦЕЛИКОМ из списка '
+        'ниже>", …}',
+        "Адрес копируй ЦЕЛИКОМ, вместе с `?token=…`: он живёт недолго и в",
+        "сокращённом виде не качается. Ставь кадр туда, где он по смыслу",
+        "подходит; если в тексте места нет совсем — скажи об этом прямо, а",
+        "насильно не ставь.",
+        "ДВА СИТА РАЗНЫЕ: сцена — 800 px по ДЛИННОЙ стороне, фетчер — 500x320",
+        "по ОБЕИМ. Что ниже, помечено ниже как «только всплывашкой».",
+        "",
+    ]
+    for m in годные:
+        пост = str(m.get("post") or "")
+        имя = "/".join(пост.rstrip("/").split("/")[-2:]) or пост
+        w, h = _du._wh(m.get("size"))
+        if w and max(w, h) >= 800 and w >= 500 and h >= 320:
+            годен = "годен БАЗОВОЙ СЦЕНОЙ"
+        elif w:
+            годен = "только ВСПЛЫВАШКОЙ (ниже порога сцены)"
+        else:
+            годен = "размер не промерен — смотри сам"
+        out.append("* %s (%s%s) — %s"
+                   % (имя, m["kind"], ", %s" % m["size"] if m.get("size") else "",
+                      годен))
+        т = тексты.get(пост, "")
+        if т:
+            out.append("    о чём пост: %s" % т[:200])
+        out.append("    direct_url: %s" % m["url"])
+    if мелкие:
+        out.append("")
+        out.append("(ещё %d вложения ниже порога фетчера — они не годятся "
+                   "никуда, их не заказывай)" % мелкие)
+    out.append("")
+    return "\n".join(out)
+
+
 def _base_catalog(dest=".", match_text=""):
     """Блок каталога базы кадров для брифа; пусто, если база ещё не набрана."""
     try:
@@ -285,7 +398,8 @@ def _in_skill(path):
     return p == _SKILL or p.startswith(_SKILL + os.sep)
 
 
-def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАДРОВКА.txt"):
+def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАДРОВКА.txt",
+                      project="."):
     """Задание на раскадровку: числа цифрами + ЖИВОЙ список мин линтера."""
     total = srt_end_sec(srt)
     want = total / 11.5 if total else 0
@@ -419,6 +533,11 @@ def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАД�
         # собранная ночью база физически не попадает ни в один ролик — фетч не
         # найдёт папку по описанию и молча уйдёт в пресс-водопад.
         _base_catalog(dest, match_text=srt_plain_text(srt)),
+        # ВЛОЖЕНИЯ ДОСЬЕ (11.11). Тот же случай, что каталог базы строкой
+        # выше: без списка адресов агент не может заказать `direct_url`
+        # физически, материал георадара лежит без дела, и `dossier_use.py`
+        # валит фетч. Пустая строка, если вложений нет.
+        _dossier_block(project),
         # РИСОВАННЫЕ КАДРЫ АРСЕНАЛА (28.10). Пользователь: «арсенал
         # разрабатывался, чтобы элементы внедрять в логику сборки». Это те
         # сцены, на которых поиск заведомо даёт брак: нет ни имени, ни места,
@@ -634,10 +753,23 @@ def main():
     if a.stage == "scenes":
         if not a.srt or not a.channel:
             sys.exit("для --stage scenes нужны --srt и --channel")
+        # ПАПКА ПРОЕКТА — ТАМ, ГДЕ ЛЕЖИТ `tg.json` (11.11): на этом шаге
+        # сцен ещё нет, первым аргументом идёт путь-заглушка, поэтому
+        # смотрим по очереди его папку, текущую папку и `--dest`.
+        _proj = _dossier_dir(os.path.dirname(os.path.abspath(a.scenes or ".")),
+                             os.getcwd(), a.dest) or "."
         path, want, total = write_scenes_task(
             a.dest, a.srt, a.channel,
-            _dest_file or "ЗАДАНИЕ-РАСКАДРОВКА.txt")
+            _dest_file or "ЗАДАНИЕ-РАСКАДРОВКА.txt", project=_proj)
         print("задание на раскадровку: %s" % win(path))
+        _тг = _tg_files(_proj)
+        if _тг:
+            print("  вложения досье вклеены из: %s"
+                  % ", ".join(os.path.basename(x) for x in _тг))
+        else:
+            print("  ВЛОЖЕНИЙ ДОСЬЕ НЕТ рядом (tg*.json не найден ни в папке "
+                  "сцен, ни в текущей, ни в --dest) — агент закажет всё "
+                  "поиском. Если досье есть, прогони tg_media.py и повтори.")
         print("  канал %s, озвучка %.1f с, просим %d сцен, "
               "список мин линтера вклеен" % (a.channel, total, want))
         # ДОПИСКИ ВКЛАДКИ НЕ ПРОХОДЯТ ФИЛЬТРЫ КАТАЛОГА (02.11, улов и разбор

@@ -22,6 +22,7 @@ Two stages:
              factor). Muxes with -c:v copy.
 
 Usage:
+  python3 build_overlays.py build <папка проекта>   # собрать overlays.json
   python3 build_overlays.py overlay <scenes.json> <images-dir> <clips-dir> <overlays.json>
   python3 build_overlays.py sfx <scenes.json> <overlays.json> <sfx-dir> <in.mp4> <out.mp4> [stretch-factor]
 """
@@ -995,11 +996,189 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
     print(("готово: " + out_mp4) if ok else ("FAIL\n" + r.stderr[-800:]))
 
 
+# ---------------------------------------------------------------- РЕЖИМ build
+# 11.11.2026. Причина: `faza.sh posle_fetcha` звал `build_overlays.py build
+# <проект>` — такого режима не было, скрипт печатал usage и возвращал НОЛЬ.
+# Снаружи шаг «слои (всплывашки/надписи)» выглядел успешным, а слой не
+# собирался вовсе («успех без результата», улов `usuario-fd`).
+# Что делает `build`: СОБИРАЕТ `overlays.json` из того, что уже лежит в
+# `overlays/` — ровно ту механику, которую вкладки делали инлайновым снипетом
+# (он же автор фантомного `approved`, BRIEF-TAB «0-кварт.»). Содержание —
+# какой кадр и какие слова — остаётся за вкладкой, код решает только поля.
+_SND_CYCLE = ("pop", "whoosh", "ding")      # «чистый» снипет, без zatvor
+_SHAPES = ("rect", "rect", "circle")
+_SCALES = (1.0, 1.2, 1.0, 1.0)
+_PHOTO_EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm")
+OV_NORM = (10, 14)          # фото-всплывашек на ролик (BRIEF-TAB, 05.11)
+
+
+def _scenes_file(proj):
+    """Раскадровка проекта. `overlays_fetch`/`maps_fetch` — НЕ она."""
+    c = [p for p in sorted(glob.glob(os.path.join(proj, "*.scenes.json")))
+         if "overlays_fetch" not in os.path.basename(p)
+         and "maps_fetch" not in os.path.basename(p)]
+    return c[0] if c else ""
+
+
+def do_build(proj="."):
+    """Собрать слой всплывашек по файлам в `overlays/`. Код 1 = слоя нет."""
+    proj = os.path.abspath(proj or ".")
+    if not os.path.isdir(proj):
+        print("нет такой папки проекта:", proj)
+        return 1
+    os.chdir(proj)
+    sp = _scenes_file(proj)
+    if not sp:
+        print("в %s нет <проект>.scenes.json — собирать слой не по чему" % proj)
+        return 1
+    d = json.load(open(sp, encoding="utf-8"))
+    scenes = d["scenes"] if isinstance(d, dict) else d
+    chan = str(d.get("channel", "")).strip() if isinstance(d, dict) else ""
+    planeta = chan.upper().replace("Ё", "Е") == "ПЛАНЕТА" or not chan
+    def_anchor = "bottom" if planeta else "top"     # низ вне ПЛАНЕТЫ запрещён
+                                                    # (только для отчёта)
+    info = {}
+    for sc in scenes:
+        try:
+            info[int(sc["id"])] = sc
+        except (KeyError, ValueError, TypeError):
+            continue
+    cards = {i for i, sc in info.items()
+             if str(sc.get("source", "")).startswith("card")}
+    for i, sc in info.items():                   # переходы двигают старт
+        k = str(sc.get("fx", "")).strip().lower()
+        if k in FX_TRANS_SEC:
+            FX_MIN_AT[i] = FX_TRANS_SEC[k] + 0.2
+
+    ov_path = os.path.join(proj, "overlays.json")
+    ov = {}
+    if os.path.exists(ov_path):
+        try:
+            ov = json.load(open(ov_path, encoding="utf-8"))
+        except ValueError as e:
+            print("overlays.json битый (%s) — не трогаю его" % e)
+            return 1
+
+    # ---- что лежит в overlays/ (служебное и предпросмотр дашборда — мимо)
+    found = {}
+    for f in sorted(glob.glob(os.path.join(proj, "overlays", "scene_*"))):
+        b = os.path.basename(f)
+        if b.endswith(".text.png") or not b.lower().endswith(_PHOTO_EXT):
+            continue
+        try:
+            sid = int(b[6:9])
+        except ValueError:
+            continue
+        if os.path.getsize(f) > 0:
+            found.setdefault(sid, os.path.join("overlays", b))
+
+    added, skipped_card, i = [], [], 0
+    for sid in sorted(found):
+        if str(sid) in ov or sid in ov:
+            continue                       # запись вкладки/дашборда — не трогаем
+        if sid in cards:
+            skipped_card.append(sid)       # на рисованном кадре слоёв не бывает
+            continue
+        dur = float(info.get(sid, {}).get("duration_sec") or 0) or 10.0
+        at = _floor_at(sid, 2.2 + 0.2 * i, dur)
+        at = min(at, max(0.6, dur - 2 * SLIDE - TAIL - 1.0))
+        ov[str(sid)] = {"photo": found[sid],
+                        "sound": _SND_CYCLE[i % len(_SND_CYCLE)],
+                        "at": round(at, 2),
+                        "shape": _SHAPES[i % len(_SHAPES)],
+                        "scale": _SCALES[i % len(_SCALES)],
+                        "style": _STYLES[sid % len(_STYLES)]}
+        # `anchor` НЕ пишем: вертикаль считается по каналу в `do_overlay`
+        # (ПЛАНЕТА — низ, остальные — верх), а посценный ключ ставит дашборд
+        # кнопкой «по вертикали». Записанный здесь он только заморозил бы
+        # выбор. 11.11
+        added.append(sid)
+        i += 1
+
+    # ---- записи на рисованных кадрах: снимаем, решение пользователя щадим
+    dropped, kept_card = [], []
+    for k in [k for k in list(ov) if str(k).isdigit() and int(k) in cards]:
+        if ov[k].get("dash_ok"):
+            kept_card.append(int(k))
+        else:
+            ov.pop(k); dropped.append(int(k))
+
+    # ---- записи без файла на диске: не удаляем, называем вслух
+    nofile = [int(k) for k, v in ov.items()
+              if str(k).isdigit() and isinstance(v, dict)
+              and (v.get("photo") and not resolve_photo(v["photo"]))]
+
+    if added or dropped:
+        tmp = ov_path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump(ov, fh, ensure_ascii=False, indent=1)
+        os.replace(tmp, ov_path)
+
+    photos = [k for k, v in ov.items() if str(k).isdigit()
+              and isinstance(v, dict) and v.get("photo")]
+    texts = [k for k, v in ov.items() if str(k).isdigit()
+             and isinstance(v, dict) and isinstance(v.get("text"), dict)]
+    print("канал: %s · сцен %d · файлов в overlays/: %d"
+          % (chan or "не указан", len(info), len(found)))
+    if added:
+        print("ДОБАВЛЕНО записей: %d (сцены %s)"
+              % (len(added), ", ".join(map(str, added))))
+    if skipped_card:
+        print("пропущены рисованные кадры: %s" % ", ".join(map(str, skipped_card)))
+    if dropped:
+        print("СНЯТЫ записи с рисованных кадров: %s" % ", ".join(map(str, dropped)))
+    if kept_card:
+        print("на рисованных кадрах остались УТВЕРЖДЁННЫЕ (dash_ok) записи: %s "
+              "— снимать только с его слова" % ", ".join(map(str, kept_card)))
+    if nofile:
+        print("ЗАПИСЬ ЕСТЬ, ФАЙЛА НЕТ (всплывашка пропадёт молча): %s"
+              % ", ".join(map(str, sorted(nofile))))
+    print("итого в overlays.json: фото-всплывашек %d (норма %d-%d), надписей %d"
+          % (len(photos), OV_NORM[0], OV_NORM[1], len(texts)))
+
+    if not photos:
+        # Слой НЕ собран. Молчать здесь нельзя — это и был дефект 11.11.
+        free = [i for i in sorted(info) if i not in cards]
+        plan = free[:1] + free[3::max(1, len(free) // max(1, OV_NORM[0]))]
+        print("В overlays/ НЕТ НИ ОДНОГО КАДРА — слой не собран.")
+        print("Положи 10-14 файлов `overlays/scene_NNN.jpg` и повтори. "
+              "Ровно по ролику ложатся сцены: %s"
+              % ", ".join(map(str, plan[:OV_NORM[1]])))
+        return 1
+    if len(photos) < OV_NORM[0]:
+        print("СМОТРИ: фото-всплывашек меньше нормы — добери до %d-%d."
+              % OV_NORM)
+    if not planeta and not texts:
+        print("СМОТРИ: канал «%s» — надписи-слова ОБЯЗАТЕЛЬНЫ (≈3 на минуту), "
+              "их ставит вкладка ключом `text`." % chan)
+    if planeta and not texts:
+        print("СМОТРИ: на ПЛАНЕТЕ обязательна надпись из-под маски "
+              "(`style: mask_plate`), норма — %d шт."
+              % max(1, round(len([i for i in info if i not in cards]) / 8.5)))
+    return 0
+
+
 if __name__ == "__main__":
-    mode = sys.argv[1]
-    if mode == "overlay":
+    # НЕИЗВЕСТНЫЙ РЕЖИМ = КОД 1 (11.11.2026). Раньше любое чужое слово
+    # печатало справку и отвечало НОЛЬ — вызывающая фаза считала шаг
+    # выполненным. Молчаливый успех здесь запрещён.
+    _MODES = "build | overlay | sfx"
+    mode = sys.argv[1] if len(sys.argv) > 1 else ""
+    if mode == "build":
+        sys.exit(do_build(sys.argv[2] if len(sys.argv) > 2 else "."))
+    elif mode == "overlay":
+        if len(sys.argv) < 6:
+            print("build_overlays.py overlay <scenes.json> <images-dir> "
+                  "<clips-dir> <overlays.json>")
+            sys.exit(1)
         do_overlay(*sys.argv[2:6])
     elif mode == "sfx":
+        if len(sys.argv) < 7:
+            print("build_overlays.py sfx <scenes.json> <overlays.json> "
+                  "<sfx-dir> <in.mp4> <out.mp4> [stretch-factor]")
+            sys.exit(1)
         do_sfx(*sys.argv[2:])
     else:
         print(__doc__)
+        print("НЕИЗВЕСТНЫЙ РЕЖИМ %r. Есть только: %s" % (mode, _MODES))
+        sys.exit(1)

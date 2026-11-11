@@ -181,3 +181,7 @@ template/naydi.py
 template/smena_pora.py
 template/brak.py
 template/zamechanie.py
+template/baza_snos.py
+template/razlozhit_rerayt.py
+template/statistika.py
+template/whisper_derzhi.sh

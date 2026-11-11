@@ -179,13 +179,58 @@ def load_tg(path):
         # `planeta-ukraina-forma-1011`, запись OstashkoNews/227780).
         _ф = _urls(r, "photos")
         _в = _urls(r, "videos")
+        # РАЗМЕР И ПРИЗНАК ПОСТЕРА ЕДУТ ВМЕСТЕ С ФАЙЛОМ (11.11). `tg_media`
+        # меряет их сам (`media_size`, `poster_size`, `video_posters`), а
+        # гейт этих полей не читал — и требовал употребить постер 320x180,
+        # который фетчер отклоняет на входе. См. `неприменим()`.
+        _разм = dict(r.get("media_size") or {})
+        _разм.update(dict(r.get("poster_size") or {}))
+        _пост = set(r.get("video_posters") or [])
         for i, u in enumerate(_ф):
             out.append({"url": u, "post": post, "kind": "фото",
-                        "notes": _notes(r), "i": i, "n": len(_ф)})
+                        "notes": _notes(r), "i": i, "n": len(_ф),
+                        "size": _разм.get(u, ""), "poster": u in _пост})
         for i, u in enumerate(_в):
             out.append({"url": u, "post": post, "kind": "видео",
-                        "notes": _notes(r), "i": i, "n": len(_в)})
+                        "notes": _notes(r), "i": i, "n": len(_в),
+                        "size": _разм.get(u, ""), "poster": False})
     return out
+
+
+# ПОРОГИ ФЕТЧЕРА (`fetch_assets_news.py`): базовая сцена 500x320, всплывашка
+# 300x200. Ниже них файл физически не встанет никуда — требовать его
+# употребления значит держать фетч закрытым навсегда.
+ПОРОГ_СЦЕНЫ = (500, 320)
+ПОРОГ_ВСПЛЫВАШКИ = (300, 200)
+
+
+def _wh(размер):
+    m = re.match(r"^\s*(\d+)\s*[xх*]\s*(\d+)", str(размер or ""))
+    return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+
+
+def неприменим(m):
+    """Почему этот файл в ролик не встанет НИКАК. Иначе None.
+
+    11.11, улов смены: гейт требовал употребить ПОСТЕР видеопоста 320x179 —
+    при пороге сцены 800 px и пороге фетчера 500x320 его отклоняет сам
+    фетчер, и вкладка вписывала постер в `tg_rejected.json` руками на каждом
+    ролике (живой пример — `planeta-3-merc-poslali-1211`). Неприменимое — не
+    забытое: оно не идёт ни в «лежит без дела», ни в отказ, но и не
+    прячется — его печатают отдельной строкой.
+    Само ВИДЕО такого поста остаётся обычным материалом: содержание несёт
+    оно, а постер — лишь его обложка.
+    """
+    w, h = _wh(m.get("size"))
+    if not w:
+        return None                       # размер не промерен — не судим
+    if w < ПОРОГ_ВСПЛЫВАШКИ[0] or h < ПОРОГ_ВСПЛЫВАШКИ[1]:
+        return ("%dx%d — ниже порога всплывашки %dx%d, фетчер отклонит"
+                % (w, h, *ПОРОГ_ВСПЛЫВАШКИ))
+    if m.get("poster") and (w < ПОРОГ_СЦЕНЫ[0] or h < ПОРОГ_СЦЕНЫ[1]):
+        return ("постер видео %dx%d — ниже порога сцены %dx%d; содержание "
+                "несёт само видео поста" % (w, h, *ПОРОГ_СЦЕНЫ))
+    return None
 
 
 def used_strings(paths):
@@ -482,15 +527,25 @@ def main():
             return True
         return False
 
-    unused = [m for m in media if not _used(m) and not _why(m)]
     used = len([m for m in media if _used(m)])
     dropped = [m for m in media if not _used(m) and _why(m)]
+    # НЕПРИМЕНИМОЕ ОТДЕЛЯЕТСЯ ДО СЧЁТА «ЛЕЖИТ БЕЗ ДЕЛА» (11.11): файл ниже
+    # порога фетчера не «забыт», его физически некуда поставить.
+    _мало = [m for m in media
+             if not _used(m) and not _why(m) and неприменим(m)]
+    _мало_u = {m["url"] for m in _мало}
+    unused = [m for m in media if not _used(m) and not _why(m)
+              and m["url"] not in _мало_u]
     print("=== МАТЕРИАЛ ДОСЬЕ ===")
     print("файлов во вложениях постов: %d (фото %d, видео %d)" % (
         len(media), sum(1 for m in media if m["kind"] == "фото"),
         sum(1 for m in media if m["kind"] == "видео")))
-    print("поставлено в ролик: %d, разобрано и отклонено: %d, лежит без "
-          "дела: %d" % (used, len(dropped), len(unused)))
+    print("поставлено в ролик: %d, разобрано и отклонено: %d, неприменимо по "
+          "размеру: %d, лежит без дела: %d"
+          % (used, len(dropped), len(_мало), len(unused)))
+    for m in _мало[:20]:
+        print("  неприменимо: %s из %s — %s"
+              % (m["kind"], m["post"], неприменим(m)))
     for m in dropped[:40]:
         print("  отклонено: %s из %s — %s"
               % (m["kind"], m["post"], _why(m) or "без причины"))

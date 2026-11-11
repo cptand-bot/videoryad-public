@@ -4351,6 +4351,26 @@ def run_live(scenes_path, images_dir, port):
                             else "файл забанен навсегда, нужна замена")
                 save_need(sid, reason or need_msg)
                 _v_zhurnal_zamen(sid, "images", "бан с дашборда")
+                # МЕТКА «ЭТО БАН ПОЛЬЗОВАТЕЛЯ, НЕ ПОЛОМКА» (11.11, п.23).
+                # Кадр исчезает из `images/`, `selfcheck` падает с
+                # FileNotFoundError — и вкладка читает это как поломку, а
+                # добор молча берёт следующий кадр из ТОЙ ЖЕ выдачи, не
+                # зная, что предыдущий снял ОН. Автоматика не должна
+                # отменять его решение вслепую: метку читает `refetch.py`.
+                try:
+                    _ub = {}
+                    if os.path.isfile(".user_bans.json"):
+                        with open(".user_bans.json", encoding="utf-8") as _f:
+                            _ub = json.load(_f) or {}
+                    _ub[str(sid)] = {"reason": reason or need_msg,
+                                     "days": days or 0,
+                                     "when": time.strftime("%Y-%m-%d %H:%M")}
+                    _tmp = ".user_bans.json.tmp"
+                    with open(_tmp, "w", encoding="utf-8") as _f:
+                        json.dump(_ub, _f, ensure_ascii=False, indent=2)
+                    os.replace(_tmp, ".user_bans.json")
+                except (OSError, ValueError):
+                    pass
                 return self._reply(200)
 
             if route == "micdiag":

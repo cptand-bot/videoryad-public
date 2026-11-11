@@ -363,10 +363,37 @@ def repair_collisions(scenes_path, images_dir, env_path):
     return True
 
 
+def _zamorozheno_stop(path_hint="."):
+    """УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО (Z-0019/Z-0020). Фетч — такая же
+    правка состава, как замена кадра: после его «утверждаю» он не идёт.
+    Вставлено 11.11 (`НА-РАСКАТКУ` п.14): у этого файла нет `main()`,
+    поэтому проверка стоит в точке входа, а не декоратором.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from zamorozka import zamorozheno
+        pdir = os.path.abspath(path_hint if os.path.isdir(path_hint)
+                               else os.path.dirname(os.path.abspath(path_hint)) or ".")
+        for _ in range(3):
+            if os.path.exists(os.path.join(pdir, ".utverzhdeno.json")):
+                break
+            pdir = os.path.dirname(pdir)
+        if zamorozheno(pdir):
+            print("ФЕТЧ ЗАПРЕЩЁН: дашборд этого ролика утверждён. "
+                  "Находку неси координатору — пересборку назначает пользователь.",
+                  file=sys.stderr)
+            raise SystemExit(3)
+    except SystemExit:
+        raise
+    except Exception:
+        pass            # нет модуля/метки — работаем как раньше
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print("usage: fetch_parallel.py <scenes.json> <images-dir> <.env> [K=5]")
         sys.exit(1)
+    _zamorozheno_stop(sys.argv[1])
     K = int(sys.argv[4]) if len(sys.argv) > 4 else 5
     # код возврата ненулевой при упавшем воркере — `refetch.py` его УЖЕ
     # проверяет и печатает «ФЕТЧ УПАЛ», просто получать было нечего

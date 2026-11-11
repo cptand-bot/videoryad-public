@@ -6,6 +6,7 @@
     python3 zanyato.py --vzyat  --kanal ПЛАНЕТА --tema "3-Украина Поражение ЗАПАД"
                                 [--den 10-11] [--kto имя] [--proekt путь] [--force]
     python3 zanyato.py --sdat   --iz-puti "<папка темы>" [--rabota видеоряд]
+                                [--bez-fayla]   # аварийно, файл лежит не там
     python3 zanyato.py --spisok [--vse]
 
 ПОВОД, дважды за 09.11:
@@ -32,7 +33,9 @@
             повторно — не отказ. Сданное не мешает: берётся заново молча,
             с упоминанием, кто сдавал.
   --sdat    пометить сданным — занятость снимается, следующий `--vzyat`
-            проходит.
+            проходит. С 11.11 на работе «видеоряд» СНАЧАЛА проверяется,
+            что в папке темы на D: лежит `.mp4` не меньше 100 МБ: нет —
+            ОТКАЗ, код 1. Обход `--bez-fayla`, с предупреждением.
   --spisok  что занято сейчас, с возрастом записей. Запись старше 12 часов в
             состоянии «в работе» показывается как «возможно брошено», но
             АВТОМАТИЧЕСКИ НЕ СНИМАЕТСЯ: снять её может только человек или
@@ -48,6 +51,7 @@
 эта отметка не должна становиться новой причиной простоя.
 """
 import argparse
+import glob
 import json
 import os
 import re
@@ -123,12 +127,41 @@ def iz_puti(path):
 
 
 def kto_ya(proekt=""):
-    """Имя исполнителя: переменная среды, иначе папка проекта + pid."""
+    """Имя исполнителя: переменная среды, иначе папка проекта + СТАБИЛЬНАЯ метка.
+
+    ПОЧЕМУ НЕ PID (11.11, `НА-РАСКАТКУ` п.7). Имя собиралось как
+    «<папка>/pid<номер процесса>», а каждый вызов инструмента Bash — НОВЫЙ
+    процесс: своя же отметка через минуту выглядела чужой, и вкладка
+    требовала `--perenyat` на СВОЕЙ теме дважды подряд. Тот же ключ стирает
+    защиту от соседа, то есть лечение дефекта открывало настоящую дыру.
+    Теперь метка кладётся в САМУ папку проекта (`.kto`) и живёт столько же,
+    сколько папка: повторный вызов из той же папки — тот же исполнитель,
+    чужая вкладка со своей папкой — другой.
+    """
     who = (os.environ.get("VIDEORYAD_WHO") or "").strip()
     if who:
         return who
-    baza = os.path.basename(os.path.abspath(proekt or os.getcwd()))
-    return "%s/pid%d" % (baza, os.getpid())
+    pdir = os.path.abspath(proekt or os.getcwd())
+    baza = os.path.basename(pdir)
+    metka = ""
+    mfile = os.path.join(pdir, ".kto")
+    try:
+        if os.path.isfile(mfile):
+            with open(mfile, encoding="utf-8") as f:
+                metka = f.read().strip()
+        if not metka:
+            import uuid
+            metka = uuid.uuid4().hex[:6]
+            os.makedirs(pdir, exist_ok=True)
+            tmp = mfile + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(metka)
+            os.replace(tmp, mfile)
+    except OSError:
+        # Папка только читается — откатываемся к прежнему поведению, оно
+        # хуже, но работает.
+        metka = "pid%d" % os.getpid()
+    return "%s/%s" % (baza, metka)
 
 
 class _Zamok(object):
@@ -308,6 +341,106 @@ def iz_proekta(proekt=""):
     return iz_puti(p)
 
 
+# ГОТОВЫЙ ФАЙЛ НА ДИСКЕ — УСЛОВИЕ ОТМЕТКИ «СДАНО» (11.11). Живой случай:
+# запись `5min-1-lavrov-rezkiy-1211-cloud/pid33450` стояла «сдано», а в папке
+# темы на D: лежали только mp3 15,1 МБ, srt, txt и превью — mp4 не было
+# ВОВСЕ. Координатор поверил реестру и передал смену с ложной картиной дня.
+# Отметку ставит не намерение вкладки, а ФАЙЛ: ищем `.mp4` не меньше 100 МБ
+# (19-минутный видеоряд весит 400-600 МБ, обрезок и заглушки столько не
+# набирают). Проверка только для работы «видеоряд»: у досье, статьи и
+# упаковки готового mp4 не бывает по устройству.
+MIN_MP4_MB = 100
+
+
+def _k_posix(p):
+    """`D:\\YouTube\\...` → `/mnt/d/YouTube/...`. В `.source_dir` лежит уже
+    путь WSL, но ключом `--iz-puti` дают и виндовый."""
+    s = str(p or "").strip().strip('"')
+    m = re.match(r"^([A-Za-z]):[\\/](.*)$", s)
+    if m:
+        s = "/mnt/%s/%s" % (m.group(1).lower(), m.group(2))
+    return s.replace("\\", "/")
+
+
+def papka_temy(proekt="", put=""):
+    """Папка темы на D:. Прямой путь сильнее; иначе `.source_dir` проекта —
+    то же место, откуда `iz_proekta` берёт канал, тему и день."""
+    if put:
+        return _k_posix(put)
+    p = os.path.abspath(proekt) if proekt else ""
+    if p:
+        try:
+            with open(os.path.join(p, ".source_dir"), encoding="utf-8") as f:
+                src = f.read().strip()
+            if src:
+                return _k_posix(src)
+        except OSError:
+            pass
+    return ""
+
+
+def gotovyy_fayl(papka):
+    """Самый большой `.mp4` в папке темы и на уровень глубже.
+
+    Возвращает (путь, МБ) или ("", 0.0).
+    """
+    naydeno = []
+    for shablon in ("*.mp4", "*/*.mp4"):
+        for f in glob.glob(os.path.join(papka, shablon)):
+            try:
+                naydeno.append((os.path.getsize(f) / float(2 ** 20), f))
+            except OSError:
+                pass
+    if not naydeno:
+        return "", 0.0
+    mb, f = max(naydeno)
+    return f, mb
+
+
+def proverka_gotovogo(papka, rabota, bez_fayla=False):
+    """Можно ли писать «сдано». Возвращает (можно, строки_для_печати).
+
+    ПУТИ НЕТ — НЕ ПАДАЕМ: говорим словами и пропускаем проверку (реестр не
+    должен становиться новой причиной простоя, правило из шапки файла).
+    """
+    out = []
+    if _norm(rabota) != _norm("видеоряд"):
+        return True, out
+    if bez_fayla:
+        out.append("!! --bez-fayla: отметка «сдано» без проверки файла. Так "
+                   "делают, только когда готовый mp4 лежит НЕ в папке темы "
+                   "(другой диск, переименован руками). Если файла нет вовсе "
+                   "— реестр соврёт координатору, как 11.11.")
+        return True, out
+    if not papka:
+        out.append("  (папка темы не известна: ни --iz-puti, ни `.source_dir` "
+                   "в папке проекта — проверку готового файла пропускаю)")
+        return True, out
+    if not os.path.isdir(papka):
+        out.append("  (папки темы %s нет на диске — проверку готового файла "
+                   "пропускаю)" % papka)
+        return True, out
+    f, mb = gotovyy_fayl(papka)
+    if f and mb >= MIN_MP4_MB:
+        out.append("готовый файл на месте: %s (%d МБ)"
+                   % (os.path.basename(f), int(mb)))
+        return True, out
+    out.append("!! СДАЧА НЕ ОТМЕЧЕНА: готового видеоряда в папке темы НЕТ.")
+    out.append("   искал `.mp4` не меньше %d МБ в: %s (и на уровень глубже)"
+               % (MIN_MP4_MB, papka))
+    if f:
+        out.append("   самый большой mp4 там: %s (%.1f МБ) — это не готовый "
+                   "ролик" % (os.path.basename(f), mb))
+    else:
+        _est = sorted(os.listdir(papka))[:12] if os.path.isdir(papka) else []
+        out.append("   mp4 в папке нет вовсе; лежит: %s"
+                   % (", ".join(_est) or "пусто"))
+    out.append("   Отметка «сдано» без файла — это ложная картина дня у "
+               "координатора (живой случай 11.11). Доставь файл и повтори.")
+    out.append("   Файл лежит в другом месте — повтори с --bez-fayla.")
+    return False, out
+
+
 def otmetitsya_myagko(kanal, tema, den, kto="", rabota="досье", proekt=""):
     """МЯГКАЯ отметка: занято другим — ПРЕДУПРЕДИТЬ, но не отказывать.
 
@@ -457,6 +590,9 @@ def main():
     ap.add_argument("--proekt", default="")
     ap.add_argument("--force", action="store_true",
                     help="--vzyat: осознанно перенять чужую работу")
+    ap.add_argument("--bez-fayla", dest="bez_fayla", action="store_true",
+                    help="--sdat: АВАРИЙНО отметить сдачу без готового mp4 "
+                         "в папке темы (файл лежит не там)")
     ap.add_argument("--reestr", default="",
                     help="другой файл реестра (только для проверок)")
     a = ap.parse_args()
@@ -493,6 +629,15 @@ def main():
               % (a.rabota, ", ".join(RABOTY)))
 
     if a.sdat:
+        # ГЕЙТ 11.11: «сдано» пишем только когда готовый файл ЛЕЖИТ НА ДИСКЕ.
+        # Папку темы берём оттуда же, откуда скрипт уже берёт канал и тему —
+        # прямой путь `--iz-puti` или `.source_dir` папки проекта.
+        _papka = papka_temy(a.proekt or a.iz_proekta, a.iz_puti)
+        _mozhno, _out = proverka_gotovogo(_papka, a.rabota, a.bez_fayla)
+        for ln in _out:
+            print(ln, file=(sys.stdout if _mozhno else sys.stderr))
+        if not _mozhno:
+            return 1
         ok, out = sdat(kanal, tema, den, a.kto, a.rabota, a.proekt)
         for ln in out:
             print(ln)

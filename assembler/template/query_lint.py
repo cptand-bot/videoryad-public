@@ -1867,6 +1867,7 @@ def lint(paths, strict=False, no_net=False):
     # только в инструкции: вкладка взяла 8 ссылок из 65 и честно отчиталась.
     # Гейт срабатывает лишь когда рядом со сценарием лежит выдача
     # `tg_media.py` — то есть досье уже прогнано.
+    _dossier_fail = ""
     try:
         import subprocess
         _du = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -1891,6 +1892,12 @@ def lint(paths, strict=False, no_net=False):
             print(_r.stdout.strip() or _r.stderr.strip())
             if _r.returncode == 1:
                 problems += 1
+                # ОТКАЗ ПО ДОСЬЕ НАЗЫВАЕТСЯ ВСЛУХ В ИТОГЕ (11.11,
+                # `НА-РАСКАТКУ` п.8). Раньше он просто прибавлял единицу к
+                # «МИН: 1», и вкладка искала среди сцен запрос, которого там
+                # нет: отказ был не по запросу, а по неиспользованному
+                # материалу георадара.
+                _dossier_fail = (_r.stdout or _r.stderr or "").strip()
         elif not _tg:
             print("\n=== материал досье (георадар) ===")
             print("  выдачи tg_media.py рядом со сценарием нет. Досье обязано "
@@ -1946,6 +1953,12 @@ def lint(paths, strict=False, no_net=False):
 
     print("\n" + "=" * 60)
     print("МИН: %d   мягких замечаний: %d" % (problems, soft))
+    if _dossier_fail:
+        import re as _re
+        _n = _re.search(r"(\d+)\s+файл", _dossier_fail)
+        print("  в том числе ОТКАЗ ПО ДОСЬЕ%s — это НЕ про запросы сцен: "
+              "материал георадара лежит без дела, см. раздел «материал "
+              "досье» выше." % (": %s файлов без дела" % _n.group(1) if _n else ""))
     if problems:
         print("Переписать мины ДО фетча — от объекта (здание/техника/"
               "помещение/улица), а не от человека и действия.")

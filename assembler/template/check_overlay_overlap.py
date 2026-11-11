@@ -21,6 +21,7 @@ scene's "style" (left/right/up-center/up-left/up-right) and/or "scale"
 confirm before handing the dashboard over. No rebuild needed — this reads
 overlays.json fresh every run.
 """
+import glob
 import json
 import os
 
@@ -199,7 +200,34 @@ def main():
     # пересобирала лист, видела рамку там же и считала правку нерабочей —
     # а на кадре она как раз СРАБОТАЛА. Проверка, которая врёт про результат
     # правки, хуже отсутствующей.
-    anchor = ov.get("anchor", "bottom")
+    # ДЕФОЛТ ЯКОРЯ — ПО КАНАЛУ, КАК В `build_overlays.py` (11.11,
+    # `НА-РАСКАТКУ` п.11). Здесь стоял жёсткий `bottom`, а сборка для всех
+    # каналов кроме ПЛАНЕТЫ ставит `top` — лист показывал посадку НЕ ТАМ,
+    # где она будет, вкладка правила по листу, и `selfcheck` потом отбивал.
+    # Канал берём как весь сборщик: из `scenes.json`, иначе из ПУТИ.
+    _chan = ""
+    for _sc in sorted(glob.glob(os.path.join(proj, "*.scenes.json"))) + \
+               [os.path.join(proj, "scenes.json")]:
+        try:
+            _d = json.load(open(_sc, encoding="utf-8"))
+            _chan = str(_d.get("channel", "") if isinstance(_d, dict) else "")
+            if _chan:
+                break
+        except (OSError, ValueError):
+            continue
+    if not _chan:
+        _up = os.path.abspath(proj).replace("\\", "/").split("/")
+        for _i, _ч in enumerate(_up):
+            if _ч.upper() == "НОВОСТИ" and _i + 1 < len(_up):
+                _chan = _up[_i + 1]
+                break
+    _def_anchor = ("bottom"
+                   if _chan.strip().upper().replace("Ё", "Е") == "ПЛАНЕТА"
+                   or not _chan.strip() else "top")
+    anchor = str(ov.get("anchor", _def_anchor)).lower()
+    if "anchor" not in ov:
+        print("якорь всплывашек по каналу «%s»: %s (ключа `anchor` в "
+              "overlays.json нет)" % (_chan or "не определён", anchor))
 
     ids = sorted(int(k) for k in ov if k.isdigit())
     tiles = []
