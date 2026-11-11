@@ -33,8 +33,15 @@ import re
 import shutil
 import sys
 
-ПОРОГ = 0.55          # похожесть текста сцены, ниже — не считаем той же сценой
-ДОЛЯ = 0.70          # максимум сцен клона, закрываемых кадрами донора
+# ЕГО СЛОВО 11.11: ТРЕТИЙ ЭКЗЕМПЛЯР СОБИРАЕТСЯ ПОЧТИ МГНОВЕННО.
+# «У них есть два источника для дашборда — это Планета и 5 минут. И добить
+# туда 10-15-20% нового — это вообще элементарно. И тут же отсылать на сборку
+# без утверждения… Ну не 3,5 часа делать, дольше, чем с нуля».
+# Поэтому берём у доноров ВСЁ, что подходит, оставляя новым поиском только
+# 15% сцен: порог сходства низкий, а чего не хватило по смыслу — добиваем
+# кадрами донора ПО ПОРЯДКУ (фактура та же, порядок повествования тот же).
+ПОРОГ = 0.35          # похожесть запроса/текста; ниже — добиваем по порядку
+ДОЛЯ = 0.85          # максимум сцен клона, закрываемых кадрами донора
 ПРОЕКТЫ = os.path.expanduser("~/projects")
 КАРТОЧКА = "card"
 
@@ -132,6 +139,9 @@ def main():
     ap.add_argument("--dolya", type=float, default=ДОЛЯ,
                     help="какую долю сцен клона закрывать кадрами донора")
     ap.add_argument("--porog", type=float, default=ПОРОГ)
+    ap.add_argument("--tolko-smysl", action="store_true", dest="tolko_smysl",
+                    help="брать только смысловые совпадения, не добивать "
+                         "кадрами донора по порядку")
     ap.add_argument("--spisok", action="store_true",
                     help="только показать, что взялось бы, ничего не трогая")
     a = ap.parse_args()
@@ -198,6 +208,42 @@ def main():
             занято.add(sid)
 
     потолок = int(len(sc) * a.dolya)
+    # ДОБИВАЕМ ПО ПОРЯДКУ (11.11). Смысловое совпадение закрывает примерно
+    # половину сцен; остальное у донора всё равно про ту же тему, снятое в
+    # том же порядке — берём его кадры подряд, пока не упрёмся в потолок.
+    # Выключается ключом `--tolko-smysl`, если клон должен отличаться сильнее.
+    if not a.tolko_smysl and len(пары) < потолок:
+        свободные = [s for s in sc if str(s.get("id")) not in занято
+                     and not str(s.get("source", "")).startswith(КАРТОЧКА)]
+        запас = []
+        for d in дон:
+            dp = рабочая_раскадровка(d)
+            if not dp:
+                continue
+            _, dsc = сцены(dp)
+            dimg = os.path.join(d, "images")
+            for ds in dsc:
+                if str(ds.get("source", "")).startswith(КАРТОЧКА):
+                    continue
+                f = файл_сцены(dimg, ds.get("id"))
+                if not f:
+                    continue
+                try:
+                    h = hashlib.md5(open(f, "rb").read()).hexdigest()
+                except OSError:
+                    continue
+                if h in _ban:
+                    continue
+                запас.append((f, h, os.path.basename(d)))
+        взятые_хэши = {x[4] for x in пары}
+        запас = [x for x in запас if x[1] not in взятые_хэши]
+        for s_, (f, h, dn) in zip(свободные, запас):
+            if len(пары) >= потолок:
+                break
+            sid = str(s_.get("id"))
+            пары.append((sid, s_, f, 0.0, h, dn))
+            занято.add(sid)
+            взятые_хэши.add(h)
     пары.sort(key=lambda x: x[3], reverse=True)
     пары = пары[:потолок]
     if not пары:
@@ -211,10 +257,33 @@ def main():
             print("  сцена %3s ← %s/%s (%.2f)" % (sid, dn, os.path.basename(f), балл))
         return 0
 
+    # ЗАПАС НА ПОДМЕНУ: если кадр уже стоит в другой сцене, берём не «ничего»,
+    # а СЛЕДУЮЩИЙ свободный кадр донора (11.11). Иначе дубль хэша просто
+    # терял сцену: в замере `--spisok` подходило 61, а копировалось 35.
+    _zapas = []
+    for d in дон:
+        dimg = os.path.join(d, "images")
+        for f0 in sorted(glob.glob(os.path.join(dimg, "scene_*"))):
+            b = os.path.basename(f0)
+            if any(w in b for w in (".ovthumb.", ".text.", ".revframe.",
+                                    ".wmcrop.", ".ocrcrop.", ".before_crop.")):
+                continue
+            try:
+                h0 = hashlib.md5(open(f0, "rb").read()).hexdigest()
+            except OSError:
+                continue
+            if h0 in _ban:
+                continue
+            _zapas.append((f0, h0, os.path.basename(d)))
+
     взято, хэши = 0, set()
     for sid, s, f, балл, h, dn in sorted(пары, key=lambda x: int(x[0])):
         if h in хэши:
-            continue
+            _замена = next(((f2, h2, d2) for f2, h2, d2 in _zapas
+                            if h2 not in хэши), None)
+            if not _замена:
+                continue
+            f, h, dn = _замена
         ext = os.path.splitext(f)[1]
         цель = os.path.join(images, "scene_%03d%s" % (int(sid), ext))
         if os.path.exists(цель):

@@ -197,6 +197,52 @@ summary() {
 
 case "$FAZA" in
 
+# ---------------------------------------------------------------- КЛОН
+# ТРЕТИЙ ЭКЗЕМПЛЯР ТЕМЫ СОБИРАЕТСЯ ПОЧТИ МГНОВЕННО (11.11, его слово:
+# «у них есть два источника для дашборда — Планета и 5 минут; добить туда
+# 10-15-20% нового — элементарно, и тут же отсылать на сборку без
+# утверждения… ну не 3,5 часа делать, дольше, чем с нуля»).
+# Один ход вместо шести фаз: кадры донора → фетч ТОЛЬКО по остатку →
+# машинные сита → полная сборка. Дашборд НЕ поднимается: клон идёт без
+# утверждения, он собран из кадров, которые он уже видел и утвердил вчера.
+klon)
+    [ -n "$SCENES" ] || { echo "ОШИБКА: не нашёл <проект>.scenes.json в $PROJ"; exit 1; }
+    cd "$PROJ" || exit 1
+    PIPE="${1:-}"; QNAME="${2:-$(basename "$PROJ")}"
+    step "кадры донора"     python3 "$T/kadry_klon.py" "$SCENES"
+    _NADO=$(python3 - "$SCENES" <<'PYK'
+import json, sys
+d = json.load(open(sys.argv[1], encoding="utf-8"))
+sc = d.get("scenes", d) if isinstance(d, dict) else d
+print(sum(1 for s in sc if str(s.get("source", "")) not in ("local_donor",)
+          and not str(s.get("source", "")).startswith("card")))
+PYK
+)
+    echo "[ОК]    осталось искать: $_NADO сцен из $(python3 -c "
+import json,sys
+d=json.load(open('$SCENES',encoding='utf-8')); sc=d.get('scenes',d) if isinstance(d,dict) else d
+print(len(sc))")"
+    if [ "${_NADO:-0}" -gt 0 ]; then
+        if [ -z "$PIPE" ] || [ "$PIPE" = "--wait" ]; then
+            PIPE="$(wait_pipe "$PROJ" 90 || true)"
+            [ -n "$PIPE" ] || { echo "ОШИБКА: за 90 мин ни одна труба не освободилась"; exit 1; }
+            echo "[ОК]    труба: $PIPE (взята замком)"
+        fi
+        step "фетч остатка"  bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME" --fetch-only
+        step "забор"         bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait-fetch
+    else
+        echo "[ОК]    фетч не нужен вовсе — все сцены закрыты кадрами доноров"
+    fi
+    step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
+    step "обязательные"     python3 "$T/obyazatelno.py" "$SCENES" --gate dashboard
+    step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
+    step "гейт детей"       python3 "$T/deti_gate.py" check "$PROJ"
+    echo ""
+    echo "ДАЛЬШЕ: дашборд НЕ поднимаем (клон идёт без утверждения) —"
+    echo "  bash $0 sdacha $QNAME ${PIPE:-<труба>} \"<папка темы на D:>\""
+    summary
+    ;;
+
 # ---------------------------------------------------------------- ФИНАЛ
 # Все машинные сита подряд. Раньше это 8-11 отдельных шагов переписки.
 final)
