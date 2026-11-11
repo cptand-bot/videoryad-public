@@ -341,6 +341,22 @@ sdacha)
             && echo "[ОК]    тема отмечена сданной" || echo "[ОТКАЗ] реестр не отметил"
         free_pipe "$PIPE"
         echo "[ОК]    труба $PIPE освобождена"
+        # СНИМАЕМ И ЛЮБОЙ ДРУГОЙ ЗАМОК ЭТОГО ПРОЕКТА (11.11,
+        # `НА-РАСКАТКУ` п.13). Замок помнит, КТО его взял, — а `sdacha`
+        # снимала только трубу из аргумента. Ролик, у которого круг шёл по
+        # одной трубе, а сборка по другой, оставлял первый замок висеть:
+        # 11.11 так висели `andiv-pub` и `pyat` при сданных роликах, и
+        # следующая вкладка считала трубы занятыми, пока замку не стукнет
+        # четыре часа.
+        for _lk in "$LOCKS"/*/kto; do
+            [ -f "$_lk" ] || continue
+            if [ "$(cat "$_lk" 2>/dev/null)" = "$PROJ" ]; then
+                _lp="$(basename "$(dirname "$_lk")")"
+                [ "$_lp" = "$PIPE" ] && continue
+                free_pipe "$_lp"
+                echo "[ОК]    снят и прежний замок трубы $_lp (его держал этот же проект)"
+            fi
+        done
         kill_dash "$PROJ"
     else
         echo "ОШИБКА: хэш НЕ совпал ($A ≠ ${B:-нет файла}) — файл на D: битый"
@@ -425,9 +441,34 @@ PYCH
     SAID=0
     while :; do
     CAND_LIST="$(python3 - "$NEWS" <<'PYEOF'
-import glob, os, sys
+import glob, json, os, re, sys
 news = sys.argv[1]
 rows = []
+
+
+def _kl(x):
+    return re.sub(r"[^а-яёa-z0-9]", "", (x or "").lower())
+
+
+_REESTR = os.path.expanduser("~/.claude/skills/news-video/base/zanyato.json")
+_SDANO = set()
+try:
+    with open(_REESTR, encoding="utf-8") as _f:
+        for _z in (json.load(_f).get("записи") or {}).values():
+            if _z.get("состояние") == "сдано" and \
+                    (_z.get("работа") or "") == "видеоряд":
+                _SDANO.add((_kl(_z.get("канал")), _kl(_z.get("тема")),
+                            (_z.get("день") or "").strip()))
+except (OSError, ValueError, AttributeError):
+    _SDANO = set()        # реестра нет или он битый — сито просто молчит
+
+
+def _sdano(t):
+    ч = os.path.abspath(t).split(os.sep)
+    if len(ч) < 4:
+        return False
+    канал, день, тема = ч[-4], ч[-2], ч[-1]
+    return (_kl(канал), _kl(тема), день.strip()) in _SDANO
 for t in glob.glob(os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*")):
     if not os.path.isdir(t):
         continue
@@ -442,6 +483,13 @@ for t in glob.glob(os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*")):
     txt = [f for f in glob.glob(os.path.join(t, "*.txt"))
            if not any(k in os.path.basename(f) for k in ("ЗАДАНИЕ", "БРИФ", "УПАКОВКА", "ОТВЕТ"))]
     if not txt:
+        continue
+    # РЕЕСТР — ВТОРОЕ СИТО ПОСЛЕ РАЗМЕРА mp4 (11.11, блокер `НА-РАСКАТКУ` п.1).
+    # Размер ловит тему, чей готовый файл лежит в КОРНЕ её папки; если ролик
+    # доставлен в другое место, тема снова выглядит свободной и `start` берёт
+    # её по второму разу — вкладка уходит работать по чужому готовому ролику.
+    # Запись «сдано» по работе «видеоряд» закрывает и этот случай.
+    if _sdano(t):
         continue
     rows.append((max(os.path.getmtime(f) for f in txt), t))
 rows.sort(reverse=True)

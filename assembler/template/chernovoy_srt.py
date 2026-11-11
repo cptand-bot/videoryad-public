@@ -84,6 +84,16 @@ def пары(root=ДЕРЕВО):
     return out
 
 
+def канал_из_пути(путь):
+    """Канал — сегмент дерева НОВОСТИ. Пусто, если такого сегмента нет."""
+    найден = ""
+    for часть in os.path.abspath(путь or ".").split(os.sep):
+        if часть.upper() in ("ПЛАНЕТА", "5 МИНУТ", "ОЛЬГА ДАЙДЖЕСТ",
+                             "ДИПЛОМАТИЯ СИЛЫ") or часть.upper().startswith("ПЕРЕВОД"):
+            найден = часть.upper()
+    return найден
+
+
 def скорость(канал="", root=ДЕРЕВО, свежих=5):
     """Знаков в секунду: медиана ПОСЛЕДНИХ роликов канала.
 
@@ -156,6 +166,9 @@ def main():
     ap.add_argument("--out", default="")
     ap.add_argument("--скорость", type=float, default=0, dest="speed")
     ap.add_argument("--замер", action="store_true", dest="measure")
+    ap.add_argument("--канал", default="", dest="kanal",
+                    help="канал явно — когда текст лежит в папке проекта, "
+                         "а не в дереве НОВОСТИ")
     a = ap.parse_args()
 
     if a.measure:
@@ -173,11 +186,31 @@ def main():
     if not a.text or not os.path.isfile(a.text):
         sys.exit("нужен файл текста (или --замер)")
 
-    канал = ""
-    for часть in os.path.abspath(a.text).split(os.sep):
-        if часть.upper() in ("ПЛАНЕТА", "5 МИНУТ", "ОЛЬГА ДАЙДЖЕСТ",
-                             "ДИПЛОМАТИЯ СИЛЫ") or часть.upper().startswith("ПЕРЕВОД"):
-            канал = часть.upper()
+    канал = (a.kanal or "").strip().upper()
+    if not канал:
+        канал = канал_из_пути(os.path.abspath(a.text))
+    if not канал:
+        # ТЕКСТ ЛЕЖИТ В ПАПКЕ ПРОЕКТА, А НЕ В ДЕРЕВЕ «НОВОСТИ» (11.11, улов
+        # вкладки `usuario-45`). Канал определялся ТОЛЬКО по пути файла, а
+        # вкладка зовёт инструмент на копии в `~/projects/<проект>` — канал
+        # «не определён», скорость берётся общей медианой (15,96 зн/с) вместо
+        # канальной (у ПЕРЕВОДА ~16,6), и черновой тайминг уезжает на ~20 с
+        # за 13 минут. Смотрим метку проекта и исходную папку темы.
+        pdir = os.path.dirname(os.path.abspath(a.text)) or "."
+        for имя in (".kanal", ".channel"):
+            try:
+                with open(os.path.join(pdir, имя), encoding="utf-8") as f:
+                    канал = f.read().strip().upper()
+                if канал:
+                    break
+            except OSError:
+                continue
+        if not канал:
+            try:
+                with open(os.path.join(pdir, ".source_dir"), encoding="utf-8") as f:
+                    канал = канал_из_пути(f.read().strip())
+            except OSError:
+                pass
     v, n = (a.speed, 0) if a.speed else скорость(канал)
     текст = читать(a.text).strip()
     srt, длит, кол = собрать(текст, v)
