@@ -449,6 +449,25 @@ jobs:
             timeout 120 sudo apt-get update -qq || true
             timeout 180 sudo apt-get install -y -qq ffmpeg tesseract-ocr tesseract-ocr-rus fonts-dejavu || echo "apt не справился — беру статический ffmpeg" >&2
           fi
+          # OCR МОЛЧА ОТКЛЮЧАЛСЯ ВМЕСТЕ С apt (11.11, разбор сданного ПсД).
+          # `_ocr_words` возвращает 0 слов, когда tesseract не найден, —
+          # «чтобы отсутствие инструмента не блокировало конвейер». Из-за
+          # этого ВСЕ сита по тексту становятся слепыми: скриншот словацкого
+          # сайта с заголовком во всю ширину (14 слов OCR, порог 8) прошёл в
+          # БАЗОВУЮ сцену, хотя локально то же сито его отбивает. Клейма
+          # стока и угловые водяные знаки ловятся тем же OCR.
+          # В `base-harvest.yml` на этот случай стоит жёсткий отказ; здесь
+          # ронять сборку нельзя, поэтому — громкое предупреждение и ФЛАГ в
+          # результат, его читает `selfcheck` и требует просмотра глазами.
+          if command -v tesseract >/dev/null 2>&1; then
+            echo "OCR: $(tesseract --version 2>&1 | head -1)"
+          else
+            echo "::warning::tesseract не установлен — сита по тексту и клеймам в этом фетче СЛЕПЫ"
+            _pdir="queue/${{ needs.setup.outputs.name }}"
+            mkdir -p "$_pdir/images" 2>/dev/null || true
+            echo "tesseract не установился на раннере $(date -u +%FT%TZ)" \
+              > "$_pdir/images/OCR-NE-RABOTAL.flag" 2>/dev/null || true
+          fi
           # PIP — ВТОРОЙ ИСТОЧНИК И ТЕПЕРЬ ГЛАВНЫЙ ЗАПАСНОЙ (23.10, вечер).
           # Днём отвалился apt, к вечеру отвалилось и стороннее зеркало
           # johnvansickle: на одном прогоне 10 джобов из 23 легли уже на нашей

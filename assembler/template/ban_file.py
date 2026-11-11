@@ -155,7 +155,21 @@ def _zamorozheno_stop(path_hint="."):
 
 def main():
     argv = sys.argv[1:]
-    _zamorozheno_stop(argv[0] if argv and not argv[0].startswith('-') else '.')
+    # БАН МЕДИАТЕКИ ЗАМОРОЗКА НЕ КАСАЕТСЯ (11.11, улов `usuario-45`).
+    # Заморозка защищает СОСТАВ УТВЕРЖДЁННОГО РОЛИКА — чтобы вкладка не
+    # меняла кадры после его «утверждаю». Бан файла в МЕДИАТЕКЕ состава
+    # ролика не меняет вовсе: он только закрывает кадру дорогу в БУДУЩИЕ
+    # сборки. А запрет срабатывал по текущей папке, и вкладка, нашедшая
+    # брак в базе на сданном ролике, получала «ПРАВКИ ЗАПРЕЩЕНЫ» и шла
+    # звать инструмент из нейтрального каталога. Бан по ХЭШУ и бан файла
+    # медиатеки пропускаем всегда; бан кадра ИЗ ПАПКИ проекта (он удаляет
+    # файл сцены) по-прежнему под заморозкой.
+    _md5_ban = bool(argv) and argv[0] == "--md5"
+    _iz_bazy = bool(argv) and not argv[0].startswith("-") and (
+        "/media-library/" in os.path.abspath(argv[0]).replace("\\", "/")
+        or "/БАЗА/" in os.path.abspath(argv[0]).replace("\\", "/"))
+    if not (_md5_ban or _iz_bazy):
+        _zamorozheno_stop(argv[0] if argv and not argv[0].startswith('-') else '.')
     if not argv:
         print(__doc__)
         raise SystemExit(1)
