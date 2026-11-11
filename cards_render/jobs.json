@@ -1,0 +1,305 @@
+[
+ {
+  "scene": 6,
+  "view": "charts.cartogram",
+  "dur": 8.95,
+  "anim": 8.95,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Германия",
+    "Китай",
+    "Индия"
+   ],
+   "title": "КТО В ЭТОЙ СИСТЕМЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "split",
+  "dur": 11.0,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_014.jpg",
+   "text": "Немедленное прекращение огня без новой архитектуры безопасности неприемлемо",
+   "author": "Сергей Лавров",
+   "role": "министр иностранных дел России",
+   "accent": "Немедленное прекращение огня",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "marker_serif",
+  "dur": 9.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Требованиями о немедленном прекращении огня Брюссель пытается купить время для киевского режима",
+   "accent": "купить время",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "slider",
+  "dur": 8.3,
+  "anim": 8.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "сколько длится конфликт",
+   "min": 2022.0,
+   "max": 2026.0,
+   "low": 2022.0,
+   "high": 2026.0,
+   "marker_value": 2026.0,
+   "marker_display": "2026",
+   "seconds": 8.3,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "",
+   "source": ""
+  }
+ },
+ {
+  "scene": 24,
+  "view": "pull",
+  "dur": 8.2,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Мы, как и прежде, предложили Российской Федерации перемирие в любом формате",
+   "author": "Егор Чернев",
+   "role": "депутат Верховной Рады",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "film.film_single",
+  "dur": 13.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_031.jpg",
+   "kick": "это уже было",
+   "title": "ДЕКАБРЬ 2021",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "cinematic.evidence_wall",
+  "dur": 12.3,
+  "anim": 12.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_034.jpg",
+     240,
+     380,
+     -4,
+     "предложения опубликованы"
+    ],
+    [
+     "cards/photo/card_034_2.jpg",
+     800,
+     380,
+     3,
+     "ключевое не принято"
+    ],
+    [
+     "cards/photo/card_034_3.jpg",
+     1360,
+     380,
+     -2,
+     "выход из договоров"
+    ]
+   ],
+   "kick": "и чем ответили",
+   "title": "ДЕКАБРЬ 2021: ЧТО БЫЛО НА СТОЛЕ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 44,
+  "view": "vyrezka.gazeta",
+  "dur": 13.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_044.jpg",
+   "author": "ДЖАРЕД КУШНЕР",
+   "role": "спецпосланник президента США",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "film.film_strip",
+  "dur": 14.8,
+  "anim": 14.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_047.jpg",
+    "cards/photo/card_047_2.jpg",
+    "cards/photo/card_047_3.jpg"
+   ],
+   "title": "ЛЕНТА ПЕРЕГОВОРОВ",
+   "captions": [
+    "что обсуждают в Вашингтоне",
+    "что лежало на столе в 2021",
+    "чем отвечали"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "photo",
+  "dur": 12.1,
+  "anim": 12.1,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_050.jpg",
+   "title": "Совместное заявление США, ЕС и Украины",
+   "lines": [
+    "суверенитет и территориальная целостность",
+    "гарантии безопасности для Киева",
+    "обновление европейской архитектуры"
+   ]
+  }
+ },
+ {
+  "scene": 53,
+  "view": "vyrezka.figura",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_053.jpg",
+   "author": "МАРКО РУБИО",
+   "role": "госсекретарь США",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "poster.poster",
+  "dur": 14.4,
+  "anim": 14.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "АРХИТЕКТУРА БЕЗОПАСНОСТИ",
+   "hero_photo": "cards/photo/card_066.jpg",
+   "bottom": "правила, а не пауза",
+   "features": [
+    {
+     "text": "проверка на месте"
+    },
+    {
+     "text": "обмен данными"
+    }
+   ],
+   "facts": [
+    {
+     "label": "ракеты",
+     "value": "где можно ставить"
+    },
+    {
+     "label": "манёвры",
+     "value": "что считать угрозой"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 70,
+  "view": "cinematic.depth_of_field",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_070.jpg",
+   "title": "у каждого своя логика безопасности",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 77,
+  "view": "bars",
+  "dur": 15.6,
+  "anim": 15.6,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "ЧЬИ ОБЯЗАТЕЛЬСТВА",
+   "caption": "без одной подписи система не работает",
+   "seconds": 15.6,
+   "bars": [
+    {
+     "label": "ЕВРОПА",
+     "value": 0.75,
+     "color": "EABD23"
+    },
+    {
+     "label": "США",
+     "value": 1.0,
+     "color": "B92526"
+    },
+    {
+     "label": "УКРАИНА",
+     "value": 0.5,
+     "color": "84848A"
+    },
+    {
+     "label": "РОССИЯ",
+     "value": 1.0,
+     "color": "E8E8E8"
+    }
+   ]
+  }
+ }
+]
