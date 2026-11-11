@@ -139,9 +139,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # Шесть приёмов канала «5 МИНУТ» (06.11) рисует ДРУГОЙ модуль — `fx_trans5.py`.
 # Принятые приёмы ПЛАНЕТЫ в нём не трогаются вовсе, регрессии невозможны.
 FX_FIVE = ("player", "curl", "slides", "stamps", "torn", "filmwin")
+# `sticker` — G13 «наклейка влетает с перелётом», принят им 11.11 и заведён
+# в бой на ПЛАНЕТУ и «5 МИНУТ» (гамма у каждого своя). Эти ДВА списка живут
+# здесь отдельно от `fx_put.KINDS`, и забытый в них вид молча отбрасывается
+# при сборке: сцена собирается обычным кадром, а прогон рапортует успех —
+# ровно та мина, что была 06.11 с шестью приёмами «5 МИНУТ».
 FX_KINDS = ("inset", "mosaic", "panels", "wipe", "depth", "tear", "flash",
-            "subscribe", "subscribe2") + FX_FIVE
-FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear", "flash") + FX_FIVE
+            "sticker", "subscribe", "subscribe2") + FX_FIVE
+FX_TRANS = ("mosaic", "panels", "wipe", "depth", "tear", "flash",
+            "sticker") + FX_FIVE
 FX_MAX = 3
 FX_OF = {}                  # sid -> вид эффекта (уже с потолком и каналом)
 INSET_SIDS = set()          # из них те, что «врезка» (для совместимости)

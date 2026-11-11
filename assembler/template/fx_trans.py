@@ -6,6 +6,8 @@
 
     python3 fx_trans.py <кадр прошлой сцены> <кадр своей сцены> <куда.mp4> \\
         --kind mosaic|panels|wipe|depth|tear --seconds 11.5 [--trans 1.4] [--channel ПЛАНЕТА]
+    python3 fx_trans.py - <кадр своей сцены> <куда.mp4> --kind sticker \\
+        --seconds 11.5 --channel «5 МИНУТ» [--words «ФАКТ,ИТОГ»]
 
 Образец пользователя — `D:\\ЗАГРУЗКИ\\Эффекты-1\\Эффекты-1.mp4`, четыре эффекта.
 Третий («врезка + круги») принят 03.11 и живёт в `fx_inset.py`; здесь — три
@@ -26,6 +28,16 @@
   flash   (A73 с полки библиотеки, назван им 06.11) — кадр вспыхивает в белое,
           и из вспышки выходит следующий. Самый короткий вид, 0,6 с: под
           поворот сюжета, где смена темы должна быть резкой.
+  sticker (G13 с полки прототипа «белый зал», принят им 11.11 — «раскатать
+          на наш сборщик новостей, минимум один раз на видеоряд, на каждом
+          канале, но в разных цветовых гаммах») — НЕ переход, а НАКЛЕЙКА
+          поверх кадра сцены: слово влетает сразу КРУПНЕЕ конечного размера
+          на 12-13% и за 75 мс оседает ходом outExpo, края рваные (семь
+          перекрывающихся прямоугольников), каждый кусок повёрнут на 3-6°, у
+          соседних — в разные стороны, второй приходит через 600 мс после
+          первого. Числа померены покадрово с его образца и НЕ меняются.
+          Гамма наклейки приходит ПО КАНАЛУ из `palitra.py`: ПЛАНЕТА —
+          сталь #4a90e2, «5 МИНУТ» — золото #e0b33a.
   depth   (наш, 05.11, в образце его нет) — новый кадр ВЫХОДИТ ИЗ ГЛУБИНЫ
           плитой со светлой кромкой и тенью, а прошлый кадр остаётся на
           месте и теряет резкость с затемнением. Это ход камеры, а не
@@ -41,20 +53,33 @@ mp4 демуксером `concat` требует побитового совпа
 """
 import argparse
 import os
+import random
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import zlib
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+FONTS = os.path.join(HERE, "fonts")
 
 W, H, FPS = 1920, 1080, 30
-KINDS = ("mosaic", "panels", "wipe", "depth", "tear", "flash")
+KINDS = ("mosaic", "panels", "wipe", "depth", "tear", "flash", "sticker")
 # Длительность самого перехода по умолчанию — замер по образцу.
 TRANS_SEC = {"mosaic": 1.6, "panels": 1.3, "wipe": 0.7, "depth": 1.1,
              "tear": 1.3,
              # ЗАСВЕТ (A73 с полки, назван им 06.11) — самый короткий из всех:
              # вспышка держится 0,6 с. Длиннее она читается как брак записи,
              # а не как приём, и на светлом кадре слепит.
-             "flash": 0.6}
+             "flash": 0.6,
+             # НАКЛЕЙКА (G13, 11.11) — это не переход: кадр сцены виден с
+             # первого мгновения. Здесь стоит окно ПРИЛЁТА обеих наклеек
+             # (0,45 с до первой + 0,6 с до второй + осадка), чтобы
+             # всплывашка не легла поверх летящего слова.
+             "sticker": 1.8}
 
 MOS_COLS, MOS_ROWS = 6, 4
 PANELS_N = 5
@@ -73,6 +98,33 @@ TEAR_PIECES = 7
 # щели ~600 px, новый кадр виден, а к концу куски всё равно за краем.
 TEAR_HOLD = 0.08
 TEAR_EDGE = 15
+
+# ---- НАКЛЕЙКА G13 (11.11). ЧИСЛА ПОМЕРЕНЫ ПОКАДРОВО С ЕГО ОБРАЗЦА — НЕ
+# ТРОГАТЬ: приём принят именно в этом виде, «красивее» здесь значит «другой».
+STICKER_OVER = 0.125        # прилетает крупнее конечного размера на 12-13%
+STICKER_SETTLE = 0.075      # и оседает за 75 мс ходом outExpo
+STICKER_AT0 = 0.45          # первая наклейка — после того, как кадр прочитан
+STICKER_GAP = 0.60          # вторая приходит через 600 мс после первой
+STICKER_ROT = (4.5, -3.5)   # поворот 3-6°, у соседних кусков — в разные стороны
+STICKER_PIECES = 7          # рваный край: семь перекрывающихся прямоугольников
+STICKER_FSIZE = 190         # кегль исходной текстуры (как в образце)
+STICKER_H = 0.155           # высота наклейки — доля кадра
+STICKER_POS = ((0.29, 0.63), (0.71, 0.31))   # центры: низ слева, верх справа
+STICKER_WORDS = ("ГЛАВНОЕ", "ИТОГ")          # если `--words` не дали
+# Контраст слова к фону наклейки считается ЧИСЛОМ (разница яркости по
+# Rec.601). Ниже этого — слово уводим в чистый чёрный или чистый белый:
+# на золоте «5 МИНУТ» и на стали ПЛАНЕТЫ почти чёрный даёт 166 и 120.
+STICKER_MIN_CONTRAST = 90
+STICKER_INK = (12, 12, 14)
+STICKER_PAPER = (244, 244, 246)
+# гамма образца — только для канала, которого нет в палитре
+STICKER_BG_БАЗА = (255, 212, 0)
+# ЗАМОК КАНАЛА ПОВИДОВЫЙ (11.11). До этого исключение было одно — `flash`;
+# наклейку он назвал на ДВА канала, и условие «всё, кроме flash, — только
+# ПЛАНЕТА» её бы отбило. None = вид разрешён на всех каналах.
+FX_CHANNELS = {"flash": None, "sticker": ("ПЛАНЕТА", "5 МИНУТ")}
+DEFAULT_CHANNELS = ("ПЛАНЕТА",)
+_LAT_RE = re.compile(r"[A-Za-z]")
 
 
 # ---------------------------------------------------------------- общий кадр
@@ -421,6 +473,136 @@ def _flash_frame(p, A, Bc):
     return Image.blend(white, im, q)
 
 
+# ------------------------------------------------------------ наклейка G13
+def _out_expo(t):
+    """Ход осадки из прототипа «белый зал» (`zal_core.out_expo`). ПЕРЕНЕСЁН
+    СЮДА, А НЕ ИМПОРТИРОВАН: `skills/prototypes/` в облако не уезжает, и
+    импорт оттуда развалил бы сборку на раннере."""
+    t = 0.0 if t < 0 else (1.0 if t > 1 else t)
+    return 1.0 if t >= 1 else 1 - pow(2, -10 * t)
+
+
+def _norm_chan(c):
+    """Имя канала как в палитре: регистр не важен, «Ё»=«Е», синонимы («5МИНУТ»,
+    «ОЛЬКА НОВОСТИ») разбирает `palitra.kanal`."""
+    s = str(c or "").strip().upper().replace("Ё", "Е")
+    try:
+        import palitra
+        k = palitra.kanal(s)
+        if k:
+            return k.upper().replace("Ё", "Е")
+    except Exception:
+        pass
+    return s
+
+
+def _lum(c):
+    """Яркость по Rec.601 — ею и меряем контраст слова к фону наклейки."""
+    return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
+
+
+def _sticker_colors(channel):
+    """(фон наклейки, цвет слова, разница яркости) — ГАММА ПРИХОДИТ ПО КАНАЛУ.
+
+    Цвета НЕ изобретаются здесь: берётся акцент канала из `palitra.py` —
+    того же единственного источника, откуда их берут субтитры, дашборд
+    упаковки и рисованные кадры (ПЛАНЕТА — сталь, «5 МИНУТ» — золото).
+    В образце наклейка жёлтая (255,212,0); этот цвет остаётся только для
+    канала, которого в палитре ещё нет.
+    """
+    bg = STICKER_BG_БАЗА
+    try:
+        import palitra
+        bg = tuple(palitra.accent(channel, inache=STICKER_BG_БАЗА))
+    except Exception as e:
+        print("  наклейка: палитра недоступна (%s) — гамма образца" % e,
+              file=sys.stderr)
+    fg = (STICKER_INK if abs(_lum(bg) - _lum(STICKER_INK))
+          >= abs(_lum(bg) - _lum(STICKER_PAPER)) else STICKER_PAPER)
+    d = abs(_lum(bg) - _lum(fg))
+    if d < STICKER_MIN_CONTRAST:
+        fg = (0, 0, 0) if _lum(bg) > 128 else (255, 255, 255)
+        d = abs(_lum(bg) - _lum(fg))
+        print("  наклейка: слово уведено в предел — контраст к фону был мал",
+              file=sys.stderr)
+    return tuple(bg) + (255,), tuple(fg) + (255,), d
+
+
+def _sticker_tex(word, bg, fg, fsize=STICKER_FSIZE):
+    """Текстура наклейки с РВАНЫМ КРАЕМ (перенос `zal_core.sticker_tex`).
+
+    Край рвут семь перекрывающихся прямоугольников со случайной высотой.
+    Зерно случайности — crc32 слова, а НЕ `hash()` как в прототипе: у
+    `hash()` в Python 3 соль своя на каждый процесс, и один и тот же ролик
+    пересобирался бы с разным краем (а кадры мы считаем в несколько
+    процессов — край разъехался бы прямо внутри клипа).
+    """
+    from PIL import Image, ImageDraw, ImageFont
+    f = ImageFont.truetype(os.path.join(FONTS, "ArialBlack.ttf"), fsize)
+    b = ImageDraw.Draw(Image.new("RGBA", (8, 8))).textbbox((0, 0), word, font=f)
+    pw = int(b[2] - b[0] + fsize * 0.52)
+    ph = int(b[3] - b[1] + fsize * 0.40)
+    img = Image.new("RGBA", (max(8, pw), max(8, ph)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    rnd = random.Random(zlib.crc32(word.encode("utf-8")))
+    d.rectangle([0, ph * 0.04, pw, ph * 0.96], fill=bg)
+    for i in range(STICKER_PIECES):
+        x0 = pw * i / float(STICKER_PIECES)
+        d.rectangle([x0, ph * rnd.uniform(0, 0.05),
+                     x0 + pw / float(STICKER_PIECES),
+                     ph * (1.0 - rnd.uniform(0, 0.05))], fill=bg)
+    d.text(((pw - (b[2] - b[0])) / 2.0 - b[0],
+            (ph - (b[3] - b[1])) / 2.0 - b[1]), word, font=f, fill=fg)
+    return img
+
+
+def _sticker_build(words, channel):
+    """Список (текстура, когда прилетает, поворот, центр) — считается ОДИН раз
+    на весь клип: поворот и масштаб потом делаются по готовой текстуре."""
+    ws = list(words or ())[:2]
+    while len(ws) < 2:
+        ws.append(STICKER_WORDS[len(ws)])
+    bg, fg, d = _sticker_colors(channel)
+    print("  наклейка: канал «%s», фон rgb%s, слово rgb%s, контраст %.0f"
+          % (channel or "?", bg[:3], fg[:3], d), file=sys.stderr)
+    return [(_sticker_tex(w, bg, fg), 0.0, STICKER_ROT[i % 2],
+             STICKER_POS[i % 2]) for i, w in enumerate(ws)]
+
+
+def _sticker_times(seconds):
+    """Когда прилетает каждая наклейка. На короткой сцене окно поджимается,
+    иначе вторая наклейка не успела бы появиться вовсе."""
+    at0 = STICKER_AT0
+    if seconds < STICKER_AT0 + STICKER_GAP + 0.6:
+        at0 = max(0.15, seconds - STICKER_GAP - 0.6)
+    return [at0, at0 + STICKER_GAP]
+
+
+def _sticker_frame(i, total, zoom, stickers):
+    """Кадр сцены (с обычным плавным зумом) + наклейки поверх него."""
+    from PIL import Image, ImageFilter
+    q = i / float(max(1, total - 1))
+    out = _zoom_frame(_ST["base"], W, H, 1.0 + zoom * _smootherstep(q))
+    t = i / float(FPS)
+    for tex, t0, rot, (cx, cy) in stickers:
+        if t < t0:
+            continue
+        k = 1.0 + STICKER_OVER * (1.0 - _out_expo((t - t0) / STICKER_SETTLE))
+        h = max(8, int(round(H * STICKER_H * k)))
+        w = max(8, int(round(h * tex.width / float(tex.height))))
+        im = tex.resize((w, h), Image.LANCZOS).rotate(
+            rot, resample=Image.BICUBIC, expand=True)
+        x = int(round(W * cx - im.width / 2.0))
+        y = int(round(H * cy - im.height / 2.0))
+        al = im.getchannel("A")
+        # тень: без неё наклейка лежит в одной плоскости с кадром и читается
+        # как напечатанная на нём, а не наклеенная сверху
+        sh = al.filter(ImageFilter.GaussianBlur(9)).point(lambda v: int(v * 0.45))
+        out.paste(Image.new("RGB", im.size, (0, 0, 0)), (x + 10, y + 14), sh)
+        out.paste(im.convert("RGB"), (x, y), al)
+    return out
+
+
 # ------------------------------------------------------------------- сборка
 _ST = {}
 
@@ -432,7 +614,11 @@ def _init(state):
 def _one(arg):
     i, total, tf, kind, zoom, out_dir = arg
     from PIL import Image
-    if i < tf:
+    if kind == "sticker":
+        # НАКЛЕЙКА ИДЁТ НА ВСЮ СЦЕНУ, а не на первые кадры: это не переход,
+        # делить клип на «переход + зум» здесь нечем.
+        im = _sticker_frame(i, total, zoom, _ST.get("stick") or [])
+    elif i < tf:
         p = i / float(max(1, tf - 1))
         if kind == "mosaic":
             im = _mosaic_frame(p, _ST["A"], _ST["B"], _ST["Bg"],
@@ -463,7 +649,8 @@ def _workers():
     return max(1, n if os.environ.get("GITHUB_ACTIONS") else min(2, n))
 
 
-def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10):
+def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10,
+                  words=(), channel=""):
     import random
     from PIL import Image
     os.makedirs(out_dir, exist_ok=True)
@@ -488,8 +675,14 @@ def render_frames(prev_img, img, out_dir, kind, seconds, trans, zoom=0.10):
     oi = list(range(n)); rnd.shuffle(oi)
     total = int(round(seconds * FPS))
     tf = min(total - 2, int(round(trans * FPS)))
+    # наклейки считаются ОДИН раз на весь клип (11.11)
+    stick = []
+    if kind == "sticker":
+        ts = _sticker_times(seconds)
+        stick = [(tex, ts[i], rot, pos) for i, (tex, _t, rot, pos)
+                 in enumerate(_sticker_build(words, channel))]
     st = {"A": A, "B": B, "Bg": Bg, "base": base, "oo": oo, "oi": oi,
-          "Ab": Ab, "pieces": pieces, "tfar": tfar}
+          "Ab": Ab, "pieces": pieces, "tfar": tfar, "stick": stick}
     args = [(i, total, tf, kind, zoom, out_dir) for i in range(total)]
     nw = min(_workers(), 8)
     if nw > 1 and total > 30:
@@ -517,16 +710,35 @@ def main():
     ap.add_argument("--trans", type=float, default=0.0)
     ap.add_argument("--zoom", type=float, default=0.10)
     ap.add_argument("--channel", default="ПЛАНЕТА")
+    ap.add_argument("--words", default="",
+                    help="слова наклеек через запятую, по-русски и "
+                         "заглавными (вид `sticker`)")
     ap.add_argument("--ffmpeg", default="ffmpeg")
     a = ap.parse_args()
 
-    # ЗАСВЕТ РАБОТАЕТ НА ЛЮБОМ КАНАЛЕ (06.11), остальные виды — ПЛАНЕТА
-    # (его слово 03.11). Замок повидовый, как в `fx_put.py`.
-    if a.kind != "flash" and \
-            a.channel.strip().upper().replace("Ё", "Е") != "ПЛАНЕТА":
-        print("!! ЭФФЕКТЫ ТОЛЬКО ДЛЯ КАНАЛА ПЛАНЕТА (его слово 03.11). "
-              "Канал «%s» — не ставлю." % a.channel, file=sys.stderr)
+    # ЗАСВЕТ РАБОТАЕТ НА ЛЮБОМ КАНАЛЕ (06.11), НАКЛЕЙКА — на ПЛАНЕТЕ и
+    # «5 МИНУТ» (его слово 11.11), остальные виды — ПЛАНЕТА (03.11).
+    # Замок повидовый, как в `fx_put.py`, таблица — `FX_CHANNELS` выше.
+    _allow = FX_CHANNELS.get(a.kind, DEFAULT_CHANNELS)
+    if _allow is not None and _norm_chan(a.channel) not in \
+            tuple(_norm_chan(c) for c in _allow):
+        print("!! вид «%s» разрешён только на канале %s (его слово). "
+              "Канал «%s» — не ставлю."
+              % (a.kind, " / ".join(_allow), a.channel), file=sys.stderr)
         return 2
+    # СЛОВА НАКЛЕЕК — ПО-РУССКИ И ЗАГЛАВНЫМИ (11.11). Латиница на наклейке
+    # ловится здесь, а не глазом на дашборде: запрет на нерусский текст в
+    # кадре общий по сборщику, а правок после `ship.sh` не бывает.
+    _words = ()
+    if a.kind == "sticker":
+        _words = tuple(w.strip().upper() for w
+                       in str(a.words or "").replace(";", ",").split(",")
+                       if w.strip())
+        _lat = [w for w in _words if _LAT_RE.search(w)]
+        if _lat:
+            print("!! слово наклейки не по-русски: %s — не ставлю"
+                  % ", ".join(_lat), file=sys.stderr)
+            return 2
     prev = "" if a.prev in ("-", "") else a.prev
     if prev and not os.path.isfile(prev):
         prev = ""
@@ -552,7 +764,7 @@ def main():
     tmp = tempfile.mkdtemp(prefix="fxt_")
     try:
         total, tf = render_frames(prev, a.img, tmp, a.kind, a.seconds, trans,
-                                  a.zoom)
+                                  a.zoom, _words, a.channel)
         cmd = [a.ffmpeg, "-y", "-hide_banner", "-loglevel", "error",
                "-framerate", str(FPS), "-i", os.path.join(tmp, "f_%05d.jpg"),
                "-an", "-t", "%.3f" % a.seconds,
@@ -571,8 +783,13 @@ def main():
                   file=sys.stderr)
             return 1
         ok = r.returncode == 0 and os.path.isfile(a.out) and os.path.getsize(a.out) > 0
-        print(("готово: %s (переход «%s» %.1f с из %.1f с сцены)"
-               % (a.out, a.kind, tf / float(FPS), a.seconds)) if ok
+        _что = ("наклейка «%s», прилёт %s"
+                % ("+".join(_words or STICKER_WORDS[:2]),
+                   " и ".join("%.2f с" % x for x in _sticker_times(a.seconds)))
+                ) if a.kind == "sticker" else \
+               ("переход «%s» %.1f с" % (a.kind, tf / float(FPS)))
+        print(("готово: %s (%s из %.1f с сцены)"
+               % (a.out, _что, a.seconds)) if ok
               else ("FAIL\n" + r.stderr[-700:]))
         return 0 if ok else 1
     finally:
