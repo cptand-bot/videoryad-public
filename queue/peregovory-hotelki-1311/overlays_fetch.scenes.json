@@ -1,0 +1,60 @@
+{
+ "scenes": [
+  {
+   "id": 3,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров на пресс-конференции МИД России, 2026"
+  },
+  {
+   "id": 14,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дмитрий Песков на брифинге в Кремле, 2026"
+  },
+  {
+   "id": 16,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Мария Захарова на брифинге МИД России, 2026"
+  },
+  {
+   "id": 30,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военная техника ВСУ на параде в Киеве, 2021"
+  },
+  {
+   "id": 35,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "флаг НАТО у штаба в Брюсселе, 2025"
+  },
+  {
+   "id": 38,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "зал заседаний Верховной Рады Украины, 2025"
+  },
+  {
+   "id": 46,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Фридрих Мерц на пресс-конференции в Берлине, 2026"
+  },
+  {
+   "id": 62,
+   "duration_sec": 4.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен на заседании Еврокомиссии, 2026"
+  }
+ ]
+}
