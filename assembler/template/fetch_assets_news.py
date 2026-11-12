@@ -2767,7 +2767,15 @@ def _direct_save_image(blob, out_base, for_overlay=False):
     # по длинной стороне, и для ВСПЛЫВАШКИ это норма: она занимает четверть
     # экрана. Порог 500x320 от 18.10 считался под кадр во весь экран. Это тот
     # же случай, что уже разобран с «тяжёлым текстом»: всплывашке свои мерки.
-    lim_w, lim_h = (300, 200) if for_overlay else (500, 320)
+    # ПОРОГ СЦЕНЫ — 800 PX ПО ДЛИННОЙ СТОРОНЕ, А НЕ 500x320 ПО ОБЕИМ
+    # (12.11, улов `usuario-e5`; его решение 05.11). Два места в коде мерили
+    # по-разному: `tg_media.py` объявлял вложение годным базовой сценой по
+    # длинной стороне, а здесь оно отбивалось по КОРОТКОЙ — и узкие кадры
+    # (800x254, 461x800) проваливались уже после того, как сцена получила
+    # источник `direct_url`. По его правилу такой кадр ставится КАК ЕСТЬ по
+    # центру, поля — размытая копия; значит короткая сторона решать не может.
+    lim_long = 300 if for_overlay else 800
+    lim_short = 200 if for_overlay else 0
     tmp = out_base + ".raw"
     with open(tmp, "wb") as f:
         f.write(blob)
@@ -2775,7 +2783,8 @@ def _direct_save_image(blob, out_base, for_overlay=False):
     try:
         from PIL import Image
         im = Image.open(tmp); im.load()
-        if im.width < lim_w or im.height < lim_h:
+        if max(im.width, im.height) < lim_long or \
+                min(im.width, im.height) < lim_short:
             os.remove(tmp)
             return ""
         try:
