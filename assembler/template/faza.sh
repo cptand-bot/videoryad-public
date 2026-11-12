@@ -290,6 +290,36 @@ fetch)
     done
     echo "[ОК]    кадров: $NFRAMES ($IMGDIR)"
     [ "$NFRAMES" -gt 0 ] || { echo "ОШИБКА: фетч не принёс ни одного кадра — смотри $LOG"; FAILED=$((FAILED+1)); }
+    # «КАДРОВ 63» ≠ «63 КАДРА» (12.11, улов `usuario-e3`, класс «успех значит
+    # ничего не сделано»). Фаза считала НАЛИЧИЕ файла, а 40 из 63 оказались
+    # тёмными облачными заглушками на 33 КБ: все 16 библиотечных сцен облако
+    # закрыть физически не может (медиатека на D:), плюс мёртвые к моменту
+    # прогона адреса телеграма. Ловим той же яркостью, что `cards_cloud`.
+    python3 - "$IMGDIR" <<'PYZ' || true
+import glob, os, sys
+кат = sys.argv[1]
+пусто = []
+for f in sorted(glob.glob(os.path.join(кат, "scene_*.jpg"))):
+    try:
+        if os.path.getsize(f) > 60000:
+            continue
+        from PIL import Image, ImageStat
+        if ImageStat.Stat(Image.open(f).convert("L")).mean[0] < 45:
+            пусто.append(os.path.basename(f))
+    except Exception:
+        continue
+if пусто:
+    print("[СМОТРИ] ЗАГЛУШЕК ВМЕСТО КАДРОВ: %d — %s"
+          % (len(пусто), ", ".join(пусто[:12]) + (" …" if len(пусто) > 12 else "")))
+    print("         Библиотечные сцены облако не закрывает (медиатека на D:) —")
+    print("         добери локально: python3 ~/.claude/skills/news-video/template/"
+          "fetch_parallel.py <ролик>.scenes.json images "
+          "~/.claude/skills/news-video/template/.env 5")
+    print("         Умершие адреса телеграма: прогнать tg_media.py заново —")
+    print("         токены новые, файлы те же.")
+else:
+    print("[ОК]    заглушек среди кадров нет (проверено яркостью)")
+PYZ
     summary
     ;;
 
