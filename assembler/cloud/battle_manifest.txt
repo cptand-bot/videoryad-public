@@ -199,3 +199,4 @@ template/zal_scenes2.py
 template/pravki.py
 template/peredacha.py
 template/rerayt_storozh.sh
+template/sverka_kartochek.py
