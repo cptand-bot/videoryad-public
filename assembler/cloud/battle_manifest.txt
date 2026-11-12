@@ -196,3 +196,4 @@ template/proverka_fayla.py
 template/o_chem.py
 template/storozh.py
 template/zal_scenes2.py
+template/pravki.py
