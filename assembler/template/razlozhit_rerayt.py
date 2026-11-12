@@ -19,6 +19,7 @@
 import argparse
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -105,6 +106,9 @@ def main():
                     help="сколько минут ждать ответ агента (по умолчанию 45)")
     ap.add_argument("--otvet", default="",
                     help="путь к готовому ответу, если он лежит не там")
+    ap.add_argument("--bez-linta", dest="bez_linta", action="store_true",
+                    help="разложить БЕЗ проверки rewrite_lint (только по его "
+                         "прямому слову)")
     a = ap.parse_args()
 
     if not os.path.isdir(a.folder):
@@ -144,6 +148,29 @@ def main():
     if os.path.isfile(цель) and os.path.getsize(цель) > 2000:
         print("текст второго канала уже лежит, не трогаю: %s" % цель)
         return 0
+    # ЛИНТ — ГЕЙТ, А НЕ СОВЕТ (12.11, его слово: «вчера был проеб по ним, один
+    # крючок оставался нетронутым»). Проверка крючка в `rewrite_lint.py`
+    # появилась 11.11, но звали её РУКАМИ из ПОРЯДКА-ДНЯ — и текст с
+    # непереписанным началом спокойно лёг в папку второго канала. Единственное
+    # горлышко, через которое статья обязана пройти, — вот этот шаг: здесь и
+    # держим. Осознанно мимо: --bez-linta (его прямое слово, не «так быстрее»).
+    if not a.bez_linta:
+        исходник = os.path.join(a.folder, имя1)
+        задание = os.path.join(a.folder, "ЗАДАНИЕ-РЕРАЙТ.txt")
+        кмд = [sys.executable,
+               os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "rewrite_lint.py"), исходник, ответ]
+        if os.path.isfile(задание):
+            кмд += ["--brief", задание]
+        п = subprocess.run(кмд, capture_output=True, text=True)
+        print(п.stdout or "", end="")
+        if п.returncode != 0:
+            print(п.stderr or "", end="", file=sys.stderr)
+            print("!! ВТОРАЯ СТАТЬЯ НЕ РАЗЛОЖЕНА: линт не пройден.", file=sys.stderr)
+            print("   Перепиши названное (крючок — в первую очередь) и "
+                  "повтори этот шаг.", file=sys.stderr)
+            return 4
+
     with open(ответ, encoding="utf-8", errors="replace") as fh:
         тело = fh.read().strip() + "\n"
     with open(цель, "w", encoding="utf-8") as fh:
