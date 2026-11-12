@@ -719,6 +719,7 @@ tema)
         case "$1" in
             --tema) WANT_TEMA="${2:-}"; shift 2 || true ;;
             --wait) WAITMIN="${2:-45}"; shift 2 || true ;;
+            --key) KEY="${2:-}"; shift 2 || true ;;
             *) _ARGS+=("$1"); shift ;;
         esac
     done
@@ -816,6 +817,39 @@ w = [w for w in re.split(r"[^А-Яа-яЁёA-Za-z0-9]+", name) if w][:3]
 print("%s-%s-%s" % (chs, "-".join(lat(x) for x in w)[:34].strip("-"), day.replace("-","")))
 PYEOF
 )"
+    # ТРИ ПАРАЛЛЕЛЬНЫЕ ВЕТКИ ЗАПУСКАЕТ И `tema` ТОЖЕ (12.11, улов `usuario-e3`).
+    # Было: их пускал только `start`, а взявшая тему по имени вкладка уходила
+    # в видеоряд — и вторая статья, упаковка и пять превью по этой теме не
+    # заказывались ВООБЩЕ. Поймано на «Ялте 2.0»: метки `.tema_start` в папке
+    # не было, второй канал стоял пустой. Ключ берём из `--key`/окружения;
+    # без ключа `tema_start.py` не зовём и говорим об этом вслух.
+    KEY="${VIDEORYAD_KEY:-${KEY:-}}"
+    MIRROR=""
+    case "$CHANNEL" in
+        "5 МИНУТ") MIRROR="ПЛАНЕТА" ;;
+        "ПЛАНЕТА") MIRROR="5 МИНУТ" ;;
+    esac
+    if [ -n "$MIRROR" ]; then
+        MDIR="$NEWS/$MIRROR/$(echo "${TAKEN%/}" | sed "s|$NEWS/$CHANNEL/||")"
+        MTXT="$(ls "$MDIR"/*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"
+        if [ -f "${TAKEN%/}/.tema_start" ]; then
+            echo "[ОК]    вторая статья и упаковка уже запускались (метка в папке темы)"
+        elif [ -n "$MTXT" ]; then
+            echo "[ОК]    на $MIRROR текст уже лежит — вторую статью не заказываю"
+        elif [ -z "$KEY" ]; then
+            echo "[СМОТРИ] ВТОРАЯ СТАТЬЯ, УПАКОВКА И ПРЕВЬЮ НЕ ЗАКАЗАНЫ: нет ключа."
+            echo "         Дай ключ — faza.sh tema \"$CHANNEL\" --tema \"…\" --key <ARM_…>"
+            echo "         или закажи явно: python3 $T/tema_start.py \"${TAKEN%/}\" --key <ключ> --channel-2 $MIRROR"
+            NOTES=$((NOTES+1))
+        elif python3 "$T/tema_start.py" "${TAKEN%/}" --key "$KEY" --channel-2 "$MIRROR" >> "$LOG" 2>&1; then
+            date '+%Y-%m-%d %H:%M' > "${TAKEN%/}/.tema_start"
+            echo "[ОК]    запущены в фоне: вторая статья на $MIRROR · упаковка · пять превью"
+        else
+            echo "[СМОТРИ] вторая статья/упаковка не запустились — закажи явно:"
+            echo "         python3 $T/tema_start.py \"${TAKEN%/}\" --key $KEY --channel-2 $MIRROR --only rewrite"
+            NOTES=$((NOTES+1))
+        fi
+    fi
     PIPE_FREE="$(pick_pipe "$PRJ" || true)"
     [ -n "$PIPE_FREE" ] || echo "[СМОТРИ] все шесть труб заняты — фаза fetch дождётся свободной сама"
     echo "--------------------------------------------------------------"
