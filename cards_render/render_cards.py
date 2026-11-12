@@ -208,6 +208,22 @@ def _registry():
            # ГАЗЕТНАЯ ВЫРЕЗКА (06.11) — импорт жёсткий, а не мягкий: вид
            # утверждён в бой, и молчаливая пропажа кадра персоны хуже падения.
            "vyrezka": vyrezka}
+    # БЕЛЫЙ ЗАЛ (11.11): сцена-павильон живёт в `template/`, рядом с палитрой,
+    # и уезжает в облако той же посылкой (`cards_cloud.py`). Импорт мягкий:
+    # не встал numpy или не доехал шрифт — падает один вид, а не весь шард.
+    try:
+        reg["zal_scene"] = __import__("zal_scene")
+    except Exception as exc:
+        print(f"  вид «zal» недоступен: {type(exc).__name__}: {exc}",
+              file=sys.stderr, flush=True)
+    # ВОСЕМЬ СЦЕН ЗАЛА (11.11): G02, G10, G11, G12, G15, G26, G17, G25 из
+    # `template/zal_scenes2.py`. Импорт мягкий по той же причине, что у
+    # `zal_scene`: падает один модуль, а не весь шард ролика.
+    try:
+        reg["zal_scenes2"] = __import__("zal_scenes2")
+    except Exception as exc:
+        print(f"  сцены зала недоступны: {type(exc).__name__}: {exc}",
+              file=sys.stderr, flush=True)
     # ГРАФИКА И КАРТЫ — В РЕЕСТР (2026-10-26, улов `usuario-e8`).
     # До этого дня порядок выбора средств «видео → карты и графика → движение
     # → остаток текст» был НЕВЫПОЛНИМ на двух ступенях из четырёх: рисовальщик
@@ -239,6 +255,24 @@ ALIAS = {
     # `card:vyrezka_kontur` — короткими именами, без точки.
     "vyrezka": "vyrezka.gazeta",
     "vyrezka_kontur": "vyrezka.figura",
+    # БЕЛЫЙ ЗАЛ (11.11): источник сцены пишется `card:zal`, без точки.
+    "zal": "zal_scene.zal",
+    # ВОСЕМЬ ПРИЁМОВ ЗАЛА (11.11): источник сцены — `card:zal_slova` и так
+    # далее. Заводя сюда новый вид, не забудь ТРИ других места, иначе он
+    # тихо не доедет: `card_put.VIEWS` (дверь), `_registry` выше (импорт)
+    # и `cards_cloud.CODE`/явное копирование файла (посылка в облако).
+    "zal_slova": "zal_scenes2.zal_slova",
+    "zal_pol": "zal_scenes2.zal_pol",
+    "zal_kub": "zal_scenes2.zal_kub",
+    "zal_makety": "zal_scenes2.zal_makety",
+    "zal_shkala": "zal_scenes2.zal_shkala",
+    "zal_efir": "zal_scenes2.zal_efir",
+    # ЕЩЁ ДВА ПРИЁМА ТОГО ЖЕ ЗАЛА (11.11, вечер): G17 — счётчик кадров,
+    # G25 — разворот панели в полный экран и обратно. Живут в том же
+    # `template/zal_scenes2.py`, поэтому в облако едут уже существующей
+    # строкой `cards_cloud.py` — отдельного файла слать не надо.
+    "zal_schetchik": "zal_scenes2.zal_schetchik",
+    "zal_ekran": "zal_scenes2.zal_ekran",
 }
 
 

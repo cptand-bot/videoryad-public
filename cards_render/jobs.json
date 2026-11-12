@@ -1,375 +1,370 @@
 [
  {
-  "scene": 5,
-  "view": "tape",
-  "dur": 13.89,
-  "anim": 2.4,
-  "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 7,
+  "view": "zal_slova",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "За словом «единство» давно скрывается драка за общий кошелёк",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 9.6,
+   "sheets": [
+    "барометр"
+   ],
+   "text": "Требования сняли?",
+   "accent": "сняли",
+   "na_polu": "ОСТАЛИСЬ",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 9,
-  "view": "charts.cartogram",
-  "dur": 11.8,
-  "anim": 11.8,
+  "view": "zal_efir",
+  "dur": 9.4,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Германия",
-    "Венгрия",
-    "Словакия",
-    "Бельгия",
-    "Украина"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 9.4,
+   "sheets": [],
+   "text": "Линия не изменилась",
+   "say": "Российская линия не изменилась: заявленные цели остаются",
+   "author": "Сергей Лавров",
+   "role": "министр иностранных дел России",
+   "source": "после переговоров в Абу-Даби",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 13,
-  "view": "slider",
-  "dur": 12.29,
-  "anim": 12.29,
+  "scene": 10,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.8,
+  "anim": 9.8,
   "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_010.jpg",
+     240,
+     380,
+     -4,
+     "Абу-Даби, переговоры"
+    ],
+    [
+     "cards/photo/card_010_2.jpg",
+     800,
+     380,
+     3,
+     "Стамбул, 2022"
+    ],
+    [
+     "cards/photo/card_010_3.jpg",
+     1360,
+     380,
+     -2,
+     "Европа, новый раунд"
+    ]
+   ],
+   "title": "Переговоры: что за чем шло",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 17,
+  "view": "zal_kub",
+  "dur": 12.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.7,
+   "sheets": [],
+   "text": "Киев этого не признаёт",
+   "accent": "не признаёт",
+   "kick": "конструкция вокруг территорий",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "split",
+  "dur": 12.2,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_020.jpg",
+   "text": "Киев предложенную территориальную схему отверг",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "accent": "территориальную схему отверг",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "zal_schetchik",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.2,
+   "sheets": [],
+   "text": "Армия в восемьсот тысяч",
+   "accent": "восемьсот тысяч",
+   "value": "800 000",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "film.film_single",
+  "dur": 11.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_026.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "zal_pol",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.9,
+   "sheets": [],
+   "text": "Цель — демилитаризация",
+   "accent": "демилитаризация",
+   "na_polu": "ДЕМИЛИТАРИЗАЦИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "photo",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_031.jpg",
+   "title": "Гарантии: кому и от чего",
+   "lines": [
+    "Киев просит армию 800 тысяч",
+    "Запад — финансирование на 10 лет",
+    "Москва требует демилитаризации"
+   ]
+  }
+ },
+ {
+  "scene": 32,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_032.jpg",
+   "title": "Какая Украина получает гарантии",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 33,
+  "view": "marker_serif",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "На упаковке написано: гарантии безопасности Украины. А что внутри упаковки?",
+   "accent": "А что внутри упаковки?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "vyrezka.gazeta",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_034.jpg",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "vyrezka.figura",
+  "dur": 12.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_037.jpg",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "zal_makety",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.1,
+   "sheets": [],
+   "text": "Кто будет оплачивать?",
+   "accent": "оплачивать",
+   "makety": [
+    "банк=ДЕНЬГИ",
+    "больница=КЛИНИКИ",
+    "лэп=СЕТИ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "zal_ekran",
+  "dur": 10.9,
+  "anim": 4.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.9,
+   "sheets": [],
+   "text": "Европа активнее",
+   "say": "В следующих раундах европейцы должны участвовать активнее",
+   "author": "Джаред Кушнер",
+   "role": "участник переговоров от США",
+   "source": "итоги переговоров в Абу-Даби",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "charts.cartogram",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "США",
+    "Украина",
+    "Германия",
+    "Франция",
+    "Польша"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "pull",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Нужно понимать, что гарантируют России и что — Украине",
+   "author": "автор канала",
+   "role": "разбор переговоров",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "slider",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {},
   "mode": "cli",
   "script": "build_chart_slider.py",
   "cfg": {
-   "title": "вес экономики Германии в бюджете Евросоюза",
+   "title": "Численность ВСУ, тысяч человек",
    "min": 0.0,
-   "max": 100.0,
-   "low": 18.0,
-   "high": 25.0,
-   "marker_value": 21.0,
-   "marker_display": "21",
-   "seconds": 12.29,
+   "max": 850.0,
+   "low": 85.0,
+   "high": 800.0,
+   "marker_value": 800.0,
+   "marker_display": "800",
+   "seconds": 11.7,
    "range_label": "РАЗБРОС ОЦЕНОК",
    "caption": "",
    "source": ""
   }
  },
  {
-  "scene": 16,
-  "view": "charts.pie",
-  "dur": 15.95,
-  "anim": 15.95,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "segments": [
-    {
-     "label": "обучение",
-     "value": 40.0
-    },
-    {
-     "label": "боевой опыт",
-     "value": 25.0
-    },
-    {
-     "label": "обновление программ",
-     "value": 20.0
-    },
-    {
-     "label": "координация",
-     "value": 15.0
-    }
-   ],
-   "title": "Почти 300 млн евро на миссию ЕС",
-   "unit": " %",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 19,
-  "view": "bars",
-  "dur": 13.15,
-  "anim": 13.15,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {},
-  "mode": "cli",
-  "script": "build_chart_bars.py",
-  "cfg": {
-   "title": "Кто успевает быстрее",
-   "caption": "",
-   "seconds": 13.15,
-   "bars": [
-    {
-     "label": "БАЛЛИСТИЧЕСКИЕ РАКЕТЫ РОССИИ",
-     "value": 0.95,
-     "color": "06C7C7"
-    },
-    {
-     "label": "ПРОТИВОРАКЕТЫ PATRIOT В МИРЕ",
-     "value": 0.55,
-     "color": "EABD23"
-    }
-   ]
-  }
- },
- {
-  "scene": 23,
-  "view": "marker_serif",
-  "dur": 10.91,
+  "scene": 63,
+  "view": "zal",
+  "dur": 11.4,
   "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Бумага отлично переносит зиму. Ей отопление не требуется",
-   "accent": "Ей отопление не требуется",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 27,
-  "view": "pull",
-  "dur": 15.55,
-  "anim": 2.6,
-  "tail_zoom": 0.05,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Если вагон начал тормозить, Мерц предлагает снять с него тормоза",
-   "author": "Фридрих Мерц",
-   "role": "канцлер Германии",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 31,
-  "view": "split",
-  "dur": 10.24,
-  "anim": 2.0,
-  "tail_zoom": 0.06,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_031.jpg",
-   "text": "Зеленский готов встретиться с Путиным где угодно, даже в Антарктиде",
-   "author": "Андрей Мельник",
-   "role": "постпред Украины при ООН",
-   "accent": "Зеленский готов встретиться с",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 35,
-  "view": "cinematic.evidence_wall",
-  "dur": 12.56,
-  "anim": 12.56,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    [
-     "cards/photo/card_035.jpg",
-     240,
-     380,
-     -4,
-     "депутат Нагорняк о перевороте"
-    ],
-    [
-     "cards/photo/card_035_2.jpg",
-     800,
-     380,
-     3,
-     "Берлин держит курс"
-    ],
-    [
-     "cards/photo/card_035_3.jpg",
-     1360,
-     380,
-     -2,
-     "Будапешт против"
-    ]
+   "text": "Сходится? Пока нет",
+   "words": [
+    "ИТОГ",
+    "ПРОВАЛ"
    ],
-   "kick": "Европа · ноябрь 2026",
-   "title": "Кто с кем спорит о продолжении",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 39,
-  "view": "vyrezka.figura",
-  "dur": 11.92,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_039.jpg",
-   "author": "Андриан Прокип",
-   "role": "энергетический эксперт",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 42,
-  "view": "poster.poster",
-  "dur": 12.46,
-  "anim": 12.46,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "title": "Одна система тянет за собой город",
-   "hero_photo": "cards/photo/card_042.jpg",
-   "bottom": "две недели без света — это не про бюджет, а про быт",
-   "facts": [
-    {
-     "label": "связь",
-     "value": "падает"
-    },
-    {
-     "label": "транспорт",
-     "value": "встаёт"
-    },
-    {
-     "label": "насосные станции",
-     "value": "без воды"
-    }
+   "sheets": [
+    "цели заявлены",
+    "армия 800 тысяч",
+    "территории",
+    "гарантии",
+    "Европа",
+    "прогресс?"
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 45,
-  "view": "charts.line",
-  "dur": 10.88,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "x_labels": [
-    "2027",
-    "2028",
-    "2034"
-   ],
-   "series": [
-    {
-     "name": "Что обещано и когда",
-     "values": [
-      200.0,
-      400.0,
-      600.0
-     ]
-    }
-   ],
-   "title": "Что обещано и когда",
-   "unit": " ракет",
-   "source": "Bloomberg, Совет ЕС",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 49,
-  "view": "cinematic.depth_of_field",
-  "dur": 13.56,
-  "anim": 13.56,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_049.jpg",
-   "title": "городская администрация Киева",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 53,
-  "view": "film.film_single",
-  "dur": 13.96,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_053.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 57,
-  "view": "vyrezka.gazeta",
-  "dur": 14.03,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_057.jpg",
-   "author": "Роберт Фицо",
-   "role": "премьер-министр Словакии",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 61,
-  "view": "film.film_strip",
-  "dur": 13.2,
-  "anim": 13.2,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    "cards/photo/card_061.jpg",
-    "cards/photo/card_061_2.jpg",
-    "cards/photo/card_061_3.jpg"
-   ],
-   "captions": [
-    "тёмные окна Киева",
-    "остывшая батарея",
-    "кран без воды"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 65,
-  "view": "photo",
-  "dur": 10.32,
-  "anim": 10.32,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-   "photo": "cards/photo/card_065.jpg",
-   "title": "служебный лимузин канцлера",
-   "lines": [
-    "сила против партнёров",
-    "счёт до 2034 года"
-   ]
-  }
- },
- {
-  "scene": 69,
-  "view": "paper_typed",
-  "dur": 14.93,
-  "anim": 2.8,
-  "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Решения будут принимать не те, кто запланировал шестьсот ракет на 2027 год, а те, кому сегодня нечем согреть дом",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 11.4,
+   "watermark": "5 МИНУТ"
   }
  }
 ]
