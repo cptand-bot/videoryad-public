@@ -1514,6 +1514,23 @@ def main():
             data = {"channel": a.channel, "scenes": scenes}
         json.dump(data, open(a.out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"\nпринято → {a.out}")
+        # ПРОПУСКИ ВИДОВ АГЕНТ ВОЗВРАЩАЕТ ПОЛЕМ, А НЕ СЛОВАМИ (12.11).
+        # Обязательны ВСЕ наши виды, но вид, которому в этом тексте места
+        # нет, он выписывает в `propuski` с причиной. Кладём их файлом рядом
+        # со сценами — его читает гейт `obyazatelno.py`. Причина короче
+        # десяти знаков не принимается: пропуск без объяснения — тихий обход.
+        _пр = {}
+        _исх = data if isinstance(data, dict) else {}
+        for _k, _v in (_исх.get("propuski") or _исх.get("пропуски") or {}).items():
+            if len(str(_v).strip()) >= 10:
+                _пр[str(_k).strip()] = str(_v).strip()
+        if _пр:
+            _pf = os.path.join(os.path.dirname(os.path.abspath(a.out)) or ".",
+                               "propuski.json")
+            json.dump(_пр, open(_pf, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            print("пропуски видов (%d) записаны → %s: %s"
+                  % (len(_пр), _pf, ", ".join(sorted(_пр))))
     return 0
 
 
