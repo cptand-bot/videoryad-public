@@ -706,6 +706,23 @@ PYEOF
 # проект, свободная труба. Раньше это раздавал координатор пятью строками
 # вручную на каждую тему (его слово 09.11: «это чисто ручная работа, блядь»).
 tema)
+    # ТЕМУ МОЖНО НАЗВАТЬ И БЕЗ КЛЮЧА (12.11, улов `usuario-e3`). `start`
+    # требует ключ георадара, а `--tema` у него только ДОПОЛНЕНИЕ; `tema`
+    # же брала ПЕРВУЮ свободную — и вкладка, которой назвали её тему
+    # голосом, не могла взять именно её: либо ключа ещё нет, либо чужая
+    # тема уходила первой. Теперь: `faza.sh tema "5 МИНУТ" --tema "<имя>"`
+    # (и `--wait <минут>`, если текста ещё нет на диске).
+    WANT_TEMA="${VIDEORYAD_TEMA:-}"
+    WAITMIN=0
+    _ARGS=()
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --tema) WANT_TEMA="${2:-}"; shift 2 || true ;;
+            --wait) WAITMIN="${2:-45}"; shift 2 || true ;;
+            *) _ARGS+=("$1"); shift ;;
+        esac
+    done
+    set -- "${_ARGS[@]:-}"
     DAY_IN="${1:-}"
     NEWS="${VIDEORYAD_NEWS_DIR:-/mnt/d/YouTube/НОВОСТИ}"
     CH_DIR="$NEWS/$CHANNEL"
@@ -730,7 +747,30 @@ tema)
         if python3 -c 'import glob,os,sys; sys.exit(0 if [f for f in glob.glob(os.path.join(sys.argv[1],"*.mp4")) if os.path.getsize(f)>=100*1024*1024] else 1)' "$td" 2>/dev/null; then
             echo "  — $TNAME: уже сдана"; continue
         fi
+        # ТЕМА НАЗВАНА — БЕРЁМ ТОЛЬКО ЕЁ, сверка нестрогая (регистр, пробелы,
+        # хвост «5 минут» в имени папки): он говорит «Ялта 2.0», в папке
+        # «2-РФ-США-ЕВРОПА-Ялта 2.0 5 минут».
+        if [ -n "${WANT_TEMA:-}" ]; then
+            if ! python3 - "$TNAME" "$WANT_TEMA" <<'PYT'
+import re, sys
+def key(x):
+    return re.sub(r"[^а-яёa-z0-9]", "", x.lower())
+have, want = key(sys.argv[1]), key(sys.argv[2])
+sys.exit(0 if (have == want or want in have or have in want) else 1)
+PYT
+            then continue; fi
+        fi
         TXT="$(ls "$td"*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"
+        # ТЕКСТА ЕЩЁ НЕТ: названную тему ЖДЁМ ВНУТРИ ШАГА, если дали --wait.
+        if [ -z "$TXT" ] && [ -n "${WANT_TEMA:-}" ] && [ "${WAITMIN:-0}" -gt 0 ]; then
+            echo "  — $TNAME: текста ещё нет, жду до $WAITMIN мин (проверка каждые 30 с)"
+            _DL=$(( $(date +%s) + WAITMIN*60 ))
+            while [ "$(date +%s)" -lt "$_DL" ]; do
+                sleep 30
+                TXT="$(ls "$td"*.txt 2>/dev/null | grep -vE "ЗАДАНИЕ|БРИФ|УПАКОВКА|ОТВЕТ" | head -1)"
+                [ -n "$TXT" ] && { echo "  — $TNAME: текст появился"; break; }
+            done
+        fi
         if [ -z "$TXT" ]; then echo "  — $TNAME: текста ещё нет"; continue; fi
         SLUG="$(python3 - "$td" "$CHANNEL" "$DAY" <<'PYEOF'
 import re, sys, os
