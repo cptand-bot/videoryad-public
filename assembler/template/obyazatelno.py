@@ -725,6 +725,18 @@ def _overlay_styles(scenes_path):
     "film": '--photos <папка>', "film_frame": '--photo <файл>',
     "vyrezka": '--photo <файл>', "vyrezka_kontur": '--photo <файл>',
     "zal": '--text "фраза" --word СЛОВО --word СЛОВО --sheet "строка" --sheet "строка"',
+    # ВОСЕМЬ ПРИЁМОВ ЗАЛА (12.11): у каждого СВОИ обязательные поля, и общий
+    # `--text "…"` отказом НЕ лечится — вкладка ставит вид, получает второй
+    # отказ уже от `card_put.py` и тратит круг. Подсказка обязана называть
+    # ровно те ключи, которые вид требует (список `ВИДЫ` в `card_put.py`).
+    "zal_slova": '--text "фраза" --na-polu "СТРОКА НА ПОЛУ" --sheet "строка" --sheet "строка"',
+    "zal_pol": '--text "фраза" --na-polu "СЛОВО" --sheet "строка" --sheet "строка"',
+    "zal_kub": '--text "фраза" --kick "СЛОВО В КУБЕ" --sheet "строка" --sheet "строка"',
+    "zal_makety": '--text "фраза" --maket "банк=БАНКИ" --maket "лэп=ЭНЕРГОСЕТИ"',
+    "zal_shkala": '--text "фраза" --value "116 175" --value-sub "январь — август 2026"',
+    "zal_efir": '--text "фраза" --say "что сказано в эфире" --author "Имя Фамилия"',
+    "zal_schetchik": '--text "фраза" --value "4,3 млрд" --value-sub "ЗА ГОД"',
+    "zal_ekran": '--text "фраза" --say "реплика субтитром" --author "Имя Фамилия"',
 }
 
 
