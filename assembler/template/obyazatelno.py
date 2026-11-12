@@ -506,15 +506,25 @@ def _добрать_effekty():
         _sp.loader.exec_module(_m)
         kinds = [k for k in (getattr(_m, "KINDS", ()) or ())
                  if k not in ЭФФЕКТЫ_МИМО]
+        # КАНАЛЫ БЕРЁМ У САМОГО ИНСТРУМЕНТА (12.11, улов `usuario-0d`):
+        # шесть видов ставятся только на ПЛАНЕТУ, и гейт требовал от
+        # «5 МИНУТ» того, что `fx_put.py` сам же и запрещает — вкладка
+        # писала шесть одинаковых пропусков на каждом ролике канала.
+        _карта = dict(getattr(_m, "CHANNEL_FX", {}) or {})
+        _по_умолчанию = tuple(getattr(_m, "DEFAULT_CHANNELS", ("ПЛАНЕТА",)))
     except Exception:
         return
     есть = {e.get("fx") for e in ОБЯЗАТЕЛЬНЫЕ if e.get("fx")}
     for k in sorted(kinds):
         if k in есть:
             continue
+        _ch = [c for c in (_карта.get(k) or _по_умолчанию)
+               if c.upper() in ("ПЛАНЕТА", "5 МИНУТ")]
+        if not _ch:
+            continue                 # вид не для наших двух каналов вовсе
         ОБЯЗАТЕЛЬНЫЕ.append({
             "код": "FX-" + k, "fx": k, "min": 1, "gate": "dashboard",
-            "каналы": ["ПЛАНЕТА", "5 МИНУТ"],
+            "каналы": _ch,
             "имя": "эффект «%s»" % k,
             "когда": "сцена, на которой этот эффект к месту",
             "чем": ("python3 ~/.claude/skills/news-video/template/fx_put.py "
@@ -912,8 +922,13 @@ def свободные_сцены(scenes, сколько):
     if not ids:
         return [], ЗАЗОР_ПОЛ
     g0 = место_под_карточки(len(ids))[2]
-    for g in range(int(g0), ЗАЗОР_ПОЛ - 1, -1):
-        свободные = []
+    # ПОЛ ОПУСКАЕТСЯ ДО НУЛЯ — И ЦИКЛ ОБЯЗАН ЭТО ПЕРЕЖИТЬ (12.11, блокер
+    # `usuario-0d`). При `g0 = 0` прежний `range(0, ЗАЗОР_ПОЛ - 1, -1)` пуст,
+    # `свободные` не создавалась вовсе, и функция падала UnboundLocalError —
+    # РОВНО ТОГДА, когда набор закрыт целиком и сказать было нечего. Класс
+    # «проверка валит инструмент своим молчанием».
+    свободные = []
+    for g in range(max(0, int(g0)), -1, -1):
         for i in range(len(ids)):
             if any(abs(i - j) <= g for j in занято + свободные):
                 continue
@@ -925,7 +940,7 @@ def свободные_сцены(scenes, сколько):
             взяты = sorted({свободные[min(len(свободные) - 1, int(k * шаг))]
                             for k in range(сколько)})
             return [ids[i] for i in взяты], g
-    return [ids[i] for i in свободные], ЗАЗОР_ПОЛ
+    return [ids[i] for i in свободные], max(0, int(g0))
 
 
 def check(scenes, channel="", gate="dashboard", scenes_path=""):
