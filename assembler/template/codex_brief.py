@@ -785,6 +785,25 @@ def main():
               "--check-dir \"ВЕДОМСТВА/ЕВРОКОМИССИЯ\"")
         print("  (код 1 = порог не проходит; скажет и почему — например "
               "«все файлы куски ОДНОГО ролика»)")
+        # СТРОКА ВЫЗОВА С `--attach` — ПЕЧАТАЕМ САМИ (12.11, гоча `usuario-0d`,
+        # 6 минут впустую). Текст субтитров в задание НЕ вклеивается, а путь
+        # `/mnt/d/...` агент из WSL не видит: без `--attach` он отвечает одной
+        # строкой «В текущей папке нет .srt — приложите файл субтитров», и
+        # заход сгорает. Кладём копию `.srt` рядом с заданием и называем
+        # готовую команду: ключи `--json` и `--attach` строго ДО задания.
+        _ряд = os.path.dirname(os.path.abspath(path))
+        _копия = os.path.join(_ряд, os.path.basename(a.srt))
+        try:
+            if os.path.abspath(a.srt) != os.path.abspath(_копия):
+                shutil.copy2(a.srt, _копия)
+        except OSError as _e:
+            _копия = a.srt
+            print("  копию .srt рядом положить не вышло (%s) — беру исходный"
+                  % _e, file=sys.stderr)
+        print("  ЗВАТЬ АГЕНТА ТОЛЬКО ТАК (без --attach заход сгорает впустую):")
+        print("    bash ~/.claude/skills/news-video/template/codex_ask.sh \\")
+        print("      --json \"%s\" --attach \"%s\" \"%s\""
+              % (os.path.join(_ряд, "codex.scenes.json"), _копия, path))
         return 0
 
     project = os.path.dirname(os.path.abspath(a.scenes)) or "."
