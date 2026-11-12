@@ -1,0 +1,841 @@
+[
+ {
+  "scene": 4,
+  "view": "strike",
+  "dur": 9.9,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "После Абу-Даби опять говорят про прогресс, только арифметика это не подтверждает",
+   "struck": "прогресс",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "zal_pol",
+  "dur": 9.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.5,
+   "sheets": [],
+   "text": "Движение есть, встреча будет",
+   "accent": "Движение",
+   "na_polu": "ПРОГРЕСС",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "paper_typed",
+  "dur": 9.8,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если слушать только официальные формулировки, ещё немного — и можно заказывать оркестр",
+   "source": "заявления сторон после переговоров",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "zal_slova",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.6,
+   "sheets": [
+    "барометр"
+   ],
+   "text": "Требования сняли?",
+   "accent": "сняли",
+   "na_polu": "ОСТАЛИСЬ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "zal_efir",
+  "dur": 9.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.4,
+   "sheets": [],
+   "text": "Линия не изменилась",
+   "say": "Российская линия не изменилась: заявленные цели остаются",
+   "author": "Сергей Лавров",
+   "role": "министр иностранных дел России",
+   "source": "после переговоров в Абу-Даби",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_010.jpg",
+     240,
+     380,
+     -4,
+     "территории"
+    ],
+    [
+     "cards/photo/card_010_2.jpg",
+     800,
+     380,
+     3,
+     "позиция Москвы"
+    ],
+    [
+     "cards/photo/card_010_3.jpg",
+     1360,
+     380,
+     -2,
+     "схема в прессе"
+    ]
+   ],
+   "title": "Переговоры: что за чем шло",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 17,
+  "view": "zal_kub",
+  "dur": 12.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.7,
+   "sheets": [],
+   "text": "Киев этого не признаёт",
+   "accent": "не признаёт",
+   "kick": "конструкция вокруг территорий",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "charts.cartogram",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Донецкая область",
+    "Луганская область",
+    "Запорожская область"
+   ],
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "split",
+  "dur": 12.2,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_020.jpg",
+   "text": "Киев предложенную территориальную схему отверг",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "accent": "территориальную схему отверг",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "charts.cartogram",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Украина"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "quote",
+  "dur": 12.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Никто не остановил Путина, никто не уничтожил его, и он до сих пор жив",
+   "author": "Владимир Зеленский",
+   "source": "запись георадара, 12 ноября 2026",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "zal_schetchik",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.2,
+   "sheets": [],
+   "text": "Армия в восемьсот тысяч",
+   "accent": "восемьсот тысяч",
+   "value": "800 000",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "film.film_single",
+  "dur": 11.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_026.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "bars",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Численность ВСУ, тысяч",
+   "caption": "в девять с лишним раз больше",
+   "seconds": 12.4,
+   "bars": [
+    {
+     "label": "ПРОЕКТ 2022",
+     "value": 0.11,
+     "color": "EABD23"
+    },
+    {
+     "label": "ЗАПРОС 2026",
+     "value": 1.0,
+     "color": "B92526"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 28,
+  "view": "zal_pol",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.9,
+   "sheets": [],
+   "text": "Цель — демилитаризация",
+   "accent": "демилитаризация",
+   "na_polu": "ДЕМИЛИТАРИЗАЦИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "charts.slope",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Численность ВСУ",
+     "from": 85.0,
+     "to": 800.0
+    },
+    {
+     "label": "Финансирование, лет",
+     "from": 0.0,
+     "to": 10.0
+    }
+   ],
+   "source": "проект 2022 года и запрос Киева",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "photo",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_031.jpg",
+   "title": "Гарантии: кому и от чего",
+   "lines": [
+    "Киев просит армию 800 тысяч",
+    "Запад — финансирование на 10 лет",
+    "Москва требует демилитаризации"
+   ]
+  }
+ },
+ {
+  "scene": 32,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_032.jpg",
+   "title": "Какая Украина получает гарантии",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 33,
+  "view": "marker_serif",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "На упаковке написано: гарантии безопасности Украины. А что внутри упаковки?",
+   "accent": "А что внутри упаковки?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "vyrezka.gazeta",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_034.jpg",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "vyrezka.figura",
+  "dur": 12.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_037.jpg",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "zal_shkala",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.0,
+   "sheets": [],
+   "text": "Восемьсот тысяч военных",
+   "value": "800 000",
+   "value_sub": "человек в армии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "paper_hand",
+  "dur": 12.2,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Ребята, а границу после всего этого где рисуем? И кто меня защитит, если завтра всё повторится?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "cinematic.dossier",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "Украина: что на столе",
+   "rows": [
+    "армия 800 тысяч человек",
+    "финансирование 10 лет"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_044.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "zal_makety",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.1,
+   "sheets": [],
+   "text": "Кто будет оплачивать?",
+   "accent": "оплачивать",
+   "makety": [
+    "банк=ДЕНЬГИ",
+    "больница=КЛИНИКИ",
+    "лэп=СЕТИ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "poster.poster",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "Чем это оборачивается",
+   "hero_photo": "cards/photo/card_047.jpg",
+   "bottom": "обязательство Запада содержать одну из крупнейших армий Европы",
+   "source": "AFP",
+   "facts": [
+    {
+     "label": "армия",
+     "value": "800 тысяч"
+    },
+    {
+     "label": "финансирование",
+     "value": "10 лет"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 48,
+  "view": "zal_ekran",
+  "dur": 10.9,
+  "anim": 4.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.9,
+   "sheets": [],
+   "text": "Европа активнее",
+   "say": "В следующих раундах европейцы должны участвовать активнее",
+   "author": "Джаред Кушнер",
+   "role": "участник переговоров от США",
+   "source": "итоги переговоров в Абу-Даби",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "charts.cartogram",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "США",
+    "Украина",
+    "Германия",
+    "Франция"
+   ],
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "charts.cartogram",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "США",
+    "Украина",
+    "Германия",
+    "Франция",
+    "Польша"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "charts.network",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "США",
+     "label": "США",
+     "weight": 6.0
+    },
+    {
+     "id": "Украина",
+     "label": "Украина",
+     "weight": 7.0
+    },
+    {
+     "id": "Россия",
+     "label": "Россия",
+     "weight": 3.0
+    },
+    {
+     "id": "Германия",
+     "label": "Германия",
+     "weight": 3.0
+    },
+    {
+     "id": "Франция",
+     "label": "Франция",
+     "weight": 2.0
+    },
+    {
+     "id": "Польша",
+     "label": "Польша",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "США",
+     "to": "Украина",
+     "weight": 3.0
+    },
+    {
+     "from": "США",
+     "to": "Россия",
+     "weight": 3.0
+    },
+    {
+     "from": "Украина",
+     "to": "Германия",
+     "weight": 2.0
+    },
+    {
+     "from": "Украина",
+     "to": "Франция",
+     "weight": 2.0
+    },
+    {
+     "from": "Германия",
+     "to": "Польша",
+     "weight": 1.0
+    }
+   ],
+   "title": "Кто с кем договаривается",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "tape",
+  "dur": 11.8,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Причины конфликта лежат в устройстве европейской безопасности",
+   "source": "позиция Москвы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "zal_slova",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.1,
+   "sheets": [
+    "России",
+    "Украине",
+    "Европе"
+   ],
+   "text": "Гарантии кому и от чего?",
+   "accent": "кому",
+   "na_polu": "СОДЕРЖАНИЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "duel",
+  "dur": 12.4,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Киев: оставьте 800 тысяч военных и финансируйте десять лет",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Москва: заявленные цели остаются, нужна демилитаризация",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "devices.device_scene",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Запрос Киева",
+    "Проект 2022 года"
+   ],
+   "series": [
+    {
+     "name": "Что на столе в цифрах",
+     "values": [
+      800.0,
+      85.0
+     ]
+    }
+   ],
+   "title": "Что на столе в цифрах",
+   "source": "AFP, проект 2022 года",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "slider",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "Численность ВСУ, тысяч человек",
+   "min": 0.0,
+   "max": 850.0,
+   "low": 85.0,
+   "high": 800.0,
+   "marker_value": 800.0,
+   "marker_display": "800",
+   "seconds": 11.7,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "",
+   "source": ""
+  }
+ },
+ {
+  "scene": 60,
+  "view": "pull",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Разговор о европейской безопасности только начался, и мы снова оказались правы",
+   "author": "автор канала",
+   "role": "разбор переговоров",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "film.film_strip",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_061.jpg",
+    "cards/photo/card_061_2.jpg",
+    "cards/photo/card_061_3.jpg"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "zal",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Сходится? Пока нет",
+   "words": [
+    "ИТОГ",
+    "ПРОВАЛ"
+   ],
+   "sheets": [
+    "цели заявлены",
+    "армия 800 тысяч",
+    "территории",
+    "гарантии",
+    "Европа",
+    "прогресс?"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 11.4,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "charts.radar",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "axes": [
+    "Демилитаризация",
+    "Территории",
+    "Политический курс",
+    "Гарантии",
+    "Новая система безопасности"
+   ],
+   "series": [
+    {
+     "label": "Цели Москвы против того, что на столе",
+     "values": [
+      20.0,
+      30.0,
+      15.0,
+      25.0,
+      35.0
+     ]
+    }
+   ],
+   "title": "Цели Москвы против того, что на столе",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "doc",
+  "dur": 11.4,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Самое сложное начинается тогда, когда надо решить, что именно будет написано мелким шрифтом. А это ещё даже не начали обсуждать: ни состав гарантий, ни численность армии, ни статус территорий",
+   "title": "Текст будущего соглашения",
+   "source": "итоги переговоров в Абу-Даби",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
