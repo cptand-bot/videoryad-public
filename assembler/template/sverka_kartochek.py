@@ -69,7 +69,14 @@ def главное():
         имя = "scene_%03d" % sid
         задание = os.path.join(очередь, имя + ".json")
         кадр = os.path.join(кадры, имя + ".jpg")
-        клип = glob.glob(os.path.join(забор, "**", имя + "*.mp4"), recursive=True)
+        # КЛИП ИЩЕМ И ТАМ, КУДА ЕГО УЖЕ РАЗЛОЖИЛИ (12.11, улов `usuario-e5`
+        # и `usuario-16`): у видов с `mode: cli` (A4 bars, A5 slider)
+        # постера-jpg не бывает вовсе, а готовый клип лежит в
+        # `images/scene_NNN.mp4` — без этого сверка печатала «без кадра» на
+        # целых сценах.
+        клип = (glob.glob(os.path.join(забор, "**", имя + "*.mp4"), recursive=True)
+                + glob.glob(os.path.join(корень, "images", имя + ".mp4"))
+                + glob.glob(os.path.join(кадры, имя + ".mp4")))
         if not os.path.exists(задание):
             без_задания.append((sid, вид))
         elif not (os.path.exists(кадр) or клип):
