@@ -154,8 +154,48 @@ def main():
     # непереписанным началом спокойно лёг в папку второго канала. Единственное
     # горлышко, через которое статья обязана пройти, — вот этот шаг: здесь и
     # держим. Осознанно мимо: --bez-linta (его прямое слово, не «так быстрее»).
+    # ДЛИНА — МЕХАНИЧЕСКИЙ БРАК, АГЕНТА ИЗ-ЗА НЕЁ НЕ ГОНЯЕМ (12.11).
+    # Из трёх вторых статей дня две завернул линт за «длиннее оригинала»
+    # (+9% и +14%) — и каждая стоила бы отдельного захода к агенту, то есть
+    # получаса на теме. Режем сами ТЕМИ ЖЕ инструментами: `rewrite_fix`
+    # снимает служебные строки, `rewrite_cut` убирает лишние абзацы до
+    # нормы. Смысл при этом не трогается: вырезаются целые абзацы, которые
+    # инструмент выбирает по длине и повторам, а линт проверяет результат.
     if not a.bez_linta:
         исходник = os.path.join(a.folder, имя1)
+        _здесь = os.path.dirname(os.path.abspath(__file__))
+        _чисто = os.path.join(a.folder, "РЕРАЙТ-ЧИСТО.txt")
+        if subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_fix.py"),
+                           ответ, "--channel", a.ch2, "--out", _чисто],
+                          capture_output=True, text=True).returncode == 0 \
+                and os.path.isfile(_чисто):
+            ответ = _чисто
+        try:
+            _raw = open(исходник, "rb").read()
+            for _enc in ("utf-8-sig", "utf-8", "cp1251"):
+                try:
+                    _цель = len(_raw.decode(_enc))
+                    break
+                except UnicodeDecodeError:
+                    _цель = 0
+        except OSError:
+            _цель = 0
+        if _цель:
+            _r = subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_cut.py"),
+                                 ответ, "--цель", str(_цель)],
+                                capture_output=True, text=True)
+            _ном = ""
+            for _l in (_r.stdout or "").splitlines():
+                if "--убрать" in _l:
+                    _ном = _l.split("--убрать", 1)[1].split("--out")[0].strip()
+            if _ном:
+                _готово = os.path.join(a.folder, "РЕРАЙТ-ГОТОВО.txt")
+                if subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_cut.py"),
+                                   ответ, "--убрать", _ном, "--out", _готово],
+                                  capture_output=True, text=True).returncode == 0 \
+                        and os.path.isfile(_готово):
+                    ответ = _готово
+                    print("длина подрезана до нормы: убраны абзацы %s" % _ном)
         задание = os.path.join(a.folder, "ЗАДАНИЕ-РЕРАЙТ.txt")
         кмд = [sys.executable,
                os.path.join(os.path.dirname(os.path.abspath(__file__)),
