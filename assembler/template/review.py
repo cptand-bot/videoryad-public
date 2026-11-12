@@ -1529,15 +1529,35 @@ def _scene_meta(sid, scenes, images_dir, kind):
                     meta["source"] = o.get("source") or meta["source"]
                     break
             break
+    # БЕРЁМ СНИМОК, А НЕ ТЕКСТОВЫЙ СЛОЙ, И ОСТАВЛЯЕМ КОПИЮ (12.11, разбор
+    # `usuario-e5`). Было: `glob` отдавал первый попавшийся файл сцены, и у
+    # всплывашки это оказывался `scene_NNN.text.png` — плашка с текстом. В
+    # журнал уезжал её md5, а сам снимок удалялся без следа. Поэтому его
+    # «забань эту картинку, никогда не выводи её больше» было физически
+    # невыполнимо: банить нечего, хэш чужой. Теперь текстовый слой и маска
+    # пропускаются, а найденный снимок копируется в `<папка>/_snyato/` —
+    # позже по нему делается настоящий бан.
     sub = "overlays" if kind in ("overlay", "text") else images_dir
-    for p in glob.glob(os.path.join(sub, f"scene_{sid:03d}.*")):
-        if p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg")):
-            continue
+    _кандидаты = [x for x in glob.glob(os.path.join(sub, f"scene_{sid:03d}.*"))
+                  if not x.endswith((".json", ".revframe.jpg", ".ovthumb.jpg"))
+                  and ".text." not in os.path.basename(x)
+                  and ".mask" not in os.path.basename(x)]
+    _кандидаты.sort(key=lambda x: (os.path.splitext(x)[1].lower() not in
+                                   (".jpg", ".jpeg", ".png", ".webp", ".mp4"), x))
+    for p in _кандидаты:
         meta["file"] = p
         try:
             import hashlib
+            import shutil
             with open(p, "rb") as fh:
                 meta["md5"] = hashlib.md5(fh.read()).hexdigest()
+            _хран = os.path.join(sub, "_snyato")
+            os.makedirs(_хран, exist_ok=True)
+            _имя = "%s_%s%s" % (os.path.splitext(os.path.basename(p))[0],
+                                meta["md5"][:10], os.path.splitext(p)[1])
+            _цель = os.path.join(_хран, _имя)
+            if not os.path.exists(_цель):
+                shutil.copy2(p, _цель)
         except OSError:
             pass
         break
@@ -3569,8 +3589,7 @@ function rjMic(){{
       st.textContent = "микрофон запрещён в браузере — разреши доступ и повтори";
       return;
     }}
-    st.textContent = "распознавание браузера недоступно — пишу локально…";
-    rjMicFile();
+    st.textContent = "браузер не распознал — напиши текстом, на твоей машине считать не буду";
   }};
   r.onend = function(){{
     _rjSR = null;
@@ -3582,8 +3601,8 @@ function rjMic(){{
   }}catch(e){{
     /* бывает, что API объявлен, но стартовать не даёт — не теряем диктовку */
     _rjSR = null;
-    st.textContent = "распознавание браузера не стартовало — пишу локально…";
-    return rjMicFile();
+    st.textContent = "браузер не распознал — напиши текстом, на твоей машине считать не буду";
+    return;
   }}
   _rjSR = r;
   btn.textContent = "⏹ стоп";
@@ -3609,7 +3628,7 @@ async function rjMicFile(){{
         const b64 = String(fr.result).split(",")[1] || "";
         _rjAudio = "";
         btn.textContent = "🎤 надиктовать ещё";
-        st.textContent = "расшифровываю локально…";
+        st.textContent = "голос приложу к записи — текст набери сам";
         const note = document.getElementById("rjnote");
         try{{
           const r = await fetch("voice", {{method:"POST",
