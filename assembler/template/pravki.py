@@ -160,6 +160,31 @@ def raskatka(a):
     return 0
 
 
+def opisat(a):
+    """Дописать описание к строке, которую завела САМА раскатка.
+
+    Авто-строка («описание не задано») лучше пропущенной, но пустой она
+    бесполезна: журнал читают, чтобы вспомнить ПОЧЕМУ.
+    """
+    строки = _читать()
+    for r in строки:
+        if r["id"].lower() != a.id.lower():
+            continue
+        if a.chto:
+            r["что"] = a.chto
+        if a.povod:
+            r["повод"] = a.povod
+        if a.provereno:
+            r["проверено"] = a.provereno
+        if a.zametka:
+            r["заметка"] = a.zametka
+        _писать_всё(строки)
+        print("%s дополнена: %s" % (r["id"], r["что"][:70]))
+        return 0
+    print("записи %s в журнале нет" % a.id, file=sys.stderr)
+    return 1
+
+
 def spisok(a):
     строки = _читать()
     если_с = None
@@ -233,6 +258,13 @@ def main():
     r.add_argument("cel")
     r.add_argument("--fayly", default="")
 
+    o = sub.add_parser("opisat", help="дописать описание к авто-строке")
+    o.add_argument("id")
+    o.add_argument("--chto", default="")
+    o.add_argument("--povod", default="")
+    o.add_argument("--provereno", default="")
+    o.add_argument("--zametka", default="")
+
     s = sub.add_parser("spisok", help="показать записи")
     s.add_argument("--dni", type=int, default=0)
     s.add_argument("--kto", default="")
@@ -247,6 +279,8 @@ def main():
         return dobav(a)
     if a.cmd == "raskatka":
         return raskatka(a)
+    if a.cmd == "opisat":
+        return opisat(a)
     if a.cmd == "spisok":
         return spisok(a)
     if a.cmd == "nayti":
