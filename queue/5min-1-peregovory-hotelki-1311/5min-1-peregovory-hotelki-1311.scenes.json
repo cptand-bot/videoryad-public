@@ -1,0 +1,527 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ТЕМЫ/АБУ-ДАБИ-ПЕРЕГОВОРЫ"
+  },
+  {
+   "id": 2,
+   "start_sec": 9.6,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Крещатик в Киеве днём, пешеходы, 2025"
+  },
+  {
+   "id": 3,
+   "start_sec": 19.4,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН"
+  },
+  {
+   "id": 4,
+   "start_sec": 29.1,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ГОСДЕП-США"
+  },
+  {
+   "id": 5,
+   "start_sec": 39.0,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП"
+  },
+  {
+   "id": 6,
+   "start_sec": 48.5,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен и Кая Каллас на саммите ЕС в Брюсселе, 2026"
+  },
+  {
+   "id": 7,
+   "start_sec": 58.3,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ"
+  },
+  {
+   "id": 8,
+   "start_sec": 67.9,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ОФИС-ПРЕЗИДЕНТА-УКРАИНЫ"
+  },
+  {
+   "id": 9,
+   "start_sec": 77.8,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ДОМ-ПРАВИТЕЛЬСТВА-РОССИИ"
+  },
+  {
+   "id": 10,
+   "start_sec": 87.2,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО"
+  },
+  {
+   "id": 11,
+   "start_sec": 97.0,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО"
+  },
+  {
+   "id": 12,
+   "start_sec": 106.7,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ФАСАД-ЗДАНИЯ-ВЕРХОВНОЙ"
+  },
+  {
+   "id": 13,
+   "start_sec": 116.6,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "web_search",
+   "source_query": "стела на въезде в Донецк у шоссе, съёмка с обочины, 2026"
+  },
+  {
+   "id": 14,
+   "start_sec": 129.2,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "городская набережная Донецка и жилые кварталы, 2026"
+  },
+  {
+   "id": 15,
+   "start_sec": 141.5,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "жилые кварталы Луганска с высоты, 2026"
+  },
+  {
+   "id": 16,
+   "start_sec": 154.3,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание правительства ДНР в Донецке, 2026"
+  },
+  {
+   "id": 17,
+   "start_sec": 166.7,
+   "duration_sec": 12.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "фасад Народного Совета ЛНР в Луганске, 2026"
+  },
+  {
+   "id": 18,
+   "start_sec": 179.4,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/ЗАЛ-ЗАСЕДАНИЙ-ВЕРХОВНОЙ"
+  },
+  {
+   "id": 19,
+   "start_sec": 191.9,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "web_search",
+   "source_query": "Крещатик Киев городская застройка и автомобили, 2026"
+  },
+  {
+   "id": 20,
+   "start_sec": 204.8,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский говорит о Донбассе в Киеве, 2026"
+  },
+  {
+   "id": 21,
+   "start_sec": 217.0,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров выступает в Москве, 2026"
+  },
+  {
+   "id": 22,
+   "start_sec": 229.6,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "коридор российского МИД перед заявлением, Москва 2026"
+  },
+  {
+   "id": 23,
+   "start_sec": 242.0,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военнослужащие ВСУ на полигоне, Украина, 2025",
+   "fx": "flash"
+  },
+  {
+   "id": 24,
+   "start_sec": 253.2,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "card:dossier",
+   "source_query": "карточка"
+  },
+  {
+   "id": 25,
+   "start_sec": 265.0,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка"
+  },
+  {
+   "id": 26,
+   "start_sec": 277.1,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "бронемашина ВСУ возле расчёта на дороге, Украина 2026"
+  },
+  {
+   "id": 27,
+   "start_sec": 288.6,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка"
+  },
+  {
+   "id": 28,
+   "start_sec": 301.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/МИНОБОРОНЫ-РОССИИ"
+  },
+  {
+   "id": 29,
+   "start_sec": 311.9,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "расчёт ВСУ возле современной гаубицы, Украина 2026"
+  },
+  {
+   "id": 30,
+   "start_sec": 323.6,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ"
+  },
+  {
+   "id": 31,
+   "start_sec": 335.6,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Марко Рубио выступает в Вашингтоне, 2026"
+  },
+  {
+   "id": 32,
+   "start_sec": 346.9,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Владимир Зеленский на Банковой в Киеве, 2026"
+  },
+  {
+   "id": 33,
+   "start_sec": 359.1,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "подписание соглашения представителями Украины, Киев 2026"
+  },
+  {
+   "id": 34,
+   "start_sec": 370.3,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "портрет Владимира Зеленского во время обращения, 2026"
+  },
+  {
+   "id": 35,
+   "start_sec": 382.1,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "web_search",
+   "source_query": "улица Банковая Киев правительственный квартал, 2026"
+  },
+  {
+   "id": 36,
+   "start_sec": 394.2,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/КАБИНЕТ-МИНИСТРОВ-УКРАИНЫ"
+  },
+  {
+   "id": 37,
+   "start_sec": 405.7,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "правительственный квартал Киева возле Кабинета министров, 2026"
+  },
+  {
+   "id": 38,
+   "start_sec": 418.1,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "фасад Министерства обороны Украины в Киеве, 2026"
+  },
+  {
+   "id": 39,
+   "start_sec": 429.0,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "web_search",
+   "source_query": "пограничный пункт Краковец Львовская область, 2026"
+  },
+  {
+   "id": 40,
+   "start_sec": 440.7,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:zal_shkala",
+   "source_query": "карточка"
+  },
+  {
+   "id": 41,
+   "start_sec": 452.7,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание военкомата в Киеве, фасад с вывеской, 2025"
+  },
+  {
+   "id": 42,
+   "start_sec": 464.0,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "автомобильная очередь у пункта Краковец, Украина 2026"
+  },
+  {
+   "id": 43,
+   "start_sec": 476.2,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "легковые автомобили выезжают из Львова к польской границе, 2026"
+  },
+  {
+   "id": 44,
+   "start_sec": 487.4,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военная академия ВСУ в Киеве, 2026"
+  },
+  {
+   "id": 45,
+   "start_sec": 499.2,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Министерства финансов Украины в Киеве, 2026"
+  },
+  {
+   "id": 46,
+   "start_sec": 511.3,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/НАЦИОНАЛЬНЫЙ-БАНК-УКРАИНЫ"
+  },
+  {
+   "id": 47,
+   "start_sec": 522.8,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "бронетехника ВСУ движется по украинской дороге, 2026"
+  },
+  {
+   "id": 48,
+   "start_sec": 535.2,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БРИФИНГ-ЗАЛ-БЕЛОГО-ДОМА",
+   "fx": "flash"
+  },
+  {
+   "id": 49,
+   "start_sec": 546.1,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Джаред Кушнер выступает перед журналистами, 2026"
+  },
+  {
+   "id": 50,
+   "start_sec": 557.8,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ"
+  },
+  {
+   "id": 51,
+   "start_sec": 569.8,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ"
+  },
+  {
+   "id": 52,
+   "start_sec": 581.1,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "город Абу-Даби деловой район и правительственные здания, 2026"
+  },
+  {
+   "id": 53,
+   "start_sec": 593.3,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО"
+  },
+  {
+   "id": 54,
+   "start_sec": 604.5,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/УЧЕНИЯ-НАТО-БРОНЕТЕХНИКА"
+  },
+  {
+   "id": 55,
+   "start_sec": 616.3,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Совета Европейского союза в Брюсселе, 2026"
+  },
+  {
+   "id": 56,
+   "start_sec": 628.4,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Московский Кремль со стороны набережной, Москва 2026"
+  },
+  {
+   "id": 57,
+   "start_sec": 639.9,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/АРМИЯ-США"
+  },
+  {
+   "id": 58,
+   "start_sec": 652.3,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "вход в Верховную Раду Киева, 2026"
+  },
+  {
+   "id": 59,
+   "start_sec": 663.2,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "украинские военнослужащие рядом с бронемашиной, Украина 2026"
+  },
+  {
+   "id": 60,
+   "start_sec": 674.9,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Европейский совет в Брюсселе перед рабочей сессией, 2026"
+  },
+  {
+   "id": 61,
+   "start_sec": 686.9,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микрофоны на столе российского МИД, Москва 2026"
+  },
+  {
+   "id": 62,
+   "start_sec": 698.2,
+   "duration_sec": 12.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Сергей Лавров отвечает журналистам в Москве, 2026"
+  },
+  {
+   "id": 63,
+   "start_sec": 710.4,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "стол российской делегации перед заявлением, Москва 2026"
+  },
+  {
+   "id": 64,
+   "start_sec": 721.8,
+   "duration_sec": 11.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "представители Украины подписывают соглашение в Киеве, 2026"
+  },
+  {
+   "id": 65,
+   "start_sec": 732.9,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "закрытая кожаная папка на столе в Москве, 2026"
+  }
+ ]
+}
