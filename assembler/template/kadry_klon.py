@@ -65,12 +65,55 @@ def сцены(path):
     return d, (d.get("scenes", d) if isinstance(d, dict) else d)
 
 
+def близнец(pdir):
+    """Вторая папка того же ролика: рабочая <-> папка забора `<проект>-cloud`."""
+    pdir = pdir.rstrip("/")
+    return pdir[:-6] if pdir.endswith("-cloud") else pdir + "-cloud"
+
+
 def рабочая_раскадровка(pdir):
-    c = [p for p in sorted(glob.glob(os.path.join(pdir, "*.scenes.json")))
-         if not os.path.basename(p).startswith(("codex", "lib_", "raw"))
-         and not any(w in os.path.basename(p)
-                     for w in ("overlays_fetch", "maps_fetch", "cards_fetch"))]
-    return c[0] if c else ""
+    """САМАЯ СВЕЖАЯ раскадровка донора ИЗ ОБЕИХ ЕГО ПАПОК (12.11).
+
+    Было: брали первый файл из одной папки. У донора их две — рабочая и
+    папка забора `<проект>-cloud`, и источники в них РАСХОДЯТСЯ: карточки он
+    ставит ПОСЛЕ отправки фетча, и в рабочем файле у сцены остаётся старый
+    `web_search`, а в файле забора уже `card:film`. Фильтр `card:*` ниже
+    смотрел в устаревший файл, пропускал сцену как обычную, а `файл_сцены()`
+    отдавал из `images/` уже отрисованный КЛИП КАРТОЧКИ. Улов `usuario-16`
+    12.11: 17 сцен из 49 приехали донорскими карточками — с ЕГО фразами
+    поверх НАШЕГО переписанного текста и дублем вида. Берём свежайший по
+    времени правки.
+    """
+    c = []
+    for d in (pdir, близнец(pdir)):
+        if not os.path.isdir(d):
+            continue
+        c += [p for p in glob.glob(os.path.join(d, "*.scenes.json"))
+              if not os.path.basename(p).startswith(("codex", "lib_", "raw"))
+              and not any(w in os.path.basename(p)
+                          for w in ("overlays_fetch", "maps_fetch", "cards_fetch"))]
+    if not c:
+        return ""
+    c.sort(key=lambda p: (os.path.getmtime(p), p), reverse=True)
+    return c[0]
+
+
+def карточка_донора(pdir, sid):
+    """Правда о сцене донора — ПО ФАЙЛАМ, а не по строке источника (12.11).
+
+    Даже свежая раскадровка может отстать от дела: задание карточки лежит
+    рядом, в `cards/queue/scene_NNN.json`, и оно появляется раньше, чем
+    источник сцены перепишут. Сцена, у которой есть задание, — рисованная,
+    донором она не бывает ни кадром, ни запросом.
+    """
+    try:
+        имя = "scene_%03d.json" % int(sid)
+    except (TypeError, ValueError):
+        return False
+    for d in (pdir, близнец(pdir)):
+        if os.path.exists(os.path.join(d, "cards", "queue", имя)):
+            return True
+    return False
 
 
 def тема_и_день(pdir):
@@ -180,6 +223,8 @@ def main():
             for ds in dsc:
                 if str(ds.get("source", "")).startswith(КАРТОЧКА):
                     continue
+                if карточка_донора(d, ds.get("id")):
+                    continue
                 # СЧИТАЕМ И ПО ЗАПРОСУ, И ПО ТЕКСТУ, БЕРЁМ ЛУЧШЕЕ (11.11).
                 # Текст у клона переписан заново (уникализация 60-80%), и по
                 # нему совпадает мало — замер на живой теме дал 5 сцен из 72.
@@ -224,6 +269,8 @@ def main():
             dimg = os.path.join(d, "images")
             for ds in dsc:
                 if str(ds.get("source", "")).startswith(КАРТОЧКА):
+                    continue
+                if карточка_донора(d, ds.get("id")):
                     continue
                 f = файл_сцены(dimg, ds.get("id"))
                 if not f:

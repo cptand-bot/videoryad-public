@@ -1424,6 +1424,19 @@ except Exception as _e:                  # список не прочиталс�
     WARN.append("не проверить обязательные элементы (%s: %s) — посмотри "
                 "`template/obyazatelno.py`" % (type(_e).__name__, _e))
 
+# 8. ЦИТАТЫ НЕ ИДУТ ПОДРЯД (12.11, его правка по дашборду 8795: сцены
+# 4 strike + 5 marker_serif + 6 paper_typed встык). Дословно: «не надо цитаты
+# прям подряд, лучше хотя бы через раз… а то будет как презентация
+# PowerPoint, я такого не хочу». Семья видов и лечение — в
+# `template/citaty_zazor.py`, здесь только гейт дашборда.
+try:
+    import citaty_zazor as _cz
+    for _b in _cz.нарушения(scenes_path):
+        FAIL.append(_b)
+except Exception as _e:
+    WARN.append("не проверить цитатный зазор (%s: %s) — посмотри "
+                "`template/citaty_zazor.py`" % (type(_e).__name__, _e))
+
 # 9. БИТЫЕ ФАЙЛЫ КАДРОВ И ВСПЛЫВАШЕК (10.11, разбор зависшей сборки).
 # На сцене 052 ролика ПЛАНЕТА · Ультиматум Рябкова под именем
 # `overlays/scene_052.jpg` лежала страница «404 Not Found» в 161 байт. ffmpeg
