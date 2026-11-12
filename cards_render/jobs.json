@@ -192,6 +192,21 @@
   }
  },
  {
+  "scene": 25,
+  "view": "doc",
+  "dur": 12.1,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Стамбульский проект 2022 года: численность украинской армии — 85 тысяч человек, ограничение дальности ракет, запрет иностранного вооружения",
+   "title": "Проект 2022 года",
+   "source": "переговоры в Стамбуле",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
   "scene": 26,
   "view": "film.film_single",
   "dur": 11.5,
@@ -202,6 +217,35 @@
   "kwargs": {
    "photo": "cards/photo/card_026.jpg",
    "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "bars",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Численность ВСУ, тысяч",
+   "caption": "в девять с лишним раз больше",
+   "seconds": 12.4,
+   "bars": [
+    {
+     "label": "ПРОЕКТ 2022",
+     "value": 0.11,
+     "color": "EABD23"
+    },
+    {
+     "label": "ЗАПРОС 2026",
+     "value": 1.0,
+     "color": "B92526"
+    }
+   ]
   }
  },
  {
@@ -321,6 +365,24 @@
   }
  },
  {
+  "scene": 40,
+  "view": "zal_shkala",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.0,
+   "sheets": [],
+   "text": "Восемьсот тысяч военных",
+   "value": "800 000",
+   "value_sub": "человек в армии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
   "scene": 42,
   "view": "paper_hand",
   "dur": 12.2,
@@ -330,6 +392,26 @@
   "channel": "5 МИНУТ",
   "kwargs": {
    "text": "Ребята, а границу после всего этого где рисуем? И кто меня защитит, если завтра всё повторится?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "cinematic.dossier",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "Украина: что на столе",
+   "rows": [
+    "армия 800 тысяч человек",
+    "финансирование 10 лет"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_044.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
    "watermark": "5 МИНУТ"
   }
  },
@@ -354,6 +436,33 @@
    ],
    "watermark": "5 МИНУТ"
   }
+ },
+ {
+  "scene": 47,
+  "view": "poster.poster",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "Чем это оборачивается",
+   "hero_photo": "cards/photo/card_047.jpg",
+   "bottom": "обязательство Запада содержать одну из крупнейших армий Европы",
+   "source": "AFP",
+   "facts": [
+    {
+     "label": "армия",
+     "value": "800 тысяч"
+    },
+    {
+     "label": "финансирование",
+     "value": "10 лет"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
  },
  {
   "scene": 48,
