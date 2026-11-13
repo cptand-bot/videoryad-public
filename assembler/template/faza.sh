@@ -95,8 +95,18 @@ LOCKS="$SK/base/truby"
 pick_pipe() {
     local proj="$1" pp st
     mkdir -p "$LOCKS"
+    # СВОЙ СОБСТВЕННЫЙ ЗАМОК — ЭТО НЕ ЗАНЯТАЯ ТРУБА (13.11, улов
+    # `usuario-c9`, БЛОКЕР: 40 минут молчаливого ожидания). Вкладка заняла
+    # `pyat` фазой подготовки, затем позвала `fetch` БЕЗ имени трубы — и
+    # `pick_pipe` пропустил `pyat` как занятую, хотя в `kto` записан ЕЁ ЖЕ
+    # проект. Шесть труб заняты шестью роликами, свободной не появится
+    # никогда, и `wait_pipe` ждал до таймаута 2400 с. Со стороны это
+    # неотличимо от работающего фетча: в логе пусто, процесс живой.
     for pp in cptand-pub andiv-pub olga-pub pyat shest rezerv; do
         if [ -d "$LOCKS/$pp" ]; then
+            if [ "$(cat "$LOCKS/$pp/kto" 2>/dev/null)" = "$proj" ]; then
+                echo "$pp"; return 0          # замок наш, труба наша
+            fi
             local age=$(( ( $(date +%s) - $(stat -c %Y "$LOCKS/$pp") ) / 60 ))
             if [ "$age" -lt 240 ]; then continue; fi
             rm -rf "$LOCKS/$pp"
@@ -126,7 +136,10 @@ wait_pipe() {
         pp="$(pick_pipe "$proj" || true)"
         [ -n "$pp" ] && { echo "$pp"; return 0; }
         if [ "$(date +%s)" -ge "$deadline" ]; then return 1; fi
-        [ "$said" -eq 0 ] && { echo "·· все шесть труб заняты — жду свободную, проверяю каждые 60 с" >&2; said=1; }
+        # ОЖИДАНИЕ ОБЯЗАНО БЫТЬ ВИДНЫМ (13.11): молчащая фаза неотличима от
+        # работающей, и вкладка 27 минут считала, что идёт фетч.
+        said=$((said+1))
+        echo "·· жду свободную трубу: занято 6 из 6, минута $said из $mins" >&2
         sleep 60
     done
 }
