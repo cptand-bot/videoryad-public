@@ -890,7 +890,15 @@ else:
 
     want = "bottom" if "ПЛАНЕТА" in ch or "ПЛАНЕТА" == ch else "top"
     if ch and ov.get("anchor", "bottom") != want:
-        FAIL.append(f"overlays anchor={ov.get('anchor','bottom')}, для канала {ch} нужен {want} (SKILL.md 3b)")
+        # ОТКАЗ НАЗЫВАЕТ, ГДЕ ИМЕННО ЖДУТ КЛЮЧ (13.11, улов `usuario-fc`):
+        # якорь читается КЛЮЧОМ ВЕРХНЕГО УРОВНЯ `overlays.json`, а правка
+        # `anchor` внутри каждой сцены проверку не проходит — вкладка
+        # правила по сценам и не понимала, почему гейт не отпускает.
+        FAIL.append(
+            f"overlays anchor={ov.get('anchor','bottom')}, для канала {ch} "
+            f"нужен {want} (SKILL.md 3b). Ждём КЛЮЧ ВЕРХНЕГО УРОВНЯ в "
+            f'overlays.json: {{"anchor": "{want}", "12": {{…}}, "17": {{…}}}} — '
+            f"правка anchor ВНУТРИ сцен проверку не проходит")
     for k, v in ov.items():
         if k == "anchor":
             continue
