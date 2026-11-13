@@ -13,6 +13,7 @@
 каждого заголовка и у каждой надписи. Порт занимает первый свободный.
 """
 import argparse
+import glob
 import html
 import http.server
 import json
@@ -987,8 +988,21 @@ def main():
             # ДИАПАЗОН ШИРЕ ВОСЬМИ (08.11): после «ещё 10 вариантов» файлы
             # бывают с номерами за десяток, и сетка их просто не показывала.
             for n in range(1, 41):
-                src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % n)
-                if not os.path.isfile(src):
+                # ИМЯ ФАЙЛА БЫВАЕТ С ПРЕФИКСОМ (13.11, его прямое слово:
+                # «почему нету зеркальных картинок в конце, где канал
+                # ПЛАНЕТА? Мне же как-то надо надписи добавлять»).
+                # `prevyu_klon.py` кладёт зеркало как «<тема> планета
+                # ПРЕВЬЮ-N.png» и В КОРЕНЬ темы, а дашборд искал строго
+                # «ПРЕВЬЮ-N.png» в «превью-варианты» — у ПЛАНЕТЫ сетка
+                # выходила ПУСТОЙ, и надписи ставить было не на что.
+                # Ищем по маске и в обеих папках, квадраты не берём.
+                _k = [q for q in
+                      sorted(glob.glob(os.path.join(vdir, "*ПРЕВЬЮ-%d.png" % n))
+                             + glob.glob(os.path.join(folder, "*ПРЕВЬЮ-%d.png" % n))
+                             + [os.path.join(vdir, "ПРЕВЬЮ-%d.png" % n)])
+                      if os.path.isfile(q) and "КВАДРАТ" not in os.path.basename(q).upper()]
+                src = _k[0] if _k else ""
+                if not src:
                     continue
                 _nums.append(n)
                 _sigs[n] = _otpechatok(src)

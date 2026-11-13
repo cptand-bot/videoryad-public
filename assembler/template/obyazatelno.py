@@ -912,7 +912,8 @@ def _overlay_styles(scenes_path):
     "pie": '--sobytiya "часть" --sobytiya "часть" --source "…"  '
            '(цифры есть — --row "метка=доля", сумма 100)',
     "dossier": '--row "должность — …" --row "возраст — …"',
-    "film": '--photos <папка>', "film_frame": '--photo <файл>',
+    "film": '--images <папка> --title "ПРО ЧТО КИНО" (заголовок обязателен)',
+    "film_frame": '--photo <файл> --title "ПРО ЧТО КАДР" (заголовок обязателен)',
     "vyrezka": '--photo <файл>', "vyrezka_kontur": '--photo <файл>',
     "zal": '--text "фраза" --word СЛОВО --word СЛОВО --sheet "строка" --sheet "строка"',
     # ВОСЕМЬ ПРИЁМОВ ЗАЛА (12.11): у каждого СВОИ обязательные поля, и общий
