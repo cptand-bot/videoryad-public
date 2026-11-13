@@ -199,6 +199,7 @@ template/wm_sheet.py
 template/zal_core.py
 template/zal_scene.py
 template/zal_scenes2.py
+template/zal_fable3.py
 template/zamechanie.py
 template/zamorozka.py
 template/zanyato.py

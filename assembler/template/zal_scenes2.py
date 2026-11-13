@@ -2429,7 +2429,12 @@ def _екр_камера(t, k):
     return zc.Cam(xoff, 1.55, EFIR_Z - d), yaw, want
 
 
-def zal_ekran(out=None, t=None, text="", say="", author="", role="",
+# ЗАМЕНЁН 13.11 ЕГО ПРЯМЫМ СЛОВОМ: «если это обновлённая версия, то её
+# менять. Старую удалять, а новую ставить». Новая реализация приёма G25
+# живёт в `template/zal_fable3.py` под тем же именем вида `card:zal_ekran`;
+# эта функция НИКУДА НЕ ПОДКЛЮЧЕНА (карта видов в `render_cards.py` ведёт на
+# новый модуль) и оставлена только как след прежней реализации.
+def zal_ekran_opus_1111(out=None, t=None, text="", say="", author="", role="",
               source="", sheets=(), channel="", watermark="", dur=0.0,
               sfx=None, **_):
     """G25. Панель эфира разворачивается в полный экран, держит его и
@@ -2547,7 +2552,11 @@ def zal_ekran(out=None, t=None, text="", say="", author="", role="",
 СЦЕНЫ = {"zal_slova": zal_slova, "zal_pol": zal_pol, "zal_kub": zal_kub,
          "zal_makety": zal_makety, "zal_shkala": zal_shkala,
          "zal_efir": zal_efir, "zal_schetchik": zal_schetchik,
-         "zal_ekran": zal_ekran}
+         # G25 ЗАМЕНЁН 13.11 (его слово: «старую удалять, а новую ставить») —
+         # в бою рисует `template/zal_fable3.py`. Здесь проба глазами ходит
+         # на прежнюю реализацию под её новым именем: пробу она не ломает, а
+         # в карте видов `render_cards.py` её больше нет.
+         "zal_ekran": zal_ekran_opus_1111}
 
 # В КАКИЕ МОМЕНТЫ СЦЕНУ НАДО ЗАМЕРИТЬ. По умолчанию один — постер (`t=None`):
 # шесть первых сцен считают раскладку по камере раскладки и от времени она не
