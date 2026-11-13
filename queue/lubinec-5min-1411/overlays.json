@@ -1,0 +1,294 @@
+{
+  "1": {
+    "text": {
+      "words": "ТЕ ЖЕ ГРАБЛИ",
+      "color": "yellow",
+      "pos": "tc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "5": {
+    "text": {
+      "words": "ПАРЛАМЕНТ ДАНИИ",
+      "color": "orange",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "13": {
+    "text": {
+      "words": "НА РУЧКЕ — ДОНАЛЬД ТРАМП",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "18": {
+    "text": {
+      "words": "НАБУ РАБОТАЕТ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_018.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "middle",
+    "style": "right",
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "20": {
+    "text": {
+      "words": "СПУТНИКОВАЯ СВЯЗЬ ОГРАНИЧЕНА",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "27": {
+    "text": {
+      "words": "ДМИТРИЙ ЛУБИНЕЦ",
+      "color": "red",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "middle",
+    "photo": "overlays/scene_027.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "style": "right",
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "29": {
+    "photo": "overlays/scene_029.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "top",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "up-left"
+  },
+  "35": {
+    "text": {
+      "words": "УЗНАВАЕМАЯ КОМПАНИЯ",
+      "color": "green",
+      "pos": "tr",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "39": {
+    "text": {
+      "words": "ЛИЦО СМЕНЫ КУРСА",
+      "color": "yellow",
+      "pos": "ml",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_039.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "middle",
+    "style": "left",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "44": {
+    "text": {
+      "words": "ПРИСМАТРИВАЮТ НА БУДУЩЕЕ",
+      "color": "yellow",
+      "pos": "mr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_044.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "bottom",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "right"
+  },
+  "48": {
+    "text": {
+      "words": "РАСЧЁТ НА ДЕМОКРАТОВ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_048.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "middle",
+    "style": "right",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "56": {
+    "text": {
+      "words": "РЯДОМ С МЕЛАНИЕЙ ТРАМП",
+      "color": "green",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "2": {
+    "text": {
+      "words": "СНОВА ТЕ ЖЕ ГРАБЛИ",
+      "color": "white",
+      "pos": "tl",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "25": {
+    "text": {
+      "words": "ПОЛНОМОЧИЯ НИКУДА НЕ ДЕЛИСЬ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_025.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "top",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "54": {
+    "text": {
+      "words": "НОВЫЙ НАПОЛЕОН НЕ ТРЕБУЕТСЯ",
+      "color": "orange",
+      "pos": "mc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_054.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "bottom",
+    "style": "right",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "7": {
+    "text": {
+      "words": "ОТ ЕГО РЕШЕНИЙ ЗАВИСИТ СЛИШКОМ МНОГОЕ",
+      "color": "white",
+      "pos": "ml",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "23": {
+    "text": {
+      "words": "ДЕМОКРАТЫ ВЗЯЛИ ОБЕ ПАЛАТЫ",
+      "color": "white",
+      "pos": "tr",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "anchor": "top"
+  },
+  "anchor": "top",
+  "9": {
+    "text": {
+      "words": "УШАКОВ: ПРИВЕТЫ ДОШЛИ",
+      "color": "green",
+      "pos": "ml",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    },
+    "photo": "overlays/scene_009.jpg",
+    "sound": "whoosh",
+    "at": 2.0,
+    "anchor": "top",
+    "style": "up-right"
+  }
+}
