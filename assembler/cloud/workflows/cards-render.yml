@@ -184,6 +184,24 @@ jobs:
           VIDEORYAD_FONTS: ${{ github.workspace }}/cards_render/fonts
           VIDEORYAD_PORTRAIT: ${{ github.workspace }}/cards_render/portrait.jpg
         run: python3 cards_render/render_cards.py cards_out --shard ${{ matrix.shard }}/${{ needs.plan.outputs.total }}
+      # БЕЗОПАСНАЯ ЗОНА И ПОЛОСА СУБТИТРОВ (13.11, пункт 0-В). Его слово:
+      # «надписи… не вылезут за кадр… и с учётом субтитров, потому что
+      # субтитры порой перекрывают надписи на вот этих карточках наших».
+      # Считает РАННЕР: OCR сорока карточек — полторы минуты, и на машине
+      # пользователя их быть не должно. Прогон НЕ валим: OCR иногда читает
+      # фактуру как буквы, а карточка без подписи хуже ролика с замечанием.
+      - name: безопасная зона карточек (не валит прогон)
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          timeout 180 sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-rus || true
+          if ! command -v tesseract >/dev/null 2>&1; then
+            echo "tesseract не встал — проверку безопасной зоны пропускаю"
+            exit 0
+          fi
+          python3 cards_render/safe_area.py cards_out --myagko \
+            --json cards_out/safe_area.json || true
+
       # СТРАЖ ПУСТОГО РЕЗУЛЬТАТА (23.10, предложение вкладки-разработчика).
       # С тех пор как одно упавшее задание перестало валить всю часть, джоб
       # завершается `success`, даже если УПАЛИ ВСЕ задания: наружу это

@@ -584,7 +584,9 @@ def zal(out=None, t=None, text="", words=(), sheets=(), channel="",
 
     if watermark:
         d = ImageDraw.Draw(img, "RGBA")
-        d.text((54, H - 62), str(watermark), font=zc.font("Arimo-Bold.ttf", 25),
+        # знак канала — в безопасной зоне, выше полосы субтитров (13.11,
+        # пункт 0-В): было (54, H-62), то есть и за левым полем, и под титром
+        d.text((96, 886 - 36), str(watermark), font=zc.font("Arimo-Bold.ttf", 25),
                fill=(96, 98, 102, 255))
 
     im = img.convert("RGB")

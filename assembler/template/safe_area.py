@@ -141,6 +141,11 @@ def _slova(png):
                 txt = p[11].strip()
                 if conf < MIN_CONF or len(txt) < MIN_ZNAKOV or _ШУМ.match(txt):
                     continue
+                # НЕ МЕНЕЕ ТРЁХ БУКВ (13.11, живая ложная тревога): тлеющие
+                # угли в белом зале OCR прочитал как «en.» и объявил текстом
+                # в полосе субтитров. Точки и цифры в счёт букв не идут.
+                if sum(1 for ch in txt if ch.isalpha()) < 3:
+                    continue
                 if not (MIN_KEGL <= h <= MAX_KEGL):
                     continue
                 наш.append((txt, x, y, x + w, y + h, conf))
