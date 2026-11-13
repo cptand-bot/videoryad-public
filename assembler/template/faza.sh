@@ -271,6 +271,26 @@ fetch)
         [ -n "$PIPE" ] || { echo "ОШИБКА: за 90 мин ни одна из шести труб не освободилась"; exit 1; }
         echo "[ОК]    труба: $PIPE (взята замком)"
     fi
+    # ЦЕЛЬ СВЕРЯЕТСЯ С БОЕВЫМ КОДОМ ДО ПЕРВОГО ПУША (13.11, его слово: «нельзя
+    # подумать заранее?»). Сверка `sverka_celey.py` жила с 10.11, но звать её
+    # было некому: правка координатора оставалась локальной (вчера гейт
+    # манифеста остановил раскатку, долг ушёл в текст ПОДХВАТ), и вкладка
+    # узнавала о старом коде на трубе ПОСРЕДИ ролика. Теперь труба либо
+    # совпадает с боевым кодом, либо её догоняет раскатка — автоматически.
+    if [ "${VIDEORYAD_NO_SVERKA:-0}" != "1" ]; then
+        if ! python3 "$SK/cloud/scripts/sverka_celey.py" --cel "$PIPE" >/tmp/sverka-$PIPE.txt 2>&1; then
+            echo "[СМОТРИ] труба $PIPE отстала от боевого кода — догоняю раскаткой:"
+            sed -n '1,8p' /tmp/sverka-$PIPE.txt | sed 's/^/         /'
+            bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/sync_assembler.sh" 2>&1 | tail -2 | sed 's/^/         /'
+            if ! python3 "$SK/cloud/scripts/sverka_celey.py" --cel "$PIPE" >/tmp/sverka-$PIPE.txt 2>&1; then
+                echo "ОШИБКА: труба $PIPE ВСЁ ЕЩЁ отстала от боевого кода — фетч не отправляю, иначе ролик соберётся старым кодом:"
+                sed -n '1,10p' /tmp/sverka-$PIPE.txt | sed 's/^/         /'
+                echo "         скажи координатору; обойти можно только VIDEORYAD_NO_SVERKA=1 и только по его слову"
+                exit 1
+            fi
+            echo "[ОК]    труба $PIPE догнана и сверена"
+        fi
+    fi
     step "отправка фетча"   bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/ship.sh" "$PROJ" "$QNAME" --fetch-only
     if [ "$FAILED" -eq 0 ]; then
         step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait-fetch
