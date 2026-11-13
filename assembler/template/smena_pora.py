@@ -151,6 +151,32 @@ def main():
     if вход:
         if уровень == "рано" or not текущий:
             return 0
+        # ПЕРЕДАЧА ПИШЕТСЯ САМА, А НЕ ПО ЕГО НАПОМИНАНИЮ (13.11, его прямое
+        # слово: «что у нас там по лимитам, не нужно ли передавать смену…
+        # почему я должен это контролировать постоянно? Это должно стоять в
+        # автомате»). Раньше хук только ПЕЧАТАЛ вкладке «пора», а файл
+        # передачи писала вкладка руками — значит мог не записаться вовсе,
+        # и тогда контроль ложился на него. Теперь на пороге файл пишется
+        # молча и сразу: открыть новую вкладку и сказать «СМЕНА» можно в
+        # любой момент, ничего не потеряется, даже если эта вкладка умрёт.
+        if уровень in ("ПОРА", "СРОЧНО"):
+            try:
+                import subprocess
+                _метка = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "..", "base", ".peredacha_zapisana")
+                _метка = os.path.normpath(_метка)
+                _свежа = (os.path.isfile(_метка)
+                          and time.time() - os.path.getmtime(_метка) < 1200)
+                if not _свежа:
+                    subprocess.run(
+                        [sys.executable,
+                         os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "peredacha.py"), "--zapisat"],
+                        capture_output=True, timeout=180)
+                    os.makedirs(os.path.dirname(_метка), exist_ok=True)
+                    open(_метка, "w").write(str(int(time.time())))
+            except Exception:
+                pass          # передача не записалась — это не повод падать
         if сказано_раньше(текущий, уровень):
             return 0
         if уровень == "закругляйся":
