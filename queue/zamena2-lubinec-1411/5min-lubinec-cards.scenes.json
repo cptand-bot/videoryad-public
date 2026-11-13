@@ -1,0 +1,21 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 41,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Дональд Трамп в Овальном кабинете за рабочим столом 2026"
+  },
+  {
+   "id": 42,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Кирилл Буданов начальник ГУР Министерства обороны Украины в форме"
+  }
+ ]
+}
