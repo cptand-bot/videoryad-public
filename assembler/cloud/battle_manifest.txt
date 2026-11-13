@@ -15,12 +15,26 @@
 # одной строкой — это осознанное действие диспетчера, а не формальность.
 # по которой он туда физически может попасть, — файл, положенный в
 # раскатка ОСТАНОВЛЕНА, файл назван. Разработка арсенала при этом ничем не
+
+# `template/upakovka_lib/` ЗДЕСЬ БОЛЬШЕ НЕТ И БЫТЬ НЕ ДОЛЖНО (2026-11-09).
+# Это накопители упаковки и превью: его личный выбор заголовков и надписей
+# (`vybor.jsonl`), авторский банк кликбейтных формулировок (`bank.txt`),
+# журнал, словарь, состояние дашборда. Десять таких файлов стояли в
+# манифесте и уезжали в ПУБЛИЧНЫЕ репозитории открытым текстом — против
+# закрытия 14.10 (в публичном репозитории нет ключей, озвучки, рабочих
+# заметок и текста сценария).
+# Теперь папку не везёт ни rsync, ни предохранитель её не считает, поэтому
+# манифест не должен обещать того, чего мы не везём: иначе он разойдётся с
+# кодом и перестанет что-либо значить.
+# НОВЫЙ НАКОПИТЕЛЬ СЮДА НЕ ВПИСЫВАТЬ. Он не свалит раскатку — предохранитель
+# эту папку пропускает намеренно.
 cloud/.gitignore
 cloud/README-CLOUD.md
 cloud/base_harvest.py
 cloud/base_video.py
 cloud/battle_manifest.txt
 cloud/busy.sh
+cloud/caps_in.py
 cloud/classify_prompt.md
 cloud/cloud_pipeline.py
 cloud/config.sh
@@ -33,7 +47,10 @@ cloud/harvest.sh
 cloud/harvest_get.sh
 cloud/harvest_video.sh
 cloud/merge_shards.py
+cloud/narration_in.py
 cloud/notify.sh
+cloud/ozvuchka_cloud.sh
+cloud/ozvuchka_job.py
 cloud/preflight.sh
 cloud/run.sh
 cloud/setup_rezerv.sh
@@ -47,15 +64,19 @@ cloud/va.sh
 cloud/workflows/base-harvest.yml
 cloud/workflows/base-video.yml
 cloud/workflows/cards-render.yml
+cloud/workflows/ozvuchka.yml
 cloud/workflows/videoryad-cloud.yml
 cloud/youtube_upload.py
 template/.env.example
 template/accept_scenes.py
-template/autofix_scenes.py
 template/adopt_cloud.py
 template/ai_batch.py
 template/autodedup.py
+template/autofix_scenes.py
+template/avtorskoe.py
 template/ban_file.py
+template/baza_snos.py
+template/brak.py
 template/build_capcut_draft.py
 template/build_clips_1080.py
 template/build_overlays.py
@@ -63,22 +84,30 @@ template/build_ticker.py
 template/build_usage_log.py
 template/captions_from_srt.py
 template/captions_shard.py
+template/cards_keep.py
 template/cards_queue.py
 template/check_lead.py
 template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
+template/chernovoy_srt.py
+template/citaty_zazor.py
 template/codex_ask.sh
-template/codex_raskhod.py
 template/codex_brief.py
+template/codex_raskhod.py
 template/contact_sheet.py
 template/crop_brand.py
+template/deti_gate.py
 template/dossier_use.py
+template/element_put.py
+template/faza.sh
 template/fetch_assets_news.py
 template/fetch_maps.py
 template/fetch_parallel.py
 template/file_away_segodnia.py
+template/final_sheet.py
 template/folder_sheet.py
+template/fonts/ArialBlack.ttf
 template/fonts/Arimo-Bold.ttf
 template/fonts/Montserrat-Bold.ttf
 template/fonts/OFL-arimo-tinos-oswald-montserrat-robotocondensed.txt
@@ -94,112 +123,84 @@ template/fx/preset-news.json
 template/fx_inset.py
 template/fx_put.py
 template/fx_rings.py
+template/fx_sheet.py
+template/fx_subscribe.py
+template/fx_subscribe2.py
 template/fx_trans.py
 template/fx_trans5.py
 template/geo_links.py
 template/grab_stream_frame.py
 template/grab_video_frame.py
+template/kadry_klon.py
+template/kartochki_srazu.py
+template/kluchi.py
+template/latinka.py
+template/merge_work.py
+template/muzyka.py
+template/nadpis_maska.py
+template/nadpisi_spread.py
+template/nalichie.py
+template/naydi.py
+template/o_chem.py
+template/obyazatelno.py
+template/overlay_fit.py
+template/ozvuchka.py
 template/pair_sheet.py
+template/palitra.py
+template/peredacha.py
 template/phase.py
 template/photo_quality.py
+template/podmena.py
+template/povtor_kadrov.py
+template/pravki.py
+template/prevyu.py
+template/prevyu_klon.py
+template/prevyu_text.py
+template/proverka_fayla.py
 template/query_lint.py
 template/quote_card.py
+template/razlozhit_rerayt.py
 template/refetch.py
 template/rejections.py
+template/rerayt_storozh.sh
 template/review.py
+template/rewrite_brief.py
+template/rewrite_cut.py
+template/rewrite_fix.py
+template/rewrite_lint.py
 template/scenes_from_srt.py
+template/scenes_klon.py
 template/search_options.py
 template/selfcheck.py
-template/deti_gate.py
-template/zhurnal_zamen.py
-template/zamorozka.py
-template/povtor_kadrov.py
 template/sfx/ding.mp3
 template/sfx/mashinka.mp3
 template/sfx/pop.mp3
 template/sfx/pshik.mp3
 template/sfx/whoosh.mp3
 template/sfx/zatvor.mp3
-template/style_card.py
-template/tg_media.py
-template/voice_note.py
-template/wm_sheet.py
-template/zoom.py
-template/ozvuchka.py
-template/chernovoy_srt.py
-template/rewrite_brief.py
-template/rewrite_cut.py
-template/rewrite_fix.py
-template/tema_start.py
-template/rewrite_lint.py
-template/unikalizaciya.py
-template/take_folder.py
-template/final_sheet.py
-template/fx_sheet.py
-template/fx_subscribe.py
-template/fx_subscribe2.py
-template/obyazatelno.py
-template/element_put.py
-template/nadpis_maska.py
-template/nadpisi_spread.py
-template/fonts/ArialBlack.ttf
-template/prevyu.py
-template/prevyu_klon.py
-template/prevyu_text.py
-template/upakovka.py
-template/avtorskoe.py
-template/svyazka.py
-template/vybor_svod.py
-template/upakovka_dash.py
-cloud/ozvuchka_cloud.sh
-cloud/ozvuchka_job.py
-cloud/workflows/ozvuchka.yml
-template/podmena.py
-template/cards_keep.py
-template/srt_keep.py
-
-# `template/upakovka_lib/` ЗДЕСЬ БОЛЬШЕ НЕТ И БЫТЬ НЕ ДОЛЖНО (2026-11-09).
-# Это накопители упаковки и превью: его личный выбор заголовков и надписей
-# (`vybor.jsonl`), авторский банк кликбейтных формулировок (`bank.txt`),
-# журнал, словарь, состояние дашборда. Десять таких файлов стояли в
-# манифесте и уезжали в ПУБЛИЧНЫЕ репозитории открытым текстом — против
-# закрытия 14.10 (в публичном репозитории нет ключей, озвучки, рабочих
-# заметок и текста сценария).
-# Теперь папку не везёт ни rsync, ни предохранитель её не считает, поэтому
-# манифест не должен обещать того, чего мы не везём: иначе он разойдётся с
-# кодом и перестанет что-либо значить.
-# НОВЫЙ НАКОПИТЕЛЬ СЮДА НЕ ВПИСЫВАТЬ. Он не свалит раскатку — предохранитель
-# эту папку пропускает намеренно.
-template/merge_work.py
-template/zanyato.py
-cloud/caps_in.py
-cloud/narration_in.py
-template/palitra.py
-template/faza.sh
-template/tikho.sh
-template/naydi.py
 template/smena_pora.py
-template/brak.py
-template/zamechanie.py
-template/baza_snos.py
-template/razlozhit_rerayt.py
+template/srt_keep.py
 template/statistika.py
+template/storozh.py
+template/style_card.py
+template/sverka_kartochek.py
+template/svyazka.py
+template/take_folder.py
+template/tema_start.py
+template/tg_media.py
+template/tikho.sh
+template/unikalizaciya.py
+template/upakovka.py
+template/upakovka_dash.py
+template/voice_note.py
+template/vybor_svod.py
 template/whisper_derzhi.sh
-template/muzyka.py
-template/kadry_klon.py
+template/wm_sheet.py
 template/zal_core.py
 template/zal_scene.py
-template/kluchi.py
-template/nalichie.py
-template/latinka.py
-template/proverka_fayla.py
-template/o_chem.py
-template/storozh.py
 template/zal_scenes2.py
-template/pravki.py
-template/peredacha.py
-template/rerayt_storozh.sh
-template/sverka_kartochek.py
-template/citaty_zazor.py
-template/scenes_klon.py
-template/kartochki_srazu.py
+template/zamechanie.py
+template/zamorozka.py
+template/zanyato.py
+template/zhurnal_zamen.py
+template/zoom.py

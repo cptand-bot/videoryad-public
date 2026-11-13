@@ -646,6 +646,34 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
         orig = os.path.join(clips_dir, f"clip_{sid:03d}.orig.mp4")
         photo = resolve_photo(spec.get("photo") or "")
         photo_ok = bool(photo)
+        # ЛОЖИТСЯ ЛИ ОНА В ЭТОТ КАДР ВООБЩЕ (13.11, его прямое слово по сцене
+        # 10 ролика «5 МИНУТ»: «всплывашка перекрыла лицо человека… надо
+        # сначала провести анализ исходной картинки и посмотреть, ложится ли
+        # туда вообще всплывашка, и если нет — не принимать решение её
+        # делать»). Проверка стоит доли секунды и идёт ДО того, как мы
+        # потратим ffmpeg на наложение: кожа в зоне коробки = там лицо.
+        # Отказ НЕ валит слой и не брак: сцена просто остаётся без
+        # всплывашки, что и есть правильный исход.
+        if photo_ok and os.environ.get("VIDEORYAD_OVERLAY_FIT", "1") != "0":
+            try:
+                import overlay_fit as _of
+                _baza = _src(images_dir, sid)
+                if _baza:
+                    _ok_fit, _pochemu, _ch = _of.ocenka(_baza, sc_anchor, "right")
+                    if not _ok_fit:
+                        _st, _ = _of.luchshaya(_baza, sc_anchor)
+                        if _st:
+                            print("  сц.%s: всплывашка уехала на %s — справа %s"
+                                  % (sid, _st, _pochemu))
+                        else:
+                            print("  сц.%s: ВСПЛЫВАШКИ НЕТ — %s. Кадр её не "
+                                  "держит, это не брак: подбирать сюда "
+                                  "картинку не надо вовсе." % (sid, _pochemu))
+                            photo_ok = False
+                            photo = ""
+            except Exception as _e:
+                print("  сц.%s: проверка пригодности кадра не отработала (%s)"
+                      % (sid, type(_e).__name__))
         # ВСПЛЫВАШКА МОЖЕТ БЫТЬ ВИДЕО (2026-10-21, просьба пользователя: «а
         # давай сделаем, чтобы поддерживал, будет веселее»).
         # Раньше тут видео принудительно сводилось к ОДНОМУ КАДРУ. Причина
