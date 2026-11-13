@@ -895,11 +895,23 @@ def _overlay_styles(scenes_path):
     "tape": '--text "…"', "doc": '--text "…"', "strike": '--text "…" --struck "…"',
     "duel": '--top_text "…" --bottom_text "…"', "pull": '--text "…"',
     "marker_serif": '--text "…"', "paper_typed": '--text "…"',
-    "paper_hand": '--text "…"', "slope": '--rows "было:…;стало:…" --source "…"',
-    "line": '--rows "2024:…;2025:…;2026:…" --source "…"',
-    "map": '--places "страна, страна"', "map_regions": '--places "область, область" --admin <страна>',
-    "bubbles": '--places "страна, страна"', "map_dist": '--places "город, город"',
-    "pie": '--places "доля, доля"', "dossier": '--text "…"',
+    "paper_hand": '--text "…"', "slope": '--sobytiya "было>стало" --sobytiya "было>стало" --source "…"  '
+              '(цифры есть — --row "метка=12>22")',
+    "line": '--sobytiya "веха" --sobytiya "веха" --sobytiya "веха" --source "…"  '
+            '(цифры есть — --row "2024=12" ×3)',
+    # КЛЮЧИ НАЗЫВАЮТСЯ ТОЧНО (13.11, улов `usuario-8e`): у карт ключ
+    # ПОВТОРЯЕМЫЙ и зовётся `--place`, с `--places` argparse падает. У
+    # графики строки даются `--row`, а не `--rows`. И у всех семи числовых
+    # видов есть второй путь — `--sobytiya` (перечень событий без цифр,
+    # П-0097): он и называется в подсказке, потому что выдумывать числа
+    # запрещено, а снимать вид нельзя.
+    "map": '--place "страна" --place "страна"',
+    "map_regions": '--place "область" --place "область" --admin <страна>',
+    "bubbles": '--place "страна" --place "страна"',
+    "map_dist": '--place "город" --place "город"',
+    "pie": '--sobytiya "часть" --sobytiya "часть" --source "…"  '
+           '(цифры есть — --row "метка=доля", сумма 100)',
+    "dossier": '--row "должность — …" --row "возраст — …"',
     "film": '--photos <папка>', "film_frame": '--photo <файл>',
     "vyrezka": '--photo <файл>', "vyrezka_kontur": '--photo <файл>',
     "zal": '--text "фраза" --word СЛОВО --word СЛОВО --sheet "строка" --sheet "строка"',
