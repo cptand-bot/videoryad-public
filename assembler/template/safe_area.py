@@ -179,14 +179,19 @@ def _razobrat_kadr(png, pole=POLE, polosa=POLOSA):
                              ramka=[x1, y1, x2, y2],
                              на=y2 - g["subtitr"], granica=g["subtitr"]))
             continue
+        # ДОПУСК 2 px НА РАМКУ (13.11): рамка слова от OCR гуляет на
+        # пиксель-другой из-за сглаживания букв и толщины выдавливания —
+        # объёмная надпись зала ровно на поле давала вечное «за рамкой на
+        # 1 px». На ПОЛОСУ СУБТИТРОВ допуска нет: там перекрытие реальное.
+        ДОП = 2
         наруш = []
-        if x1 < g["left"]:
+        if x1 < g["left"] - ДОП:
             наруш.append(("слева", g["left"] - x1))
-        if x2 > g["right"]:
+        if x2 > g["right"] + ДОП:
             наруш.append(("справа", x2 - g["right"]))
-        if y1 < g["top"]:
+        if y1 < g["top"] - ДОП:
             наруш.append(("сверху", g["top"] - y1))
-        if y2 > g["bottom"]:
+        if y2 > g["bottom"] + ДОП:
             наруш.append(("снизу", y2 - g["bottom"]))
         if наруш:
             сторона, на = max(наруш, key=lambda t: t[1])
