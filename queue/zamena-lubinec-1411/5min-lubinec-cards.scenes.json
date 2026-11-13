@@ -1,0 +1,53 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 31,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "табличка Национального антикоррупционного бюро Украины на фасаде"
+  },
+  {
+   "id": 32,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Овальный кабинет стол президента США реальное фото"
+  },
+  {
+   "id": 33,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микроавтобус гуманитарной миссии с эмблемой Красного Креста"
+  },
+  {
+   "id": 34,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Давид Арахамия в зале Верховной Рады 2026"
+  },
+  {
+   "id": 35,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "микрофоны на пресс-подходе у Офиса президента Украины"
+  },
+  {
+   "id": 36,
+   "start_sec": 0.0,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "ступени Капитолия США Вашингтон днём"
+  }
+ ]
+}
