@@ -172,8 +172,19 @@ def razvedka(q, env):
         for name, f in futures.items():
             try:
                 itog[name] = f.result(timeout=25)
-            except Exception:
+            except Exception as exc:
+                # СБОЙ ИСТОЧНИКА — ЭТО НЕ НОЛЬ (13.11, улов `usuario-03`,
+                # п.28). Раньше упавший источник ложился в отчёт как None и
+                # дальше читался вкладкой наравне с честным нулём: при
+                # падении сети инструмент печатал «ТОЛЬКО ПОИСК 0» разом на
+                # все запросы, включая «Владимир Путин Москва 2026», где
+                # нулей быть физически не может, и ВОЗВРАЩАЛ КОД 0. Вкладка,
+                # поверившая вердикту, закрыла бы карточками половину
+                # ролика. Теперь сбои считаются отдельно и разведка, которая
+                # не состоялась, падает кодом 1 без отчёта.
                 itog[name] = None
+                itog.setdefault("_сбои", []).append("%s: %s"
+                                                    % (name, type(exc).__name__))
     return itog
 
 
@@ -224,6 +235,11 @@ def main():
     if a.zapros:
         itog = razvedka(a.zapros, env)
         v, best = verdikt(itog)
+        if v == "НЕТ СВЯЗИ" or itog.get("_сбои"):
+            print("РАЗВЕДКА НЕ СОСТОЯЛАСЬ: %s"
+                  % ("; ".join(itog.get("_сбои") or ["все источники молчат"])),
+                  file=sys.stderr)
+            return 1
         print(f"{v:<13} {best:>6}  {a.zapros}")
         print("              " + " · ".join(
             f"{k} {('—' if v2 is None else v2)}" for k, v2 in itog.items()
@@ -258,6 +274,33 @@ def main():
     with ThreadPoolExecutor(max_workers=6) as pool:
         for q, itog in zip(zadachi, pool.map(lambda x: razvedka(x, env), zadachi)):
             rez[q] = itog
+
+    # ПРОВЕРКА СОСТОЯТЕЛЬНОСТИ — ДО ПЕЧАТИ ОТЧЁТА. Класс «успех ≠
+    # результат»: вердикт без связи ничем не отличается на вид от честного
+    # нуля, и он дороже отсутствия вердикта.
+    _ист = len([k for k in (next(iter(rez.values()), {}) or {})
+                if not k.startswith("_")]) or 1
+    _сбоев = sum(len(i.get("_сбои") or ()) for i in rez.values())
+    _нет_связи = sum(1 for i in rez.values() if verdikt(i)[0] == "НЕТ СВЯЗИ")
+    _все_нули = all(verdikt(i, stok_zapros.get(q, False))[1] == 0
+                    for q, i in rez.items())
+    if _нет_связи or (_все_нули and len(rez) >= 5) or \
+       _сбоев >= _ист * len(rez) * 0.5:
+        print("РАЗВЕДКА НЕ СОСТОЯЛАСЬ — вердикта нет, отчёт не печатаю.",
+              file=sys.stderr)
+        print("  запросов %d, источников %d, сбоев источников %d%s"
+              % (len(rez), _ист, _сбоев,
+                 ", все вердикты нулевые" if _все_нули else ""),
+              file=sys.stderr)
+        print("  Нулю на таком прогоне верить нельзя: «ТОЛЬКО ПОИСК 0» разом "
+              "на все запросы\n  значит упала сеть или ключи, а не то, что "
+              "кадров нет. Повтори позже;\n  решения о карточках по этому "
+              "прогону НЕ принимать.", file=sys.stderr)
+        for q, i in list(rez.items())[:3]:
+            if i.get("_сбои"):
+                print("  %s — %s" % (q[:50], "; ".join(i["_сбои"][:4])),
+                      file=sys.stderr)
+        return 1
 
     pusto, tonko, chistit = [], [], []
     for q, itog in rez.items():
@@ -294,4 +337,16 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        sys.exit(130)
+    except Exception as _exc:
+        # ПАДЕНИЕ НЕ МАСКИРУЕМ НУЛЁМ (13.11, п.28): живой случай —
+        # `ValueError: I/O operation on closed file` в http/client, после
+        # которого инструмент возвращал КОД 0 с нулевым отчётом.
+        import traceback
+        traceback.print_exc()
+        print("РАЗВЕДКА УПАЛА (%s) — вердикта нет, прогону не верить."
+              % type(_exc).__name__, file=sys.stderr)
+        sys.exit(1)
