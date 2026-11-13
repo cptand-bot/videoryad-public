@@ -1303,6 +1303,17 @@ try:
         _ban.add(m)
 except (OSError, ValueError):
     _ban_raw, _ban = {}, set()
+# ТОТ ЖЕ РУБЕЖ ПО ОТПЕЧАТКУ КАДРА (2026-11-13). md5 ловит ТОТ ЖЕ ФАЙЛ, а в
+# сборку приезжает тот же СНИМОК другой копией — пережатой, другого размера,
+# с другого сайта. Именно так забаненный кадр «лез и лез» каждый день.
+_ban_ph = set()
+try:
+    import sys as _sy
+    _sy.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import phash_ban as _PH
+    _ban_ph = _PH.load_banned_phash()
+except Exception:
+    _PH = None
 # СЦЕНЫ-КАРТОЧКИ ИЗ СВЕРКИ ИСКЛЮЧЕНЫ (04.11, улов `usuario-af`). Облако
 # кладёт всем сценам `card:*` ОДНУ И ТУ ЖЕ заглушку ~34 КБ до прогона
 # `cards_cloud.py`. Кто-то её однажды забанил — и предупреждение «забаненный
@@ -1335,7 +1346,7 @@ try:
 except OSError:
     _wm = {}
 
-if _ban or _wm:
+if _ban or _wm or _ban_ph:
     _checked = 0
     for _p in sorted(glob.glob(f"{images}/scene_*.*") + glob.glob("overlays/scene_*.*")):
         if _p.endswith((".json", ".revframe.jpg", ".ovthumb.jpg") + TMP_SUFFIX):
@@ -1352,13 +1363,25 @@ if _ban or _wm:
             FAIL.append(f"ЗАБАНЕННЫЙ КАДР В СБОРКЕ: {_p} (md5 {_h[:10]}) — "
                         f"бан от {(_ban_raw.get(_h) or {}).get('date','?')}: {_why or 'без причины'}. "
                         f"Заменить до сборки.")
+        elif _ban_ph and _PH is not None:
+            try:
+                _hit, _near, _dist = _PH.phash_banned(_p, _ban_ph)
+            except Exception:
+                _hit = False
+            if _hit:
+                FAIL.append(f"ЗАБАНЕННЫЙ КАДР В СБОРКЕ ДРУГОЙ КОПИЕЙ: {_p} — "
+                            f"md5 {_h[:10]} в листе НЕТ, но отпечаток кадра "
+                            f"совпал с забаненным {_near[:8]} (расстояние "
+                            f"{_dist} из 64). Это тот же снимок, пережатый "
+                            f"или другого размера. Заменить до сборки.")
         if _h in _wm:
             FAIL.append(f"КАДР С КЛЕЙМОМ АПСКЕЙЛЕРА В СБОРКЕ: {_p} — это "
                         f"{_wm[_h]}, убранный из базы. На контактном листе "
                         f"клеймо не видно, в готовом файле видно. Заменить "
                         f"рефетчем из той же папки.")
     print(f"[selfcheck] сверка с бан-листом: {_checked} файлов против "
-          f"{len(_ban)} активных банов и {len(_wm)} убранных по клейму"
+          f"{len(_ban)} активных банов, {len(_ban_ph)} отпечатков "
+          f"и {len(_wm)} убранных по клейму"
           + (f" (сцены-карточки пропущены: {len(_card_sids)})" if _card_sids else ""))
 
 # 6. сцена 1 = видео — БЫЛО hard FAIL, РАЗЖАЛОВАНО В WARN (user, 2026-10-08,

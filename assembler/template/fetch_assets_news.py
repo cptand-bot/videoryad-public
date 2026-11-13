@@ -195,6 +195,46 @@ def load_banned_md5(this_project=""):
     return out
 
 
+# БАН ПО ПЕРЦЕПТИВНОМУ ХЕШУ (2026-11-13) — ЧТОБЫ ЗАБАНЕННЫЙ КАДР НЕ
+# ВОЗВРАЩАЛСЯ ДРУГИМ ФАЙЛОМ. Его главная претензия 13.11, сказана дважды:
+# «то, что я забанил, оно никуда не банится, оно всё равно опять достаётся».
+# Причина была одна: бан держался на md5 ФАЙЛА, а поиск отдаёт ТОТ ЖЕ снимок
+# пережатым, другого размера, с другого сайта, иногда с иной обрезкой — md5
+# у него другой, и бан его не видел в упор. Теперь рядом с md5-листом живёт
+# `.banned_phash.json` (dHash 8x8 на трёх масштабах, расстояние Хэмминга
+# ≤ 6 = тот же кадр). Подробности и защита от ложных срабатываний — в
+# `template/phash_ban.py`.
+try:
+    import phash_ban as _PH
+except Exception:                      # модуля нет — работаем как раньше
+    _PH = None
+
+
+def banned_frame(path, banned_md5=None, banned_ph=None, this_project=""):
+    """Это забаненный КАДР? Возвращает (да/нет, чем поймали).
+
+    Сначала md5 (точная метка файла), затем перцептивный отпечаток (тот же
+    снимок другим файлом). Ровному кадру — заглушке облака, размытой
+    подложке — отпечаток не выдаётся вовсе, для него в силе только md5.
+    """
+    try:
+        h = file_md5(path)
+    except OSError:
+        return False, ""
+    if h in (load_banned_md5(this_project) if banned_md5 is None else banned_md5):
+        return True, "md5"
+    if _PH is None:
+        return False, ""
+    try:
+        hit, near, dist = _PH.phash_banned(path, banned_ph, this_project)
+    except Exception:
+        return False, ""
+    if hit:
+        return True, "отпечаток кадра (похож на забаненный %s, расстояние %d)" % (
+            near[:8], dist)
+    return False, ""
+
+
 # ХЭШ ПУСТОГО ФАЙЛА — ВЕЧНЫЙ БЕЛЫЙ СПИСОК (06.11, улов `usuario-a3`).
 # Банилка взяла md5 файла, которого уже не было на диске, получила хэш пустоты
 # и записала его в ОБЩИЙ бан-лист. Последствие шире одного ролика: пустой файл
@@ -282,6 +322,30 @@ def ban_md5(md5, path="", reason="", days=None):
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=1)
     os.replace(tmp, BANNED_LOG)
+    # ОТПЕЧАТОК КАДРА ПИШЕТСЯ ЗДЕСЬ, А НЕ В БАНИЛКЕ (2026-11-13): через эту
+    # функцию банят ВСЕ — `ban_file.py`, кнопка 🚫 на дашборде, рефетч,
+    # автопочинка. Положи это в один из них — остальные три продолжили бы
+    # банить только md5, и «я забанил, а оно лезет» вернулось бы с той
+    # стороны, где правку забыли. Молча не пропускаем: если кадр ровный и
+    # отпечатка не получил, это надо видеть — на нём бан держится только
+    # на md5, то есть пережатая копия пройдёт.
+    if _PH is not None and path and os.path.isfile(path):
+        try:
+            _ph = _PH.ban_phash(path, md5=md5, reason=reason,
+                                until=entry.get("until", ""),
+                                project=entry.get("project", ""))
+        except Exception as _e:
+            print("  отпечаток кадра НЕ записан (%s) — бан держится только на "
+                  "md5, пережатая копия пройдёт" % _e, flush=True)
+        else:
+            if _ph:
+                print("  отпечаток кадра записан: %s — теперь ловится и "
+                      "пережатая копия с другого сайта" % _ph[:8], flush=True)
+            else:
+                print("  отпечаток НЕ выдан: кадр ровный (заглушка/размытая "
+                      "подложка). Бан держится на md5 — так и надо, иначе "
+                      "такой отпечаток забанил бы любой ровный кадр.",
+                      flush=True)
     return True
 
 
@@ -740,12 +804,15 @@ def _accept(ok, out_path):
     can via round-robin."""
     if not ok:
         return ok
-    try:
-        if file_md5(out_path) in load_banned_md5():
+    _hit, _why = banned_frame(out_path)
+    if _hit:
+        print("  кадр ОТКЛОНЁН баном (%s): %s"
+              % (_why, os.path.basename(out_path)), flush=True)
+        try:
             os.remove(out_path)
-            return False
-    except OSError:
-        pass
+        except OSError:
+            pass
+        return False
     words, blob = _ocr_words(out_path)
     bad = words > 8 or any(w in blob for w in _STOCK_WATERMARKS)
     if bad:
@@ -1990,6 +2057,21 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     def _lib_fits(path):
         """(годен, как_описать) — порог по типу файла."""
         low = path.lower()
+        # ЗАБАНЕННЫЙ КАДР ЛЕЖИТ В БАЗЕ ДВАЖДЫ (2026-11-13). Один и тот же
+        # снимок попадает в медиатеку из двух сборов — разного размера и
+        # пережатый, — поэтому бан по md5 снимает только одну копию, а вторая
+        # продолжает ходить в кадр. Отпечаток ловит обе. Для видео здесь не
+        # считаем: там md5 точен (файл тот же), а кадр из клипа стоил бы
+        # ffprobe+ffmpeg на каждого кандидата round-robin.
+        if _PH is not None and low.endswith((".jpg", ".jpeg", ".png", ".webp")):
+            try:
+                _h, _n, _d = _PH.phash_banned(path)
+            except Exception:
+                _h = False
+            if _h:
+                return False, (_LIB_HARD + "забанен по отпечатку кадра "
+                               "(похож на %s, расстояние %d) — тот же снимок "
+                               "другой копией" % (_n[:8], _d))
         if low.endswith((".mp4", ".mov", ".webm", ".mkv")):
             try:
                 pr = subprocess.run(
@@ -2566,12 +2648,15 @@ def _accept_video(ok, out_path):
     never did."""
     if not ok:
         return ok
-    try:
-        if file_md5(out_path) in load_banned_md5():
+    _hit, _why = banned_frame(out_path)
+    if _hit:
+        print("  клип ОТКЛОНЁН баном (%s): %s"
+              % (_why, os.path.basename(out_path)), flush=True)
+        try:
             os.remove(out_path)
-            return False
-    except OSError:
-        pass
+        except OSError:
+            pass
+        return False
     return ok
 
 
@@ -2854,12 +2939,13 @@ def _accept_direct_photo(path, allow_text):
     — это ровно то, что пользователь запретил («никаких документов и
     бумаг с текстом»), всплывашка же для цитаты издания и предназначена.
     """
-    try:
-        if file_md5(path) in load_banned_md5():
+    _hit, _why = banned_frame(path)
+    if _hit:
+        try:
             os.remove(path)
-            return False, "бан-лист"
-    except OSError:
-        pass
+        except OSError:
+            pass
+        return False, "бан-лист (%s)" % _why
     words, blob = _ocr_words(path)
     if any(w in blob for w in _STOCK_WATERMARKS):
         try:
@@ -3191,12 +3277,14 @@ def main():
         # planeta-territorii-1610, пользователь: «Я его баню, баню, а оно опять».
         if existing:
             _ban = load_banned_md5()
+            _ban_ph = _PH.load_banned_phash() if _PH else set()
             _kept = []
             for _p in existing:
                 try:
-                    if file_md5(_p) in _ban:
+                    _h2, _w2 = banned_frame(_p, _ban, _ban_ph)
+                    if _h2:
                         os.remove(_p)
-                        print(f"[{sid:03d}] кэш забанен — удалил {os.path.basename(_p)}, качаю заново", flush=True)
+                        print(f"[{sid:03d}] кэш забанен ({_w2}) — удалил {os.path.basename(_p)}, качаю заново", flush=True)
                         continue
                 except OSError:
                     pass

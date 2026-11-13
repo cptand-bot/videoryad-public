@@ -246,6 +246,16 @@ def _ban_env(proj):
         except Exception:
             n = "?"
         log(f"бан-лист: {n} md5 из очереди — забаненные кадры не возьмём")
+    # ОТПЕЧАТКИ КАДРА (2026-11-13): md5 ловит тот же ФАЙЛ, отпечаток — тот же
+    # СНИМОК другой копией, пережатой и другого размера.
+    ban_ph = os.path.join(proj, ".banned_phash.json")
+    if os.path.isfile(ban_ph):
+        os.environ["VIDEORYAD_BANNED_PHASH_FILE"] = ban_ph
+        try:
+            m = len(json.load(open(ban_ph, encoding="utf-8")))
+        except Exception:
+            m = "?"
+        log(f"отпечатки кадров: {m} из очереди — пережатая копия тоже не пройдёт")
     return ban
 
 

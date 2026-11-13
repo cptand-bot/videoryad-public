@@ -1464,11 +1464,27 @@ def main():
                 folder = it.get("превью_папка") or ""
                 num = int(req["n"])
                 vdir = os.path.join(folder, "превью-варианты")
-                src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % num)
-                if not os.path.isfile(src):
-                    src = os.path.join(folder, "ПРЕВЬЮ-%d.png" % num)
-                if not os.path.isfile(src):
-                    raise FileNotFoundError(src)
+                # ИМЯ ФАЙЛА БЫВАЕТ С ПРЕФИКСОМ — ИЩЕМ ПО МАСКЕ (13.11, его
+                # прямое слово по окну надписей: «что это блять ещё?» и
+                # отказ `FileNotFoundError: …/ПРЕВЬЮ-4.png`). Сетку картинок
+                # по маске чинили утром, а ЭТОТ путь — наложение надписи —
+                # остался на голом имени: у ПЛАНЕТЫ файл называется
+                # «<тема> планета ПРЕВЬЮ-N.png», и окно надписей падало на
+                # каждом зеркальном превью клон-канала. Тот же класс, что
+                # уже ловили: починили одну половину, вторую не тронули.
+                _k = [q for q in
+                      sorted(glob.glob(os.path.join(vdir, "*ПРЕВЬЮ-%d.png" % num))
+                             + glob.glob(os.path.join(folder, "*ПРЕВЬЮ-%d.png" % num))
+                             + [os.path.join(vdir, "ПРЕВЬЮ-%d.png" % num),
+                                os.path.join(folder, "ПРЕВЬЮ-%d.png" % num)])
+                      if os.path.isfile(q)
+                      and "КВАДРАТ" not in os.path.basename(q).upper()]
+                src = _k[0] if _k else ""
+                if not src:
+                    raise FileNotFoundError(
+                        "варианта %d нет ни в «превью-варианты», ни в корне "
+                        "темы «%s» (искал и по маске «*ПРЕВЬЮ-%d.png»)"
+                        % (num, it.get("тема", ""), num))
                 # СТРАНИЦА ОБЯЗАНА НАЗВАТЬ ТО ЖЕ, ЧТО ВИДИТ ПОЛЬЗОВАТЕЛЬ
                 # (08.11). Вместе с номером она присылает отпечаток
                 # картинки, которую показала в окне. Не совпал — значит

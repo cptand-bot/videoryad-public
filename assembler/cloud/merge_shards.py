@@ -221,7 +221,23 @@ def _sweep_banned(proj, images_dir):
     today = time.strftime("%Y-%m-%d")
     ban = {m for m, e in raw.items()
            if not (isinstance(e, dict) and e.get("until")) or e["until"] >= today}
-    if not ban:
+    # ОТПЕЧАТКИ КАДРА — ТО ЖЕ СИТО, НО ПО СНИМКУ, А НЕ ПО ФАЙЛУ (13.11).
+    ban_ph, PH = set(), None
+    try:
+        import sys as _sy
+        _sy.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "..", "template"))
+        _sy.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "template"))
+        import phash_ban as PH
+        _php = os.environ.get("VIDEORYAD_BANNED_PHASH_FILE") or \
+            os.path.join(proj, ".banned_phash.json")
+        if os.path.isfile(_php):
+            os.environ["VIDEORYAD_BANNED_PHASH_FILE"] = _php
+            ban_ph = PH.load_banned_phash()
+    except Exception:
+        PH = None
+    if not ban and not ban_ph:
         return
     hit, seen = [], 0
     for d in (images_dir, os.path.join(proj, "overlays")):
@@ -233,13 +249,25 @@ def _sweep_banned(proj, images_dir):
             except OSError:
                 continue
             seen += 1
-            if h in ban:
+            _bad = h in ban
+            if not _bad and ban_ph and PH is not None:
+                try:
+                    _bad, _near, _d = PH.phash_banned(f, ban_ph)
+                    if _bad:
+                        print(f"[merge] {os.path.basename(f)}: md5 чист, но "
+                              f"отпечаток совпал с забаненным {_near[:8]} "
+                              f"(расстояние {_d}) — тот же снимок другой копией",
+                              flush=True)
+                except Exception:
+                    _bad = False
+            if _bad:
                 try:
                     os.remove(f)
                     hit.append(os.path.basename(f))
                 except OSError:
                     pass
-    print(f"[merge] сито бан-листа: {seen} файлов против {len(ban)} активных банов"
+    print(f"[merge] сито бан-листа: {seen} файлов против {len(ban)} активных банов "
+          f"и {len(ban_ph)} отпечатков"
           + (f" — УДАЛЕНО {len(hit)}: {hit} (сцены доберутся локально)" if hit else " — чисто"),
           flush=True)
 

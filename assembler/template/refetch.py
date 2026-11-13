@@ -325,11 +325,30 @@ def _stash_pick(pool, assets, sid):
     OCR (он секунда на кадр).
     """
     banned = _banned_md5()
+    # ОТПЕЧАТОК КАДРА (13.11). Рефетч зовётся РОВНО ПОСЛЕ того, как он забанил
+    # кадр на дашборде, и из запаса ему возвращалась ТА ЖЕ фотография другим
+    # файлом — пережатая, другого размера, с другого сайта. По md5 она чистая.
+    # Это и есть его «я баню, а оно опять лезет».
+    _ph_ban, _PH = set(), None
+    try:
+        import phash_ban as _PH
+        _ph_ban = _PH.load_banned_phash()
+    except Exception:
+        _PH = None
+    # кадры, УЖЕ стоящие в сборке, тоже считаем «занятыми» по отпечатку —
+    # иначе близнец встанет соседней сценой и выглядит как повтор
+    stand_ph = []
     stand = {}
     for f in glob.glob(os.path.join(assets, "scene_*.jpg")):
         h = _md5(f)
         if h:
             stand[h] = os.path.basename(f)
+        if _PH is not None:
+            try:
+                for _p in _PH.dhash_set(f):
+                    stand_ph.append((_p, os.path.basename(f)))
+            except Exception:
+                pass
     order = sorted(pool, key=lambda f: _wh_from_name(f)[0] * _wh_from_name(f)[1],
                    reverse=True)
     skipped = []
@@ -349,6 +368,32 @@ def _stash_pick(pool, assets, sid):
         if m and m in stand:
             skipped.append((f, "близнец уже стоящего %s" % stand[m]))
             continue
+        if _PH is not None and (_ph_ban or stand_ph):
+            try:
+                _hit, _near, _d = _PH.phash_banned(f, _ph_ban)
+            except Exception:
+                _hit = False
+            if _hit:
+                skipped.append((f, "в бан-листе ПО ОТПЕЧАТКУ: тот же снимок, "
+                                   "что забаненный %s (расстояние %d)"
+                                   % (_near[:8], _d)))
+                continue
+            try:
+                _mine = _PH.dhash_set(f)
+            except Exception:
+                _mine = []
+            _tw = None
+            for _p in _mine:
+                for _sp, _nm in stand_ph:
+                    if _PH.hamming(_p, _sp) <= _PH.PHASH_DIST:
+                        _tw = _nm
+                        break
+                if _tw:
+                    break
+            if _tw:
+                skipped.append((f, "тот же снимок, что уже стоит в %s "
+                                   "(другая копия)" % _tw))
+                continue
         if _corner_brand(f):
             skipped.append((f, "клеймо в углу (OCR)"))
             continue

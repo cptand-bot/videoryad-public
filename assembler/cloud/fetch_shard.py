@@ -56,6 +56,21 @@ def _run(scenes, dest_dir, env_path, manifest_name, proj_root=None):
     else:
         print(f"[fetch_shard] ВНИМАНИЕ: бан-листа нет по пути {ban or '(не задан)'} "
               f"— забаненные кадры НЕ БУДУТ отсеяны", flush=True)
+    # ЛИСТ ОТПЕЧАТКОВ (2026-11-13) — ловит ТОТ ЖЕ СНИМОК другой копией.
+    # Переменную ставим ЯВНО, а не полагаемся на «рядом с md5»: путь должен
+    # быть виден в логе, иначе молчаливая неработа повторит историю
+    # 5min-svergnut-1710, где бан «доехал», а не действовал.
+    ban_ph = os.path.join(proj_root, ".banned_phash.json") if proj_root else ""
+    if ban_ph and os.path.exists(ban_ph):
+        env["VIDEORYAD_BANNED_PHASH_FILE"] = ban_ph
+        try:
+            _m = len(json.load(open(ban_ph, encoding="utf-8")))
+        except Exception:
+            _m = "?"
+        print(f"[fetch_shard] отпечатки кадров: {_m} из {ban_ph}", flush=True)
+    else:
+        print("[fetch_shard] отпечатков кадров нет — бан держится только на "
+              "md5, пережатая копия забаненного кадра пройдёт", flush=True)
     subprocess.run([sys.executable, os.path.join(TPL, "fetch_assets_news.py"),
                     tmp, dest_dir, env_path], env=env, check=False)
     try:
