@@ -1,0 +1,240 @@
+[
+ {
+  "scene": 8,
+  "view": "cinematic.dossier",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "Грег Стьюби",
+   "rows": [
+    "резко ответил на шутку Зеленского",
+    "палата представителей, Флорида",
+    "реакция появилась в тот же день"
+   ],
+   "kick": "Вашингтон · ноябрь 2026",
+   "title": "Вашингтон · ноябрь 2026",
+   "photo": "cards/photo/card_008.jpg",
+   "stamp": "США",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "zal_efir",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.6,
+   "sheets": [],
+   "text": "оружие дипломатии США",
+   "say": "Ну не делай так",
+   "author": "переговорщики США",
+   "role": "администрация Трампа",
+   "source": "брифинг Белого дома, ноябрь 2026",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "duel",
+  "dur": 13.6,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "переговоры · ноябрь 2026",
+   "top": {
+    "who": "Зеленский",
+    "text": "публично показывает характер",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "Вашингтон",
+    "text": "держит в руках конкретные инструменты",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_shkala",
+  "dur": 15.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 15.6,
+   "sheets": [],
+   "text": "Конгресс начнёт работу в январе",
+   "value": "2027",
+   "value_sub": "новый состав Конгресса",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "zal_makety",
+  "dur": 8.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.6,
+   "sheets": [],
+   "text": "омбудсмен, гуманитарная работа",
+   "makety": [
+    "больница=ГУМАНИТАРКА",
+    "банк=ВЕДОМСТВА",
+    "лэп=ИНФРАСТРУКТУРА"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "split",
+  "dur": 15.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "поблагодарила Лубинца за мужество и сердце, с которым он служит людям",
+   "author": "Мелания Трамп",
+   "role": "первая леди США",
+   "source": "Белый дом, 5 ноября 2026",
+   "photo": "cards/photo/card_031.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "zal_ekran",
+  "dur": 13.9,
+  "anim": 4.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.9,
+   "sheets": [],
+   "text": "его ставят в другую рамку",
+   "say": "Не человек войны",
+   "author": "Вашингтон",
+   "role": "администрация США",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "zal_kub",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.2,
+   "sheets": [],
+   "text": "прежняя система закончилась",
+   "kick": "смена курса",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "zal_schetchik",
+  "dur": 12.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.5,
+   "sheets": [],
+   "text": "территории, гарантии, санкции, подписи",
+   "value": "10",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "zal_slova",
+  "dur": 8.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.3,
+   "sheets": [],
+   "text": "прежнее руководство ушло",
+   "na_polu": "УШЛИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "zal_pol",
+  "dur": 8.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.3,
+   "sheets": [],
+   "text": "предыдущая эпоха закончилась",
+   "na_polu": "ЭПОХА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "zal",
+  "dur": 8.81,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "капитуляцию подпишет совсем другой человек",
+   "words": [
+    "ИТОГ",
+    "ЦЕНА",
+    "КУРС"
+   ],
+   "sheets": [
+    "Киев",
+    "Вашингтон",
+    "Москва",
+    "переговоры",
+    "курс",
+    "смена"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 8.81,
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
