@@ -201,3 +201,4 @@ template/peredacha.py
 template/rerayt_storozh.sh
 template/sverka_kartochek.py
 template/citaty_zazor.py
+template/scenes_klon.py

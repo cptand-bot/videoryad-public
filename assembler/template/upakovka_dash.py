@@ -925,14 +925,24 @@ def main():
                                     "тема содержит эту подстроку "
                                     "(несколько — через запятую)")
     a = ap.parse_args()
-    items = collect(a.day)
-    if a.tolko:
+
+    def _filtr(spisok):
+        """Отбор по --tolko. Вынесен из `main`, потому что им пользуется и
+        пересборка страницы на живом сервере."""
+        if not a.tolko:
+            return spisok
         masks = [m.strip().lower() for m in a.tolko.split(",") if m.strip()]
         keep = []
-        for it in items:
-            hay = ("%s|%s" % (it.get("канал") or "", it.get("тема") or "")).lower()
+        for it in spisok:
+            hay = ("%s|%s" % (it.get("канал") or "",
+                              it.get("тема") or "")).lower()
             if any(m in hay for m in masks):
                 keep.append(it)
+        return keep
+
+    items = collect(a.day)
+    if a.tolko:
+        keep = _filtr(items)
         if not keep:
             sys.exit("--tolko %r не совпал ни с одним роликом дня %s: %s"
                      % (a.tolko, a.day,
@@ -965,56 +975,79 @@ def main():
     os.makedirs(d, exist_ok=True)
     # КАРТИНКИ КЛАДЁМ РЯДОМ СО СТРАНИЦЕЙ: сервер раздаёт только свою папку,
     # а папки тем лежат на D: — ссылаться туда напрямую нельзя.
-    for i, it in enumerate(items):
-        folder = it.get("превью_папка") or ""
-        urls = []
-        vdir = os.path.join(folder, "превью-варианты")
-        if not os.path.isdir(vdir):
-            vdir = folder
-        _nums, _sigs = [], {}
-        # ДИАПАЗОН ШИРЕ ВОСЬМИ (08.11): после «ещё 10 вариантов» файлы
-        # бывают с номерами за десяток, и сетка их просто не показывала.
-        for n in range(1, 41):
-            src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % n)
-            if not os.path.isfile(src):
-                continue
-            _nums.append(n)
-            _sigs[n] = _otpechatok(src)
-            sub = os.path.join(d, "prevyu", str(i))
-            os.makedirs(sub, exist_ok=True)
-            dst = os.path.join(sub, "%d.png" % n)
-            try:
-                if (not os.path.exists(dst)
-                        or os.path.getmtime(src) > os.path.getmtime(dst)):
-                    shutil.copy2(src, dst)
-                urls.append("prevyu/%d/%d.png" % (i, n))
-            except OSError:
-                pass
-        it["превью_файлы"] = urls
-        it["превью_номера"] = _nums
-        it["превью_отпечатки"] = _sigs
-        # УЖЕ СДЕЛАННЫЕ С НАДПИСЬЮ — ищем в корне темы по имени ролика
-        ready = {}
-        try:
-            name = _pt_name(folder)
-        except Exception:
-            name = ""
-        for n in range(1, 41):
-            f = os.path.join(folder, "%s ПРЕВЬЮ-%d.png" % (name, n))
-            if name and os.path.isfile(f):
+    def _razlozhit(spisok):
+        """Скопировать превью рядом со страницей и собрать саму страницу."""
+        for i, it in enumerate(spisok):
+            folder = it.get("превью_папка") or ""
+            urls = []
+            vdir = os.path.join(folder, "превью-варианты")
+            if not os.path.isdir(vdir):
+                vdir = folder
+            _nums, _sigs = [], {}
+            # ДИАПАЗОН ШИРЕ ВОСЬМИ (08.11): после «ещё 10 вариантов» файлы
+            # бывают с номерами за десяток, и сетка их просто не показывала.
+            for n in range(1, 41):
+                src = os.path.join(vdir, "ПРЕВЬЮ-%d.png" % n)
+                if not os.path.isfile(src):
+                    continue
+                _nums.append(n)
+                _sigs[n] = _otpechatok(src)
                 sub = os.path.join(d, "prevyu", str(i))
                 os.makedirs(sub, exist_ok=True)
-                dst = os.path.join(sub, "%d-text.png" % n)
+                dst = os.path.join(sub, "%d.png" % n)
                 try:
                     if (not os.path.exists(dst)
-                            or os.path.getmtime(f) > os.path.getmtime(dst)):
-                        shutil.copy2(f, dst)
-                    ready[n] = "prevyu/%d/%d-text.png" % (i, n)
+                            or os.path.getmtime(src) > os.path.getmtime(dst)):
+                        shutil.copy2(src, dst)
+                    urls.append("prevyu/%d/%d.png" % (i, n))
                 except OSError:
                     pass
-        it["превью_готовые"] = ready
-    htm = page(items, a.day)
-    open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(htm)
+            it["превью_файлы"] = urls
+            it["превью_номера"] = _nums
+            it["превью_отпечатки"] = _sigs
+            # УЖЕ СДЕЛАННЫЕ С НАДПИСЬЮ — ищем в корне темы по имени ролика
+            ready = {}
+            try:
+                name = _pt_name(folder)
+            except Exception:
+                name = ""
+            for n in range(1, 41):
+                f = os.path.join(folder, "%s ПРЕВЬЮ-%d.png" % (name, n))
+                if name and os.path.isfile(f):
+                    sub = os.path.join(d, "prevyu", str(i))
+                    os.makedirs(sub, exist_ok=True)
+                    dst = os.path.join(sub, "%d-text.png" % n)
+                    try:
+                        if (not os.path.exists(dst)
+                                or os.path.getmtime(f) > os.path.getmtime(dst)):
+                            shutil.copy2(f, dst)
+                        ready[n] = "prevyu/%d/%d-text.png" % (i, n)
+                    except OSError:
+                        pass
+            it["превью_готовые"] = ready
+        htm = page(spisok, a.day)
+        _tmp = os.path.join(d, "index.html.tmp")
+        with open(_tmp, "w", encoding="utf-8") as _fh:
+            _fh.write(htm)
+        os.replace(_tmp, os.path.join(d, "index.html"))
+
+    def _perestroit():
+        """СТРАНИЦА ПЕРЕСОБИРАЕТСЯ НА КАЖДЫЙ ЗАХОД (12.11, его улов: «на
+        дашборде 8811 нет картинок, на тему 3 Европа нападение на РФ, канал
+        Планета»). Картинки были на месте и отдавались с кодом 200 — страница
+        собиралась ОДИН раз при подъёме сервера, и всё, что дорисовано позже
+        (превью той темы лежат от 12:15 до 12:21, сервер поднят в 12:22 с
+        прошлой страницей в кэше браузера), не появлялось до перезапуска.
+        Теперь список роликов дня и превью перечитываются с диска перед
+        выдачей страницы, а список правится НА МЕСТЕ — обработчики кликов
+        держат его по ссылке и по номерам."""
+        fresh = _filtr(collect(a.day))
+        if not fresh:
+            return
+        items[:] = fresh
+        _razlozhit(items)
+
+    _razlozhit(items)
     os.chdir(d)
     # СОБСТВЕННЫЙ ОБРАБОТЧИК: статика плюс один POST `/make` — он и делает
     # финальное превью. Надписи рисует `prevyu_text.py` (код, не модель):
@@ -1123,6 +1156,22 @@ def main():
             self.send_header("Pragma", "no-cache")
             self.send_header("Expires", "0")
             http.server.SimpleHTTPRequestHandler.end_headers(self)
+
+        # ЗАХОД НА СТРАНИЦУ = ПЕРЕСБОРКА (12.11). Иначе превью и темы,
+        # появившиеся после подъёма сервера, видны только после перезапуска.
+        _svezho = [0.0]
+
+        def do_GET(self):
+            путь = (self.path or "/").split("?")[0]
+            if путь in ("/", "/index.html"):
+                import time as _t
+                if _t.time() - Handler._svezho[0] > 1.0:
+                    Handler._svezho[0] = _t.time()
+                    try:
+                        _perestroit()
+                    except Exception as _e:
+                        print("пересборка страницы не вышла: %s" % _e)
+            return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
         def do_POST(self):
             if self.path == "/more":
