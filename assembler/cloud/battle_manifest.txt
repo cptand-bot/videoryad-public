@@ -206,3 +206,5 @@ template/zhurnal_zamen.py
 template/zoom.py
 template/phash_ban.py
 template/phash_backfill.py
+template/safe_area.py
+template/sdacha_proverka.py
