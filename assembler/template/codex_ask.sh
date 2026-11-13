@@ -193,7 +193,23 @@ if [ -z "${CODEX_ACCOUNT:-}" ] && [ -f "$HOME/.codex-eva/auth.json" ]; then
         _n_main="$(awk -F'\t' -v e="$_edge2" '$1 >= e && ($4 == "основной" || $4 == "") {n++} END {print n+0}' "$_jr2")"
         _n_eva="$(awk -F'\t' -v e="$_edge2" '$1 >= e && $4 == "eva" {n++} END {print n+0}' "$_jr2")"
       fi
-      if [ "$_n_eva" -le "$_n_main" ]; then
+      # СНАЧАЛА СВОБОДНЫЙ АККАУНТ, И ТОЛЬКО ПОТОМ СЧЁТ ЗАХОДОВ (13.11, его
+      # слово: «делается раскадровка на одном аккаунте, приходит задание на
+      # вторую — надо её на другой свободный аккаунт кидать, в чате GPT не
+      # должны ждать и стоять в очереди»). Замок у каждого аккаунта свой, так
+      # что занятость проверяется им же: `flock -n` на чужом дескрипторе не
+      # блокирует, а честно отвечает «занято».
+      _zanyat() {   # 0 = аккаунт занят своим вызовом
+        local _l="/tmp/videoryad-codex-$1.lock"
+        [ -e "$_l" ] || return 1
+        ( exec 9>"$_l" && flock -n 9 ) && return 1 || return 0
+      }
+      if _zanyat osnovnoy && ! _zanyat eva; then
+        export CODEX_ACCOUNT=eva
+        echo "агент: основной ЗАНЯТ вызовом — беру РЕЗЕРВНЫЙ (eva), в очередь не встаю" >&2
+      elif _zanyat eva && ! _zanyat osnovnoy; then
+        echo "агент: резервный ЗАНЯТ вызовом — беру ОСНОВНОЙ, в очередь не встаю" >&2
+      elif [ "$_n_eva" -le "$_n_main" ]; then
         export CODEX_ACCOUNT=eva
         echo "агент: в окне основной $_n_main / eva $_n_eva — беру РЕЗЕРВНЫЙ (eva)" >&2
       else
@@ -342,11 +358,37 @@ _codex_live() {
   done
   printf '%s' "$out"
 }
+# ЧУЖОЙ АККАУНТ БОЛЬШЕ НЕ СЧИТАЕТСЯ ЗАНЯТОСТЬЮ (13.11). Проверка «на машине
+# не должно идти НИ ОДНОГО codex exec» сводила на нет замок-на-аккаунт от
+# 12.11: вторая раскадровка всё равно ждала первую до 30 минут, хотя аккаунты
+# разные. Теперь сирот ищем ТОЛЬКО по своему `CODEX_HOME`, а от OOM (ради
+# которого стояла глухая проверка) защищает порог свободной памяти: два
+# `codex exec` разом живут, если памяти хватает обоим.
+_codex_live_moy() {
+  local p out="" home="${CODEX_HOME:-$HOME/.codex}"
+  for p in $(pgrep -x codex 2>/dev/null || true); do
+    case " $(tr '\0' ' ' < "/proc/$p/cmdline" 2>/dev/null || true) " in
+      *" exec "*) ;;
+      *) continue ;;
+    esac
+    local _h
+    _h="$(tr '\0' '\n' < "/proc/$p/environ" 2>/dev/null | sed -n 's/^CODEX_HOME=//p' | head -1)"
+    [ -n "$_h" ] || _h="$HOME/.codex"
+    [ "$_h" = "$home" ] && out="$out$p "
+  done
+  printf '%s' "$out"
+}
+_mem_free_mb() { awk '/MemAvailable/ {print int($2/1024)}' /proc/meminfo 2>/dev/null || echo 99999; }
+_MEM_MIN="${CODEX_MEM_MIN_MB:-2200}"
 if command -v pgrep >/dev/null 2>&1; then
-  _live="$(_codex_live)"
+  _live="$(_codex_live_moy)"
+  _mf="$(_mem_free_mb)"
+  if [ -z "$_live" ] && [ -n "$(_codex_live)" ] && [ "$_mf" -lt "$_MEM_MIN" ]; then
+    echo "агент: чужой аккаунт считает, свободно ${_mf} МБ (<${_MEM_MIN}) — жду, чтобы не уронить машину" >&2
+    _live="$(_codex_live)"
+  fi
   if [ -n "$_live" ]; then
-    echo "на машине уже идёт codex exec (pid $_live) — не от нашей очереди," >&2
-    echo "   скорее всего сирота или вызов старой версии; жду его конца." >&2
+    echo "уже идёт codex exec СВОЕГО аккаунта (pid $_live) — жду его конца." >&2
   fi
   # ОПРАШИВАЕМ ЧАСТО, ПЕЧАТАЕМ РЕДКО: шаг 30 с добавлял до полуминуты
   # простоя после смерти сироты, а признак жизни чаще раза в 30 с распухает
@@ -354,7 +396,7 @@ if command -v pgrep >/dev/null 2>&1; then
   while [ -n "$_live" ] && [ "$_waited" -lt "$_lock_wait_max" ]; do
     sleep 5
     _waited=$(( _waited + 5 ))
-    _live="$(_codex_live)"
+    _live="$(_codex_live_moy)"
     if [ -n "$_live" ] && [ $(( _waited % 30 )) -eq 0 ]; then
       echo "   жду ${_waited} с из ${_lock_wait_max} · живой codex exec: $_live" >&2
     fi
@@ -588,7 +630,12 @@ fi
 # СВЕРКА ПО ВРЕМЕНИ И РАЗМЕРУ, А НЕ ПО КОДУ ВОЗВРАТА (08.11).
 _now_mtime=$(stat -c%Y "$out" 2>/dev/null || echo 0)
 _out_size=$(wc -c < "$out" 2>/dev/null || echo 0)
-if [ "$_out_size" -lt 40 ] || [ "$_now_mtime" -le "$_prev_mtime" ]; then
+# ПОРОГ «ПУСТО» — ПО ФАКТУ ПУСТОТЫ, А НЕ ПО 40 БАЙТАМ (13.11). Короткий, но
+# ЧЕСТНЫЙ ответ («Готов», «раз») объявлялся отказом, и наружу шло «АГЕНТ НЕ
+# ОТВЕТИЛ» на живом агенте — на этом 13.11 потеряли полчаса, решив, что оба
+# аккаунта мертвы. Длину ответа проверяет тот, кто задание ставил; обёртка
+# ловит только настоящий провал: пустой файл или необновившийся.
+if [ "$_out_size" -lt 2 ] || [ "$_now_mtime" -le "$_prev_mtime" ]; then
   echo "!! АГЕНТ НЕ ОТВЕТИЛ: файл ответа $( [ "$_out_size" -lt 40 ] && echo "пуст ($_out_size байт)" || echo "НЕ ОБНОВИЛСЯ" )." >&2
   echo "   Сырой лог: ${out}.raw ($_raw_size байт). Код возврата агента НИЧЕГО" >&2
   echo "   не значит — бывает 0 при пустом ответе. Повтори задание." >&2
