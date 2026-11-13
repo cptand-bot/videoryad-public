@@ -74,7 +74,16 @@ for s in scenes:
     m = manifest.get(sid, {})
     src = m.get("source", s["source"])
     status = m.get("status", "?")
-    label = f"{sid:02d} [{src}] {status}"
+    # НАША КАРТОЧКА ПОМЕЧАЕТСЯ НА ЛИСТЕ (13.11, улов `usuario-03`: шесть
+    # ЛОЖНЫХ срабатываний подряд). Проверяющий по контактному листу объявил
+    # «чистый белый лист», «почти чёрные», «счётчик ноль», «две одинаковые»
+    # — а в самих карточках всё было на месте: на плитке рисованный кадр в
+    # тёмной гамме канала выглядит пустым, а два приёма белого зала —
+    # одинаковыми. Круг правок уходил на выдуманный брак. Рисованные кадры
+    # проверяет `cards_queue --gate`, глазам по листу их смотреть нечего.
+    _карт = str(src).startswith("card:") or str(s.get("source", "")).startswith("card:")
+    label = f"{sid:02d} [{src}] {status}" + (" · НАША КАРТОЧКА, НЕ ПРОВЕРЯТЬ"
+                                             if _карт else "")
     sub = s["source_query"][:52]
 
     img = Image.new("RGB", (TW, TH), (30, 30, 34))
@@ -154,7 +163,8 @@ for s in scenes:
 
     d = ImageDraw.Draw(img)
     d.rectangle([0, TH - BAR, TW, TH], fill=(0, 0, 0))
-    col = (120, 200, 255) if src == "local_library" else (255, 210, 120)
+    col = ((90, 220, 140) if _карт else
+           (120, 200, 255) if src == "local_library" else (255, 210, 120))
     d.text((6, TH - BAR + 2), label, font=FONT, fill=col)
     d.text((6, TH - BAR + 21), sub, font=FONT_S, fill=(200, 200, 200))
     tiles.append(img)
