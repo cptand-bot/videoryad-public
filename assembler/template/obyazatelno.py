@@ -670,10 +670,117 @@ _добрать_виды()
 _добрать_effekty()
 
 
-def обязательных_карточек():
+# ── СОСТАВ ОБЯЗАТЕЛЬНЫХ ЗАМОРАЖИВАЕТСЯ НА ПРИЁМКЕ РАСКАДРОВКИ (13.11) ──
+# Повод живой и с матом: S1-S10 стали обязательными, когда дашборд ролика был
+# УЖЕ утверждён, — `ship.sh` встал на десяти видах, которых в раскадровке
+# физически быть не могло, вкладка переделала десять сцен и сожгла лишний
+# прогон облака. Это нарушение его же правила «пока идёт съёмка — код не
+# правим»: список растёт каждый день, а ролик живёт полдня и обязан отвечать
+# ровно за тот состав, с которым начинался.
+#
+# Поэтому приёмка (`accept_scenes.py --out`) кладёт рядом со сценами снимок
+# состава, а ОБА гейта (дашборд и `ship.sh`) спрашивают с ролика ЕГО, а не
+# сегодняшний список. Новый элемент спокойно раскатывается в любой момент и
+# берёт силу со СЛЕДУЮЩЕГО ролика, а не посреди текущего.
+#
+# СНИМКА НЕТ — спрашиваем сегодняшний список, как раньше (ролик начат до
+# 13.11 либо сцены собраны руками): ослаблять гейт молчанием нельзя.
+ФАЙЛ_ЗАМОРОЗКИ = "obyazatelno-spisok.json"
+
+
+def путь_заморозки(scenes_path):
+    return os.path.join(os.path.dirname(os.path.abspath(scenes_path)) or ".",
+                        ФАЙЛ_ЗАМОРОЗКИ)
+
+
+def снимок_состава():
+    """Состав списка машинным видом: код → чем его спрашивают."""
+    сн = {}
+    for el in ОБЯЗАТЕЛЬНЫЕ:
+        сн[el["код"]] = {
+            "min": el.get("min", 1),
+            "на_сцен": el.get("на_сцен"),
+            "gate": el.get("gate", "dashboard"),
+            "каналы": el.get("каналы"),
+            "метка": ("надпись:" + el["overlay_style"] if el.get("overlay_style")
+                      else "fx:" + el["fx"] if el.get("fx")
+                      else "card:" + str(el.get("view"))),
+        }
+    return сн
+
+
+def заморозить(scenes_path, channel="", перезаписать=False):
+    """Записать состав рядом со сценами. `(путь, сколько, записан ли заново)`."""
+    import datetime
+    p = путь_заморозки(scenes_path)
+    if os.path.isfile(p) and not перезаписать:
+        try:
+            было = json.load(open(p, encoding="utf-8")) or {}
+            n = len(было.get("элементы") or {})
+            if n:
+                return p, n, False
+        except Exception:
+            pass                      # битый снимок перезапишем
+    данные = {
+        "дата": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "канал": channel or "",
+        "сцены": os.path.basename(scenes_path),
+        "зачем": ("состав обязательных на момент приёмки раскадровки; гейты "
+                  "спрашивают с ролика ЭТОТ список, а не сегодняшний"),
+        "элементы": снимок_состава(),
+    }
+    json.dump(данные, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    return p, len(данные["элементы"]), True
+
+
+def список_ролика(scenes_path=""):
+    """ОБЯЗАТЕЛЬНЫЕ в том составе, с которым ролик начинался.
+
+    `(список, записка)`. Записка — одна строка для вывода гейта; пустая,
+    если снимка нет и спрашивается сегодняшний список.
+    """
+    if not scenes_path:
+        return list(ОБЯЗАТЕЛЬНЫЕ), ""
+    p = путь_заморозки(scenes_path)
+    try:
+        снимок = (json.load(open(p, encoding="utf-8")) or {}).get("элементы") or {}
+    except Exception:
+        return list(ОБЯЗАТЕЛЬНЫЕ), ""
+    if not снимок:
+        return list(ОБЯЗАТЕЛЬНЫЕ), ""
+    список = []
+    for el in ОБЯЗАТЕЛЬНЫЕ:
+        б = снимок.get(el["код"])
+        if б is None:
+            continue                  # элемент заведён ПОСЛЕ приёмки — не спрашиваем
+        э = dict(el)
+        э["min"] = б.get("min", el.get("min", 1))
+        э["на_сцен"] = б.get("на_сцен") if "на_сцен" in б else el.get("на_сцен")
+        э["gate"] = б.get("gate", el.get("gate", "dashboard"))
+        if "каналы" in б:
+            э["каналы"] = б.get("каналы")
+        список.append(э)
+    позже = len(ОБЯЗАТЕЛЬНЫЕ) - len(список)
+    коды = {e["код"] for e in ОБЯЗАТЕЛЬНЫЕ}
+    ушло = [k for k in снимок if k not in коды]
+    зап = ("состав заморожен приёмкой раскадровки %s — спрашиваем %d элементов"
+           % (снимок and os.path.basename(p), len(список)))
+    if позже:
+        зап += "; заведённых позже (%d) с этого ролика не спрашиваем" % позже
+    if ушло:
+        зап += "; снято из кода после приёмки: %d" % len(ушло)
+    return список, зап
+
+
+def обязательных_карточек(список=None):
     """Сколько РИСОВАННЫХ КАДРОВ ролик обязан содержать (эффекты не считаем:
-    они не занимают сцену, а ложатся на её кадр)."""
-    return len([e for e in ОБЯЗАТЕЛЬНЫЕ if e.get("view")])
+    они не занимают сцену, а ложатся на её кадр).
+
+    `список` — состав, замороженный приёмкой этого ролика (см.
+    `список_ролика`); без него считается сегодняшний список.
+    """
+    _сп = ОБЯЗАТЕЛЬНЫЕ if список is None else список
+    return len([e for e in _сп if e.get("view")])
 
 
 
@@ -1072,9 +1179,13 @@ def _overlay_styles(scenes_path):
 }
 
 
-def свои_сверх(scenes):
-    """(виды в ролике, свои сверх списка, незанятые виды)."""
-    обяз = {el.get("view") for el in ОБЯЗАТЕЛЬНЫЕ if el.get("view")}
+def свои_сверх(scenes, список=None):
+    """(виды в ролике, свои сверх списка, незанятые виды).
+
+    `список` — замороженный состав этого ролика (`список_ролика`).
+    """
+    _сп = ОБЯЗАТЕЛЬНЫЕ if список is None else список
+    обяз = {el.get("view") for el in _сп if el.get("view")}
     есть = set()
     for s in (scenes or []):
         src = str(s.get("source", ""))
@@ -1263,10 +1374,15 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
     обычных = len([s for s in (scenes or [])
                    if not str(s.get("source", "")).startswith("card:")])
     have, have_fx = {}, {}
+    # СОСТАВ — ТОТ, С КОТОРЫМ РОЛИК НАЧИНАЛСЯ (13.11, пункт 59 очереди):
+    # список растёт каждый день, ролик живёт полдня.
+    _список, _записка = список_ролика(scenes_path)
+    if _записка:
+        print(_записка)
     _чисел = числовых_фактов(scenes if isinstance(scenes, list) else [])
     _адм = адм_единиц(scenes if isinstance(scenes, list) else [])
     have_ov = (_overlay_styles(scenes_path)
-               if any(e.get("overlay_style") for e in ОБЯЗАТЕЛЬНЫЕ) else {})
+               if any(e.get("overlay_style") for e in _список) else {})
     for s in scenes:
         src = str(s.get("source", ""))
         if src.startswith("card:"):
@@ -1276,7 +1392,7 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
             have_fx[f] = have_fx.get(f, 0) + 1
     bad = []
     _не_занято = []
-    for el in ОБЯЗАТЕЛЬНЫЕ:
+    for el in _список:
         if gate == "dashboard" and el["gate"] == "video":
             continue                      # этот спрашиваем только перед сборкой
         if el["каналы"] and channel and channel.upper() not in [
@@ -1325,13 +1441,13 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
     # поставить и отрисовать облаком тем же прогоном. Перед полной сборкой
     # (`video`) требование только называется — после «утверждаю» ролик
     # заморожен, и валить его там значило бы гнать вкладку в обход гейта.
-    _есть, _свои, _свободны = свои_сверх(scenes)
+    _есть, _свои, _свободны = свои_сверх(scenes, _список)
     if _не_занято:
         print("НЕ ЗАНЯТО НИ РАЗУ (%d из наших видов) — поставь те, что ложатся "
               "по смыслу, остальные пропусти:" % len(_не_занято))
         for _s in _не_занято[:40]:
             print("   · %s" % _s)
-    _надо_сверх = 0 if обязательных_карточек() >= 20 else СВОИХ_СВЕРХ
+    _надо_сверх = 0 if обязательных_карточек(_список) >= 20 else СВОИХ_СВЕРХ
     if gate == "dashboard" and _надо_сверх and len(_свои) < _надо_сверх:
         _надо = _надо_сверх - len(_свои)
         _куда, _g = свободные_сцены(scenes, _надо)
@@ -1365,6 +1481,12 @@ def main():
     ap.add_argument("--gate", choices=["dashboard", "video"], default="dashboard")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--list", action="store_true")
+    # ЗАМОРОЗКА СОСТАВА (13.11, пункт 59). Обычно её делает приёмка
+    # раскадровки сама; ключ нужен для ролика, начатого до этой правки.
+    ap.add_argument("--zamorozit", action="store_true",
+                    help="заморозить состав списка рядом со сценами")
+    ap.add_argument("--perezamorozit", action="store_true",
+                    help="перезаписать снимок состава (только по его слову)")
     a = ap.parse_args()
 
     if a.list or not a.scenes:
@@ -1390,6 +1512,16 @@ def main():
         print("нет файла сцен: %s" % a.scenes, file=sys.stderr)
         return 2
     scenes, meta = _scenes(a.scenes)
+    if a.zamorozit or a.perezamorozit:
+        _p, _n, _nov = заморозить(a.scenes, _channel(meta, a.scenes),
+                                  a.perezamorozit)
+        if _nov:
+            print("состав обязательных заморожен (%d элементов) → %s" % (_n, _p))
+        else:
+            print("состав уже заморожен (%d элементов) → %s\n"
+                  "   перезаписать (только по его слову): --perezamorozit"
+                  % (_n, _p))
+        return 0
     bad = check(scenes, _channel(meta, a.scenes), a.gate, a.scenes)
     if a.json:
         print(json.dumps({"gate": a.gate, "ok": not bad, "нет": bad},
@@ -1405,7 +1537,7 @@ def main():
     # СВОИ ВИДЫ СВЕРХ СПИСКА. Сам ОТКАЗ живёт в `check()` (гейт дашборда),
     # сюда он уже приехал через `bad` — здесь только картина по ролику.
     # 11.11: раньше тут печаталось «нужно не меньше 3» и возвращался НОЛЬ.
-    _есть, _свои, _свободны = свои_сверх(scenes)
+    _есть, _свои, _свободны = свои_сверх(scenes, список_ролика(a.scenes)[0])
     print("видов в ролике: %d (обязательных %d + своих %d)"
           % (len(_есть), len(_есть) - len(_свои), len(_свои)))
     if _свои:

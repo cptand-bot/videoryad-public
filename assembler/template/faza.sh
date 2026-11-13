@@ -194,6 +194,25 @@ gotovyy_mp4() {
     echo "$mp4"
 }
 
+# zabrat_iz_zabora <имя очереди> <папка проекта> — перенести готовый mp4 из
+# папки забора в папку проекта (13.11, пункт 61 очереди).
+# `get.sh <имя>` ВСЕГДА кладёт в `~/projects/<имя>-cloud`, а сдача ищет mp4 в
+# папке ПРОЕКТА, и имена эти разные (очередь `pl3evropa1411`, проект
+# `planeta-3-evropa-peregovory-1411`) — вкладка каждый раз искала готовый файл
+# руками, а фаза печатала «готового .mp4 в проекте нет» на живом файле.
+# Переносим, а не копируем: тот же диск, 270 МБ — мгновенно.
+zabrat_iz_zabora() {
+    local qn="$1" proj="$2" zab mp4
+    zab="$HOME/projects/$qn-cloud"
+    [ -d "$zab" ] || return 0
+    [ "$(readlink -f "$zab" 2>/dev/null)" != "$(readlink -f "$proj" 2>/dev/null)" ] || return 0
+    mp4="$(ls -S "$zab"/*.mp4 2>/dev/null | head -1)"
+    [ -n "$mp4" ] || return 0
+    mv -f "$mp4" "$proj/" 2>/dev/null \
+        && echo "[ОК]    готовый файл перенесён из забора в проект: $(basename "$mp4")" \
+        || echo "[!]     готовый файл лежит в заборе, перенести не вышло: $mp4"
+}
+
 summary() {
     echo "--------------------------------------------------------------"
     if [ "$FAILED" -eq 0 ]; then
@@ -427,6 +446,7 @@ sdacha)
         if [ "$FAILED" -eq 0 ]; then
             step "ожидание и забор" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait
         fi
+        zabrat_iz_zabora "$QNAME" "$PROJ"
         READY="$(ls -S "$PROJ"/*.mp4 2>/dev/null | head -1)"
     fi
     if [ -z "$READY" ]; then

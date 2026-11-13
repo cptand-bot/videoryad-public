@@ -1514,6 +1514,29 @@ def main():
             data = {"channel": a.channel, "scenes": scenes}
         json.dump(data, open(a.out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"\nпринято → {a.out}")
+        # СОСТАВ ОБЯЗАТЕЛЬНЫХ ЗАМОРАЖИВАЕТСЯ ИМЕННО ЗДЕСЬ (13.11, пункт 59
+        # очереди). Его мат по живому ролику: S1-S10 стали обязательными,
+        # когда дашборд был УЖЕ утверждён, — `ship.sh` встал на десяти видах,
+        # которых в раскадровке быть не могло. Список растёт каждый день, а
+        # ролик живёт полдня: с него спрашивается ровно тот состав, с которым
+        # он начинался. Снимок кладётся рядом со сценами и едет с папкой.
+        try:
+            import importlib.util as _ilu3
+            _op3 = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "obyazatelno.py")
+            _sp3 = _ilu3.spec_from_file_location("_obyaz_zam", _op3)
+            _ob3 = _ilu3.module_from_spec(_sp3)
+            _sp3.loader.exec_module(_ob3)
+            _p3, _n3, _nov3 = _ob3.заморозить(a.out, a.channel)
+            print("состав обязательных %s (%d элементов) → %s"
+                  % ("заморожен" if _nov3 else "уже был заморожен",
+                     _n3, os.path.basename(_p3)))
+        except Exception as _e3:
+            # Молчать нельзя: без снимка гейт спросит сегодняшний список.
+            print("НЕ ЗАМОРОЗИТЬ состав обязательных (%s: %s) — гейт будет "
+                  "спрашивать сегодняшний список; заморозить вручную: "
+                  "python3 template/obyazatelno.py %s --zamorozit"
+                  % (type(_e3).__name__, _e3, a.out))
         # ПРОПУСКИ ВИДОВ АГЕНТ ВОЗВРАЩАЕТ ПОЛЕМ, А НЕ СЛОВАМИ (12.11).
         # Обязательны ВСЕ наши виды, но вид, которому в этом тексте места
         # нет, он выписывает в `propuski` с причиной. Кладём их файлом рядом

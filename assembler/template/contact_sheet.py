@@ -38,7 +38,11 @@ while _i < len(_argv):
 
 scenes_path = _pos[0] if len(_pos) > 0 else (sorted(_g.glob("*.scenes.json")) or ["scenes.json"])[0]
 images_dir = _pos[1] if len(_pos) > 1 else "images"
-out_dir = _out_key or (_pos[2] if len(_pos) > 2 else "thumbs")
+# ПАПКА ЛИСТОВ — РЯДОМ СО СЦЕНАМИ, А НЕ В ТЕКУЩЕЙ (13.11, пункт 67 очереди):
+# инструмент, позванный из каталога скилла, засорял боевую папку и ОСТАНАВЛИВАЛ
+# раскатку по всем десяти целям. Явный третий аргумент и `--out` сильнее.
+out_dir = _out_key or (_pos[2] if len(_pos) > 2 else os.path.join(
+    os.path.dirname(os.path.abspath(scenes_path)) or ".", "thumbs"))
 ONLY = _only
 os.makedirs(out_dir, exist_ok=True)
 

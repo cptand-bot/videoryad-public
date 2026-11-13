@@ -27,6 +27,22 @@ OUT = "thumbs"
 VID = (".mp4", ".mov", ".webm", ".mkv", ".m4v")
 
 
+def _out_dir(src):
+    """Куда класть ужатые копии: РЯДОМ С КАДРОМ, а не в текущую папку.
+
+    13.11, пункт 67 очереди. Позванный из каталога скилла `zoom.py` создавал
+    `template/thumbs/` — чужой файл в боевой папке, и раскатка по всем десяти
+    целям вставала целиком («в боевых папках файлы, которых нет в манифесте»).
+    За одну смену это случилось ДВАЖДЫ (ещё `template/cards/` от `card_put`).
+    Поэтому выход считается от пути к кадру: `images/scene_041.jpg` проекта
+    кладёт в `<проект>/thumbs`, одинокий файл — в его же папку.
+    """
+    d = os.path.dirname(os.path.abspath(src)) or "."
+    if os.path.basename(d).lower() in ("images", "clips", "cards", "thumbs"):
+        d = os.path.dirname(d) or d       # кадр лежит внутри проекта
+    return os.path.join(d, OUT)
+
+
 def _as_image(src):
     """Видеофайл → один кадр JPEG; картинка возвращается как есть (03.11).
 
@@ -40,8 +56,9 @@ def _as_image(src):
     if not src.lower().endswith(VID):
         return src, ""
     import subprocess
-    os.makedirs(OUT, exist_ok=True)
-    out = os.path.join(OUT, "frame_" + os.path.splitext(
+    _o = _out_dir(src)
+    os.makedirs(_o, exist_ok=True)
+    out = os.path.join(_o, "frame_" + os.path.splitext(
         os.path.basename(src))[0] + ".jpg")
     for ss in ("3", "0.5"):
         subprocess.run(["ffmpeg", "-y", "-ss", ss, "-i", src,
@@ -65,7 +82,7 @@ def shrink(src, side=1000):
         k = min(1.0, side / max(w, h))
         if k < 1.0:
             im = im.resize((int(w * k), int(h * k)), Image.LANCZOS)
-        out = os.path.join(OUT, "zoom_" + os.path.basename(src))
+        out = os.path.join(_out_dir(src), "zoom_" + os.path.basename(src))
         return _save(im, out), im.size, (w, h)
 
 
@@ -81,7 +98,7 @@ def corners(src, n=420):
         pos = [(0, 0), (n + 8, 0), (0, n + 8), (n + 8, n + 8), (n * 2 + 16, n // 2)]
         for (x, y), (px, py) in zip(spots, pos):
             sheet.paste(im.crop((x, y, x + n, y + n)), (px, py))
-        out = os.path.join(OUT, "corners_" + os.path.basename(src))
+        out = os.path.join(_out_dir(src), "corners_" + os.path.basename(src))
         return _save(sheet, out), sheet.size, (W, H)
 
 

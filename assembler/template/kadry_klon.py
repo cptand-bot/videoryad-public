@@ -310,8 +310,29 @@ def main():
     _zapas = []
     for d in дон:
         dimg = os.path.join(d, "images")
+        # КЛИПЫ КАРТОЧЕК ДОНОРА В ЗАПАС НЕ КЛАДЁМ (13.11, пункт 66 очереди,
+        # улов `usuario-fc`: в клон прилетел клип чужой карточки `bars`).
+        # В основном доборе выше карточки отсеяны по `source` и
+        # `карточка_донора`, а этот список собирался СЛЕПЫМ `glob` по папке —
+        # то есть те же самые файлы возвращались через чёрный ход. Наш
+        # рисованный кадр чужому ролику не принадлежит: он сделан под ЕГО
+        # текст, в клоне читается как цитата из соседнего ролика.
+        _карточки_донора = set()
+        _dp0 = рабочая_раскадровка(d)
+        if _dp0:
+            _, _dsc0 = сцены(_dp0)
+            for _ds0 in _dsc0:
+                try:
+                    _sid0 = int(_ds0.get("id"))
+                except (TypeError, ValueError):
+                    continue
+                if (str(_ds0.get("source", "")).startswith(КАРТОЧКА)
+                        or карточка_донора(d, _ds0.get("id"))):
+                    _карточки_донора.add("scene_%03d" % _sid0)
         for f0 in sorted(glob.glob(os.path.join(dimg, "scene_*"))):
             b = os.path.basename(f0)
+            if b.split(".")[0] in _карточки_донора:
+                continue
             if any(w in b for w in (".ovthumb.", ".text.", ".revframe.",
                                     ".wmcrop.", ".ocrcrop.", ".before_crop.")):
                 continue
