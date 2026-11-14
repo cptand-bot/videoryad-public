@@ -310,6 +310,30 @@ def _render_text_png(words, color, out_path, fkey="default", style="plate"):
 CHANNEL_NOW = ""
 
 
+def _normalize_words(words):
+    """Список слов, записанный СТРОКОЙ, разворачиваем обратно (14.11).
+
+    Его слово по сценам 1 и 10 ролика `5min-1-likvidaciya-ze`: «Что за
+    квадратные скобки? Что за кавычки там какие-то появляются на надписи?»
+    В `overlays.json` лежало
+    `"words": "['МОСКВА', 'СТАРОЕ ПРАВИЛО ПЕРЕСМАТРИВАЮТ']"` — то есть
+    список, превращённый в строку через `str(list)`, — и скобки с кавычками
+    уезжали прямо в кадр. Чиним на ЧТЕНИИ, чтобы вылечить и уже записанные
+    файлы, а не только будущие.
+    """
+    if isinstance(words, str):
+        т = words.strip()
+        if т.startswith("[") and т.endswith("]"):
+            try:
+                import ast as _ast
+                разобрано = _ast.literal_eval(т)
+                if isinstance(разобрано, (list, tuple)):
+                    return [str(x) for x in разобрано if str(x).strip()]
+            except (ValueError, SyntaxError):
+                pass
+    return words
+
+
 def _apply_mask_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     """НАДПИСЬ ИЗ-ПОД МАСКИ — приём, принятый им 07.11 из витрины кандидатов.
 
@@ -398,7 +422,7 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     """Отдельная всплывашка-СЛОВО поверх клипа: сетка 9 позиций
     (pos = tl/tc/tr/ml/mc/mr/bl/bc/br), плавное появление/исчезновение,
     без рамки. `base_mp4` уже может нести фото-всплывашку — текст идёт сверху."""
-    words = ts.get("words") or ts.get("text") or ""
+    words = _normalize_words(ts.get("words") or ts.get("text") or "")
     if not str(words).strip():
         return False
     # НАДПИСЬ ИЗ-ПОД МАСКИ — свой путь: там секвенция, а не один PNG
