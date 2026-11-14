@@ -58,7 +58,8 @@ def main():
         текст = (s.get("text") or "").strip()
         ном = int(str(s.get("id") or i))
         дверь = m._dver_vida(вид) or CARD_PUT
-        фраза = m._fraza_pod_vid(вид, текст) or m._fraza(текст)
+        # мерим ровно то, что делает конвейер: запасной длинной фразы нет
+        фраза = m._fraza_pod_vid(вид, текст)
         ключи = m._klyuchi(вид, фраза, текст) if фраза else None
         if not ключи:
             плохо.append((ном, вид, "нечем наполнить из текста сцены"))
