@@ -84,6 +84,38 @@ def _load_brightness():
         return None
 
 
+_MAN_CACHE = {}
+
+
+def _manifest_status(proj):
+    """Статус каждой сцены из `images/manifest.json` (14.11).
+
+    Заглушку, о которой облако САМО сказало «залей файл» (`needs_upload`),
+    мерить яркостью нельзя: она тёмная по определению и к подмене
+    отношения не имеет.
+    """
+    if proj in _MAN_CACHE:
+        return _MAN_CACHE[proj]
+    out = {}
+    for _p in (os.path.join(proj, "images", "manifest.json"),
+               os.path.join(proj, "manifest.json")):
+        try:
+            d = json.load(open(_p, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        rows = d if isinstance(d, list) else d.get("scenes", [])
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            try:
+                out[int(r.get("id"))] = str(r.get("status") or "")
+            except (TypeError, ValueError):
+                continue
+        break
+    _MAN_CACHE[proj] = out
+    return out
+
+
 def _scenes(proj):
     """Сцены ролика: id -> источник. Нужны, чтобы не считать заглушками то,
     что заглушкой и должно быть: карточки рисуются САМИ (`card:*`) и в заборе
@@ -135,6 +167,21 @@ def check(proj, tiho=False):
             i = _sid(f)
             s = src.get(i, "") if i is not None else ""
             if s.startswith("card") or s == "local_library":
+                skipped += 1
+                continue
+            # ЗАКОННАЯ ЗАГЛУШКА `needs_upload` — НЕ ПОДМЕНА (14.11, улов
+            # `usuario-4b`). Облако, не сумев скачать кадр, кладёт тёмную
+            # заготовку и ЧЕСТНО пишет в манифест `needs_upload` — «залей
+            # файл сам». Гейт этого не знал, мерил все файлы подряд, и на
+            # пяти таких заглушках из восьми измеренных получал «62% тёмных
+            # — ЭТО ПОДМЕНА», после чего в проект не переносились ГОДНЫЕ
+            # восемь кадров и пять видео. Диагноз выходил ложный («релиз от
+            # снятого прогона»), а прогон был свой и успешный.
+            # Статус берём из манифеста, а не из яркости: заглушка
+            # `needs_upload` тёмная ПО ОПРЕДЕЛЕНИЮ.
+            if i is not None and _manifest_status(proj).get(i) in (
+                    "needs_upload", "NEEDS_UPLOAD", "library_pending",
+                    "LIBRARY_PENDING", "card_pending", "CARD_PENDING"):
                 skipped += 1
                 continue
             frames.append(f)
