@@ -1266,6 +1266,7 @@ def main():
         _dir = os.path.dirname(os.path.abspath(a.scenes)) or "."
         _queue = os.path.join(_dir, "cards", "queue")
         назначенные, готовые, нечем = [], 0, []
+        _зам_журнал = []
         for i, s_ in enumerate(сцены, 1):
             ист = _источник(s_)
             if not ист.startswith("card:"):
@@ -1326,6 +1327,10 @@ def main():
                         print("  замена: сцена %d — вид «%s» этим текстом не "
                               "наполняется (нет числа/имени/страны), ставлю "
                               "«%s»" % (ном, вид, _зам))
+                        _зам_журнал.append({"сцена": ном, "было": вид,
+                                            "стало": _зам,
+                                            "почему": "в тексте сцены нет "
+                                                      "материала для этого вида"})
                         вид, фраза, кл = _зам, _ф2, _кл2
                         break
             if кл is None:
@@ -1376,6 +1381,11 @@ def main():
                   "(запись в `obyazatelno-spisok.json`)." % _зам_всего)
         for о in отказы:
             print("  [ОТКАЗ] %s" % о)
+        if _зам_журнал:
+            _путь = os.path.join(_dir, "zameny_vidov.json")
+            json.dump(_зам_журнал, open(_путь, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
+            print("  замены записаны: %s (их читает гейт обязательных)" % _путь)
         if a.otpravit and поставлено:
             print("\nотправляю рисовку в облако:")
             subprocess.run([sys.executable, CARDS_CLOUD], cwd=_dir)

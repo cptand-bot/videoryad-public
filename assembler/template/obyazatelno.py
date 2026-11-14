@@ -1512,6 +1512,24 @@ def адм_единиц(scenes):
     return n
 
 
+def _zamena_vida(scenes_path, вид):
+    """Запись о замене этого вида, если материала для него в тексте не было."""
+    if not вид:
+        return None
+    корень = os.path.dirname(os.path.abspath(scenes_path or ".")) or "."
+    путь = os.path.join(корень, "zameny_vidov.json")
+    if not os.path.isfile(путь):
+        return None
+    try:
+        import json as _j
+        for з in _j.load(open(путь, encoding="utf-8")):
+            if str(з.get("было")) == str(вид):
+                return з
+    except (OSError, ValueError):
+        return None
+    return None
+
+
 def check(scenes, channel="", gate="dashboard", scenes_path=""):
     """Чего не хватает. Возвращает список строк отказа (пустой — всё стоит)."""
     n_scenes = len(scenes or [])
@@ -1609,6 +1627,22 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
             _не_занято.append("%s — не требуется: числовых фактов в тексте %d "
                               "(порог %d), выдумывать данные запрещено"
                               % (_вид_, _чисел, ЧИСЛОВОЙ_ПОРОГ))
+            continue
+        # ЗАМЕНА ПО ОТСУТСТВИЮ МАТЕРИАЛА — ЭТО НЕ ПРОПУСК (14.11.2026).
+        # Замер того же дня: из 56 карточек комплекта 22 вида требуют
+        # числа, страны, названного человека или готового снимка, которых
+        # в тексте сцены НЕТ. Выдумать их запрещено прямым словом, и агент
+        # их тоже не придумает законно — значит сцена всё равно получает
+        # НАШУ карточку, только другого вида. `kartochki_srazu` пишет такие
+        # замены в `zameny_vidov.json` (сцена, было, стало, почему), и гейт
+        # засчитывает исходный вид закрытым. Пустых мест при этом не
+        # возникает: замена ставится в ту же сцену.
+        _зам = _zamena_vida(scenes_path, el.get("view") or el.get("fx"))
+        if _зам:
+            _не_занято.append("%s — заменён на «%s» в сцене %s: %s"
+                              % (el.get("view") or el.get("fx"),
+                                 _зам.get("стало"), _зам.get("сцена"),
+                                 _зам.get("почему")))
             continue
         _пч = _причина_пропуска(scenes_path, el.get("view") or el.get("fx"))
         if _пч:
