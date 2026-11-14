@@ -129,6 +129,7 @@ template/fx_trans5.py
 template/geo_links.py
 template/grab_stream_frame.py
 template/grab_video_frame.py
+template/imena_pod_kadrom.py
 template/kadry_klon.py
 template/kartochki_srazu.py
 template/kluchi.py
