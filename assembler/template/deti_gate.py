@@ -405,6 +405,20 @@ def cmd_listy(args):
     have = [(s, f) for s, f in pairs if f]
     missing = [s for s, f in pairs if not f]
 
+    # Какая сцена — наша карточка и какого вида (для зелёной пометки ниже).
+    _cards_vid = {}
+    _sf = _scenes_file(pdir)
+    if _sf:
+        try:
+            _d = json.load(open(_sf, encoding="utf-8"))
+            _sc = _d.get("scenes", _d) if isinstance(_d, dict) else _d
+            for _s in _sc:
+                _src = str(_s.get("source", ""))
+                if _src.startswith("card:") and "id" in _s:
+                    _cards_vid[int(_s["id"])] = _src[5:].strip()
+        except Exception:
+            _cards_vid = {}
+
     sheets = []
     for start in range(0, len(have), PER_SHEET):
         chunk = have[start:start + PER_SHEET]
@@ -420,8 +434,21 @@ def cmd_listy(args):
             x = (i % COLS) * CELL_W + 4
             y = (i // COLS) * CELL_H + 22
             sheet.paste(im, (x, y))
-            d.text((x, y - 18), f"сцена {sid}", fill=(255, 225, 70),
-                   font=_font(15))
+            # НАША КАРТОЧКА ПОМЕЧАЕТСЯ ЗЕЛЁНЫМ (14.11, улов `usuario-ac`:
+            # субагент назвал «плохими» две сцены — ленту плёнки и стену
+            # улик, — и вкладка потратила круг на проверку `zoom.py`). На
+            # листах `wm_sheet` такая пометка есть, здесь её не было, хотя
+            # кадр карточки теперь в лист попадает (П-0170). Рисованный кадр
+            # — наш, запреты в нём проверяет не субагент, а состав задания.
+            _nash = str(_cards_vid.get(sid, "")).strip()
+            if _nash:
+                d.rectangle([x - 3, y - 3, x + im.width + 2, y + im.height + 2],
+                            outline=(60, 200, 90), width=3)
+                d.text((x, y - 18), f"сцена {sid} · НАША КАРТОЧКА {_nash}",
+                       fill=(60, 220, 100), font=_font(15))
+            else:
+                d.text((x, y - 18), f"сцена {sid}", fill=(255, 225, 70),
+                       font=_font(15))
         name = os.path.join(out_dir, f"list_{len(sheets) + 1:02d}.jpg")
         sheet.save(name, quality=80)
         sheets.append(name)
