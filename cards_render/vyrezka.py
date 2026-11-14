@@ -466,8 +466,15 @@ def _scene(photo, *, figure, author, role, kick, title, sub, watermark,
             # было H-48, и на живом ролике «Владимир Зеленский / президент
             # Украины» сидел на 898-993 — ровно под титром.
             ty = min(sc.SUB_Y - tape.size[1] - 8, cy + ch - 46)
-            im = _paste(im, _shadow(tape, 9, 5, 7, 110), tx, ty + dy, a_s)
-            im = _paste(im, tape, tx, ty + dy, a_s)
+            # ПРИЕЗД ПОЛОСКИ СЧИТАЕТСЯ ПОСЛЕ ПОТОЛКА, А НЕ ДО НЕГО (14.11,
+            # улов 92 на `planeta-1-likvidaciya-ze`): потолок стоял на `ty`, а
+            # рисовалась полоска на `ty + dy` — ход приезда (десятки пикселей
+            # вниз) уводил её ПОД потолок, и сама плашка касалась линии
+            # субтитров, хотя текст внутри был выше 886. Теперь к линии
+            # прижимается то, что реально ложится в кадр.
+            ty = min(ty + dy, sc.SUB_Y - tape.size[1] - 8)
+            im = _paste(im, _shadow(tape, 9, 5, 7, 110), tx, ty, a_s)
+            im = _paste(im, tape, tx, ty, a_s)
             sc._ev(sfx, 1.02, "quote")
 
     im = cn._head(im.convert("RGB"), kick, title, sub, watermark, t)

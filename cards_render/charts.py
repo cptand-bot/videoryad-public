@@ -2509,7 +2509,27 @@ def slope(out=None, kick="", title="", items=(), left_label="", right_label="",
     LX, RX = PX0 + 360, W - 560
     TOP, BOT = PY0 + 10, PY1 - 10
 
-    def ypos(v):
+    # РАВНЫЕ ВЕЛИЧИНЫ РАЗВОДИМ ПО ВЫСОТЕ (14.11, его кадр со сцены 33
+    # ролика `5min-1-likvidaciya-ze`: «ВРАГ» и «СОЮЗНИК» напечатаны ОДНА
+    # ПОВЕРХ ДРУГОЙ). В режиме перечня без цифр (`--sobytiya`) рисовальщик
+    # получает одинаковые значения у всех пунктов — 1.0 и 1.0, — и `ypos`
+    # честно возвращает им ОДНУ высоту: подписи садятся в одну точку и
+    # перекрывают друг друга. Это тот самый случай, который появился, когда
+    # числовые виды научились работать без цифр.
+    _равные = len({round(float(i["from"]), 6) for i in items}) <= 1 and \
+        len({round(float(i["to"]), 6) for i in items}) <= 1
+    _мест = {}
+    if _равные and len(items) > 1:
+        for _n, _it in enumerate(items):
+            _мест[id(_it)] = _n
+
+    def ypos(v, item=None):
+        if _мест and item is not None and id(item) in _мест:
+            _n = _мест[id(item)]
+            _шаг = (BOT - TOP) / float(max(1, len(items) - 1) + 1)
+            return TOP + _шаг * (_n + 0.5) + _шаг * 0.25
+        if hi - lo < 1e-9:
+            return (TOP + BOT) / 2.0
         return BOT - (float(v) - lo) / (hi - lo) * (BOT - TOP)
 
     f_lab = sc._f(sc.F_HEAD, 29)
@@ -2567,10 +2587,10 @@ def slope(out=None, kick="", title="", items=(), left_label="", right_label="",
     # Правые подписи разводим заранее: у двух близких значений (126 и 121)
     # числа садились друг на друга (поймано 20.10).
     right_y = {}
-    order = sorted(range(len(items)), key=lambda k: ypos(items[k]["to"]))
+    order = sorted(range(len(items)), key=lambda k: ypos(items[k]["to"], items[k]))
     prev = None
     for k in order:
-        y = ypos(items[k]["to"])
+        y = ypos(items[k]["to"], items[k])
         if prev is not None and y - prev < 38:
             y = prev + 38
         right_y[k] = y
@@ -2582,7 +2602,7 @@ def slope(out=None, kick="", title="", items=(), left_label="", right_label="",
         if gr <= 0:
             continue
         sc._ev(sfx, at, "label")
-        y0, y1 = ypos(it["from"]), ypos(it["to"])
+        y0, y1 = ypos(it["from"], it), ypos(it["to"], it)
         up = float(it["to"]) >= float(it["from"])
         col = sc.RED if it.get("accent") else (sc.WHITE if up else (150, 150, 156))
         xe = LX + (RX - LX) * gr

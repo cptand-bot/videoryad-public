@@ -305,11 +305,18 @@ def text_tex(words, fsize=210, fname="ArialBlack.ttf", pad=26, line_gap=14, cond
     for ln in words:
         ws = ln.split(" ")
         sizes = [tmp.textbbox((0, 0), w, font=f) for w in ws]
-        rows.append((ws, sizes))
+        # ОБЩАЯ БАЗОВАЯ ЛИНИЯ НА СТРОКУ (14.11, его слово по сцене 2:
+        # «буква С первая выше, чем следующее слово»). Каждое слово
+        # рисовалось со сдвигом на СВОЙ `bbox.top`, то есть равнялось по
+        # верху собственных глифов: у «С» верх ниже, чем у «КАЖДОЙ» с «Й»,
+        # и одиночная буква уезжала вверх. Берём верх ЦЕЛОЙ строки — тогда
+        # все слова стоят на одной линии.
+        верх_строки = tmp.textbbox((0, 0), ln, font=f)[1]
+        rows.append((ws, sizes, верх_строки))
     sp = tmp.textlength(" ", font=f)
     wmax = 0
     hline = fsize * 1.02
-    for ws, sizes in rows:
+    for ws, sizes, _ in rows:
         wd = sum(s[2] - s[0] for s in sizes) + sp * (len(ws) - 1)
         wmax = max(wmax, wd)
     tw = int(wmax + pad * 2)
@@ -318,7 +325,7 @@ def text_tex(words, fsize=210, fname="ArialBlack.ttf", pad=26, line_gap=14, cond
     d = ImageDraw.Draw(img)
     idx = 0
     y = pad
-    for ws, sizes in rows:
+    for ws, sizes, верх_строки in rows:
         x = pad
         for w, s in zip(ws, sizes):
             ww = s[2] - s[0]
@@ -328,7 +335,7 @@ def text_tex(words, fsize=210, fname="ArialBlack.ttf", pad=26, line_gap=14, cond
                             fill=hl_color)
                 if hl_ink:
                     ink = hl_ink
-            d.text((x - s[0], y - s[1]), w, font=f, fill=ink)
+            d.text((x - s[0], y - верх_строки), w, font=f, fill=ink)
             x += ww + sp
             idx += 1
         y += hline + line_gap
