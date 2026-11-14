@@ -355,7 +355,15 @@ def _apply_mask_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import nadpis_maska as NM
 
-    head = str(ts.get("words") or ts.get("text") or "").strip().upper()
+    # ВТОРОЙ ПУТЬ НАДПИСИ ТОЖЕ НОРМАЛИЗУЕМ (14.11, улов `usuario-1f`:
+    # «починен не тот путь»). Надпись-пластина рисуется здесь, и список
+    # уходил в `str()` вместе со скобками и кавычками — в кадре стояло
+    # `['УДАРЫ ПО ЛЮДЯМ, А НЕ ПО ОБЪЕКТАМ']`. А списком их кладут все, и
+    # `build` сам пишет их так.
+    _wrd = _normalize_words(ts.get("words") or ts.get("text") or "")
+    if isinstance(_wrd, (list, tuple)):
+        _wrd = " — ".join(str(x).strip() for x in _wrd if str(x).strip())
+    head = str(_wrd).strip().upper()
     if not head:
         return False
     sub = str(ts.get("sub") or "").strip()
@@ -723,7 +731,7 @@ def do_overlay(scenes_path, images_dir, clips_dir, ov_path, ffmpeg="ffmpeg"):
                       f"только для фото, беру прямоугольник", flush=True)
                 spec = dict(spec); spec["shape"] = "rect"
         tspec = spec.get("text") if isinstance(spec.get("text"), dict) else None
-        if tspec and not str(tspec.get("words") or tspec.get("text") or "").strip():
+        if tspec and not str(_normalize_words(tspec.get("words") or tspec.get("text") or "")).strip():
             tspec = None
         # НЕЗАВИСИМЫЕ всплывашки: фото и/или СЛОВО. Хотя бы одна нужна.
         if not photo_ok and not tspec:
@@ -1033,7 +1041,7 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
         if resolve_photo(spec.get("photo") or ""):
             _add(sid, spec.get("sound", "whoosh"), spec.get("at", LEAD), "")
         ts = spec.get("text") if isinstance(spec.get("text"), dict) else None
-        if ts and str(ts.get("words") or ts.get("text") or "").strip():
+        if ts and str(_normalize_words(ts.get("words") or ts.get("text") or "")).strip():
             # дефолт текстовой всплывашки — РАЗНЫЙ по сценам (2026-10-17,
             # просьба пользователя: «нужно, чтобы с разными звуками выходил»)
             _TXT_CYCLE = ("pop", "mashinka", "pshik", "zatvor", "whoosh")
