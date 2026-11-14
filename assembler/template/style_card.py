@@ -55,7 +55,7 @@
 кладёт постер в cards/, прежний кадр убирает в cards/replaced/, ставит сцене
 источник `card:<вид>` и ведёт общий журнал cards/cards.json.
 """
-import argparse, fcntl, json, os, shutil, subprocess, sys, time
+import argparse, fcntl, json, os, re, shutil, subprocess, sys, time
 
 # Непустой source_query — см. разбор в quote_card.py: гарды облака считают
 # сцену с пустым запросом неклассифицированной и роняют прогон на setup.
