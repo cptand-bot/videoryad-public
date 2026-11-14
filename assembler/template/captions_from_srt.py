@@ -180,13 +180,30 @@ def main():
         if not a.allow_stub:
             sys.exit(2)
 
+    # ОТНОСИТЕЛЬНЫЙ `--out` КЛАДЁТСЯ РЯДОМ С SRT, А НЕ В ТЕКУЩУЮ ПАПКУ
+    # (14.11, гоча `usuario-ac`). Было: `--out captions.ass` писался
+    # относительно cwd, и позванный из каталога скилла инструмент напечатал
+    # бодрое «субтитры: 204 строк → captions.ass», а файл лёг в
+    # `template/captions.ass` — в папке проекта субтитров не было вовсе.
+    # Класс «успех без результата»: лог чистый, а `ship.sh` встал бы позже и
+    # на пустом месте (субтитры обязательны на каждом ролике с 10.11).
+    # Папка ролика — это папка SRT: именно там лежат `scenes.json`, озвучка
+    # и сам выключатель субтитров.
+    if not os.path.isabs(a.out):
+        _ryadom = os.path.join(os.path.dirname(os.path.abspath(a.srt)), a.out)
+        if os.path.abspath(a.out) != _ryadom:
+            print("субтитры кладу РЯДОМ С SRT: %s" % _ryadom, file=sys.stderr)
+            print("  (относительный --out раньше уходил в текущую папку — "
+                  "файл терялся молча)", file=sys.stderr)
+        a.out = _ryadom
+
     body = [HDR.format(size=a.size, pad=a.pad, mv=a.margin,
                        text=_ass_color(a.text), plate=_ass_color(a.plate, a.alpha))]
     for st, en, tx in groups:
         body.append("Dialogue: 0,%s,%s,Caption,,0,0,0,,%s"
                     % (_t(st), _t(en), tx.upper()))
     open(a.out, "w", encoding="utf-8").write("\n".join(body) + "\n")
-    print("субтитры: %d строк → %s" % (len(groups), a.out))
+    print("субтитры: %d строк → %s" % (len(groups), os.path.abspath(a.out)))
     print("  подложка #%s, текст #%s, кегль %d, отступ снизу %d"
           % (a.plate.lstrip('#'), a.text.lstrip('#'), a.size, a.margin))
     print("  ВКЛЮЧЕНО: этот файл в папке ролика и есть выключатель — облако "
