@@ -164,6 +164,23 @@ def _frame_for(pdir, sid):
     есть кадр-миниатюра: декодировать mp4 ради листа значит считать на его
     машине, а это запрещено (23.10)."""
     images = os.path.join(pdir, "images")
+    # КАДР ВНУТРИ КАРТОЧКИ ТОЖЕ ПРОВЕРЯЕМ (14.11, дыра нашлась живьём у
+    # `usuario-1f`: в элементе A64 на сцене 32 стояла ДЕТСКАЯ ПЛОЩАДКА —
+    # горка и песочница из папки базы, — и гейт её не поймал вовсе).
+    # Причина: гейт смотрел только `images/`, а кадры, которые вкладывают
+    # внутрь рисованных кадров (`card:photo`, `dof`, `wall`, `film_frame`,
+    # `dossier`, `split`, `vyrezka`…), лежат в `cards/photo/` и в листы не
+    # попадали. То есть на ЛЮБОМ ролике кадр карточки шёл без проверки на
+    # жёсткий запрет. Берём первый файл карточки этой сцены — `card_<sid>`
+    # с возможным суффиксом (`card_015_2.jpg`), их у вида бывает несколько.
+    _cards = os.path.join(pdir, "cards", "photo")
+    if os.path.isdir(_cards):
+        _nashli = sorted(glob.glob(os.path.join(_cards, f"card_{sid:03d}.*"))
+                         + glob.glob(os.path.join(_cards, f"card_{sid:03d}_*.*")))
+        _nashli = [f for f in _nashli
+                   if os.path.splitext(f)[1].lower() in (".jpg", ".jpeg", ".png", ".webp")]
+        if _nashli:
+            return _nashli[0]
     for p in (os.path.join(images, ".rev", f"{sid:03d}.jpg"),
               os.path.join(pdir, "thumbs", f"{sid:03d}.jpg")):
         if os.path.exists(p):
