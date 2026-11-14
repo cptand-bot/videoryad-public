@@ -184,6 +184,11 @@ def main():
     ap.add_argument("--photo", default="",
                     help="снимок для вида photo: ставится слева в своём окне "
                          "и НЕ растягивается выше своего разрешения")
+    ap.add_argument("--photo-kto", default="", dest="photo_kto",
+                    help="кто НА ФОТО (14.11, его правило): если под кадром "
+                         "идёт имя, на кадре обязан быть названный человек. "
+                         "Путь к снимку `style_card` переименовывает, поэтому "
+                         "имя подтверждается этим ключом")
     ap.add_argument("--note", default="", help="сноска внизу (золотая)")
     ap.add_argument("--source", default="", help="первоисточник, можно пустым")
     ap.add_argument("--images", default="images")
@@ -414,6 +419,23 @@ def main():
     os.makedirs(os.path.join("cards", "replaced"), exist_ok=True)
     out_mp4 = os.path.join(a.images, f"scene_{a.sid:03d}.mp4")
     poster = os.path.join("cards", f"scene_{a.sid:03d}.jpg")
+
+    # ИМЯ ПОД КАДРОМ — ЗНАЧИТ НА КАДРЕ ЭТОТ ЧЕЛОВЕК (14.11, его слово; дыру
+    # нашла `usuario-70`: у вида A34 `photo` имя задать было нечем, и кадр
+    # уехал бы без подписи молча). Имя идёт в `--source`; подтверждение —
+    # `--photo-kto`, потому что путь к снимку этот инструмент переименовывает.
+    _имя = str(a.source or "")
+    _фам = re.findall(r"[А-ЯЁ][а-яё]{3,}", _имя)
+    if a.photo and _фам:
+        _где = (str(a.photo or "") + " " + str(getattr(a, "photo_kto", "") or "")).lower()
+        if not any(ф.lower()[:5] in _где for ф in _фам):
+            raise SystemExit(
+                "под кадром идёт имя «%s», а подтверждения, что на снимке "
+                "именно он, нет.\n"
+                "  Его правило 14.11: если стоит имя — на кадре обязан быть "
+                "НАЗВАННЫЙ человек, а не общий план и не чужие руки.\n"
+                "  Подтверди явно: --photo-kto «%s» (или возьми портрет из "
+                "базы `ПЕРСОНЫ/<ФАМИЛИЯ>`)." % (_имя, _фам[0]))
 
     common = dict(kick=a.kick, source=a.source, watermark=watermark)
     if a.kind == "photo":
