@@ -100,7 +100,7 @@ def mines_text():
         return ""
 
 
-def _media_library_dir(dest="."):
+def _media_library_dir(dest=".", channel=""):
     """КАКАЯ МЕДИАТЕКА У ЭТОГО КАНАЛА (2026-10-29, улов «Порох и Сикорский»).
 
     Раньше бриф брал библиотеку из переменной окружения, а она в оболочке не
@@ -130,7 +130,26 @@ def _media_library_dir(dest="."):
             continue
         if ml:
             break
-    ml = ml or os.environ.get("MEDIA_LIBRARY_DIR") or os.path.expanduser("~/projects/media-library")
+    # ПОСЛЕДНИЙ ОТВЕТ — КАНАЛ, А НЕ БИБЛИОТЕКА-1 (14.11, блокер
+    # `usuario-70`). `.env` проекта 5 МИНУТ часто создаётся БЕЗ строки
+    # `MEDIA_LIBRARY_DIR` (копируется с ПЛАНЕТЫ), и тогда умолчание
+    # подставляло библиотеку-1: в задание уехали `ПОЛИТИКА/ЗЕЛЕНСКИЙ`,
+    # `ПОЛИТИКА/SVO`, `ПОЛИТИКА/НАТО`, `ПОЛИТИКА/ЕВРОПА-армия`,
+    # `ПОЛИТИКА/ГЕРМАНИЯ`, `ПОЛИТИКА/ЕС-форумы-Украина`, `ПОЛИТИКА/УКРАИНА
+    # ВСУ и Азов` — папки ПЛАНЕТЫ, которых у канала физически нет. Агент
+    # честно заказал по ним 7 сцен, заход ушёл на ветер (приёмка поймала, но
+    # уже после агента). Умолчание «библиотека-1» годилось, пока каналов было
+    # два; раскладка известна и зашита в соседних инструментах
+    # (`build_usage_log`, `check_pins`): библиотека-2 — 5 МИНУТ, ДИПЛОМАТИЯ
+    # СИЛЫ, ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО; библиотека-1 — ПЛАНЕТА и ОЛЬКА.
+    if not ml:
+        ml = os.environ.get("MEDIA_LIBRARY_DIR") or ""
+    if not ml and channel:
+        _ch = str(channel).upper().replace("Ё", "Е")
+        if ("5 МИНУТ" in _ch or "ДИПЛОМАТИЯ" in _ch
+                or "ПЕРЕВОД" in _ch):
+            ml = "media-library-2"
+    ml = ml or os.path.expanduser("~/projects/media-library")
     if not os.path.isabs(ml):
         ml = os.path.expanduser(os.path.join("~/projects", ml))
     return ml
@@ -380,7 +399,7 @@ def _dossier_block(project="."):
     return "\n".join(out)
 
 
-def _base_catalog(dest=".", match_text=""):
+def _base_catalog(dest=".", match_text="", channel=""):
     """Блок каталога базы кадров для брифа; пусто, если база ещё не набрана."""
     try:
         import importlib.util
@@ -393,7 +412,7 @@ def _base_catalog(dest=".", match_text=""):
         # `БАЗА/ТЕМЫ/*`, чьи имена звучат в закадровке (см. `_theme_auto_ok`).
         if match_text:
             mod.AUTO_TEXT = match_text
-        ml = _media_library_dir(dest)
+        ml = _media_library_dir(dest, channel)
         # ТЕМАТИЧЕСКИЕ ПАПКИ МЕДИАТЕКИ ТОЖЕ (2026-10-29). Раньше здесь был
         # только `scan` по `БАЗА/`, и агент, обязанный чем-то закрыть
         # движение, видел ОДИН склад персон и ведомств: живой случай — ролик
@@ -654,7 +673,8 @@ def write_scenes_task(dest, srt, channel, out_name="ЗАДАНИЕ-РАСКАД�
         # раскадровку, а узнать о ней он может ТОЛЬКО отсюда. Без этого блока
         # собранная ночью база физически не попадает ни в один ролик — фетч не
         # найдёт папку по описанию и молча уйдёт в пресс-водопад.
-        _base_catalog(dest, match_text=srt_plain_text(srt)),
+        _base_catalog(dest, match_text=srt_plain_text(srt),
+                      channel=channel),
         # ВЛОЖЕНИЯ ДОСЬЕ (11.11). Тот же случай, что каталог базы строкой
         # выше: без списка адресов агент не может заказать `direct_url`
         # физически, материал георадара лежит без дела, и `dossier_use.py`

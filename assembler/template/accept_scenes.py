@@ -449,7 +449,15 @@ def main():
         _txt = open(_cp, encoding="utf-8").read()
         _blk = re.search(r"VIEWS = \{(.*?)\n\}", _txt, re.S)
         if _blk:
-            _known = set(re.findall(r'"([a-z_]+)":', _blk.group(1)))
+            # ЦИФРЫ В ИМЕНИ ВИДА (14.11, блокер `usuario-70`). Регулярка была
+            # `[a-z_]+` — без цифр, — поэтому приёмка не видела ровно те виды,
+            # которые гейт обязательных ТРЕБУЕТ: `zal_g01`, `zal_g18`,
+            # `zal_g44`, `zal_g48` (приёмы белого зала, заведены 13.11). Файл
+            # с верной раскадровкой падал с «вида карточки НЕ СУЩЕСТВУЕТ» на
+            # четырёх сценах, то есть один наш гейт отбивал то, что требует
+            # другой. Класс известный — «реестров несколько, приёмка знает
+            # один», только здесь разъехался не реестр, а МАСКА ИМЕНИ.
+            _known = set(re.findall(r'"([a-z0-9_]+)":', _blk.group(1)))
     except Exception:
         _known = set()
     # РЕЕСТРА ДВА, А ПРИЁМКА ЗНАЛА ОДИН (02.11, улов `usuario-04`).
@@ -466,7 +474,7 @@ def main():
         _st = open(_sc, encoding="utf-8").read()
         _lb = re.search(r"LIMITS = \{(.*?)\n\}", _st, re.S)
         if _lb:
-            _known |= set(re.findall(r'"([a-z_]+)":\s*\{', _lb.group(1)))
+            _known |= set(re.findall(r'"([a-z0-9_]+)":\s*\{', _lb.group(1)))
     except Exception:
         pass
     # РЕЕСТРОВ СТАЛО ТРИ (06.11). Общая дверь элементов арсенала
@@ -480,7 +488,7 @@ def main():
         _et = open(_ep, encoding="utf-8").read()
         _eb = re.search(r"ЭЛЕМЕНТЫ = \{(.*?)\n\}", _et, re.S)
         if _eb:
-            _known |= set(re.findall(r'"([a-z_]+)":\s*\{', _eb.group(1)))
+            _known |= set(re.findall(r'"([a-z0-9_]+)":\s*\{', _eb.group(1)))
     except Exception:
         pass
     for i in cards:
