@@ -1240,7 +1240,23 @@ def resolved_asset(images_dir, sid):
                 hits.append(p)
         except OSError:
             continue          # transient temp file vanished mid-glob
-    return sorted(hits)[0] if hits else None
+    if not hits:
+        return None
+    # СВЕЖИЙ КЛИП СИЛЬНЕЕ СТАРОЙ КАРТИНКИ (14.11, его слово по сцене 65:
+    # «превьюшка нарисована… а нажимая „рассмотреть“, идёт старая, где края
+    # точек очень далеко друг от друга»). Рядом со сценой могут лежать и
+    # `scene_NNN.jpg` от прошлой версии, и свежий `scene_NNN.mp4` после
+    # перерисовки; сортировка по имени всегда отдавала `.jpg`, то есть
+    # «рассмотреть» показывал кадр, которого в ролике уже нет.
+    hits.sort()
+    _свежий = max(hits, key=lambda p: os.path.getmtime(p))
+    try:
+        _первый = hits[0]
+        if (os.path.getmtime(_свежий) - os.path.getmtime(_первый)) > 2:
+            return _свежий
+    except OSError:
+        pass
+    return hits[0]
 
 
 # --- «Уникализировать» — набор мелких обратимых правок кадра ------------
@@ -2429,7 +2445,12 @@ async function poll(){
       }
       if(sc.full){
         window.__full = window.__full || {};
-        window.__full[sc.id] = {src: sc.full, vid: !!sc.is_video};
+        // ВЕРСИЯ В АДРЕСЕ, ИНАЧЕ БРАУЗЕР ПОКАЖЕТ СТАРЫЙ ФАЙЛ (14.11, его
+        // слово по сцене 65: «превьюшка нарисована… а „рассмотреть“ идёт
+        // старая»). Путь к файлу после перерисовки тот же, поэтому без
+        // метки версии кэш отдаёт прежний клип — плитка уже новая, а
+        // крупный кадр старый.
+        window.__full[sc.id] = {src: sc.full + (sc.full.indexOf('?')<0 ? ('?v='+sc.v) : ''), vid: !!sc.is_video};
         const lb = document.getElementById('look'+sc.id);
         if(lb) lb.disabled = false;
       }
