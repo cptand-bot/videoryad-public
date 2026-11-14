@@ -785,10 +785,48 @@ def _cli(argv):
         print("не прочитать %s (%s)" % (путь, e), file=sys.stderr)
         return 2
     сцены = данные["scenes"] if isinstance(данные, dict) else данные
+
+    # КАРТОЧКА БЕЗ ЗАДАНИЯ В ОЧЕРЕДИ — ОТКАЗ (14.11, мина `usuario-ac`).
+    # Агент ставит `source: card:<вид>` на все виды комплекта, а ЗАДАНИЯ на
+    # рисовку при этом нет: его пишет `card_put`/`element_put`/`style_card` в
+    # `cards/queue/scene_NNN.json`, и только по нему рисует облако
+    # (`cards_cloud.py` берёт ровно эту папку). До сих пор такой ролик
+    # проходил ОБА гейта — и «рисованные кадры чистые», и «обязательные на
+    # месте», — а в облако уехали бы две карточки из 58: остальные 56 сцен
+    # остались бы БЕЗ КАДРА ВООБЩЕ. Класс «успех без результата», самый
+    # дорогой: видно это только на готовом файле.
+    _нет_задания = []
+    for s in сцены:
+        if not рисованная(s):
+            continue
+        try:
+            sid = int(s.get("id"))
+        except (TypeError, ValueError):
+            continue
+        if not os.path.isfile(os.path.join(проект, QUEUE, "scene_%03d.json" % sid)):
+            _нет_задания.append((sid, str(s.get("source", ""))[5:].strip()))
+    if _нет_задания:
+        print("❌ КАРТОЧКИ БЕЗ ЗАДАНИЯ НА РИСОВКУ (%d): сцене поставлен "
+              "источник `card:*`, а файла `cards/queue/scene_NNN.json` нет — "
+              "облако такую сцену не рисует, в готовом ролике она останется "
+              "ПУСТОЙ." % len(_нет_задания))
+        for sid, вид in _нет_задания[:20]:
+            print("   сцена %-3d card:%s" % (sid, вид))
+        if len(_нет_задания) > 20:
+            print("   … и ещё %d" % (len(_нет_задания) - 20))
+        print("   Чем закрыть разом: python3 ~/.claude/skills/news-video/"
+              "template/kartochki_srazu.py %s --naznachennye --stavit "
+              "--otpravit" % os.path.basename(путь))
+        print("   Что не выведется из текста — руками: `card_put.py` (виды "
+              "card_put), `element_put.py` (wall/bars/dof/poster/slider), "
+              "`style_card.py` (photo/bullets/forces/timeline).")
+        return 1
+
     наруш = слои_на_карточках(сцены, None, проект)
     if not наруш:
         n = sum(1 for s in сцены if рисованная(s))
-        print("✅ рисованные кадры чистые (%d карточек, слоёв ни на одной)" % n)
+        print("✅ рисованные кадры чистые (%d карточек, слоёв ни на одной), "
+              "задание на рисовку есть у каждой" % n)
         return 0
     print("❌ " + отказ_слои(наруш))
     return 1
