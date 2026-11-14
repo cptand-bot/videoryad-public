@@ -526,7 +526,46 @@ def sdat(kanal, tema, den, kto="", rabota="видеоряд", proekt=""):
             out.append("сдано: %s | %s | %s | %s"
                        % (zap.get("канал"), zap.get("тема"),
                           zap.get("день") or "день не указан", rabota))
+    out += _snyat_zamki_truby(zap.get("проект") or proekt)
     return True, out
+
+
+def _snyat_zamki_truby(proekt):
+    """Сдана тема — свободны и её трубы (14.11, конфликт `usuario-3a`).
+
+    Снятие замка живёт в `faza.sh sdacha`, и только ВНУТРИ ветки «хэш
+    совпал». Доставку часто доводят руками (`ship.sh` + `get.sh` + копия на
+    `D:`), фаза при этом не отрабатывает — и замок висит до четырёх часов.
+    Живой случай 14.11: труба `pyat` держалась 356 минут брошенной от
+    СДАННОГО `planeta-2-strashnye-poteri`, следующей вкладке пришлось
+    перехватывать её по возрасту, а `cptand-pub` и `olga-pub` так и стояли
+    занятыми от роликов, сданных утром. Реестр знает о сдаче в ЛЮБОМ пути
+    доставки — значит снимать замок правильно здесь.
+    """
+    out = []
+    if not proekt:
+        return out
+    цель = os.path.abspath(proekt)
+    замки = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "base", "truby")
+    if not os.path.isdir(замки):
+        return out
+    for имя in sorted(os.listdir(замки)):
+        файл = os.path.join(замки, имя, "kto")
+        try:
+            with open(файл, encoding="utf-8") as f:
+                чей = f.read().strip()
+        except OSError:
+            continue
+        if os.path.abspath(чей) != цель:
+            continue
+        try:
+            os.remove(файл)
+            os.rmdir(os.path.join(замки, имя))
+            out.append("труба %s освобождена (её держал этот проект)" % имя)
+        except OSError as e:
+            out.append("!! труба %s не освободилась: %s" % (имя, e))
+    return out
 
 
 def spisok(vse=False):
