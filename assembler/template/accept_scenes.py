@@ -408,14 +408,33 @@ def main():
         # приходится резать. Получалась ложная тревога ровно там, где правка
         # обязательна. При явном `--per-scene` верх считаем +20%.
         _hi = 1.2 if a.per_scene else 1.1
-        if n > want * _hi:
+        # ВЕРХ РАМКИ ПОДЧИНЁН КОМПЛЕКТУ (14.11, блокер `usuario-70`). На
+        # коротком ролике обязательный комплект (карточек не меньше 56 плюс
+        # сцены видео-лида) физически не влезает в рамку «длительность÷11,5
+        # ±10%»: 659 с дают норму 57 при потолке 63, а минимум по комплекту
+        # 67. `codex_brief._ramka_scen` раздвигает рамку в задании — приёмка
+        # обязана считать ТАК ЖЕ, иначе ролик, сделанный по заданию, ловит
+        # замечание «нарезано мелко» на ровном месте.
+        _min_komplekt = 0
+        try:
+            import importlib.util as _ilu3
+            _cbp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "codex_brief.py")
+            _sp3 = _ilu3.spec_from_file_location("_cb_ramka", _cbp)
+            _cb = _ilu3.module_from_spec(_sp3)
+            _sp3.loader.exec_module(_cb)
+            _min_komplekt = _cb._ramka_scen(want)[1]
+        except Exception:
+            _min_komplekt = 0
+        _verh = max(want * _hi, _min_komplekt)
+        if n > _verh:
             warn.append("сцен %d при норме %d (%.0f-%.0f) — нарезано мелко, "
                         "медиана %.1f с; каждая лишняя сцена это лишний запрос "
                         "и лишняя плитка на проверку"
-                        % (n, round(want), want * 0.9, want * _hi, total / n))
+                        % (n, round(want), want * 0.9, _verh, total / n))
         elif n < want * 0.9:
             warn.append("сцен %d при норме %d (%.0f-%.0f) — кадры будут «застывать»"
-                        % (n, round(want), want * 0.9, want * _hi))
+                        % (n, round(want), want * 0.9, _verh))
     # ВИД КАРТОЧКИ СВЕРЯЕМ С РЕЕСТРОМ ДВЕРИ (2026-10-27, улов `usuario-54` на
     # `5min-granica1997`). Приёмка проверяла только ПРЕФИКС `card:` — поэтому
     # выдуманный агентом `card:bullets` прошёл с кодом 0. Дефект был бы поздним
