@@ -5144,8 +5144,46 @@ def main():
     args = sys.argv[1:]
     live = "--live" in args
     args = [a for a in args if a != "--live"]
+    # КЛЮЧИ `--port` И `--images` ПОНИМАЕМ ЯВНО (14.11, авария на двух
+    # дашбордах сразу). Порт и папка кадров читались ТОЛЬКО позиционно, и
+    # вызов `review.py <сцены> --live --port 8790` разбирался так:
+    # `images_dir = "--port"`, то есть кадров нет ни одного — все плитки
+    # висели «ждём кадр…», а сам порт брался из следующего аргумента, и ДВА
+    # дашборда сели на один номер (второй молча уехал на соседний). Со
+    # стороны выглядело как «дашборд не поднимается», и это он увидел на
+    # двух роликах подряд. Теперь ключи вынимаются до позиционных.
+    _port_key = None
+    _imgs_key = None
+    _clean = []
+    _i = 0
+    while _i < len(args):
+        a = args[_i]
+        if a in ("--port", "-p") and _i + 1 < len(args):
+            _port_key = args[_i + 1]
+            _i += 2
+            continue
+        if a.startswith("--port="):
+            _port_key = a.split("=", 1)[1]
+            _i += 1
+            continue
+        if a in ("--images", "--images-dir") and _i + 1 < len(args):
+            _imgs_key = args[_i + 1]
+            _i += 2
+            continue
+        if a.startswith("--images="):
+            _imgs_key = a.split("=", 1)[1]
+            _i += 1
+            continue
+        _clean.append(a)
+        _i += 1
+    args = _clean
     scenes_path = args[0] if len(args) > 0 else (sorted(glob.glob("*.scenes.json")) or ["scenes.json"])[0]
-    images_dir = args[1] if len(args) > 1 else "images"
+    images_dir = _imgs_key or (args[1] if len(args) > 1 else "images")
+    if _port_key:
+        # порт из ключа встаёт туда, где его ждёт позиционный разбор ниже
+        while len(args) < 3:
+            args.append("")
+        args[2] = _port_key
     # ПАПКА МИНИАТЮР СОЗДАЁТСЯ СРАЗУ (14.11, мина `usuario-48`). Если
     # дашборд подняли раньше первого обращения к `.rev`, папки нет — и
     # `notify.sh` отбивает оповещение «СЕТКА ПУСТАЯ, /state отвечает
