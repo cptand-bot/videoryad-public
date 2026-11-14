@@ -58,6 +58,7 @@ cloud/switch_account.sh
 cloud/sync_assembler.sh
 cloud/traffic.sh
 cloud/use_account.sh
+cloud/uborka.sh
 cloud/va.sh
 cloud/workflows/base-harvest.yml
 cloud/workflows/base-video.yml
@@ -143,6 +144,7 @@ template/nadpisi_spread.py
 template/nalichie.py
 template/naydi.py
 template/o_chem.py
+template/nuli.sh
 template/obyazatelno.py
 template/overlay_fit.py
 template/ozvuchka.py
