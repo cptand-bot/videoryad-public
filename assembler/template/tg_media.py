@@ -247,7 +247,12 @@ RETELLERS = ("ostashkonews", "readovkanews", "rian_ru", "bbbreaking",
              # 06.11, улов `usuario-a3`: отдал интервью ZDF ПЕРЕСНЯТЫМ
              # эфиром — плашка «НОВИНИ LIVE» в углу и вшитые украинские
              # титры ПОСЕРЕДИНЕ кадра (углы срезать можно, середину нет)
-             "media_post_ua", "novyny", "novini")
+             "media_post_ua", "novyny", "novini",
+             # 14.11, улов 85 (`usuario-4b`, ключ 367): аудит забраковал 11
+             # сцен из 15, и все одиннадцать — вложения этих каналов:
+             # скриншоты NYT и Bloomberg, испанская и немецкая пресса,
+             # плашки телеэфира, вшитые титры. В списке их не было.
+             "zerada", "ostashko", "resurs_ua", "insiderua", "hueviykiev")
 
 
 def _reteller(chan):

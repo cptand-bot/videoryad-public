@@ -96,6 +96,7 @@ template/codex_raskhod.py
 template/contact_sheet.py
 template/crop_brand.py
 template/deti_gate.py
+template/dossier_otbor.py
 template/dossier_use.py
 template/element_put.py
 template/faza.sh
