@@ -5146,6 +5146,16 @@ def main():
     args = [a for a in args if a != "--live"]
     scenes_path = args[0] if len(args) > 0 else (sorted(glob.glob("*.scenes.json")) or ["scenes.json"])[0]
     images_dir = args[1] if len(args) > 1 else "images"
+    # ПАПКА МИНИАТЮР СОЗДАЁТСЯ СРАЗУ (14.11, мина `usuario-48`). Если
+    # дашборд подняли раньше первого обращения к `.rev`, папки нет — и
+    # `notify.sh` отбивает оповещение «СЕТКА ПУСТАЯ, /state отвечает
+    # 000000» при живом и правильном дашборде. Лечилось это вручную
+    # (`mkdir -p <проект>/images/.rev`), то есть вкладка теряла минуты на
+    # ровном месте и могла решить, что дашборд сломан.
+    try:
+        os.makedirs(os.path.join(images_dir, ".rev"), exist_ok=True)
+    except OSError:
+        pass
     if live:
         port = int(args[2]) if len(args) > 2 else 8747
         run_live(scenes_path, images_dir, port)
