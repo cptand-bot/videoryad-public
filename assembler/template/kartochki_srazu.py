@@ -40,6 +40,44 @@ import sys
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CARD_PUT = os.path.join(SKILL, "fullcycle", "card_put.py")
+ELEMENT_PUT = os.path.join(SKILL, "template", "element_put.py")
+STYLE_CARD = os.path.join(SKILL, "template", "style_card.py")
+
+
+def _dver_vida(вид):
+    """Какой дверью ставится вид: card_put, element_put или style_card.
+
+    14.11, улов `usuario-48`. Режим `--naznachennye` звал ТОЛЬКО `card_put`,
+    а агент назначает и виды двух других дверей: `wall` (A56), `bars` (A4),
+    `dof` (A64), `poster` (A6), `slider` (A5) живут в `element_put`, а
+    `photo`, `bullets`, `forces`, `timeline` — в `style_card`. Дверь
+    отвечала `invalid choice`, и шесть сцен из тринадцати падали на ровном
+    месте: вид назначен верно, инструмент стучался не в ту дверь.
+    """
+    import importlib.util as _ilu
+    try:
+        _sp = _ilu.spec_from_file_location("_cp_views", CARD_PUT)
+        _m = _ilu.module_from_spec(_sp)
+        _sp.loader.exec_module(_m)
+        if вид in (getattr(_m, "VIEWS", {}) or {}):
+            return CARD_PUT
+    except Exception:
+        pass
+    try:
+        _t = open(ELEMENT_PUT, encoding="utf-8").read()
+        _b = re.search(r"ЭЛЕМЕНТЫ = \{(.*?)\n\}", _t, re.S)
+        if _b and вид in set(re.findall(r'"([a-z0-9_]+)":\s*\{', _b.group(1))):
+            return ELEMENT_PUT
+    except OSError:
+        pass
+    try:
+        _t2 = open(STYLE_CARD, encoding="utf-8").read()
+        _b2 = re.search(r"LIMITS = \{(.*?)\n\}", _t2, re.S)
+        if _b2 and вид in set(re.findall(r'"([a-z0-9_]+)":\s*\{', _b2.group(1))):
+            return STYLE_CARD
+    except OSError:
+        pass
+    return ""
 CARDS_CLOUD = os.path.join(SKILL, "fullcycle", "cards_cloud.py")
 
 # Виды, у которых ВСЕ параметры выводятся из текста сцены: их ставим сами.
@@ -604,10 +642,18 @@ def main():
                 готовые += 1
                 continue
             т = _текст(s_)
+            дверь = _dver_vida(вид)
+            if дверь and дверь != CARD_PUT:
+                # ВИД ДРУГОЙ ДВЕРИ: ключи у него свои и почти все требуют
+                # КАДРА (`--photo`, `--shot`) или готовых рядов, из текста их
+                # не вывести. Честно называем вид и дверь, а не отбиваем его
+                # «invalid choice» от `card_put`.
+                нечем.append((ном, вид, os.path.basename(дверь)))
+                continue
             фраза = _fraza_pod_vid(вид, т) or _fraza(т)
             кл = _klyuchi(вид, фраза, т)
             if кл is None:
-                нечем.append((ном, вид))
+                нечем.append((ном, вид, "материал"))
                 continue
             назначенные.append((ном, вид, т, кл))
         print("НАЗНАЧЕНО АГЕНТОМ: карточек %d · уже с заданием %d · "
@@ -616,8 +662,15 @@ def main():
         if нечем:
             print("материал из текста не выводится (%d) — поставь руками, "
                   "числа и фамилии выдумывать запрещено:" % len(нечем))
-            for ном, вид in нечем[:12]:
-                print("  сцена %-3d %s" % (ном, вид))
+            for ном, вид, чем in нечем[:16]:
+                if чем == "element_put.py":
+                    print("  сцена %-3d %-16s дверь element_put.py "
+                          "(нужен кадр или ряды)" % (ном, вид))
+                elif чем == "style_card.py":
+                    print("  сцена %-3d %-16s дверь style_card.py" % (ном, вид))
+                else:
+                    print("  сцена %-3d %-16s материал из текста не выводится"
+                          % (ном, вид))
         if not a.stavit:
             print("ничего не поставлено (нужен ключ --stavit)")
             return 0
