@@ -1,0 +1,1340 @@
+[
+ {
+  "scene": 1,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.2,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 10.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Москва пересматривает прежние",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.2
+   }
+  },
+  "kwargs": {
+   "text": "Москва пересматривает прежние",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.2
+  }
+ },
+ {
+  "scene": 2,
+  "view": "strike",
+  "dur": 12.0,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Красные линии, о которых твердили годами, больше не действуют: прежний защищённый статус перечёркнут.",
+   "struck": "прежний защищённый статус",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.49,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 13.49,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "которая потребуется для будущих",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 13.49,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "которая потребуется для будущих",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 13.49,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "film.film_single",
+  "dur": 10.96,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_007.jpg",
+   "title": "Предыстория",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.62,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 11.62,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Одна двигается, другая держит.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.62,
+    "pary": [
+     "Одна сторона=двигаться дальше",
+     "Другая сторона=сохранять ограничения"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Одна двигается, другая держит.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.62,
+   "pary": [
+    "Одна сторона=двигаться дальше",
+    "Другая сторона=сохранять ограничения"
+   ]
+  }
+ },
+ {
+  "scene": 13,
+  "view": "zal",
+  "dur": 9.28,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "теперь несите оружие, кредиты, бюджеты и ещё несколько лет",
+   "words": [
+    "ТЕПЕРЬ",
+    "НЕСИТЕ"
+   ],
+   "sheets": [
+    "теперь несите оружие",
+    "бюджеты и ещё несколько лет поддержки",
+    "И пока наверху выясняют",
+    "насколько далеко можно зайти"
+   ],
+   "channel": "ПЛАНЕТА",
+   "dur": 9.28,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "cinematic.dossier",
+  "dur": 13.68,
+  "anim": 13.68,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "rows": [
+    "Георгий Мазурашу",
+    "депутат Верховной рады",
+    "допустил изменение границ областей",
+    "условие — настоящие гарантии мира",
+    "раньше за такое травили публично"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_014.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "zal_slova",
+  "dur": 9.49,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.49,
+   "sheets": [],
+   "text": "Границы по нынешней линии фронта.",
+   "na_polu": "ГАРАНТИИ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "zal_pol",
+  "dur": 9.55,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.55,
+   "sheets": [],
+   "text": "Конституцию менять нельзя.",
+   "na_polu": "ЛАЗЕЙКА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "doc",
+  "dur": 12.53,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Теперь депутат ищет юридический путь для такого решения.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "zal_kub",
+  "dur": 9.29,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.29,
+   "sheets": [],
+   "text": "Сесть за стол не значит вернуть территории.",
+   "kick": "ФОРМУЛИРОВКА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "duel",
+  "dur": 13.2,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Линия прекращения боевых действий",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Передача контроля обратно Киеву",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "vyrezka.gazeta",
+  "dur": 10.56,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_021.jpg",
+   "author": "Тарас Чмут",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "zal_g01",
+  "dur": 11.03,
+  "anim": 11.03,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.03,
+   "sheets": [],
+   "text": "Почему сохранять нынешние союзы?",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "charts.cartogram",
+  "dur": 12.44,
+  "anim": 12.44,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Китай",
+    "Иран",
+    "Северная Корея"
+   ],
+   "mode": "bubble",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "split",
+  "dur": 12.08,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Украина теоретически может стать союзником России против Европы.",
+   "photo": "cards/photo/card_025.jpg",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "film.film_strip",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_026.jpg",
+    "cards/photo/card_026_2.jpg",
+    "cards/photo/card_026_3.jpg"
+   ],
+   "title": "Мир, в котором решает сила",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "cinematic.evidence_wall",
+  "dur": 12.33,
+  "anim": 12.33,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_027.jpg",
+     240,
+     380,
+     -4,
+     "общие институты"
+    ],
+    [
+     "cards/photo/card_027_2.jpg",
+     800,
+     380,
+     3,
+     "общая логистика"
+    ],
+    [
+     "cards/photo/card_027_3.jpg",
+     1360,
+     380,
+     -2,
+     "общий Запад"
+    ]
+   ],
+   "title": "Связи, которые не рвутся",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 28,
+  "view": "charts.network",
+  "dur": 12.47,
+  "anim": 12.47,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Россия",
+     "label": "Россия",
+     "weight": 2.0
+    },
+    {
+     "id": "Украина",
+     "label": "Украина",
+     "weight": 2.0
+    },
+    {
+     "id": "связанная промышленность",
+     "label": "связанная промышленность",
+     "weight": 1.0
+    },
+    {
+     "id": "единая инфраструктура",
+     "label": "единая инфраструктура",
+     "weight": 1.0
+    },
+    {
+     "id": "Смешанные семьи",
+     "label": "Смешанные семьи",
+     "weight": 1.0
+    },
+    {
+     "id": "обе страны",
+     "label": "обе страны",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Россия",
+     "to": "Украина",
+     "weight": 1.0
+    },
+    {
+     "from": "Россия",
+     "to": "связанная промышленность",
+     "weight": 1.0
+    },
+    {
+     "from": "Украина",
+     "to": "единая инфраструктура",
+     "weight": 1.0
+    },
+    {
+     "from": "Смешанные семьи",
+     "to": "обе страны",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "charts.map_dist",
+  "dur": 13.72,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Москва",
+     "lat": 55.75,
+     "lon": 37.62,
+     "accent": false
+    },
+    {
+     "label": "Киев",
+     "lat": 50.45,
+     "lon": 30.52,
+     "accent": false
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "bars",
+  "dur": 11.04,
+  "anim": 11.04,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Материальные интересы",
+   "caption": "",
+   "seconds": 11.04,
+   "bars": [
+    {
+     "label": "РЕСУРСЫ РОССИИ",
+     "value": 0.9,
+     "color": "4A90E2"
+    },
+    {
+     "label": "СЕЛЬСКОЕ ХОЗЯЙСТВО УКРАИНЫ",
+     "value": 0.7,
+     "color": "48BB78"
+    },
+    {
+     "label": "ОБЩАЯ ГРАНИЦА",
+     "value": 0.8,
+     "color": "84848A"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 31,
+  "view": "cinematic.depth_of_field",
+  "dur": 9.52,
+  "anim": 9.52,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_031.jpg",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 33,
+  "view": "zal_slova",
+  "dur": 10.32,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.32,
+   "sheets": [],
+   "text": "Россия и Украина меняют расстановку",
+   "na_polu": "ВОСТОК ЕВРОПЫ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "zal_efir",
+  "dur": 13.34,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.34,
+   "sheets": [],
+   "text": "Чмут задал вопрос вслух.",
+   "say": "Кому Украина предъявит главный счёт?",
+   "author": "Тарас Чмут",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "vyrezka.figura",
+  "dur": 13.74,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_035.jpg",
+   "author": "Тарас Чмут",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "charts.slope",
+  "dur": 12.08,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Ожидание членства",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "новые условия"
+    },
+    {
+     "label": "Обещанный вход в Евросоюз",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "следующий поворот"
+    },
+    {
+     "label": "Рынки для зерна",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "закрытые рынки"
+    }
+   ],
+   "source": "Реплика Тараса Чмута",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "zal_g18",
+  "dur": 9.76,
+  "anim": 9.76,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.76,
+   "sheets": [
+    "Не пара месяцев",
+    "Счёт пошёл на годы"
+   ],
+   "text": "Членство отодвинули.",
+   "value": "10 ЛЕТ",
+   "value_sub": "ответ из Европы",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.31,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 10.31,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Впереди целое десятилетие переговоров.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.31,
+    "sobytiya": [
+     "Завершение войны",
+     "Многолетние переговоры",
+     "Изменение законов",
+     "Членский билет не гарантирован"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Впереди целое десятилетие переговоров.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.31,
+   "sobytiya": [
+    "Завершение войны",
+    "Многолетние переговоры",
+    "Изменение законов",
+    "Членский билет не гарантирован"
+   ]
+  }
+ },
+ {
+  "scene": 39,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.05,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.05,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Процедура вступления",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.05,
+    "tezisy": [
+     "Многолетние переговоры",
+     "Изменение законов",
+     "Экономические требования",
+     "Управленческие требования",
+     "Война и коррупция"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Процедура вступления",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.05,
+   "tezisy": [
+    "Многолетние переговоры",
+    "Изменение законов",
+    "Экономические требования",
+    "Управленческие требования",
+    "Война и коррупция"
+   ]
+  }
+ },
+ {
+  "scene": 40,
+  "view": "doc",
+  "dur": 12.48,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Сколько лет Киев шёл за обещанием европейского будущего?",
+   "title": "Вопрос без ответа.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "zal_g44",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.6,
+   "sheets": [
+    "Требовали ещё один закон",
+    "Морковку пора менять"
+   ],
+   "text": "Показывали общий дом.",
+   "value": "РЕФОРМА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "pull",
+  "dur": 10.83,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Даже через десять лет Украина может остаться у входа.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "zal_pol",
+  "dur": 10.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.8,
+   "sheets": [],
+   "text": "Быстрой дороги к членству нет.",
+   "na_polu": "УДАР",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "torn_split.torn_split",
+  "dur": 13.61,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "a_path": "cards/photo/card_044.jpg",
+   "b_path": "cards/photo/card_044_2.jpg",
+   "title": "Две Украины",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "zal_ekran",
+  "dur": 13.76,
+  "anim": 13.76,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.76,
+   "sheets": [],
+   "text": "Обещания не выполнены.",
+   "say": "Страна к членству не готова.",
+   "author": "Петер Мадьяр",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.64,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 12.64,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Сменится премьер — и ворота откроются?",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 12.64,
+    "role": "Премьер-министр Венгрии"
+   }
+  },
+  "kwargs": {
+   "text": "Сменится премьер — и ворота откроются?",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 12.64,
+   "role": "Премьер-министр Венгрии"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.04,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "globus",
+   "seconds": 12.04,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Никуда не исчезли ни закарпатские",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 12.04,
+    "region": "Венгрия"
+   }
+  },
+  "kwargs": {
+   "text": "Никуда не исчезли ни закарпатские",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 12.04,
+   "region": "Венгрия"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "charts.cartogram",
+  "dur": 11.92,
+  "anim": 11.92,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Польша",
+    "Венгрия",
+    "Украина"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "tape",
+  "dur": 10.88,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Территориальные уступки, ограничения на зерно и годы ожидания у дверей Евросоюза.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "zal_shkala",
+  "dur": 13.12,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.12,
+   "sheets": [],
+   "text": "Избиратель потребует отчёт.",
+   "value": "НЕСКОЛЬКО ЛЕТ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "quote",
+  "dur": 11.76,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Где членство, где восстановление, где безопасность, где деньги и почему Киев по-прежнему должен выполнять новые условия?",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "zal",
+  "dur": 13.48,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Союз с Россией перестанет звучать нелепостью.",
+   "words": [
+    "СОЮЗ",
+    "ВАРИАНТ"
+   ],
+   "sheets": [
+    "Европа без Киева",
+    "Разговор без смеха",
+    "Новый курс"
+   ],
+   "channel": "ПЛАНЕТА",
+   "dur": 13.48,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "paper_hand",
+  "dur": 13.2,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Кого украинцы обвинят сильнее: Москву, руководство в Киеве или европейских партнёров?",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "zal_g48",
+  "dur": 13.04,
+  "anim": 13.04,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.04,
+   "sheets": [],
+   "text": "Будущие союзы решит реальность",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.08,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 11.08,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "границах и членстве в Евросоюзе.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.08,
+    "soobshcheniya": [
+     "Главный бытовой вопрос — когда появится электричество",
+     "Совместный доклад американских ведомств — об энергосистеме Украины"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "границах и членстве в Евросоюзе.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.08,
+   "soobshcheniya": [
+    "Главный бытовой вопрос — когда появится электричество",
+    "Совместный доклад американских ведомств — об энергосистеме Украины"
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "charts.pie",
+  "dur": 11.72,
+  "anim": 11.72,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Электростанции",
+     "value": 25.0
+    },
+    {
+     "label": "Электрические сети",
+     "value": 25.0
+    },
+    {
+     "label": "Централизованное отопление",
+     "value": 25.0
+    },
+    {
+     "label": "Запорожская АЭС",
+     "value": 25.0
+    }
+   ],
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "charts.cartogram",
+  "dur": 12.21,
+  "anim": 12.21,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Запорожская область"
+   ],
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "paper_typed",
+  "dur": 13.04,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "За сухими словами о генерации прячется обычная городская квартира.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "zal_makety",
+  "dur": 11.68,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.68,
+   "sheets": [],
+   "text": "Дом зависит от общей сети.",
+   "makety": [
+    "лэп=ЭНЕРГОСЕТИ",
+    "больница=БОЛЬНИЦЫ"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "photo",
+  "dur": 11.92,
+  "anim": 11.92,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "photo": "cards/photo/card_061.jpg",
+   "title": "Восстановление затянется",
+   "lines": [
+    "Вода и тепло уходят следом за светом",
+    "Зимой это вопрос выживания районов",
+    "Полное восстановление — до пяти лет"
+   ]
+  }
+ },
+ {
+  "scene": 62,
+  "view": "slider",
+  "dur": 12.56,
+  "anim": 12.56,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "",
+   "min": 0.0,
+   "max": 5.0,
+   "low": 0.0,
+   "high": 5.0,
+   "marker_value": 5.0,
+   "marker_display": "5 лет",
+   "seconds": 12.56,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "полное восстановление энергетики",
+   "source": ""
+  }
+ },
+ {
+  "scene": 63,
+  "view": "devices.device_scene",
+  "dur": 13.44,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "content_path": "cards/photo/card_063.jpg",
+   "items": [
+    "Расписание=отключения электричества",
+    "Задача=вскипятить воду и зарядить телефон"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "poster.poster",
+  "dur": 11.92,
+  "anim": 11.92,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "Картина дня",
+   "hero_photo": "cards/photo/card_064.jpg",
+   "facts": [
+    {
+     "label": "Утечка из Москвы",
+     "value": "снятие запрета"
+    },
+    {
+     "label": "Рада",
+     "value": "ищет правовую форму"
+    },
+    {
+     "label": "Энергетика",
+     "value": "под ударами"
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 65,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.61,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 10.61,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "для изменения территориальных границ.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.61,
+    "repliki_": [
+     "Георгий Мазурашу — допустил изменение границ",
+     "Георгий Мазурашу — ищет юридический путь для решения",
+     "Тарас Чмут — допустил пересмотр союзов",
+     "Тарас Чмут — связал его с периодом после Зеленского"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "для изменения территориальных границ.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.61,
+   "repliki_": [
+    "Георгий Мазурашу — допустил изменение границ",
+    "Георгий Мазурашу — ищет юридический путь для решения",
+    "Тарас Чмут — допустил пересмотр союзов",
+    "Тарас Чмут — связал его с периодом после Зеленского"
+   ]
+  }
+ },
+ {
+  "scene": 66,
+  "view": "zal_schetchik",
+  "dur": 10.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.88,
+   "sheets": [],
+   "text": "Евросоюз отодвигается",
+   "value": "10 лет",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 67,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.79,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 10.79,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "и честно выдаёт остаток мощности.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.79,
+    "role": "Будущий руководитель Украины"
+   }
+  },
+  "kwargs": {
+   "text": "и честно выдаёт остаток мощности.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.79,
+   "role": "Будущий руководитель Украины"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "charts.waterfall",
+  "dur": 11.59,
+  "anim": 11.59,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "start": {
+    "label": "Нынешнее положение",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Иные границы",
+     "value": 1.0
+    },
+    {
+     "label": "Повреждённая энергосистема",
+     "value": 1.0
+    },
+    {
+     "label": "Новое руководство",
+     "value": 1.0
+    },
+    {
+     "label": "Претензии к Европе",
+     "value": 1.0
+    },
+    {
+     "label": "Главный партнёр",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "charts.line",
+  "dur": 11.62,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "x_labels": [
+    "Указатели",
+    "Саммиты",
+    "Разворот истории"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "История",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "marker_serif",
+  "dur": 12.34,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Фразы, над которыми вчера смеялись, становятся решениями правительства. И смех заканчивается первым.",
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
