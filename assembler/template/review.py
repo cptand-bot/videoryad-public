@@ -1230,13 +1230,42 @@ def badge_for(source, is_video):
     return BADGES.get((source, is_video)) or BADGES.get((source, False)) or (f"{source}", "b-other")
 
 
+def _гдеискать(images_dir):
+    """Три места, где может лежать кадр сцены (14.11.2026, улов `usuario-b2`).
+
+    Его замечание того же дня — «ждём кадр» на дашборде при ГОТОВОЙ
+    карточке. Причина не в рисовке, а в раскладке файлов: постеры
+    отрисованных карточек `cards_cloud` кладёт в `cards/`, а в `images/`
+    на их месте остаётся тёмная облачная заглушка; видеоклипы обычных сцен
+    (вложения досье, медиатека) остаются в папке ЗАБОРА `<проект>-cloud/
+    images/`, если копировали только `*.jpg`. Дашборд смотрел ровно одну
+    папку — и показывал «ждём кадр» там, где файл уже есть.
+    Поэтому ищем по очереди: `images/` → `cards/` → папка забора.
+    """
+    места = [images_dir]
+    корень = os.path.dirname(os.path.abspath(images_dir)) or "."
+    места.append(os.path.join(корень, "cards"))
+    забор = корень + "-cloud"
+    места.append(os.path.join(забор, "images"))
+    места.append(os.path.join(забор, "cards"))
+    return [м for м in места if os.path.isdir(м)]
+
+
 def resolved_asset(images_dir, sid):
     hits = []
-    for p in glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*")):
+    for _место in _гдеискать(images_dir):
+      for p in glob.glob(os.path.join(_место, f"scene_{sid:03d}.*")):
         if p.endswith(".json") or p.endswith(".revframe.jpg"):
             continue
         try:
-            if os.path.getsize(p) > 0:
+            # ЗАГЛУШКА ОБЛАКА ЛЕГЧЕ 40 КБ (замер `usuario-b2` 14.11: тёмная
+            # заглушка стабильно 33-34 КБ, самый лёгкий настоящий постер
+            # карточки — 47 КБ). Такой файл не кадр: пропускаем его и ищем
+            # дальше, иначе «ждём кадр» сменится чёрным квадратом.
+            _рз = os.path.getsize(p)
+            if _рз > 0 and not (_рз < 40000 and os.path.basename(
+                    os.path.dirname(p)) == "images" and p.lower().endswith(
+                    (".jpg", ".jpeg", ".png"))):
                 hits.append(p)
         except OSError:
             continue          # transient temp file vanished mid-glob

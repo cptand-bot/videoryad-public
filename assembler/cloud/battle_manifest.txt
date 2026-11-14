@@ -210,6 +210,7 @@ template/zal_scene.py
 template/zal_scenes2.py
 template/zamechanie.py
 template/zamorozka.py
+template/zamer_klyuchey.py
 template/zanyato.py
 template/zhurnal_zamen.py
 template/zoom.py
