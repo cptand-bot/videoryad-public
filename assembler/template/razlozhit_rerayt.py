@@ -20,6 +20,7 @@ import argparse
 import os
 import re
 import subprocess
+import tempfile
 import sys
 import time
 
@@ -106,6 +107,10 @@ def main():
                     help="сколько минут ждать ответ агента (по умолчанию 45)")
     ap.add_argument("--otvet", default="",
                     help="путь к готовому ответу, если он лежит не там")
+    ap.add_argument("--brief", default="",
+                    help="СВОЁ задание рерайта (пара к --otvet). Нужен на "
+                         "третьем экземпляре темы: в папке донора лежит "
+                         "задание ВТОРОГО канала, и линт отбивает чужую пару")
     ap.add_argument("--bez-linta", dest="bez_linta", action="store_true",
                     help="разложить БЕЗ проверки rewrite_lint (только по его "
                          "прямому слову)")
@@ -164,7 +169,17 @@ def main():
     if not a.bez_linta:
         исходник = os.path.join(a.folder, имя1)
         _здесь = os.path.dirname(os.path.abspath(__file__))
-        _чисто = os.path.join(a.folder, "РЕРАЙТ-ЧИСТО.txt")
+        # ПРОМЕЖУТОЧНЫЕ ФАЙЛЫ НЕ ЛОЖАТСЯ В ПАПКУ ДОНОРА (14.11, улов
+        # `usuario-3a`, С УЩЕРБОМ). `РЕРАЙТ-ЧИСТО.txt` и `РЕРАЙТ-ГОТОВО.txt`
+        # писались в `a.folder` — папку ПЕРВОГО канала на `D:`. У второго
+        # канала это ещё терпимо (своя пара пишется туда же), а на ТРЕТЬЕМ
+        # экземпляре темы папка первого канала — это СДАННЫЙ ролик: 17:04
+        # так были затёрты оба текста ПЛАНЕТЫ, вкладка вернула их из копии
+        # `take_folder.py` и сверила md5. Правок после сдачи не бывает —
+        # значит и писать туда нельзя. Пишем в папку ВТОРОГО канала, а пока
+        # её нет — во временный каталог.
+        _rab = куда if os.path.isdir(куда) else tempfile.mkdtemp(prefix="rerayt-")
+        _чисто = os.path.join(_rab, "РЕРАЙТ-ЧИСТО.txt")
         if subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_fix.py"),
                            ответ, "--channel", a.ch2, "--out", _чисто],
                           capture_output=True, text=True).returncode == 0 \
@@ -204,14 +219,19 @@ def main():
                 if "команда:" in _l and "--убрать" in _l:
                     _ном = _l.split("--убрать", 1)[1].split("--out")[0].strip()
             if _ном:
-                _готово = os.path.join(a.folder, "РЕРАЙТ-ГОТОВО.txt")
+                _готово = os.path.join(_rab, "РЕРАЙТ-ГОТОВО.txt")
                 if subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_cut.py"),
                                    ответ, "--убрать", _ном, "--out", _готово],
                                   capture_output=True, text=True).returncode == 0 \
                         and os.path.isfile(_готово):
                     ответ = _готово
                     print("длина подрезана до нормы: убраны абзацы %s" % _ном)
-        задание = os.path.join(a.folder, "ЗАДАНИЕ-РЕРАЙТ.txt")
+        # СВОЯ ПАРА ЗАДАНИЕ-ОТВЕТ, А НЕ ЧУЖАЯ (14.11, тот же улов, пункт 1).
+        # Линт сверяет мой текст с заданием из папки ДОНОРА, а там лежит
+        # задание и ответ ВТОРОГО канала: совпадение 2% и отказ «статью
+        # переписали своей рукой». На третьем экземпляре это отказ ВСЕГДА —
+        # своей пары у третьего канала в донорской папке быть не может.
+        задание = a.brief or os.path.join(a.folder, "ЗАДАНИЕ-РЕРАЙТ.txt")
         кмд = [sys.executable,
                os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             "rewrite_lint.py"), исходник, ответ]
