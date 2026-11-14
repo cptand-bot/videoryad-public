@@ -536,8 +536,48 @@ else:
     _pervye_obychnye = [int(sc["id"]) for sc in scenes
                         if int(sc["id"]) <= 4
                         and int(sc["id"]) not in _card_ids]
+    # ...И ТОЛЬКО ЕСЛИ ВСПЛЫВАШКА ТУДА РЕАЛЬНО ЛОЖИТСЯ (14.11, блокер
+    # `usuario-ac`, продолжение П-0179). Обычная сцена в начале есть, но
+    # `overlay_fit` на ней говорит «обе стороны заняты» при любом якоре — и
+    # тогда блокер снова невыполним, а менять годный кадр на негодный ради
+    # места под коробку неправильно (замена, которую нашла вкладка, была
+    # 882x716 — ниже порога качества). Его правило 13.11 «не ложится — не
+    # ставим вовсе, сцена без всплывашки не брак» ПОЗЖЕ правила 26.10,
+    # значит оно и решает. Проверяем не на слово, а вызовом самого
+    # `overlay_fit` по кадрам этих сцен.
+    def _vlezet_v_nachalo():
+        try:
+            import importlib.util as _ilu4
+            _ofp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "overlay_fit.py")
+            _sp4 = _ilu4.spec_from_file_location("_ofit", _ofp)
+            _of = _ilu4.module_from_spec(_sp4)
+            _sp4.loader.exec_module(_of)
+        except Exception:
+            return True          # проверить нечем — ведём себя как раньше
+        for _sid in _pervye_obychnye:
+            for _ext in (".jpg", ".jpeg", ".png", ".webp"):
+                _p = os.path.join("images", "scene_%03d%s" % (_sid, _ext))
+                if not os.path.exists(_p):
+                    continue
+                for _ank in ("top", "bottom"):
+                    try:
+                        _st, _ = _of.luchshaya(_p, _ank)
+                    except Exception:
+                        return True
+                    if _st:
+                        return True
+        return False
+
     if _ov_ids and _ov_ids[0] > 4:
-        if _pervye_obychnye:
+        if _pervye_obychnye and not _vlezet_v_nachalo():
+            WARN.append(
+                f"первая всплывашка только на сцене {_ov_ids[0]}: в сценах "
+                f"{_pervye_obychnye} коробка не ложится ни одной стороной ни "
+                f"при каком якоре (проверено `overlay_fit`), а менять годный "
+                f"кадр на кадр хуже порога ради места нельзя. По правилу "
+                f"13.11 сцена без всплывашки не брак — пропускаю")
+        elif _pervye_obychnye:
             FAIL.append(
                 f"первая всплывашка только на сцене {_ov_ids[0]} — по правилу 26.10 "
                 f"она обязана быть в первых ЧЕТЫРЁХ сценах. Добавь одну на сцену "
