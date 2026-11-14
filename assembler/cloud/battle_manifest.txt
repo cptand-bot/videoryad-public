@@ -1,32 +1,30 @@
+
 #
-#
-#
+# (`vybor.jsonl`), авторский банк кликбейтных формулировок (`bank.txt`),
 # `template/` и `cloud/` с этим списком. Нашёл файл, которого здесь нет, —
 # `template/` или `cloud/`: `sync_assembler.sh` раскатывает ЭТИ ДВЕ ПАПКИ на
+# `template/upakovka_lib/` ЗДЕСЬ БОЛЬШЕ НЕТ И БЫТЬ НЕ ДОЛЖНО (2026-11-09).
 # Добавил НАСТОЯЩИЙ боевой файл (новый инструмент конвейера)? Впиши его сюда
 # Зачем. Второй сборщик (арсенал, `fullcycle/`) разрабатывается ОТДЕЛЬНОЙ
 # Как работает. Перед раскаткой `sync_assembler.sh` сверяет содержимое
 # МАНИФЕСТ БОЕВОГО КОДА — что разрешено раскатывать в облако (2026-10-23)
+# НОВЫЙ НАКОПИТЕЛЬ СЮДА НЕ ВПИСЫВАТЬ. Он не свалит раскатку — предохранитель
 # Путь — от корня скилла, ровно как печатает `find template cloud -type f`.
+# Теперь папку не везёт ни rsync, ни предохранитель её не считает, поэтому
+# Это накопители упаковки и превью: его личный выбор заголовков и надписей
 # вкладкой, и его код в боевую сборку попадать не должен. Единственная дорога,
 # все восемь целей, и с этого момента новый код работает в каждом ролике.
+# журнал, словарь, состояние дашборда. Десять таких файлов стояли в
+# закрытия 14.10 (в публичном репозитории нет ключей, озвучки, рабочих
+# заметок и текста сценария).
 # и в облако оно не едет.
+# кодом и перестанет что-либо значить.
+# манифест не должен обещать того, чего мы не везём: иначе он разойдётся с
+# манифесте и уезжали в ПУБЛИЧНЫЕ репозитории открытым текстом — против
 # ограничена: в `fullcycle/` клади что угодно, туда предохранитель не смотрит
 # одной строкой — это осознанное действие диспетчера, а не формальность.
 # по которой он туда физически может попасть, — файл, положенный в
 # раскатка ОСТАНОВЛЕНА, файл назван. Разработка арсенала при этом ничем не
-
-# `template/upakovka_lib/` ЗДЕСЬ БОЛЬШЕ НЕТ И БЫТЬ НЕ ДОЛЖНО (2026-11-09).
-# Это накопители упаковки и превью: его личный выбор заголовков и надписей
-# (`vybor.jsonl`), авторский банк кликбейтных формулировок (`bank.txt`),
-# журнал, словарь, состояние дашборда. Десять таких файлов стояли в
-# манифесте и уезжали в ПУБЛИЧНЫЕ репозитории открытым текстом — против
-# закрытия 14.10 (в публичном репозитории нет ключей, озвучки, рабочих
-# заметок и текста сценария).
-# Теперь папку не везёт ни rsync, ни предохранитель её не считает, поэтому
-# манифест не должен обещать того, чего мы не везём: иначе он разойдётся с
-# кодом и перестанет что-либо значить.
-# НОВЫЙ НАКОПИТЕЛЬ СЮДА НЕ ВПИСЫВАТЬ. Он не свалит раскатку — предохранитель
 # эту папку пропускает намеренно.
 cloud/.gitignore
 cloud/README-CLOUD.md
@@ -149,6 +147,8 @@ template/pair_sheet.py
 template/palitra.py
 template/peredacha.py
 template/phase.py
+template/phash_backfill.py
+template/phash_ban.py
 template/photo_quality.py
 template/podmena.py
 template/povtor_kadrov.py
@@ -164,12 +164,15 @@ template/refetch.py
 template/rejections.py
 template/rerayt_storozh.sh
 template/review.py
+template/revizia_kartochek.py
 template/rewrite_brief.py
 template/rewrite_cut.py
 template/rewrite_fix.py
 template/rewrite_lint.py
+template/safe_area.py
 template/scenes_from_srt.py
 template/scenes_klon.py
+template/sdacha_proverka.py
 template/search_options.py
 template/selfcheck.py
 template/sfx/ding.mp3
@@ -197,15 +200,11 @@ template/vybor_svod.py
 template/whisper_derzhi.sh
 template/wm_sheet.py
 template/zal_core.py
+template/zal_fable3.py
 template/zal_scene.py
 template/zal_scenes2.py
-template/zal_fable3.py
 template/zamechanie.py
 template/zamorozka.py
 template/zanyato.py
 template/zhurnal_zamen.py
 template/zoom.py
-template/phash_ban.py
-template/phash_backfill.py
-template/safe_area.py
-template/sdacha_proverka.py
