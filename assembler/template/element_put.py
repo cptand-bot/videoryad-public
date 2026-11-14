@@ -272,6 +272,8 @@ def _zamorozheno_stop(path_hint="."):
 def main():
     _zamorozheno_stop(".")
     ap = argparse.ArgumentParser(description="элемент арсенала на сцену ролика")
+    ap.add_argument("--force", action="store_true",
+                    help="принимается и ИГНОРИРУЕТСЯ: обвязка (kartochki_srazu, батч-дверь) передаёт --force всем дверям одинаково, и падение на `unrecognized arguments` молча гасило A4, A6, A56, A64 (улов 14.11)")
     ap.add_argument("scenes", nargs="?", default="")
     ap.add_argument("sid", nargs="?", type=int)
     ap.add_argument("what", nargs="?", default="", help="код полки (A56) или вид (wall)")
