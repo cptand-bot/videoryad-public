@@ -1,0 +1,138 @@
+{
+ "anchor": "top",
+ "1": {
+  "photo": "overlays/scene_001.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "text": {
+   "words": "МОСКВА — СТАРОЕ ПРАВИЛО ПЕРЕСМАТРИВАЮТ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "mashinka",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "approved": true,
+  "dash_ok": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "18": {
+  "photo": "overlays/scene_018.jpg",
+  "sound": "whoosh",
+  "at": 3.5,
+  "text": {
+   "words": "ДЕПУТАТ РАДЫ: ГРАНИЦЫ МОЖНО ОБСУЖДАТЬ",
+   "color": "red",
+   "pos": "mc",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "25": {
+  "photo": "overlays/scene_025.jpg",
+  "sound": "whoosh",
+  "at": 4.0,
+  "text": {
+   "words": "ТАРАС ЧМУТ — «ПОВЕРНИСЬ ЖИВИМ»",
+   "color": "yellow",
+   "pos": "tr",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "side": "left",
+  "anchor": "top",
+  "style": "left",
+  "approved": true,
+  "dash_ok": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "34": {
+  "photo": "overlays/scene_034.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "text": {
+   "words": "СБЛИЖЕНИЕ РОССИИ И УКРАИНЫ",
+   "color": "white",
+   "pos": "ml",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  },
+  "approved": true,
+  "dash_ok": true,
+  "shape": "rect",
+  "scale": 1.0
+ },
+ "10": {
+  "text": {
+   "words": "УДАРЫ ПО ЛЮДЯМ, А НЕ ПО ОБЪЕКТАМ",
+   "color": "white",
+   "pos": "tl",
+   "font": "default",
+   "sound": "pop",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "44": {
+  "text": {
+   "words": "БРЮССЕЛЬ НЕ ТОРОПИТСЯ",
+   "color": "yellow",
+   "pos": "mr",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "56": {
+  "text": {
+   "words": "ПЛАНОВЫЕ ОТКЛЮЧЕНИЯ",
+   "color": "white",
+   "pos": "tc",
+   "font": "default",
+   "sound": "mashinka",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "59": {
+  "text": {
+   "words": "ВОССТАНОВЛЕНИЕ: ДО ПЯТИ ЛЕТ",
+   "color": "red",
+   "pos": "tl",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 2.0,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "69": {
+  "photo": "overlays/scene_069.jpg",
+  "sound": "whoosh",
+  "at": 4.0,
+  "side": "right",
+  "anchor": "bottom",
+  "text": {
+   "words": "ВЕНГРИЯ ПРОТИВ — ДВЕРЬ НЕ ОТКРЫВАЮТ",
+   "color": "white",
+   "pos": "mc"
+  }
+ }
+}
