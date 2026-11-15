@@ -143,6 +143,7 @@ template/merge_work.py
 template/muzyka.py
 template/nadpis_maska.py
 template/nadpisi_spread.py
+template/nakopiteli.py
 template/nalichie.py
 template/naydi.py
 template/nuli.sh

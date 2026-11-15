@@ -1553,6 +1553,35 @@ def main():
                 shutil.copy2(dst, web)
                 _bad = _opechatki(_t) + _opechatki(_b)
                 _gram = _grammatika(_t) + _grammatika(_b)
+                # СВЯЗКА ПИШЕТСЯ САМА (15.11, его слово: «я чокнусь каждый
+                # пункт тебя контролировать»). `svyazki.jsonl` наполнялся
+                # инструментом, который зовёт человек, — то есть не
+                # наполнялся никем: ОДНА запись за неделю при 144 записях
+                # выбора рядом. Теперь выбор превью СРАЗУ заводит связку
+                # «заголовок + надписи + превью + тема», а через 3-7 дней
+                # к ней цепляется статистика (`svyazka.py --замер`).
+                try:
+                    _сз = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "upakovka_lib", "svyazki.jsonl")
+                    os.makedirs(os.path.dirname(_сз), exist_ok=True)
+                    _ид = "%s|%s|%s" % (it.get("канал", ""), it.get("тема", ""),
+                                        time.strftime("%Y-%m-%d"))
+                    with open(_сз, "a", encoding="utf-8") as _f:
+                        _f.write(json.dumps({
+                            "id": _ид,
+                            "канал": it.get("канал", ""),
+                            "тема": it.get("тема", ""),
+                            "заголовок": (it.get("выбранный_заголовок")
+                                          or it.get("заголовок") or ""),
+                            "надпись_сверху": _t, "надпись_снизу": _b,
+                            "превью_вариант": num,
+                            "файл_превью": os.path.abspath(dst),
+                            "ждёт_замера": True,
+                            "когда": time.strftime("%Y-%m-%d %H:%M:%S"),
+                        }, ensure_ascii=False) + "\n")
+                except Exception as _e:
+                    print("связка не записалась: %s" % _e)
+
                 записать_выбор({
                     "событие": "превью",
                     "канал": it.get("канал", ""), "тема": it.get("тема", ""),
