@@ -1076,6 +1076,22 @@ _PHOTO_EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm")
 OV_NORM = (10, 14)          # фото-всплывашек на ролик (BRIEF-TAB, 05.11)
 
 
+def ov_norm(svobodnyh):
+    """Норма фото-всплывашек ОТ ЧИСЛА ОБЫЧНЫХ СЦЕН (15.11, улов 102).
+
+    Слой не ложится на рисованный кадр, а комплект наших карточек вырос:
+    при 56 карточках на 67 сцен обычных остаётся 11, и прежняя норма 10-14
+    физически недостижима — вкладка круг за кругом «добирала до нормы»
+    то, чего поставить некуда. Пропорция прежняя (на ~70 сценах это те же
+    10-14), но потолком служит число свободных сцен.
+    """
+    if svobodnyh <= 0:
+        return (0, 0)
+    lo = min(OV_NORM[0], max(1, int(round(svobodnyh * 0.5))))
+    hi = min(OV_NORM[1], max(lo + 1, int(round(svobodnyh * 0.7))))
+    return (lo, hi)
+
+
 def _scenes_file(proj):
     """Раскадровка проекта. `overlays_fetch`/`maps_fetch` — НЕ она."""
     c = [p for p in sorted(glob.glob(os.path.join(proj, "*.scenes.json")))
@@ -1197,21 +1213,25 @@ def do_build(proj="."):
     if nofile:
         print("ЗАПИСЬ ЕСТЬ, ФАЙЛА НЕТ (всплывашка пропадёт молча): %s"
               % ", ".join(map(str, sorted(nofile))))
-    print("итого в overlays.json: фото-всплывашек %d (норма %d-%d), надписей %d"
-          % (len(photos), OV_NORM[0], OV_NORM[1], len(texts)))
+    free = [i for i in sorted(info) if i not in cards]
+    NORM = ov_norm(len(free))
+    print("итого в overlays.json: фото-всплывашек %d (норма %d-%d от %d обычных сцен), "
+          "надписей %d" % (len(photos), NORM[0], NORM[1], len(free), len(texts)))
+    if NORM != OV_NORM:
+        print("   норма ужата: рисованных кадров %d из %d сцен, слой на них не ложится"
+              % (len(info) - len(free), len(info)))
 
     if not photos:
         # Слой НЕ собран. Молчать здесь нельзя — это и был дефект 11.11.
-        free = [i for i in sorted(info) if i not in cards]
-        plan = free[:1] + free[3::max(1, len(free) // max(1, OV_NORM[0]))]
+        plan = free[:1] + free[3::max(1, len(free) // max(1, NORM[0] or 1))]
         print("В overlays/ НЕТ НИ ОДНОГО КАДРА — слой не собран.")
-        print("Положи 10-14 файлов `overlays/scene_NNN.jpg` и повтори. "
+        print("Положи %d-%d файлов `overlays/scene_NNN.jpg` и повтори. "
               "Ровно по ролику ложатся сцены: %s"
-              % ", ".join(map(str, plan[:OV_NORM[1]])))
+              % (NORM[0], NORM[1], ", ".join(map(str, plan[:NORM[1]]))))
         return 1
-    if len(photos) < OV_NORM[0]:
+    if len(photos) < NORM[0]:
         print("СМОТРИ: фото-всплывашек меньше нормы — добери до %d-%d."
-              % OV_NORM)
+              % NORM)
     # НАДПИСИ-СЛОВА — ТОЛЬКО «5 МИНУТ» (14.11, улов `usuario-3a`). Условие
     # стояло «не ПЛАНЕТА», то есть подсказка требовала их и на ПсД, и на
     # ДИПЛОМАТИИ СИЛЫ, и на ОЛЬКЕ — а `selfcheck` там их не требует и

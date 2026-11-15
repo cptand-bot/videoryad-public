@@ -57,8 +57,8 @@ cloud/ship.sh
 cloud/switch_account.sh
 cloud/sync_assembler.sh
 cloud/traffic.sh
-cloud/use_account.sh
 cloud/uborka.sh
+cloud/use_account.sh
 cloud/va.sh
 cloud/workflows/base-harvest.yml
 cloud/workflows/base-video.yml
@@ -90,6 +90,7 @@ template/check_library_updates.py
 template/check_overlay_overlap.py
 template/check_pins.py
 template/chernovoy_srt.py
+template/chitaemost.py
 template/citaty_zazor.py
 template/codex_ask.sh
 template/codex_brief.py
@@ -143,8 +144,8 @@ template/nadpis_maska.py
 template/nadpisi_spread.py
 template/nalichie.py
 template/naydi.py
-template/o_chem.py
 template/nuli.sh
+template/o_chem.py
 template/obyazatelno.py
 template/overlay_fit.py
 template/ozvuchka.py
@@ -209,8 +210,8 @@ template/zal_fable3.py
 template/zal_scene.py
 template/zal_scenes2.py
 template/zamechanie.py
-template/zamorozka.py
 template/zamer_klyuchey.py
+template/zamorozka.py
 template/zanyato.py
 template/zhurnal_zamen.py
 template/zoom.py

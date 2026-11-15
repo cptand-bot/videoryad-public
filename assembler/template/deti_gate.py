@@ -119,16 +119,26 @@ def _state_verdict(pdir):
 # вместо СЕМИДЕСЯТИ ДВУХ сцен ролика. Гейт при этом не упал и не
 # предупредил — чистый «успех значит ничего не сделано». В
 # `build_overlays.py` этот же файл отсекается явно, здесь фильтра не было.
-_NE_RASKADROVKA = ("overlays_fetch", "maps_fetch", "cards_fetch")
+# `donor`/`klon` добавлены 15.11 (улов 101, `usuario-3a` 14.11): у клона в
+# папке лежит раскадровка ДОНОРА, и по алфавиту она вставала первой —
+# гейт проверил 57 ЧУЖИХ сцен и записал вердикт по ним. Раскадровка
+# берётся ПО ИМЕНИ ПРОЕКТА (имя папки), донорская — только если своей нет.
+_NE_RASKADROVKA = ("overlays_fetch", "maps_fetch", "cards_fetch",
+                   "donor", "klon_donor")
 
 
 def _scenes_file(pdir, tiho=True):
-    """Рабочий scenes.json проекта (не сырой файл агента `codex*.json`
-    и не служебное задание облаку на кадры всплывашек/карт)."""
+    """Рабочий scenes.json проекта (не сырой файл агента `codex*.json`,
+    не задание облаку на кадры всплывашек/карт и не раскадровка донора)."""
     def _svoy(f):
         b = os.path.basename(f)
         return (not b.startswith(("codex", "lib_", "raw"))
                 and not any(w in b for w in _NE_RASKADROVKA))
+
+    # СНАЧАЛА — ФАЙЛ, НАЗВАННЫЙ ИМЕНЕМ ПРОЕКТА: он и есть своя раскадровка.
+    svoy_imenem = os.path.join(pdir, os.path.basename(pdir.rstrip("/")) + ".scenes.json")
+    if os.path.exists(svoy_imenem):
+        return svoy_imenem
 
     cands = sorted(f for f in glob.glob(os.path.join(pdir, "*.scenes.json"))
                    if _svoy(f))
