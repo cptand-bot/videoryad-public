@@ -119,6 +119,13 @@ def main():
                     help="СВОЁ задание рерайта (пара к --otvet). Нужен на "
                          "третьем экземпляре темы: в папке донора лежит "
                          "задание ВТОРОГО канала, и линт отбивает чужую пару")
+    # ЦЕЛЬ В ЗНАКАХ: при ней резка `rewrite_cut` НЕ зовётся, а линт получает
+    # тот же `--cel` (15.11, улов `usuario-1a`: сводка дня из шести текстов
+    # резалась до длины одного донора — минус 3,4 К знаков и минус четыре
+    # минуты хронометража ДО всякой проверки).
+    ap.add_argument("--cel", type=int, default=0,
+                    help="целевая длина в знаках (сводные ролики): "
+                         "не резать и мерить коридор от неё")
     ap.add_argument("--bez-linta", dest="bez_linta", action="store_true",
                     help="разложить БЕЗ проверки rewrite_lint (только по его "
                          "прямому слову)")
@@ -218,6 +225,8 @@ def main():
             _длина_ответа = len(open(ответ, encoding="utf-8", errors="replace").read())
         except OSError:
             pass
+        if a.cel:
+            _цель = 0          # цель задана руками — резать нечего
         if _цель and _длина_ответа > _цель:
             _r = subprocess.run([sys.executable, os.path.join(_здесь, "rewrite_cut.py"),
                                  ответ, "--цель", str(_цель)],
@@ -242,7 +251,8 @@ def main():
         задание = a.brief or os.path.join(a.folder, "ЗАДАНИЕ-РЕРАЙТ.txt")
         кмд = [sys.executable,
                os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "rewrite_lint.py"), исходник, ответ]
+                            "rewrite_lint.py"), исходник, ответ] \
+                           + (["--cel", str(a.cel)] if a.cel else [])
         if os.path.isfile(задание):
             кмд += ["--brief", задание]
         п = subprocess.run(кмд, capture_output=True, text=True)
