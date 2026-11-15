@@ -1,0 +1,84 @@
+{
+  "anchor": "top",
+  "3": {
+    "text": {
+      "words": "ВОПРОС ЗАДАЛИ ВПЕРВЫЕ",
+      "color": "green",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "style": "plate",
+      "approved": true
+    }
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "7": {
+    "photo": "overlays/scene_007.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "style": "left",
+    "anchor": "middle",
+    "approved": true,
+    "dash_ok": true,
+    "shape": "rect",
+    "scale": 1.0
+  },
+  "11": {
+    "photo": "overlays/scene_011.jpg",
+    "sound": "whoosh",
+    "at": 3.0,
+    "shape": "rect",
+    "scale": 1.0,
+    "approved": true,
+    "dash_ok": true
+  },
+  "13": {
+    "text": {
+      "words": "'МОСКВА ГОВОРИТ', 'ОБ ОБРАТНОМ'",
+      "color": "green",
+      "pos": "tc",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "style": "plate",
+      "approved": true
+    }
+  },
+  "19": {
+    "text": {
+      "words": "ПРЕДЛАГАЛИ ДАЖЕ НАТО",
+      "color": "orange",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "style": "plate",
+      "approved": true
+    }
+  },
+  "21": {
+    "text": {
+      "words": "['ОТКАЗ — ТОЖЕ РЕЗУЛЬТАТ']",
+      "color": "yellow",
+      "pos": "mc",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "style": "plate",
+      "approved": true
+    }
+  }
+}
