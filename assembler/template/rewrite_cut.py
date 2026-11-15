@@ -49,7 +49,16 @@ import sys
 # `rewrite_cut`): два разных сита на одно правило — это не «строже», это
 # другой ответ. Правишь здесь — правь во всех трёх, иначе `rewrite_fix`
 # вставит третий призыв там, где линт видит два (на этом уже обжигались).
-CTA_RE = re.compile(r"подпиш(?:ись|итесь)|подписывай(?:ся|тесь)", re.I)
+# ОДИН ДЕТЕКТОР ПРИЗЫВОВ НА ТРИ ИНСТРУМЕНТА (15.11, см. prizyv.py): узкое
+# выражение считало только повелительные формы и пропускало «не забудьте
+# подписаться» — rewrite_fix вставлял третий призыв в текст, где их два.
+import importlib.util as _ilu
+_sp = _ilu.spec_from_file_location(
+    "prizyv", __import__("os").path.join(
+        __import__("os").path.dirname(__import__("os").path.abspath(__file__)),
+        "prizyv.py"))
+_pz = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_pz)
+CTA_RE = _pz.ПРИЗЫВ_RE
 
 
 def читать(path):

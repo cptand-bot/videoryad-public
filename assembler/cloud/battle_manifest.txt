@@ -164,6 +164,7 @@ template/pravki.py
 template/prevyu.py
 template/prevyu_klon.py
 template/prevyu_text.py
+template/prizyv.py
 template/proverka_fayla.py
 template/query_lint.py
 template/quote_card.py
