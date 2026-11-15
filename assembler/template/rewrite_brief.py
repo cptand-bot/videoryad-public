@@ -25,6 +25,16 @@
 """
 import argparse
 import glob
+# СЛУЖЕБНОЕ ИМЯ — ОДНА ПРОВЕРКА НА ВЕСЬ СБОРЩИК (15.11, см. sluzhebnye.py):
+# слово узнаётся по разделителю, а не по вхождению, иначе тема со словом
+# «ответ»/«статья»/«список» в заголовке теряет свой единственный текст.
+import importlib.util as _ilu, os as _os
+_sp = _ilu.spec_from_file_location(
+    "sluzhebnye", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                "sluzhebnye.py"))
+_sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
+sluzhebnoe = _sl.sluzhebnoe
+
 import os
 import re
 import sys
@@ -95,8 +105,7 @@ def find_text(folder):
     skip = ("ЗАДАНИЕ", "БРИФ", "ОТВЕТ", "ПРОМПТ", "РЕРАЙТ", "ДОСЬЕ", "АУДИТ",
             "СТАТЬЯ")
     cands = [os.path.join(folder, n) for n in os.listdir(folder)
-             if n.lower().endswith(".txt")
-             and not any(s in n.upper() for s in skip)]
+             if n.lower().endswith(".txt") and not sluzhebnoe(n, skip)]
     if not cands:
         sys.exit("в папке нет текста темы: %s" % folder)
     выбран = max(cands, key=os.path.getsize)

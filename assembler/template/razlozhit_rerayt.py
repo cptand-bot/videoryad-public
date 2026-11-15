@@ -17,6 +17,14 @@
     python3 razlozhit_rerayt.py "<папка темы 1-го канала>" --channel-2 ПЛАНЕТА [--wait 45]
 """
 import argparse
+# СЛУЖЕБНОЕ ИМЯ — ОДНА ПРОВЕРКА НА ВЕСЬ СБОРЩИК (15.11, см. sluzhebnye.py).
+import importlib.util as _ilu, os as _os
+_sp = _ilu.spec_from_file_location(
+    "sluzhebnye", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                "sluzhebnye.py"))
+_sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
+sluzhebnoe = _sl.sluzhebnoe
+
 import os
 import re
 import subprocess
@@ -57,7 +65,7 @@ def текст_темы(папка):
     """Самый большой содержательный .txt — как в `rewrite_brief.find_text`."""
     канд = [f for f in os.listdir(папка)
             if f.lower().endswith(".txt")
-            and not any(s in f.upper() for s in СЛУЖЕБНЫЕ)]
+            and not sluzhebnoe(f, СЛУЖЕБНЫЕ)]
     if not канд:
         return ""
     return max(канд, key=lambda f: os.path.getsize(os.path.join(папка, f)))

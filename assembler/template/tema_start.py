@@ -32,6 +32,16 @@
 """
 
 import argparse
+# СЛУЖЕБНОЕ ИМЯ — ОДНА ПРОВЕРКА НА ВЕСЬ СБОРЩИК (15.11, см. sluzhebnye.py):
+# слово узнаётся по разделителю, а не по вхождению, иначе тема со словом
+# «ответ»/«статья»/«список» в заголовке теряет свой единственный текст.
+import importlib.util as _ilu, os as _os
+_sp = _ilu.spec_from_file_location(
+    "sluzhebnye", _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                "sluzhebnye.py"))
+_sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
+sluzhebnoe = _sl.sluzhebnoe
+
 import os
 import subprocess
 import sys
@@ -82,10 +92,10 @@ def main():
     тексты = sorted(
         (f for f in os.listdir(a.folder)
          if f.lower().endswith(".txt")
-         and not any(s in f.upper() for s in
-                     ("ЗАДАНИЕ", "УПАКОВКА", "ОТВЕТ", "ГЕОРАДАР", "РЕРАЙТ",
-                      "БРИФ", "ПРОМПТ", "ДОСЬЕ", "АУДИТ", "СТАТЬЯ",
-                      "СОСТОЯНИЕ", "ССЫЛКИ", "ДЛЯ-ВКЛАДКИ", "СПИСОК"))),
+         and not sluzhebnoe(f, ("ЗАДАНИЕ", "УПАКОВКА", "ОТВЕТ", "ГЕОРАДАР",
+                                "РЕРАЙТ", "БРИФ", "ПРОМПТ", "ДОСЬЕ", "АУДИТ",
+                                "СТАТЬЯ", "СОСТОЯНИЕ", "ССЫЛКИ",
+                                "ДЛЯ-ВКЛАДКИ", "СПИСОК"))),
         key=lambda f: os.path.getsize(os.path.join(a.folder, f)), reverse=True)
     if not тексты:
         sys.exit("в папке нет текста озвучки — запускать нечего")

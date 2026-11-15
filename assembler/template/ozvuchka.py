@@ -155,21 +155,16 @@ def template_of(path):
 # «ПРЕДЛОЖЕНИЯ» в любом живом заголовке темы.
 # Теперь служебным считается слово, отделённое началом имени, точкой, дефисом
 # или подчёркиванием — то есть именно наша разметка, а не слово внутри фразы.
-_SLUZH_RAZD = ".-_"
+import importlib.util as _ilu
+_sp = _ilu.spec_from_file_location(
+    "sluzhebnye", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "sluzhebnye.py"))
+_sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
 
 
 def _sluzhebnoe(up):
-    for s in SKIP_TXT:
-        i = up.find(s)
-        while i >= 0:
-            слева = up[i - 1] if i > 0 else ""
-            j = i + len(s)
-            справа = up[j] if j < len(up) else ""
-            if (слева == "" or слева in _SLUZH_RAZD) and \
-               (справа == "" or справа in _SLUZH_RAZD or справа == "."):
-                return True
-            i = up.find(s, i + 1)
-    return False
+    """Общая проверка на весь сборщик — `template/sluzhebnye.py`."""
+    return _sl.sluzhebnoe(up, SKIP_TXT)
 
 
 def find_text(folder):
