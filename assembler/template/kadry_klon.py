@@ -185,6 +185,8 @@ def main():
     ap.add_argument("--tolko-smysl", action="store_true", dest="tolko_smysl",
                     help="брать только смысловые совпадения, не добивать "
                          "кадрами донора по порядку")
+    ap.add_argument("--bez-unikalizacii", action="store_true", dest="bez_unik",
+                    help="не зеркалить и не менять крупность взятых кадров")
     ap.add_argument("--spisok", action="store_true",
                     help="только показать, что взялось бы, ничего не трогая")
     a = ap.parse_args()
@@ -373,6 +375,28 @@ def main():
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(out, fh, ensure_ascii=False, indent=1)
     os.replace(tmp, a.scenes)
+    # ВЗЯТЫЙ У ДОНОРА КАДР УНИКАЛИЗИРУЕТСЯ (15.11, его прямое слово: «можно
+    # же на эту же тему закинуть на планету, только отзеркалить это же фото,
+    # если там нет надписей, которые перевернутся. Положить на него какой-то
+    # другой эффект»). Инструмент для этого есть с 07.11, но клон его не
+    # звал — и один и тот же кадр уезжал в два ролика без единого отличия.
+    # Зеркало ставится только там, где распознавание не нашло в кадре текста;
+    # заодно меняется крупность. Отключить: --bez-unikalizacii.
+    if взято and not a.bez_unik:
+        _un = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "unikalizaciya.py")
+        if os.path.exists(_un) and дон:
+            import subprocess as _sp
+            print("уникализирую кадры донора (зеркало без текста + крупность):")
+            _r = _sp.run([sys.executable, _un, дон[0], pdir],
+                         capture_output=True, text=True)
+            _хвост = (_r.stdout or "").strip().splitlines()
+            for _л in _хвост[-6:]:
+                print("  %s" % _л)
+            if _r.returncode != 0:
+                print("  уникализация не прошла — кадры остались как у донора",
+                      file=sys.stderr)
+
     print("взято кадров донора: %d — за этими сценами фетч уже не идёт" % взято)
     print("остальные %d сцен ищутся как обычно: клон должен отличаться "
           "составом, а не быть копией (его курс 08.11)" % (len(sc) - взято))
