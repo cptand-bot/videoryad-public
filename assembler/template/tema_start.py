@@ -156,13 +156,45 @@ def main():
                   "см. вывод rewrite_brief.py выше")
             провал = True
 
-    if "upakovka" in шаги:
-        запустить("упаковка", [sys.executable, os.path.join(HERE, "upakovka.py"), a.folder],
-                  os.path.join(ЛОГИ, "upakovka-%s-%s.log" % (база, метка)))
+    # ОЧЕРЁДНОСТЬ У ВНЕШНЕГО АГЕНТА ДЕРЖИТ КОД, А НЕ ТЕКСТ (15.11, его
+    # прямой вопрос: «каким образом упаковка и превью уже готовы, почему они
+    # пошли в первостепенные задачи, а не в конце»). Его правило 13.11:
+    # сперва ВСЕ раскадровки дня, упаковка и превью потом. Здесь же обе
+    # ветки уходили в тот же миг, что и тема, и на первой теме 15.11
+    # оказались готовы в 09:34-09:41 — раньше раскадровок. Вторая статья
+    # этим не ограничена: без неё второй канал стоит целиком.
+    # Снять ограничение на один запуск: VIDEORYAD_UPAKOVKA_SRAZU=1.
+    _srazu = os.environ.get("VIDEORYAD_UPAKOVKA_SRAZU") == "1"
+    _zhdut_raskadrovki = []
+    if not _srazu:
+        _den = os.path.dirname(os.path.abspath(a.folder.rstrip("/")))
+        for _t in sorted(os.listdir(_den)) if os.path.isdir(_den) else []:
+            _p = os.path.join(_den, _t)
+            if not os.path.isdir(_p) or _t.startswith("_"):
+                continue
+            _est_tekst = any(f.lower().endswith(".txt") and not sluzhebnoe(f)
+                             for f in os.listdir(_p))
+            _est_scenes = any(f.endswith(".scenes.json") for f in os.listdir(_p))
+            if _est_tekst and not _est_scenes:
+                _zhdut_raskadrovki.append(_t)
 
-    if "prevyu" in шаги:
-        запустить("превью", [sys.executable, os.path.join(HERE, "prevyu.py"), a.folder],
-                  os.path.join(ЛОГИ, "prevyu-%s-%s.log" % (база, метка)))
+    if _zhdut_raskadrovki and not _srazu:
+        print("")
+        print("УПАКОВКА И ПРЕВЬЮ ОТЛОЖЕНЫ — у агента сперва раскадровки "
+              "(его правило 13.11). Ждут раскадровки: %s"
+              % ", ".join(_zhdut_raskadrovki[:6]))
+        print("  Закажет вкладка сама, когда заход за раскадровкой закрыт:")
+        print("    python3 %s \"%s\" --only upakovka,prevyu"
+              % (os.path.join(HERE, "tema_start.py"), a.folder))
+        print("  Нужно прямо сейчас — VIDEORYAD_UPAKOVKA_SRAZU=1.")
+    else:
+        if "upakovka" in шаги:
+            запустить("упаковка", [sys.executable, os.path.join(HERE, "upakovka.py"), a.folder],
+                      os.path.join(ЛОГИ, "upakovka-%s-%s.log" % (база, метка)))
+
+        if "prevyu" in шаги:
+            запустить("превью", [sys.executable, os.path.join(HERE, "prevyu.py"), a.folder],
+                      os.path.join(ЛОГИ, "prevyu-%s-%s.log" % (база, метка)))
 
     print("")
     if провал:
