@@ -189,6 +189,7 @@ template/sfx/whoosh.mp3
 template/sfx/zatvor.mp3
 template/sluzhebnye.py
 template/smena_pora.py
+template/smoke_dveri.sh
 template/srt_keep.py
 template/statistika.py
 template/storozh.py
