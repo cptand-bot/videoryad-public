@@ -117,7 +117,16 @@ def main():
         files = []
         for _, d in files_map.items():
             files += glob.glob(os.path.join(d, "scene_*.*"))
-        files = [f for f in files if ".json" not in f and ".ovthumb." not in f and ".text." not in f]
+        # ОБЗОРНЫЙ КАДР КЛИПА КАРТОЧКИ ИЗ СРАВНЕНИЯ ВЫНУТ (15.11, улов
+        # `usuario-1a`): `scene_NNN.mp4.revframe.jpg` — ПЕРВЫЙ кадр клипа, и
+        # у двух карточек одного вида он одинаков по построению (пустая
+        # подложка диаграммы до анимации), хотя сами клипы разные. Инструмент
+        # сносил ревфрейм и требовал «перепиши запрос сцены», а запрос там
+        # служебный — «кадр рисуется в облаке». Та же причина, по которой
+        # ревфреймы уже исключены в `povtor_kadrov` (12.11).
+        files = [f for f in files
+                 if ".json" not in f and ".ovthumb." not in f
+                 and ".text." not in f and ".revframe." not in f]
         by_hash = {}
         for f in files:
             by_hash.setdefault(md5(f), []).append(f)

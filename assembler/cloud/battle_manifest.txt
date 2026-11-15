@@ -75,6 +75,7 @@ template/autofix_scenes.py
 template/avtorskoe.py
 template/ban_file.py
 template/baza_snos.py
+template/bliznecy.py
 template/brak.py
 template/build_capcut_draft.py
 template/build_clips_1080.py
