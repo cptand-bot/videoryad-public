@@ -1137,6 +1137,30 @@ def _klyuchi(вид, фраза, текст):
 ЛИМИТ_ФРАЗЫ = 120
 
 
+def _bez_pustyh(кл):
+    """Ключи без None и пустых значений: флаг без значения тоже убираем."""
+    чисто, i = [], 0
+    кл = list(кл or [])
+    while i < len(кл):
+        к = кл[i]
+        if к is None:
+            i += 1
+            continue
+        к = str(к)
+        if к.startswith("--") and i + 1 < len(кл):
+            зн = кл[i + 1]
+            if зн is None or (isinstance(зн, str) and not зн.strip()):
+                i += 2          # флаг и его пустое значение — мимо
+                continue
+            чисто.append(к)
+            чисто.append(str(зн))
+            i += 2
+            continue
+        чисто.append(к)
+        i += 1
+    return чисто
+
+
 def _fraza(текст, лимит=ЛИМИТ_ФРАЗЫ):
     """Фраза для карточки — ЦЕЛЫМИ предложениями, слово не рвём.
 
@@ -1555,6 +1579,12 @@ def main():
     # ── 4. ПОСТАНОВКА ──
     поставлено, отказы = 0, []
     for ном, вид, т, кл in план:
+        # НИ ОДНОГО None В КОМАНДЕ (15.11, блокер, улов `usuario-55`):
+        # `subprocess.run` падает трейсбеком «expected str, not NoneType» и
+        # убивает ВСЮ машинную постановку, хотя виновата одна сцена. Пустые
+        # значения выбрасываем вместе с их флагом — пусть дверь честно
+        # скажет, чего ей не хватает, на этой сцене, а не роняет прогон.
+        кл = _bez_pustyh(кл)
         кмд = [sys.executable, CARD_PUT, a.scenes, str(ном), вид] + кл
         r = subprocess.run(кмд, capture_output=True, text=True)
         if r.returncode == 0:
