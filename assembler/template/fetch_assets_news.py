@@ -1626,6 +1626,54 @@ def _by_rarity(tag_dir, files):
     return [f for _c, _d, f in ranked]
 
 
+# ── РЕЕСТР ИСПОЛЬЗОВАННЫХ КАДРОВ БАЗЫ (15.11) ───────────────────────────
+ROTACIYA_DNEY = 7
+_REESTR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                       "base", "ispolzovano.json")
+
+
+def _reestr_chitat():
+    try:
+        with open(_REESTR, encoding="utf-8") as f:
+            return json.load(f) or {}
+    except Exception:
+        return {}
+
+
+def _po_svezhesti(files):
+    """Кандидаты папки: давно не бравшиеся первыми, свежие — в конец."""
+    р = _reestr_chitat()
+    if not р:
+        return files
+    import time as _t
+    сейчас = _t.time()
+
+    def ключ(f):
+        к = os.path.basename(str(f[0] if isinstance(f, (tuple, list)) else f))
+        было = р.get(к, {}).get("когда", 0)
+        # давность в днях; не бравшийся вовсе — максимальная давность
+        дней = (сейчас - было) / 86400.0 if было else 9999.0
+        return (-min(дней, 9999.0), к)
+    return sorted(files, key=ключ)
+
+
+def reestr_otmetit(put, proekt=""):
+    """Записать, что кадр базы ушёл в ролик."""
+    import time as _t
+    р = _reestr_chitat()
+    к = os.path.basename(str(put))
+    зап = р.setdefault(к, {})
+    зап["когда"] = int(_t.time())
+    зап["проект"] = proekt or os.path.basename(os.getcwd())
+    зап["раз"] = int(зап.get("раз", 0)) + 1
+    try:
+        os.makedirs(os.path.dirname(_REESTR), exist_ok=True)
+        with open(_REESTR, "w", encoding="utf-8") as f:
+            json.dump(р, f, ensure_ascii=False, indent=1)
+    except Exception:
+        pass
+
+
 def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ffmpeg="ffmpeg",
                         blocked_md5=None, used_md5=None, dur_hint=None, seq=0):
     """Pull from the user's own pre-vetted local folder instead of the web.
@@ -2029,6 +2077,18 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
     except OSError:
         pass
     n = len(files)
+    # ПАМЯТЬ МЕЖДУ РОЛИКАМИ (15.11, его слово: «чтобы мы не гоняли одни и те
+    # же изображения и видео»). `usage_counts` живёт ОДИН прогон, поэтому в
+    # каждом новом ролике обход папки начинался с нуля — и первый файл
+    # уезжал во все ролики подряд, пока остальная база лежала без дела.
+    # Реестр `base/ispolzovano.json` помнит, когда файл ставился последний
+    # раз; кандидаты сортируются «давно не бравшийся — первым», свежие
+    # (моложе ROTACIYA_DNEY) уходят в конец очереди, но не выбрасываются:
+    # пустая сцена хуже повтора.
+    try:
+        files = _po_svezhesti(files)
+    except Exception:
+        pass
     start = usage_counts.get(tag, 0)
     chosen = None
 
@@ -2241,6 +2301,7 @@ def fetch_local_library(tag_query, media_library_dir, out_base, usage_counts, ff
 
     src_path = os.path.join(tag_dir, chosen)
     out_path = _copy_from_library(src_path, out_base)
+    reestr_otmetit(src_path)          # память между роликами (15.11)
     _USE_COUNT[chosen_md5] += 1
     if used_md5 is not None:
         used_md5[out_path] = chosen_md5
