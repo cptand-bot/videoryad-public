@@ -1737,7 +1737,8 @@ def lint(paths, strict=False, no_net=False):
                 continue  # карточка арсенала (card:quote и соседи, 2026-10-22):
                 # у неё вместо запроса ТЕКСТ ЦИТАТЫ, и линтер ловил бы в нём
                 # свои же мины («снос», «поезд») — кадр при этом рисуем мы сами
-            if q and not src.startswith(("card", "local_library", "direct_url")):
+            if q and not src.startswith(("card", "local_library", "local_donor",
+                                         "direct_url")):
                 all_q.append(("%s %s" % ("всплывашка" if for_overlay else "сцена",
                                          s.get("id")), q))
             if src == "direct_url":
@@ -1749,8 +1750,14 @@ def lint(paths, strict=False, no_net=False):
                     problems += h_
                     soft += s_
                 continue
-            if src == "local_library":
+            if src in ("local_library", "local_donor"):
                 continue  # путь к файлу, не поисковый запрос
+                # `local_donor` добавлен 15.11 (улов `usuario-55`): у кадров,
+                # взятых у донора, в `source_query` лежит путь вида
+                # «5min-…/scene_007.jpg». Линт сравнивал эти пути между собой
+                # как тексты запросов и давал «ПОЧТИ ОДИН ЗАПРОС (98%)» на
+                # каждую пару: 15 донорских сцен — 55 «мин», все до единой
+                # ложные, и фаза подготовки клона возвращала ОТКАЗ.
                 # (direct_url добавлен 2026-10-20: адрес латиницей, и правило
                 #  «запросы только по-русски» ловило бы его как нарушение)
             if src in PEXELS:
