@@ -42,6 +42,7 @@ _sp = _ilu.spec_from_file_location(
 _sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
 sluzhebnoe = _sl.sluzhebnoe
 
+import re
 import os
 import subprocess
 import sys
@@ -164,26 +165,49 @@ def main():
     # оказались готовы в 09:34-09:41 — раньше раскадровок. Вторая статья
     # этим не ограничена: без неё второй канал стоит целиком.
     # Снять ограничение на один запуск: VIDEORYAD_UPAKOVKA_SRAZU=1.
+    # УПАКОВКА — В САМОМ КОНЦЕ ДНЯ (15.11, его прямое слово, зло: «Упаковка
+    # должна делаться в самом конце, когда уже сделаны ВСЕ дашборды. Когда
+    # уже не надо работать чата GPT ни на одном из аккаунтов. Вот тогда надо
+    # делать упаковку и заказывать картинки, а не тормозить процесс
+    # дашборда»). Ролик ждёт агента на раскадровке и ключах карточек, и
+    # каждая минута, которую агент тратит на описания и превью, — это
+    # минута простоя дашборда. Поэтому ветка не уходит, пока ХОТЯ БЫ ОДИН
+    # ролик дня не дошёл до дашборда: признак — `overlays.json` в папке
+    # проекта (его пишет `build_overlays` перед сборкой страницы).
+    # Снять на один запуск: VIDEORYAD_UPAKOVKA_SRAZU=1.
     _srazu = os.environ.get("VIDEORYAD_UPAKOVKA_SRAZU") == "1"
-    _zhdut_raskadrovki = []
+    _ne_gotovy = []
     if not _srazu:
         _den = os.path.dirname(os.path.abspath(a.folder.rstrip("/")))
-        for _t in sorted(os.listdir(_den)) if os.path.isdir(_den) else []:
+        _proekty = os.path.join(os.path.expanduser("~"), "projects")
+        for _t in (sorted(os.listdir(_den)) if os.path.isdir(_den) else []):
             _p = os.path.join(_den, _t)
             if not os.path.isdir(_p) or _t.startswith("_"):
                 continue
-            _est_tekst = any(f.lower().endswith(".txt") and not sluzhebnoe(f)
-                             for f in os.listdir(_p))
-            _est_scenes = any(f.endswith(".scenes.json") for f in os.listdir(_p))
-            if _est_tekst and not _est_scenes:
-                _zhdut_raskadrovki.append(_t)
+            if not any(f.lower().endswith(".txt") and not sluzhebnoe(f)
+                       for f in os.listdir(_p)):
+                continue          # текста ещё нет — тема не в работе
+            # ищем проект этой темы среди рабочих папок
+            _slova = [w.lower() for w in re.findall(r"[A-Za-zА-Яа-яЁё]{4,}", _t)]
+            _dash = False
+            for _pr in (os.listdir(_proekty) if os.path.isdir(_proekty) else []):
+                _prp = os.path.join(_proekty, _pr)
+                if not os.path.isdir(_prp):
+                    continue
+                if _slova and not any(w[:5] in _pr.lower() for w in _slova):
+                    continue
+                if os.path.exists(os.path.join(_prp, "overlays.json")):
+                    _dash = True
+                    break
+            if not _dash:
+                _ne_gotovy.append(_t)
 
-    if _zhdut_raskadrovki and not _srazu:
+    if _ne_gotovy and not _srazu:
         print("")
-        print("УПАКОВКА И ПРЕВЬЮ ОТЛОЖЕНЫ — у агента сперва раскадровки "
-              "(его правило 13.11). Ждут раскадровки: %s"
-              % ", ".join(_zhdut_raskadrovki[:6]))
-        print("  Закажет вкладка сама, когда заход за раскадровкой закрыт:")
+        print("УПАКОВКА И ПРЕВЬЮ ОТЛОЖЕНЫ ДО КОНЦА ДНЯ — его прямое слово "
+              "15.11: пока агент нужен видеоряду, он не рисует картинки.")
+        print("  Дашборда ещё нет у тем: %s" % ", ".join(_ne_gotovy[:6]))
+        print("  Когда ВСЕ дашборды дня собраны, закажи одной командой:")
         print("    python3 %s \"%s\" --only upakovka,prevyu"
               % (os.path.join(HERE, "tema_start.py"), a.folder))
         print("  Нужно прямо сейчас — VIDEORYAD_UPAKOVKA_SRAZU=1.")
