@@ -24,6 +24,17 @@
 """
 import argparse
 import glob
+# СЛУЖЕБНОЕ ИМЯ — ОДНА ПРОВЕРКА НА ВЕСЬ СБОРЩИК (15.11, sluzhebnye.py):
+# шестой инструмент той же семьи. Статья «…ответ Москвы 5 минут.txt»
+# выбрасывалась как служебная по подстроке «ОТВЕТ».
+import importlib.util as _ilu
+_sp = _ilu.spec_from_file_location(
+    "sluzhebnye", __import__("os").path.join(
+        __import__("os").path.dirname(__import__("os").path.abspath(__file__)),
+        "sluzhebnye.py"))
+_sl = _ilu.module_from_spec(_sp); _sp.loader.exec_module(_sl)
+sluzhebnoe = _sl.sluzhebnoe
+
 import os
 import shutil
 import subprocess
@@ -59,7 +70,7 @@ def read_text(path):
 def find_text(folder):
     c = [os.path.join(folder, n) for n in os.listdir(folder)
          if n.lower().endswith(".txt")
-         and not any(s in n.upper() for s in SKIP_TXT)]
+         and not sluzhebnoe(n, SKIP_TXT)]
     return max(c, key=os.path.getsize) if c else ""
 
 
