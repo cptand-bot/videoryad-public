@@ -126,6 +126,10 @@ def main():
     ap.add_argument("--cel", type=int, default=0,
                     help="целевая длина в знаках (сводные ролики): "
                          "не резать и мерить коридор от неё")
+    ap.add_argument("--esche-original", action="append", default=[],
+                    dest="esche", metavar="ФАЙЛ",
+                    help="ещё тексты-источники сводки: по ним линт сверяет "
+                         "фамилии при должностях (можно повторять)")
     ap.add_argument("--bez-linta", dest="bez_linta", action="store_true",
                     help="разложить БЕЗ проверки rewrite_lint (только по его "
                          "прямому слову)")
@@ -252,7 +256,9 @@ def main():
         кмд = [sys.executable,
                os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             "rewrite_lint.py"), исходник, ответ] \
-                           + (["--cel", str(a.cel)] if a.cel else [])
+                           + (["--cel", str(a.cel)] if a.cel else []) \
+                           + [x for _ф in getattr(a, "esche", [])
+                              for x in ("--esche-original", _ф)]
         if os.path.isfile(задание):
             кмд += ["--brief", задание]
         п = subprocess.run(кмд, capture_output=True, text=True)
