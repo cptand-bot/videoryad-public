@@ -40,7 +40,11 @@ run_check () {            # имя · команда…
 run_check ревизия   python3 "$T/revizia_kartochek.py" "$BASE"
 run_check имена     python3 "$T/imena_pod_kadrom.py"  "$BASE"
 run_check дети      python3 "$T/deti_gate.py" check "$PROJ"
-run_check повторы   python3 "$T/povtor_kadrov.py"     "$BASE"
+# ПОВТОРАМ НУЖНА ПАПКА, А НЕ ИМЯ ФАЙЛА СЦЕН (15.11, улов `usuario-27`).
+# Передавался `$BASE` — basename раскадровки; инструмент не находил кадров,
+# печатал «кадров в сравнении: 0» и шаг рапортовал ЕСТЬ. На комплектном
+# ролике проверка повторов молча не делалась вовсе.
+run_check повторы   python3 "$T/povtor_kadrov.py"     "$PROJ"
 run_check selfcheck python3 "$T/selfcheck.py"         "$BASE"
 rm -f "$log"
 
