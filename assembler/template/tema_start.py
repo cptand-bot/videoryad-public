@@ -175,7 +175,13 @@ def main():
     # ролик дня не дошёл до дашборда: признак — `overlays.json` в папке
     # проекта (его пишет `build_overlays` перед сборкой страницы).
     # Снять на один запуск: VIDEORYAD_UPAKOVKA_SRAZU=1.
-    _srazu = os.environ.get("VIDEORYAD_UPAKOVKA_SRAZU") == "1"
+    # ЯВНЫЙ ВЫЗОВ НЕ ОТКЛАДЫВАЕТСЯ (15.11, улов `usuario-55`): отложенный
+    # режим писался против АВТОЗАПУСКА из `start`, который тормозил дашборд.
+    # Когда упаковку зовут руками ключом `--only upakovka`, значит время
+    # пришло — откладывать нечего, и вкладка теряла заход, послушавшись
+    # обычной строки вывода.
+    _yavno = bool(a.only)
+    _srazu = os.environ.get("VIDEORYAD_UPAKOVKA_SRAZU") == "1" or _yavno
     _ne_gotovy = []
     if not _srazu:
         _den = os.path.dirname(os.path.abspath(a.folder.rstrip("/")))
