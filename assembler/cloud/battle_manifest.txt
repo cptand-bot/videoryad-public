@@ -205,6 +205,7 @@ template/voice_note.py
 template/vybor_svod.py
 template/whisper_derzhi.sh
 template/wm_sheet.py
+template/yofikator.py
 template/zal_core.py
 template/zal_fable3.py
 template/zal_scene.py

@@ -146,6 +146,32 @@ def template_of(path):
     return ch, TEMPLATES[ch]
 
 
+# СЛУЖЕБНОЕ СЛОВО УЗНАЁТСЯ ПО РАЗДЕЛИТЕЛЮ, А НЕ ПО ВХОЖДЕНИЮ (15.11.2026).
+# Было: `s in up` — и тема «2-Против РФ ответ Москвы» не озвучивалась ВООБЩЕ,
+# потому что в её названии есть слово «ответ», а «ОТВЕТ» стоит в списке
+# служебных (он метил файлы вида `ЗАДАНИЕ-РЕРАЙТ.ОТВЕТ.txt`). Сторож молча
+# считал папку «без текста», вкладка 12 минут ждала озвучку и искала причину
+# в гейте «ё». Тем же вхождением выбивались бы «ИТОГ», «ЗАМЕТКИ», «ВИЗУАЛ»,
+# «ПРЕДЛОЖЕНИЯ» в любом живом заголовке темы.
+# Теперь служебным считается слово, отделённое началом имени, точкой, дефисом
+# или подчёркиванием — то есть именно наша разметка, а не слово внутри фразы.
+_SLUZH_RAZD = ".-_"
+
+
+def _sluzhebnoe(up):
+    for s in SKIP_TXT:
+        i = up.find(s)
+        while i >= 0:
+            слева = up[i - 1] if i > 0 else ""
+            j = i + len(s)
+            справа = up[j] if j < len(up) else ""
+            if (слева == "" or слева in _SLUZH_RAZD) and \
+               (справа == "" or справа in _SLUZH_RAZD or справа == "."):
+                return True
+            i = up.find(s, i + 1)
+    return False
+
+
 def find_text(folder):
     """Текст озвучки в папке темы — единственный содержательный `.txt`."""
     found = []
@@ -153,7 +179,7 @@ def find_text(folder):
         if not name.lower().endswith(".txt"):
             continue
         up = name.upper()
-        if any(up.startswith(s) or s in up for s in SKIP_TXT):
+        if _sluzhebnoe(up):
             continue
         found.append(os.path.join(folder, name))
     return found
