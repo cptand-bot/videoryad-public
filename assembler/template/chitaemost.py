@@ -161,7 +161,16 @@ def main():
             pusto = kontrast < PORG_KONTRAST_TEXT
             bledno = False
         elif vid in KARTY:
-            pusto = kontrast < PORG_KONTRAST_KARTA
+            # КАРТЫ МЕТРИКОЙ НЕ СУДЯТСЯ (15.11, проверено глазами). Порог по
+            # контрасту, заведённый утром, забраковал ДВЕ ХОРОШИЕ карты:
+            # земли Германии с подсветкой и подписями (контраст 0,00% после
+            # ужатия, 0,13% на полном кадре) и Кишинёв—Бухарест с пунктиром
+            # и «358 км» (0,7% чернил — карта просто тёмная). При этом
+            # «жёлтая заливка без подписей» из его разбора давала 0,26%, то
+            # есть БОЛЬШЕ хорошей. Разделить их числом нельзя: карта тёмная
+            # и мелкоконтрастная по устройству. Поэтому гейт карты
+            # пропускает и помечает «смотреть глазами» — решает дашборд.
+            pusto = False
             bledno = False
         elif _pavilon(vid):
             pusto = ink < PORG_INK_FAIL
@@ -176,8 +185,9 @@ def main():
                      "razmah": round(razmah, 1),
                      "kontrast": round(kontrast * 100, 2),
                      "verdikt": "пусто" if pusto else ("бледно" if bledno else
-                                ("слабо" if (vid not in TEKSTOVYE
-                                             and ink < PORG_INK_WARN) else "ок"))})
+                                ("карта — глазами" if vid in KARTY else
+                                 ("слабо" if (vid not in TEKSTOVYE
+                                              and ink < PORG_INK_WARN) else "ок")))})
         if pusto or bledno:
             brak.append(rows[-1])
         elif vid not in TEKSTOVYE and ink < PORG_INK_WARN:
