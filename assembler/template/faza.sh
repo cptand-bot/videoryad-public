@@ -104,7 +104,17 @@ pick_pipe() {
     # неотличимо от работающего фетча: в логе пусто, процесс живой.
     for pp in cptand-pub andiv-pub olga-pub pyat shest rezerv; do
         if [ -d "$LOCKS/$pp" ]; then
-            if [ "$(cat "$LOCKS/$pp/kto" 2>/dev/null)" = "$proj" ]; then
+            # СВЕРЯЕМ ПО ИМЕНИ ПРОЕКТА, А НЕ ПО СТРОКЕ ПУТИ (15.11, улов
+            # `usuario-27`). Внутри фазы `$proj` — полный путь
+            # `/home/andrey/projects/<имя>`, а вкладка, занявшая трубу
+            # руками, пишет в `kto` короткое имя. Строки не совпадали, своя
+            # же труба читалась как чужая, фаза уезжала на следующую
+            # свободную — так был занят аварийный `rezerv` при свободной
+            # штатной трубе, а брошенный замок висел бы до четырёх часов.
+            local _kto="$(cat "$LOCKS/$pp/kto" 2>/dev/null)"
+            if [ "$_kto" = "$proj" ] || \
+               [ "$(basename "$_kto")" = "$(basename "$proj")" ]; then
+                echo "$proj" > "$LOCKS/$pp/kto"   # нормализуем в полный путь
                 echo "$pp"; return 0          # замок наш, труба наша
             fi
             local age=$(( ( $(date +%s) - $(stat -c %Y "$LOCKS/$pp") ) / 60 ))
