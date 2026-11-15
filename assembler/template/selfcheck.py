@@ -1560,10 +1560,20 @@ except Exception as _e:                  # список не прочиталс�
 # прям подряд, лучше хотя бы через раз… а то будет как презентация
 # PowerPoint, я такого не хочу». Семья видов и лечение — в
 # `template/citaty_zazor.py`, здесь только гейт дашборда.
+# ДВЕРЬ НА УТВЕРЖДЁННОМ РОЛИКЕ (15.11): когда он УЖЕ сказал «утверждаю» по
+# дашборду, смена вида — это смена утверждённого кадра, чего вкладка делать
+# не вправе. Утверждение старше нормы чередования (правило 13.11
+# «утверждено = заморожено»), поэтому на таком ролике зазор цитат
+# понижается до замечания. Файл `.utverzhdeno.json` пишет сам дашборд;
+# аварийный обход — `VIDEORYAD_NO_CITATY=1`.
+_citaty_myagko = (os.path.exists(".utverzhdeno.json")
+                  or os.environ.get("VIDEORYAD_NO_CITATY") == "1")
 try:
     import citaty_zazor as _cz
     for _b in _cz.нарушения(scenes_path):
-        FAIL.append(_b)
+        (WARN if _citaty_myagko else FAIL).append(
+            (_b + "  [ролик утверждён — замечание, не отказ]")
+            if _citaty_myagko else _b)
 except Exception as _e:
     WARN.append("не проверить цитатный зазор (%s: %s) — посмотри "
                 "`template/citaty_zazor.py`" % (type(_e).__name__, _e))
