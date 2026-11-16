@@ -163,6 +163,9 @@ template/podmena.py
 template/povtor_kadrov.py
 template/pravki.py
 template/proverki.py
+template/agent_gate.py
+template/model_gate.py
+template/modeli.py
 template/prevyu.py
 template/prevyu_klon.py
 template/prevyu_text.py
