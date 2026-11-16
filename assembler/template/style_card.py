@@ -201,6 +201,27 @@ def main():
     ap.add_argument("--force", action="store_true",
                     help="не падать на расстановке (норма, интервал)")
     a = ap.parse_args()
+    # ТОЧКА В КОНЦЕ ФРАЗЫ НА КАРТОЧКЕ НЕ СТАВИТСЯ НИКОГДА (16.11, его правило
+    # по сценам 1, 3 и 9 дашборда 8792: «эти точки очень часто встречаются на
+    # наших карточках, они не нужны» — все каналы, все виды). Снимаем дверью,
+    # а не правилом в брифе: вкладка берёт фразу из текста сцены, где точка
+    # стоит законно. Многоточие не трогаем (его ловит гейт обрывка).
+    def _bez_tochki(_зн):
+        if isinstance(_зн, list):
+            return [_bez_tochki(_x) for _x in _зн]
+        if not isinstance(_зн, str):
+            return _зн
+        _т = _зн.rstrip()
+        if _т.endswith(".") and not _т.endswith(("..", "\u2026")):
+            return _т[:-1].rstrip()
+        return _зн
+
+    for _поле in ("text", "title", "caption", "sub", "subtitle", "kick",
+                  "bottom", "say", "tezis", "replika", "feature", "bar",
+                  "fact", "shot", "author", "role"):
+        if hasattr(a, _поле):
+            setattr(a, _поле, _bez_tochki(getattr(a, _поле)))
+
 
     if not os.path.isfile(a.scenes):
         _fail(2, f"нет файла сцен: {a.scenes}")

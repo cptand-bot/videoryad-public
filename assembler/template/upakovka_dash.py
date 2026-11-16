@@ -19,6 +19,7 @@ import http.server
 import json
 import os
 import shutil
+import time as _time
 import socketserver
 import subprocess
 import time
@@ -915,6 +916,10 @@ def _otpechatok(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("day", help="день в виде ДД-ММ, например 08-11")
+    ap.add_argument("--plus", action="append", default=[],
+                    help="дописать внизу ещё день: --plus 16-11 (можно "
+                         "несколько раз) — для тем, по которым упаковка "
+                         "готова, а выбор ещё не сделан")
     ap.add_argument("--port", type=int, default=8810)
     ap.add_argument("--out", help="сохранить html и не поднимать сервер")
     # ТОЛЬКО ОДИН РОЛИК НА СТРАНИЦЕ (10.11, его слово по «ПЕРЕВОД с
@@ -942,6 +947,16 @@ def main():
         return keep
 
     items = collect(a.day)
+    # ЕЩЁ ОДИН ДЕНЬ ВНИЗУ СТРАНИЦЫ (16.11, его прямое слово: «там у нас со
+    # вчера оставался проект перевод с дипломатического, его тоже нужно внизу
+    # туда вывести»). Дашборд знал ровно один день, и вчерашняя тема, по
+    # которой упаковка готова, а выбор ещё не сделан, просто исчезала со
+    # страницы — выбрать её было негде.
+    for _д in (a.plus or []):
+        _ещё = collect(_д)
+        for _it in _ещё:
+            _it.setdefault("день", _д)
+        items += _ещё
     if a.tolko:
         keep = _filtr(items)
         if not keep:
@@ -954,7 +969,7 @@ def main():
         sys.exit("за %s ни одной УПАКОВКА.json не нашлось — сначала "
                  "upakovka.py <папка дня> --all" % a.day)
     if a.out:
-        htm = page(items, a.day)
+        htm = page(items, " + ".join([a.day] + list(a.plus or [])))
         open(a.out, "w", encoding="utf-8").write(htm)
         print("страница: %s (роликов %d)" % (a.out, len(items)))
         return
@@ -1039,7 +1054,7 @@ def main():
                     except OSError:
                         pass
             it["превью_готовые"] = ready
-        htm = page(spisok, a.day)
+        htm = page(spisok, " + ".join([a.day] + list(a.plus or [])))
         _tmp = os.path.join(d, "index.html.tmp")
         with open(_tmp, "w", encoding="utf-8") as _fh:
             _fh.write(htm)
@@ -1054,13 +1069,35 @@ def main():
         прошлой страницей в кэше браузера), не появлялось до перезапуска.
         Теперь список роликов дня и превью перечитываются с диска перед
         выдачей страницы, а список правится НА МЕСТЕ — обработчики кликов
-        держат его по ссылке и по номерам."""
+        держат его по ссылке и по номерам.
+
+        НО НЕ ЧАЩЕ, ЧЕМ РАЗ В 20 СЕКУНД (16.11): пересборка опрашивает диск
+        `D:` по каждому превью каждой темы, а DrvFs на такие опросы медленный
+        — с шестью роликами запрос шёл 5-6 секунд, с тринадцатью (день плюс
+        вчерашний) уже 11,5. `notify.sh` ждёт ответа 5 секунд и отбивал
+        оповещение как «не дашборд», то есть пузырь о готовой упаковке
+        физически не мог уйти. Свежесть при этом сохраняется: 20 секунд — это
+        меньше, чем он успевает посмотреть одну тему."""
+        _сейчас = _time.time()
+        if (_сейчас - _perestroit.когда < 20.0
+                and os.path.isfile(os.path.join(d, "index.html"))):
+            return
+        _perestroit.когда = _сейчас
         fresh = _filtr(collect(a.day))
+        # ДОБАВЛЕННЫЕ ДНИ ПЕРЕЧИТЫВАЕМ ТОЖЕ (16.11): страница пересобирается
+        # перед каждой выдачей, и без этой строки `--plus` работал только до
+        # первого обновления — вчерашняя тема пропадала со страницы молча.
+        for _д in (a.plus or []):
+            _ещё = _filtr(collect(_д))
+            for _it in _ещё:
+                _it.setdefault("день", _д)
+            fresh += _ещё
         if not fresh:
             return
         items[:] = fresh
         _razlozhit(items)
 
+    _perestroit.когда = 0.0
     _razlozhit(items)
     os.chdir(d)
     # СОБСТВЕННЫЙ ОБРАБОТЧИК: статика плюс один POST `/make` — он и делает

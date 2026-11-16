@@ -322,6 +322,27 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args()
+    # ТОЧКА В КОНЦЕ ФРАЗЫ НА КАРТОЧКЕ НЕ СТАВИТСЯ НИКОГДА (16.11, его правило
+    # по сценам 1, 3 и 9 дашборда 8792: «эти точки очень часто встречаются на
+    # наших карточках, они не нужны» — все каналы, все виды). Снимаем дверью,
+    # а не правилом в брифе: вкладка берёт фразу из текста сцены, где точка
+    # стоит законно. Многоточие не трогаем (его ловит гейт обрывка).
+    def _bez_tochki(_зн):
+        if isinstance(_зн, list):
+            return [_bez_tochki(_x) for _x in _зн]
+        if not isinstance(_зн, str):
+            return _зн
+        _т = _зн.rstrip()
+        if _т.endswith(".") and not _т.endswith(("..", "\u2026")):
+            return _т[:-1].rstrip()
+        return _зн
+
+    for _поле in ("text", "title", "caption", "sub", "subtitle", "kick",
+                  "bottom", "say", "tezis", "replika", "feature", "bar",
+                  "fact", "shot", "author", "role"):
+        if hasattr(a, _поле):
+            setattr(a, _поле, _bez_tochki(getattr(a, _поле)))
+
 
     if a.list or not a.scenes:
         print("ЭЛЕМЕНТЫ АРСЕНАЛА В БОЕВОЙ ДВЕРИ (код · вид · режим · чем рисуется):")
