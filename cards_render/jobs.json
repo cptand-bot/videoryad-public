@@ -1,966 +1,876 @@
 [
  {
   "scene": 2,
-  "view": "sceny.prolog",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 7.9,
-  "channel": "ПЛАНЕТА",
+  "view": "zal_g01",
+  "dur": 13.4,
+  "anim": 13.4,
+  "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "prolog",
-   "seconds": 7.9,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Надо поставить рядом временные.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 7.9
-   }
-  },
+  "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Надо поставить рядом временные.",
    "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 7.9
+   "dur": 13.4,
+   "sheets": [],
+   "text": "И тут кто то всё же посмотрел вниз.",
+   "watermark": "ПЛАНЕТА"
   }
  },
  {
   "scene": 3,
-  "view": "zal_slova",
-  "dur": 15.3,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.8,
   "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 9.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "ЛОНДОН НАШЁЛ СТОЛ",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 9.8
+   }
+  },
   "kwargs": {
+   "text": "ЛОНДОН НАШЁЛ СТОЛ",
    "channel": "ПЛАНЕТА",
-   "dur": 15.3,
-   "sheets": [],
-   "text": "Старые решения закончились.",
-   "na_polu": "РЕМОНТ",
-   "watermark": "ПЛАНЕТА"
+   "watermark": "ПЛАНЕТА",
+   "dur": 9.8
   }
  },
  {
-  "scene": 5,
-  "view": "zal_g18",
-  "dur": 9.0,
-  "anim": 9.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 9.0,
-   "sheets": [],
-   "text": "Машины выходят из строя.",
-   "value": "ПОЧТИ 400",
-   "value_sub": "машин",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 7,
-  "view": "cinematic.dossier",
-  "dur": 10.0,
-  "anim": 10.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "rows": [
-    "Николай Калашник",
-    "Министр инфраструктуры",
-    "Железная дорога",
-    "Повреждены локомотивы",
-    "Удары по станциям"
-   ],
-   "title": "ДОСЬЕ",
-   "photo": "cards/photo/card_007.jpg",
-   "stamp": "ПЕРВОИСТОЧНИК",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 9,
-  "view": "zal_schetchik",
-  "dur": 5.1,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 5.1,
-   "sheets": [],
-   "text": "Локомотив не легковушка.",
-   "value": "630",
-   "value_sub": "машин",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 11,
+  "scene": 4,
   "view": "sceny.prohod",
   "mode": "cli",
   "script": "sceny_cli.py",
-  "dur": 10.7,
+  "dur": 13.4,
   "channel": "ПЛАНЕТА",
   "watermark": "ПЛАНЕТА",
   "cfg": {
    "view": "prohod",
-   "seconds": 10.7,
+   "seconds": 13.4,
    "fps": 30,
    "t0": 0.0,
    "kwargs": {
-    "text": "Колея широкая, локомотивов мало.",
+    "text": "ДРУГИЕ КОМАНДЫ",
     "channel": "ПЛАНЕТА",
     "watermark": "ПЛАНЕТА",
-    "dur": 10.7,
+    "dur": 13.4,
     "tezisy": [
-     "Широкая колея",
-     "Локомотивов мало",
-     "Закупки без тендера"
+     "Давить сильнее",
+     "Вооружать больше",
+     "Готовиться дольше"
     ]
    }
   },
   "kwargs": {
-   "text": "Колея широкая, локомотивов мало.",
+   "text": "ДРУГИЕ КОМАНДЫ",
    "channel": "ПЛАНЕТА",
    "watermark": "ПЛАНЕТА",
-   "dur": 10.7,
+   "dur": 13.4,
    "tezisy": [
-    "Широкая колея",
-    "Локомотивов мало",
-    "Закупки без тендера"
+    "Давить сильнее",
+    "Вооружать больше",
+    "Готовиться дольше"
    ]
   }
  },
  {
-  "scene": 13,
-  "view": "photo",
-  "dur": 9.8,
-  "anim": 9.8,
-  "tail_zoom": 0.0,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "watermark": "ПЛАНЕТА",
-   "photo": "cards/photo/card_013.jpg",
-   "lines": [
-    "Меньше исправных машин",
-    "Меньше перевезённых грузов"
-   ]
-  }
- },
- {
-  "scene": 15,
-  "view": "torn_split.torn_split",
-  "dur": 7.0,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "a_path": "cards/photo/card_015.jpg",
-   "b_path": "cards/photo/card_015_2.jpg",
-   "title": "СОВЕЩАНИЯ И ПУТИ",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 17,
-  "view": "pull",
-  "dur": 5.5,
-  "anim": 2.6,
-  "tail_zoom": 0.05,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Тяжёлому транспорту разрешено далеко не всё.",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 19,
-  "view": "zal_shkala",
-  "dur": 9.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 9.6,
-   "sheets": [],
-   "text": "Киев атакует российские объекты.",
-   "value": "ДО СЕРЕДИНЫ ДНЯ",
-   "value_sub": "ограничение проезда",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 21,
-  "view": "split",
-  "dur": 12.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Зелёная линия метро не вернётся в срок.",
-   "photo": "cards/photo/card_021.jpg",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 23,
-  "view": "marker_serif",
-  "dur": 6.8,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Ставить придётся там, где мосты стали целями.",
-   "accent": "целями",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 25,
-  "view": "zal_kub",
-  "dur": 17.2,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 17.2,
-   "sheets": [],
-   "text": "По его оценке, при разрушении основных мостов ни понтоны",
-   "kick": "ПЕРЕПРАВЫ",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 28,
-  "view": "film.film_single",
-  "dur": 9.4,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "photo": "cards/photo/card_028.jpg",
-   "title": "МОНТАЖ РУКАМИ",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 31,
-  "view": "zal_efir",
-  "dur": 8.2,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 8.2,
-   "sheets": [],
-   "text": "Проложить тоннель под Днепром.",
-   "say": "Проложить тоннель под Днепром.",
-   "author": "Бескрестнова",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 32,
-  "view": "devices.device_scene",
-  "dur": 6.9,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "content_path": "cards/photo/card_032.jpg",
-   "items": [
-    "Понтон можно разбить",
-    "Тоннель под рекой",
-    "Стоимость монументальная"
-   ],
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 33,
-  "view": "sceny.tribuna",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 9.2,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "tribuna",
-   "seconds": 9.2,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Строительство растянется на годы.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 9.2,
-    "role": "СОВЕТНИК"
-   }
-  },
-  "kwargs": {
-   "text": "Строительство растянется на годы.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 9.2,
-   "role": "СОВЕТНИК"
-  }
- },
- {
-  "scene": 35,
-  "view": "strike",
-  "dur": 5.6,
-  "anim": 3.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Возможность прекратить цикл занимает последнее место.",
-   "struck": "последнее место",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 36,
-  "view": "zal_g44",
-  "dur": 6.0,
-  "anim": 6.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 6.0,
-   "sheets": [],
-   "text": "Прошло больше ста сорока дней.",
-   "value": "140",
-   "value_sub": "ДНЕЙ",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 37,
-  "view": "sceny.mehanizm",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 6.3,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "mehanizm",
-   "seconds": 6.3,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Обещанный срок закончился давно.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 6.3,
-    "pary": [
-     "Обещанный — Зато",
-     "Зато — Киеве"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Обещанный срок закончился давно.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 6.3,
-   "pary": [
-    "Обещанный — Зато",
-    "Зато — Киеве"
-   ]
-  }
- },
- {
-  "scene": 39,
-  "view": "sceny.pechat",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 12.6,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "pechat",
-   "seconds": 12.6,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Ракета корректирует курс.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 12.6,
-    "stamp": "утверждено"
-   }
-  },
-  "kwargs": {
-   "text": "Ракета корректирует курс.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 12.6,
-   "stamp": "утверждено"
-  }
- },
- {
-  "scene": 40,
-  "view": "marker_serif",
-  "dur": 6.0,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Большая переправа представляет собой огромную и прочную конструкцию.",
-   "accent": "представляет",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 41,
-  "view": "charts.network",
-  "dur": 13.8,
-  "anim": 13.8,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "nodes": [
-    {
-     "id": "Прилететь",
-     "label": "Прилететь",
-     "weight": 1.0
-    },
-    {
-     "id": "Специалист",
-     "label": "Специалист",
-     "weight": 2.0
-    },
-    {
-     "id": "Мауро",
-     "label": "Мауро",
-     "weight": 2.0
-    },
-    {
-     "id": "Джилли",
-     "label": "Джилли",
-     "weight": 1.0
-    }
-   ],
-   "links": [
-    {
-     "from": "Прилететь",
-     "to": "Специалист",
-     "weight": 1.0
-    },
-    {
-     "from": "Специалист",
-     "to": "Мауро",
-     "weight": 1.0
-    },
-    {
-     "from": "Мауро",
-     "to": "Джилли",
-     "weight": 1.0
-    }
-   ],
-   "title": "Прилететь поблизости и действительно ост",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 43,
-  "view": "film.film_single",
-  "dur": 9.1,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "photo": "cards/photo/card_043.jpg",
-   "title": "ОСТРОВИЗАЦИЯ",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 44,
+  "scene": 6,
   "view": "sceny.relsy",
   "mode": "cli",
   "script": "sceny_cli.py",
-  "dur": 10.0,
+  "dur": 13.4,
   "channel": "ПЛАНЕТА",
   "watermark": "ПЛАНЕТА",
   "cfg": {
    "view": "relsy",
-   "seconds": 10.0,
+   "seconds": 13.4,
    "fps": 30,
    "t0": 0.0,
    "kwargs": {
-    "text": "Переброска энергии затруднена.",
+    "text": "РАЗГОВОР ОБ УСЛОВИЯХ",
     "channel": "ПЛАНЕТА",
     "watermark": "ПЛАНЕТА",
-    "dur": 10.0,
+    "dur": 13.4,
     "sobytiya": [
-     "Энергия производится",
-     "Переброска затруднена",
-     "Последствия шире"
+     "Телефон;Переговоры;Условия"
     ]
    }
   },
   "kwargs": {
-   "text": "Переброска энергии затруднена.",
+   "text": "РАЗГОВОР ОБ УСЛОВИЯХ",
    "channel": "ПЛАНЕТА",
    "watermark": "ПЛАНЕТА",
-   "dur": 10.0,
+   "dur": 13.4,
    "sobytiya": [
-    "Энергия производится",
-    "Переброска затруднена",
-    "Последствия шире"
+    "Телефон;Переговоры;Условия"
    ]
   }
  },
  {
-  "scene": 45,
-  "view": "zal_g48",
-  "dur": 6.3,
-  "anim": 6.3,
+  "scene": 8,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.4,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 13.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Получалась занятная схема.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 13.4,
+    "pary": [
+     "БРИТАНИЯ>УКРАИНА",
+     "БРИТАНИЯ>МОСКВА"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Получалась занятная схема.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 13.4,
+   "pary": [
+    "БРИТАНИЯ>УКРАИНА",
+    "БРИТАНИЯ>МОСКВА"
+   ]
+  }
+ },
+ {
+  "scene": 10,
+  "view": "devices.device_scene",
+  "dur": 13.4,
+  "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 6.3,
-   "sheets": [],
-   "text": "В третьем остывают батареи.",
+   "content_path": "cards/photo/card_010.jpg",
+   "items": [
+    "Сначала понадобился телефон",
+    "Следом заговорили о переговорах"
+   ],
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 47,
-  "view": "cinematic.evidence_wall",
-  "dur": 13.5,
-  "anim": 13.5,
+  "scene": 12,
+  "view": "cinematic.depth_of_field",
+  "dur": 13.4,
+  "anim": 13.4,
   "tail_zoom": 0.0,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "shots": [
-    [
-     "cards/photo/card_047.jpg",
-     240,
-     380,
-     -4,
-     "энергосети"
-    ],
-    [
-     "cards/photo/card_047_2.jpg",
-     800,
-     380,
-     3,
-     "транспорт"
-    ],
-    [
-     "cards/photo/card_047_3.jpg",
-     1360,
-     380,
-     -2,
-     "промышленность"
-    ]
-   ],
-   "title": "ОДИН УЗЕЛ ТЯНЕТ СОСЕДНИЕ",
+   "photo": "cards/photo/card_012.jpg",
    "watermark": "ПЛАНЕТА"
   },
   "mode": "frame"
  },
  {
-  "scene": 48,
-  "view": "paper_typed",
-  "dur": 6.2,
-  "anim": 2.8,
-  "tail_zoom": 0.04,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Рядом с этой историей украинская система Lima Quant получает большую публикацию в New York Times. Описание у неё почти волшебное.",
-   "title": "LIMA QUANT",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 49,
-  "view": "duel",
-  "dur": 15.8,
-  "anim": 3.2,
-  "tail_zoom": 0.035,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "top": {
-    "who": "",
-    "text": "что система способна убедить российский беспилотник",
-    "accent": null,
-    "source": ""
-   },
-   "bottom": {
-    "who": "",
-    "text": "Ей также приписывают возможность воздействовать на российские ракеты",
-    "accent": null,
-    "source": ""
-   },
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 51,
-  "view": "zal_pol",
-  "dur": 4.3,
+  "scene": 14,
+  "view": "zal_shkala",
+  "dur": 13.4,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
    "channel": "ПЛАНЕТА",
-   "dur": 4.3,
+   "dur": 13.4,
    "sheets": [],
-   "text": "Военный канал отвечает вопросом.",
-   "na_polu": "ИЗОБРЕТЕНИЕ",
+   "text": "Обязательства Лондона растут.",
+   "value": "ДЕСЯТКИ МИЛЛИАРДОВ",
+   "value_sub": "ФУНТОВ",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 52,
-  "view": "zal_g01",
-  "dur": 3.5,
-  "anim": 3.5,
+  "scene": 16,
+  "view": "charts.slope",
+  "dur": 13.4,
+  "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 3.5,
-   "sheets": [],
-   "text": "Подмену координат называют спуфингом.",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 53,
-  "view": "sceny.kreslo",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 13.7,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "kreslo",
-   "seconds": 13.7,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Навигатор уводит к аэропорту.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 13.7,
-    "role": "ЖИТЕЛЬ МОСКВЫ"
-   }
-  },
-  "kwargs": {
-   "text": "Навигатор уводит к аэропорту.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 13.7,
-   "role": "ЖИТЕЛЬ МОСКВЫ"
-  }
- },
- {
-  "scene": 55,
-  "view": "sceny.lenta",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 3.5,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "lenta",
-   "seconds": 3.5,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Цели достигали задолго до спутников.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 3.5,
-    "soobshcheniya": [
-     "Цели достигали",
-     "До GPS",
-     "До ГЛОНАСС"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Цели достигали задолго до спутников.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 3.5,
-   "soobshcheniya": [
-    "Цели достигали",
-    "До GPS",
-    "До ГЛОНАСС"
-   ]
-  }
- },
- {
-  "scene": 56,
-  "view": "sceny.prohod",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 14.4,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "prohod",
-   "seconds": 14.4,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Ориентировались по карте.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 14.4,
-    "tezisy": [
-     "Бумажная карта",
-     "Указатель",
-     "Упрямство"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Ориентировались по карте.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 14.4,
-   "tezisy": [
-    "Бумажная карта",
-    "Указатель",
-    "Упрямство"
-   ]
-  }
- },
- {
-  "scene": 57,
-  "view": "sceny.pechat",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 6.0,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "pechat",
-   "seconds": 6.0,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Объявить себя гением.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 6.0,
-    "stamp": "утверждено"
-   }
-  },
-  "kwargs": {
-   "text": "Объявить себя гением.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 6.0,
-   "stamp": "утверждено"
-  }
- },
- {
-  "scene": 59,
-  "view": "sceny.relsy",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 11.8,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "relsy",
-   "seconds": 11.8,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Спор развернулся вокруг Starshield.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 11.8,
-    "sobytiya": [
-     "Москва улучшает системы",
-     "Спор о Starshield"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Спор развернулся вокруг Starshield.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 11.8,
-   "sobytiya": [
-    "Москва улучшает системы",
-    "Спор о Starshield"
-   ]
-  }
- },
- {
-  "scene": 60,
-  "view": "film.film_strip",
-  "dur": 7.5,
-  "anim": 7.5,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "shots": [
-    "cards/photo/card_060.jpg",
-    "cards/photo/card_060_2.jpg",
-    "cards/photo/card_060_3.jpg"
+   "items": [
+    {
+     "label": "Запретное",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Привычное"
+    },
+    {
+     "label": "Осторожность",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Отсталость"
+    },
+    {
+     "label": "Ступенька",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Следующая"
+    }
    ],
-   "title": "ВЕРСИИ БЕЗ ПОДТВЕРЖДЕНИЯ",
+   "source": "хроника эскалации",
+   "sobytiya": true,
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 61,
-  "view": "sceny.repliki",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 12.7,
-  "channel": "ПЛАНЕТА",
+  "scene": 18,
+  "view": "cinematic.dossier",
+  "dur": 13.4,
+  "anim": 13.4,
+  "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "repliki",
-   "seconds": 12.7,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Ограничения нарастали несколько суток.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 12.7,
-    "repliki_": [
-     "Сначала десять процентов",
-     "Потом пятьдесят процентов",
-     "Затем срыв всех миссий"
-    ]
-   }
-  },
+  "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Ограничения нарастали несколько суток.",
+   "rows": [
+    "Аэродромы",
+    "Хранилища",
+    "Командные пункты",
+    "Логистика",
+    "Учения"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_018.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "pull",
+  "dur": 13.4,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Взлётная полоса никуда не отправилась.",
+   "accent": "Взлётная полоса",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "zal_slova",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
    "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 12.7,
-   "repliki_": [
-    "Сначала десять процентов",
-    "Потом пятьдесят процентов",
-    "Затем срыв всех миссий"
+   "dur": 9.8,
+   "sheets": [
+    "Командный пункт тоже не решил взять вы",
+    "Минск считает происходящее подготовкой"
+   ],
+   "text": "Европейские государства отвечают",
+   "na_polu": "МИНСК",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "marker_serif",
+  "dur": 13.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Система сама производит угрозы и сама на них реагирует.",
+   "accent": "угрозы",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "bars",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Семь из тридцати двух",
+   "caption": "",
+   "seconds": 9.8,
+   "bars": [
+    {
+     "label": "ПОДДЕРЖАЛИ",
+     "value": 0.22,
+     "color": "4A90E2"
+    },
+    {
+     "label": "ОСТАЛЬНЫЕ",
+     "value": 0.78,
+     "color": "48BB78"
+    }
    ]
   }
  },
  {
-  "scene": 63,
-  "view": "quote",
-  "dur": 3.5,
+  "scene": 30,
+  "view": "charts.pie",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Поддержали",
+     "value": 50.0
+    },
+    {
+     "label": "Остальные",
+     "value": 50.0
+    }
+   ],
+   "source": "итоги голосования",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "zal",
+  "dur": 11.0,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Зеленский связывает снижение скорости Starshield с ударами российских Шахедов по подстанциям.",
-   "author": "Зеленский",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 64,
-  "view": "duel",
-  "dur": 6.7,
-  "anim": 3.2,
-  "tail_zoom": 0.035,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "top": {
-    "who": "",
-    "text": "Перехватчики",
-    "accent": null,
-    "source": ""
-   },
-   "bottom": {
-    "who": "",
-    "text": "Воздушные цели",
-    "accent": null,
-    "source": ""
-   },
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 65,
-  "view": "zal_slova",
-  "dur": 9.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
+   "text": "СЧЁТ НА СТОЛЕ",
+   "words": [
+    "СЧЁТ",
+    "ЕДИНСТВО"
+   ],
+   "sheets": [
+    "СТРОЙ БЕЗУПРЕЧЕН",
+    "ПРИНОСЯТ СЧЁТ",
+    "ПОЛОВИНА ПОЕЛА ДОМА",
+    "ЗАКАЗЫВАЛИ ТОЛЬКО ВОДУ",
+    "ЛОЗУНГИ И БУХГАЛТЕРИЯ",
+    "ВСТРЕЧА НЕВЕЖЛИВАЯ"
+   ],
    "channel": "ПЛАНЕТА",
-   "dur": 9.6,
-   "sheets": [],
-   "text": "Претензии дошли до края.",
-   "na_polu": "ПРЕДЕЛ",
+   "dur": 11.0,
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 67,
-  "view": "zal_pol",
+  "scene": 32,
+  "view": "quote",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Вот где лозунги встречаются с бухгалтерией. Встреча получается короткая и крайне невежливая.",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "charts.line",
   "dur": 11.2,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 11.2,
-   "sheets": [],
-   "text": "Система остаётся чужой.",
-   "na_polu": "ЗАВИСИМОСТЬ",
+   "x_labels": [
+    "Сначала нечего обсуждать",
+    "Потом линия связи",
+    "Теперь переговоры"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "хроника заседаний",
+   "sobytiya": true,
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 68,
+  "scene": 35,
+  "view": "zal_schetchik",
+  "dur": 11.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.9,
+   "sheets": [],
+   "text": "СОГЛАСНЫ",
+   "value": "7",
+   "value_sub": "СТРАН",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.8,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 10.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "СУДЬБА ЕВРОПЫ ЗА КОФЕ",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.8,
+    "role": "участники европейской встречи"
+   }
+  },
+  "kwargs": {
+   "text": "СУДЬБА ЕВРОПЫ ЗА КОФЕ",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.8,
+   "role": "участники европейской встречи"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "zal_pol",
+  "dur": 11.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.3,
+   "sheets": [
+    "Киев требует своё место",
+    "Брюссель требует своё"
+   ],
+   "text": "Киев требует своё место.",
+   "na_polu": "ПАРИЖ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "vyrezka.gazeta",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_039.jpg",
+   "author": "наблюдение",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "zal_efir",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.6,
+   "sheets": [],
+   "text": "А Европа понимает её по разному.",
+   "say": "Эммануэль Макрон убеждает французов, что помощь Украине напрямую связана с безопасностью",
+   "author": "Макрон",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "duel",
+  "dur": 12.2,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "поэтому военную поддержку необходимо продолжать",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Роберт Фицо видит перед собой ту же карту",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "torn_split.torn_split",
+  "dur": 11.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "a_path": "cards/photo/card_042.jpg",
+   "b_path": "cards/photo/card_042_2.jpg",
+   "title": "Два чтения одной карты",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "strike",
+  "dur": 11.8,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Так выглядит европейское согласие без парадного освещения и оркестра.",
+   "struck": "Так выглядит европейское согласие",
+   "fix": "Второй отказывается оплачивать следующий счёт",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "zal_g18",
+  "dur": 10.7,
+  "anim": 10.7,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.7,
+   "sheets": [],
+   "text": "Четырнадцать процентов.",
+   "value": "14%",
+   "value_sub": "ОДОБРЯЮТ МАКРОНА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "zal_makety",
+  "dur": 12.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 12.5,
+   "sheets": [],
+   "text": "ЗАБОТЫ ФРАНЦУЗОВ",
+   "makety": [
+    "больница=КЛИНИКИ",
+    "школа=ШКОЛЫ",
+    "дом=ЖИЛЬЁ"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "charts.waterfall",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "start": {
+    "label": "Покупательная способность",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Социальная система",
+     "value": 1.0
+    },
+    {
+     "label": "Государственный долг",
+     "value": 1.0
+    },
+    {
+     "label": "Дефицит",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "source": "опрос французов",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "photo",
+  "dur": 10.9,
+  "anim": 10.9,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "photo": "cards/photo/card_047.jpg",
+   "lines": [
+    "Покупательная способность",
+    "Социальная система",
+    "Государственный долг"
+   ]
+  }
+ },
+ {
+  "scene": 48,
+  "view": "zal_g44",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.6,
+   "sheets": [],
+   "text": "РЕЙТИНГ МАКРОНА",
+   "value": "14%",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "poster.poster",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "Германия вспомнила географию",
+   "subtitle": "Шольц напомнил Европе про карту",
+   "hero_photo": "cards/photo/card_049.jpg",
+   "bottom": "Счёт снова придётся делить",
+   "facts": [
+    {
+     "label": "Россия",
+     "value": "осталась на карте"
+    },
+    {
+     "label": "Европа",
+     "value": "обсуждает без неё"
+    },
+    {
+     "label": "Шольц",
+     "value": "предлагает разговор"
+    },
+    {
+     "label": "Берлин",
+     "value": "без особой сделки"
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 50,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.1,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "globus",
+   "seconds": 11.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "ОБСУЖДАТЬ С РОССИЕЙ",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.1,
+    "region": "Россия"
+   }
+  },
+  "kwargs": {
+   "text": "ОБСУЖДАТЬ С РОССИЕЙ",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.1,
+   "region": "Россия"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "charts.map_dist",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Москва",
+     "lat": 55.75,
+     "lon": 37.62,
+     "accent": false
+    },
+    {
+     "label": "Брюссель",
+     "lat": 50.85,
+     "lon": 4.35,
+     "accent": false
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "cinematic.evidence_wall",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_053.jpg",
+     240,
+     250,
+     -4,
+     "Истребители НАТО"
+    ],
+    [
+     "cards/photo/card_053_2.jpg",
+     800,
+     250,
+     3,
+     "Учения в Европе"
+    ],
+    [
+     "cards/photo/card_053_3.jpg",
+     1360,
+     250,
+     -2,
+     "Авиабазы"
+    ],
+    [
+     "cards/photo/card_053_4.jpg",
+     240,
+     580,
+     4,
+     "Логистика"
+    ]
+   ],
+   "title": "Кто с кем говорит",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 54,
+  "view": "paper_typed",
+  "dur": 11.3,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Все выступают за единство, пока единство не просит назвать сумму и поставить подпись.",
+   "accent": "единство",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "charts.cartogram",
+  "dur": 10.9,
+  "anim": 10.9,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Бельгия",
+    "Индия",
+    "Китай"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "charts.cartogram",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Индия",
+    "Китай"
+   ],
+   "mode": "bubble",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 59,
   "view": "slider",
-  "dur": 8.3,
-  "anim": 8.3,
+  "dur": 11.8,
+  "anim": 11.8,
   "tail_zoom": 0.0,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
@@ -975,333 +885,518 @@
    "high": 100.0,
    "marker_value": 50.0,
    "marker_display": "50",
-   "seconds": 8.3,
+   "seconds": 11.8,
    "range_label": "РАЗБРОС ОЦЕНОК",
    "caption": "",
    "source": ""
   }
  },
  {
-  "scene": 69,
+  "scene": 60,
+  "view": "doc",
+  "dur": 10.7,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Европе, отказе Украины от вступления в Альянс, присутствии иностранных сил и поставках западного вооружения.",
+   "mark": "УКРАИНЫ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "film.film_single",
+  "dur": 12.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_061.jpg",
+   "title": "НАТО 1997",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.9,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 10.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Для самого Альянса",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.9,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Для самого Альянса",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.9,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.6,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 11.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Обе стороны употребляют слово безопасность.",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.6,
+    "repliki_": [
+     "Обе стороны употребляют слово безопасность",
+     "Только каждая подразумевает безопасность от другой стороны"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Обе стороны употребляют слово безопасность.",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.6,
+   "repliki_": [
+    "Обе стороны употребляют слово безопасность",
+    "Только каждая подразумевает безопасность от другой стороны"
+   ]
+  }
+ },
+ {
+  "scene": 66,
   "view": "zal_kub",
-  "dur": 6.0,
+  "dur": 11.1,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
    "channel": "ПЛАНЕТА",
-   "dur": 6.0,
+   "dur": 11.1,
+   "sheets": [
+    "Российская формула для НАТО звучит пре",
+    "Название сохраняйте"
+   ],
+   "text": "Российская формула для НАТО звучит предельно жёстко.",
+   "kick": "НАЗВАНИЕ СОХРАНЯЙТЕ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 67,
+  "view": "zal_efir",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.8,
    "sheets": [],
-   "text": "Причиной назвали неполадку.",
-   "kick": "СБОЙ",
+   "text": "ОДНО СЛОВО",
+   "say": "Ответ Альянса помещается в одно короткое слово",
+   "author": "НАТО",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "zal_g48",
+  "dur": 10.7,
+  "anim": 10.7,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.7,
+   "sheets": [],
+   "text": "Его нельзя закрыть формулировкой",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "split",
+  "dur": 11.3,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_070.jpg",
+   "text": "Тут переговоры начинают звучать гораздо привлекательнее.",
+   "accent": "привлекательнее",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
   "scene": 71,
-  "view": "zal_g01",
-  "dur": 3.5,
-  "anim": 3.5,
+  "view": "film.film_strip",
+  "dur": 10.9,
+  "anim": 10.9,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "channel": "ПЛАНЕТА",
-   "dur": 3.5,
-   "sheets": [],
-   "text": "Публичного объяснения пока нет.",
+   "shots": [
+    "cards/photo/card_071.jpg",
+    "cards/photo/card_071_2.jpg",
+    "cards/photo/card_071_3.jpg",
+    "cards/photo/card_071_4.jpg"
+   ],
+   "title": "РЕЦЕПТ",
+   "captions": [
+    "Зал-Европарламента",
+    "Зал-Европарламента",
+    "Зал-Европарламента",
+    "Зал-Европарламента"
+   ],
    "watermark": "ПЛАНЕТА"
   }
  },
  {
   "scene": 72,
-  "view": "zal",
-  "dur": 8.0,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Всё гораздо прозаичнее и потому опаснее.",
-   "words": [
-    "СУТЬ",
-    "ВСЁ"
-   ],
-   "sheets": [
-    "Суть проблемы не обязательно сводится",
-    "Всё гораздо прозаичнее и потому опасне"
-   ],
-   "channel": "ПЛАНЕТА",
-   "dur": 8.0,
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 73,
-  "view": "sceny.lenta",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 12.3,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "lenta",
-   "seconds": 12.3,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Система остаётся чужой.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 12.3,
-    "soobshcheniya": [
-     "Обслуживает чужая фирма",
-     "Контролирует чужая страна",
-     "Объясняют по своему расписанию"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Система остаётся чужой.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 12.3,
-   "soobshcheniya": [
-    "Обслуживает чужая фирма",
-    "Контролирует чужая страна",
-    "Объясняют по своему расписанию"
-   ]
-  }
- },
- {
-  "scene": 74,
-  "view": "charts.cartogram",
-  "dur": 14.0,
-  "anim": 14.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "data": [
-    "Эстония",
-    "Россия"
-   ],
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 75,
   "view": "pull",
-  "dur": 7.4,
+  "dur": 11.6,
   "anim": 2.6,
   "tail_zoom": 0.05,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Цели сопровождали, но перехватывать не стали.",
+   "text": "Теперь предлагается найти ещё один особенный пакет, после которого Москва немедленно станет сговорчивой.",
+   "accent": "особенный пакет",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 76,
-  "view": "poster.poster",
-  "dur": 13.3,
-  "anim": 13.3,
-  "tail_zoom": 0.0,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "title": "ОПАСЕНИЕ ЭСКАЛАЦИИ",
-   "hero_photo": "cards/photo/card_076.jpg",
-   "watermark": "ПЛАНЕТА"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 77,
-  "view": "sceny.relsy",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 4.8,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "relsy",
-   "seconds": 4.8,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Эстония выглядит размером с империю.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 4.8,
-    "sobytiya": [
-     "Призывы к жёсткости",
-     "Эстония размером с империю"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Эстония выглядит размером с империю.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 4.8,
-   "sobytiya": [
-    "Призывы к жёсткости",
-    "Эстония размером с империю"
-   ]
-  }
- },
- {
-  "scene": 79,
-  "view": "paper_hand",
-  "dur": 13.1,
-  "anim": 2.8,
-  "tail_zoom": 0.04,
-  "watermark": "ПЛАНЕТА",
-  "channel": "ПЛАНЕТА",
-  "kwargs": {
-   "text": "Осторожность находят после выступления.",
-   "watermark": "ПЛАНЕТА"
-  }
- },
- {
-  "scene": 80,
-  "view": "marker_serif",
-  "dur": 13.3,
+  "scene": 73,
+  "view": "zal_pol",
+  "dur": 12.2,
   "anim": 2.6,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Нарушена работа девяти из тридцати пяти НПЗ.",
-   "accent": "тридцати пяти",
+   "channel": "ПЛАНЕТА",
+   "dur": 12.2,
+   "sheets": [],
+   "text": "Принесут старую папку",
+   "na_polu": "НОВАЯ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 74,
+  "view": "charts.network",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Зеленского",
+     "label": "Зеленского",
+     "weight": 1.0
+    },
+    {
+     "id": "Москва",
+     "label": "Москва",
+     "weight": 2.0
+    },
+    {
+     "id": "Вашингтоном",
+     "label": "Вашингтоном",
+     "weight": 2.0
+    },
+    {
+     "id": "Европейские",
+     "label": "Европейские",
+     "weight": 2.0
+    },
+    {
+     "id": "Правительства",
+     "label": "Правительства",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Зеленского",
+     "to": "Москва",
+     "weight": 1.0
+    },
+    {
+     "from": "Москва",
+     "to": "Вашингтоном",
+     "weight": 1.0
+    },
+    {
+     "from": "Вашингтоном",
+     "to": "Европейские",
+     "weight": 1.0
+    },
+    {
+     "from": "Европейские",
+     "to": "Правительства",
+     "weight": 1.0
+    }
+   ],
+   "title": "Но поведение Зеленского вполне объяснимо",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 75,
+  "view": "marker_serif",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "В такой обстановке Киев должен постоянно напоминать о себе и выдвигать очередное условие или требование.",
+   "accent": "очередное условие",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 76,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.7,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 10.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "РЕШЕНИЯ БЕЗ ЗЕЛЕНСКОГО",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.7,
+    "role": "украинская сторона"
+   }
+  },
+  "kwargs": {
+   "text": "РЕШЕНИЯ БЕЗ ЗЕЛЕНСКОГО",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.7,
+   "role": "украинская сторона"
+  }
+ },
+ {
+  "scene": 77,
+  "view": "charts.cartogram",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Тверская область"
+   ],
+   "level": "region",
+   "admin": "Россия",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 78,
+  "view": "zal_slova",
+  "dur": 11.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.3,
+   "sheets": [
+    "всю историю",
+    "бессмысленно"
+   ],
+   "text": "Он будет искать любую новую опору.",
+   "na_polu": "НАЗВАНИЕ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 79,
+  "view": "vyrezka.figura",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_079.jpg",
+   "author": "наблюдение",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
   "scene": 81,
-  "view": "sceny.pechat",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 14.2,
-  "channel": "ПЛАНЕТА",
+  "view": "quote",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "pechat",
-   "seconds": 14.2,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Переработка упала на треть.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 14.2,
-    "stamp": "утверждено"
-   }
-  },
+  "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Переработка упала на треть.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 14.2,
-   "stamp": "утверждено"
+   "text": "Москва переводит спор с Украины на устройство всей Европы.",
+   "author": "Москва",
+   "watermark": "ПЛАНЕТА"
   }
  },
  {
   "scene": 82,
-  "view": "photo",
-  "dur": 18.0,
-  "anim": 18.0,
-  "tail_zoom": 0.0,
-  "watermark": "ПЛАНЕТА",
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.1,
   "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 11.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "КАК МЕНЯЛСЯ ТОН",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.1,
+    "sobytiya": [
+     "Обсуждать нечего",
+     "Нужна линия связи",
+     "Заговорили о переговорах",
+     "Придётся уступать"
+    ]
+   }
+  },
   "kwargs": {
+   "text": "КАК МЕНЯЛСЯ ТОН",
+   "channel": "ПЛАНЕТА",
    "watermark": "ПЛАНЕТА",
-   "photo": "cards/photo/card_082.jpg",
-   "lines": [
-    "Огонь тушат за часы",
-    "Ущерб не в высоте пламени"
+   "dur": 11.1,
+   "sobytiya": [
+    "Обсуждать нечего",
+    "Нужна линия связи",
+    "Заговорили о переговорах",
+    "Придётся уступать"
    ]
   }
  },
  {
   "scene": 83,
-  "view": "cinematic.depth_of_field",
-  "dur": 14.3,
-  "anim": 14.3,
-  "tail_zoom": 0.0,
+  "view": "paper_hand",
+  "dur": 11.8,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "photo": "cards/photo/card_083.jpg",
+   "text": "Иногда приходится отказываться от части собственных.",
+   "author": "наблюдение",
    "watermark": "ПЛАНЕТА"
-  },
-  "mode": "frame"
+  }
  },
  {
-  "scene": 84,
+  "scene": 87,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.8,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 13.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "ДЖОНСОН ПРОСИЛ НАЛИВАТЬ",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 13.8,
+    "soobshcheniya": [
+     "Джонсон сам просил наливать ему снова и снова",
+     "Затем приехала Лиз Трасс",
+     "Уровень серьёзности поднялся ещё выше"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "ДЖОНСОН ПРОСИЛ НАЛИВАТЬ",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 13.8,
+   "soobshcheniya": [
+    "Джонсон сам просил наливать ему снова и снова",
+    "Затем приехала Лиз Трасс",
+    "Уровень серьёзности поднялся ещё выше"
+   ]
+  }
+ },
+ {
+  "scene": 88,
   "view": "tape",
-  "dur": 10.3,
+  "dur": 13.8,
   "anim": 2.4,
   "tail_zoom": 0.04,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "Рядом со спором о Starshield контраст выглядит особенно выразительно.",
+   "text": "Именно такие люди долго объясняли всей Европе, как правильно выстраивать отношения с Москвой.",
+   "accent": "Европе",
    "watermark": "ПЛАНЕТА"
   }
  },
  {
-  "scene": 85,
-  "view": "sceny.prohod",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 6.0,
-  "channel": "ПЛАНЕТА",
-  "watermark": "ПЛАНЕТА",
-  "cfg": {
-   "view": "prohod",
-   "seconds": 6.0,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Независимость теряется.",
-    "channel": "ПЛАНЕТА",
-    "watermark": "ПЛАНЕТА",
-    "dur": 6.0,
-    "tezisy": [
-     "Свобода выбора целей",
-     "Потеря скорости",
-     "Зависимость"
-    ]
-   }
-  },
-  "kwargs": {
-   "text": "Независимость теряется.",
-   "channel": "ПЛАНЕТА",
-   "watermark": "ПЛАНЕТА",
-   "dur": 6.0,
-   "tezisy": [
-    "Свобода выбора целей",
-    "Потеря скорости",
-    "Зависимость"
-   ]
-  }
- },
- {
-  "scene": 86,
-  "view": "strike",
-  "dur": 203.88,
-  "anim": 3.0,
+  "scene": 89,
+  "view": "zal_ekran",
+  "dur": 13.8,
+  "anim": 13.8,
   "tail_zoom": 0.045,
   "watermark": "ПЛАНЕТА",
   "channel": "ПЛАНЕТА",
   "kwargs": {
-   "text": "В комментариях напишите, какой предел прочности вы видите у такой системы.",
-   "struck": "В комментариях напишите, какой предел",
-   "fix": "у кого находится розетка",
+   "channel": "ПЛАНЕТА",
+   "dur": 13.8,
+   "sheets": [],
+   "text": "Но движение всё же есть.",
+   "say": "Раньше за столом выясняли, кто кому налил",
+   "author": "итог",
    "watermark": "ПЛАНЕТА"
   }
  }
