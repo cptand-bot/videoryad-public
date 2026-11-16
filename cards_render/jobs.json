@@ -1,1638 +1,1368 @@
 [
  {
-  "scene": 1,
-  "view": "cinematic.evidence_wall",
-  "dur": 11.9,
-  "anim": 11.9,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    [
-     "cards/photo/card_001.jpg",
-     240,
-     380,
-     -4,
-     "Вашингтон предлагает сделку"
-    ],
-    [
-     "cards/photo/card_001_2.jpg",
-     800,
-     380,
-     3,
-     "Европа тянется к активам"
-    ],
-    [
-     "cards/photo/card_001_3.jpg",
-     1360,
-     380,
-     -2,
-     "Киеву считают цену"
-    ]
-   ],
-   "kick": "ПРОВЕРКА",
-   "title": "Три двери одного дня",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
   "scene": 2,
-  "view": "zal",
-  "dur": 6.8,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 9.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Мерц просит не делать резких шагов.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.7
+   }
+  },
   "kwargs": {
-   "text": "Европейцы снова тянулись к российским активам.",
-   "words": [
-    "АКТИВЫ",
-    "ГАЗ"
-   ],
-   "sheets": [
-    "Три двери одного дня",
-    "Российские активы под рукой",
-    "Платежи за газ продолжаются",
-    "Отказ важнее подписи",
-    "Европа считает цену вслух",
-    "Киеву называют цену помощи"
-   ],
-   "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-   "dur": 6.8,
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Мерц просит не делать резких шагов.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.7
   }
  },
  {
-  "scene": 4,
-  "view": "poster.poster",
-  "dur": 12.0,
-  "anim": 12.0,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 9,
+  "view": "zal",
+  "dur": 9.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "title": "Европа ищет чужой карман",
-   "subtitle": "Обещания встретили калькулятор",
-   "hero_photo": "cards/photo/card_004.jpg",
-   "facts": [
+   "text": "Это всё внешняя мишура. Гораздо важнее другое.",
+   "words": [
+    "МИШУРА",
+    "ГЛАВНОЕ"
+   ],
+   "sheets": [
+    "переговоры",
+    "протокол",
+    "встреча",
+    "коридор",
+    "мишура",
+    "суть"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 9.3,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "zal_slova",
+  "dur": 9.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.7,
+   "sheets": [],
+   "text": "Европа исходила из одной конструкции.",
+   "na_polu": "БРЮССЕЛЬ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 11,
+  "view": "zal_pol",
+  "dur": 9.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.5,
+   "sheets": [],
+   "text": "Америка была мотором конструкции.",
+   "na_polu": "ВАШИНГТОН",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "zal_kub",
+  "dur": 9.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.9,
+   "sheets": [
+    "разведка",
+    "политический вес, НАТО"
+   ],
+   "text": "Без США европейская машина выглядит уже не так бодро.",
+   "kick": "И ВОТ ТЕПЕРЬ ГЛАВНЫЙ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 13,
+  "view": "zal_efir",
+  "dur": 9.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.4,
+   "sheets": [],
+   "text": "Отсюда и эти просьбы Мерца.",
+   "say": "Пожалуйста, никаких сюрпризов",
+   "author": "Мерц",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "film.film_single",
+  "dur": 11.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_017.jpg",
+   "title": "ПОЗИЦИЯ МОСКВЫ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "charts.map_dist",
+  "dur": 12.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
     {
-     "label": "Победа",
-     "value": "новые деньги"
+     "label": "Москва",
+     "lat": 55.75,
+     "lon": 37.62,
+     "accent": false
     },
     {
-     "label": "Свои средства",
-     "value": "их всё меньше"
-    },
-    {
-     "label": "Чужой карман",
-     "value": "кажется удобнее"
+     "label": "Киев",
+     "lat": 50.45,
+     "lon": 30.52,
+     "accent": false
     }
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "И уже внутри украинского конфликта появились",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "sobytiya": [
+     "есть сначала был спор о НАТО",
+     "Потом этот спор дошёл до Укр",
+     "И уже внутри украинского кон"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "И уже внутри украинского конфликта появились",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "sobytiya": [
+    "есть сначала был спор о НАТО",
+    "Потом этот спор дошёл до Укр",
+    "И уже внутри украинского кон"
+   ]
+  }
+ },
+ {
+  "scene": 20,
+  "view": "cinematic.evidence_wall",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_020.jpg",
+     240,
+     250,
+     -4,
+     "переговоры"
+    ],
+    [
+     "cards/photo/card_020_2.jpg",
+     800,
+     250,
+     3,
+     "закрытая дверь"
+    ],
+    [
+     "cards/photo/card_020_3.jpg",
+     1360,
+     250,
+     -2,
+     "трёхсторонняя встреча"
+    ],
+    [
+     "cards/photo/card_020_4.jpg",
+     240,
+     580,
+     4,
+     "авиация у Ирана"
+    ]
+   ],
+   "title": "ЧТО СВЯЗАНО",
+   "watermark": "5 МИНУТ"
   },
   "mode": "frame"
  },
  {
-  "scene": 5,
+  "scene": 21,
+  "view": "charts.cartogram",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Украина",
+    "НАТО"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "zal_g01",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.2,
+   "sheets": [],
+   "text": "Другой масштаб разговора.",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 12.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Москва получает своё.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.5,
+    "pary": [
+     "США>Москва",
+     "Москва>Европа"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Москва получает своё.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.5,
+   "pary": [
+    "США>Москва",
+    "Москва>Европа"
+   ]
+  }
+ },
+ {
+  "scene": 25,
   "view": "duel",
-  "dur": 12.4,
+  "dur": 11.9,
   "anim": 3.2,
   "tail_zoom": 0.035,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
    "top": {
     "who": "",
-    "text": "Готова ли Украина оставить Донбасс, если взамен получит членство в НАТО?",
+    "text": "но и устройство безопасности всего континента",
     "accent": null,
     "source": ""
    },
    "bottom": {
     "who": "",
-    "text": "Формула выглядит щедро только на первый взгляд.",
+    "text": "И здесь очень интересное противоречие",
     "accent": null,
     "source": ""
    },
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 7,
-  "view": "doc",
-  "dur": 10.4,
-  "anim": 3.4,
-  "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Киев назвал восстановление страны, отказ от нейтрального статуса и непризнание российского контроля над потерянными территориями.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 11,
-  "view": "strike",
-  "dur": 8.8,
-  "anim": 3.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Нужна не подпись, а слово нет",
-   "struck": "подпись",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 13,
-  "view": "charts.cartogram",
-  "dur": 12.0,
-  "anim": 12.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "data": [
-    "Россия",
-    "Украина"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 14,
-  "view": "zal_pol",
-  "dur": 7.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-   "dur": 7.6,
-   "sheets": [
-    "Вид из окна прекрасный",
-    "Прав на дачу нет"
-   ],
-   "text": "Сделка напоминает продажу чужой дачи.",
-   "na_polu": "ПРАВА",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 16,
-  "view": "slider",
-  "dur": 11.1,
-  "anim": 11.1,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {},
-  "mode": "cli",
-  "script": "build_chart_slider.py",
-  "cfg": {
-   "title": "",
-   "min": 0.0,
-   "max": 100.0,
-   "low": 0.0,
-   "high": 100.0,
-   "marker_value": 50.0,
-   "marker_display": "50",
-   "seconds": 11.1,
-   "range_label": "РАЗБРОС ОЦЕНОК",
-   "caption": "",
-   "source": ""
-  }
- },
- {
-  "scene": 17,
-  "view": "torn_split.torn_split",
-  "dur": 13.1,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "a_path": "cards/photo/card_017.jpg",
-   "b_path": "cards/photo/card_017_2.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 18,
-  "view": "split",
-  "dur": 11.3,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Кая Каллас настаивает, что разговор о требованиях Москвы отвлекает от прекращения боевых действий.",
-   "photo": "cards/photo/card_018.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 19,
-  "view": "charts.map_dist",
-  "dur": 12.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "points": [
-    {
-     "label": "Канада",
-     "lat": 56.13,
-     "lon": -106.35,
-     "accent": false
-    },
-    {
-     "label": "Латвия",
-     "lat": 56.95,
-     "lon": 24.11,
-     "accent": false
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 21,
-  "view": "zal_kub",
-  "dur": 11.0,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-   "dur": 11.0,
-   "sheets": [
-    "За столом уже разложены красные линии",
-    "только свободного места для соглашения"
-   ],
-   "text": "На этом фоне особенно бодро выступил Риши Сунак.",
-   "kick": "БЫВШИЙ БРИТАНСКИЙ",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 24,
-  "view": "vyrezka.figura",
-  "dur": 12.3,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_024.jpg",
-   "author": "Сунак",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 26,
-  "view": "charts.line",
-  "dur": 13.4,
-  "anim": 2.6,
+  "view": "charts.pie",
+  "dur": 12.1,
+  "anim": 12.1,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "x_labels": [
-    "Сейчас",
-    "Через год",
-    "Через два года",
-    "Через три года"
-   ],
-   "series": [
+   "segments": [
     {
-     "name": "",
-     "values": [
-      0.0,
-      1.0,
-      2.0,
-      3.0
-     ]
+     "label": "Прекращение огня на Украине",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Безопасность НАТО",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Расширение альянса",
+     "value": 33.333333333333336
     }
    ],
-   "source": "Горизонт стратегии выстоять",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "film.film_strip",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_027.jpg",
+    "cards/photo/card_027_2.jpg",
+    "cards/photo/card_027_3.jpg",
+    "cards/photo/card_027_4.jpg"
+   ],
+   "title": "ПЕРЕМИРИЕ",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 28,
-  "view": "cinematic.dossier",
-  "dur": 12.4,
-  "anim": 12.4,
+  "view": "zal_g48",
+  "dur": 11.4,
+  "anim": 11.4,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "rows": [
-    "Марьяна Безуглая",
-    "Считает ресурсы",
-    "Называет цену ожидания",
-    "Практический расчёт"
-   ],
-   "title": "ДОСЬЕ",
-   "photo": "cards/photo/card_028.jpg",
-   "stamp": "ПЕРВОИСТОЧНИК",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 11.4,
+   "sheets": [],
+   "text": "И приезжаем туда же, откуда уехали.",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 29,
-  "view": "charts.cartogram",
-  "dur": 12.4,
-  "anim": 12.4,
+  "view": "split",
+  "dur": 12.2,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Украина=1",
-    "США=0.8",
-    "Германия=0.7",
-    "Польша=0.6"
-   ],
-   "mode": "bubble",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Можно каждые несколько лет проводить новый мирный саммит и снова спасать мир.",
+   "photo": "cards/photo/card_029.jpg",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 33,
-  "view": "charts.waterfall",
-  "dur": 13.0,
-  "anim": 13.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 30,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Похоже на переговоры.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "tezisy": [
+     "Никаких уступок",
+     "Ни шагу назад",
+     "Всё наше",
+     "Победа неизбежна"
+    ]
+   }
+  },
   "kwargs": {
-   "start": {
-    "label": "Предложение альянса",
-    "value": 0.4
-   },
-   "steps": [
-    {
-     "label": "Ядерный риск",
-     "value": -0.4
-    },
-    {
-     "label": "Ожидание отказа",
-     "value": -0.5
-    }
-   ],
-   "end": {
-    "label": "Условия Киева"
-   },
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Похоже на переговоры.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "tezisy": [
+    "Никаких уступок",
+    "Ни шагу назад",
+    "Всё наше",
+    "Победа неизбежна"
+   ]
+  }
+ },
+ {
+  "scene": 32,
+  "view": "marker_serif",
+  "dur": 11.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Что происходит с санкциями. Кто подписывает. Кто отвечает, если договор нарушен.",
+   "accent": "Кто подписывает",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 34,
-  "view": "charts.radar",
-  "dur": 11.1,
-  "anim": 11.1,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "axes": [
-    "Твёрдость тона",
-    "Ясность результата",
-    "Цена для Киева",
-    "Личная цена",
-    "Ресурсная опора"
-   ],
-   "series": [
-    {
-     "label": "",
-     "values": [
-      0.9,
-      0.3,
-      1.0,
-      0.1,
-      0.2
-     ]
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 35,
-  "view": "devices.device_scene",
-  "dur": 15.4,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "content_path": "cards/photo/card_035.jpg",
-   "items": [
-    "Счёт приходит Киеву",
-    "Решения важнее заявлений",
-    "Европа открывает калькулятор"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 37,
   "view": "charts.network",
-  "dur": 10.9,
-  "anim": 10.9,
+  "dur": 11.6,
+  "anim": 11.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
    "nodes": [
     {
-     "id": "Украины",
-     "label": "Украины",
+     "id": "Американцы",
+     "label": "Американцы",
      "weight": 1.0
     },
     {
-     "id": "Удобство",
-     "label": "Удобство",
+     "id": "Киев",
+     "label": "Киев",
      "weight": 2.0
     },
     {
-     "id": "Громкий",
-     "label": "Громкий",
-     "weight": 2.0
-    },
-    {
-     "id": "Риги",
-     "label": "Риги",
+     "id": "Кушнер",
+     "label": "Кушнер",
      "weight": 1.0
     }
    ],
    "links": [
     {
-     "from": "Украины",
-     "to": "Удобство",
+     "from": "Американцы",
+     "to": "Киев",
      "weight": 1.0
     },
     {
-     "from": "Удобство",
-     "to": "Громкий",
-     "weight": 1.0
-    },
-    {
-     "from": "Громкий",
-     "to": "Риги",
+     "from": "Киев",
+     "to": "Кушнер",
      "weight": 1.0
     }
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 38,
-  "view": "charts.cartogram",
-  "dur": 15.3,
-  "anim": 15.3,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "data": [
-    "Россия",
-    "Бельгия"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 39,
-  "view": "photo",
-  "dur": 7.3,
-  "anim": 7.3,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-   "photo": "cards/photo/card_039.jpg",
-   "lines": [
-    "Евроклир хранит активы",
-    "Инвесторы ждут защиты",
-    "Конфискация подрывает доверие"
-   ]
-  }
- },
- {
-  "scene": 40,
-  "view": "pull",
-  "dur": 14.1,
-  "anim": 2.6,
-  "tail_zoom": 0.05,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Капитал способен терпеть жёсткие условия, объявленные заранее.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 42,
-  "view": "charts.line",
-  "dur": 11.4,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "x_labels": [
-    "25 пакет",
-    "26 пакет",
-    "Следующий пакет",
-    "Дальний предел"
-   ],
-   "series": [
-    {
-     "name": "",
-     "values": [
-      25.0,
-      26.0,
-      27.0,
-      325.0
-     ]
-    }
-   ],
-   "source": "Санкционные пакеты",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 43,
+  "scene": 35,
   "view": "paper_typed",
-  "dur": 11.1,
+  "dur": 12.3,
   "anim": 2.8,
   "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Если ограничения давно встроены Россией в хозяйственные расчёты, очередной список запретов",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Вытащить энергетику — одна картина. Вытащить территории — другая. Взять НАТО — третья.",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 44,
+  "scene": 36,
+  "view": "charts.waterfall",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Территории",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Гарантии безопасности",
+     "value": 1.0
+    },
+    {
+     "label": "Санкции",
+     "value": 1.0
+    },
+    {
+     "label": "Членство в НАТО",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
   "view": "slider",
-  "dur": 9.7,
-  "anim": 9.7,
+  "dur": 11.4,
+  "anim": 11.4,
   "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {},
   "mode": "cli",
   "script": "build_chart_slider.py",
   "cfg": {
-   "title": "Срок санкционной среды",
+   "title": "БЫСТРЫЙ МИР",
    "min": 0.0,
    "max": 100.0,
-   "low": 0.0,
-   "high": 6.0,
+   "low": 20.0,
+   "high": 80.0,
    "marker_value": 50.0,
-   "marker_display": "50 лет",
-   "seconds": 9.7,
-   "range_label": "РАЗБРОС ОЦЕНОК",
-   "caption": "Ожидание Москвы",
+   "marker_display": "50",
+   "seconds": 11.4,
+   "range_label": "на каких условиях",
+   "caption": "Условия решают всё.",
    "source": ""
   }
  },
  {
-  "scene": 45,
-  "view": "charts.slope",
-  "dur": 14.7,
+  "scene": 38,
+  "view": "zal_slova",
+  "dur": 12.2,
   "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "items": [
-    {
-     "label": "Санкционная новизна",
-     "from": 1.0,
-     "to": 0.2
-    },
-    {
-     "label": "Адаптация России",
-     "from": 0.2,
-     "to": 0.8
-    },
-    {
-     "label": "Сила угрозы",
-     "from": 0.9,
-     "to": 0.4
-    }
-   ],
-   "source": "Жизнь внутри ограничений",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 12.2,
+   "sheets": [],
+   "text": "Подписать бумагу быстро можно.",
+   "na_polu": "ГОРАЗДО",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 48,
-  "view": "bars",
-  "dur": 20.3,
-  "anim": 20.3,
+  "scene": 40,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 12.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Украинский конфликт обсуждаться не будет.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.5,
+    "role": "Лидер государства"
+   }
+  },
+  "kwargs": {
+   "text": "Украинский конфликт обсуждаться не будет.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.5,
+   "role": "Лидер государства"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "poster.poster",
+  "dur": 11.3,
+  "anim": 11.3,
   "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "О ЧЁМ БУДУТ ГОВОРИТЬ",
+   "hero_photo": "cards/photo/card_041.jpg",
+   "bottom": "Встреча важна в любой версии",
+   "facts": [
+    {
+     "label": "тема",
+     "value": "ядерное оружие"
+    },
+    {
+     "label": "тема",
+     "value": "Иран"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 42,
+  "view": "bars",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {},
   "mode": "cli",
   "script": "build_chart_bars.py",
   "cfg": {
-   "title": "",
-   "caption": "",
-   "seconds": 20.3,
+   "title": "ЦЕНТРЫ РЕШЕНИЙ",
+   "caption": "Украина перестаёт быть единственным центром.",
+   "seconds": 12.0,
    "bars": [
     {
-     "label": "ПРОШЛЫЙ ГОД",
-     "value": 0.83,
-     "color": "06C7C7"
-    },
-    {
-     "label": "НЫНЕШНИЙ ГОД",
-     "value": 1.0,
+     "label": "США",
+     "value": 0.9,
      "color": "EABD23"
     },
     {
-     "label": "ОКТЯБРЬСКИЙ ОБЪЁМ",
-     "value": 0.7,
+     "label": "РОССИЯ",
+     "value": 0.8,
+     "color": "B92526"
+    },
+    {
+     "label": "КИТАЙ",
+     "value": 0.9,
      "color": "84848A"
     },
     {
-     "label": "ОКТЯБРЬСКАЯ СУММА",
-     "value": 0.9,
+     "label": "УКРАИНА",
+     "value": 0.3,
      "color": "E8E8E8"
     }
    ]
   }
  },
  {
-  "scene": 49,
+  "scene": 43,
   "view": "charts.cartogram",
-  "dur": 10.4,
-  "anim": 10.4,
+  "dur": 11.6,
+  "anim": 11.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
    "data": [
-    "Нидерланды",
-    "Франция",
-    "Португалия",
-    "Испания",
-    "Бельгия"
+    "Китай",
+    "Иран"
    ],
    "mode": "bubble",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "photo",
+  "dur": 12.3,
+  "anim": 12.3,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_044.jpg",
+   "title": "ЯЛТА ДВА НОЛЬ",
+   "lines": [
+    "трое за столом",
+    "каждый со своим куском",
+    "карту никто не режет"
+   ]
+  }
+ },
+ {
+  "scene": 45,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Мир так уже не работает.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "region": "США"
+   }
+  },
+  "kwargs": {
+   "text": "Мир так уже не работает.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "region": "США"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "vyrezka.gazeta",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_046.jpg",
+   "author": "Мерц нервничает",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "charts.cartogram",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Фуцзянь",
+    "Гуандун",
+    "Хайнань"
+   ],
+   "level": "region",
+   "admin": "Китай",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "zal_schetchik",
+  "dur": 12.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.5,
+   "sheets": [],
+   "text": "Военные корабли Китая.",
+   "value": "100",
+   "value_sub": "кораблей",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "charts.radar",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "axes": [
+    "Флот",
+    "Авиация",
+    "Ракеты",
+    "Правила"
+   ],
+   "series": [
+    {
+     "label": "ПЕКИН: СИЛА И ПРАВИЛА",
+     "values": [
+      9.0,
+      8.0,
+      8.0,
+      2.0
+     ]
+    }
+   ],
+   "title": "ПЕКИН: СИЛА И ПРАВИЛА",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 51,
-  "view": "charts.cartogram",
-  "dur": 10.4,
-  "anim": 10.4,
+  "view": "quote",
+  "dur": 12.0,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Венгрия",
-    "Румыния",
-    "Молдова",
-    "Россия"
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Универсального правила до сих пор не придумали. Китай имеет свои представления. Россия имеет свои.",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 52,
-  "view": "charts.cartogram",
-  "dur": 14.1,
-  "anim": 14.1,
+  "view": "devices.device_scene",
+  "dur": 11.6,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Кишинёв",
-    "Комрат"
+   "content_path": "cards/photo/card_052.jpg",
+   "items": [
+    "обсуждается изменение правил юрисдикции",
+    "речь о руководителях государств",
+    "фигурируют Вашингтон и Нидерланды"
    ],
-   "level": "region",
-   "admin": "Молдавия",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 53,
-  "view": "poster.poster",
-  "dur": 11.5,
-  "anim": 11.5,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "doc",
+  "dur": 12.3,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "title": "Цена энергетической замены",
-   "subtitle": "Поставщик меняется, квитанция остаётся",
-   "hero_photo": "cards/photo/card_053.jpg",
-   "facts": [
-    {
-     "label": "Газ",
-     "value": "меняют поставщика"
-    },
-    {
-     "label": "Новые поставки",
-     "value": "дороже"
-    },
-    {
-     "label": "Активы",
-     "value": "крупный рычаг"
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 54,
-  "view": "charts.waterfall",
-  "dur": 10.4,
-  "anim": 10.4,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "start": {
-    "label": "Новый налог",
-    "value": -0.3
-   },
-   "steps": [
-    {
-     "label": "Новые займы",
-     "value": -0.3
-    },
-    {
-     "label": "Ожидание санкций",
-     "value": -0.2
-    },
-    {
-     "label": "Замороженные активы",
-     "value": 0.8
-    }
-   ],
-   "end": {
-    "label": "ИТОГ"
-   },
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Обсуждается изменение правил юрисдикции. Речь идёт о руководителях государств. В разговоре фигурируют Вашингтон и Нидерланды. Просматривается гораздо более широкая логика.",
+   "title": "ЮРИСДИКЦИЯ СУДА",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 55,
-  "view": "quote",
-  "dur": 9.3,
-  "anim": 2.6,
+  "view": "strike",
+  "dur": 11.4,
+  "anim": 3.0,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "И если Евросоюз намерен долго финансировать Киев при сокращающемся наборе средств давления, эти активы, скорее всего, заберут.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Насколько далеко зайдут изменения вокруг МУС, покажут сами решения.",
+   "struck": "Насколько далеко зайдут изменения",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 57,
-  "view": "doc",
-  "dur": 12.0,
-  "anim": 3.4,
-  "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 56,
+  "view": "zal_pol",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Значит, начнётся поиск европейского имущества, проектов, прав и операций, которые можно ограничить или изъять.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 12.2,
+   "sheets": [],
+   "text": "Американские интересы затронуты.",
+   "na_polu": "ТЕГЕРАН",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 58,
-  "view": "torn_split.torn_split",
-  "dur": 13.6,
+  "view": "zal_kub",
+  "dur": 12.5,
   "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "a_path": "cards/photo/card_058.jpg",
-   "b_path": "cards/photo/card_058_2.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 12.5,
+   "sheets": [],
+   "text": "После предыдущих американских и израильских ударов",
+   "kick": "Военная подготовка",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 59,
-  "view": "charts.pie",
-  "dur": 10.7,
-  "anim": 10.7,
+  "view": "zal_g18",
+  "dur": 11.3,
+  "anim": 11.3,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "segments": [
-    {
-     "label": "За реформу",
-     "value": 54.0
-    },
-    {
-     "label": "Против",
-     "value": 33.0
-    },
-    {
-     "label": "Воздержались",
-     "value": 13.0
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 11.3,
+   "sheets": [],
+   "text": "Производство не исчезло.",
+   "value": "50",
+   "value_sub": "ракет в месяц",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 60,
-  "view": "devices.device_scene",
-  "dur": 11.4,
+  "view": "zal_shkala",
+  "dur": 12.0,
   "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "content_path": "cards/photo/card_060.jpg",
+   "channel": "5 МИНУТ",
+   "dur": 12.0,
+   "sheets": [],
+   "text": "Темп выше довоенного уровня.",
+   "value": "50",
+   "value_sub": "вдвое ниже довоенного",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "charts.slope",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
    "items": [
-    "Разведка получает полномочия",
-    "Доступ к информационным системам",
-    "Голосование в бундестаге"
+    {
+     "label": "Разногласия",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Договорённости"
+    },
+    {
+     "label": "Конфликт",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Переговоры"
+    }
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "left_label": "Раньше",
+   "right_label": "Теперь",
+   "source": "Международные отношения",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 62,
-  "view": "tape",
-  "dur": 11.5,
-  "anim": 2.4,
-  "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "zal_g44",
+  "dur": 12.3,
+  "anim": 12.3,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Возникают споры о работе с несовершеннолетними",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 12.3,
+   "sheets": [],
+   "text": "Интересы держав пересекаются.",
+   "value": "44 страны",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 63,
-  "view": "cinematic.evidence_wall",
-  "dur": 14.0,
-  "anim": 14.0,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "charts.line",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "shots": [
-    [
-     "cards/photo/card_063.jpg",
-     240,
-     380,
-     -4,
-     "Расширение полномочий"
-    ],
-    [
-     "cards/photo/card_063_2.jpg",
-     800,
-     380,
-     3,
-     "Обмен данными"
-    ],
-    [
-     "cards/photo/card_063_3.jpg",
-     1360,
-     380,
-     -2,
-     "Внутренняя борьба"
-    ]
+   "x_labels": [
+    "Уран",
+    "Производство",
+    "Экспорт"
    ],
-   "title": "Секреты, земли и АдГ",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
+   "series": [
+    {
+     "name": "Иран",
+     "values": [
+      20.0,
+      30.0,
+      50.0
+     ]
+    }
+   ],
+   "source": "МАГАТЭ",
+   "watermark": "5 МИНУТ"
+  }
  },
  {
   "scene": 64,
   "view": "sceny.pechat",
   "mode": "cli",
   "script": "sceny_cli.py",
-  "dur": 13.8,
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "dur": 11.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
   "cfg": {
    "view": "pechat",
-   "seconds": 13.8,
+   "seconds": 11.4,
    "fps": 30,
    "t0": 0.0,
    "kwargs": {
-    "text": "Полномочия остаются навсегда",
-    "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-    "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-    "dur": 13.8,
+    "text": "Отношения Саудовской Аравии с хуситами.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.4,
     "stamp": "утверждено"
    }
   },
   "kwargs": {
-   "text": "Полномочия остаются навсегда",
-   "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-   "dur": 13.8,
+   "text": "Отношения Саудовской Аравии с хуситами.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.4,
    "stamp": "утверждено"
   }
  },
  {
   "scene": 65,
-  "view": "poster.poster",
-  "dur": 8.2,
-  "anim": 8.2,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "torn_split.torn_split",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "title": "Старые рычаги слабеют",
-   "subtitle": "Каждый инструмент требует платы",
-   "hero_photo": "cards/photo/card_065.jpg",
-   "facts": [
-    {
-     "label": "Газ",
-     "value": "продолжают покупать"
-    },
-    {
-     "label": "Санкции",
-     "value": "теряют новизну"
-    },
-    {
-     "label": "Активы",
-     "value": "угроза доверию"
-    },
-    {
-     "label": "Спецслужбы",
-     "value": "усиливаются"
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
+   "a_path": "cards/photo/card_065.jpg",
+   "b_path": "cards/photo/card_065_2.jpg",
+   "title": "ИРАН И ЕВРОПА",
+   "watermark": "5 МИНУТ"
+  }
  },
  {
   "scene": 66,
-  "view": "charts.waterfall",
-  "dur": 13.4,
-  "anim": 13.4,
+  "view": "zal_efir",
+  "dur": 11.7,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "start": {
-    "label": "Российский газ",
-    "value": -0.4
-   },
-   "steps": [
-    {
-     "label": "Замена поставщика",
-     "value": -0.5
-    },
-    {
-     "label": "Финансовая репутация",
-     "value": -0.7
-    },
-    {
-     "label": "Внутренние полномочия",
-     "value": -0.4
-    }
-   ],
-   "end": {
-    "label": "ИТОГ"
-   },
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Проблема в Европе.",
+   "say": "Трамп договорится с Путиным без нас",
+   "author": "Мерц",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 67,
-  "view": "torn_split.torn_split",
-  "dur": 11.4,
+  "view": "pull",
+  "dur": 12.5,
   "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "a_path": "cards/photo/card_067.jpg",
-   "b_path": "cards/photo/card_067_2.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Пожалуйста, не принимайте решения без нас.",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 68,
-  "view": "cinematic.dossier",
-  "dur": 9.6,
-  "anim": 9.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 69,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 12.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "С поставками нефти стало хуже.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.0,
+    "soobshcheniya": [
+     "ЧТО АМЕРИКАНСКАЯ УГРОЗА РЕАЛЬНА",
+     "ПОСЛЕ СОБЫТИЙ В ВЕНЕСУЭЛЕ КУБА ПОТЕРЯЛА ВАЖНЕЙШУЮ",
+     "С ПОСТАВКАМИ НЕФТИ СТАЛО ХУЖЕ",
+     "ЭНЕРГЕТИЧЕСКАЯ СИТУАЦИЯ"
+    ]
+   }
+  },
   "kwargs": {
-   "rows": [
-    "Польша",
-    "Взнос отложен",
-    "Нужды своей армии",
-    "Американское оружие Киеву"
-   ],
-   "title": "ДОСЬЕ",
-   "photo": "cards/photo/card_068.jpg",
-   "stamp": "ПЕРВОИСТОЧНИК",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "С поставками нефти стало хуже.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.0,
+   "soobshcheniya": [
+    "ЧТО АМЕРИКАНСКАЯ УГРОЗА РЕАЛЬНА",
+    "ПОСЛЕ СОБЫТИЙ В ВЕНЕСУЭЛЕ КУБА ПОТЕРЯЛА ВАЖНЕЙШУЮ",
+    "С ПОСТАВКАМИ НЕФТИ СТАЛО ХУЖЕ",
+    "ЭНЕРГЕТИЧЕСКАЯ СИТУАЦИЯ"
+   ]
   }
  },
  {
   "scene": 70,
-  "view": "charts.cartogram",
-  "dur": 12.9,
-  "anim": 12.9,
+  "view": "cinematic.dossier",
+  "dur": 11.6,
+  "anim": 11.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Польша=1",
-    "Болгария=0.7",
-    "Венгрия=0.5",
-    "Словакия=0.5"
+   "case": "МАРКО РУБИО",
+   "rows": [
+    "Марко Рубио",
+    "глава Госдепартамента",
+    "кубинская тема имеет личный вес",
+    "Трамп не исключает применения силы",
+    "вопрос решить до конца срока"
    ],
-   "mode": "bubble",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_070.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 71,
-  "view": "vyrezka.gazeta",
-  "dur": 14.1,
+  "view": "vyrezka.figura",
+  "dur": 12.3,
   "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
    "photo": "cards/photo/card_071.jpg",
-   "author": "Туск",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "author": "Марко Рубио",
+   "watermark": "5 МИНУТ"
   }
  },
  {
-  "scene": 72,
-  "view": "strike",
-  "dur": 11.1,
-  "anim": 3.0,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "scene": 73,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 11.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Правило должно быть понятным для всех.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.4,
+    "role": "Политолог"
+   }
+  },
   "kwargs": {
-   "text": "Бухгалтерия проникла даже в правильный кабинет и села там без приглашения.",
-   "struck": "без приглашения",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 74,
-  "view": "charts.waterfall",
-  "dur": 12.2,
-  "anim": 12.2,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "start": {
-    "label": "Финансовый взнос",
-    "value": -0.5
-   },
-   "steps": [
-    {
-     "label": "Железные дороги",
-     "value": 0.2
-    },
-    {
-     "label": "Восстановление энергетики",
-     "value": 0.3
-    }
-   ],
-   "end": {
-    "label": "Электроэнергия"
-   },
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Правило должно быть понятным для всех.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.4,
+   "role": "Политолог"
   }
  },
  {
   "scene": 75,
-  "view": "vyrezka.figura",
-  "dur": 12.2,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "cinematic.depth_of_field",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
    "photo": "cards/photo/card_075.jpg",
-   "author": "Мерц",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
+   "title": "РАСШИРЕНИЕ НАТО",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
  },
  {
   "scene": 76,
-  "view": "charts.network",
-  "dur": 9.8,
-  "anim": 9.8,
+  "view": "zal",
+  "dur": 12.5,
+  "anim": 2.6,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "nodes": [
-    {
-     "id": "Евросоюз",
-     "label": "Евросоюз",
-     "weight": 0.9
-    },
-    {
-     "id": "Украина",
-     "label": "Украина",
-     "weight": 2.2
-    },
-    {
-     "id": "Бюджет",
-     "label": "Бюджет",
-     "weight": 1.4
-    },
-    {
-     "id": "Столицы",
-     "label": "Столицы",
-     "weight": 0.9
-    }
+   "text": "Правило должно быть понятным для всех.",
+   "words": [
+    "МОСКВА",
+    "ПЕКИН"
    ],
-   "links": [
-    {
-     "from": "Евросоюз",
-     "to": "Украина",
-     "weight": 0.9
-    },
-    {
-     "from": "Бюджет",
-     "to": "Украина",
-     "weight": 0.9
-    },
-    {
-     "from": "Столицы",
-     "to": "Бюджет",
-     "weight": 0.5
-    },
-    {
-     "from": "Столицы",
-     "to": "Украина",
-     "weight": 0.4
-    }
+   "sheets": [
+    "правило",
+    "угроза",
+    "система",
+    "Москва",
+    "Пекин",
+    "безопасность"
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 12.5,
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 77,
-  "view": "charts.pie",
-  "dur": 16.8,
-  "anim": 16.8,
+  "view": "zal_ekran",
+  "dur": 11.3,
+  "anim": 11.3,
   "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "segments": [
-    {
-     "label": "Взносы стран",
-     "value": 60.0
-    },
-    {
-     "label": "Другие программы",
-     "value": 25.0
-    },
-    {
-     "label": "Дополнительно Киеву",
-     "value": 15.0
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "channel": "5 МИНУТ",
+   "dur": 11.3,
+   "sheets": [],
+   "text": "Правила для всех одинаковы.",
+   "say": "Если угроза у них реальна, то наша тоже",
+   "author": "Эксперт",
+   "role": "Политолог",
+   "source": "Трансляция",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 78,
-  "view": "charts.cartogram",
-  "dur": 9.7,
-  "anim": 9.7,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "paper_hand",
+  "dur": 12.0,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "data": [
-    "Венгрия",
-    "Болгария",
-    "Чехия",
-    "Словакия",
-    "Словения",
-    "Ирландия"
-   ],
-   "mode": "bubble",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Разговор об устранении первопричин важнее, чем выглядит. Иначе торг пойдёт по кругу.",
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 79,
-  "view": "charts.pie",
-  "dur": 9.4,
-  "anim": 9.4,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.6,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 11.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Каждый говорит о своих интересах.",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.6,
+    "repliki_": [
+     "Мерц|без сюрпризов",
+     "Путин|угроза НАТО",
+     "Си|Тайвань — внутреннее"
+    ]
+   }
+  },
   "kwargs": {
-   "segments": [
-    {
-     "label": "Украина",
-     "value": 35.0
-    },
-    {
-     "label": "Региональные фонды",
-     "value": 25.0
-    },
-    {
-     "label": "Дороги",
-     "value": 20.0
-    },
-    {
-     "label": "Хозяйственные проекты",
-     "value": 20.0
-    }
+   "text": "Каждый говорит о своих интересах.",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.6,
+   "repliki_": [
+    "Мерц|без сюрпризов",
+    "Путин|угроза НАТО",
+    "Си|Тайвань — внутреннее"
+   ]
+  }
+ },
+ {
+  "scene": 80,
+  "view": "zal_makety",
+  "dur": 12.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.3,
+   "sheets": [],
+   "text": "Каждый видит угрозу по-своему.",
+   "makety": [
+    "банк=Финансы",
+    "лэп=Энергетика"
    ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "watermark": "5 МИНУТ"
   }
  },
  {
   "scene": 81,
-  "view": "split",
-  "dur": 13.5,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Меньше помощи, слабее Украина",
-   "photo": "cards/photo/card_081.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 82,
-  "view": "charts.radar",
-  "dur": 10.8,
-  "anim": 10.8,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "axes": [
-    "Общая безопасность",
-    "Польская казна",
-    "Болгарская казна",
-    "Национальные фонды",
-    "Новые взносы"
-   ],
-   "series": [
-    {
-     "label": "",
-     "values": [
-      0.9,
-      0.8,
-      0.8,
-      0.9,
-      0.3
-     ]
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 83,
-  "view": "film.film_single",
-  "dur": 12.6,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_083.jpg",
-   "title": "Меркель возвращает 2015 год",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 84,
-  "view": "film.film_strip",
-  "dur": 12.5,
-  "anim": 12.5,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    "cards/photo/card_084.jpg",
-    "cards/photo/card_084_2.jpg",
-    "cards/photo/card_084_3.jpg",
-    "cards/photo/card_084_4.jpg"
-   ],
-   "title": "Диалог две тысячи пятнадцатого",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 86,
-  "view": "paper_hand",
-  "dur": 11.8,
-  "anim": 2.8,
+  "view": "tape",
+  "dur": 11.7,
+  "anim": 2.4,
   "tail_zoom": 0.04,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Но бесконечный рассказ о том, как тебя снова перехитрили, плохо рекламирует не только хитрость партнёра.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 87,
-  "view": "cinematic.depth_of_field",
-  "dur": 12.2,
-  "anim": 12.2,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_087.jpg",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 88,
-  "view": "film.film_single",
-  "dur": 13.4,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "photo": "cards/photo/card_088.jpg",
-   "title": "Дипломатия 2015 года",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 89,
-  "view": "film.film_strip",
-  "dur": 9.1,
-  "anim": 9.1,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    "cards/photo/card_089.jpg",
-    "cards/photo/card_089_2.jpg",
-    "cards/photo/card_089_3.jpg",
-    "cards/photo/card_089_4.jpg"
-   ],
-   "title": "Время вместо решения",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 90,
-  "view": "charts.radar",
-  "dur": 15.4,
-  "anim": 15.4,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "axes": [
-    "Уроки Запада",
-    "Уроки России",
-    "Уроки Украины",
-    "Доверие обещаниям",
-    "Риск новой паузы"
-   ],
-   "series": [
-    {
-     "label": "",
-     "values": [
-      0.4,
-      0.6,
-      0.5,
-      0.3,
-      0.8
-     ]
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 92,
-  "view": "marker_serif",
-  "dur": 11.2,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Для Европы итог ещё неприятнее.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 93,
-  "view": "charts.network",
-  "dur": 11.3,
-  "anim": 11.3,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "nodes": [
-    {
-     "id": "Европа",
-     "label": "Европа",
-     "weight": 3.7000000000000006
-    },
-    {
-     "id": "Москва",
-     "label": "Москва",
-     "weight": 0.7
-    },
-    {
-     "id": "Киев",
-     "label": "Киев",
-     "weight": 0.9
-    },
-    {
-     "id": "Энергия",
-     "label": "Энергия",
-     "weight": 0.8
-    },
-    {
-     "id": "Капитал",
-     "label": "Капитал",
-     "weight": 0.7
-    },
-    {
-     "id": "Граждане",
-     "label": "Граждане",
-     "weight": 0.6
-    }
-   ],
-   "links": [
-    {
-     "from": "Европа",
-     "to": "Москва",
-     "weight": 0.7
-    },
-    {
-     "from": "Европа",
-     "to": "Киев",
-     "weight": 0.9
-    },
-    {
-     "from": "Европа",
-     "to": "Энергия",
-     "weight": 0.8
-    },
-    {
-     "from": "Европа",
-     "to": "Капитал",
-     "weight": 0.7
-    },
-    {
-     "from": "Европа",
-     "to": "Граждане",
-     "weight": 0.6
-    }
-   ],
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 94,
-  "view": "charts.slope",
-  "dur": 12.5,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "items": [
-    {
-     "label": "Собственная армия",
-     "from": 0.6,
-     "to": 1.0
-    },
-    {
-     "label": "Украинский взнос",
-     "from": 1.0,
-     "to": 0.4
-    },
-    {
-     "label": "Цена энергии",
-     "from": 0.4,
-     "to": 0.9
-    },
-    {
-     "label": "Отказ от России",
-     "from": 0.9,
-     "to": 0.4
-    }
-   ],
-   "source": "Смена европейских приоритетов",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 95,
-  "view": "pull",
-  "dur": 13.0,
-  "anim": 2.6,
-  "tail_zoom": 0.05,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "Самая опасная для Киева перемена происходит без громкого предательства.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  }
- },
- {
-  "scene": 96,
-  "view": "cinematic.evidence_wall",
-  "dur": 13.3,
-  "anim": 13.3,
-  "tail_zoom": 0.0,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "shots": [
-    [
-     "cards/photo/card_096.jpg",
-     240,
-     380,
-     -4,
-     "Вашингтон собирает отказ"
-    ],
-    [
-     "cards/photo/card_096_2.jpg",
-     800,
-     380,
-     3,
-     "Варшава берёт бюджет"
-    ],
-    [
-     "cards/photo/card_096_3.jpg",
-     1360,
-     380,
-     -2,
-     "Брюссель смотрит на кассу"
-    ]
-   ],
-   "title": "Поддержка после условий",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
-  },
-  "mode": "frame"
- },
- {
-  "scene": 97,
-  "view": "quote",
-  "dur": 11.43,
-  "anim": 2.6,
-  "tail_zoom": 0.045,
-  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
-  "channel": "ПЕРЕВОД с ДИПЛОМАТИЧЕСКОГО",
-  "kwargs": {
-   "text": "А Украина должна держаться, пока все остальные решают, сколько ещё готовы заплатить за это слово.",
-   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+   "text": "Новые конфликты будут появляться быстрее.",
+   "watermark": "5 МИНУТ"
   }
  }
 ]
