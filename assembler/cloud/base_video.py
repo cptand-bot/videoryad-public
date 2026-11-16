@@ -38,6 +38,43 @@ BASE = os.path.abspath(os.path.join(HERE, "..", "base"))
 sys.path.insert(0, TPL)
 import fetch_assets_news as F   # noqa: E402  те же гейты, что в бою
 
+# СИТО БАНА И В СТЕЙДЖИНГЕ (16.11). Забаненный кусок в базу не ляжет —
+# приёмка `accept_picks.py` его отбивает, — но без этой проверки он всё
+# равно скачивается, попадает в контактные листы и отнимает место в норме
+# объекта, а человек утром снова смотрит то, что уже забанил. Сита два, как
+# в бою: точный md5 и перцептивный отпечаток.
+_BAN = {}
+
+
+def _ban_sita():
+    if "v" not in _BAN:
+        try:
+            m = F.load_banned_md5()
+        except Exception:
+            m = set()
+        try:
+            import phash_ban as _PH
+            ph = _PH.load_banned_phash()
+        except Exception:
+            _PH, ph = None, set()
+        _BAN["v"] = (m, ph, _PH)
+    return _BAN["v"]
+
+
+def _zabanen(path, h5=""):
+    """Чем забанен кусок: 'бан по md5' / 'бан по отпечатку d=N' / ''."""
+    m, ph, _PH = _ban_sita()
+    if m and h5 and h5 in m:
+        return "бан по md5"
+    if ph and _PH:
+        try:
+            hit, _near, dist = _PH.phash_banned(path, ph)
+        except Exception:
+            hit = False
+        if hit:
+            return "бан по отпечатку d=%s" % dist
+    return ""
+
 MIN_W, MIN_H = 1280, 720
 MIN_CLIP = 10.15                # ниже этого сцена медиатеки клип не примет
 
@@ -250,6 +287,11 @@ def cut_clips(src, dst_dir, base_name, clip_len, want, seen_md5, brand=False):
             h5 = None
         if h5 and h5 in seen_md5:
             os.remove(dst); continue
+        _bw = _zabanen(dst, h5 or "")
+        if _bw:
+            os.remove(dst)
+            _say("      кусок %d отбит: %s (в библиотеку не кладём)" % (n, _bw))
+            continue
         ok, why = clip_is_clean(dst, cdur)
         if not ok:
             os.remove(dst)
@@ -396,6 +438,11 @@ def grab_sections(vid, dur, dst_dir, base_name, clip_len, want, seen_md5, brand=
             h5 = None
         if h5 and h5 in seen_md5:
             os.remove(dst); continue
+        _bw = _zabanen(dst, h5 or "")
+        if _bw:
+            os.remove(dst)
+            _say("      кусок %d отбит: %s (в библиотеку не кладём)" % (i, _bw))
+            continue
         ok, why = clip_is_clean(dst, cdur)
         if not ok:
             os.remove(dst); _say("      кусок %d отбит: %s" % (i, why)); continue
