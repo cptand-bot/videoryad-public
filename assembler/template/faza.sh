@@ -1165,7 +1165,7 @@ posle_fetcha)
     cat "$FXOUT" >> "$LOG"
     if [ "$FXRC" -eq 0 ]; then
         echo "[ОК]    эффекты"
-    elif grep -q "ставить не буду\|нечего\|уже сто" "$FXOUT"; then
+    elif grep -q "ставить не буду\|нечего\|уже сто\|подходящих сцен нет" "$FXOUT"; then
         echo "[ОК]    эффекты — ставить нечего (нормы соблюдены)"
     else
         echo "[ОТКАЗ] эффекты (код $FXRC)"; grep -hE "$MARK" "$FXOUT" | head -2 | cut -c1-200 | sed 's/^/        · /'

@@ -1699,6 +1699,13 @@ def main():
     ap.add_argument("--gate", choices=["dashboard", "video"], default="dashboard")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--list", action="store_true")
+    # КАНАЛ В СПИСКЕ (16.11, пункт 117). Часть элементов живёт только на
+    # своём канале (шесть приёмов `fx` — только «5 МИНУТ», надпись
+    # из-под маски — только ПЛАНЕТА), а `--list` канал не печатал вовсе:
+    # вкладка узнавала это шестью запусками двери, по отказу на каждый вид.
+    ap.add_argument("--channel", default="",
+                    help="показать список для ЭТОГО канала: чужие элементы "
+                         "не печатаются, у своих видна канальная пометка")
     # ЗАМОРОЗКА СОСТАВА (13.11, пункт 59). Обычно её делает приёмка
     # раскадровки сама; ключ нужен для ролика, начатого до этой правки.
     ap.add_argument("--zamorozit", action="store_true",
@@ -1722,8 +1729,16 @@ def main():
                     else "x1 на %g обычн.сцен" % float(el["на_сцен"])
                     if el.get("overlay_style")
                     else "x1 на %g сцен" % float(el["на_сцен"]))
-            print("  %-9s %-4s %-17s %-13s %s"
-                  % (el["gate"], el["код"], метка, _скл, el["имя"]))
+            _кан = el.get("каналы") or []
+            if a.channel and _кан and a.channel.strip().upper() not in [
+                    str(c).upper() for c in _кан]:
+                continue
+            _пом = (" [только %s]" % ", ".join(_кан)) if _кан else ""
+            print("  %-9s %-4s %-17s %-13s %s%s"
+                  % (el["gate"], el["код"], метка, _скл, el["имя"], _пом))
+        if a.channel:
+            print("\n(показан список канала «%s»: элементы других каналов "
+                  "не печатаются и этим роликом не спрашиваются)" % a.channel)
         return 0
 
     if not os.path.isfile(a.scenes):

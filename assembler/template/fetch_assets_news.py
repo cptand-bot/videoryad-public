@@ -1505,6 +1505,38 @@ def _latin_name(query):
     return lat
 
 
+# ИМЯ ЧЕЛОВЕКА В ЛАТИНСКИЕ АРХИВЫ НЕ ОТДАЁМ (16.11, пункт 118; замер
+# `usuario-55` 15.11). На персону и город `openverse_lat` и `wikimedia_lat`
+# дали 4 брака из 4 — чужое лицо-однофамилец, портрет не той эпохи, рисунок —
+# а `web_search` по тому же запросу 6 годных из 6. Латинский заход придуман
+# для ОБЪЕКТОВ, подписанных в архиве по-английски (здание, техника, город);
+# на человеке он ровно наоборот: архивный фонд знает старое имя, а нам нужно
+# сегодняшнее лицо. `internet_archive_lat` в улове брака не давал — он
+# остаётся, снимаем ровно те два источника, что замерены.
+ЛЮДИ_В_ЗАПРОСЕ = (
+    "зеленск", "путин", "трамп", "лавров", "макрон", "мерц", "орбан",
+    "песков", "рубио", "рютте", "рябков", "стармер", "сырск", "туск",
+    "уиткофф", "умеров", "фицо", "ляйен", "каллас", "кушнер", "захаров",
+    "вэнс", "стубб", "джонсон", "байден", "верещук", "гнап", "гринкевич",
+    "друзенко", "кучеренко", "чмут", "обама", "меркель", "блинкен",
+    "столтенберг", "джонсон", "шольц", "кулеба", "залужн", "буданов",
+    "медведев", "шойгу", "герасимов", "небензя", "дуда", "навроцк",
+    "фон дер ляйен", "вучич", "фидан", "эрдоган", "си цзиньпин", "ким чен",
+)
+
+
+def _imya_cheloveka(query):
+    """True, если в запросе стоит имя ЧЕЛОВЕКА (по открытому списку).
+
+    Список открытый: имя дописывается, как только персона попала в ролики
+    (слой `ПЕРСОНЫ` медиатеки и есть его источник). Эвристику «два слова с
+    заглавной» не берём — под неё попадают «Верховная Рада», «Белый дом»,
+    «Генеральная Ассамблея», и латинский заход снялся бы там, где он полезен.
+    """
+    low = (query or "").lower().replace("ё", "е")
+    return any(имя.replace("ё", "е") in low for имя in ЛЮДИ_В_ЗАПРОСЕ)
+
+
 def _press_waterfall(query, out_path, env):
     """The 'real photo' waterfall for `press_photo` / `wikimedia` scenes AND
     for a local_library tag folder that turned up empty. Order (user rule,
@@ -1529,11 +1561,17 @@ def _press_waterfall(query, out_path, env):
     ]
     lat = _latin_name(query)
     if lat:
-        steps += [
-            ("openverse_lat", lambda: fetch_openverse(lat, out_path)),
-            ("internet_archive_lat", lambda: fetch_internet_archive(lat, out_path)),
-            ("wikimedia_lat", lambda: fetch_wikimedia(lat, out_path)),
-        ]
+        _человек = _imya_cheloveka(query)
+        if _человек:
+            print("  [имя человека] латинские Openverse и Викисклад пропускаю "
+                  "(4 брака из 4 на замере 15.11), остаётся архив и поиск",
+                  flush=True)
+        steps += ([("openverse_lat", lambda: fetch_openverse(lat, out_path))]
+                  if not _человек else [])
+        steps += [("internet_archive_lat",
+                   lambda: fetch_internet_archive(lat, out_path))]
+        steps += ([("wikimedia_lat", lambda: fetch_wikimedia(lat, out_path))]
+                  if not _человек else [])
     steps.append(("web_search", lambda: fetch_web_search(query, out_path, env)))
     for name, fn in steps:
         if _past_deadline():
