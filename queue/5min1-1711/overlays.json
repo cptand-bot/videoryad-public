@@ -1,0 +1,203 @@
+{
+ "anchor": "top",
+ "1": {
+  "photo": "overlays/scene_001.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right",
+  "text": {
+   "words": "ПРОБЛЕМЫ С ДОВЕРИЕМ",
+   "color": "yellow",
+   "pos": "tc"
+  }
+ },
+ "5": {
+  "photo": "overlays/scene_005.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "up-right",
+  "text": {
+   "words": "КАРТИНА СКЛАДЫВАЕТСЯ",
+   "color": "orange",
+   "pos": "tr"
+  }
+ },
+ "7": {
+  "photo": "overlays/scene_007.jpg",
+  "sound": "ding",
+  "at": 2.6,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "right",
+  "text": {
+   "words": "ОТДЕЛЬНО НАПОМИНАТЬ",
+   "color": "yellow",
+   "pos": "mr"
+  }
+ },
+ "14": {
+  "photo": "overlays/scene_014.jpg",
+  "sound": "pop",
+  "at": 2.8,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right",
+  "text": {
+   "words": "УСТРАНИТЬ ПЕРВОПРИЧИНЫ",
+   "color": "red",
+   "pos": "tl"
+  }
+ },
+ "16": {
+  "photo": "overlays/scene_016.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "text": {
+   "words": "ЧЕТЫРЕ ТРЕБОВАНИЯ",
+   "color": "green",
+   "pos": "tr"
+  }
+ },
+ "31": {
+  "photo": "overlays/scene_031.jpg",
+  "sound": "ding",
+  "at": 3.2,
+  "shape": "circle",
+  "scale": 1.2,
+  "style": "left",
+  "text": {
+   "words": "ДВЕРЬ ЗАКРЫВАЕТСЯ",
+   "color": "yellow",
+   "pos": "mr"
+  }
+ },
+ "39": {
+  "photo": "overlays/scene_039.jpg",
+  "sound": "pop",
+  "at": 3.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "up-center",
+  "text": {
+   "words": "ТРОЕ ЗА СТОЛОМ",
+   "color": "red",
+   "pos": "tl"
+  }
+ },
+ "54": {
+  "photo": "overlays/scene_054.jpg",
+  "sound": "whoosh",
+  "at": 3.6,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "up-right",
+  "text": {
+   "words": "СТАРЫЙ ПОРЯДОК РАЗБИРАЮТ",
+   "color": "green",
+   "pos": "tr"
+  }
+ },
+ "68": {
+  "photo": "overlays/scene_068.jpg",
+  "sound": "ding",
+  "at": 3.8,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "up-right",
+  "text": {
+   "words": "ТЕПЕРЬ КУБА",
+   "color": "yellow",
+   "pos": "mr"
+  }
+ },
+ "74": {
+  "photo": "overlays/scene_074.jpg",
+  "sound": "pop",
+  "at": 4.0,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "up-center",
+  "text": {
+   "words": "ОПАСНО ВОЗЛЕ ГРАНИЦ",
+   "color": "red",
+   "pos": "tl"
+  }
+ },
+ "3": {
+  "text": {
+   "words": "СОЮЗНИКИ БОЯТСЯ СОЮЗНИКОВ",
+   "color": "white",
+   "pos": "tl"
+  }
+ },
+ "4": {
+  "text": {
+   "words": "СВЯЗЫВАЕМ СОБЫТИЯ",
+   "color": "red",
+   "pos": "mc"
+  }
+ },
+ "6": {
+  "text": {
+   "words": "ПРОСЬБА К ВАШИНГТОНУ",
+   "color": "green",
+   "pos": "ml"
+  }
+ },
+ "8": {
+  "text": {
+   "words": "КОМАНДНАЯ ИГРА СБИЛАСЬ",
+   "color": "white",
+   "pos": "tc"
+  }
+ },
+ "15": {
+  "text": {
+   "words": "УХО ПРИВЫКЛО",
+   "color": "orange",
+   "pos": "mc"
+  }
+ },
+ "23": {
+  "text": {
+   "words": "РОССИЯ И НАТО",
+   "color": "yellow",
+   "pos": "ml"
+  }
+ },
+ "33": {
+  "text": {
+   "words": "ПЕРЕМИРИЕ ОТКЛОНЕНО",
+   "color": "white",
+   "pos": "tc"
+  }
+ },
+ "47": {
+  "text": {
+   "words": "РАЗГОВОР БЕЗ ЕВРОПЫ",
+   "color": "orange",
+   "pos": "mc"
+  }
+ },
+ "57": {
+  "text": {
+   "words": "АВИАЦИЯ ВОКРУГ ИРАНА",
+   "color": "yellow",
+   "pos": "ml"
+  }
+ },
+ "72": {
+  "text": {
+   "words": "БЛОКАДА И ДАВЛЕНИЕ",
+   "color": "white",
+   "pos": "tc"
+  }
+ }
+}
