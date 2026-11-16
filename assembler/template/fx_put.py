@@ -184,6 +184,23 @@ def _probe(ffprobe, src):
     return w, h, dur
 
 
+def _zanyato(sc, kind, zamenit):
+    """Текст отказа, если на сцене уже стоит ДРУГОЙ эффект (16.11).
+
+    Поле `fx` у сцены ОДНО, и вторая постановка молча затирала первую: на
+    живом ролике так исчез `flash`, поставленный под `stamps`, и пропажу
+    нашёл только гейт обязательных элементов — круг правок на пустом месте.
+    Теперь затирание возможно лишь явным `--zamenit`.
+    """
+    est = str(sc.get("fx", "")).strip().lower()
+    if not est or est == str(kind).strip().lower() or zamenit:
+        return ""
+    return ("на сцене %s УЖЕ стоит эффект «%s» — поле у сцены одно, и «%s» "
+            "затёр бы его молча. Поставь эффект на другую сцену либо повтори "
+            "с --zamenit, если «%s» тут не нужен"
+            % (sc.get("id"), est, kind, est))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("scenes")
@@ -196,6 +213,17 @@ def main():
     ap.add_argument("--kind", default="", choices=("",) + KINDS,
                     help="вид эффекта; по умолчанию inset, если дано видео")
     ap.add_argument("--off", action="store_true", help="снять эффект со сцены")
+    # КЛЮЧ `--sid` ЕСТЬ ТЕПЕРЬ И ЗДЕСЬ (16.11, улов `usuario-81`): гейт
+    # обязательных элементов печатает подсказку `fx_put.py --sid <сцена>
+    # --kind flash`, а инструмент такого ключа не знал — вкладка читала отказ
+    # argparse и считала, что гейт советует несуществующую команду.
+    ap.add_argument("--sid", dest="sid_key", type=int, default=None,
+                    help="то же, что номер сцены позиционным аргументом")
+    # ЗАМЕНА ЭФФЕКТА — ТОЛЬКО ЯВНО (16.11, улов `usuario-81`): `flash` и
+    # `stamps` на одну сцену молча затирали друг друга, пропажу поймал лишь
+    # гейт обязательных, через круг правок.
+    ap.add_argument("--zamenit", action="store_true",
+                    help="сцена уже с эффектом — заменить его этим")
     ap.add_argument("--ffmpeg", default="")
     a = ap.parse_args()
 
@@ -240,6 +268,8 @@ def main():
 
     if a.auto:
         return _auto(a, data, scenes)
+    if a.sid is None and getattr(a, "sid_key", None) is not None:
+        a.sid = a.sid_key
     if a.sid is None:
         return _die("скажи номер сцены — или поставь --auto, и я расставлю "
                     "три перехода по ролику сам")
@@ -313,6 +343,9 @@ def main():
         if dur < 2.5:
             return _die("сцена %d всего %.1f с — переходу «%s» нужно не "
                         "меньше 2,5 с" % (a.sid, dur, kind))
+        _zan = _zanyato(sc, kind, a.zamenit)
+        if _zan:
+            return _die(_zan)
         sc["fx"] = kind
         # Сцена могла быть врезкой — тогда её файл больше не нужен и в облако
         # поедет мёртвым грузом (а `ship.sh` честно отчитается о врезке,
@@ -369,6 +402,9 @@ def main():
         print("врезка скопирована как есть: %.1f МБ %dx%d %.1f с"
               % (mb, w, h, vdur))
 
+    _zan = _zanyato(sc, "inset", a.zamenit)
+    if _zan:
+        return _die(_zan)
     sc["fx"] = "inset"
     _save(a.scenes, data)
     have = sorted(set(have) | {a.sid})

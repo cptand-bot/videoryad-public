@@ -3463,6 +3463,36 @@ def main():
                         pass
                 _kept.append(_p)
             existing = _kept
+        # ИСТОЧНИК ПРОТИВ РАСШИРЕНИЯ ФАЙЛА — ТРЕТЬЕ СИТО КЭША (16.11).
+        # Улов `usuario-ee`: на сценах 52 и 73 одного ролика источник стоял
+        # `press_photo`, а в слоте лежало ВИДЕО — прежний стоковый клип от
+        # старой версии сцены. Прежние два сита этого не ловят: бан он не
+        # нарушает, заглушкой не является, а сравнение запросов молчит, когда
+        # `.queries.json` не доехал (после переезда в `-cloud` кадры
+        # переносятся, а запросы нет) — и фетч честно рапортовал «cached».
+        # Правило: фото-источник не может лежать видеофайлом и наоборот.
+        if existing:
+            _vid_src = ("pexels_video", "youtube", "video")
+            _pho_src = ("press_photo", "web_search", "wikimedia", "pexels_photo")
+            _kept = []
+            for _p in existing:
+                _e = os.path.splitext(_p)[1].lower()
+                _is_vid = _e in (".mp4", ".mov", ".webm", ".mkv")
+                _is_pho = _e in (".jpg", ".jpeg", ".png", ".webp")
+                _bad = ((source in _pho_src and _is_vid)
+                        or (source in _vid_src and _is_pho))
+                if _bad:
+                    try:
+                        os.remove(_p)
+                        print(f"[{sid:03d}] в слоте {'ВИДЕО' if _is_vid else 'ФОТО'}, "
+                              f"а источник сцены «{source}» — это кадр от прежней "
+                              f"версии сцены, кэшем не считается; качаю заново",
+                              flush=True)
+                        continue
+                    except OSError:
+                        pass
+                _kept.append(_p)
+            existing = _kept
         if existing:
             # МАНИФЕСТ НЕ ДОЛЖЕН ВРАТЬ ПРО ИСТОЧНИК (2026-10-18, улов usuario-b7).
             # Было: «cached» писал ЗАЯВЛЕННЫЙ в сцене `source`. На провалившемся

@@ -17,6 +17,11 @@
     python3 zamorozka.py check    <проект>     # 0 — можно, 1 — правки запрещены
     python3 zamorozka.py snyat    <проект> --slovo-polzovatelya
 
+`<проект>` — полный путь ИЛИ просто имя папки в `~/projects` (16.11, п.186):
+имя проекта принимают остальные инструменты конвейера, и здесь оно теперь
+тоже адрес. Папки с таким именем нет — ответ «ПРОЕКТ НЕ НАЙДЕН» и код 3, а
+не «заморозки и не было»: эти два ответа путать нельзя.
+
 `postavit` ставит `ship.sh` сам при ПЕРВОЙ полной сборке (не `--fetch-only`):
 полная сборка идёт только после его «собирай», это и есть момент утверждения.
 `check` сверяет md5 сценария, `overlays.json` и всех кадров. Совпало — пуск
@@ -38,7 +43,28 @@ FAIL_FILE = ".utverzhdeno.json"
 
 
 def _pdir(p):
-    return os.path.abspath(os.path.expanduser(p or "."))
+    """Папка проекта по полному пути ИЛИ по одному имени проекта.
+
+    ИМЯ ПРОЕКТА — ТОЖЕ АДРЕС (16.11, улов `usuario-7c`, `НА-РАСКАТКУ` п.186).
+    Было: аргумент понимался только как путь, и на `zamorozka.py snyat
+    planeta-3-svo-1711` инструмент отвечал «заморозки и не было» — то есть
+    про НЕСУЩЕСТВУЮЩУЮ папку `./planeta-3-svo-1711`. Вкладка читала это как
+    «заморозки нет», шла собирать и упиралась в отказ `ship.sh` (п.185).
+    Остальные инструменты конвейера имя проекта принимают (`accept_scenes`,
+    `check_pins`, `codex_brief`), поэтому и здесь так же: не нашлось по
+    пути — ищем `~/projects/<имя>`, затем папку забора `~/projects/<имя>-cloud`.
+    Ничего не нашлось — возвращаем как было, чтобы вызывающий сказал
+    «проект не найден», а не «заморозки не было».
+    """
+    p = p or "."
+    пути = [os.path.abspath(os.path.expanduser(p))]
+    if not os.path.isdir(пути[0]) and not os.path.isabs(p) and os.sep not in p:
+        пути.append(os.path.expanduser(os.path.join("~/projects", p)))
+        пути.append(os.path.expanduser(os.path.join("~/projects", p + "-cloud")))
+    for к in пути:
+        if os.path.isdir(к):
+            return os.path.abspath(к)
+    return пути[0]
 
 
 def _md5(path):
@@ -97,6 +123,12 @@ def cmd_postavit(args):
 def cmd_check(args):
     """0 — работать можно; 1 — проект заморожен и состав изменён."""
     pdir = _pdir(args.project)
+    # ПАПКИ НЕТ — ЭТО НЕ «ЗАМОРОЗКИ НЕТ» (16.11, п.186). Код не меняем:
+    # решение о сборке принимает `ship.sh`, а здесь важно, чтобы вкладка не
+    # прочла тишину как разрешение.
+    if not os.path.isdir(pdir):
+        print("zamorozka: ПРОЕКТ НЕ НАЙДЕН (%s) — проверка заморозки НЕ "
+              "сделана, дай полный путь" % pdir, file=sys.stderr)
     p = os.path.join(pdir, FAIL_FILE)
     if os.environ.get("VIDEORYAD_RAZMOROZKA") == "1":
         print("zamorozka: ОБХОД VIDEORYAD_RAZMOROZKA=1 — только по слову пользователя")
@@ -147,12 +179,22 @@ def cmd_snyat(args):
         print("снять заморозку может только пользователь: "
               "--slovo-polzovatelya", file=sys.stderr)
         return 2
+    # «ПАПКИ НЕТ» И «ЗАМОРОЗКИ НЕТ» — ДВА РАЗНЫХ ОТВЕТА (16.11, п.186).
+    # Прежде оба случая отвечали «заморозки и не было», и опечатка в имени
+    # проекта читалась как разрешение собирать.
+    if not os.path.isdir(pdir):
+        print("ПРОЕКТ НЕ НАЙДЕН: «%s»" % args.project, file=sys.stderr)
+        print("  искал как путь, как ~/projects/%s и как ~/projects/%s-cloud."
+              % (args.project, args.project), file=sys.stderr)
+        print("  Дай полный путь к папке проекта. Про заморозку это НИЧЕГО "
+              "не говорит — она может стоять.", file=sys.stderr)
+        return 3
     p = os.path.join(pdir, FAIL_FILE)
     if os.path.exists(p):
         os.remove(p)
-        print("заморозка снята по слову пользователя")
+        print("заморозка снята по слову пользователя (%s)" % pdir)
     else:
-        print("заморозки и не было")
+        print("заморозки в %s и не было" % pdir)
     return 0
 
 
