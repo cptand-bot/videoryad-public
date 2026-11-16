@@ -162,6 +162,7 @@ template/photo_quality.py
 template/podmena.py
 template/povtor_kadrov.py
 template/pravki.py
+template/proverki.py
 template/prevyu.py
 template/prevyu_klon.py
 template/prevyu_text.py

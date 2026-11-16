@@ -1583,6 +1583,26 @@ def main():
                          str(_sc.get("text", ""))[:160]))
             if _draft:
                 print("  правь в %s и прогони приёмку по нему" % _draft)
+        # ГЕЙТЫ ПРИЁМКИ ОТМЕЧАЮТСЯ В ЖУРНАЛЕ ПРОВЕРОК (16.11, его правило:
+        # «проверка, которая за неделю не отбила ни одного брака,
+        # снимается»). Имя проверки — первые слова её отказа.
+        try:
+            import importlib.util as _ilup
+            _spp = _ilup.spec_from_file_location(
+                "proverki", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         "proverki.py"))
+            _mp = _ilup.module_from_spec(_spp)
+            _spp.loader.exec_module(_mp)
+            _proj = ""
+            for _кл in ("scenes", "json", "out"):
+                _v = getattr(a, _кл, "") or ""
+                if _v:
+                    _proj = os.path.basename(os.path.dirname(os.path.abspath(_v)))
+                    break
+            for _b in bad:
+                _mp.otmetit("gate", str(_b).split("\n")[0][:120], _proj)
+        except Exception as _e:
+            print("  (журнал проверок не записан: %s)" % _e, file=sys.stderr)
         print("\nПРИНИМАТЬ НЕЛЬЗЯ — исправь перечисленное или попроси переделать."
               + ("\n(механическое `--fix` уже починил, см. строки ПОЧИНЕНО; "
                  "перечисленное выше — смысловое, его пишет вкладка или "

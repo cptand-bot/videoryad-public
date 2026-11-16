@@ -1442,6 +1442,26 @@ def gathering_without_year(q):
         "столах, микрофоны-гусиные шеи"), ]
 
 
+def _otmetit_minu(imena):
+    """Отметить сработавшие мины в журнале проверок (16.11, его правило).
+
+    Нужно, чтобы видеть обратное — какая мина НЕ ловила ничего неделю: такие
+    снимаются («ловит — остаётся, не ловит — уходит»). Пишет `proverki.py`,
+    молча и без влияния на прогон.
+    """
+    try:
+        import importlib.util as _ilu
+        _sp = _ilu.spec_from_file_location(
+            "proverki", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "proverki.py"))
+        _m = _ilu.module_from_spec(_sp)
+        _sp.loader.exec_module(_m)
+        for _im in imena:
+            _m.otmetit("mine", _im, os.path.basename(os.getcwd()))
+    except Exception:
+        pass
+
+
 def scan_query(q, source):
     """Вернуть (mines, charts) — списки найденных проблем."""
     low = q.lower()
@@ -1534,6 +1554,8 @@ def scan_query(q, source):
     charts = [w for w in CHART_BAIT if re.search(r"\b" + re.escape(w), low)]
     has_object = any(w in low for w in OBJECT_WORDS)
     is_real = "реальное фото" in low or "реальн" in low
+    if mines:
+        _otmetit_minu([str(w) for w, _f in mines])
     return mines, charts, has_object, is_real
 
 
