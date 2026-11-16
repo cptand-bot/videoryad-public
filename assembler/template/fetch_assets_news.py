@@ -759,6 +759,28 @@ def _corner_penalty(path, md5_=None):
     return mult
 
 
+def _ocr_net_flag(image_path):
+    """Положить рядом с кадрами флаг «OCR не работал» и сказать об этом.
+
+    Файл читает `selfcheck`: он не валит ролик, но требует просмотреть
+    контактные листы глазами и снять скриншоты публикаций и клейма.
+    """
+    try:
+        d = os.path.dirname(os.path.abspath(image_path)) or "."
+        f = os.path.join(d, "OCR-NE-RABOTAL.flag")
+        if not os.path.exists(f):
+            with open(f, "w", encoding="utf-8") as fh:
+                fh.write("tesseract не найден ни в ~/tools/tesseract, ни в PATH: "
+                         "сита «тяжёлый текст», стоковое клеймо и угловой знак "
+                         "в этом заборе НЕ РАБОТАЛИ\n")
+            print("  !! OCR НЕ РАБОТАЕТ: tesseract не найден — сита по тексту "
+                  "и клеймам в этом заборе слепы. Флаг положен рядом с "
+                  "кадрами, `selfcheck` потребует просмотра глазами.",
+                  file=sys.stderr)
+    except Exception:
+        pass
+
+
 def _ocr_words(image_path):
     """Run tesseract over the full frame AND each corner/bottom-strip crop
     (see _corner_watermark_blob); return (real_word_count, full_lowercased_
@@ -769,6 +791,22 @@ def _ocr_words(image_path):
     tesseract is unavailable so a missing OCR tool never blocks the
     pipeline."""
     tess_bin = _TESS_BIN if os.path.exists(_TESS_BIN) else "tesseract"
+    # НЕТ OCR — ГОВОРИМ ОБ ЭТОМ, А НЕ ОТВЕЧАЕМ «ТЕКСТА НЕТ» (16.11, пункт
+    # 198). Класс «успех значит ничего не сделано»: без бинаря функция
+    # возвращала (0, ""), и три сита — «тяжёлый текст», стоковое клеймо,
+    # угловой знак — молча пропускали всё подряд. Так в сданный ПсД заехал
+    # скриншот словацкого сайта (14 слов OCR при пороге 8).
+    # Флаг рядом с кадрами уже понимает `selfcheck` (он требует просмотра
+    # глазами) — его кладёт облако; локальный путь не клал НИЧЕГО.
+    # Ставить tesseract на его машину нельзя: счёт пошёл бы на его
+    # процессоре (его правило 23.10), а в облаке он ставится сам.
+    # Проверено запуском 16.11: бинарь лежит в `~/tools/tesseract` (5.5.0,
+    # распаковкой .deb, apt на машине нет) и РАБОТАЕТ. Прежняя запись
+    # «tesseract отсутствует» родилась из `command -v tesseract`: в PATH его
+    # и не было никогда, это не поломка.
+    if not os.path.exists(_TESS_BIN) and not shutil.which("tesseract"):
+        _ocr_net_flag(image_path)
+        return 0, ""
     real_words, blob = _ocr_raw(image_path, tess_bin)
     corner_blob = _corner_watermark_blob(image_path, tess_bin)
     return real_words, (blob + " " + corner_blob).strip()

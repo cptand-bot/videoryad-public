@@ -138,6 +138,7 @@ template/kadry_klon.py
 template/kartochki_batch.py
 template/kartochki_srazu.py
 template/kluchi.py
+template/konkretika.py
 template/latinka.py
 template/merge_work.py
 template/muzyka.py
