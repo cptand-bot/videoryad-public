@@ -225,6 +225,14 @@ def main():
 
     if not os.path.isfile(a.scenes):
         _fail(2, f"нет файла сцен: {a.scenes}")
+    # ОЧЕРЕДЬ ЖИВЁТ РЯДОМ СО СЦЕНАМИ, А НЕ В ТЕКУЩЕЙ ПАПКЕ (17.11, та же дыра,
+    # что уже чинили в card_put.py 13.11, п.47 — здесь забыли повторить):
+    # cards_queue.py пишет cards/queue|photo/ ОТНОСИТЕЛЬНО cwd, и вызов из
+    # каталога скилла заливал `template/cards/` чужими файлами проекта.
+    _база = os.path.dirname(os.path.abspath(a.scenes))
+    if os.path.isdir(_база) and os.path.abspath(os.getcwd()) != _база:
+        os.chdir(_база)
+        a.scenes = os.path.basename(a.scenes)
     data = json.load(open(a.scenes, encoding="utf-8"))
     scenes = data["scenes"] if isinstance(data, dict) else data
     scene = next((s for s in scenes if int(s.get("id", -1)) == a.sid), None)
