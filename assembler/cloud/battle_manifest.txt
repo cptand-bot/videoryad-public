@@ -207,6 +207,7 @@ template/svyazka.py
 template/take_folder.py
 template/tema_start.py
 template/tg_media.py
+template/tg_overlay_fill.py
 template/tikho.sh
 template/unikalizaciya.py
 template/upakovka.py
