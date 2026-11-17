@@ -1,0 +1,17 @@
+[
+ {
+  "scene": 30,
+  "view": "cinematic.depth_of_field",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "photo": "cards/photo/card_030.jpg",
+   "title": "Марк Рютте",
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  },
+  "mode": "frame"
+ }
+]
