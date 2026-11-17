@@ -59,8 +59,9 @@
    "duration_sec": 9.4,
    "text": "",
    "source": "local_library",
-   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ",
-   "fx": "player"
+   "source_query": "БАЗА/ВЕДОМСТВА/БУНДЕСВЕР",
+   "fx": "player",
+   "visual_prompt": "БАЗА/ВЕДОМСТВА/БУНДЕСВЕР"
   },
   {
    "id": 8,
