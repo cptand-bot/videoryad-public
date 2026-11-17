@@ -373,6 +373,20 @@ def main():
     вид = КОД_В_ВИД.get(a.what.upper(), a.what.lower())
     el = ЭЛЕМЕНТЫ.get(вид)
     if el is None:
+        # ОБРАТНЫЙ РЕДИРЕКТ (17.11, парная находка к card_put.py): вид
+        # действительно рисует card_put.py (fullcycle/), а не эта дверь —
+        # говорим точно, а не общей фразой «карты и плёнку — card_put.py».
+        try:
+            import sys as _s
+            _s.path.insert(0, os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "..", "fullcycle"))
+            import card_put as _cp
+            if вид in _cp.VIEWS:
+                _fail(2, f"вид «{a.what}» рисует НЕ эта дверь, а card_put.py (fullcycle/).",
+                      f"  python3 ~/.claude/skills/news-video/fullcycle/card_put.py "
+                      f"<scenes.json> <сцена> {вид} --help")
+        except Exception:
+            pass
         _fail(2, f"элемента «{a.what}» в этой двери нет.",
               "  есть: " + ", ".join("%s (%s)" % (v["код"], k)
                                      for k, v in ЭЛЕМЕНТЫ.items()),

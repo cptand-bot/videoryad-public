@@ -1255,6 +1255,27 @@ posle_fetcha)
             cp -n "$PROJ-cloud/images"/* "$PROJ/images/" 2>/dev/null || true
             echo "[ОК]    карточки сведены в images/ из $PROJ-cloud/images (если там что-то было)"
         fi
+        # ЗАГЛУШКА .jpg РЯДОМ С ГОТОВЫМ .mp4 НА ОДНОЙ card:-СЦЕНЕ (17.11,
+        # улов usuario-e1: autodedup по похожести ловит это не всегда —
+        # 52 из 53 в её ролике, одна проскочила). Карточная сцена рисует
+        # РОВНО один файл; если рядом лежит ещё и .jpg — он всегда старая
+        # заглушка (сборщик иначе берёт его по алфавиту раньше mp4).
+        # Правило детерминированное, похожесть кадра тут ни при чём.
+        python3 - "$SCENES" "$PROJ/images" <<'PYDEDUP'
+import json, os, sys
+scenes_path, images = sys.argv[1], sys.argv[2]
+d = json.load(open(scenes_path, encoding="utf-8"))
+sc = d["scenes"] if isinstance(d, dict) else d
+for s in sc:
+    if not str(s.get("source", "")).startswith("card:"):
+        continue
+    sid = int(s.get("id", -1))
+    mp4 = os.path.join(images, "scene_%03d.mp4" % sid)
+    jpg = os.path.join(images, "scene_%03d.jpg" % sid)
+    if os.path.isfile(mp4) and os.path.isfile(jpg):
+        os.remove(jpg)
+        print("    убрана заглушка scene_%03d.jpg (рядом готовый .mp4)" % sid)
+PYDEDUP
     else
         echo "[СМОТРИ] труба не названа — карточки не отрисованы"; NOTES=$((NOTES+1))
     fi
