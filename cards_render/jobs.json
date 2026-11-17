@@ -1,0 +1,105 @@
+[
+ {
+  "scene": 25,
+  "view": "paper_typed",
+  "dur": 10.1,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "В военной среде такое решение якобы встретили с воодушевлением, поскольку снятия прежних ограничений ждали давно",
+   "accent": "воодушевлением",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "duel",
+  "dur": 10.0,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "top": {
+    "who": "Версия",
+    "text": "Всё зависит от одного сервиса",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "Реальность",
+    "text": "Работает сразу несколько систем",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 5.4,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 5.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Это рычаг для новых требований и давления",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 5.4,
+    "pary": [
+     "Киев>Трамп",
+     "Требования>Поддержка"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Это рычаг для новых требований и давления",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 5.4,
+   "pary": [
+    "Киев>Трамп",
+    "Требования>Поддержка"
+   ]
+  }
+ },
+ {
+  "scene": 63,
+  "view": "charts.slope",
+  "dur": 7.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Не разбирался",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Разбирает"
+    },
+    {
+     "label": "Один эпизод",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Вся цепочка"
+    }
+   ],
+   "left_label": "БЫЛО",
+   "right_label": "СТАЛО",
+   "source": "по тексту темы",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
