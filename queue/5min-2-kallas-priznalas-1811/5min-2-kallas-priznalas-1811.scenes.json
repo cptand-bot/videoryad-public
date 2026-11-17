@@ -1,0 +1,602 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ"
+  },
+  {
+   "id": 2,
+   "start_sec": 9.6,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОКОМИССИЯ"
+  },
+  {
+   "id": 3,
+   "start_sec": 19.4,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО",
+   "fx": "flash"
+  },
+  {
+   "id": 4,
+   "start_sec": 28.8,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО",
+   "fx": "curl"
+  },
+  {
+   "id": 5,
+   "start_sec": 38.7,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 6,
+   "start_sec": 49.5,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ГОСДЕП-США",
+   "fx": "filmwin"
+  },
+  {
+   "id": 7,
+   "start_sec": 59.2,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ",
+   "fx": "player"
+  },
+  {
+   "id": 8,
+   "start_sec": 68.7,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 9,
+   "start_sec": 79.9,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка «split» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 10,
+   "start_sec": 90.5,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН",
+   "fx": "slides"
+  },
+  {
+   "id": 11,
+   "start_sec": 100.3,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ",
+   "fx": "stamps"
+  },
+  {
+   "id": 12,
+   "start_sec": 109.9,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "fx": "torn"
+  },
+  {
+   "id": 13,
+   "start_sec": 119.8,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:zal_shkala",
+   "source_query": "карточка «zal_shkala» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 14,
+   "start_sec": 130.3,
+   "duration_sec": 11.0,
+   "text": "",
+   "source": "card:zal_g01",
+   "source_query": "карточка «zal_g01» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 15,
+   "start_sec": 141.3,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/БУНДЕСВЕР",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 16,
+   "start_sec": 150.7,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ"
+  },
+  {
+   "id": 17,
+   "start_sec": 160.5,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "card:globus_map",
+   "source_query": "карточка «globus_map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 18,
+   "start_sec": 171.1,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ"
+  },
+  {
+   "id": 19,
+   "start_sec": 180.8,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:torn",
+   "source_query": "карточка «torn» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 20,
+   "start_sec": 191.3,
+   "duration_sec": 9.2,
+   "text": "",
+   "source": "card:mehanizm",
+   "source_query": "карточка «mehanizm» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 21,
+   "start_sec": 200.5,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:zal_makety",
+   "source_query": "карточка «zal_makety» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 22,
+   "start_sec": 210.3,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:zal",
+   "source_query": "карточка «zal» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 23,
+   "start_sec": 220.3,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:kreslo",
+   "source_query": "карточка «kreslo» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 24,
+   "start_sec": 230.5,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:vyrezka_kontur",
+   "source_query": "карточка «vyrezka_kontur» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 25,
+   "start_sec": 240.8,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:zal_kub",
+   "source_query": "карточка «zal_kub» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 26,
+   "start_sec": 250.6,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:duel",
+   "source_query": "карточка «duel» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 27,
+   "start_sec": 260.6,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:zal_efir",
+   "source_query": "карточка «zal_efir» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 28,
+   "start_sec": 270.8,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 29,
+   "start_sec": 281.1,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон саммит Европейского союза реальное фото",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 30,
+   "start_sec": 290.9,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:device",
+   "source_query": "карточка «device» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 31,
+   "start_sec": 300.9,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Вячеслав Володин Государственная дума реальное фото",
+   "fx": "player"
+  },
+  {
+   "id": 32,
+   "start_sec": 311.1,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 33,
+   "start_sec": 321.4,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:wall",
+   "source_query": "карточка «wall» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "wall",
+    "код": "A56",
+    "title": "Что копится у Каллас",
+    "watermark": "5 МИНУТ",
+    "anim": 9.8
+   }
+  },
+  {
+   "id": 34,
+   "start_sec": 331.2,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:zal_g48",
+   "source_query": "карточка «zal_g48» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 35,
+   "start_sec": 341.2,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:zal_slova",
+   "source_query": "карточка «zal_slova» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 36,
+   "start_sec": 351.4,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эммануэль Макрон Елисейский дворец реальное фото"
+  },
+  {
+   "id": 37,
+   "start_sec": 361.7,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:map_dist",
+   "source_query": "карточка «map_dist» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 38,
+   "start_sec": 371.5,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка «poster» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "poster",
+    "код": "A6",
+    "title": "Разлом союза",
+    "watermark": "5 МИНУТ",
+    "anim": 10.0
+   }
+  },
+  {
+   "id": 39,
+   "start_sec": 381.5,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка «bars» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bars",
+    "код": "A4",
+    "title": "Трансатлантическое единство",
+    "watermark": "5 МИНУТ",
+    "anim": 10.2
+   }
+  },
+  {
+   "id": 40,
+   "start_sec": 391.7,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:slider",
+   "source_query": "карточка «slider» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "slider",
+    "код": "A5",
+    "title": "Путь к соглашению",
+    "watermark": "5 МИНУТ",
+    "anim": 10.3
+   }
+  },
+  {
+   "id": 41,
+   "start_sec": 402.0,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:zal_schetchik",
+   "source_query": "карточка «zal_schetchik» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 42,
+   "start_sec": 411.8,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 43,
+   "start_sec": 421.8,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 44,
+   "start_sec": 432.0,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 45,
+   "start_sec": 442.3,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:waterfall",
+   "source_query": "карточка «waterfall» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 46,
+   "start_sec": 452.1,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:pechat",
+   "source_query": "карточка «pechat» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 47,
+   "start_sec": 462.1,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО"
+  },
+  {
+   "id": 48,
+   "start_sec": 472.3,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:repliki",
+   "source_query": "карточка «repliki» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 49,
+   "start_sec": 482.6,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:vyrezka",
+   "source_query": "карточка «vyrezka» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 50,
+   "start_sec": 492.4,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:zal_g44",
+   "source_query": "карточка «zal_g44» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 51,
+   "start_sec": 502.4,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:relsy",
+   "source_query": "карточка «relsy» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 52,
+   "start_sec": 512.6,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:prohod",
+   "source_query": "карточка «prohod» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 53,
+   "start_sec": 522.9,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:zal_pol",
+   "source_query": "карточка «zal_pol» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 54,
+   "start_sec": 532.7,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:photo",
+   "source_query": "карточка «photo» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "photo",
+    "lines": [
+     "Новые ограничения против банков",
+     "Санкции для компаний"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 10.0,
+    "photo": "cards/photo/kadr_fondeleyen.jpg"
+   }
+  },
+  {
+   "id": 55,
+   "start_sec": 542.7,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "web_search",
+   "source_query": "танкер нефть Зимбабве флаг высадка военных реальное фото",
+   "fx": "subscribe2",
+   "visual_prompt": "танкер нефть Зимбабве флаг высадка военных реальное фото"
+  },
+  {
+   "id": 56,
+   "start_sec": 552.9,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:lenta",
+   "source_query": "карточка «lenta» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 57,
+   "start_sec": 563.2,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка «film_frame» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 58,
+   "start_sec": 573.0,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:paper_typed",
+   "source_query": "карточка «paper_typed» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 59,
+   "start_sec": 583.0,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 60,
+   "start_sec": 593.2,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ",
+   "visual_prompt": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ"
+  },
+  {
+   "id": 61,
+   "start_sec": 603.5,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:strike",
+   "source_query": "карточка «strike» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 62,
+   "start_sec": 613.3,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:zal_ekran",
+   "source_query": "карточка «zal_ekran» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 63,
+   "start_sec": 623.3,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "card:pie",
+   "source_query": "карточка «pie» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 64,
+   "start_sec": 633.5,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:doc",
+   "source_query": "карточка «doc» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 65,
+   "start_sec": 643.8,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Антониу Кошта председатель Совета Европейского союза реальное фото"
+  },
+  {
+   "id": 66,
+   "start_sec": 653.6,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Кая Каллас заседание Совета ЕС Брюссель реальное фото",
+   "fx": "curl"
+  },
+  {
+   "id": 67,
+   "start_sec": 663.6,
+   "duration_sec": 10.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ",
+   "visual_prompt": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ШТАБ-НАТО-БРЮССЕЛЕ"
+  },
+  {
+   "id": 68,
+   "start_sec": 673.8,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "card:tape",
+   "source_query": "карточка «tape» — кадр рисуется в облаке, фетч не нужен"
+  }
+ ]
+}
