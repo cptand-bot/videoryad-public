@@ -1237,6 +1237,15 @@ posle_fetcha)
     cd "$PROJ" || exit 1
     if [ -n "$PIPE" ]; then
         step "карточки облаком" bash "$SK/cloud/va.sh" "$PIPE" python3 "$SK/fullcycle/cards_cloud.py" "$SCENES"
+        # ТА ЖЕ ДЫРА, ЧТО У ФЕТЧА, НО ДЛЯ КАРТОЧЕК (17.11, улов usuario-e1):
+        # готовые клипы карточек иногда оказываются в $PROJ-cloud/images, а
+        # дашборд (review.py --live) и часть сит смотрят только $PROJ/images
+        # буквально — 11 сцен показывали «ждём кадра» при реально готовых
+        # карточках. Сводим defensively, как и у фетча.
+        if [ -d "$PROJ-cloud/images" ]; then
+            cp -n "$PROJ-cloud/images"/* "$PROJ/images/" 2>/dev/null || true
+            echo "[ОК]    карточки сведены в images/ из $PROJ-cloud/images (если там что-то было)"
+        fi
     else
         echo "[СМОТРИ] труба не названа — карточки не отрисованы"; NOTES=$((NOTES+1))
     fi
