@@ -1,0 +1,140 @@
+[
+ {
+  "scene": 30,
+  "view": "cinematic.depth_of_field",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "photo": "cards/photo/card_030.jpg",
+   "title": "Марко Рубио",
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 57,
+  "view": "vyrezka.gazeta",
+  "dur": 12.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "photo": "cards/photo/card_057.jpg",
+   "author": "Виктор Хренин",
+   "role": "министр обороны Белоруссии",
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "photo",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.0,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+   "photo": "cards/photo/card_068.jpg",
+   "title": "Роберт Фицо",
+   "lines": [
+    "за мир",
+    "против кредита Киеву"
+   ]
+  }
+ },
+ {
+  "scene": 72,
+  "view": "split",
+  "dur": 12.0,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "photo": "cards/photo/card_072.jpg",
+   "text": "Брюссель слишком долго разговаривал с Глобальным Югом так, будто решение уже принято",
+   "author": "Олаф Шольц",
+   "role": "экс-канцлер Германии",
+   "accent": "разговаривал с Глобальным Югом",
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  }
+ },
+ {
+  "scene": 80,
+  "view": "cinematic.evidence_wall",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.0,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_080.jpg",
+     240,
+     380,
+     -4,
+     "Макрон"
+    ],
+    [
+     "cards/photo/card_080_2.jpg",
+     800,
+     380,
+     3,
+     "Бёрнем"
+    ]
+   ],
+   "title": "Кто против кого",
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 101,
+  "view": "devices.device_scene",
+  "dur": 12.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "content_path": "cards/photo/card_101.jpg",
+   "items": [
+    "Starshield=сбои связи",
+    "SpaceX=отрицает изменения"
+   ],
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  }
+ },
+ {
+  "scene": 113,
+  "view": "poster.poster",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.0,
+  "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "channel": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО",
+  "kwargs": {
+   "title": "Солидарность НАТО",
+   "hero_photo": "cards/photo/card_113.jpg",
+   "bottom": "Слова дешевле счёта",
+   "facts": [
+    {
+     "label": "Пообещали поддержку",
+     "value": "32 страны"
+    },
+    {
+     "label": "Платят по факту",
+     "value": "7 стран"
+    }
+   ],
+   "watermark": "ПЕРЕВОД С ДИПЛОМАТИЧЕСКОГО"
+  },
+  "mode": "frame"
+ }
+]
