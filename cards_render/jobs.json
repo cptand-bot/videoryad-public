@@ -1,0 +1,147 @@
+[
+ {
+  "scene": 9,
+  "view": "split",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Народу слишком много, получится какофония",
+   "photo": "cards/photo/card_009.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "vyrezka.figura",
+  "dur": 10.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_024.jpg",
+   "author": "Кая Каллас",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "devices.device_scene",
+  "dur": 10.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_030.jpg",
+   "items": [
+    "российские цифровые данные",
+    "участников боевых действий"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_033.jpg",
+     240,
+     380,
+     -4,
+     "НЕ В ГРУППЕ"
+    ],
+    [
+     "cards/photo/card_033_2.jpg",
+     800,
+     380,
+     3,
+     "РОССИЙСКИЕ ДАННЫЕ"
+    ]
+   ],
+   "title": "Что копится у Каллас",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 38,
+  "view": "poster.poster",
+  "dur": 10.0,
+  "anim": 10.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "Разлом союза",
+   "hero_photo": "cards/photo/card_038.jpg",
+   "facts": [
+    {
+     "label": "США",
+     "value": "ослабляют помощь"
+    },
+    {
+     "label": "Европа",
+     "value": "продолжает поддержку"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 49,
+  "view": "vyrezka.gazeta",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_049.jpg",
+   "author": "Сергей Соболев",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "photo",
+  "dur": 10.0,
+  "anim": 10.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_054.jpg",
+   "lines": [
+    "Новые ограничения против банков",
+    "Санкции для компаний"
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "film.film_single",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_057.jpg",
+   "title": "2021 ГОД",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
