@@ -253,6 +253,15 @@ def adopt(src, dst, dry=False, force=False):
                 continue
             if not dry:
                 shutil.copy2(sp, dp)
+                # ТОТ ЖЕ КЭШ .rev/, ЧТО И У refetch.py (17.11, улов
+                # usuario-47): переживает замену кадра, гейт детей и листы
+                # смотрят на старое превью.
+                for _c in (os.path.join(d_dir, ".rev", "%03d.jpg" % _sid),
+                           os.path.join(d_dir, ".rev", "preview_%03d.mp4" % _sid)):
+                    try:
+                        os.remove(_c)
+                    except OSError:
+                        pass
             moved += 1
         print("   перенесено %d, пропущено (уже есть) %d" % (moved, skipped))
         total_moved += moved

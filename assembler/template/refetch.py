@@ -456,6 +456,17 @@ def replace_from_stash(scenes_path, ids, assets="images"):
         dst = os.path.join(assets, "scene_%03d.jpg" % sid)
         try:
             os.replace(pick, dst)
+            # КЭШ ПРЕВЬЮ .rev/ НЕ ЧИСТИТСЯ САМ (17.11, улов usuario-47):
+            # гейт детей и контактные листы смотрят на ужатую копию в
+            # `images/.rev/<id>.jpg` (и `.rev/preview_<id>.mp4` у видео),
+            # а она переживает замену кадра — гейт детей ложно держал
+            # сцену 73 по СТАРОМУ превью, хотя сам scene_073.jpg уже чист.
+            for _c in (os.path.join(assets, ".rev", "%03d.jpg" % sid),
+                       os.path.join(assets, ".rev", "preview_%03d.mp4" % sid)):
+                try:
+                    os.remove(_c)
+                except OSError:
+                    pass
             done.append(sid)
             print("  сцена %d: взят кадр из запаса (%s), осталось в запасе %d"
                   % (sid, os.path.basename(pick), len(pool) - 1))
