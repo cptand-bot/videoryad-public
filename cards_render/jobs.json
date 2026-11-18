@@ -1,0 +1,321 @@
+[
+ {
+  "scene": 1,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 12.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Унтер-офицерская вдова",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.4,
+    "kick": "ЕВРОПА · НОЯБРЬ 2026"
+   }
+  },
+  "kwargs": {
+   "text": "Унтер-офицерская вдова",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.4,
+   "kick": "ЕВРОПА · НОЯБРЬ 2026"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "poster.poster",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "MADE IN GERMANY",
+   "hero_photo": "cards/photo/card_024.jpg",
+   "bottom": "Бренд под вопросом",
+   "facts": [
+    {
+     "label": "час производства",
+     "value": "5× дороже"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 26,
+  "view": "photo",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_026.jpg",
+   "title": "Глава производства Mercedes",
+   "lines": [
+    "Стоимость часа в 5 раз выше",
+    "Инвестиции в заводы заморожены"
+   ]
+  }
+ },
+ {
+  "scene": 28,
+  "view": "cinematic.dossier",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "rows": [
+    "Лидер Национального объединения",
+    "Требует вернуть полномочия столицам",
+    "Союзники: Германия, Польша",
+    "Цель: сократить дипломатическую службу ЕС"
+   ],
+   "title": "МАРИН ЛЕ ПЕН",
+   "photo": "cards/photo/card_028.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "vyrezka.gazeta",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_034.jpg",
+   "author": "МАРИН ЛЕ ПЕН",
+   "role": "лидер Национального объединения",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "vyrezka.figura",
+  "dur": 11.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_035.jpg",
+   "author": "КАЯ КАЛЛАС",
+   "role": "глава дипломатии ЕС",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "split",
+  "dur": 12.1,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_037.jpg",
+   "text": "Польза от Каллас очень ограничена",
+   "author": "Шарль Анри Галлуа",
+   "role": "советник Национального объединения",
+   "accent": "Польза от Каллас очень",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "charts.network",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Кабинеты",
+     "label": "Кабинеты",
+     "weight": 1.0
+    },
+    {
+     "id": "Советники",
+     "label": "Советники",
+     "weight": 2.0
+    },
+    {
+     "id": "Делегации",
+     "label": "Делегации",
+     "weight": 2.0
+    },
+    {
+     "id": "Координатор",
+     "label": "Координатор",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Кабинеты",
+     "to": "Советники",
+     "weight": 1.0
+    },
+    {
+     "from": "Советники",
+     "to": "Делегации",
+     "weight": 1.0
+    },
+    {
+     "from": "Делегации",
+     "to": "Координатор",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "cinematic.depth_of_field",
+  "dur": 11.9,
+  "anim": 11.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_043.jpg",
+   "title": "Стоимость часа производства",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 46,
+  "view": "cinematic.evidence_wall",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_046.jpg",
+     240,
+     380,
+     -4,
+     "Брюссель"
+    ],
+    [
+     "cards/photo/card_046_2.jpg",
+     800,
+     380,
+     3,
+     "Берлин"
+    ]
+   ],
+   "title": "ОДНА ИДЕЯ, МНОГО СТОЛИЦ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 50,
+  "view": "devices.device_scene",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_050.jpg",
+   "items": [
+    "Mercedes: стоп-инвестиции",
+    "Mercedes: проверка заводов"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "charts.map_dist",
+  "dur": 11.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Брюссель",
+     "lat": 50.846,
+     "lon": 4.351,
+     "accent": false
+    },
+    {
+     "label": "Киев",
+     "lat": 50.45,
+     "lon": 30.523,
+     "accent": true
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "torn_split.torn_split",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_058.jpg",
+   "b_path": "cards/photo/card_058_2.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "bars",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Стоимость часа производства",
+   "caption": "",
+   "seconds": 11.7,
+   "bars": [
+    {
+     "label": "ГЕРМАНИЯ",
+     "value": 1.0,
+     "color": "EABD23"
+    },
+    {
+     "label": "ВОСТОЧНАЯ ЕВРОПА",
+     "value": 0.2,
+     "color": "B92526"
+    }
+   ]
+  }
+ }
+]
