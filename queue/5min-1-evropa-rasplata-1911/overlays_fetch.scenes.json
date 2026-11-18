@@ -1,0 +1,60 @@
+{
+ "scenes": [
+  {
+   "id": 201,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Марин Ле Пен портрет крупным планом 2026"
+  },
+  {
+   "id": 202,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Кая Каллас портрет крупным планом лицо 2026"
+  },
+  {
+   "id": 203,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Шарль Анри Галлуа Национальное объединение портрет"
+  },
+  {
+   "id": 204,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Михаэль Шибе Mercedes-Benz производство портрет 2026"
+  },
+  {
+   "id": 205,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "здание Берлемон Еврокомиссия Брюссель фото"
+  },
+  {
+   "id": 206,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Рейхстаг Берлин здание фасад фото"
+  },
+  {
+   "id": 207,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "завод Mercedes-Benz Германия цех конвейер современный 2026 фото"
+  },
+  {
+   "id": 208,
+   "duration_sec": 5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "логотип звезда Mercedes-Benz на капоте фото"
+  }
+ ]
+}
