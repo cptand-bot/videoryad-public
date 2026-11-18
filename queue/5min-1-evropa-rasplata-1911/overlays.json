@@ -1,0 +1,59 @@
+{
+  "anchor": "top",
+  "2": {
+    "text": {
+      "words": "БУМЕРАНГ",
+      "pos": "tc",
+      "color": "yellow",
+      "sound": "pop"
+    }
+  },
+  "6": {
+    "text": {
+      "words": "САНКЦИИ",
+      "pos": "tl",
+      "color": "white",
+      "sound": "ding"
+    }
+  },
+  "9": {
+    "text": {
+      "words": "РОССИЙСКИЙ РЫНОК",
+      "pos": "mc",
+      "color": "red",
+      "sound": "whoosh"
+    }
+  },
+  "13": {
+    "text": {
+      "words": "MADE IN GERMANY",
+      "pos": "tr",
+      "color": "orange",
+      "sound": "pop"
+    }
+  },
+  "17": {
+    "text": {
+      "words": "ЗАМОРОЗКА ИНВЕСТИЦИЙ",
+      "pos": "ml",
+      "color": "green",
+      "sound": "ding"
+    }
+  },
+  "22": {
+    "text": {
+      "words": "В 5 РАЗ ДОРОЖЕ",
+      "pos": "mr",
+      "color": "yellow",
+      "sound": "whoosh"
+    }
+  },
+  "31": {
+    "text": {
+      "words": "ОБЩИЙ РЕЗУЛЬТАТ",
+      "pos": "tc",
+      "color": "white",
+      "sound": "pop"
+    }
+  }
+}
