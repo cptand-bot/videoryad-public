@@ -710,6 +710,27 @@ def verify(path):
 # Отказ происходит ДО apply_fix: запросы в scenes.json не переписываются,
 # кадры не удаляются, терять нечего.
 ROUNDS = ".refetch_rounds.json"
+СМЕНА_СТРАТЕГИИ = ".strana_proverka.json"
+
+
+def _отметить_на_проверку(ids_all, why):
+    """Сцены, которым сменили стратегию поиска — на явную проверку страны/
+    персоны перед дашбордом (п.236/240, `strana_gate.py`)."""
+    try:
+        d = json.load(open(СМЕНА_СТРАТЕГИИ, encoding="utf-8"))
+    except (OSError, ValueError):
+        d = []
+    уже = {x.get("key") for x in d}
+    for key in ids_all:
+        if key in уже:
+            continue
+        d.append({"key": key, "why": str(why)[:200],
+                   "ts": time.strftime("%Y-%m-%d %H:%M:%S")})
+    try:
+        json.dump(d, open(СМЕНА_СТРАТЕГИИ, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    except OSError:
+        pass
 SIM_LIMIT = 0.45      # пересечение слов, выше которого это «та же фраза»
 ROUND_BUDGET = 2      # кругов на ролик без --force
 
@@ -992,6 +1013,18 @@ def round_record(pend, fill=None, why=None):
                   ensure_ascii=False, indent=1)
     except OSError:
         pass
+    # П.236/240 (18.11, точный корень): переключение стратегии поиска
+    # («поиск по персоне» вместо библиотеки и т.п.) выводит сцену из-под
+    # обычных кругов сита «не та страна/не тот человек» — раунды ПОСЛЕ
+    # переключения её больше не трогают, кадр доходит до дашборда
+    # непроверенным (живой случай: фото Белоусова вместо Кима). Отмечаем
+    # такую сцену — `strana_gate.py check` потребует явный вердикт по ней
+    # перед дашбордом, как и `deti_gate`.
+    if why and ids_all:
+        _ключ = str(why).lower()
+        if any(_сл in _ключ for _сл in
+               ("переключ", "стратег", "поиск по персоне", "поиск по имени")):
+            _отметить_на_проверку(ids_all, why)
 
 
 def rounds_report():

@@ -1688,6 +1688,21 @@ except Exception as _e:
     WARN.append("не проверить «дети и площадки» (%s: %s) — посмотри "
                 "`template/deti_gate.py`" % (type(_e).__name__, _e))
 
+# 9. НЕ ТА СТРАНА / НЕ ТОТ ЧЕЛОВЕК ПОСЛЕ СМЕНЫ СТРАТЕГИИ (18.11, п.236/240,
+# точный корень — живой случай «Ким» вместо фото Белоусова). `refetch.py`
+# сам помечает сцену, когда поиск переключили на другую стратегию;
+# `strana_gate.py check` требует явный вердикт по каждой такой сцене.
+try:
+    _sg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "strana_gate.py")
+    _pd2 = os.path.dirname(os.path.abspath(scenes_path)) or "."
+    _r2 = _sp.run([sys.executable, _sg, "check", _pd2], capture_output=True, text=True)
+    if _r2.returncode != 0:
+        FAIL.append((_r2.stderr or _r2.stdout or "СТРАНА/ПЕРСОНА: проверка не пройдена")
+                    .strip().replace("\n", " · ")[:400])
+except Exception as _e:
+    WARN.append("не проверить «страна/персона после смены стратегии» (%s: %s) — "
+                "посмотри `template/strana_gate.py`" % (type(_e).__name__, _e))
+
 print("=" * 60)
 print(f"САМОПРОВЕРКА: {scenes_path}  ({len(scenes)} сцен, {total:.0f}с, канал {meta.get('channel','?')})")
 print("=" * 60)

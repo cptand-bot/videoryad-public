@@ -123,10 +123,33 @@ def не_пора_молчим(пора):
     return not пора
 
 
+def _рабочая_вкладка(cwd):
+    """Рабочая вкладка живёт внутри папки проекта (`.kto`/`.geo_key` кладёт
+    `take_folder.py`/`faza.sh` при взятии темы). Его прямое слово 18.11:
+    «они вообще не должны знать и заботиться об этом контексте» — хук
+    молчит для них полностью, независимо от порога."""
+    if not cwd:
+        return False
+    for marker in (".kto", ".geo_key", ".source_dir"):
+        if os.path.isfile(os.path.join(cwd, marker)):
+            return True
+    return False
+
+
 def main():
     все = "--vse" in sys.argv
     тихо = "--tiho" in sys.argv   # молчит, пока не пора: для хука на каждом ответе
     вход = "--hook-vhod" in sys.argv  # хук НА ВХОДЕ в ход: агент успевает закруглиться
+    # ХУК ЧИТАЕТ cwd ИЗ STDIN (UserPromptSubmit/Stop передают JSON) — если
+    # это рабочая вкладка внутри папки проекта, молчим совсем, даже при
+    # --vse. Координатор работает вне папки темы — его это не задевает.
+    if тихо or вход:
+        try:
+            _вх = json.loads(sys.stdin.read() or "{}")
+            if _рабочая_вкладка(_вх.get("cwd") or os.getcwd()):
+                return 0
+        except (ValueError, OSError):
+            pass
     файлы = sorted(glob.glob(os.path.join(ROOT, "*", "*.jsonl")),
                    key=os.path.getmtime, reverse=True)
     свежие = time.time() - 6 * 3600

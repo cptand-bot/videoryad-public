@@ -516,6 +516,24 @@ sdacha)
     if [ "${VIDEORYAD_SDACHA_REBUILD:-0}" != "1" ]; then
         READY="$(gotovyy_mp4 "$PROJ" || true)"
     fi
+    # П.237 (18.11, улов `usuario-e3`): локальной папки мало — если ПРЕДЫДУЩИЙ
+    # заход уже отправил сборку и повторный вызов `get.sh --wait` оборвался
+    # по СВОЕМУ таймауту ДО переноса mp4 в проект, `gotovyy_mp4` видит пустую
+    # папку и считает ролик несобранным — уходит ВТОРАЯ полная пересборка,
+    # хотя готовый релиз уже лежит на GitHub. Перед сборкой — лёгкая проверка
+    # релиза (НЕ `--wait`, не блокирует): есть mp4 — просто забираем.
+    if [ -z "$READY" ] && [ "${VIDEORYAD_SDACHA_REBUILD:-0}" != "1" ]; then
+        _REL_ASSETS="$(bash "$SK/cloud/va.sh" "$PIPE" gh release view "$QNAME" \
+            --json assets -q '[.assets[].name] | @tsv' 2>/dev/null || true)"
+        case "$_REL_ASSETS" in
+            *.mp4*)
+                echo "[ОК]    релиз «$QNAME» на GitHub уже содержит mp4 — забираю вместо пересборки"
+                step "забор готового релиза" bash "$SK/cloud/va.sh" "$PIPE" bash "$SK/cloud/get.sh" "$QNAME" --wait
+                zabrat_iz_zabora "$QNAME" "$PROJ"
+                READY="$(gotovyy_mp4 "$PROJ" || true)"
+                ;;
+        esac
+    fi
     if [ -n "$READY" ]; then
         echo "[ОК]    готовый файл уже собран и свежее сцен/слоёв — сборку пропускаю"
         echo "        ($(basename "$READY"); пересобрать принудительно: VIDEORYAD_SDACHA_REBUILD=1)"
@@ -605,7 +623,12 @@ sdacha)
     for _c in "$DEST"/*.mp3 "$DEST"/*.wav "$DEST"/*.txt; do
         [ -f "$_c" ] || continue
         case "$(basename "$_c")" in
-            *ЗАДАНИЕ*|*БРИФ*|*УПАКОВКА*|*ОТВЕТ*|*ЧИСТО*|*СОСТОЯНИЕ*|*ДЛЯ-ВКЛАДКИ*) continue ;;
+            # П.238 (18.11): было `*ОТВЕТ*` по подстроке — выбрасывало и
+            # настоящие файлы темы со словом «ОТВЕТКА» в названии (например
+            # «…ОТВЕТКА планета.mp3/.txt»), из-за чего основа имени при
+            # доставке падала на случайный файл вроде «РЕРАЙТ-ГОТОВО.txt».
+            # Теперь — точный суффикс файлов-ответов Codex, не подстрока.
+            *ЗАДАНИЕ*|*БРИФ*|*УПАКОВКА*|*.ОТВЕТ.txt|*.ОТВЕТ.ОТВЕТ.txt|*ЧИСТО*|*СОСТОЯНИЕ*|*ДЛЯ-ВКЛАДКИ*) continue ;;
         esac
         _OSN="$(basename "${_c%.*}")"
         break
@@ -1071,7 +1094,7 @@ PYEOF
             if [ "$_MOYA" -eq 0 ] && \
                ls "$CAND"/*.scenes.json "$CAND/.geo_key" "$CAND"/narration.* \
                   >/dev/null 2>&1; then
-                echo "  — $CH · $TNAME: ведёт другая вкладка (живой проект $SLUG)"
+                echo "  — $CHANNEL · $TNAME: ведёт другая вкладка (живой проект $SLUG)"
                 continue
             fi
         fi

@@ -201,6 +201,7 @@ template/smoke_dveri.sh
 template/srt_keep.py
 template/statistika.py
 template/storozh.py
+template/strana_gate.py
 template/style_card.py
 template/sverka_kartochek.py
 template/svyazka.py

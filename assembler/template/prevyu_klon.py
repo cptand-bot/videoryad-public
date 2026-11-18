@@ -56,13 +56,42 @@ def варианты(folder):
     return out
 
 
+def _sibling_papki(folder):
+    """Та же тема/день на «5 МИНУТ» и ПЛАНЕТЕ (п.241, 18.11): при ТРЁХ
+    каналах на одну тему (5 МИНУТ + ПЛАНЕТА + третий клон) вариант,
+    свободный у ОДНОГО донора, может быть уже занят ВТОРЫМ — `prevyu_klon`
+    сверялся только с переданным в аргументах, отдал клону вариант,
+    который уже стоял на сестринском канале."""
+    ч = os.path.abspath(folder).replace("\\", "/").split("/")
+    try:
+        i = [x.upper() for x in ч].index("НОВОСТИ")
+    except ValueError:
+        return []
+    номер = re.match(r"\s*(\d+)\s*-", ч[-1])
+    найдено = []
+    for канал in ("5 МИНУТ", "ПЛАНЕТА"):
+        день = "/".join(ч[:i + 1] + [канал] + ч[i + 2:-1])
+        if not os.path.isdir(день):
+            continue
+        for d in sorted(os.listdir(день)):
+            путь = os.path.join(день, d)
+            if not os.path.isdir(путь):
+                continue
+            свой = номер and re.match(r"\s*%s\s*-" % номер.group(1), d)
+            if свой and os.path.abspath(путь) != os.path.abspath(folder):
+                найдено.append(путь)
+    return найдено
+
+
 def утверждённые(folder):
-    """Номера вариантов, которые он уже взял в работу на канале-доноре."""
+    """Номера вариантов, которые уже взяты в работу — на переданном
+    канале-доноре И на любом сестринском канале той же темы/дня."""
     взято = set()
-    for n in os.listdir(folder):
-        m = re.search(r"ПРЕВЬЮ-(\d+)(?:-КВАДРАТ)?\.png$", n)
-        if m:
-            взято.add(int(m.group(1)))
+    for папка in [folder] + _sibling_papki(folder):
+        for n in os.listdir(папка):
+            m = re.search(r"ПРЕВЬЮ-(\d+)(?:-КВАДРАТ)?\.png$", n)
+            if m:
+                взято.add(int(m.group(1)))
     return взято
 
 

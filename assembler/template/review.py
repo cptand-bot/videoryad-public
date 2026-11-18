@@ -4090,6 +4090,19 @@ def run_live(scenes_path, images_dir, port):
             # rolls anything back to how it looked when the server launched.
             # See SKILL.md gotcha "review.html served stale after reload".
             if path in ("", "/review.html", "review.html"):
+                # П. «утверждение могло проскочить мимо его реальной
+                # проверки» (18.11): `.dashboard_touch` пишется только на
+                # POST (клик), а он обычно просто СМОТРИТ страницу и говорит
+                # «утверждаю» голосом — для него самого ни одна отметка не
+                # писалась. `.posledniy_prosmotr` фиксирует КАЖДУЮ отдачу
+                # страницы; `zamorozka.py` сверяет её с mtime кадров, чтобы
+                # поймать файл, который изменился ПОСЛЕ того, как дашборд
+                # был показан, но ДО того, как слепок утверждения снят.
+                try:
+                    with open(".posledniy_prosmotr", "w") as _pf:
+                        _pf.write(str(time.time()))
+                except OSError:
+                    pass
                 _место = _СБОРОК_РАЗОМ.acquire(timeout=30)
                 try:
                     body = build_page(scenes, project, live=True,

@@ -107,6 +107,37 @@ def _snimok(pdir):
     return s
 
 
+def _после_просмотра(pdir):
+    """Кадры, чей mtime НОВЕЕ последнего реального открытия дашборда
+    (`.posledniy_prosmotr`, пишет `review.py` на каждый GET страницы) —
+    они легли в проект ПОСЛЕ того, как он в последний раз смотрел, и в
+    слепок утверждения попадут непроверенными им глазами. Его вопрос
+    18.11: «не мог ли он просочиться без моей проверки» — мог, если
+    фоновый дозаказ кадра дописал файл в этом окне."""
+    метка = os.path.join(pdir, ".posledniy_prosmotr")
+    if not os.path.isfile(метка):
+        return []
+    try:
+        t_просмотр = float(open(метка, encoding="utf-8").read().strip())
+    except (OSError, ValueError):
+        return []
+    подозрительно = []
+    for d in ("images", "overlays", "cards/photo"):
+        dd = os.path.join(pdir, d)
+        if not os.path.isdir(dd):
+            continue
+        for f in sorted(os.listdir(dd)):
+            fp = os.path.join(dd, f)
+            if not os.path.isfile(fp) or f.endswith((".json", ".revframe.jpg")):
+                continue
+            try:
+                if os.path.getmtime(fp) > t_просмотр:
+                    подозрительно.append("%s/%s" % (d, f))
+            except OSError:
+                continue
+    return подозрительно
+
+
 def cmd_postavit(args):
     pdir = _pdir(args.project)
     p = os.path.join(pdir, FAIL_FILE)
@@ -117,6 +148,18 @@ def cmd_postavit(args):
     json.dump(data, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("УТВЕРЖДЕНО И ЗАМОРОЖЕНО в %s: кадров %d. Дальше правки запрещены."
           % (data["ts"], len(data["snimok"]["kadry"])))
+    _сомнительные = _после_просмотра(pdir)
+    if _сомнительные:
+        print("!! ВНИМАНИЕ: %d файлов изменились ПОСЛЕ последнего открытия "
+              "дашборда — он мог утвердить состав, не увидев их таким, каким "
+              "он лёг в заморозку:" % len(_сомнительные), file=sys.stderr)
+        for f in _сомнительные[:20]:
+            print("   %s" % f, file=sys.stderr)
+        print("   Обнови дашборд (перезагрузи страницу) и получи его "
+              "утверждение ЕЩЁ РАЗ, прежде чем собирать. Обход только его "
+              "словом: VIDEORYAD_POSTAVIT_BEZ_PROVERKI=1.", file=sys.stderr)
+        if os.environ.get("VIDEORYAD_POSTAVIT_BEZ_PROVERKI") != "1":
+            return 1
     return 0
 
 
