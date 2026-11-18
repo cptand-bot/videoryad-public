@@ -1,0 +1,312 @@
+[
+ {
+  "scene": 2,
+  "view": "paper_hand",
+  "dur": 9.6,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Выстояла Россия. Заболела Европа",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "charts.pie",
+  "dur": 9.5,
+  "anim": 9.5,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Германия",
+     "value": 83.0
+    },
+    {
+     "label": "Восточная Европа",
+     "value": 17.0
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_006.jpg",
+     240,
+     380,
+     -4,
+     "служба ЕС"
+    ],
+    [
+     "cards/photo/card_006_2.jpg",
+     800,
+     380,
+     3,
+     "документы и подписи"
+    ]
+   ],
+   "title": "Кто с кем связан",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 10,
+  "view": "charts.waterfall",
+  "dur": 9.7,
+  "anim": 9.7,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "start": {
+    "label": "Перекрыть рынки",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Ограничить расчёты",
+     "value": 1.0
+    },
+    {
+     "label": "Поднять цену решений",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 11,
+  "view": "zal_shkala",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.8,
+   "sheets": [],
+   "text": "Во сколько раз дороже",
+   "value": "5",
+   "value_sub": "производство в Германии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "zal_g44",
+  "dur": 9.6,
+  "anim": 9.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.6,
+   "sheets": [],
+   "text": "Нужно объяснить всем",
+   "value": "27",
+   "value_sub": "ГОСУДАРСТВ ЕС",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "photo",
+  "dur": 9.3,
+  "anim": 9.3,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "photo": "cards/photo/card_014.jpg",
+   "title": "Цех Mercedes",
+   "lines": [
+    "конвейер",
+    "дорогая смена"
+   ]
+  }
+ },
+ {
+  "scene": 16,
+  "view": "film.film_single",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_016.jpg",
+   "title": "Подписание соглашений ЕС",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "cinematic.depth_of_field",
+  "dur": 9.5,
+  "anim": 9.5,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_018.jpg",
+   "title": "Еврокомиссия",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 20,
+  "view": "charts.network",
+  "dur": 9.9,
+  "anim": 9.9,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Германия",
+     "label": "Германия",
+     "weight": 1.0
+    },
+    {
+     "id": "Брюссель",
+     "label": "Брюссель",
+     "weight": 3.0
+    },
+    {
+     "id": "Франция",
+     "label": "Франция",
+     "weight": 1.0
+    },
+    {
+     "id": "Польша",
+     "label": "Польша",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Германия",
+     "to": "Брюссель",
+     "weight": 1.0
+    },
+    {
+     "from": "Франция",
+     "to": "Брюссель",
+     "weight": 1.0
+    },
+    {
+     "from": "Польша",
+     "to": "Брюссель",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "poster.poster",
+  "dur": 9.7,
+  "anim": 9.7,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "Mercedes",
+   "hero_photo": "cards/photo/card_024.jpg",
+   "bottom": "Национальный символ становится дорогим",
+   "facts": [
+    {
+     "label": "Разница в цене",
+     "value": "в 5 раз"
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 25,
+  "view": "devices.device_scene",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "content_path": "cards/photo/card_025.jpg",
+   "items": [
+    "Цена без мелкого шрифта"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "charts.cartogram",
+  "dur": 11.9,
+  "anim": 11.9,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Россия"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "vyrezka.gazeta",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_035.jpg",
+   "author": "Марин Ле Пен",
+   "role": "французский политик",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "paper_typed",
+  "dur": 10.8,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Путин говорит партнёрам в Китае, что страна выдержала давление",
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
