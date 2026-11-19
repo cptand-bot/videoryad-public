@@ -454,16 +454,51 @@ function svoyWatch(el, item, kind){
     t = setTimeout(function(){ svoyAuto(el, item, kind); }, 1200);
   });
 }
-function zhurnal(kind, text, item){
+function zhurnal(kind, text, item, ch, tema){
   try{ fetch('/zhurnal', {method:'POST', headers:{'Content-Type':'application/json'},
-       body: JSON.stringify({kind:kind, text:text, item:item||0})}); }catch(e){}
+       body: JSON.stringify({kind:kind, text:text, item:item||0,
+                             ch:ch||'', tema:tema||''})}); }catch(e){}
 }
 function copyLi(li){
-  zhurnal(li.dataset.k || 'строка', li.dataset.t, li.dataset.i || 0);
+  zhurnal(li.dataset.k || 'строка', li.dataset.t, li.dataset.i || 0,
+          li.dataset.ch, li.dataset.tema);
   navigator.clipboard.writeText(li.dataset.t).then(function(){
     var o=li.style.color; li.style.color='#4a9d5f';
     setTimeout(function(){li.style.color=o},900);
   });
+}
+// ОЦЕНКА КАЖДОГО ВАРИАНТА — «ПОЛНОСТЬЮ» / «ЧАСТИЧНО» / «ОТВЕРГАЮ НАВСЕГДА»
+// (19.11, его прямое слово: «чтобы те, которые я полностью отвергаю,
+// больше не попадали и не предлагались дальше»). Клик по значку, не по
+// самой строке — копирование строки (`copyLi`) этим не трогаем.
+function metka(span, znachenie, event){
+  if(event){ event.stopPropagation(); }
+  var li = span.closest('li');
+  if(!li || li.dataset.ocenено) return;
+  fetch('/metka', {method:'POST', headers:{'Content-Type':'application/json'},
+                   body: JSON.stringify({kind: li.dataset.k, text: li.dataset.t,
+                                        item: li.dataset.i, ch: li.dataset.ch,
+                                        tema: li.dataset.tema, metka: znachenie})})
+   .then(function(r){ return r.json(); })
+   .then(function(d){
+      if(!d.ok){ alert('не вышло: ' + (d.error||'?')); return; }
+      li.dataset.ocenено = '1';
+      var знак = {'полностью':'✓ полностью','частично':'〜 частично',
+                  'отвергнуто':'✗ навсегда нет'}[znachenie] || znachenie;
+      var пометка = li.querySelector('.ocenka-pometka');
+      if(!пометка){
+        пометка = document.createElement('span');
+        пометка.className = 'ocenka-pometka';
+        пометка.style.cssText = 'margin-left:8px;font-size:11px';
+        li.appendChild(пометка);
+      }
+      пометка.textContent = '(' + знак + ')';
+      li.querySelectorAll('.ocenka-btn').forEach(function(b){
+        b.style.pointerEvents = 'none'; b.style.opacity = '0.35';
+      });
+      if(znachenie === 'отвергнуто'){ li.style.opacity = '0.45'; }
+   })
+   .catch(function(e){ alert('сбой: ' + e); });
 }
 """
 
@@ -780,10 +815,32 @@ def page(items, day):
             P.append('<div class="lab">%s</div><ol>' % lab)
             for r in rows:
                 # data-k и data-i — чтобы журнал знал, ЧТО именно выбрано
-                # и по какому ролику (08.11)
+                # и по какому ролику (08.11). data-ch/data-tema — чтобы
+                # оценка (19.11) не зависела от номера карточки, который
+                # плывёт при пересборке списка (тот же урок, что в
+                # `_svoya_kartochka`).
+                # ТРИ ЗНАЧКА ОЦЕНКИ — ✓ полностью / 〜 частично / ✗ навсегда
+                # (19.11, его прямое слово: «годится полностью», «годится
+                # частично», «полностью отвергаю — чтобы больше не
+                # попадали»). stopPropagation в `metka()` не даёт клику по
+                # значку сработать как клику по строке (копирование).
                 P.append('<li data-t="%s" data-k="%s" data-i="%d" '
-                         'onclick="copyLi(this)">%s</li>'
+                         'data-ch="%s" data-tema="%s" onclick="copyLi(this)">'
+                         '%s'
+                         '<span class="ocenka-btn" title="частично годится" '
+                         'style="margin-left:8px;opacity:.55;cursor:pointer" '
+                         'onclick="metka(this,\'частично\',event)">〜</span>'
+                         '<span class="ocenka-btn" title="полностью годится" '
+                         'style="margin-left:4px;opacity:.55;cursor:pointer" '
+                         'onclick="metka(this,\'полностью\',event)">✓</span>'
+                         '<span class="ocenka-btn" title="не предлагать больше '
+                         'никогда" style="margin-left:4px;opacity:.55;'
+                         'cursor:pointer" '
+                         'onclick="metka(this,\'отвергнуто\',event)">✗</span>'
+                         '</li>'
                          % (html.escape(r, quote=True), key, _i,
+                            html.escape(it.get("канал", ""), quote=True),
+                            html.escape(it.get("тема", ""), quote=True),
                             html.escape(r)))
             P.append('</ol>')
             # ПОЛЕ «МОЙ ВАРИАНТ» — ТОЛЬКО У ЗАГОЛОВКОВ (08.11, его поправка:
@@ -1281,6 +1338,8 @@ def main():
                 return self.do_kartinki()
             if self.path == "/zhurnal":
                 return self.do_zhurnal()
+            if self.path == "/metka":
+                return self.do_metka()
             if self.path == "/sostoyanie":
                 return self.do_sostoyanie()
             return self.send_error(404)
@@ -1315,9 +1374,14 @@ def main():
                 n = int(self.headers.get("Content-Length") or 0)
                 req = json.loads(self.rfile.read(n).decode("utf-8"))
                 it = items[int(req.get("item", 0))] if items else {}
+                # КАНАЛ/ТЕМА — СВОИМИ, ЕСЛИ СТРАНИЦА ИХ ПРИСЛАЛА (19.11,
+                # тот же класс, что в `_svoya_kartochka`): номер карточки
+                # плывёт при пересборке списка, а канал+тема, присланные
+                # кликом, не плывут никогда.
+                _ch = (req.get("ch") or it.get("канал", "")).strip()
+                _tema = (req.get("tema") or it.get("тема", "")).strip()
                 записать_выбор({"событие": req.get("kind") or "строка",
-                                "канал": it.get("канал", ""),
-                                "тема": it.get("тема", ""),
+                                "канал": _ch, "тема": _tema,
                                 "выбрано": req.get("text", "")[:300],
                                 # СПИСОК ПРЕДЛОЖЕННОГО БРАЛСЯ ПО КЛЮЧУ
                                 # «свой_заголовки», А В КАРТОЧКЕ ОН
@@ -1339,12 +1403,48 @@ def main():
                          "свой_заголовки": "свой_заголовок"}.get(_вид)
                 if _поле:
                     писать_состояние(
-                        ключ_карточки(it.get("канал", ""), it.get("тема", ""),
-                                      a.day),
+                        ключ_карточки(_ch, _tema, a.day),
                         {_поле: (req.get("text") or "")[:300]})
             except Exception:
                 pass
             return self._ok()
+
+        def do_metka(self):
+            """ОЦЕНКА ПО КАЖДОМУ ВАРИАНТУ — «ПОЛНОСТЬЮ» / «ЧАСТИЧНО» /
+            «ОТВЕРГАЮ НАВСЕГДА» (19.11). Его прямое слово: «чтобы те, которые
+            я полностью отвергаю, больше не попадали и не предлагались
+            дальше… чтобы это копилось в базе и с этим учётом выводились
+            другие новые варианты». ГЕОРАДАР для этого не годится — туда
+            пишет только редакция (его же давнее правило), база — локальная,
+            тот же `vybor.jsonl`, что копит его выбор с 08.11. «Отвергнуто»
+            разбирает `upakovka.запрет_navsegda()` и подкладывает в КАЖДОЕ
+            следующее задание агенту — и в первую генерацию (`upakovka.py`),
+            и в «ещё 10» (`more()` ниже) — без ограничения по времени."""
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                req = json.loads(self.rfile.read(n).decode("utf-8"))
+                метка = (req.get("metka") or "").strip()
+                if метка not in ("полностью", "частично", "отвергнуто"):
+                    raise ValueError("непонятная оценка: %r" % метка)
+                вид = (req.get("kind") or "").strip()
+                текст = (req.get("text") or "").strip()[:300]
+                if not текст or вид not in ("заголовки", "надписи"):
+                    raise ValueError("нет текста или вида варианта")
+                it = items[int(req.get("item", 0))] if items else {}
+                _ch = (req.get("ch") or it.get("канал", "")).strip()
+                _tema = (req.get("tema") or it.get("тема", "")).strip()
+                записать_выбор({"событие": "метка", "вид": вид,
+                                "канал": _ch, "тема": _tema,
+                                "текст": текст, "метка": метка})
+                body = {"ok": True}
+            except Exception as exc:
+                body = {"ok": False, "error": "%s: %s" % (type(exc).__name__, exc)}
+            out = json.dumps(body, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
 
         def more(self):
             """ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ (07.11, его заказ: «не подошли мне эти,
@@ -1364,6 +1464,13 @@ def main():
                 folder = it.get("превью_папка") or ""
                 text = _up.read_text(_up.find_text(folder))
                 было = it.get(kind) or []
+                # НАВСЕГДА ЗАПРЕЩЁННЫЕ — ОТДЕЛЬНО ОТ «УЖЕ ВЫДАНО» (19.11).
+                # «Уже выдано» — это ТОЛЬКО сегодняшняя пачка этой темы,
+                # забывается с ней. «Навсегда» копится по всем темам и дням
+                # без ограничения — его прямое слово: «чтобы такие варианты
+                # больше не попадали и не предлагались при следующей
+                # обработке следующих видео».
+                _запрет = _up.запрет_navsegda(kind)
                 task = (
                     "ЗАДАНИЕ: ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ\n\n"
                     "Канал: %s\nТема: %s\n\n"
@@ -1371,6 +1478,7 @@ def main():
                     "Они должны быть ДРУГИМИ по ходу мысли, а не "
                     "перетасовкой уже выданных.\n\n"
                     "УЖЕ ВЫДАНО, НЕ ПОВТОРЯТЬ И НЕ ПЕРЕФРАЗИРОВАТЬ:\n· %s\n\n"
+                    "%s"
                     "%s\n\n"
                     "ЗАПРЕТЫ: стоп-слова «терроризм», «война», «шок» и "
                     "чувствительная лексика на обложку не выносить; "
@@ -1386,6 +1494,10 @@ def main():
                         "НАДПИСИ НА ПРЕВЬЮ: 2-4 слова, резкий глагол или "
                         "реакция, без капслока"),
                        "\n· ".join(было),
+                       ("НИКОГДА НЕ ПРЕДЛАГАТЬ ПОВТОРНО (он отметил «полностью "
+                        "отвергаю» на дашборде — запрет без срока, не только "
+                        "по этой теме):\n· " + "\n· ".join(_запрет) + "\n\n"
+                        if _запрет else ""),
                        ("Надпись и заголовок дополняют друг друга, а не "
                         "повторяют." if kind == "надписи" else ""),
                        _up.lib_text("bank.txt", 9000),
