@@ -1217,6 +1217,21 @@ def _zamorozheno_stop(path_hint="."):
         pass
 
 def main():
+    # ЖУРНАЛ КРУГОВ ПИШЕТСЯ ПО CWD, А НЕ ПО ПРОЕКТУ (19.11, улов `usuario-91`).
+    # `ROUNDS`/`СМЕНА_СТРАТЕГИИ` — голые относительные имена: кто позвал
+    # refetch.py не из папки проекта (прямым Bash-вызовом, не через
+    # `faza.sh krug`, который сам делает `cd "$PROJ"`), получал
+    # `.refetch_rounds.json` в ТОМ каталоге, где стоял — один раз это была
+    # сама `template/`, общая для всех вкладок. Файл не из манифеста —
+    # `sync_assembler.sh` увидел чужака и час отказывал ВСЕМ раскаткам на
+    # всех целях. Лечим у входа: как только есть `--scenes`, встаём в его
+    # папку — дальше код ничего не знает про чужой cwd.
+    if "--scenes" in sys.argv:
+        _si = sys.argv.index("--scenes")
+        if _si + 1 < len(sys.argv):
+            _scdir = os.path.dirname(os.path.abspath(sys.argv[_si + 1]))
+            if _scdir and os.path.isdir(_scdir) and _scdir != os.getcwd():
+                os.chdir(_scdir)
     _zamorozheno_stop(".")
     # --next <ids> — мгновенная замена из запаса кандидатов (28.10)
     if "--next" in sys.argv:
