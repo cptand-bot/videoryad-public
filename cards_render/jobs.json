@@ -1,0 +1,1214 @@
+[
+ {
+  "scene": 2,
+  "view": "pull",
+  "dur": 10.1,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Речь ведь не о том, что кому то придётся уйти в отставку или проиграть выборы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 3,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 8.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кто обещал расплатиться за смелость?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.9,
+    "pary": [
+     "Малые страны=обещание союзников"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Кто обещал расплатиться за смелость?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.9,
+   "pary": [
+    "Малые страны=обещание союзников"
+   ]
+  }
+ },
+ {
+  "scene": 4,
+  "view": "zal_slova",
+  "dur": 7.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.9,
+   "sheets": [],
+   "text": "Куда ведут громкие заявления",
+   "na_polu": "ПОДПИШИТЕСЬ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "paper_hand",
+  "dur": 7.2,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Отправка небольшого числа инструкторов и техников не считается военной операцией",
+   "author": "Жан-Ноэль Барро",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 10.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Малые страны, громкие угрозы",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.9
+   }
+  },
+  "kwargs": {
+   "text": "Малые страны, громкие угрозы",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.9
+  }
+ },
+ {
+  "scene": 9,
+  "view": "charts.pie",
+  "dur": 7.3,
+  "anim": 7.3,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Обучение украинской армии",
+     "value": 50.0
+    },
+    {
+     "label": "Обслуживание техники",
+     "value": 50.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 10.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Депутаты не знали о миссии",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.4,
+    "role": "французские депутаты",
+    "place": "Национальное собрание Франции"
+   }
+  },
+  "kwargs": {
+   "text": "Депутаты не знали о миссии",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.4,
+   "role": "французские депутаты",
+   "place": "Национальное собрание Франции"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "devices.device_scene",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_016.jpg",
+   "items": [
+    "Барро подтвердил присутствие войск",
+    "Спор идёт не о факте, а о статусе"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "film.film_strip",
+  "dur": 9.6,
+  "anim": 9.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_017.jpg",
+    "cards/photo/card_017_2.jpg",
+    "cards/photo/card_017_3.jpg"
+   ],
+   "title": "ФРАНЦИЯ НА УКРАИНЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 8.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Она давно раскручивает эту спираль",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.9,
+    "sobytiya": [
+     "Европа не начала готовиться",
+     "Она давно раскручивает эту с",
+     "Учения, переброска сил"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Она давно раскручивает эту спираль",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.9,
+   "sobytiya": [
+    "Европа не начала готовиться",
+    "Она давно раскручивает эту с",
+    "Учения, переброска сил"
+   ]
+  }
+ },
+ {
+  "scene": 19,
+  "view": "zal_makety",
+  "dur": 9.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.9,
+   "sheets": [],
+   "text": "Восточный фланг укрепляют",
+   "makety": [
+    "банк=МИНИСТЕРСТВО",
+    "лэп=ЭНЕРГОСЕТИ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "charts.cartogram",
+  "dur": 8.5,
+  "anim": 8.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "ЭСТОНИЯ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "cinematic.dossier",
+  "dur": 8.2,
+  "anim": 8.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "rows": [
+    "Реестр населения — вывозится",
+    "Земельный кадастр — вывозится",
+    "Резервный ЦОД — Люксембург",
+    "Площадки — Azure, AWS"
+   ],
+   "kick": "ЦИФРОВАЯ ЭВАКУАЦИЯ",
+   "title": "ЦИФРОВАЯ ЭВАКУАЦИЯ",
+   "photo": "cards/photo/card_021.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_g48",
+  "dur": 6.9,
+  "anim": 6.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.9,
+   "sheets": [],
+   "text": "Сможет ли государство выжить",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "charts.cartogram",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "ЭСТОНИЯ",
+    "ЛИТВА",
+    "ЛАТВИЯ"
+   ],
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "charts.map_dist",
+  "dur": 14.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "ТАЛЛИН",
+     "lat": 59.437,
+     "lon": 24.754,
+     "accent": false
+    },
+    {
+     "label": "САНКТ-ПЕТЕРБУРГ",
+     "lat": 59.939,
+     "lon": 30.316,
+     "accent": false
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 8.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Руководители всё понимают",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.5,
+    "region": "ЭСТОНИЯ"
+   }
+  },
+  "kwargs": {
+   "text": "Руководители всё понимают",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.5,
+   "region": "ЭСТОНИЯ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "charts.radar",
+  "dur": 6.4,
+  "anim": 6.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "axes": [
+    "Управление",
+    "Защита",
+    "Связь"
+   ],
+   "series": [
+    {
+     "label": "",
+     "values": [
+      0.4,
+      0.8,
+      0.5
+     ]
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "strike",
+  "dur": 7.3,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Можно продолжать как прежде. Запасных вариантов нет",
+   "struck": "Можно продолжать как прежде.",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "zal_pol",
+  "dur": 8.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.5,
+   "sheets": [],
+   "text": "Вот тут у меня простой вопрос",
+   "na_polu": "РОССИЮ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "zal",
+  "dur": 10.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Останется ли эта страна",
+   "words": [
+    "СТАВКИ",
+    "РИСК",
+    "ВЫБОР",
+    "ЦЕНА"
+   ],
+   "sheets": [
+    "Бюджет на оборону",
+    "Военные расходы растут"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 10.3,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "bars",
+  "dur": 8.2,
+  "anim": 8.2,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "",
+   "caption": "",
+   "seconds": 8.2,
+   "bars": [
+    {
+     "label": "ЭСТОНИЯ",
+     "value": 0.2,
+     "color": "EABD23"
+    },
+    {
+     "label": "ЛИТВА",
+     "value": 0.25,
+     "color": "B92526"
+    },
+    {
+     "label": "ЛАТВИЯ",
+     "value": 0.2,
+     "color": "84848A"
+    },
+    {
+     "label": "НАТО",
+     "value": 0.9,
+     "color": "E8E8E8"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 34,
+  "view": "charts.network",
+  "dur": 10.2,
+  "anim": 10.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Эстония",
+     "label": "Эстония",
+     "weight": 5.0
+    },
+    {
+     "id": "НАТО",
+     "label": "НАТО",
+     "weight": 19.0
+    },
+    {
+     "id": "Литва",
+     "label": "Литва",
+     "weight": 5.0
+    },
+    {
+     "id": "Латвия",
+     "label": "Латвия",
+     "weight": 5.0
+    },
+    {
+     "id": "США",
+     "label": "США",
+     "weight": 4.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Эстония",
+     "to": "НАТО",
+     "weight": 5.0
+    },
+    {
+     "from": "Литва",
+     "to": "НАТО",
+     "weight": 5.0
+    },
+    {
+     "from": "Латвия",
+     "to": "НАТО",
+     "weight": 5.0
+    },
+    {
+     "from": "США",
+     "to": "НАТО",
+     "weight": 4.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "charts.cartogram",
+  "dur": 10.6,
+  "anim": 10.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "ХАРЬЮ",
+    "ИДА-ВИРУ"
+   ],
+   "level": "region",
+   "admin": "ЭСТОНИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "photo",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_037.jpg",
+   "lines": [
+    "Нападение связали со спецслужбами РФ"
+   ]
+  }
+ },
+ {
+  "scene": 38,
+  "view": "poster.poster",
+  "dur": 8.9,
+  "anim": 8.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "ДЕСЯТЬ ПРЕДПРИЯТИЙ",
+   "hero_photo": "cards/photo/card_038.jpg",
+   "facts": [
+    {
+     "label": "Цель",
+     "value": "оборонка Эстонии"
+    },
+    {
+     "label": "Риск",
+     "value": "диверсии РФ"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 39,
+  "view": "cinematic.evidence_wall",
+  "dur": 8.9,
+  "anim": 8.9,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_039.jpg",
+     240,
+     380,
+     -4,
+     "ЦИФРОВАЯ ИНФРАСТРУКТУРА"
+    ],
+    [
+     "cards/photo/card_039_2.jpg",
+     800,
+     380,
+     3,
+     "ПОГРАНИЧНЫЕ ПУНКТЫ"
+    ]
+   ],
+   "title": "СЕТЬ УГРОЗ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 40,
+  "view": "zal_kub",
+  "dur": 9.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.1,
+   "sheets": [],
+   "text": "Михал поручил закрыть переходы с Россией",
+   "kick": "ПУТЬ ЧЕРЕЗ ЛАТВИЮ ОСТАЁТСЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "duel",
+  "dur": 11.0,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "что конкретное нападение такая мера не остановила",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Зато остановит обычные поездки людей",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "cinematic.depth_of_field",
+  "dur": 6.0,
+  "anim": 6.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_044.jpg",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 45,
+  "view": "vyrezka.gazeta",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_045.jpg",
+   "author": "Гитанас Науседа",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "torn_split.torn_split",
+  "dur": 10.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_046.jpg",
+   "b_path": "cards/photo/card_046_2.jpg",
+   "title": "КАЛИНИНГРАД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "doc",
+  "dur": 11.4,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Остаются договорённости, остаются маршруты, и каждое такое решение становится частью большого противостояния",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 9.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Операция под чужим флагом",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.0,
+    "soobshcheniya": [
+     "Rzeczpospolita: подготовка диверсии",
+     "Цель — сорвать поддержку Украины"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Операция под чужим флагом",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.0,
+   "soobshcheniya": [
+    "Rzeczpospolita: подготовка диверсии",
+    "Цель — сорвать поддержку Украины"
+   ]
+  }
+ },
+ {
+  "scene": 50,
+  "view": "paper_typed",
+  "dur": 10.4,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Люди должны были изображать украинских диверсантов и перейти границу",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "zal_efir",
+  "dur": 8.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.5,
+   "sheets": [],
+   "text": "Диверсию остановили",
+   "say": "Операцию полностью сорвали",
+   "author": "польские службы",
+   "role": "спецслужбы Польши",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "film.film_single",
+  "dur": 9.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_053.jpg",
+   "title": "ПОЛЬША",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "charts.line",
+  "dur": 7.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Поддержка Украины",
+    "Граница с Калининградом",
+    "Закрытие переходов"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      2.0,
+      3.0
+     ]
+    }
+   ],
+   "source": "СОБЫТИЯ НОЯБРЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 12.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Разные направления, одна тревога",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.4,
+    "repliki_": [
+     "Франция=инструкторы на Украине",
+     "Эстония=выносит данные за рубеж",
+     "Польша=усиливает границу",
+     "Литва=допускает закрытие границы"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Разные направления, одна тревога",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.4,
+   "repliki_": [
+    "Франция=инструкторы на Украине",
+    "Эстония=выносит данные за рубеж",
+    "Польша=усиливает границу",
+    "Литва=допускает закрытие границы"
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "zal_g01",
+  "dur": 9.2,
+  "anim": 9.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.2,
+   "sheets": [],
+   "text": "Всё это не старт нового процесса",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "vyrezka.figura",
+  "dur": 7.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_058.jpg",
+   "author": "Рютте",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "zal_shkala",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Ориентир по закупкам",
+   "value": "10 МЛРД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "split",
+  "dur": 7.3,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_060.jpg",
+   "text": "Это был расчётный ориентир, а на практике потребность оказалась ниже",
+   "author": "Марк Рютте",
+   "role": "генеральный секретарь НАТО",
+   "accent": "Это был расчётный ориентир, а на",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "zal_g18",
+  "dur": 9.5,
+  "anim": 9.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.5,
+   "sheets": [],
+   "text": "Согласованная цель",
+   "value": "70 МЛРД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 62,
+  "view": "marker_serif",
+  "dur": 7.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Военная решимость идёт впереди бюджета",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "zal_ekran",
+  "dur": 9.0,
+  "anim": 9.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.0,
+   "sheets": [],
+   "text": "Готовы закрывать границы",
+   "say": "Сервисы выносят за рубеж",
+   "author": "правительства Балтии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "charts.waterfall",
+  "dur": 11.5,
+  "anim": 11.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Поставлено",
+    "value": 60.0
+   },
+   "steps": [
+    {
+     "label": "Недостаёт",
+     "value": -10.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "zal_schetchik",
+  "dur": 8.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.9,
+   "sheets": [],
+   "text": "Цена подготовки растёт",
+   "value": "70 МЛРД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 9.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Самые маленькие — самые уязвимые",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.9,
+    "tezisy": [
+     "Эстония выносит данные",
+     "Польша усиливает границу",
+     "Калининград под обсуждением"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Самые маленькие — самые уязвимые",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.9,
+   "tezisy": [
+    "Эстония выносит данные",
+    "Польша усиливает границу",
+    "Калининград под обсуждением"
+   ]
+  }
+ },
+ {
+  "scene": 67,
+  "view": "quote",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Большая война в Европе не начинается с одного заявления",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.1,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 8.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Спираль закручивается тогда",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.1,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Спираль закручивается тогда",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.1,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "charts.slope",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Отрицалось",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Признают официально"
+    },
+    {
+     "label": "Крайний сценарий",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Госплан"
+    }
+   ],
+   "source": "НОЯБРЬ 2026",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 6.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 6.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Вопрос к прибалтийским лидерам прост",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 6.7,
+    "role": "лидеры Прибалтики"
+   }
+  },
+  "kwargs": {
+   "text": "Вопрос к прибалтийским лидерам прост",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 6.7,
+   "role": "лидеры Прибалтики"
+  }
+ },
+ {
+  "scene": 71,
+  "view": "tape",
+  "dur": 11.5,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Тогда зачем продолжать повышать ставки?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 72,
+  "view": "zal_g44",
+  "dur": 9.46,
+  "anim": 9.46,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.46,
+   "sheets": [],
+   "text": "Кто стоит ближе всех",
+   "value": "ПЕРВЫМИ",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
