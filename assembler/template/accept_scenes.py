@@ -58,7 +58,11 @@ SAID_RE = re.compile(
 
 
 OK_SOURCES = {"press_photo", "web_search", "pexels_photo", "pexels_video",
-              "local_library", "direct_url"}
+              "local_library", "direct_url",
+              # 19.11: легитимный с 11.11 (kadry_klon.py) — кадр донора при
+              # сборке клона темы, остальные инструменты (fetch/obyazatelno/
+              # cards_cloud) его уже знали, только здесь забыли дописать.
+              "local_donor"}
 CARD_PREFIX = "card:"
 
 

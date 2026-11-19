@@ -25,9 +25,21 @@ import subprocess
 import time
 import threading
 
-# Агент на машине ОДИН — два задания одновременно он не тянет.
+# Агент на машине ОДИН (НА АККАУНТ) — два задания с одного аккаунта
+# одновременно он не тянет. Это свой внутренний замок — от того, что ЭТОТ
+# процесс сам себя не обгонит (двойной клик «ещё 10» и «ещё 5» разом).
 _codex_lock = threading.Lock()
 import sys
+
+# УПАКОВКА — НА ВТОРОЙ АККАУНТ АГЕНТА, А НЕ НА ОСНОВНОЙ (19.11, живая
+# авария: дашборд упаковки звал `codex_ask.sh`/`prevyu.py` без выбора
+# аккаунта, они брали ОСНОВНОЙ — тот же, на котором рабочие вкладки в это
+# время делают рерайт и раскадровку, — и обе стороны вставали в очередь
+# друг за другом до получаса. Комментарий «упаковка идёт на ВТОРОЙ аккаунт»
+# уже был в `prevyu.py` с 08.11, но ничего в коде его не выставляло —
+# текст без гейта не держит. `setdefault` — не трогает выбор, если его уже
+# сделал тот, кто запускает (например, явный `CODEX_ACCOUNT=` в команде).
+os.environ.setdefault("CODEX_ACCOUNT", "eva")
 
 NEWS = os.environ.get("VIDEORYAD_NEWS_DIR", "/mnt/d/YouTube/НОВОСТИ")
 CHANNELS = ("5 МИНУТ", "ПЛАНЕТА", "ОЛЬКА НОВОСТИ", "ДИПЛОМАТИЯ СИЛЫ",
@@ -117,8 +129,15 @@ JS = """
 // «выбираю один, кликаю, появляется диалоговое окно — запись вверху и
 // запись внизу, нажимаю ОК, и ты генерируешь только его»).
 var CUR = null;
-function openDlg(item, n, src, titles, sig, where){
-  CUR = {item:item, n:n, sig:sig||''};
+function openDlg(item, n, src, titles, sig, where, ch, tema){
+  // КАНАЛ И ТЕМА ЕДУТ ВМЕСТЕ С КЛИКОМ (19.11, живая авария: надпись на
+  // превью ПЛАНЕТЫ легла в папку 5 МИНУТ, с чужой гаммой). Номер карточки
+  // «item» — это позиция в списке на сервере, а список пересобирается
+  // сам каждые 20 с (`_perestroit`): появилась новая тема дня — старые
+  // позиции сдвигаются, а открытая страница ничего не знает и продолжает
+  // слать старый номер. Канал и тема — то, что он реально видит на
+  // карточке, поэтому сервер сверяет ИХ, а не только номер.
+  CUR = {item:item, n:n, sig:sig||'', ch:ch||'', tema:tema||''};
   // ЧТО ИМЕННО ПОЙДЁТ В РАБОТУ — НАДПИСЬЮ В ШАПКЕ ОКНА (08.11): канал,
   // тема и НОМЕР варианта. Раньше окно показывало только картинку, и
   // проверить, тот ли это вариант, было нечем.
@@ -163,6 +182,7 @@ function makeIt(){
   btn.textContent = 'делаю…'; btn.disabled = true;
   fetch('/make', {method:'POST', headers:{'Content-Type':'application/json'},
                   body: JSON.stringify({item:CUR.item, n:CUR.n, sig:CUR.sig,
+                                        ch:CUR.ch, tema:CUR.tema,
                                         top:top, bottom:bot})})
    .then(function(r){ return r.json(); })
    .then(function(d){
@@ -296,12 +316,13 @@ function unfoldBlock(id, item, kind){
 }
 // ЕЩЁ ДЕСЯТЬ ВАРИАНТОВ (07.11). Агент думает около минуты — пишем об
 // этом прямо, чтобы кнопка не выглядела залипшей.
-function more(item, kind, blockId, btn){
+function more(item, kind, blockId, btn, ch, tema){
   var hint = document.getElementById(blockId + '-hint');
   btn.disabled = true; btn.textContent = 'думаю…';
   hint.textContent = 'агент пишет новые десять, это около минуты';
   fetch('/more', {method:'POST', headers:{'Content-Type':'application/json'},
-                  body: JSON.stringify({item:item, kind:kind})})
+                  body: JSON.stringify({item:item, kind:kind,
+                                        ch:ch||'', tema:tema||''})})
    .then(function(r){ return r.json(); })
    .then(function(d){
       btn.disabled = false; btn.textContent = 'ещё 10 вариантов';
@@ -321,7 +342,7 @@ function more(item, kind, blockId, btn){
 }
 // ЕЩЁ ПЯТЬ КАРТИНОК ПО ЕГО ПРАВКЕ (10.11). Рисует агент — это минуты,
 // поэтому кнопка сразу говорит, что идёт работа.
-function pvMore(item){
+function pvMore(item, ch, tema){
   var ta = document.getElementById('pv-' + item);
   var btn = document.getElementById('pvbtn-' + item);
   var hint = document.getElementById('pv-' + item + '-hint');
@@ -329,7 +350,8 @@ function pvMore(item){
   hint.textContent = 'агент рисует пять новых, это несколько минут';
   fetch('/kartinki', {method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({item:item, pravka: ta.value})})
+        body: JSON.stringify({item:item, pravka: ta.value,
+                              ch:ch||'', tema:tema||''})})
    .then(function(r){ return r.json(); })
    .then(function(d){
       btn.disabled = false; btn.textContent = 'ещё 5 картинок';
@@ -344,7 +366,7 @@ function pvMore(item){
                           + 'border:2px solid ' + d.accent;
         img.onclick = function(){
           openDlg(item, x.num, x.url, d.titles, x.sig,
-                  d.where + ' · вариант ' + x.num);
+                  d.where + ' · вариант ' + x.num, ch, tema);
         };
         if(grid){ grid.appendChild(img); }
       });
@@ -632,6 +654,11 @@ def page(items, day):
     for _i, it in enumerate(items):
         desc = it.get("описание", "")
         _accent, _bg = ch_color(it.get("канал", ""))
+        # КАНАЛ И ТЕМА ЭТОЙ КАРТОЧКИ — ОДИН РАЗ, ДЛЯ ВСЕХ КЛИКОВ ВНУТРИ НЕЁ
+        # (19.11). См. правку в `openDlg`: номер карточки «_i» гуляет при
+        # пересборке списка, канал+тема — нет, сервер сверяет по ним.
+        _ch_js = json.dumps(it.get("канал", ""), ensure_ascii=False)
+        _tema_js = json.dumps(it.get("тема", ""), ensure_ascii=False)
         # ЕГО ВЫБОР И ВИД КАРТОЧКИ — С ДИСКА (09.11, см. блок выше)
         _ключ, _st = состояние_карточки(it, day, _сост_файл)
         _zag = (_st.get("свой_заголовок")
@@ -790,10 +817,10 @@ def page(items, day):
             P.append('<div class="row">'
                      '<button onclick="fold(\'%s\',%d,\'%s\')">скрыть — с этим '
                      'закончил</button>'
-                     '<button onclick=\'more(%d,"%s","%s",this)\'>'
+                     '<button onclick=\'more(%d,"%s","%s",this,%s,%s)\'>'
                      'ещё 10 вариантов</button>'
                      '<span class="hint" id="%s-hint"></span></div>'
-                     % (_bid, _i, key, _i, key, _bid, _bid))
+                     % (_bid, _i, key, _i, key, _bid, _ch_js, _tema_js, _bid))
             P.append('</div>')
         # ПРЕВЬЮ — САМИ КАРТИНКИ, А НЕ ПРОМПТ (07.11). Файлы лежат в папке
         # темы как ПРЕВЬЮ-N.png; на страницу они отдаются по короткой ссылке
@@ -828,12 +855,12 @@ def page(items, day):
                 _where = "%s · %s · вариант %d" % (it.get("канал", ""),
                                                    it.get("тема", ""), _num)
                 P.append('<img id="p-%d-%d" src="%s?t=%s" '
-                         'onclick=\'openDlg(%d,%d,"%s",%s,"%s","%s")\' '
+                         'onclick=\'openDlg(%d,%d,"%s",%s,"%s","%s",%s,%s)\' '
                          'title="нажми, чтобы наложить надписи" '
                          'style="width:100%%;border-radius:6px;cursor:pointer;'
                          'border:%s">'
                          % (_i, _num, _src, _sig, _i, _num, u, _titles, _sig,
-                            _where.replace('"', "'"),
+                            _where.replace('"', "'"), _ch_js, _tema_js,
                             ("3px solid %s" % _accent) if _ready
                             else "1px solid var(--line)"))
             P.append('</div>')
@@ -849,11 +876,11 @@ def page(items, day):
                      'border-radius:6px;padding:6px;font:inherit"></textarea>'
                      '<button id="pvmic-%d" onclick="pvGolos(%d)" '
                      'title="наговорить правку голосом">голосом</button>'
-                     '<button id="pvbtn-%d" onclick="pvMore(%d)">'
+                     '<button id="pvbtn-%d" onclick="pvMore(%d,%s,%s)">'
                      'ещё 5 картинок</button></div>'
                      '<div class="hint" id="pv-%d-hint">правка весит больше '
                      'общих указаний промпта; рисует агент, это минуты</div>'
-                     % (_i, _i, _i, _i, _i, _i))
+                     % (_i, _i, _i, _i, _i, _ch_js, _tema_js, _i))
         P.append('</div>')          # конец vars-N
         # КНОПКА СВОРАЧИВАНИЯ КАРТОЧКИ — И ЕЁ ПАМЯТЬ (09.11)
         P.append('<div class="row" style="margin-top:12px">'
@@ -911,6 +938,28 @@ def _otpechatok(path):
         return "%d-%d" % (st.st_size, int(st.st_mtime))
     except OSError:
         return ""
+
+
+def _svoya_kartochka(it, req, idx):
+    """НОМЕР КАРТОЧКИ ПРОВЕРЯЕМ КАНАЛОМ И ТЕМОЙ (19.11, живая авария):
+    надпись, наложенная на превью ПЛАНЕТЫ, легла в папку клона 5 МИНУТ с
+    его гаммой. Причина — `_perestroit()` пересобирает `items` каждые 20 с
+    по мере появления новых тем дня, и позиция карточки в списке плывёт;
+    открытая страница продолжает слать СТАРЫЙ номер. Канал и тема на
+    карточке не меняются никогда — страница присылает их вместе с
+    кликом, и если они разошлись с тем, что сейчас на месте `idx`,
+    работа останавливается, а не пишет файл не в ту папку."""
+    ch = (req.get("ch") or "").strip()
+    tema = (req.get("tema") or "").strip()
+    if not ch and not tema:
+        return          # старая страница в кэше браузера — без полей не сверить
+    if it.get("канал", "") != ch or it.get("тема", "") != tema:
+        raise ValueError(
+            "страница показывает не ту карточку, что сейчас на сервере "
+            "(ждал «%s · %s», а на месте %d сейчас «%s · %s»). Список "
+            "роликов дня пересобрался — обнови страницу (Ctrl+F5) и "
+            "повтори: в чужую тему я писать не буду."
+            % (ch, tema, idx, it.get("канал", ""), it.get("тема", "")))
 
 
 def main():
@@ -1307,6 +1356,7 @@ def main():
                 n = int(self.headers.get("Content-Length") or 0)
                 req = json.loads(self.rfile.read(n).decode("utf-8"))
                 it = items[int(req["item"])]
+                _svoya_kartochka(it, req, int(req["item"]))
                 kind = req.get("kind") or "заголовки"
                 записать_выбор({"событие": "ещё_десять", "вид": kind,
                                 "канал": it.get("канал", ""),
@@ -1423,6 +1473,7 @@ def main():
                 req = json.loads(self.rfile.read(n).decode("utf-8"))
                 i = int(req["item"])
                 it = items[i]
+                _svoya_kartochka(it, req, i)
                 folder = it.get("превью_папка") or ""
                 pravka = (req.get("pravka") or "").strip()
                 vdir = os.path.join(folder, "превью-варианты")
@@ -1498,6 +1549,7 @@ def main():
                 n = int(self.headers.get("Content-Length") or 0)
                 req = json.loads(self.rfile.read(n).decode("utf-8"))
                 it = items[int(req["item"])]
+                _svoya_kartochka(it, req, int(req["item"]))
                 folder = it.get("превью_папка") or ""
                 num = int(req["n"])
                 vdir = os.path.join(folder, "превью-варианты")

@@ -32,6 +32,12 @@ import re
 import subprocess
 import sys
 
+# УПАКОВКА — НА ВТОРОЙ АККАУНТ АГЕНТА (19.11, тот же класс, что в
+# `upakovka_dash.py`): без этого `codex_ask.sh` ниже брал ОСНОВНОЙ
+# аккаунт — тот же, которым в это время рерайт и раскадровку делают
+# рабочие вкладки, — и обе стороны стояли в очереди друг за другом.
+os.environ.setdefault("CODEX_ACCOUNT", "eva")
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 LIB = os.path.join(HERE, "upakovka_lib")
 ZHURNAL = os.path.join(LIB, "zhurnal.json")

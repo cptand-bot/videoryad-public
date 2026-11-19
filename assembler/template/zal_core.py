@@ -454,11 +454,18 @@ def word_tiles(lines, fsize=220, fname="ArialBlack.ttf", hl=None,
     d0 = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
     sp = d0.textlength(" ", font=f)
     rows = []
-    for ln in lines:
-        ws = ln.split(" ")
+    for ln in (lines or []):
+        ws = [w for w in ln.split(" ") if w]
+        if not ws:
+            continue
         bb = [d0.textbbox((0, 0), w, font=f) for w in ws]
         width = sum(b[2] - b[0] for b in bb) + sp * (len(ws) - 1)
         rows.append((ws, bb, width))
+    # ПУСТОЙ ВХОД — ПУСТЫЕ ТАЙЛЫ, НЕ ПАДЕНИЕ (19.11, живой случай: zal_g18
+    # без --value-sub/--na-polu падал ValueError на max() пустой последова-
+    # тельности и ронял ВЕСЬ облачный прогон карточек, не только этот вид).
+    if not rows:
+        return pad * 2, pad * 2, []
     total_w = max(r[2] for r in rows) + pad * 2
     hline = fsize * 1.02
     total_h = len(rows) * hline + (len(rows) - 1) * line_gap + pad * 2

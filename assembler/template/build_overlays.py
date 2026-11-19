@@ -1044,15 +1044,25 @@ def do_sfx(scenes_path, ov_path, sfx_dir, in_mp4, out_mp4, factor=1.0, ffmpeg="f
     # берём 60% от прежнего: 0.18 и 0.54. Правится ЗДЕСЬ, в одном месте —
     # ship.sh печатает эти же числа, не задаёт их.
     SFX_VOL_WITH_VOICE, SFX_VOL_ALONE, VOICE_VOL = 0.18, 0.54, 1.0
+    # ПАПКА РОЛИКА, А НЕ ТЕКУЩАЯ ДИРЕКТОРИЯ ЗАПУСКА (19.11, живой случай —
+    # готовый файл уехал на D: ПОЛНОСТЬЮ НЕМЫМ: узнали по жалобе пользователя,
+    # ни одной ошибки нигде не напечаталось). Раньше `os.path.isfile(_c)` и
+    # `glob.glob("*.mp3")` проверяли ТЕКУЩУЮ рабочую директорию процесса —
+    # если `do_sfx` позвали не из папки ролика (вручную, другим скриптом,
+    # на раннере с иным cwd), narration.* молча не находился, и ветка
+    # «озвучки в папке нет» срабатывала на ролике, где озвучка есть.
+    _proj_dir = os.path.dirname(os.path.abspath(scenes_path)) or "."
     _voice = os.environ.get("VIDEORYAD_NARRATION") or ""
     if not _voice:
         for _c in ("narration.mp3", "narration.wav", "narration.m4a"):
-            if os.path.isfile(_c):
-                _voice = _c
+            p = os.path.join(_proj_dir, _c)
+            if os.path.isfile(p):
+                _voice = p
                 break
     if not _voice:
-        _loose = [f for f in sorted(glob.glob("*.mp3")) + sorted(glob.glob("*.wav"))
-                  if os.path.dirname(os.path.abspath(f)) == os.path.abspath(".")]
+        _loose = [f for f in sorted(glob.glob(os.path.join(_proj_dir, "*.mp3")))
+                  + sorted(glob.glob(os.path.join(_proj_dir, "*.wav")))
+                  if os.path.dirname(os.path.abspath(f)) == os.path.abspath(_proj_dir)]
         if len(_loose) == 1:
             _voice = _loose[0]
     sfx_vol = SFX_VOL_ALONE
