@@ -1,0 +1,1108 @@
+[
+ {
+  "scene": 4,
+  "view": "cinematic.dossier",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "rows": [
+    "Марко Микельсон",
+    "Председатель комитета по международным делам",
+    "Парламент Эстонии",
+    "Переговоры нужны. Мир нужен."
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_004.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "zal_ekran",
+  "dur": 9.6,
+  "anim": 9.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.6,
+   "sheets": [],
+   "text": "Европейская логика по шагам",
+   "say": "А России за столом быть не должно",
+   "author": "Марко Микельсон",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "zal_pol",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.6,
+   "sheets": [],
+   "text": "Россия не наблюдает по телевизору",
+   "na_polu": "АРМИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 9.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Позиции разошлись по всей Европе и за океаном",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.7,
+    "repliki_": [
+     "МИКЕЛЬСОН|Переговоры нужны. Мир нужен.",
+     "КАЛЛАС|Предпосылок для окончания конфликта не вижу.",
+     "ЗЕЛЕНСКИЙ|Крупные государства не должны решать судьбу Украины без неё.",
+     "СТУББ|Финляндия из НАТО выходить не собирается.",
+     "КОЛБИ|Эффективность украинских ударов вглубь России под вопросом.",
+     "ТРАМП|Соединённые Штаты хорошо зарабатывают на вооружении Украины."
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Позиции разошлись по всей Европе и за океаном",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.7,
+   "repliki_": [
+    "МИКЕЛЬСОН|Переговоры нужны. Мир нужен.",
+    "КАЛЛАС|Предпосылок для окончания конфликта не вижу.",
+    "ЗЕЛЕНСКИЙ|Крупные государства не должны решать судьбу Украины без неё.",
+    "СТУББ|Финляндия из НАТО выходить не собирается.",
+    "КОЛБИ|Эффективность украинских ударов вглубь России под вопросом.",
+    "ТРАМП|Соединённые Штаты хорошо зарабатывают на вооружении Украины."
+   ]
+  }
+ },
+ {
+  "scene": 10,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 12.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "СТОЛ ПЕРЕГОВОРОВ БЕЗ РОССИИ",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.8
+   }
+  },
+  "kwargs": {
+   "text": "СТОЛ ПЕРЕГОВОРОВ БЕЗ РОССИИ",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.8
+  }
+ },
+ {
+  "scene": 11,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.3,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 9.3,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Неприличный вопрос:",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.3,
+    "tezisy": [
+     "А сколько у вас дивизий?",
+     "Не у Соединённых Штатов",
+     "Не у всего НАТО",
+     "У вас"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Неприличный вопрос:",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.3,
+   "tezisy": [
+    "А сколько у вас дивизий?",
+    "Не у Соединённых Штатов",
+    "Не у всего НАТО",
+    "У вас"
+   ]
+  }
+ },
+ {
+  "scene": 13,
+  "view": "split",
+  "dur": 12.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Кая Каллас примерно в это же время говорит, что предпосылок для окончания конфликта не видит",
+   "photo": "cards/photo/card_013.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "doc",
+  "dur": 9.9,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "И сколько бы в Брюсселе ни повторяли слово уступки, Москва от этого не начинает считать европейские",
+   "mark": "БРЮССЕЛЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "zal_makety",
+  "dur": 12.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.9,
+   "sheets": [],
+   "text": "Какой у них конечный план?",
+   "makety": [
+    "лэп=ЭНЕРГОСЕТИ",
+    "больница=МЕДИЦИНА"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "zal_shkala",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.8,
+   "sheets": [],
+   "text": "Сколько это может продолжаться?",
+   "value": "5-Й ГОД",
+   "value_sub": "КОНФЛИКТА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "zal_efir",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.6,
+   "sheets": [],
+   "text": "Это позиция Киева",
+   "say": "Крупные государства не должны решать судьбу Украины без участия самой Украины",
+   "author": "Зеленский",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 13.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Украину без Украины обсуждать нельзя",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 13.8,
+    "role": "президент Украины"
+   }
+  },
+  "kwargs": {
+   "text": "Украину без Украины обсуждать нельзя",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 13.8,
+   "role": "президент Украины"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "torn_split.torn_split",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_024.jpg",
+   "b_path": "cards/photo/card_024_2.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "tape",
+  "dur": 12.1,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Дальше начинается история, где требования уже появляются раньше, чем успевают понять",
+   "accent": "требования",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "vyrezka.gazeta",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_026.jpg",
+   "author": "Александр Стубб",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "duel",
+  "dur": 12.6,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Стубб уточнил",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "что такого требования не предъявлял",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 10.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Реакция есть. Требования пока нет",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.9,
+    "soobshcheniya": [
+     "Политическая реакция уже есть",
+     "Категорический ответ уже есть",
+     "Осталось найти само требование"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Реакция есть. Требования пока нет",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.9,
+   "soobshcheniya": [
+    "Политическая реакция уже есть",
+    "Категорический ответ уже есть",
+    "Осталось найти само требование"
+   ]
+  }
+ },
+ {
+  "scene": 29,
+  "view": "cinematic.evidence_wall",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_029.jpg",
+     240,
+     250,
+     -4,
+     "Дом Правительства России"
+    ],
+    [
+     "cards/photo/card_029_2.jpg",
+     800,
+     250,
+     3,
+     "Дом Правительства России"
+    ],
+    [
+     "cards/photo/card_029_3.jpg",
+     1360,
+     250,
+     -2,
+     "Дом Правительства России"
+    ],
+    [
+     "cards/photo/card_029_4.jpg",
+     240,
+     580,
+     4,
+     "Дом Правительства России"
+    ]
+   ],
+   "title": "ПЕРЕГОВОРОВ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 30,
+  "view": "strike",
+  "dur": 11.2,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Сначала создаётся условие, которое выглядит заведомо неприемлемым",
+   "struck": "Сначала создаётся условие",
+   "fix": "Россия всё сорвала",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 12.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Сценарий обвинения готов заранее",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.4,
+    "sobytiya": [
+     "Требование выдвинуто",
+     "Европейский политик его героически отвергает",
+     "Виновный уже назначен"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Сценарий обвинения готов заранее",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.4,
+   "sobytiya": [
+    "Требование выдвинуто",
+    "Европейский политик его героически отвергает",
+    "Виновный уже назначен"
+   ]
+  }
+ },
+ {
+  "scene": 32,
+  "view": "paper_typed",
+  "dur": 11.6,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Идёт борьба за то, кто будет виноват, если соглашения не будет",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "charts.cartogram",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Финляндия",
+    "Россия"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "charts.cartogram",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Калининградская область"
+   ],
+   "level": "region",
+   "admin": "Россия",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "charts.slope",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Финляндия выходит из НАТО",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Ограничение военного присутствия НАТО"
+    },
+    {
+     "label": "Расширение НАТО после 1997 года",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Сокращение сил России в Калининграде и Беларуси"
+    }
+   ],
+   "left_label": "было",
+   "right_label": "стало",
+   "source": "Bloomberg",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "film.film_single",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_037.jpg",
+   "title": "1997 ГОД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "film.film_strip",
+  "dur": 10.9,
+  "anim": 10.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_038.jpg",
+    "cards/photo/card_038_2.jpg",
+    "cards/photo/card_038_3.jpg",
+    "cards/photo/card_038_4.jpg"
+   ],
+   "title": "РОССИЙСКИЕ",
+   "captions": [
+    "Зал-Европарламента",
+    "Зал-Европарламента",
+    "Зал-Европарламента",
+    "Зал-Европарламента"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "devices.device_scene",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_039.jpg",
+   "items": [
+    "НАТО сокращает присутствие",
+    "Россия сокращает присутствие"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.2,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 11.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "НАТО и Россия обсуждают обмен",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.2,
+    "pary": [
+     "НАТО>Россия",
+     "Россия>НАТО"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "НАТО и Россия обсуждают обмен",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.2,
+   "pary": [
+    "НАТО>Россия",
+    "Россия>НАТО"
+   ]
+  }
+ },
+ {
+  "scene": 41,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 12.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Безопасность всей Европы",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.4,
+    "region": "Европа"
+   }
+  },
+  "kwargs": {
+   "text": "Безопасность всей Европы",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.4,
+   "region": "Европа"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "charts.network",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Москва",
+     "label": "Москва",
+     "weight": 1.0
+    },
+    {
+     "id": "конфликт",
+     "label": "конфликт",
+     "weight": 2.0
+    },
+    {
+     "id": "военное устройство Европы",
+     "label": "военное устройство Европы",
+     "weight": 2.0
+    },
+    {
+     "id": "НАТО",
+     "label": "НАТО",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Москва",
+     "to": "конфликт",
+     "weight": 1.0
+    },
+    {
+     "from": "конфликт",
+     "to": "военное устройство Европы",
+     "weight": 1.0
+    },
+    {
+     "from": "военное устройство Европы",
+     "to": "НАТО",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "quote",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Тем более без России за столом",
+   "accent": "России",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "zal_slova",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.4,
+   "sheets": [],
+   "text": "Москва слышит условия",
+   "na_polu": "ТОРОПЯТСЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "vyrezka.figura",
+  "dur": 12.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_045.jpg",
+   "author": "Стив Уиткофф",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "zal_g01",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.8,
+   "sheets": [],
+   "text": "И вот это уже очень интересная деталь",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "pull",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Тебе предлагают договориться сейчас, потому что через некоторое время американская внутренняя политика может измениться",
+   "accent": "американская",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "charts.line",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Договорились",
+    "Следующий политический цикл",
+    "Снова всё пересматриваем",
+    "Снова начинаем сначала"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "комментарий ролика",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.2,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 11.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Обещания должны переживать выборы",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.2,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Обещания должны переживать выборы",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.2,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_051.jpg",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 52,
+  "view": "charts.cartogram",
+  "dur": 11.6,
+  "anim": 11.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "США",
+    "Украина",
+    "Эстония",
+    "Россия"
+   ],
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 12.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "В Вашингтоне звучит новый голос",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.0,
+    "role": "заместитель главы Пентагона по политическим вопросам"
+   }
+  },
+  "kwargs": {
+   "text": "В Вашингтоне звучит новый голос",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.0,
+   "role": "заместитель главы Пентагона по политическим вопросам"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "photo",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_054.jpg",
+   "lines": [
+    "Удар вглубь России",
+    "Не помог остановить продвижение",
+    "Не помог закончить конфликт"
+   ]
+  }
+ },
+ {
+  "scene": 55,
+  "view": "zal_g48",
+  "dur": 12.1,
+  "anim": 12.1,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.1,
+   "sheets": [],
+   "text": "Вот это уже разговор взрослого человека",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "zal_kub",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.6,
+   "sheets": [
+    "украинского министра обороны",
+    "Можно объяснять это расписанием"
+   ],
+   "text": "Можно объяснять это расписанием, делами, занятостью",
+   "kick": "НО ПОЛИТИЧЕСКИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "marker_serif",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Особенно на фоне того, что европейцы продолжают призывать к усилению давления",
+   "accent": "европейцы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "charts.waterfall",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Европа платит",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Америка производит",
+     "value": 1.0
+    },
+    {
+     "label": "Украина получает",
+     "value": 1.0
+    },
+    {
+     "label": "Американский бизнес зарабатывает",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "poster.poster",
+  "dur": 12.4,
+  "anim": 12.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "ХОРОШИЙ БИЗНЕС",
+   "hero_photo": "cards/photo/card_061.jpg",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 64,
+  "view": "zal",
+  "dur": 10.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Америка не обязана угождать Каллас",
+   "words": [
+    "ИТОГ",
+    "ЦЕНА"
+   ],
+   "sheets": [
+    "ЭФФЕКТИВНОСТЬ ДЕЙСТВИЙ",
+    "ПОЛИТИЧЕСКИЙ РЕЗУЛЬТАТ",
+    "ПРОДАЖА ОРУЖИЯ",
+    "ИНТЕРЕСЫ США",
+    "СОГЛАШЕНИЕ",
+    "ДАВЛЕНИЕ НА РОССИЮ"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 10.7,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "charts.map_dist",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Вашингтон",
+     "lat": 38.9072,
+     "lon": -77.0369,
+     "accent": false
+    },
+    {
+     "label": "Брюссель",
+     "lat": 50.8503,
+     "lon": 4.3517,
+     "accent": false
+    }
+   ],
+   "admin": "США",
+   "place": "Европа",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "paper_hand",
+  "dur": 10.9,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Проблема Европы больше, чем спор вокруг Украины. Решать придётся со всеми, от кого зависит результат",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
