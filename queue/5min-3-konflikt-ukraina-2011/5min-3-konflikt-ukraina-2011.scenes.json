@@ -1,0 +1,601 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 12.7,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО"
+  },
+  {
+   "id": 2,
+   "start_sec": 12.7,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ"
+  },
+  {
+   "id": 3,
+   "start_sec": 22.2,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЗАСЕДАНИЙ-НАТО",
+   "fx": "curl"
+  },
+  {
+   "id": 4,
+   "start_sec": 32.0,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:dossier",
+   "source_query": "карточка «dossier» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 5,
+   "start_sec": 44.4,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "card:zal_ekran",
+   "source_query": "карточка «zal_ekran» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 6,
+   "start_sec": 54.0,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ЗДАНИЕ-МИД-РОССИИ",
+   "fx": "player"
+  },
+  {
+   "id": 7,
+   "start_sec": 63.9,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "card:zal_pol",
+   "source_query": "карточка «zal_pol» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 8,
+   "start_sec": 76.5,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН",
+   "fx": "slides"
+  },
+  {
+   "id": 9,
+   "start_sec": 85.9,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "card:repliki",
+   "source_query": "карточка «repliki» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 10,
+   "start_sec": 95.6,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "card:prolog",
+   "source_query": "карточка «prolog» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 11,
+   "start_sec": 108.4,
+   "duration_sec": 9.3,
+   "text": "",
+   "source": "card:prohod",
+   "source_query": "карточка «prohod» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 12,
+   "start_sec": 117.7,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ИСТРЕБИТЕЛЬ-EUROFIGHTER-РУЛЁЖКЕ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 13,
+   "start_sec": 127.7,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка «split» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 14,
+   "start_sec": 140.0,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/КАЛЛАС"
+  },
+  {
+   "id": 15,
+   "start_sec": 149.6,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "card:doc",
+   "source_query": "карточка «doc» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 16,
+   "start_sec": 159.5,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "web_search",
+   "source_query": "железнодорожная станция Запорожская область последствия удара ноябрь 2026",
+   "fx": "torn"
+  },
+  {
+   "id": 17,
+   "start_sec": 169.3,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/БЫТ-УКРАИНА/ТРАНСФОРМАТОРНАЯ-ПОДСТАНЦИЯ-СЕТКОЙ",
+   "fx": "filmwin"
+  },
+  {
+   "id": 18,
+   "start_sec": 178.8,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "card:zal_makety",
+   "source_query": "карточка «zal_makety» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 19,
+   "start_sec": 191.7,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:zal_shkala",
+   "source_query": "карточка «zal_shkala» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 20,
+   "start_sec": 201.5,
+   "duration_sec": 13.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Марко Микельсон председатель комитета Эстония",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 21,
+   "start_sec": 215.3,
+   "duration_sec": 9.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/УИТКОФФ",
+   "fx": "stamps"
+  },
+  {
+   "id": 22,
+   "start_sec": 224.7,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "card:zal_efir",
+   "source_query": "карточка «zal_efir» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 23,
+   "start_sec": 237.3,
+   "duration_sec": 13.8,
+   "text": "",
+   "source": "card:kreslo",
+   "source_query": "карточка «kreslo» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 24,
+   "start_sec": 251.1,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "card:torn",
+   "source_query": "карточка «torn» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 25,
+   "start_sec": 262.5,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:tape",
+   "source_query": "карточка «tape» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 26,
+   "start_sec": 274.6,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "card:vyrezka",
+   "source_query": "карточка «vyrezka» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 27,
+   "start_sec": 286.4,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "card:duel",
+   "source_query": "карточка «duel» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 28,
+   "start_sec": 299.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:lenta",
+   "source_query": "карточка «lenta» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 29,
+   "start_sec": 309.9,
+   "duration_sec": 13.0,
+   "text": "",
+   "source": "card:wall",
+   "source_query": "карточка «wall» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "wall",
+    "код": "A56",
+    "title": "ПЕРЕГОВОРОВ",
+    "watermark": "5 МИНУТ",
+    "anim": 13.0
+   }
+  },
+  {
+   "id": 30,
+   "start_sec": 322.9,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:strike",
+   "source_query": "карточка «strike» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 31,
+   "start_sec": 334.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:relsy",
+   "source_query": "карточка «relsy» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 32,
+   "start_sec": 346.5,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "card:paper_typed",
+   "source_query": "карточка «paper_typed» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 33,
+   "start_sec": 358.1,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 34,
+   "start_sec": 370.1,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "card:map_regions",
+   "source_query": "карточка «map_regions» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 35,
+   "start_sec": 381.5,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:slope",
+   "source_query": "карточка «slope» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 36,
+   "start_sec": 393.6,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-ПАРЛАМЕНТА-ФИНЛЯНДИИ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 37,
+   "start_sec": 405.4,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка «film_frame» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 38,
+   "start_sec": 418.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 39,
+   "start_sec": 428.9,
+   "duration_sec": 13.0,
+   "text": "",
+   "source": "card:device",
+   "source_query": "карточка «device» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 40,
+   "start_sec": 441.9,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:mehanizm",
+   "source_query": "карточка «mehanizm» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 41,
+   "start_sec": 453.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:globus_map",
+   "source_query": "карточка «globus_map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 42,
+   "start_sec": 465.5,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "card:network",
+   "source_query": "карточка «network» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 43,
+   "start_sec": 477.1,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 44,
+   "start_sec": 489.1,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "card:zal_slova",
+   "source_query": "карточка «zal_slova» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 45,
+   "start_sec": 500.5,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:vyrezka_kontur",
+   "source_query": "карточка «vyrezka_kontur» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 46,
+   "start_sec": 512.6,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "card:zal_g01",
+   "source_query": "карточка «zal_g01» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 47,
+   "start_sec": 524.4,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/КАПИТОЛИЙ-ВАШИНГТОНЕ-ДНЁМ",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 48,
+   "start_sec": 537.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 49,
+   "start_sec": 547.9,
+   "duration_sec": 13.0,
+   "text": "",
+   "source": "card:line",
+   "source_query": "карточка «line» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 50,
+   "start_sec": 560.9,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:pechat",
+   "source_query": "карточка «pechat» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 51,
+   "start_sec": 572.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:dof",
+   "source_query": "карточка «dof» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "dof",
+    "код": "A64",
+    "watermark": "5 МИНУТ",
+    "anim": 12.4
+   }
+  },
+  {
+   "id": 52,
+   "start_sec": 584.5,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 53,
+   "start_sec": 596.1,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:tribuna",
+   "source_query": "карточка «tribuna» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 54,
+   "start_sec": 608.1,
+   "duration_sec": 11.4,
+   "text": "",
+   "source": "card:photo",
+   "source_query": "карточка «photo» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "photo",
+    "lines": [
+     "Удар вглубь России",
+     "Не помог остановить продвижение",
+     "Не помог закончить конфликт"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 11.4,
+    "photo": "/mnt/d/media-library/БАЗА/БЫТ-УКРАИНА/ТРАНСФОРМАТОРНАЯ-ПОДСТАНЦИЯ-СЕТКОЙ/01_4000x2252.jpg"
+   }
+  },
+  {
+   "id": 55,
+   "start_sec": 619.5,
+   "duration_sec": 12.1,
+   "text": "",
+   "source": "card:zal_g48",
+   "source_query": "карточка «zal_g48» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 56,
+   "start_sec": 631.6,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Эльбридж Колби Пентагон НАТО",
+   "fx": "flash"
+  },
+  {
+   "id": 57,
+   "start_sec": 643.4,
+   "duration_sec": 12.6,
+   "text": "",
+   "source": "card:zal_kub",
+   "source_query": "карточка «zal_kub» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 58,
+   "start_sec": 656.0,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/ПЕНТАГОН-ВОЗДУХА",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 59,
+   "start_sec": 666.9,
+   "duration_sec": 13.0,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 60,
+   "start_sec": 679.9,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:waterfall",
+   "source_query": "карточка «waterfall» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 61,
+   "start_sec": 691.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка «poster» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "poster",
+    "код": "A6",
+    "title": "ХОРОШИЙ БИЗНЕС",
+    "watermark": "5 МИНУТ",
+    "anim": 12.4
+   }
+  },
+  {
+   "id": 62,
+   "start_sec": 703.5,
+   "duration_sec": 11.6,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП"
+  },
+  {
+   "id": 63,
+   "start_sec": 715.1,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/БЕЛЫЙ-ДОМ-СО"
+  },
+  {
+   "id": 64,
+   "start_sec": 727.1,
+   "duration_sec": 10.7,
+   "text": "",
+   "source": "card:zal",
+   "source_query": "карточка «zal» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 65,
+   "start_sec": 737.8,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/4cf0dda6db.mp4?token=BTKSdujk7wMJ2OudRTVjMrFi1W10Yfqy5WJ-5JOkA8QxToLpOxBWUZg0pPHxJG0Rno0V-e_4O0Q1m7B46yEEWReU22XkKuaI3cveWlEPoKOxYOwLztjR81qCSnVsVjMhF0BmOFDH1OWSZmbKZDJrMclSdtQm7AU5jIgxdIV7swkJgyQnteVYp4KXOrCUp7RlUsrKYUsJTd5mqVSOU2t9xwX0I-sKZqqvBzdU0XnB3lHl5jP2fjhe3ZhYmEhItEEmYNY8hNXXgGL_PgSgdGmkmUSL3wSvX_Y7im7KhRvHoYJBAnbffAwfzM3tJNKcw-p4LYIxpeY11Eeyb9eFZEoS_A"
+  },
+  {
+   "id": 66,
+   "start_sec": 749.1,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:map_dist",
+   "source_query": "карточка «map_dist» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 67,
+   "start_sec": 758.9,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Конгресс США Вашингтон заседание"
+  },
+  {
+   "id": 68,
+   "start_sec": 771.4,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-США/ЗАЛ-СЕНАТА-США",
+   "fx": "torn"
+  },
+  {
+   "id": 69,
+   "start_sec": 782.3,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:paper_hand",
+   "source_query": "карточка «paper_hand» — кадр рисуется в облаке, фетч не нужен"
+  }
+ ]
+}
