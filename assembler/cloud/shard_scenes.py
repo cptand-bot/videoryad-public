@@ -28,6 +28,29 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "template"))
 from fetch_parallel import partition  # noqa: E402
+from fetch_report import _brightness  # noqa: E402
+
+# ЗАГЛУШКА «НЕТ КАДРА» НЕ СЧИТАЕТСЯ «УЖЕ ЕСТЬ КАДР» (19.11, живой случай
+# usuario-12/usuario-19: повторный fetch на уже отправленный проект получал
+# шард '[]' и job целиком SKIPPED, хотя сцена реально приехала тёмной
+# заглушкой 33-36 КБ — glob видел файл и считал сцену закрытой навсегда).
+# Те же пороги, что в `template/cards_keep.py` (вес не ловит — у заглушки
+# свой md5 на каждый прогон, ловит только яркость).
+_STUB_MAX = 150 * 1024
+_STUB_DARK = 45
+_IMG_EXT = (".jpg", ".jpeg", ".png", ".webp")
+
+
+def _is_stub(path):
+    if not path.lower().endswith(_IMG_EXT):
+        return False
+    try:
+        if os.path.getsize(path) > _STUB_MAX:
+            return False
+    except OSError:
+        return False
+    b = _brightness(path)
+    return b is not None and b < _STUB_DARK
 
 TARGET_PER_SHARD = 4      # was 8 (2026-10-09) -> 4 (2026-10-10, speed test).
                           # ROLLBACK: just set this back to 8, re-run
@@ -39,7 +62,12 @@ MAX_SHARDS = 20           # GitHub free tier allows ~20 concurrent jobs
 def _has_image(images_dir, sid):
     if not images_dir:
         return False
-    return bool(glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*")))
+    found = glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*"))
+    if not found:
+        return False
+    # ЕСЛИ ВСЕ найденные файлы на эту сцену — заглушки, кадра нет: сцену
+    # нужно фетчить заново, не считать закрытой.
+    return any(not _is_stub(f) for f in found)
 
 
 def needs_web_fetch(scene, images_dir):
