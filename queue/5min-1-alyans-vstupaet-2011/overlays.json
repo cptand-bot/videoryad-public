@@ -1,0 +1,102 @@
+{
+ "anchor": "top",
+ "1": {
+  "photo": "overlays/scene_001.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "10": {
+  "photo": "overlays/scene_010.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "left"
+ },
+ "13": {
+  "photo": "overlays/scene_013.jpg",
+  "sound": "ding",
+  "at": 2.6,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "up-left"
+ },
+ "15": {
+  "photo": "overlays/scene_015.jpg",
+  "sound": "pop",
+  "at": 2.8,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "23": {
+  "photo": "overlays/scene_023.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left"
+ },
+ "36": {
+  "photo": "overlays/scene_036.jpg",
+  "sound": "ding",
+  "at": 3.2,
+  "shape": "circle",
+  "scale": 1.2,
+  "style": "right"
+ },
+ "42": {
+  "photo": "overlays/scene_042.jpg",
+  "sound": "pop",
+  "at": 3.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "52": {
+  "photo": "overlays/scene_052.jpg",
+  "sound": "whoosh",
+  "at": 3.6,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left"
+ },
+ "6": {
+  "text": {
+   "words": "ПРИСУТСТВИЕ НЕ СЕКРЕТ",
+   "at": 1.5,
+   "pos": "tc"
+  }
+ },
+ "31": {
+  "text": {
+   "words": "ВОПРОС ПРОЩЕ",
+   "at": 1.5,
+   "pos": "tc"
+  }
+ },
+ "41": {
+  "text": {
+   "words": "ГРАНИЦА НЕ ЩИТ",
+   "at": 1.5,
+   "pos": "tc"
+  }
+ },
+ "11": {
+  "text": {
+   "words": "СПОР НЕ О ФАКТЕ",
+   "at": 1.5,
+   "pos": "tc"
+  }
+ },
+ "47": {
+  "text": {
+   "words": "ЛОЖНЫЙ СЛЕД",
+   "at": 1.5,
+   "pos": "tc"
+  }
+ }
+}
