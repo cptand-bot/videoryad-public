@@ -183,6 +183,7 @@ template/rewrite_brief.py
 template/rewrite_cut.py
 template/rewrite_fix.py
 template/rewrite_lint.py
+template/role_icons.py
 template/safe_area.py
 template/scenes_from_srt.py
 template/scenes_klon.py
