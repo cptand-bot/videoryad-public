@@ -212,7 +212,55 @@ def _load_txt_font(fkey, size):
     return ImageFont.load_default()
 
 
-def _render_text_png(words, color, out_path, fkey="default", style="plate"):
+def _render_duo_png(words, sub, color, out_path, fkey="default"):
+    """ДВУХСТРОЧНАЯ ПЛАШКА «5 МИНУТ»: заголовок капсом + подпись строкой ниже,
+    обе на сплошной скруглённой плашке акцентного цвета, тёмные чернила.
+
+    Его слово 19.11 по образцу (скриншот «ПРИЛИВ И ОТЛИВ / это её работа, а
+    не магия»): «это на 5 минут должно стоять… но это формат должен идти на
+    канал 5 минут». Формат стоял раньше и пропал при редизайне 20.10
+    (остался только одностраничный «plate»/«bar»/«bare» без подписи) —
+    восстановлен отдельным стилем, чтобы не трогать остальные три.
+    """
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        return False
+    head = " ".join(str(words or "").split()).upper()
+    tail = " ".join(str(sub or "").split())
+    if not head:
+        return False
+    accent = _TXT_RGB.get(str(color).lower(), _TXT_RGB["yellow"])
+    ink = (26, 20, 14, 255)
+    fs_h, fs_s = 150, 92
+    font_h = _load_txt_font(fkey, fs_h)
+    font_s = _load_txt_font(fkey, fs_s)
+    probe = ImageDraw.Draw(Image.new("RGBA", (8, 8)))
+    bb_h = probe.textbbox((0, 0), head, font=font_h)
+    bb_s = probe.textbbox((0, 0), tail, font=font_s) if tail else (0, 0, 0, 0)
+    pad_x, pad_top, gap, pad_bot = 70, 54, 18, 54
+    w_h, h_h = bb_h[2] - bb_h[0], bb_h[3] - bb_h[1]
+    w_s, h_s = bb_s[2] - bb_s[0], bb_s[3] - bb_s[1]
+    W_ = int(max(w_h, w_s) + pad_x * 2)
+    H_ = int(pad_top + h_h + (gap + h_s if tail else 0) + pad_bot)
+    img = Image.new("RGBA", (max(W_, 8), max(H_, 8)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    radius = min(44, H_ // 3)
+    d.rounded_rectangle((0, 0, W_ - 1, H_ - 1), radius=radius,
+                        fill=accent + (255,))
+    d.text((pad_x - bb_h[0], pad_top - bb_h[1]), head, font=font_h, fill=ink)
+    if tail:
+        d.text((pad_x - bb_s[0], pad_top + h_h + gap - bb_s[1]), tail,
+               font=font_s, fill=ink)
+    try:
+        img.save(out_path)
+        return True
+    except OSError:
+        return False
+
+
+def _render_text_png(words, color, out_path, fkey="default", style="plate",
+                      sub=""):
     """Текстовая всплывашка в СОВРЕМЕННОЙ подаче.
 
     Было до 20.10.2026: жёлтый капс с толстой чёрной обводкой — тот самый
@@ -225,8 +273,12 @@ def _render_text_png(words, color, out_path, fkey="default", style="plate"):
     style:
       plate  — тёмная пластина + акцентная черта слева (по умолчанию);
       bar    — текст на сплошной акцентной полосе (цвет = фон, текст тёмный);
-      bare   — только текст с мягкой тенью, без плашки.
+      bare   — только текст с мягкой тенью, без плашки;
+      duo    — скруглённая плашка акцентного цвета, заголовок капсом + вторая
+               строка подписи (формат «5 МИНУТ», восстановлен 19.11).
     """
+    if str(style or "").lower() == "duo":
+        return _render_duo_png(words, sub, color, out_path, fkey)
     try:
         from PIL import Image, ImageDraw, ImageFilter
     except ImportError:
@@ -463,7 +515,8 @@ def _apply_text_overlay(ffmpeg, ffprobe, base_mp4, out_mp4, ts, dur, sid=None):
     xk = pos[1] if len(pos) > 1 and pos[1] in "lcr" else "c"
     png = out_mp4 + ".txt.png"
     if not _render_text_png(words, ts.get("color") or text_color_for(sid), png,
-                            ts.get("font", "default"), ts.get("style", "plate")):
+                            ts.get("font", "default"), ts.get("style", "plate"),
+                            ts.get("sub", "")):
         return False
     pw, ph = _img_wh(ffprobe, png)
     th = max(60, min(int(H / 6 * msc), int(H * 0.5)))
