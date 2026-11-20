@@ -426,7 +426,12 @@ def main():
         print("по теме записи (слова/дата) нашлось ещё %d ссылок" % len(topic))
 
     if links:
-        _hp = "links_hops.txt"
+        # 20.11: писал голым относительным именем — улетал в CWD (каталог
+        # скилла, если звать не из папки проекта), а не рядом с `out`, как
+        # соседние `links_topic.txt`/`tg_source.json` чуть ниже. Чужой файл
+        # в `template/` держал сверку кода на трубе (улов `usuario-67`:
+        # andiv-pub не проходил `sverka_celey`, фетч стоял).
+        _hp = os.path.join(os.path.dirname(os.path.abspath(out)), "links_hops.txt")
         try:
             with open(_hp, "w", encoding="utf-8") as _f:
                 for _u in sorted(links, key=lambda x: (hop_of.get(x, 9), x)):
