@@ -3902,6 +3902,24 @@ def run_live(scenes_path, images_dir, port):
 
     scenes = load_scenes(scenes_path)
     project = os.path.basename(os.getcwd())
+    # ДАШБОРД НЕ ПОДНИМАЕТСЯ ИЗ ПАПКИ-ЗАБОРА, ЕСЛИ РЯДОМ ЕСТЬ НАСТОЯЩИЙ
+    # ПРОЕКТ (20.11, п.141 — данные потеряны НАСОВСЕМ). Живой случай: дашборд
+    # запущен из `<имя>-cloud` (после get.sh, до переноса в проект), его
+    # правка (снял Мерца) ушла в overlays.json ЭТОЙ папки, а `faza.sh sdacha`
+    # потом собирал из ДРУГОГО overlays.json — в папке настоящего проекта,
+    # где правки не было. Снаружи это выглядело как «правка молча
+    # откатилась». Разводить копии больше нельзя: правь либо здесь (если
+    # проекта ещё нет), либо там — не в обеих папках одного ролика разом.
+    if project.endswith("-cloud"):
+        _real = os.path.join(os.path.dirname(os.getcwd()), project[:-len("-cloud")])
+        if os.path.isdir(_real):
+            print("ОТКАЗ: это папка-забор «%s», а рядом уже есть папка проекта «%s»."
+                  % (project, os.path.basename(_real)), file=sys.stderr)
+            print("        Правка здесь разойдётся с тем, что увидит faza.sh sdacha —", file=sys.stderr)
+            print("        живой случай 20.11 стоил ему потерянной правки на готовом ролике.", file=sys.stderr)
+            print("        Перенеси содержимое в проект (take_folder.py/zabrat_iz_zabora)", file=sys.stderr)
+            print("        и подними дашборд ИЗ НЕГО: cd %s" % _real, file=sys.stderr)
+            raise SystemExit(1)
     thumbs_dir = os.path.join(images_dir, ".rev")
     # Каталог скрытый и в облако не уезжает: после get.sh его в папке забора
     # нет, и `state` падал FileNotFoundError на КАЖДОМ запросе — страница
