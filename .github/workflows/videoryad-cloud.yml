@@ -305,34 +305,57 @@ jobs:
             exit 0
           fi
           python3 - "$man" "$PROJ" "$NAME" <<'PY'
-          import hashlib, json, os, subprocess, sys
+          # ОТДЕЛЬНЫХ АССЕТОВ scene_NNN.jpg В РЕЛИЗЕ НЕТ (20.11, живой баг,
+          # пойман тестом `test-reuse-2011`: «no assets match the file
+          # pattern»). `assemble` кладёт кадры фетча НЕ поштучно, а внутри
+          # `<имя>-project.tgz` — тем же архивом, которым едет весь проект.
+          # Качаем архив ОДИН раз и достаём из него только нужные файлы.
+          import hashlib, json, os, shutil, subprocess, sys, tarfile, tempfile
           man_path, proj, name = sys.argv[1], sys.argv[2], sys.argv[3]
           data = json.load(open(man_path, encoding="utf-8"))
           files = data.get("files", {})
           if not files:
               print("манифест пуст — нечего восстанавливать")
               raise SystemExit(0)
+          tmpd = tempfile.mkdtemp()
+          tgz_name = f"{name}-project.tgz"
+          r = subprocess.run(
+              ["gh", "release", "download", name, "-p", tgz_name,
+               "-D", tmpd, "--clobber"],
+              capture_output=True, text=True)
+          if r.returncode != 0:
+              print(f"::error::слияние фетча и сборки: не скачался архив "
+                    f"{tgz_name} из прежнего релиза «{name}»: "
+                    f"{r.stderr.strip()[:300]}")
+              sys.exit(1)
+          tgz_path = os.path.join(tmpd, tgz_name)
           ok = 0
-          for rel, want_md5 in files.items():
-              dst = os.path.join(proj, rel)
-              os.makedirs(os.path.dirname(dst), exist_ok=True)
-              r = subprocess.run(
-                  ["gh", "release", "download", name, "-p", os.path.basename(rel),
-                   "-D", os.path.dirname(dst), "--clobber"],
-                  capture_output=True, text=True)
-              if r.returncode != 0:
-                  print(f"::error::слияние фетча и сборки: не скачался {rel} из "
-                        f"прежнего релиза «{name}»: {r.stderr.strip()[:300]}")
-                  sys.exit(1)
-              h = hashlib.md5(open(dst, "rb").read()).hexdigest()
-              if h != want_md5:
-                  print(f"::error::слияние фетча и сборки: ОТПЕЧАТОК НЕ СОВПАЛ у "
-                        f"{rel} — было {want_md5}, стало {h}. Это не тот файл, "
-                        f"брать его не буду.")
-                  sys.exit(1)
-              ok += 1
+          with tarfile.open(tgz_path) as tf:
+              for rel, want_md5 in files.items():
+                  member = f"{name}/{rel}"
+                  try:
+                      src = tf.extractfile(member)
+                  except KeyError:
+                      src = None
+                  if src is None:
+                      print(f"::error::слияние фетча и сборки: в архиве "
+                            f"{tgz_name} нет {member}")
+                      sys.exit(1)
+                  raw = src.read()
+                  h = hashlib.md5(raw).hexdigest()
+                  if h != want_md5:
+                      print(f"::error::слияние фетча и сборки: ОТПЕЧАТОК НЕ "
+                            f"СОВПАЛ у {rel} — было {want_md5}, стало {h}. "
+                            f"Это не тот файл, брать его не буду.")
+                      sys.exit(1)
+                  dst = os.path.join(proj, rel)
+                  os.makedirs(os.path.dirname(dst), exist_ok=True)
+                  with open(dst, "wb") as out:
+                      out.write(raw)
+                  ok += 1
+          shutil.rmtree(tmpd, ignore_errors=True)
           print(f"слияние фетча и сборки: восстановлено {ok}/{len(files)} "
-                f"нетронутых кадров, отпечаток сверен у каждого")
+                f"нетронутых кадров из {tgz_name}, отпечаток сверен у каждого")
           PY
 
       - name: Shard the WEB scenes for the matrix (library scenes stay local)
