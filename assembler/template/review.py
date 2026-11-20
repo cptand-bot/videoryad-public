@@ -782,7 +782,15 @@ def mask_text_png(tspec, out_png, project=""):
         import nadpis_maska as NM
     W, H = 1920, 1080
     tspec = tspec or {}
-    head = str(tspec.get("words") or tspec.get("text") or "").strip().upper()
+    _слова = tspec.get("words") or tspec.get("text") or ""
+    # СПИСОК СЛОВ — РЕАЛЬНЫЙ list, а не строка: без join `str(list)` рисует
+    # Python-репр на плитке целиком, скобки и кавычки (его вопрос 14.11,
+    # «что за квадратные скобки?» — тогда чинили только финальный рендер в
+    # build_overlays.py, дашборд-превью этот путь не трогал, 20.11 поймано
+    # живьём на 5min-2-dogovarivatsya-ne-2111).
+    if isinstance(_слова, (list, tuple)):
+        _слова = " — ".join(str(x).strip() for x in _слова if str(x).strip())
+    head = str(_слова).strip().upper()
     if not head:
         return (0, 0)
     sub = str(tspec.get("sub") or "").strip()
@@ -1141,6 +1149,8 @@ def render_text_png(text, tcolor, out_path, fkey="default", style="plate",
     except Exception:
         pass
     from PIL import Image, ImageDraw
+    if isinstance(text, (list, tuple)):
+        text = " — ".join(str(x).strip() for x in text if str(x).strip())
     txt = " ".join((text or "").split()).upper()
     if not txt:
         return False
@@ -4033,7 +4043,13 @@ def run_live(scenes_path, images_dir, port):
                             # откуда его берёт весь сборщик — ИЗ ПУТИ.
                             mask_text_png(tb, tpng, project)
                         else:
-                            render_text_png(str(tb.get("words") or tb.get("text") or ""),
+                            # `tb.get("words")` — реальный list (его и
+                            # должен получать `build_overlays._render_text_png`,
+                            # он сам джойнит через `_normalize_words`).
+                            # `str()` ЗДЕСЬ превращал список в Python-репр
+                            # до того, как фикс мог сработать — скобки и
+                            # кавычки на плитке (20.11, живой случай).
+                            render_text_png(tb.get("words") or tb.get("text") or "",
                                             str(tb.get("color") or "white"), tpng,
                                             str(tb.get("font") or "default"),
                                             str(tb.get("style") or "plate"),

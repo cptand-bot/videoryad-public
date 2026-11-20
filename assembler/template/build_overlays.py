@@ -277,6 +277,14 @@ def _render_text_png(words, color, out_path, fkey="default", style="plate",
       duo    — скруглённая плашка акцентного цвета, заголовок капсом + вторая
                строка подписи (формат «5 МИНУТ», восстановлен 19.11).
     """
+    # СПИСОК СЛОВ ПРИХОДИТ РЕАЛЬНЫМ list (не строкой) — `_normalize_words`
+    # его таким и возвращает. Без join здесь `str(words)` ниже рисует
+    # Python-репр целиком, скобки и кавычки: «Что за квадратные скобки?»
+    # (14.11) было починено только в `_apply_mask_overlay`, а в плоский
+    # путь (сюда, `_render_text_png`) починка не доехала — 20.11, живой
+    # случай на дашборде 5min-2-dogovarivatsya-ne-2111.
+    if isinstance(words, (list, tuple)):
+        words = " — ".join(str(x).strip() for x in words if str(x).strip())
     if str(style or "").lower() == "duo":
         return _render_duo_png(words, sub, color, out_path, fkey)
     try:
