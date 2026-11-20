@@ -1,0 +1,1487 @@
+[
+ {
+  "scene": 4,
+  "view": "quote",
+  "dur": 10.72,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Сикорски возмущён тем, что Россия вообще оказалась в таком формате переговоров",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "split",
+  "dur": 9.61,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_005.jpg",
+   "text": "Россия — экономический карлик, которого зачем-то усадили рядом с США и Китаем",
+   "author": "Радослав Сикорски",
+   "role": "министр иностранных дел Польши",
+   "accent": "карлик",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "zal_slova",
+  "dur": 10.87,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.87,
+   "sheets": [
+    "Тогда давайте совсем просто",
+    "Если Европа такой экономический монстр"
+   ],
+   "text": "Может, Радослав, ты что то перепутал?",
+   "na_polu": "ТОГДА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "charts.waterfall",
+  "dur": 12.54,
+  "anim": 12.54,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Ресурсы",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Территория",
+     "value": 1.0
+    },
+    {
+     "label": "Влияние на безопасность",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "vyrezka.gazeta",
+  "dur": 10.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_010.jpg",
+   "author": "РЮТТЕ",
+   "role": "генеральный секретарь НАТО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 13,
+  "view": "charts.map_dist",
+  "dur": 9.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Москва",
+     "lat": 55.7558,
+     "lon": 37.6173,
+     "accent": false
+    },
+    {
+     "label": "Вашингтон",
+     "lat": 38.9072,
+     "lon": -77.0369,
+     "accent": false
+    }
+   ],
+   "kick": "Два полюса одного разговора",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "doc",
+  "dur": 10.56,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Важны не красивые фотографии, а темы, которые Россия, США и Китай решили вынести в общий документ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "charts.cartogram",
+  "dur": 11.24,
+  "anim": 11.24,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "США",
+    "Китай",
+    "Франция",
+    "Великобритания"
+   ],
+   "kick": "Реформа ООН без Франции и Британии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "charts.pie",
+  "dur": 9.2,
+  "anim": 9.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Это ведь не случайные",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Это два постоянных члена",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Всего таких государств пять",
+     "value": 33.333333333333336
+    }
+   ],
+   "title": "Это ведь не случайные прохожие возле",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "charts.cartogram",
+  "dur": 10.64,
+  "anim": 10.64,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Франция",
+    "Великобритания"
+   ],
+   "kick": "Карлик участвует. Монстры — нет",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "bars",
+  "dur": 9.92,
+  "anim": 9.92,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "КТО СЕЙЧАС ЗА СТОЛОМ",
+   "caption": "",
+   "seconds": 9.92,
+   "bars": [
+    {
+     "label": "РОССИЯ, США, КИТАЙ",
+     "value": 0.9,
+     "color": "EABD23"
+    },
+    {
+     "label": "ФРАНЦИЯ, БРИТАНИЯ",
+     "value": 0.3,
+     "color": "B92526"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 19,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.76,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 9.76,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Место за этим столом не постоянное",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.76,
+    "region": "Германия"
+   }
+  },
+  "kwargs": {
+   "text": "Место за этим столом не постоянное",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.76,
+   "region": "Германия"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "cinematic.evidence_wall",
+  "dur": 9.76,
+  "anim": 9.76,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_020.jpg",
+     240,
+     380,
+     -4,
+     "Декларация о мире"
+    ],
+    [
+     "cards/photo/card_020_2.jpg",
+     800,
+     380,
+     3,
+     "Трамп: «12 из 10»"
+    ]
+   ],
+   "title": "КАК ЭТО ШЛО",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 21,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.6,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 13.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Важный разговор начался без тебя",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 13.6,
+    "role": "постоянный член Совбеза"
+   }
+  },
+  "kwargs": {
+   "text": "Важный разговор начался без тебя",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 13.6,
+   "role": "постоянный член Совбеза"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "cinematic.dossier",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "МЕТТЕ ФРЕДЕРИКСЕН",
+   "rows": [
+    "Премьер-министр Дании",
+    "Требует не принимать условия России",
+    "Считает их шире украинского конфликта",
+    "Выступает за единую позицию Европы"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_022.jpg",
+   "stamp": "ПОЗИЦИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "paper_typed",
+  "dur": 13.28,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Трамп раскритиковал надгосударственные структуры, которые живут своей жизнью и командуют государствами, как будто страны существуют для их удобства",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "film.film_strip",
+  "dur": 9.28,
+  "anim": 9.28,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_024.jpg",
+    "cards/photo/card_024_2.jpg",
+    "cards/photo/card_024_3.jpg"
+   ],
+   "title": "ПРО ЧТО КИНО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 12.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Раздражение растёт",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.8,
+    "pary": [
+     "Внешние структуры=Суверенитет"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Раздражение растёт",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.8,
+   "pary": [
+    "Внешние структуры=Суверенитет"
+   ]
+  }
+ },
+ {
+  "scene": 26,
+  "view": "zal_pol",
+  "dur": 12.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.8,
+   "sheets": [],
+   "text": "Внешняя структура — приглашение чужого",
+   "na_polu": "СУВЕРЕНИТЕТ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "pull",
+  "dur": 13.28,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Офигевшие глобалистические надстройки — структуры, которые уже почти никто не контролирует",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "zal",
+  "dur": 12.12,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Структуры не должны быть начальством",
+   "words": [
+    "ИТОГ",
+    "ЦЕНА",
+    "ПРОВАЛ"
+   ],
+   "sheets": [
+    "Карлики и монстры",
+    "Ялта 2.0 не состоялась",
+    "Реформа ООН без Франции",
+    "Суверенитет государства",
+    "Международный уголовный суд",
+    "Энергетика и ИИ"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 12.12,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "doc",
+  "dur": 12.17,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Значительная часть современной европейской политики построена на передаче огромного количества полномочий наверх — в Брюссель, в наднациональные механизмы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "charts.network",
+  "dur": 11.99,
+  "anim": 11.99,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Россия",
+     "label": "Россия",
+     "weight": 2.0
+    },
+    {
+     "id": "США",
+     "label": "США",
+     "weight": 2.0
+    },
+    {
+     "id": "Китай",
+     "label": "Китай",
+     "weight": 2.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Россия",
+     "to": "США",
+     "weight": 1.0
+    },
+    {
+     "from": "США",
+     "to": "Китай",
+     "weight": 1.0
+    },
+    {
+     "from": "Россия",
+     "to": "Китай",
+     "weight": 1.0
+    }
+   ],
+   "kick": "Три игрока — одна логика",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.28,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 11.28,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Не единственный билет на вход",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.28
+   }
+  },
+  "kwargs": {
+   "text": "Не единственный билет на вход",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.28
+  }
+ },
+ {
+  "scene": 32,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.68,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 11.68,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Европа без единства",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.68,
+    "repliki_": [
+     "Фредериксен: против условий Москвы",
+     "Сикорски: против формата встречи",
+     "Рютте: встреча нормальна"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Европа без единства",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.68,
+   "repliki_": [
+    "Фредериксен: против условий Москвы",
+    "Сикорски: против формата встречи",
+    "Рютте: встреча нормальна"
+   ]
+  }
+ },
+ {
+  "scene": 33,
+  "view": "charts.cartogram",
+  "dur": 11.12,
+  "anim": 11.12,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Франция",
+    "Германия",
+    "Великобритания"
+   ],
+   "kick": "Франция, Германия и Британия обсуждают контакты с Москвой",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "vyrezka.figura",
+  "dur": 11.89,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_034.jpg",
+   "author": "СИКОРСКИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "charts.cartogram",
+  "dur": 12.72,
+  "anim": 12.72,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Донецкая область",
+    "Луганская область"
+   ],
+   "kick": "Донбасс — тяжёлый вопрос",
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "zal_makety",
+  "dur": 11.04,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.04,
+   "sheets": [],
+   "text": "Военная инфраструктура НАТО",
+   "makety": [
+    "лэп=БАЗЫ",
+    "лэп=РАКЕТЫ",
+    "банк=ВОЙСКА"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.76,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.76,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Спор не кончается",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.76,
+    "tezisy": [
+     "Ракеты, базы, войска",
+     "Украина — кусок",
+     "Спор дальше"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Спор не кончается",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.76,
+   "tezisy": [
+    "Ракеты, базы, войска",
+    "Украина — кусок",
+    "Спор дальше"
+   ]
+  }
+ },
+ {
+  "scene": 38,
+  "view": "duel",
+  "dur": 11.12,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "переходит на следующий этаж",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "И вот европейцам это особенно неприятно",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.28,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 11.28,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Только у крупнейших держав своя логика",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.28,
+    "sobytiya": [
+     "Только у крупнейших держав",
+     "договариваются между собой",
+     "А если договорятся по"
+    ],
+    "рол_номер": 1
+   }
+  },
+  "kwargs": {
+   "text": "Только у крупнейших держав своя логика",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.28,
+   "sobytiya": [
+    "Только у крупнейших держав",
+    "договариваются между собой",
+    "А если договорятся по"
+   ],
+   "рол_номер": 1
+  }
+ },
+ {
+  "scene": 40,
+  "view": "film.film_single",
+  "dur": 10.56,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_040.jpg",
+   "title": "Декларация о мире",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "paper_hand",
+  "dur": 11.63,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Трое уже обозначили темы: ООН, суверенитет, международные суды, энергетика, ядерные риски",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "zal_g01",
+  "dur": 12.24,
+  "anim": 12.24,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.24,
+   "sheets": [],
+   "text": "Не просто карта Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "zal_g48",
+  "dur": 12.16,
+  "anim": 12.16,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.16,
+   "sheets": [],
+   "text": "Вдруг — нефтепереработка",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "charts.slope",
+  "dur": 10.89,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Германия: дешёвая энергия",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "дорогая энергия"
+    },
+    {
+     "label": "Европа: конкурентоспособность",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "рост цен"
+    }
+   ],
+   "source": "Германия",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "charts.waterfall",
+  "dur": 12.88,
+  "anim": 12.88,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Старт",
+    "value": 10.0
+   },
+   "steps": [
+    {
+     "label": "Энергия",
+     "value": -2.0
+    },
+    {
+     "label": "Промышленность",
+     "value": -2.0
+    },
+    {
+     "label": "Вес",
+     "value": -2.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.44,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 11.44,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Трудности объясняют противостоянием с Россией",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.44,
+    "role": "немецкий министр"
+   }
+  },
+  "kwargs": {
+   "text": "Трудности объясняют противостоянием с Россией",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.44,
+   "role": "немецкий министр"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "charts.pie",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Электричество",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Отопление",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Цена производства",
+     "value": 33.333333333333336
+    }
+   ],
+   "kick": "Счёт приходит домой",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "zal_ekran",
+  "dur": 12.8,
+  "anim": 12.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.8,
+   "sheets": [],
+   "text": "Отказ от оружия",
+   "say": "Давайте всё это уничтожим — сразу, всем",
+   "author": "Си Цзиньпин",
+   "source": "Шэньчжэнь, 2026",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "charts.network",
+  "dur": 10.75,
+  "anim": 10.75,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Россия",
+     "label": "Россия",
+     "weight": 2.0
+    },
+    {
+     "id": "США",
+     "label": "США",
+     "weight": 2.0
+    },
+    {
+     "id": "Китай",
+     "label": "Китай",
+     "weight": 2.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Россия",
+     "to": "США",
+     "weight": 1.0
+    },
+    {
+     "from": "США",
+     "to": "Китай",
+     "weight": 1.0
+    },
+    {
+     "from": "Россия",
+     "to": "Китай",
+     "weight": 1.0
+    }
+   ],
+   "kick": "Самый маленький арсенал у Китая",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "charts.line",
+  "dur": 11.57,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Дешёвая энергия",
+    "Дорогая энергия и рост цен",
+    "Положение ещё хуже"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "ядерный баланс",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "zal_shkala",
+  "dur": 12.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.8,
+   "sheets": [],
+   "text": "Россия и США: ноль",
+   "value": "3",
+   "value_sub": "державы за столом",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "devices.device_scene",
+  "dur": 12.16,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_052.jpg",
+   "items": [
+    "Экономика",
+    "Промышленность",
+    "Технологии",
+    "Искусственный интеллект"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "torn_split.torn_split",
+  "dur": 10.61,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_053.jpg",
+   "b_path": "cards/photo/card_053_2.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "poster.poster",
+  "dur": 13.07,
+  "anim": 13.07,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "САММИТ В ШЭНЬЧЖЭНЕ",
+   "hero_photo": "cards/photo/card_054.jpg",
+   "bottom": "Все за разоружение. Отлично. Кроме того, кто вот-вот отстанет навсегда",
+   "facts": [
+    {
+     "label": "Участники",
+     "value": "Россия, США, Китай"
+    },
+    {
+     "label": "Тема",
+     "value": "Ядерное разоружение"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 55,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.21,
+  "anim": 12.21,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_055.jpg",
+   "title": "Франция, Германия и Британия обсуждают контакты с Москвой",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 56,
+  "view": "photo",
+  "dur": 12.33,
+  "anim": 12.33,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_056.jpg",
+   "title": "Самолёт Судного дня",
+   "lines": [
+    "Сообщения выглядят очень по-человечески",
+    "Никто далеко не убирает своё железо"
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "tape",
+  "dur": 12.94,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Так что китайская хитрость не прошла",
+   "accent": "китайская",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "zal_kub",
+  "dur": 11.54,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.54,
+   "sheets": [],
+   "text": "Фото — не договор",
+   "kick": "СТРАХОВКА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "charts.cartogram",
+  "dur": 11.66,
+  "anim": 11.66,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "США",
+    "Китай"
+   ],
+   "kick": "Трамп, Путин, Си — общее фото",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "marker_serif",
+  "dur": 13.56,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вот почему спор Сикорского о том, достоин ли российский карлик сидеть рядом с великими",
+   "accent": "Сикорского",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "charts.waterfall",
+  "dur": 12.68,
+  "anim": 12.68,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "Ресурсы",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Право вето",
+     "value": 1.0
+    },
+    {
+     "label": "Способность сорвать решение",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ЗА СТОЛОМ"
+   },
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 62,
+  "view": "pull",
+  "dur": 12.13,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Россия беднее Евросоюза. Но когда речь о ядерном сдерживании — арифметика другая",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "strike",
+  "dur": 11.24,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Крупная экономика решает всё. Только не для Франции и Британии, когда речь о Совбезе и праве сорвать решение",
+   "struck": "Крупная экономика решает всё",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "zal_g44",
+  "dur": 12.11,
+  "anim": 12.11,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.11,
+   "sheets": [],
+   "text": "Особое место пятёрки",
+   "value": "5",
+   "value_sub": "вето в Совбезе",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "charts.network",
+  "dur": 11.96,
+  "anim": 11.96,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Россия",
+     "label": "Россия",
+     "weight": 2.0
+    },
+    {
+     "id": "США",
+     "label": "США",
+     "weight": 2.0
+    },
+    {
+     "id": "Китай",
+     "label": "Китай",
+     "weight": 2.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Россия",
+     "to": "США",
+     "weight": 1.0
+    },
+    {
+     "from": "США",
+     "to": "Китай",
+     "weight": 1.0
+    },
+    {
+     "from": "Россия",
+     "to": "Китай",
+     "weight": 1.0
+    }
+   ],
+   "kick": "Намётки новой Ялты",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.13,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 11.13,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Суверенитет против давления",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.13,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Суверенитет против давления",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.13,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 67,
+  "view": "doc",
+  "dur": 12.07,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Иммунитеты официальных лиц против полномочий международных судов. Энергетические интересы против политики, которая делает промышленность дороже. Ядерное сдерживание против призывов всё уничтожить",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "zal_schetchik",
+  "dur": 12.08,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.08,
+   "sheets": [],
+   "text": "Там решают без них",
+   "value": "0",
+   "value_sub": "ИСКЛЮЧЕНА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.84,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 11.84,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Принципы без троих",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.84,
+    "soobshcheniya": [
+     "Места за столом мало",
+     "Таблички тоже мало"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Принципы без троих",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.84,
+   "soobshcheniya": [
+    "Места за столом мало",
+    "Таблички тоже мало"
+   ]
+  }
+ },
+ {
+  "scene": 70,
+  "view": "paper_hand",
+  "dur": 12.24,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Это болезненнее для Европы, чем любая фотография Путина с лидерами",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 71,
+  "view": "zal_efir",
+  "dur": 11.09,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.09,
+   "sheets": [],
+   "text": "Рукопожатие — вежливость",
+   "say": "Правила ООН и энергетики решают без нас",
+   "author": "дипломат",
+   "role": "европейский дипломат",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 72,
+  "view": "tape",
+  "dur": 11.28,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Объяснять придётся не перед фотографами",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "zal_g18",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.2,
+   "sheets": [],
+   "text": "Карлик сидит, монстр — нет",
+   "value": "2",
+   "value_sub": "без места",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
