@@ -37,6 +37,7 @@ cloud/classify_prompt.md
 cloud/cloud_pipeline.py
 cloud/config.sh
 cloud/dash.sh
+cloud/clean_clones.sh
 cloud/dash_watch.sh
 cloud/fetch_report.py
 cloud/fetch_shard.py
