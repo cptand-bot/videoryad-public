@@ -1,0 +1,49 @@
+[
+ {
+  "scene": 4,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.72,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 10.72,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Россия в этом формате переговоров",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.72,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Россия в этом формате переговоров",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.72,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 62,
+  "view": "charts.cartogram",
+  "dur": 12.13,
+  "anim": 12.13,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Германия",
+    "Франция"
+   ],
+   "kick": "Россия беднее Евросоюза — но вопрос не только в деньгах",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
