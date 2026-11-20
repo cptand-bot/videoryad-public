@@ -308,6 +308,12 @@ final)
     cd "$PROJ" || exit 1
     step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
     step "обязательные"     python3 "$T/obyazatelno.py" "$SCENES" --gate dashboard
+    # 20.11, п.135: `dossier_use.py` раньше гонялся ТОЛЬКО в `podgotovka`,
+    # ДО фетча и до большинства правок — поздние замены кадров/источников
+    # (его слово про фото Каллас) уходили из-под этой проверки насовсем,
+    # находилось только по его прямой жалобе на готовом дашборде. Второй
+    # прогон здесь, перед самим дашбордом, ловит то, что изменилось позже.
+    step "материал досье (повтор)" python3 "$T/dossier_use.py" "$SCENES"
     step "слои на карточках" python3 "$T/cards_queue.py" --gate "$SCENES" "$PROJ"
     step "дедуп"            python3 "$T/autodedup.py" "$SCENES" images
     step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
