@@ -1447,7 +1447,7 @@ def _sid_of(path):
 # этом только от пользователя. Сверка по md5 стоит секунды и ловит то, чего
 # не видно на контактном листе. Живой случай: `ЛЮДИ-ОФИСЕ-МОНИТОРАМИ__05`
 # стоял в сцене 44 готового набора.
-_wm_dir = os.environ.get("VIDEORYAD_UPSCALED_DIR") or "/mnt/d/media-library/_БРАК-апскейлер"
+_wm_dir = os.environ.get("VIDEORYAD_UPSCALED_DIR") or "/mnt/i/media-library/_БРАК-апскейлер"
 _wm = {}
 try:
     for _f in sorted(glob.glob(os.path.join(_wm_dir, "*"))):

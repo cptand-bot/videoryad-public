@@ -396,7 +396,7 @@ MIN_GAP_БАЗА = 8
         # «одна и та же картинка на сценах 22, 26, 27». Два наших правила
         # противоречили друг другу; лечится в подсказке: мозаичным видам
         # (`film`, `wall`, `torn`) нужны кадры, которых в ролике нет —
-        # из `D:\media-library\БАЗА` или добранные мини-проектом.
+        # из `I:\media-library\БАЗА` или добранные мини-проектом.
         "чем": ("python3 ~/.claude/skills/news-video/fullcycle/card_put.py "
                 "<scenes.json> <сцена> film --title «ПРО ЧТО КИНО» "
                 "--images «cards/photo/kadr_01.jpg,cards/photo/kadr_02.jpg,"

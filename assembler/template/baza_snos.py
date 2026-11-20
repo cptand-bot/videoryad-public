@@ -33,7 +33,7 @@ import shutil
 import sys
 import time
 
-BAZA = os.environ.get("VIDEORYAD_BAZA") or "/mnt/d/media-library/БАЗА"
+BAZA = os.environ.get("VIDEORYAD_BAZA") or "/mnt/i/media-library/БАЗА"
 INDEX = os.path.join(BAZA, ".md5-index.json")
 EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm")
 
