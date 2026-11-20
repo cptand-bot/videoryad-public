@@ -2097,6 +2097,21 @@ def card_html(s, t, live, images_dir, needs=None, overlays=None, sfx=None, ticke
     # to see that ("зашил слишком много").
     _tw = ov_cur.get("text") if isinstance(ov_cur.get("text"), dict) else {}
     _twords = _tw.get("words") or _tw.get("text") or ""
+    # ТО ЖЕ САМОЕ, ЧТО И В `mask_text_png`/`render_text_png`: список слов —
+    # настоящий list, без join он садится в поле ввода панели как
+    # Python-репр со скобками — оператор видит мусор и может пересохранить
+    # его же строкой (20.11, живой случай: сцены 1/8/19 получили
+    # "words": "['...']" именно так, через approve панели).
+    if isinstance(_twords, (list, tuple)):
+        _twords = " — ".join(str(x).strip() for x in _twords if str(x).strip())
+    elif isinstance(_twords, str) and _twords.strip().startswith("[") and _twords.strip().endswith("]"):
+        try:
+            import ast as _ast_tw
+            _parsed_tw = _ast_tw.literal_eval(_twords.strip())
+            if isinstance(_parsed_tw, (list, tuple)):
+                _twords = " — ".join(str(x).strip() for x in _parsed_tw if str(x).strip())
+        except (ValueError, SyntaxError):
+            pass
     _text_active = bool(str(_twords).strip())
     # фото-панель активна: есть фото, ЛИБО есть заготовка сцены без текста
     _photo_active = bool(ov_cur.get("photo")) or (bool(ov_cur) and not _text_active)
