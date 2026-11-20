@@ -276,6 +276,65 @@ jobs:
             --add-dir ${{ steps.pick.outputs.proj }}
             --add-dir assembler
 
+      # СЛИТЬ ФЕТЧ И СБОРКУ: ВОССТАНОВИТЬ НЕТРОНУТЫЕ КАДРЫ ИЗ ПРЕЖНЕГО
+      # РЕЛИЗА ЭТОГО ЖЕ ИМЕНИ (20.11). `ship.sh` на полной сборке, следующей
+      # за `--fetch-only`, уже НЕ кладёт в очередь кадры, которые на
+      # дашборде не трогали — вместо файла едет только их отпечаток
+      # (md5) в `.reuse_from_fetch.json`. Релиз `<имя>` от предыдущего
+      # фетч-прогона этой же очереди к этому моменту ЕЩЁ ЖИВ: его снесёт
+      # только шаг `Clear the queue slot` / создание нового релиза В КОНЦЕ
+      # ЭТОГО ЖЕ прогона (джоб `assemble`), а не раньше. Поэтому здесь, до
+      # шардинга, можно спокойно забрать файлы оттуда.
+      # ПРОВЕРКА ПО ОТПЕЧАТКУ, А НЕ ПО ИМЕНИ — РОВНО ТА ЖЕ ПРИЧИНА, ПО
+      # КОТОРОЙ КЭШ КЛИПОВ НИЖЕ (джоб `clips`) СОЗНАТЕЛЬНО НЕ ДЕРЖИТСЯ
+      # МЕЖДУ ПРОГОНАМИ: старое должно быть НЕВОЗМОЖНО принять за новое.
+      # Отпечаток совпал — файл точно тот; не совпал или не скачался —
+      # ГРОМКИЙ ОТКАЗ прогона (`::error::`), а не тихая подмена: шард
+      # потом честно сходит за этим кадром заново, если вкладка повторит
+      # отправку без `.reuse_from_fetch.json`.
+      - name: Восстановить нетронутые кадры из прежнего фетча (слияние фетча и сборки)
+        if: steps.pick.outputs.have == 'true'
+        env:
+          PROJ: "${{ steps.pick.outputs.proj }}"
+          NAME: "${{ steps.pick.outputs.name }}"
+          GH_TOKEN: "${{ github.token }}"
+        run: |
+          man="$PROJ/.reuse_from_fetch.json"
+          if [ ! -f "$man" ]; then
+            echo "манифеста переиспользования нет — обычная отправка (fetch-only, первый фетч, либо правок с прошлого раза не было)"
+            exit 0
+          fi
+          python3 - "$man" "$PROJ" "$NAME" <<'PY'
+          import hashlib, json, os, subprocess, sys
+          man_path, proj, name = sys.argv[1], sys.argv[2], sys.argv[3]
+          data = json.load(open(man_path, encoding="utf-8"))
+          files = data.get("files", {})
+          if not files:
+              print("манифест пуст — нечего восстанавливать")
+              raise SystemExit(0)
+          ok = 0
+          for rel, want_md5 in files.items():
+              dst = os.path.join(proj, rel)
+              os.makedirs(os.path.dirname(dst), exist_ok=True)
+              r = subprocess.run(
+                  ["gh", "release", "download", name, "-p", os.path.basename(rel),
+                   "-D", os.path.dirname(dst), "--clobber"],
+                  capture_output=True, text=True)
+              if r.returncode != 0:
+                  print(f"::error::слияние фетча и сборки: не скачался {rel} из "
+                        f"прежнего релиза «{name}»: {r.stderr.strip()[:300]}")
+                  sys.exit(1)
+              h = hashlib.md5(open(dst, "rb").read()).hexdigest()
+              if h != want_md5:
+                  print(f"::error::слияние фетча и сборки: ОТПЕЧАТОК НЕ СОВПАЛ у "
+                        f"{rel} — было {want_md5}, стало {h}. Это не тот файл, "
+                        f"брать его не буду.")
+                  sys.exit(1)
+              ok += 1
+          print(f"слияние фетча и сборки: восстановлено {ok}/{len(files)} "
+                f"нетронутых кадров, отпечаток сверен у каждого")
+          PY
+
       - name: Shard the WEB scenes for the matrix (library scenes stay local)
         id: shard
         if: steps.pick.outputs.have == 'true'
