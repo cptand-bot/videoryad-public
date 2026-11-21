@@ -182,6 +182,28 @@ def файл_сцены(images, sid):
     return ""
 
 
+_OV_EXT = (".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".webm")
+
+
+def всплывашка_донора(d, donor_sid):
+    """Файл донорской ВСПЛЫВАШКИ (не кадра) для её сцены, если есть (21.11).
+
+    Те же правила, что у `build_overlays.py do_build` при сборе `overlays/`:
+    служебный `.text.png` не считается.
+    """
+    try:
+        имя = "scene_%03d" % int(donor_sid)
+    except (TypeError, ValueError):
+        return ""
+    for f in sorted(glob.glob(os.path.join(d, "overlays", имя + ".*"))):
+        b = os.path.basename(f)
+        if b.endswith(".text.png") or not b.lower().endswith(_OV_EXT):
+            continue
+        if os.path.getsize(f) > 0:
+            return f
+    return ""
+
+
 def main():
     ap = argparse.ArgumentParser(description="кадры клона из донорской темы")
     ap.add_argument("scenes")
@@ -204,6 +226,7 @@ def main():
     pdir = os.path.dirname(os.path.abspath(a.scenes)) or "."
     images = os.path.join(pdir, "images")
     os.makedirs(images, exist_ok=True)
+    overlays_dir = os.path.join(pdir, "overlays")
     data, sc = сцены(a.scenes)
     if not sc:
         sys.exit("раскадровка пустая: %s" % a.scenes)
@@ -217,6 +240,7 @@ def main():
     _ban = баны()
     пары = []
     занято = set()
+    _ов_взято = set()
     for d in дон:
         dp = рабочая_раскадровка(d)
         if not dp:
@@ -261,6 +285,36 @@ def main():
                 continue
             пары.append((sid, s, f, балл, h, os.path.basename(d)))
             занято.add(sid)
+
+            # ВСПЛЫВАШКА ДОНОРА — ТОТ ЖЕ ПРИНЦИП, ЧТО КАДР (21.11, П-0422).
+            # `tg_overlay_fill.py`/`build_overlays.py` ищут совпадение со
+            # СЛОВАРЁМ поста по тексту СЦЕНЫ, а текст клона переписан заново
+            # — на нём находит в разы меньше (его замер 19.11: 13 vs 3, 27
+            # vs 4, 8 vs 5 на трёх темах дня). Сцена донора здесь уже
+            # смыслово подобрана (порог похожести выше `a.porog`) — если у
+            # неё есть всплывашка и клон своей ещё не получил, переносим её
+            # вместе с кадром, не дожидаясь отдельного словарного поиска.
+            # Только для смысловых совпадений этого цикла, не для добивки
+            # по порядку ниже — там сцены не связаны по содержанию.
+            if not a.spisok and sid not in _ов_взято \
+                    and not glob.glob(os.path.join(overlays_dir,
+                                                    "scene_%03d.*" % int(sid))):
+                of = всплывашка_донора(d, лучший.get("id"))
+                if of:
+                    try:
+                        oh = hashlib.md5(open(of, "rb").read()).hexdigest()
+                    except OSError:
+                        oh = None
+                    if oh and oh not in _ban:
+                        os.makedirs(overlays_dir, exist_ok=True)
+                        oext = os.path.splitext(of)[1]
+                        цель_ов = os.path.join(
+                            overlays_dir, "scene_%03d%s" % (int(sid), oext))
+                        try:
+                            shutil.copy2(of, цель_ов)
+                            _ов_взято.add(sid)
+                        except OSError:
+                            pass
 
     потолок = int(len(sc) * a.dolya)
     # ДОБИВАЕМ ПО ПОРЯДКУ (11.11). Смысловое совпадение закрывает примерно
@@ -309,6 +363,8 @@ def main():
 
     print("кадров донора подходит: %d из %d сцен (потолок %d, порог похожести "
           "%.2f)" % (len(пары), len(sc), потолок, a.porog))
+    if _ов_взято:
+        print("всплывашек донора перенесено: %d" % len(_ов_взято))
     if a.spisok:
         for sid, _s, f, балл, _h, dn in sorted(пары, key=lambda x: int(x[0]))[:40]:
             print("  сцена %3s ← %s/%s (%.2f)" % (sid, dn, os.path.basename(f), балл))
