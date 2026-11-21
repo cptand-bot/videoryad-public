@@ -1,0 +1,77 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "source": "press_photo",
+   "source_query": "Московский Кремль вид сверху 2026",
+   "text": ""
+  },
+  {
+   "id": 6,
+   "source": "press_photo",
+   "source_query": "Офис президента Украины здание Киев 2026",
+   "text": ""
+  },
+  {
+   "id": 15,
+   "source": "press_photo",
+   "source_query": "Юрий Ушаков советник Путина портрет 2026",
+   "text": ""
+  },
+  {
+   "id": 23,
+   "source": "press_photo",
+   "source_query": "флаги Франция Германия Великобритания саммит 2026",
+   "text": ""
+  },
+  {
+   "id": 30,
+   "source": "press_photo",
+   "source_query": "Александр Стубб президент Финляндии портрет 2026",
+   "text": ""
+  },
+  {
+   "id": 36,
+   "source": "press_photo",
+   "source_query": "резиденция на Банковой улице Киев 2026",
+   "text": ""
+  },
+  {
+   "id": 47,
+   "source": "press_photo",
+   "source_query": "завод Рейнметалл цех производство 2026",
+   "text": ""
+  },
+  {
+   "id": 55,
+   "source": "press_photo",
+   "source_query": "самолёт НАТО патруль Балтика 2026",
+   "text": ""
+  },
+  {
+   "id": 65,
+   "source": "press_photo",
+   "source_query": "министерство иностранных дел Китай Пекин здание 2026",
+   "text": ""
+  },
+  {
+   "id": 70,
+   "source": "press_photo",
+   "source_query": "граница НАТО Прибалтика учения 2026",
+   "text": ""
+  },
+  {
+   "id": 80,
+   "source": "press_photo",
+   "source_query": "Рейхстаг Берлин здание вечер 2026",
+   "text": ""
+  },
+  {
+   "id": 90,
+   "source": "press_photo",
+   "source_query": "Верховная рада Украины здание Киев 2026",
+   "text": ""
+  }
+ ]
+}
