@@ -698,6 +698,14 @@ def queue(scenes_path, sid, view, dur, watermark, channel, kwargs,
     фоновые проходы пишут тот же scenes.json, и правка молча откатывалась
     (разбор 22.10). Возвращает путь задания.
     """
+    # ПУТИ QUEUE/PHOTO/JOURNAL/LOCK — ОТНОСИТЕЛЬНЫЕ, ОТ ПАПКИ ПРОЕКТА, НЕ ОТ
+    # cwd ВЫЗОВА (21.11, улов `usuario-3e`, П-0470). `card_put.py` решает это
+    # через `os.chdir` сразу после парсинга аргументов; здесь та же защита, но
+    # ВНУТРИ queue() — единственной общей двери trёх инструментов. `scenes_path`
+    # резолвим в абсолютный ДО chdir, чтобы все дальнейшие open()/replace()
+    # по нему (ниже) не зависели от смены cwd.
+    scenes_path = os.path.abspath(scenes_path)
+    os.chdir(os.path.dirname(scenes_path))
     os.makedirs(QUEUE, exist_ok=True)
     # СЛОИ СЦЕНЫ ПЕРЕЕЗЖАЮТ ПЕРВЫМИ (09.11): сцена вот-вот станет рисованной,
     # а надпись и всплывашка на `card:*` запрещены. Делаем это ДО записи

@@ -421,7 +421,38 @@ fetch)
     # ОДНО место сразу здесь, а не только считаем.
     if [ "$IMGDIR" != "$PROJ/images" ] && [ -d "$IMGDIR" ]; then
         mkdir -p "$PROJ/images"
-        cp -n "$IMGDIR"/* "$PROJ/images/" 2>/dev/null || true
+        # СВЕДЕНИЕ НЕ ДОЛЖНО ВОЗВРАЩАТЬ ЗАБАНЕННЫЙ КАДР (21.11, механизм
+        # разобран живьём у `usuario-a1`: `cp -n` копирует из `-cloud` ТОЛЬКО
+        # если файла в рабочей папке ещё нет — а если сцену только что
+        # забанили и удалили локальный файл в ожидании замены, «нет» читается
+        # как «надо взять старую версию из забора», и бан обходится молча.
+        # Сверяем отпечаток каждого кандидата перед копированием.
+        python3 - "$IMGDIR" "$PROJ/images" "$PROJ" <<'PYMRG'
+import os, shutil, sys
+sys.path.insert(0, os.path.expanduser("~/.claude/skills/news-video/template"))
+try:
+    from fetch_assets_news import banned_frame
+except Exception:
+    banned_frame = None
+src, dst, proj = sys.argv[1], sys.argv[2], os.path.basename(sys.argv[3].rstrip("/"))
+взято, забанено = 0, 0
+for f in sorted(os.listdir(src)):
+    sp = os.path.join(src, f)
+    dp = os.path.join(dst, f)
+    if not os.path.isfile(sp) or os.path.exists(dp):
+        continue
+    if banned_frame is not None:
+        try:
+            плох, _ = banned_frame(sp, this_project=proj)
+        except Exception:
+            плох = False
+        if плох:
+            забанено += 1
+            continue
+    shutil.copy2(sp, dp)
+    взято += 1
+print("[ОК]    сведено файлов: %d (пропущено забаненных: %d)" % (взято, забанено))
+PYMRG
         echo "[ОК]    кадры сведены в $PROJ/images (источник: $IMGDIR)"
     fi
     # ОТПЕЧАТКИ ФЕТЧА — ТУДА ЖЕ (20.11, слияние фетча и сборки). Манифест

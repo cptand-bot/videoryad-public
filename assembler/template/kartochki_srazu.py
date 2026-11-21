@@ -1565,7 +1565,11 @@ def main():
                   "обязательных)" % (_путь, len(_итог)))
         if a.otpravit and поставлено:
             print("\nотправляю рисовку в облако:")
-            subprocess.run([sys.executable, CARDS_CLOUD], cwd=_dir)
+            # П-0469 (21.11, улов `usuario-b1`): без позиционного `scenes`
+            # cards_cloud.py падал "required: scenes" КАЖДЫЙ раз — --otpravit
+            # не работал вообще, никто этого не замечал, потому что падение
+            # шло тихо (returncode не проверялся здесь).
+            subprocess.run([sys.executable, CARDS_CLOUD, a.scenes], cwd=_dir)
         return 0 if not отказы else 1
 
     print("сцен в ролике: %d · свободных под карточку: %d" % (всего, len(свободные)))
@@ -1686,7 +1690,9 @@ def main():
     # ── 5. РЕНДЕР В ОБЛАКЕ, ПОКА ИДЁТ ФЕТЧ ──
     if a.otpravit and поставлено:
         print("\nотправляю рисовку в облако (идёт параллельно фетчу):")
-        r = subprocess.run([sys.executable, CARDS_CLOUD],
+        # П-0469 (21.11, улов `usuario-b1`) — та же пропажа позиционного
+        # `scenes`, что и выше.
+        r = subprocess.run([sys.executable, CARDS_CLOUD, a.scenes],
                            cwd=os.path.dirname(os.path.abspath(a.scenes)) or ".")
         if r.returncode != 0:
             print("  рендер не отправился — позови cards_cloud.py вручную", file=sys.stderr)

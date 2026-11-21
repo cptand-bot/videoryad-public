@@ -101,7 +101,15 @@ def _snimok(pdir):
             continue
         for f in sorted(os.listdir(dd)):
             fp = os.path.join(dd, f)
-            if not os.path.isfile(fp) or f.endswith((".json", ".revframe.jpg")):
+            # `.text.png` — ДЕРИВАТИВ overlays.json, НЕ НОВЫЙ КОНТЕНТ (21.11,
+            # улов `usuario-3e`). Надпись из-под маски перерисовывается заново
+            # при каждой сборке с тем же текстом, но НОВЫМ отпечатком PNG —
+            # рендер не детерминирован. Сам текст уже сверяется через md5
+            # `overlays.json` выше; второй раз та же правка считалась как
+            # «изменилось» без единой настоящей правки, гейт свежести не
+            # стабилизировался НИКОГДА.
+            if (not os.path.isfile(fp)
+                    or f.endswith((".json", ".revframe.jpg", ".text.png"))):
                 continue
             s["kadry"]["%s/%s" % (d, f)] = _md5(fp)
     return s
@@ -128,7 +136,10 @@ def _после_просмотра(pdir):
             continue
         for f in sorted(os.listdir(dd)):
             fp = os.path.join(dd, f)
-            if not os.path.isfile(fp) or f.endswith((".json", ".revframe.jpg")):
+            # `.text.png` исключён по той же причине, что в `_snimok` выше —
+            # недетерминированный рендер надписи, не новый контент.
+            if (not os.path.isfile(fp)
+                    or f.endswith((".json", ".revframe.jpg", ".text.png"))):
                 continue
             try:
                 if os.path.getmtime(fp) > t_просмотр:
