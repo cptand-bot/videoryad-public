@@ -1,0 +1,225 @@
+{
+ "1": {
+  "photo": "overlays/scene_001.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "6": {
+  "photo": "overlays/scene_006.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "up-left"
+ },
+ "15": {
+  "photo": "overlays/scene_015.jpg",
+  "sound": "ding",
+  "at": 2.6,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "23": {
+  "photo": "overlays/scene_023.jpg",
+  "sound": "pop",
+  "at": 2.8,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left"
+ },
+ "30": {
+  "photo": "overlays/scene_030.jpg",
+  "sound": "whoosh",
+  "at": 3.0,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left"
+ },
+ "36": {
+  "photo": "overlays/scene_036.jpg",
+  "sound": "ding",
+  "at": 3.2,
+  "shape": "circle",
+  "scale": 1.2,
+  "style": "right",
+  "text": {
+   "words": "КИЕВ",
+   "pos": "tc",
+   "at": 2.0,
+   "color": "white"
+  }
+ },
+ "47": {
+  "photo": "overlays/scene_047.jpg",
+  "sound": "pop",
+  "at": 3.4,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "up-right",
+  "text": {
+   "words": "МОСКВА",
+   "pos": "mc",
+   "at": 2.0,
+   "color": "orange"
+  }
+ },
+ "55": {
+  "photo": "overlays/scene_055.jpg",
+  "sound": "whoosh",
+  "at": 3.6,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "up-left"
+ },
+ "65": {
+  "photo": "overlays/scene_065.jpg",
+  "sound": "ding",
+  "at": 3.8,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "left",
+  "text": {
+   "words": "УДАР",
+   "pos": "mr",
+   "at": 2.0,
+   "color": "yellow"
+  }
+ },
+ "70": {
+  "photo": "overlays/scene_070.jpg",
+  "sound": "pop",
+  "at": 4.0,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "right",
+  "text": {
+   "words": "ГРАНИЦЫ",
+   "pos": "tc",
+   "at": 2.0,
+   "color": "white"
+  }
+ },
+ "80": {
+  "photo": "overlays/scene_080.jpg",
+  "sound": "whoosh",
+  "at": 4.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left",
+  "text": {
+   "words": "БЕРЛИН",
+   "pos": "mc",
+   "at": 2.0,
+   "color": "orange"
+  }
+ },
+ "90": {
+  "photo": "overlays/scene_090.jpg",
+  "sound": "ding",
+  "at": 4.4,
+  "shape": "circle",
+  "scale": 1.0,
+  "style": "up-left"
+ },
+ "anchor": "top",
+ "3": {
+  "text": {
+   "words": "СУЕТА",
+   "pos": "tc",
+   "at": 2.0,
+   "color": "yellow"
+  }
+ },
+ "7": {
+  "text": {
+   "words": "ОШИБКА",
+   "pos": "tl",
+   "at": 2.0,
+   "color": "white"
+  }
+ },
+ "13": {
+  "text": {
+   "words": "ЛОГИКА",
+   "pos": "mc",
+   "at": 2.0,
+   "color": "red"
+  }
+ },
+ "19": {
+  "text": {
+   "words": "ПОГОВОРИТЬ",
+   "pos": "tr",
+   "at": 2.0,
+   "color": "orange"
+  }
+ },
+ "25": {
+  "text": {
+   "words": "КОАЛИЦИЯ",
+   "pos": "ml",
+   "at": 2.0,
+   "color": "green"
+  }
+ },
+ "31": {
+  "text": {
+   "words": "ВСТРЕЧА",
+   "pos": "mr",
+   "at": 2.0,
+   "color": "yellow"
+  }
+ },
+ "41": {
+  "text": {
+   "words": "НАТО",
+   "pos": "tl",
+   "at": 2.0,
+   "color": "red"
+  }
+ },
+ "53": {
+  "text": {
+   "words": "ВООРУЖЕНИЯ",
+   "pos": "tr",
+   "at": 2.0,
+   "color": "green"
+  }
+ },
+ "60": {
+  "text": {
+   "words": "ОТВЕТ",
+   "pos": "ml",
+   "at": 2.0,
+   "color": "yellow"
+  }
+ },
+ "75": {
+  "text": {
+   "words": "КОНФЛИКТ",
+   "pos": "tl",
+   "at": 2.0,
+   "color": "red"
+  }
+ },
+ "87": {
+  "text": {
+   "words": "ПЕРЕГОВОРЫ",
+   "pos": "tr",
+   "at": 2.0,
+   "color": "green"
+  }
+ },
+ "95": {
+  "text": {
+   "words": "УРОВЕНЬ",
+   "pos": "ml",
+   "at": 2.0,
+   "color": "yellow"
+  }
+ }
+}
