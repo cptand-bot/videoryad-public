@@ -1,0 +1,40 @@
+{
+ "rounds": [
+  {
+   "n": 0,
+   "fill": true,
+   "ts": "2026-11-22 14:16:08",
+   "ids": [
+    "overlays:7",
+    "overlays:21",
+    "overlays:42"
+   ]
+  }
+ ],
+ "tried": {
+  "overlays:7": [
+   {
+    "round": 0,
+    "source": "press_photo",
+    "query": "карта раздела территории Украины схема",
+    "fill": true
+   }
+  ],
+  "overlays:21": [
+   {
+    "round": 0,
+    "source": "press_photo",
+    "query": "семейное чёрно-белое фото архив история",
+    "fill": true
+   }
+  ],
+  "overlays:42": [
+   {
+    "round": 0,
+    "source": "press_photo",
+    "query": "Владимир Зеленский выступление",
+    "fill": true
+   }
+  ]
+ }
+}

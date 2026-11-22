@@ -4253,6 +4253,22 @@ def run_live(scenes_path, images_dir, port):
             base = self.path.split("?", 1)
             route = base[0].rstrip("/").lstrip("/")
             qs = urllib.parse.parse_qs(base[1] if len(base) > 1 else "")
+            # ПРАВКА БЕЗ ПЕРЕЗАГРУЗКИ НЕ ОБНОВЛЯЛА СЛЕД, И КНОПКА САМА СЕБЯ
+            # ОТБИВАЛА (22.11.2026, улов `usuario-e0`). `.posledniy_prosmotr`
+            # писался только на полный GET (строка ~4178) — правка кадра
+            # через AJAX (без F5) его не трогала, и `zamorozka.py` читал это
+            # как «файл изменился ПОСЛЕ показа» на любом «правлю → утверждаю»
+            # подряд, хотя изменение было его собственным кликом, а не чужим
+            # вмешательством со стороны, от которого проверка защищает.
+            # Решение: любой МЕНЯЮЩИЙ POST тоже обновляет след — КРОМЕ самого
+            # `utverdit`, иначе кнопка обновляла бы след прямо перед своей же
+            # проверкой и смысл проверки пропадал бы целиком.
+            if route not in ("utverdit", "micdiag", "voice"):
+                try:
+                    with open(".posledniy_prosmotr", "w") as _pf:
+                        _pf.write(str(time.time()))
+                except OSError:
+                    pass
             try:
                 sid = int(qs.get("id", ["0"])[0])
             except ValueError:
