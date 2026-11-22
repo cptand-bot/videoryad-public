@@ -1,0 +1,286 @@
+[
+ {
+  "scene": 6,
+  "view": "quote",
+  "dur": 13.04,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Морем в Калининград идёт около 22% всех грузов — это каждый пятый груз",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "tape",
+  "dur": 12.35,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Чтобы создать проблемы Калининграду, необязательно объявлять блокаду",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "marker_serif",
+  "dur": 12.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Одно судно получило удар. Потом ещё одно. Просто плавать стало неуютно",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "doc",
+  "dur": 11.28,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Санкции означали ограничения на сделки и доступ к портам. Увидел санкционное судно — и можно запускать беспилотник?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.92,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 11.92,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Каждый вариант даёт новую информацию",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.92,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Каждый вариант даёт новую информацию",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.92,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 10.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Первый раз всегда самый сложный",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.4
+   }
+  },
+  "kwargs": {
+   "text": "Первый раз всегда самый сложный",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.4
+  }
+ },
+ {
+  "scene": 33,
+  "view": "zal",
+  "dur": 10.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Между слабым и сильным ответом — своя температура",
+   "words": [
+    "ПРЕДЕЛ",
+    "РИСК"
+   ],
+   "sheets": [
+    "Слабый ответ",
+    "Давить можно дальше",
+    "Сильный ответ",
+    "Риск для Запада",
+    "Красная линия",
+    "Нужная температура"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 10.8,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "paper_hand",
+  "dur": 11.04,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Почему мы вообще должны смотреть на Балтику только как на море?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "pull",
+  "dur": 11.02,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "И каждый отдельный случай можно объяснить случайностью",
+   "accent": "случайностью",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "duel",
+  "dur": 11.15,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Британия: 2000 специалистов",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Россия, Китай, Иран, КНДР: 30000+",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "film.film_strip",
+  "dur": 11.28,
+  "anim": 11.28,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_059.jpg",
+    "cards/photo/card_059_2.jpg",
+    "cards/photo/card_059_3.jpg",
+    "cards/photo/card_059_4.jpg"
+   ],
+   "title": "ЗАПУТАННЕЕ",
+   "captions": [
+    "Энергоразрыв-Ес-Рф",
+    "Энергоразрыв-Ес-Рф",
+    "Энергоразрыв-Ес-Рф",
+    "Энергоразрыв-Ес-Рф"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.56,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 12.56,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Можно проводить специальные операции",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.56,
+    "soobshcheniya": [
+     "ИСЧЕЗАЕТ",
+     "НАОБОРОТ",
+     "ТАМ СТАНОВИТСЯ ТЕСНЕЕ",
+     "МОЖНО БИТЬ ДРОНАМИ",
+     "МОЖНО УСТРАИВАТЬ КИБЕРОПЕРАЦИИ"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Можно проводить специальные операции",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.56,
+   "soobshcheniya": [
+    "ИСЧЕЗАЕТ",
+    "НАОБОРОТ",
+    "ТАМ СТАНОВИТСЯ ТЕСНЕЕ",
+    "МОЖНО БИТЬ ДРОНАМИ",
+    "МОЖНО УСТРАИВАТЬ КИБЕРОПЕРАЦИИ"
+   ]
+  }
+ },
+ {
+  "scene": 65,
+  "view": "zal_g01",
+  "dur": 12.53,
+  "anim": 12.53,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.53,
+   "sheets": [],
+   "text": "Не пересечь линию контроля",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "zal_g48",
+  "dur": 11.61,
+  "anim": 11.61,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.61,
+   "sheets": [],
+   "text": "Кто решает, что ответить?",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
