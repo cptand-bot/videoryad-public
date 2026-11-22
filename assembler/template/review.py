@@ -2717,6 +2717,7 @@ poll();
   <button id="needjump" onclick="jumpNeed()"{'' if need_n else ' hidden'} data-first="{min(int(k) for k in needs) if needs else ''}">⚠️ нужно твоё фото: {need_n}</button>
   <button onclick="showList()">📋 Показать правки для чата</button>
   <button onclick="clearAll()">Сбросить</button>
+  <button id="utverdbtn" onclick="utverdit()" style="background:#1a7a3a;color:#fff;font-weight:700">✅ УТВЕРЖДАЮ</button>
 </header>
 <div class="grid">
 {''.join(cards)}
@@ -3762,6 +3763,29 @@ function rjSend(reason){{
   }}
 }}
 function rjIgnore(){{ rjSend(""); }}
+
+/* «УТВЕРЖДАЮ» (22.11.2026) — ставит .utverzhdeno.json ТЕМ ЖЕ кодом, что
+   ручной обход словом в чате; после этого faza.sh sdacha пускает сборку
+   без VIDEORYAD_SDACHA_BEZ_UTVERZHDENIYA=1. */
+async function utverdit(){{
+  const btn = document.getElementById("utverdbtn");
+  if(!confirm("Утвердить ролик целиком? После этого править здесь будет нельзя.")) return;
+  btn.disabled = true; btn.textContent = "…утверждаю";
+  try{{
+    const r = await fetch("utverdit", {{method:"POST"}});
+    const j = await r.json().catch(()=>({{ok:r.ok}}));
+    if(j.ok){{
+      btn.textContent = "✅ УТВЕРЖДЕНО";
+      btn.style.background = "#0c4a1f";
+    }} else {{
+      btn.disabled = false; btn.textContent = "✅ УТВЕРЖДАЮ";
+      alert("Не утвердилось: " + (j.reason || "см. консоль сервера"));
+    }}
+  }}catch(e){{
+    btn.disabled = false; btn.textContent = "✅ УТВЕРЖДАЮ";
+    alert("Не достучался до сервера — попробуй ещё раз.");
+  }}
+}}
 </script>
 </body>
 <div class="lbx" id="lbx" onclick="if(event.target.id==='lbx')lbxClose()">
@@ -4233,6 +4257,29 @@ def run_live(scenes_path, images_dir, port):
                 sid = int(qs.get("id", ["0"])[0])
             except ValueError:
                 sid = 0
+
+            # КНОПКА «УТВЕРЖДАЮ» ВНИЗУ ДАШБОРДА (22.11.2026, его прямое
+            # слово: «сделать кнопку, на которую нажимаю, утверждаю, и
+            # которая будет давать согласие»). Раньше `.utverzhdeno.json`
+            # ставился ТОЛЬКО словом в чате через обход
+            # `VIDEORYAD_SDACHA_BEZ_UTVERZHDENIYA=1` — кликом в браузере его
+            # поставить было нечем, хотя `faza.sh sdacha` и комментарий у
+            # `zamorozka.FAIL_FILE` этот клик предполагали. Кнопка зовёт
+            # ТОТ ЖЕ `zamorozka.py postavit`, что и ручной путь — запись
+            # одна, второго формата файла не заводим.
+            if route == "utverdit":
+                r = subprocess.run(
+                    ["python3", _script("zamorozka.py"), "postavit", os.getcwd()],
+                    capture_output=True, text=True)
+                ok = (r.returncode == 0)
+                print("  %s утверждение: %s" % ("[ОК]" if ok else "!!",
+                      (r.stdout or r.stderr).strip().splitlines()[-1]
+                      if (r.stdout or r.stderr) else ""), flush=True)
+                return self._reply(
+                    200 if ok else 409,
+                    json.dumps({"ok": ok,
+                                "reason": (r.stderr or r.stdout or "").strip()},
+                               ensure_ascii=False).encode())
 
             if route == "overlay":
                 if not sid:
