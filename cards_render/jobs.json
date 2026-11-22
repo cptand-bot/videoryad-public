@@ -1,0 +1,408 @@
+[
+ {
+  "scene": 3,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.49,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 9.49,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Балтика. Новая точка эскалации",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 9.49,
+    "kick": "ноябрь 2026"
+   }
+  },
+  "kwargs": {
+   "text": "Балтика. Новая точка эскалации",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 9.49,
+   "kick": "ноябрь 2026"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "sceny.lenta_foto",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.64,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta_foto",
+   "seconds": 10.64,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Балтика стала новой точкой эскалации",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.64,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_005.jpg",
+      "god": "2023",
+      "podpis": "встреча в Хельсинки"
+     },
+     {
+      "photo": "cards/photo/card_005_2.jpg",
+      "god": "2025",
+      "podpis": "на Пентагоне"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Балтика стала новой точкой эскалации",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.64,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_005.jpg",
+     "god": "2023",
+     "podpis": "встреча в Хельсинки"
+    },
+    {
+     "photo": "cards/photo/card_005_2.jpg",
+     "god": "2025",
+     "podpis": "на Пентагоне"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 8,
+  "view": "zal_g18",
+  "dur": 11.47,
+  "anim": 11.47,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.47,
+   "sheets": [],
+   "text": "Квартира с тремя выходами",
+   "value": "3",
+   "value_sub": "НЕ ПУСТУЕТ НИКОГДА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "sceny.perematka",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.98,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "perematka",
+   "seconds": 9.98,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Можно сделать удивлённое лицо",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 9.98,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_012.jpg",
+      "god": "2025"
+     },
+     {
+      "photo": "cards/photo/card_012_2.jpg",
+      "god": "2023"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Можно сделать удивлённое лицо",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 9.98,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_012.jpg",
+     "god": "2025"
+    },
+    {
+     "photo": "cards/photo/card_012_2.jpg",
+     "god": "2023"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 13,
+  "view": "zal_g44",
+  "dur": 11.38,
+  "anim": 11.38,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.38,
+   "sheets": [],
+   "text": "Финские военные наблюдали атаку",
+   "value": "22%",
+   "value_sub": "ГРУЗОВ ИДЁТ МОРЕМ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "zal_shkala",
+  "dur": 9.36,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.36,
+   "sheets": [],
+   "text": "Санкции не превращают в мишень",
+   "value": "30 000",
+   "value_sub": "СПЕЦИАЛИСТОВ",
+   "source": "по тексту статьи",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "film.film_strip",
+  "dur": 11.58,
+  "anim": 11.58,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_028.jpg",
+    "cards/photo/card_028_2.jpg",
+    "cards/photo/card_028_3.jpg"
+   ],
+   "title": "Три голоса одной истории",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "film.film_single",
+  "dur": 10.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_031.jpg",
+   "title": "Генеральный секретарь НАТО",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "torn_split.torn_split",
+  "dur": 12.09,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "a_path": "cards/photo/card_032.jpg",
+   "b_path": "cards/photo/card_032_2.jpg",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "devices.device_scene",
+  "dur": 11.78,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "content_path": "cards/photo/card_034.jpg",
+   "items": [
+    "Автор=Марк Рютте"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "cinematic.dossier",
+  "dur": 12.96,
+  "anim": 12.96,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "rows": [
+    "имя — Петтери Орпо",
+    "должность — премьер-министр Финляндии",
+    "тема — право Украины на отпор",
+    "суть — заявление сделано после атаки у границ",
+    "итог — momентно расценено как сигнал Москве"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_036.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "cinematic.evidence_wall",
+  "dur": 11.85,
+  "anim": 11.85,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_037.jpg",
+     240,
+     380,
+     -4,
+     "Марк Рютте"
+    ],
+    [
+     "cards/photo/card_037_2.jpg",
+     800,
+     380,
+     3,
+     "Петтери Орпо"
+    ]
+   ],
+   "title": "Кто с кем связан в этой истории",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 39,
+  "view": "tape",
+  "dur": 12.16,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Реакция показывает, что нервозность внутри НАТО вовсе не декоративная",
+   "accent": "декоративная",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "zal_makety",
+  "dur": 12.23,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 12.23,
+   "sheets": [],
+   "text": "Рядом появляется Британия",
+   "makety": [
+    "министерство=ВЛАСТИ",
+    "сети=ИНФРАСТРУКТУРА"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "vyrezka.gazeta",
+  "dur": 12.45,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_052.jpg",
+   "author": "Петр Павел",
+   "role": "президент Чехии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "split",
+  "dur": 12.23,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_056.jpg",
+   "text": "Будем защищать каждый сантиметр территории Польши",
+   "author": "Марк Рютте",
+   "role": "генеральный секретарь НАТО",
+   "accent": "сантиметр территории Польши",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "vyrezka.figura",
+  "dur": 11.28,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_065.jpg",
+   "author": "Петтери Орпо",
+   "role": "премьер-министр Финляндии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 14.29,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 14.29,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "После отсутствия вернулся в Киев",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 14.29,
+    "role": "место Зеленского"
+   }
+  },
+  "kwargs": {
+   "text": "После отсутствия вернулся в Киев",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 14.29,
+   "role": "место Зеленского"
+  }
+ }
+]
