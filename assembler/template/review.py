@@ -4269,6 +4269,30 @@ def run_live(scenes_path, images_dir, port):
                         _pf.write(str(time.time()))
                 except OSError:
                     pass
+            # УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО, И ДАШБОРД ТОЖЕ (22.11.2026).
+            # Та же защита, что у 10 инструментов правки — но главный путь,
+            # которым контент меняют ПОСЛЕ утверждения, это как раз кнопки
+            # ЭТОГО дашборда (живой случай дня, usuario-e0: «правка на
+            # дашборде» после утверждения). Его прямое слово: «после того
+            # как утверждаю дашборд, никаких действий больше не производится
+            # — ни замены, ни эффекты, ни подмены, вообще ничего». route
+            # «utverdit» разрешён всегда — это и есть снятие замороженного
+            # состояния на новое утверждение, а не правка контента.
+            if route != "utverdit":
+                try:
+                    _tpl = os.path.dirname(os.path.abspath(__file__))
+                    if _tpl not in sys.path:
+                        sys.path.insert(0, _tpl)
+                    from zamorozka import zamorozheno as _zam
+                    if _zam(os.getcwd()):
+                        return self._reply(
+                            423,
+                            json.dumps({"ok": False,
+                                        "reason": "дашборд утверждён — правки "
+                                        "запрещены, неси координатору"},
+                                       ensure_ascii=False).encode())
+                except Exception:
+                    pass
             try:
                 sid = int(qs.get("id", ["0"])[0])
             except ValueError:
