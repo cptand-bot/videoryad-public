@@ -492,15 +492,85 @@ def word_tiles(lines, fsize=220, fname="ArialBlack.ttf", hl=None,
     return total_w, total_h, tiles
 
 
+MAKET_KINDS = ("bank", "hospital", "power", "ship", "aircraft", "missile")
+
+
 def maket_tex(kind, px=420):
     """Белый объёмный макет: `bank` (колоннада), `hospital` (корпус с
-    крестом), `power` (две опоры ЛЭП). Рисуется, а не берётся картинкой:
-    это предмет в зале, а не фотография чужого здания."""
+    крестом), `power` (две опоры ЛЭП), `ship` (силуэт корабля), `aircraft`
+    (самолёт/вертолёт боком), `missile` (ракета носом вверх). Рисуется, а
+    не берётся картинкой: это предмет в зале, а не фотография чужого
+    объекта. Добавлены 22.11.2026 (его прямой вопрос «ракета это не умеет
+    никак») — живой случай: сцена про готовность Польши (Пэтриот, ПВО,
+    вертолёты) не могла встать в zal_makety, модели не было ни одной."""
     img = Image.new("RGBA", (px, px), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     ink = (236, 238, 241, 255)
     edge = (120, 124, 130, 255)
-    if kind == "bank":
+    if kind == "ship":
+        # корпус — силуэт лодки, нос справа, ватерлиния внизу
+        d.polygon([(px * 0.05, px * 0.80), (px * 0.05, px * 0.66),
+                   (px * 0.15, px * 0.60), (px * 0.80, px * 0.58),
+                   (px * 0.95, px * 0.70), (px * 0.82, px * 0.80)],
+                  fill=ink, outline=edge, width=3)
+        d.rectangle([px * 0.32, px * 0.38, px * 0.58, px * 0.60],
+                    fill=ink, outline=edge, width=3)
+        d.rectangle([px * 0.38, px * 0.24, px * 0.52, px * 0.38],
+                    fill=ink, outline=edge, width=3)
+        d.line([(px * 0.45, px * 0.24), (px * 0.45, px * 0.08)],
+               fill=edge, width=3)
+        d.line([(px * 0.03, px * 0.83), (px * 0.97, px * 0.83)],
+               fill=edge, width=2)
+    elif kind == "aircraft":
+        # вид СВЕРХУ (классический силуэт ✈, носом вправо) — читается лучше
+        # бокового профиля на плоской белой заливке без теней
+        d.polygon([(px * 0.10, px * 0.50), (px * 0.20, px * 0.47),
+                   (px * 0.80, px * 0.49), (px * 0.93, px * 0.50),
+                   (px * 0.80, px * 0.51), (px * 0.20, px * 0.53)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(px * 0.58, px * 0.49), (px * 0.47, px * 0.50),
+                   (px * 0.14, px * 0.16), (px * 0.30, px * 0.20),
+                   (px * 0.62, px * 0.47)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(px * 0.58, px * 0.51), (px * 0.47, px * 0.50),
+                   (px * 0.14, px * 0.84), (px * 0.30, px * 0.80),
+                   (px * 0.62, px * 0.53)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(px * 0.24, px * 0.495), (px * 0.19, px * 0.50),
+                   (px * 0.10, px * 0.38), (px * 0.18, px * 0.40),
+                   (px * 0.26, px * 0.49)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(px * 0.24, px * 0.505), (px * 0.19, px * 0.50),
+                   (px * 0.10, px * 0.62), (px * 0.18, px * 0.60),
+                   (px * 0.26, px * 0.51)],
+                  fill=ink, outline=edge, width=3)
+    elif kind == "helicopter":
+        # кабина-капля, хвостовая балка, несущий и хвостовой винт
+        d.ellipse([px * 0.18, px * 0.46, px * 0.60, px * 0.72],
+                   fill=ink, outline=edge, width=3)
+        d.polygon([(px * 0.56, px * 0.54), (px * 0.90, px * 0.58),
+                   (px * 0.90, px * 0.66), (px * 0.56, px * 0.64)],
+                  fill=ink, outline=edge, width=3)
+        d.ellipse([px * 0.86, px * 0.50, px * 0.94, px * 0.74],
+                   fill=ink, outline=edge, width=2)
+        d.line([(px * 0.39, px * 0.30), (px * 0.39, px * 0.46)],
+               fill=edge, width=5)
+        d.line([(px * 0.06, px * 0.30), (px * 0.72, px * 0.30)],
+               fill=edge, width=6)
+    elif kind == "missile":
+        # вертикальная ракета носом вверх, два стабилизатора у хвоста
+        cx = px * 0.5
+        d.polygon([(cx, px * 0.08), (cx - px * 0.07, px * 0.30),
+                   (cx - px * 0.07, px * 0.80), (cx + px * 0.07, px * 0.80),
+                   (cx + px * 0.07, px * 0.30)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(cx - px * 0.07, px * 0.68), (cx - px * 0.22, px * 0.90),
+                   (cx - px * 0.07, px * 0.82)],
+                  fill=ink, outline=edge, width=3)
+        d.polygon([(cx + px * 0.07, px * 0.68), (cx + px * 0.22, px * 0.90),
+                   (cx + px * 0.07, px * 0.82)],
+                  fill=ink, outline=edge, width=3)
+    elif kind == "bank":
         d.polygon([(px * 0.06, px * 0.36), (px * 0.5, px * 0.10),
                    (px * 0.94, px * 0.36)], fill=ink, outline=edge, width=3)
         d.rectangle([px * 0.08, px * 0.36, px * 0.92, px * 0.44],
