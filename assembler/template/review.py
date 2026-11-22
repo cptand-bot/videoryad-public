@@ -3775,7 +3775,7 @@ async function utverdit(){{
     const r = await fetch("utverdit", {{method:"POST"}});
     const j = await r.json().catch(()=>({{ok:r.ok}}));
     if(j.ok){{
-      btn.textContent = "✅ УТВЕРЖДЕНО";
+      btn.textContent = j.already ? "✅ УЖЕ БЫЛО УТВЕРЖДЕНО РАНЕЕ" : "✅ УТВЕРЖДЕНО";
       btn.style.background = "#0c4a1f";
     }} else {{
       btn.disabled = false; btn.textContent = "✅ УТВЕРЖДАЮ";
@@ -4288,12 +4288,18 @@ def run_live(scenes_path, images_dir, port):
                     ["python3", _script("zamorozka.py"), "postavit", os.getcwd()],
                     capture_output=True, text=True)
                 ok = (r.returncode == 0)
+                _out = (r.stdout or r.stderr).strip()
+                # УЖЕ БЫЛО УТВЕРЖДЕНО — КНОПКА ОБ ЭТОМ МОЛЧАЛА (22.11.2026,
+                # улов usuario-07): zamorozka.py postavit на уже замороженном
+                # проекте возвращает код 0 и ничего не меняет, кнопка
+                # показывала то же «✅ УТВЕРЖДЕНО», что и на свежем клике —
+                # непонятно, случилось что-то сейчас или нет.
+                _already = ok and "заморозка уже стоит" in _out
                 print("  %s утверждение: %s" % ("[ОК]" if ok else "!!",
-                      (r.stdout or r.stderr).strip().splitlines()[-1]
-                      if (r.stdout or r.stderr) else ""), flush=True)
+                      _out.splitlines()[-1] if _out else ""), flush=True)
                 return self._reply(
                     200 if ok else 409,
-                    json.dumps({"ok": ok,
+                    json.dumps({"ok": ok, "already": _already,
                                 "reason": (r.stderr or r.stdout or "").strip()},
                                ensure_ascii=False).encode())
 
