@@ -1,0 +1,821 @@
+[
+ {
+  "scene": 4,
+  "view": "zal_g01",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.8,
+   "sheets": [
+    "Балтика",
+    "Новая точка"
+   ],
+   "text": "Балтика стала новой точкой эскалации",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "charts.map_dist",
+  "dur": 9.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Хельсинки",
+     "lat": 60.17,
+     "lon": 24.94,
+     "accent": false
+    },
+    {
+     "label": "Калининград",
+     "lat": 54.71,
+     "lon": 20.51,
+     "accent": true
+    }
+   ],
+   "place": "Балтийское море",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "charts.pie",
+  "dur": 11.2,
+  "anim": 11.2,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "Море",
+     "value": 22.0
+    },
+    {
+     "label": "Другие пути",
+     "value": 78.0
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "strike",
+  "dur": 11.04,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Официальной блокады нет, маршрут открыт, море свободное",
+   "struck": "блокады",
+   "fix": "точечные помехи",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "zal_slova",
+  "dur": 11.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.88,
+   "sheets": [
+    "небольшими порциями",
+    "Сначала пострадало одно судно"
+   ],
+   "text": "Следом капитан отказался от рейса",
+   "na_polu": "ЗАТЕМ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.92,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "globus",
+   "seconds": 9.92,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Получается редкое сочетание",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 9.92,
+    "region": "Финляндия"
+   }
+  },
+  "kwargs": {
+   "text": "Получается редкое сочетание",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 9.92,
+   "region": "Финляндия"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "zal_ekran",
+  "dur": 13.23,
+  "anim": 13.23,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.23,
+   "sheets": [
+    "ЗАЯВЛЕНИЕ",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Заявление Орпо",
+   "say": "право Украины давать отпор России",
+   "author": "Петтери Орпо",
+   "role": "премьер-министр Финляндии",
+   "source": "выступление, ноябрь 2026",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.88,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 10.88,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Под санкциями США",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.88,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Под санкциями США",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.88,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "poster.poster",
+  "dur": 12.05,
+  "anim": 12.05,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "Балтика под наблюдением",
+   "hero_photo": "cards/photo/card_019.jpg",
+   "bottom": "Но беспилотники долетели всё равно",
+   "facts": [
+    {
+     "label": "Кто следит",
+     "value": "НАТО"
+    },
+    {
+     "label": "Что видят",
+     "value": "Корабли и небо"
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 20,
+  "view": "zal_pol",
+  "dur": 9.39,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.39,
+   "sheets": [
+    "вокруг Калининграда появился новый",
+    "Но судно могло быть только"
+   ],
+   "text": "Но судно могло быть только инструментом",
+   "na_polu": "КАЛИНИНГРАДА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "paper_typed",
+  "dur": 13.6,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Официальный список вопросов Москве: усилит охрану, отправит корабли или ограничится заявлением?",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_kub",
+  "dur": 8.77,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 8.77,
+   "sheets": [
+    "Так выясняется не заявленная, а",
+    "Красных линий можно нарисовать"
+   ],
+   "text": "Красных линий можно нарисовать сколько угодно",
+   "kick": "ЦЕНА ПОЯВЛЯЕТСЯ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "slider",
+  "dur": 10.24,
+  "anim": 10.24,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "Доля моря в поставках",
+   "min": 0.0,
+   "max": 100.0,
+   "low": 0.0,
+   "high": 22.0,
+   "marker_value": 22.0,
+   "marker_display": "22",
+   "seconds": 10.24,
+   "range_label": "транзит в Калининградскую область",
+   "caption": "22% идёт морем",
+   "source": ""
+  }
+ },
+ {
+  "scene": 26,
+  "view": "charts.slope",
+  "dur": 10.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Первый удар",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Требует решимости"
+    },
+    {
+     "label": "После третьего",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Начинается привычка"
+    }
+   ],
+   "source": "по тексту статьи",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "charts.line",
+  "dur": 12.74,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "x_labels": [
+    "Тревога",
+    "Новость",
+    "Памятка"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      2.0,
+      3.0
+     ]
+    }
+   ],
+   "source": "по тексту статьи",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.21,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 12.21,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кто повышал ставки",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 12.21,
+    "soobshcheniya": [
+     "Финские военные: наблюдали атаку",
+     "Орпо: Украина вправе отвечать",
+     "Судно под санкциями США",
+     "Британия: кибероперации"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Кто повышал ставки",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 12.21,
+   "soobshcheniya": [
+    "Финские военные: наблюдали атаку",
+    "Орпо: Украина вправе отвечать",
+    "Судно под санкциями США",
+    "Британия: кибероперации"
+   ]
+  }
+ },
+ {
+  "scene": 38,
+  "view": "marker_serif",
+  "dur": 11.28,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Появляется простой вопрос: вы нас вообще куда привели?",
+   "accent": "простой вопрос",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.36,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 13.36,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Удобный режим эскалации",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 13.36,
+    "tezisy": [
+     "Тревога не исчезает",
+     "Чемоданы не достают",
+     "Бюджеты растут",
+     "Вокзалы спокойны"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Удобный режим эскалации",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 13.36,
+   "tezisy": [
+    "Тревога не исчезает",
+    "Чемоданы не достают",
+    "Бюджеты растут",
+    "Вокзалы спокойны"
+   ]
+  }
+ },
+ {
+  "scene": 46,
+  "view": "bars",
+  "dur": 12.64,
+  "anim": 12.64,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "Кибер-силы: кто кого превосходит числом",
+   "caption": "",
+   "seconds": 12.64,
+   "bars": [
+    {
+     "label": "БРИТАНИЯ",
+     "value": 0.06,
+     "color": "4A90E2"
+    },
+    {
+     "label": "РОССИЯ, КИТАЙ, ИРАН, КНДР",
+     "value": 0.94,
+     "color": "48BB78"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 47,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.8,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 12.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Каждый эпизод по отдельности",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 12.8,
+    "sobytiya": [
+     "Повреждают судно",
+     "Атакуют инфраструктуру",
+     "Работают спецслужбы",
+     "Власти дают объяснение"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Каждый эпизод по отдельности",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 12.8,
+   "sobytiya": [
+    "Повреждают судно",
+    "Атакуют инфраструктуру",
+    "Работают спецслужбы",
+    "Власти дают объяснение"
+   ]
+  }
+ },
+ {
+  "scene": 50,
+  "view": "zal_efir",
+  "dur": 11.92,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.92,
+   "sheets": [],
+   "text": "Следом появляется польский эпизод",
+   "say": "После ракетного инцидента Марк Рютте пообещал защищать каждый",
+   "author": "Рютте",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "tape",
+  "dur": 12.45,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Президент Чехии Петр Павел заявил, что подобное может случиться и в его стране",
+   "accent": "Чехии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.71,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 11.71,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Служат в силах НАТО",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.71,
+    "role": "представитель вооружённых сил Чехии"
+   }
+  },
+  "kwargs": {
+   "text": "Служат в силах НАТО",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.71,
+   "role": "представитель вооружённых сил Чехии"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "charts.cartogram",
+  "dur": 13.13,
+  "anim": 13.13,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Подкарпатское воеводство"
+   ],
+   "level": "region",
+   "admin": "Польша",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.8,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 10.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Рядом проходят учения коалиции желающих",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.8,
+    "repliki_": [
+     "Орпо|право Украины давать отпор России",
+     "Рютте|будем защищать каждый сантиметр",
+     "Павел|подобное может случиться и у нас",
+     "Рыбицкий|Киев специально не перехватывает ракеты"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Рядом проходят учения коалиции желающих",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.8,
+   "repliki_": [
+    "Орпо|право Украины давать отпор России",
+    "Рютте|будем защищать каждый сантиметр",
+    "Павел|подобное может случиться и у нас",
+    "Рыбицкий|Киев специально не перехватывает ракеты"
+   ]
+  }
+ },
+ {
+  "scene": 58,
+  "view": "charts.cartogram",
+  "dur": 12.17,
+  "anim": 12.17,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Финляндия",
+    "Эстония",
+    "Литва",
+    "Польша",
+    "Великобритания",
+    "Украина"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "charts.cartogram",
+  "dur": 12.32,
+  "anim": 12.32,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Финляндия",
+    "Эстония",
+    "Литва"
+   ],
+   "mode": "bubble",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "zal",
+  "dur": 13.12,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Маршрут можно запутать, управление спрятать",
+   "words": [
+    "СЛЕДЫ",
+    "АНОНИМНО"
+   ],
+   "sheets": [
+    "Спутниковый канал",
+    "Подставной владелец"
+   ],
+   "channel": "ПЛАНЕТА",
+   "dur": 13.12,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "charts.waterfall",
+  "dur": 13.52,
+  "anim": 13.52,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "start": {
+    "label": "Старт",
+    "value": 0.0
+   },
+   "steps": [
+    {
+     "label": "Экономика буксует",
+     "value": -1.0
+    },
+    {
+     "label": "Расходы растут",
+     "value": -1.0
+    },
+    {
+     "label": "Правые растут",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "zal_g48",
+  "dur": 12.45,
+  "anim": 12.45,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 12.45,
+   "sheets": [
+    "Сухогруз",
+    "Испытание России"
+   ],
+   "text": "Опасность не сводится к сухогрузу",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "paper_hand",
+  "dur": 12.31,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Одна сторона изучает набор ответов другой и выбирает самый выгодный себе",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "duel",
+  "dur": 10.97,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Молчание",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Давление растёт дальше",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 71,
+  "view": "pull",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Так противнику предлагают меню, где все блюда оплачивает он",
+   "accent": "противнику",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 72,
+  "view": "zal_schetchik",
+  "dur": 11.36,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.36,
+   "sheets": [],
+   "text": "У Лондона около двух тысяч специалистов",
+   "accent": "специалистов",
+   "value": "2 000",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "cinematic.depth_of_field",
+  "dur": 12.02,
+  "anim": 12.02,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_073.jpg",
+   "title": "Корабль у причала в Балтийске",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ }
+]
