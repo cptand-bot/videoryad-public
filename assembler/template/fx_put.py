@@ -204,7 +204,37 @@ def _zanyato(sc, kind, zamenit):
             % (sc.get("id"), est, kind, est))
 
 
+def _zamorozheno_stop(path_hint="."):
+    """УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО (10.11, Z-0019/Z-0020). Добавлено сюда
+    22.11.2026 — этого инструмента не было в списке восьми защищённых дверей
+    (card_put/quote_card/element_put/style_card/ban_file/podmena/refetch/
+    fetch_parallel), и ship.sh сам зовёт `fx_put.py --auto` перед сборкой —
+    живой случай дня: вкладка чистила долитые переходы ПОСЛЕ утверждения
+    руками, узнавая о запрете только на сдаче заморозкой, постфактум."""
+    try:
+        import sys as _s, os as _o
+        _tpl = _o.path.dirname(_o.path.abspath(__file__))
+        _s.path.insert(0, _tpl)
+        from zamorozka import zamorozheno
+        pdir = _o.path.abspath(path_hint if _o.path.isdir(path_hint)
+                               else _o.path.dirname(_o.path.abspath(path_hint)) or ".")
+        for _ in range(3):
+            if _o.path.exists(_o.path.join(pdir, ".utverzhdeno.json")):
+                break
+            pdir = _o.path.dirname(pdir)
+        if zamorozheno(pdir):
+            print("ПРАВКИ ЗАПРЕЩЕНЫ: дашборд этого ролика утверждён. "
+                  "Находку неси координатору — пересборку назначает пользователь.",
+                  file=_s.stderr)
+            raise SystemExit(3)
+    except SystemExit:
+        raise
+    except Exception:
+        pass
+
+
 def main():
+    _zamorozheno_stop(".")
     ap = argparse.ArgumentParser()
     ap.add_argument("scenes")
     ap.add_argument("sid", type=int, nargs="?", default=None)

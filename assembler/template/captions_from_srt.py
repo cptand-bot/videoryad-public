@@ -78,7 +78,36 @@ def cues(path):
     return out
 
 
+def _zamorozheno_stop(path_hint="."):
+    """УТВЕРЖДЕНО — ЗНАЧИТ ЗАМОРОЖЕНО (10.11, Z-0019/Z-0020). Добавлено сюда
+    22.11.2026 — живой случай дня: вкладка сгенерировала captions.ass УЖЕ
+    ПОСЛЕ утверждения дашборда (субтитров не хватало на сдаче), это стало
+    первой правкой в круге «утверждаю → правка → заморозка → его слово
+    на снятие → утверждаю заново», который он назвал адом."""
+    try:
+        import sys as _s, os as _o
+        _tpl = _o.path.dirname(_o.path.abspath(__file__))
+        _s.path.insert(0, _tpl)
+        from zamorozka import zamorozheno
+        pdir = _o.path.abspath(path_hint if _o.path.isdir(path_hint)
+                               else _o.path.dirname(_o.path.abspath(path_hint)) or ".")
+        for _ in range(3):
+            if _o.path.exists(_o.path.join(pdir, ".utverzhdeno.json")):
+                break
+            pdir = _o.path.dirname(pdir)
+        if zamorozheno(pdir):
+            print("ПРАВКИ ЗАПРЕЩЕНЫ: дашборд этого ролика утверждён. "
+                  "Находку неси координатору — пересборку назначает пользователь.",
+                  file=_s.stderr)
+            raise SystemExit(3)
+    except SystemExit:
+        raise
+    except Exception:
+        pass
+
+
 def main():
+    _zamorozheno_stop(".")
     ap = argparse.ArgumentParser()
     ap.add_argument("srt")
     ap.add_argument("--channel", default="", help="канал: подставит его палитру")
