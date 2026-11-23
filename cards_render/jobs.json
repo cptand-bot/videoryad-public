@@ -1,0 +1,41 @@
+[
+ {
+  "scene": 92,
+  "view": "sceny.perematka",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "perematka",
+   "seconds": 8.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Почему не дождались выборов?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.7,
+    "kadry": [
+     {
+      "photo": "2014",
+      "god": "cards/photo/card_092.jpg"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Почему не дождались выборов?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.7,
+   "kadry": [
+    {
+     "photo": "2014",
+     "god": "cards/photo/card_092.jpg"
+    }
+   ]
+  }
+ }
+]
