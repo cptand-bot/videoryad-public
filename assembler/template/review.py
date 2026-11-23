@@ -3290,6 +3290,14 @@ async function pickOpt(id, o, gridId, msgId, target, el){{
       if(target === "overlay"){{
         const pv = document.getElementById("ovprev"+id);
         if(pv){{ pv.src = o.thumb; pv.hidden = false; }}
+      }} else {{
+        // ОСНОВНОЙ КАДР СЦЕНЫ — ТАК ЖЕ ПЕРЕРИСОВАТЬ СРАЗУ (23.11, живой
+        // случай: сервер сохранял новый файл верно, но плитка на странице
+        // не менялась — только всплывашка обновлялась немедленно, основная
+        // сцена ждала следующего цикла poll(), который мог не дойти или
+        // дойти незаметно). Не полагаемся на poll() — бьём кэш тут же.
+        const im = document.getElementById("i"+id);
+        if(im){{ im.src = (im.getAttribute("src") || "").split("?")[0] + "?t=" + Date.now(); }}
       }}
     }} else {{ if(msg) msg.textContent = "✗ " + (j.reason || "не скачалось, выбери другой"); if(el) el.classList.remove("picked"); }}
   }}catch(e){{ if(msg) msg.textContent = "✗ ошибка"; }}
@@ -4214,6 +4222,15 @@ def run_live(scenes_path, images_dir, port):
 
         def end_headers(self):
             self.send_header("Access-Control-Allow-Origin", "*")
+            # СТАТИКА (images/scene_NNN.*, overlays/*, .rev/*.jpg) ОТДАВАЛАСЬ
+            # ГОЛЫМ SimpleHTTPRequestHandler БЕЗ no-store (23.11, живой
+            # случай: кадр сцены реально заменён на диске, кэш-бастер в JS
+            # есть, а браузер Windows всё равно показывал старый файл).
+            # HTML/`/state` уже ставили no-store сами — статика нет. Дашборд
+            # живой, кэшировать тут вообще нечего, бьём его на КАЖДОМ ответе.
+            # (повтор того же заголовка там, где он уже стоит выше по коду —
+            # не беда: значение совпадает, браузеры это едят спокойно.)
+            self.send_header("Cache-Control", "no-store")
             super().end_headers()
 
         def do_OPTIONS(self):

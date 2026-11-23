@@ -155,6 +155,22 @@ def cmd_postavit(args):
     if os.path.exists(p) and not args.perezapisat:
         print("заморозка уже стоит — ничего не меняю")
         return 0
+    # ДАШБОРД НИ РАЗУ НЕ ОТКРЫВАЛСЯ (23.11) — его прямое слово «я никакого
+    # дашборда не утверждал». Живой случай: вкладка звала ship.sh напрямую
+    # (ship.sh без --fetch-only сам зовёт postavit как «момент утверждения»),
+    # минуя review.py — .posledniy_prosmotr никогда не писался, и старая
+    # _после_просмотра() на отсутствующую метку отвечала «подозрительных
+    # нет», то есть замораживала БЕЗ единого живого показа страницы.
+    метка_просмотра = os.path.join(pdir, ".posledniy_prosmotr")
+    if not os.path.isfile(метка_просмотра):
+        print("!! ДАШБОРД НИ РАЗУ НЕ ОТКРЫВАЛСЯ — заморозка (и сборка) не "
+              "ставится.", file=sys.stderr)
+        print("   Подними review.py --live и дай ему открыть страницу, "
+              "прежде чем собирать.", file=sys.stderr)
+        print("   Обход только его прямым словом на этот ролик: "
+              "VIDEORYAD_POSTAVIT_BEZ_PROVERKI=1", file=sys.stderr)
+        if os.environ.get("VIDEORYAD_POSTAVIT_BEZ_PROVERKI") != "1":
+            return 1
     data = {"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "snimok": _snimok(pdir)}
     json.dump(data, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("УТВЕРЖДЕНО И ЗАМОРОЖЕНО в %s: кадров %d. Дальше правки запрещены."

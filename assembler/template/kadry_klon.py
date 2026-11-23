@@ -470,15 +470,28 @@ def main():
                            "deti_gate.py")
         if os.path.exists(_dg):
             import subprocess as _sp
-            print("гейт детей по перенесённым кадрам:")
-            _r = _sp.run([sys.executable, _dg, a.scenes],
+            # БЫЛО (до 23.11): звали `deti_gate.py <scenes.json>` без
+            # подкоманды (нужна listy/verdikt/centr/check) И с файлом сцен
+            # вместо папки проекта — argparse падал кодом 2 на КАЖДОМ
+            # переносе, а сообщение ниже читало любой ненулевой код как
+            # «не чисто», хотя гейт вообще не запускался (Z-0034/п.156).
+            # deti_gate — не синхронная проверка: listy собирает листы,
+            # смотрящий (суб­агент/внешний агент) даёт verdikt, check потом
+            # читает ЗАПИСАННЫЙ вердикт. Автоматический check тут был бы
+            # пустышкой без verdikt — поэтому только листы и явная просьба.
+            print("гейт детей по перенесённым кадрам — собираю контактные листы:")
+            _r = _sp.run([sys.executable, _dg, "listy", pdir],
                          capture_output=True, text=True)
             for _л in (_r.stdout or "").strip().splitlines()[-6:]:
                 print("  %s" % _л)
             if _r.returncode != 0:
-                print("  !! ГЕЙТ ДЕТЕЙ НЕ ЧИСТ — разбери названные сцены до "
-                      "фетча, кадр донора проверенным не считается",
+                print("  !! deti_gate.py listy упал (код %d) — разбери "
+                      "вручную: python3 deti_gate.py listy %s" % (_r.returncode, pdir),
                       file=sys.stderr)
+            else:
+                print("  листы готовы в %s/deti/ — требуется просмотр и "
+                      "verdikt ПЕРЕД check, кадр донора проверенным "
+                      "не считается, пока verdikt не записан" % pdir)
 
     print("взято кадров донора: %d — за этими сценами фетч уже не идёт" % взято)
     print("остальные %d сцен ищутся как обычно: клон должен отличаться "

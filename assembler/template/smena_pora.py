@@ -143,19 +143,30 @@ def main():
     # ХУК ЧИТАЕТ cwd ИЗ STDIN (UserPromptSubmit/Stop передают JSON) — если
     # это рабочая вкладка внутри папки проекта, молчим совсем, даже при
     # --vse. Координатор работает вне папки темы — его это не задевает.
+    свой = ""   # файл сессии ИМЕННО ЭТОЙ вкладки (хук передаёт transcript_path)
     if тихо or вход:
         try:
             _вх = json.loads(sys.stdin.read() or "{}")
             if _рабочая_вкладка(_вх.get("cwd") or os.getcwd()):
                 return 0
+            _tp = _вх.get("transcript_path") or ""
+            if _tp and os.path.isfile(_tp):
+                свой = _tp
         except (ValueError, OSError):
             pass
-    файлы = sorted(glob.glob(os.path.join(ROOT, "*", "*.jsonl")),
-                   key=os.path.getmtime, reverse=True)
-    свежие = time.time() - 6 * 3600
-    файлы = [f for f in файлы if os.path.getmtime(f) > свежие] or файлы[:1]
-    if not все:
-        файлы = файлы[:1]
+    # ЕГО СЛОВО 23.11.2026: «Ты поймала чужое ограничение… Какая у тебя может
+    # быть контекст 553 К? Ты только что открылась». Раньше хук брал САМЫЙ
+    # СВЕЖИЙ файл сессии среди всех вкладок — и новая вкладка получала
+    # плашку с чужим контекстом. Теперь хук меряет только свою сессию.
+    if свой and not все:
+        файлы = [свой]
+    else:
+        файлы = sorted(glob.glob(os.path.join(ROOT, "*", "*.jsonl")),
+                       key=os.path.getmtime, reverse=True)
+        свежие = time.time() - 6 * 3600
+        файлы = [f for f in файлы if os.path.getmtime(f) > свежие] or файлы[:1]
+        if not все:
+            файлы = файлы[:1]
     пора = False
     уровень, причина, текущий = "рано", "", ""
     строки = []

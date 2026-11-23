@@ -63,6 +63,49 @@ def _t(sec):
     return "%d:%02d:%02d.%02d" % (h, m, s, cs)
 
 
+def _razbit_dlinnuyu(st, en, tx, maxdur=2.6, maxchars=38):
+    """Реплика из .srt длиннее 2,6 с ИЛИ 38 знаков (норма та же, что в
+    script-to-video/build_dynamics.py) — колет на части по словам, с
+    приоритетом разрыва по запятой, время делит пропорционально длине
+    куска. Живой случай 23.11 (Z-0045): VoiceGen отдал 72 реплики по
+    ролику длиннее нормы (худшая 11,7 с / 19 слов), субтитры легли целыми
+    предложениями — его прямая претензия. У .srt только границы реплики
+    целиком, не по словам, поэтому тайминг внутри куска — пропорция по
+    числу знаков, не идеальная синхронизация, но читаемо."""
+    dur = en - st
+    if dur <= maxdur and len(tx) <= maxchars:
+        return [[st, en, tx]]
+    слова = tx.split()
+    if len(слова) <= 1:
+        return [[st, en, tx]]
+    куски, текущий = [], ""
+    for сл in слова:
+        добавка = (" " if текущий else "") + сл
+        если_длиннее = текущий + добавка
+        # рвём ПОСЛЕ запятой, если уже близко к лимиту — читается естественнее
+        if текущий and (len(если_длиннее) > maxchars
+                         or (текущий.endswith(",") and len(текущий) >= maxchars * 0.5)):
+            куски.append(текущий)
+            текущий = сл
+        else:
+            текущий = если_длиннее
+    if текущий:
+        куски.append(текущий)
+    if len(куски) <= 1:
+        return [[st, en, tx]]
+    всего_знаков = sum(len(k) for k in куски) or 1
+    пол = 0.6  # минимум на кусок, иначе мелькает нечитаемо
+    итог, t = [], st
+    for i, k in enumerate(куски):
+        доля = len(k) / всего_знаков
+        d = max(пол, dur * доля)
+        t2 = en if i == len(куски) - 1 else min(en, t + d)
+        итог.append([t, t2, k])
+        t = t2
+    итог[-1][1] = en
+    return итог
+
+
 def cues(path):
     raw = open(path, encoding="utf-8-sig", errors="replace").read()
     out = []
@@ -74,7 +117,7 @@ def cues(path):
         tx = " ".join(x.strip() for x in m.group(9).split("\n") if x.strip())
         tx = re.sub(r"<[^>]+>", "", tx).strip()
         if tx:
-            out.append([st, en, tx])
+            out.extend(_razbit_dlinnuyu(st, en, tx))
     return out
 
 
