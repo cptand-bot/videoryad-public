@@ -1,0 +1,601 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 8.9,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ТРАМП",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 2,
+   "start_sec": 8.9,
+   "duration_sec": 10.1,
+   "text": "",
+   "source": "card:prolog",
+   "source_query": "карточка «prolog» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 3,
+   "start_sec": 19.0,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/ПУТИН",
+   "fx": "filmwin"
+  },
+  {
+   "id": 4,
+   "start_sec": 28.8,
+   "duration_sec": 7.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Еврокомиссия заседание бюджет помощь Украине",
+   "fx": "player"
+  },
+  {
+   "id": 5,
+   "start_sec": 36.3,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "card:zal_g18",
+   "source_query": "карточка"
+  },
+  {
+   "id": 6,
+   "start_sec": 49.4,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "card:mehanizm",
+   "source_query": "карточка"
+  },
+  {
+   "id": 7,
+   "start_sec": 58.9,
+   "duration_sec": 13.9,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка"
+  },
+  {
+   "id": 8,
+   "start_sec": 72.8,
+   "duration_sec": 6.2,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/c33bede1b4.mp4?token=b3OEfZoBalNdvUSKCTzkuikSZC2Pl6mqggrb-hxuG6spwZ-319C1LO2-WVLFyGoCEHzZFjUIVK0CZ4vvdHGNd8WtmkHPVSQHOLUcBaifA5BgiyQ7V880Z5gJ8nW2GblxQPet081Laahqkub6cCpz8jqgLJJHwjAIxesfo4rpabPvwyNUN-an9OpQ1F6arlR1mqgeZX5YlPvG7WakUaAUH8In37wjGVJ9SFfMbHLcZJesmC1aiz_CiTQNRGxNxo_N-AJ88aezXkRdfrMCuHwLoZpw__7ZA8MSSzNmEdRWXZZX_EJolVCAC7IHGHArvaY0-YRMBAUvSGwLn-MyRVIz8pHkNEhYvLaApy55k49Yn7-iPrezBpLzECA-EDBlTmk80jEmqscTRiy766fU7sIpMgDqVydNgfqpmQ-LH8vM7NkHjYL-TBsnIbswaHra8g9tcAmeQfdxVL_YtiUh4aXBFcshhFTBR4_-wm2efX2KHp1aA_EM0V7riBmoUdXHzMuDFGdSB8pV5lgoXWmjSmQlHQdIg_wpFgR1B7Pzg0ILtld3yZ_l3BpQcafdWDbT1Mi9e0abop4ExnMauUL74SjQaPcQb1Z6zu0C23d7_k99R5OpG7RIkRfZBmvkEaXosPk8F0iQTyrw_UiQTr7otOeDQtgApsavDLM6sAtA7XCUlOQ",
+   "fx": "slides"
+  },
+  {
+   "id": 9,
+   "start_sec": 79.0,
+   "duration_sec": 7.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОПАРЛАМЕНТ",
+   "fx": "stamps"
+  },
+  {
+   "id": 10,
+   "start_sec": 86.5,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/ЕВРОКОМИССИЯ",
+   "fx": "torn"
+  },
+  {
+   "id": 11,
+   "start_sec": 98.8,
+   "duration_sec": 8.7,
+   "text": "",
+   "source": "card:zal_shkala",
+   "source_query": "карточка"
+  },
+  {
+   "id": 12,
+   "start_sec": 107.5,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка «bars» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bars",
+    "код": "A4",
+    "title": "Названные суммы",
+    "watermark": "5 МИНУТ",
+    "anim": 10.3
+   }
+  },
+  {
+   "id": 13,
+   "start_sec": 117.8,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Еврокомиссия Брюссель заседание помощь Украине финансирование",
+   "fx": "flash"
+  },
+  {
+   "id": 14,
+   "start_sec": 127.3,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:paper_hand",
+   "source_query": "карточка «paper_hand» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 15,
+   "start_sec": 137.8,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО",
+   "fx": "curl"
+  },
+  {
+   "id": 16,
+   "start_sec": 149.6,
+   "duration_sec": 8.6,
+   "text": "",
+   "source": "card:film",
+   "source_query": "карточка «film» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 17,
+   "start_sec": 158.2,
+   "duration_sec": 3.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/АРМИЯ-США"
+  },
+  {
+   "id": 18,
+   "start_sec": 161.7,
+   "duration_sec": 13.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "конференция восстановление Украины доноры финансирование",
+   "fx": "subscribe2"
+  },
+  {
+   "id": 19,
+   "start_sec": 175.1,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "card:map_regions",
+   "source_query": "карточка «map_regions» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 20,
+   "start_sec": 187.6,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "нардеп Нагорняк заявление хищение энергетика Киевщина"
+  },
+  {
+   "id": 21,
+   "start_sec": 199.9,
+   "duration_sec": 5.9,
+   "text": "",
+   "source": "card:zal_makety",
+   "source_query": "карточка «zal_makety» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 22,
+   "start_sec": 205.8,
+   "duration_sec": 14.4,
+   "text": "",
+   "source": "card:waterfall",
+   "source_query": "карточка «waterfall» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 23,
+   "start_sec": 220.2,
+   "duration_sec": 3.5,
+   "text": "",
+   "source": "card:tribuna",
+   "source_query": "карточка «tribuna» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 24,
+   "start_sec": 223.7,
+   "duration_sec": 14.5,
+   "text": "",
+   "source": "card:zal_g48",
+   "source_query": "карточка"
+  },
+  {
+   "id": 25,
+   "start_sec": 238.2,
+   "duration_sec": 6.5,
+   "text": "",
+   "source": "card:zal_g44",
+   "source_query": "карточка"
+  },
+  {
+   "id": 26,
+   "start_sec": 244.7,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "card:device",
+   "source_query": "карточка «device» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 27,
+   "start_sec": 256.4,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "card:relsy",
+   "source_query": "карточка"
+  },
+  {
+   "id": 28,
+   "start_sec": 266.0,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "армии США на учениях 2026 пуск ракеты Patriot",
+   "fx": "subscribe2",
+   "visual_prompt": "армии США на учениях 2026 пуск ракеты Patriot"
+  },
+  {
+   "id": 29,
+   "start_sec": 278.3,
+   "duration_sec": 9.9,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Зеленский Patriot ракеты передача разрешение США"
+  },
+  {
+   "id": 30,
+   "start_sec": 288.2,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Пентагон программа PURL поставки ракет Украине"
+  },
+  {
+   "id": 31,
+   "start_sec": 298.6,
+   "duration_sec": 7.1,
+   "text": "",
+   "source": "card:network",
+   "source_query": "карточка"
+  },
+  {
+   "id": 32,
+   "start_sec": 305.7,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "card:zal",
+   "source_query": "карточка"
+  },
+  {
+   "id": 33,
+   "start_sec": 317.0,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:vyrezka",
+   "source_query": "карточка «vyrezka» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 34,
+   "start_sec": 329.4,
+   "duration_sec": 8.0,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Путин Си Цзиньпин встреча переговоры саммит",
+   "visual_prompt": "Путин Си Цзиньпин встреча переговоры саммит"
+  },
+  {
+   "id": 35,
+   "start_sec": 337.4,
+   "duration_sec": 7.8,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка"
+  },
+  {
+   "id": 36,
+   "start_sec": 345.2,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 37,
+   "start_sec": 354.7,
+   "duration_sec": 10.9,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка"
+  },
+  {
+   "id": 38,
+   "start_sec": 365.6,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Давид Арахамия политик Украина",
+   "visual_prompt": "Давид Арахамия политик Украина"
+  },
+  {
+   "id": 39,
+   "start_sec": 377.4,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "card:globus_map",
+   "source_query": "карточка «globus_map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 40,
+   "start_sec": 387.2,
+   "duration_sec": 3.6,
+   "text": "",
+   "source": "card:prohod",
+   "source_query": "карточка «prohod» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 41,
+   "start_sec": 390.8,
+   "duration_sec": 17.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "вилла особняк резиденция заграница",
+   "fx": "subscribe2",
+   "visual_prompt": "вилла особняк резиденция заграница"
+  },
+  {
+   "id": 42,
+   "start_sec": 408.5,
+   "duration_sec": 8.5,
+   "text": "",
+   "source": "card:zal_g01",
+   "source_query": "карточка"
+  },
+  {
+   "id": 43,
+   "start_sec": 417.0,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "card:kreslo",
+   "source_query": "карточка «kreslo» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 44,
+   "start_sec": 426.6,
+   "duration_sec": 14.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Залужный награда конференция",
+   "visual_prompt": "Залужный награда конференция"
+  },
+  {
+   "id": 45,
+   "start_sec": 440.8,
+   "duration_sec": 5.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "разрушенная инфраструктура Украина война",
+   "visual_prompt": "разрушенная инфраструктура Украина война"
+  },
+  {
+   "id": 46,
+   "start_sec": 446.3,
+   "duration_sec": 7.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "конференция вручение награды статуэтка",
+   "visual_prompt": "конференция вручение награды статуэтка"
+  },
+  {
+   "id": 47,
+   "start_sec": 453.8,
+   "duration_sec": 14.0,
+   "text": "",
+   "source": "card:duel",
+   "source_query": "карточка"
+  },
+  {
+   "id": 48,
+   "start_sec": 467.8,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "card:zal_efir",
+   "source_query": "карточка «zal_efir» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 49,
+   "start_sec": 478.6,
+   "duration_sec": 11.2,
+   "text": "",
+   "source": "card:paper_typed",
+   "source_query": "карточка"
+  },
+  {
+   "id": 50,
+   "start_sec": 489.8,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военкомат здание Украина призывной пункт",
+   "visual_prompt": "военкомат здание Украина призывной пункт"
+  },
+  {
+   "id": 51,
+   "start_sec": 500.6,
+   "duration_sec": 9.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "мобилизация Украина призывной возраст",
+   "visual_prompt": "мобилизация Украина призывной возраст"
+  },
+  {
+   "id": 52,
+   "start_sec": 509.7,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "card:torn",
+   "source_query": "карточка"
+  },
+  {
+   "id": 53,
+   "start_sec": 520.3,
+   "duration_sec": 5.5,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "военкомат Украина призыв",
+   "fx": "subscribe2",
+   "visual_prompt": "военкомат Украина призыв"
+  },
+  {
+   "id": 54,
+   "start_sec": 525.8,
+   "duration_sec": 13.6,
+   "text": "",
+   "source": "card:doc",
+   "source_query": "карточка"
+  },
+  {
+   "id": 55,
+   "start_sec": 539.4,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "card:zal_slova",
+   "source_query": "карточка «zal_slova» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 56,
+   "start_sec": 551.3,
+   "duration_sec": 6.7,
+   "text": "",
+   "source": "card:line",
+   "source_query": "карточка"
+  },
+  {
+   "id": 57,
+   "start_sec": 558.0,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "card:slider",
+   "source_query": "карточка «slider» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "slider",
+    "код": "A5",
+    "watermark": "5 МИНУТ",
+    "anim": 9.0
+   }
+  },
+  {
+   "id": 58,
+   "start_sec": 567.0,
+   "duration_sec": 11.7,
+   "text": "",
+   "source": "card:film_frame",
+   "source_query": "карточка «film_frame» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 59,
+   "start_sec": 578.7,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "card:lenta",
+   "source_query": "карточка «lenta» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 60,
+   "start_sec": 590.6,
+   "duration_sec": 3.5,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/УМЕРОВ"
+  },
+  {
+   "id": 61,
+   "start_sec": 594.1,
+   "duration_sec": 15.2,
+   "text": "",
+   "source": "card:poster",
+   "source_query": "карточка «poster» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "poster",
+    "код": "A6",
+    "title": "Смотрим по отдельности",
+    "watermark": "5 МИНУТ",
+    "anim": 15.2
+   }
+  },
+  {
+   "id": 62,
+   "start_sec": 609.3,
+   "duration_sec": 9.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "разрушенный город Украина война последствия",
+   "visual_prompt": "разрушенный город Украина война последствия"
+  },
+  {
+   "id": 63,
+   "start_sec": 618.9,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "card:strike",
+   "source_query": "карточка «strike» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 64,
+   "start_sec": 631.8,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "card:zal_kub",
+   "source_query": "карточка «zal_kub» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 65,
+   "start_sec": 643.3,
+   "duration_sec": 9.2,
+   "text": "",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 66,
+   "start_sec": 652.5,
+   "duration_sec": 13.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "демографический кризис Украина эмиграция",
+   "visual_prompt": "демографический кризис Украина эмиграция"
+  },
+  {
+   "id": 67,
+   "start_sec": 666.1,
+   "duration_sec": 3.5,
+   "text": "",
+   "source": "card:repliki",
+   "source_query": "карточка «repliki» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 68,
+   "start_sec": 669.6,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:tape",
+   "source_query": "карточка"
+  },
+  {
+   "id": 69,
+   "start_sec": 679.9,
+   "duration_sec": 13.89,
+   "text": "",
+   "source": "card:zal_pol",
+   "source_query": "карточка «zal_pol» — кадр рисуется в облаке, фетч не нужен"
+  }
+ ]
+}
