@@ -1,41 +1,41 @@
 [
  {
-  "scene": 92,
-  "view": "sceny.perematka",
-  "mode": "cli",
-  "script": "sceny_cli.py",
-  "dur": 8.7,
-  "channel": "5 МИНУТ",
+  "scene": 61,
+  "view": "poster.poster",
+  "dur": 15.2,
+  "anim": 15.2,
+  "tail_zoom": 0.0,
   "watermark": "5 МИНУТ",
-  "cfg": {
-   "view": "perematka",
-   "seconds": 8.7,
-   "fps": 30,
-   "t0": 0.0,
-   "kwargs": {
-    "text": "Почему не дождались выборов?",
-    "channel": "5 МИНУТ",
-    "watermark": "5 МИНУТ",
-    "dur": 8.7,
-    "kadry": [
-     {
-      "photo": "2014",
-      "god": "cards/photo/card_092.jpg"
-     }
-    ]
-   }
-  },
+  "channel": "5 МИНУТ",
   "kwargs": {
-   "text": "Почему не дождались выборов?",
-   "channel": "5 МИНУТ",
-   "watermark": "5 МИНУТ",
-   "dur": 8.7,
-   "kadry": [
+   "title": "Смотрим по отдельности",
+   "hero_photo": "cards/photo/card_061.jpg",
+   "bottom": "Вместе — совсем другая картина происходящего",
+   "features": [
     {
-     "photo": "2014",
-     "god": "cards/photo/card_092.jpg"
+     "text": "Каждая тема — отдельная новость"
     }
-   ]
-  }
+   ],
+   "facts": [
+    {
+     "label": "Кредит",
+     "value": "вопрос"
+    },
+    {
+     "label": "Энергетика",
+     "value": "вопрос"
+    },
+    {
+     "label": "Мобилизация",
+     "value": "вопрос"
+    },
+    {
+     "label": "Конференция",
+     "value": "вопрос"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
  }
 ]
