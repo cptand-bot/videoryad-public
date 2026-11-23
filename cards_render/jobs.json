@@ -1,0 +1,1296 @@
+[
+ {
+  "scene": 2,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 9.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Москва почти согласна?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.5
+   }
+  },
+  "kwargs": {
+   "text": "Москва почти согласна?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.5
+  }
+ },
+ {
+  "scene": 4,
+  "view": "split",
+  "dur": 9.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Путин прямо ответил: не начал бы вторжение при Трампе",
+   "source": "по словам Трампа",
+   "photo": "cards/photo/card_004.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "strike",
+  "dur": 13.1,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если бы в Белом доме оставался он, а не Байден, этого конфликта, по его словам, вообще бы не было",
+   "struck": "Байден",
+   "fix": "Трамп",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "zal_efir",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.0,
+   "sheets": [],
+   "text": "При Трампе такого бы не было",
+   "say": "Путин хочет закончить конфликт путём переговоров",
+   "author": "Трамп",
+   "role": "президент США",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "zal_ekran",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.0,
+   "sheets": [
+    "СРОКИ МИРА",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Старый спор о сроках мира",
+   "say": "За сутки не получится, Москва может добиваться своих целей",
+   "author": "Зеленский",
+   "role": "президент Украины",
+   "source": "эфир, 2026",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 13,
+  "view": "charts.slope",
+  "dur": 9.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "НАТО неприемлемо для Москвы",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Компромисс на обложке"
+    },
+    {
+     "label": "Будут ли войска",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Когда придут войска"
+    }
+   ],
+   "left_label": "Было",
+   "right_label": "Стало",
+   "source": "переговоры 2026",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "zal",
+  "dur": 9.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Только на обложке уже написано компромисс",
+   "words": [
+    "УЖЕ",
+    "ТАКОЕ"
+   ],
+   "sheets": [
+    "Только на обложке уже написано",
+    "Такое впечатление, что просто не",
+    "Вот и всё",
+    "Сколько ещё раз его надо повторить",
+    "Но здесь противоречие ещё жёстче",
+    "Если недопущение"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 9.5,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 13.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Цена вступления в НАТО?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 13.0,
+    "sobytiya": [
+     "Украина в НАТО",
+     "Донбасс России"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Цена вступления в НАТО?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 13.0,
+   "sobytiya": [
+    "Украина в НАТО",
+    "Донбасс России"
+   ]
+  }
+ },
+ {
+  "scene": 17,
+  "view": "zal_pol",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.0,
+   "sheets": [],
+   "text": "Не компромисса посередине",
+   "na_polu": "КАПИТУЛЯЦИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "bars",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "",
+   "caption": "Что дешевле",
+   "seconds": 13.0,
+   "bars": [
+    {
+     "label": "НАТО",
+     "value": 0.3,
+     "color": "EABD23"
+    },
+    {
+     "label": "АРМИЯ ВНЕ АЛЬЯНСА",
+     "value": 0.9,
+     "color": "B92526"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 20,
+  "view": "charts.pie",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "расходы на союзников",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "содержание армии",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "конкретные решения",
+     "value": 33.333333333333336
+    }
+   ],
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 21,
+  "view": "vyrezka.gazeta",
+  "dur": 9.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_021.jpg",
+   "author": "Захарова",
+   "role": "официальный представитель МИД России",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "cinematic.evidence_wall",
+  "dur": 13.1,
+  "anim": 13.1,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_022.jpg",
+     240,
+     380,
+     -4,
+     "Вашингтон Пост"
+    ],
+    [
+     "cards/photo/card_022_2.jpg",
+     800,
+     380,
+     3,
+     "Кремль"
+    ],
+    [
+     "cards/photo/card_022_3.jpg",
+     1360,
+     380,
+     -2,
+     "Киев"
+    ]
+   ],
+   "title": "ЦЕПОЧКА ИСТОЧНИКА",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 24,
+  "view": "duel",
+  "dur": 13.0,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "если войск НАТО постоянно на Украине не будет",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Разбираем, что ещё лежит в этом пакете",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кто что получает?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "tezisy": [
+     "России предлагают отвести войска",
+     "Украине дают долгосрочные гарантии",
+     "Западу оставляют механизм быстрого реагирования"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Кто что получает?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "tezisy": [
+    "России предлагают отвести войска",
+    "Украине дают долгосрочные гарантии",
+    "Западу оставляют механизм быстрого реагирования"
+   ]
+  }
+ },
+ {
+  "scene": 28,
+  "view": "slider",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "",
+   "min": 0.0,
+   "max": 100.0,
+   "low": 0.0,
+   "high": 100.0,
+   "marker_value": 50.0,
+   "marker_display": "50",
+   "seconds": 11.8,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "",
+   "source": ""
+  }
+ },
+ {
+  "scene": 29,
+  "view": "poster.poster",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "ПЛАН КАПИТУЛЯЦИИ?",
+   "hero_photo": "cards/photo/card_029.jpg",
+   "bottom": "Не хватает только «сложить оружие»",
+   "facts": [
+    {
+     "label": "Войска",
+     "value": "отвести"
+    },
+    {
+     "label": "Гарантии",
+     "value": "Украине"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 32,
+  "view": "marker_serif",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Готовность России обсуждать гарантии по аналогии с пятой статьёй — серьёзный шаг вперёд",
+   "accent": "пятой статьёй",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "charts.cartogram",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Украина",
+    "Россия"
+   ],
+   "accent": [
+    "Украина"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "charts.cartogram",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "НАТО"
+   ],
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "charts.network",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "консультации",
+     "label": "консультации",
+     "weight": 2.0
+    },
+    {
+     "id": "прозрачность",
+     "label": "прозрачность",
+     "weight": 1.0
+    },
+    {
+     "id": "западные войска",
+     "label": "западные войска",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "консультации",
+     "to": "прозрачность",
+     "weight": 1.0
+    },
+    {
+     "from": "консультации",
+     "to": "западные войска",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Гарантии без войск НАТО",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "pary": [
+     "НАТО>Возобновление конфликта",
+     "Вашингтон>Гарантии без войск"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Гарантии без войск НАТО",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "pary": [
+    "НАТО>Возобновление конфликта",
+    "Вашингтон>Гарантии без войск"
+   ]
+  }
+ },
+ {
+  "scene": 37,
+  "view": "zal_slova",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "То есть спор не исчез",
+   "na_polu": "ВОЙСКА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "devices.device_scene",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_038.jpg",
+   "items": [
+    "Соглашение выглядит красиво",
+    "Условие спрятано в мелочи"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "sceny.lenta_foto",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta_foto",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Папка с НАТО не новая",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_040.jpg",
+      "god": "2008",
+      "podpis": "Бухарест обещал членство"
+     },
+     {
+      "photo": "cards/photo/card_040_2.jpg",
+      "god": "2022",
+      "podpis": "Начало конфликта"
+     },
+     {
+      "photo": "cards/photo/card_040_3.jpg",
+      "god": "2026",
+      "podpis": "Новые переговоры"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Папка с НАТО не новая",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_040.jpg",
+     "god": "2008",
+     "podpis": "Бухарест обещал членство"
+    },
+    {
+     "photo": "cards/photo/card_040_2.jpg",
+     "god": "2022",
+     "podpis": "Начало конфликта"
+    },
+    {
+     "photo": "cards/photo/card_040_3.jpg",
+     "god": "2026",
+     "podpis": "Новые переговоры"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 41,
+  "view": "zal_kub",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Говорят о снижении напряжённости",
+   "kick": "БЫСТРЫЙ ВХОД НАТО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Декларация России, США и Китая к месту",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "region": "Китай"
+   }
+  },
+  "kwargs": {
+   "text": "Декларация России, США и Китая к месту",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "region": "Китай"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "doc",
+  "dur": 11.7,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Декларация остаётся декларацией. Она не превращается автоматически в полноценный международный договор",
+   "title": "ГДЕ ГРАНИЦА?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "tape",
+  "dur": 11.8,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "У любого обязательства есть две простые составляющие желание его выполнить и реальные возможности это сделать",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Можно придумать красивое название",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Можно придумать красивое название",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "film.film_single",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_048.jpg",
+   "title": "СТАРЫЕ ОБЕЩАНИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Личная безопасность лидеров — важная часть стабильности",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "role": "обозреватель"
+   }
+  },
+  "kwargs": {
+   "text": "Личная безопасность лидеров — важная часть стабильности",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "role": "обозреватель"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "vyrezka.figura",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_053.jpg",
+   "author": "Рябков",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "film.film_strip",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_054.jpg",
+    "cards/photo/card_054_2.jpg",
+    "cards/photo/card_054_3.jpg"
+   ],
+   "title": "СОВПАДЕНИЕ?",
+   "captions": [
+    "Декларация",
+    "Реакция Вашингтона",
+    "Гарантии"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "paper_typed",
+  "dur": 11.7,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Декларации в ядерной сфере реально ограничивают немногое",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "zal_shkala",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.8,
+   "sheets": [],
+   "text": "Не красивую фотографию",
+   "value": "4 года",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "zal_g44",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Сколько раз нужно повторить нет?",
+   "value": "10",
+   "value_sub": "раз",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "zal_g01",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.8,
+   "sheets": [],
+   "text": "Кушнер по поручению Трампа",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "cinematic.dossier",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "rows": [
+    "Кушнер — спецпосланник США",
+    "Тема — проект успешной и сильной Украины",
+    "Партнёры — Всемирный банк, БлэкРок, Евросоюз",
+    "Прогресс — с командой Зеленского уже достигнут",
+    "Остаётся — одобрение через Конгресс"
+   ],
+   "title": "Кушнер",
+   "photo": "cards/photo/card_059.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Прогресс с Зеленским уже есть",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "repliki_": [
+     "Кушнер|прогресс с Зеленским уже есть",
+     "Кушнер|обязательства пройдут через Конгресс",
+     "Россия|согласна на многосторонний формат",
+     "Европейцы|участвуют в формате"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Прогресс с Зеленским уже есть",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "repliki_": [
+    "Кушнер|прогресс с Зеленским уже есть",
+    "Кушнер|обязательства пройдут через Конгресс",
+    "Россия|согласна на многосторонний формат",
+    "Европейцы|участвуют в формате"
+   ]
+  }
+ },
+ {
+  "scene": 61,
+  "view": "zal_g48",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Украине гарантируют безопасность",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 62,
+  "view": "charts.waterfall",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "место за столом",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "экономические послабления",
+     "value": 1.0
+    },
+    {
+     "label": "восстановление",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "zal_makety",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Переговоры тяжелы: много условий",
+   "makety": [
+    "банк=ВОССТАНОВЛЕНИЕ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "zal_schetchik",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.8,
+   "sheets": [],
+   "text": "Киев просит гарантии на десятилетия",
+   "value": "4",
+   "value_sub": "года",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "cinematic.depth_of_field",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_065.jpg",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 66,
+  "view": "paper_hand",
+  "dur": 11.8,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Москве пока видны лишь обещания послаблений",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "pull",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Именно поэтому слова Буданова про чудо до конца года звучат вполне логично даже без всякой мистики",
+   "accent": "Буданова",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "torn_split.torn_split",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_070.jpg",
+   "b_path": "cards/photo/card_070_2.jpg",
+   "title": "РАЗНЫЕ СТОРОНЫ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 71,
+  "view": "quote",
+  "dur": 11.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Система безопасности начинается не с красивого названия, а с ответа на простой вопрос",
+   "accent": "простой вопрос",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 72,
+  "view": "photo",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_072.jpg",
+   "lines": [
+    "Долгосрочные гарантии",
+    "Союзники",
+    "Меньше нагрузки на армию"
+   ]
+  }
+ },
+ {
+  "scene": 73,
+  "view": "zal_g18",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Контроль и влияние",
+   "value": "10",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 74,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кресло пока пустует",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "role": "министр"
+   }
+  },
+  "kwargs": {
+   "text": "Кресло пока пустует",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "role": "министр"
+  }
+ },
+ {
+  "scene": 75,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Старая папка с НАТО",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "soobshcheniya": [
+     "Отвести войска",
+     "Принять гарантии по образцу НАТО",
+     "Механизм быстрого входа сил альянса"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Старая папка с НАТО",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "soobshcheniya": [
+    "Отвести войска",
+    "Принять гарантии по образцу НАТО",
+    "Механизм быстрого входа сил альянса"
+   ]
+  }
+ },
+ {
+  "scene": 77,
+  "view": "sceny.perematka",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "perematka",
+   "seconds": 11.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Спор о НАТО тянется годами",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.0,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_077.jpg",
+      "god": "2008"
+     },
+     {
+      "photo": "cards/photo/card_077_2.jpg",
+      "god": "2022"
+     },
+     {
+      "photo": "cards/photo/card_077_3.jpg",
+      "god": "2026"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Спор о НАТО тянется годами",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.0,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_077.jpg",
+     "god": "2008"
+    },
+    {
+     "photo": "cards/photo/card_077_2.jpg",
+     "god": "2022"
+    },
+    {
+     "photo": "cards/photo/card_077_3.jpg",
+     "god": "2026"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 78,
+  "view": "charts.line",
+  "dur": 11.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Слово нет на столе",
+    "Кто-то делает вид обратного",
+    "Спор продолжается"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "сценарий",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
