@@ -26,7 +26,6 @@
 # по которой он туда физически может попасть, — файл, положенный в
 # раскатка ОСТАНОВЛЕНА, файл назван. Разработка арсенала при этом ничем не
 # эту папку пропускает намеренно.
-cloud/.gitignore
 cloud/README-CLOUD.md
 cloud/base_harvest.py
 cloud/base_video.py
@@ -67,7 +66,6 @@ cloud/workflows/cards-render.yml
 cloud/workflows/ozvuchka.yml
 cloud/workflows/videoryad-cloud.yml
 cloud/youtube_upload.py
-template/.env.example
 template/accept_scenes.py
 template/adopt_cloud.py
 template/ai_batch.py
@@ -109,6 +107,7 @@ template/fetch_maps.py
 template/fetch_parallel.py
 template/file_away_segodnia.py
 template/final_sheet.py
+template/geo_opyt.py
 template/folder_sheet.py
 template/fonts/ArialBlack.ttf
 template/fonts/Arimo-Bold.ttf

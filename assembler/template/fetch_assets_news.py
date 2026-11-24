@@ -3453,6 +3453,15 @@ def main():
         # Mirrors the same exclusion selfcheck.py's dedup pass already uses.
         existing = [p for p in glob.glob(os.path.join(images_dir, f"scene_{sid:03d}.*"))
                     if os.path.getsize(p) > 0 and not p.endswith((".json", ".text.png", ".lock"))]
+        # КАРТОЧКА — НЕ ЭТИ СИТА (2026-11-24, улов usuario-48, поймано ТРЕТИЙ
+        # раз подряд). `card:*` ничего не скачивает из сети, у `source_query`
+        # динамический текст («карточка «вид» — кадр рисуется в облаке...»),
+        # он меняется почти на каждом прогоне — сито «запрос изменился» ниже
+        # принимало это за смену темы и УДАЛЯЛО уже отрисованную карточку, не
+        # пытаясь её перекачать (card-ветка ниже сама честно пишет «файла
+        # нет», хотя файл был секунду назад). Готовую карточку в слоте не
+        # трогаем вообще — её свежесть считает своя отрисовка, не этот фетчер.
+        _is_card_src = source.startswith("card")
         # ЗАБАНЕННЫЙ КАДР НЕ СЧИТАЕТСЯ КЭШЕМ (2026-10-15). Бан проверялся только
         # при СКАЧИВАНИИ (_accept/_accept_video), а уже лежащий файл принимался
         # как «cached» без единой проверки. Поэтому забаненный клип возвращался
@@ -3460,7 +3469,7 @@ def main():
         # фетч видел его и ничего не качал — бан-лист при этом был доставлен и
         # исправен, просто его никто не спрашивал. Поймано живьём на
         # planeta-territorii-1610, пользователь: «Я его баню, баню, а оно опять».
-        if existing:
+        if existing and not _is_card_src:
             _ban = load_banned_md5()
             _ban_ph = _PH.load_banned_phash() if _PH else set()
             _kept = []
@@ -3476,7 +3485,7 @@ def main():
                 _kept.append(_p)
             existing = _kept
         # ЗАГЛУШКА И СМЕНА ЗАПРОСА — НЕ КЭШ (28.10, см. `_looks_like_cloud_stub`)
-        if existing:
+        if existing and not _is_card_src:
             _prev_q = _load_queries(images_dir).get(str(sid))
             _now_q = (query or "").strip()
             _kept = []
@@ -3509,7 +3518,7 @@ def main():
         # `.queries.json` не доехал (после переезда в `-cloud` кадры
         # переносятся, а запросы нет) — и фетч честно рапортовал «cached».
         # Правило: фото-источник не может лежать видеофайлом и наоборот.
-        if existing:
+        if existing and not _is_card_src:
             _vid_src = ("pexels_video", "youtube", "video")
             _pho_src = ("press_photo", "web_search", "wikimedia", "pexels_photo")
             _kept = []

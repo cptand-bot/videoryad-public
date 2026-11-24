@@ -28,6 +28,7 @@
 """
 import re
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -1151,14 +1152,50 @@ def _channel(meta, path):
 # Вернуть пропуски может только ОН: `VIDEORYAD_PROPUSKI_OK=1`.
 ПРОПУСКИ_РАЗРЕШЕНЫ = os.environ.get("VIDEORYAD_PROPUSKI_OK") == "1"
 
+# ФЛАГ НЕ НАСЛЕДУЕТСЯ МЕЖДУ ВЫЗОВАМИ `faza.sh` (24.11, НА-РАСКАТКУ п.166,
+# его прямое слово «делать всё до конца, не потом»). Каждый `faza.sh <шаг>`
+# — новый subprocess, окружение не передаётся само собой; флаг, поставленный
+# на один вызов, следующий не видел — вкладка вынуждена ставить его на
+# КАЖДЫЙ вызов отдельно, легко забыть. Решение: один раз РЕАЛЬНО
+# разрешённое (флаг БЫЛ в окружении в момент чтения причины) запоминается
+# отметкой рядом с `propuski.json`, привязанной к ХЕШУ ЕГО СОДЕРЖИМОГО —
+# следующий вызов без флага проверяет отметку и хеш. Любое изменение
+# `propuski.json` (новый вид, новая причина) сразу делает отметку
+# устаревшей — разрешение не «расползается» на то, что не одобряли.
+_ПРОПУСКИ_ОТМЕТКА = ".propuski_ok.json"
+
+
+def _пропуски_хеш(путь_файла):
+    try:
+        return hashlib.sha256(open(путь_файла, "rb").read()).hexdigest()
+    except OSError:
+        return None
+
+
+def _пропуски_разрешены_для(scenes_path):
+    if ПРОПУСКИ_РАЗРЕШЕНЫ:
+        return True
+    if not scenes_path:
+        return False
+    папка = os.path.dirname(os.path.abspath(scenes_path))
+    текущий = _пропуски_хеш(os.path.join(папка, ПРОПУСКИ_ФАЙЛ))
+    if текущий is None:
+        return False
+    try:
+        сохранённый = json.load(open(os.path.join(папка, _ПРОПУСКИ_ОТМЕТКА),
+                                      encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return сохранённый.get("hash") == текущий
+
 
 def _причина_пропуска(scenes_path, вид):
-    if not ПРОПУСКИ_РАЗРЕШЕНЫ:
+    if not _пропуски_разрешены_для(scenes_path):
         return ""
     if not scenes_path or not вид:
         return ""
-    п = os.path.join(os.path.dirname(os.path.abspath(scenes_path)),
-                     ПРОПУСКИ_ФАЙЛ)
+    папка = os.path.dirname(os.path.abspath(scenes_path))
+    п = os.path.join(папка, ПРОПУСКИ_ФАЙЛ)
     try:
         with open(п, encoding="utf-8") as f:
             д = json.load(f)
@@ -1167,6 +1204,17 @@ def _причина_пропуска(scenes_path, вид):
     причина = str((д or {}).get(вид, "")).strip()
     # Пустая строка причиной НЕ является: пропуск без объяснения — это
     # тихий обход гейта, ровно то, от чего он и поставлен.
+    if len(причина) >= 10 and ПРОПУСКИ_РАЗРЕШЕНЫ:
+        # флаг РЕАЛЬНО был в окружении именно сейчас — обновляем отметку,
+        # чтобы следующий вызов без флага прошёл для этого же propuski.json
+        текущий = _пропуски_хеш(п)
+        if текущий:
+            try:
+                json.dump({"hash": текущий},
+                          open(os.path.join(папка, _ПРОПУСКИ_ОТМЕТКА), "w",
+                               encoding="utf-8"))
+            except OSError:
+                pass
     return причина if len(причина) >= 10 else ""
 
 
