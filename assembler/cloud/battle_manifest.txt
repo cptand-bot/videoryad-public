@@ -97,6 +97,7 @@ template/codex_brief.py
 template/codex_raskhod.py
 template/contact_sheet.py
 template/crop_brand.py
+template/data/places_ua_theater.json
 template/deti_gate.py
 template/dossier_otbor.py
 template/dossier_use.py
@@ -135,6 +136,10 @@ template/grab_stream_frame.py
 template/grab_video_frame.py
 template/imena_pod_kadrom.py
 template/kadry_klon.py
+template/karta_brifing_atoms.py
+template/karta_brifing_data/base_map.jpg
+template/karta_brifing_data/meta.json
+template/karta_brifing_news.py
 template/kartochki_batch.py
 template/kartochki_srazu.py
 template/kluchi.py
@@ -156,6 +161,7 @@ template/pair_sheet.py
 template/palitra.py
 template/peredacha.py
 template/phase.py
+template/place_lookup.py
 template/phash_backfill.py
 template/phash_ban.py
 template/photo_quality.py
