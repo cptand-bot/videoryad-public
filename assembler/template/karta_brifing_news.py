@@ -81,7 +81,11 @@ def ua_theater(out=None, t=None, text="", channel="", watermark="",
               dur=0.0, sfx=None, **_):
     base, meta = _load()
     full = dur if dur > 0 else 4.0
-    tt = 0.0 if t is None else max(0.0, min(1.0, t / full))
+    # ПОСТЕР (t=None) ПОКАЗЫВАЕТ УСТОЯВШЕЕСЯ СОСТОЯНИЕ, НЕ СТАРТ (24.11,
+    # тот же баг и та же правка, что у kino_dok_text.dok_word/dok_title):
+    # t=0 рисовал только кольцо радара без подписей/зоны/флага — поймано
+    # живым тестом постера, не глазами на видео.
+    tt = 1.0 if t is None else max(0.0, min(1.0, t / full))
 
     im = _kb(base, tt, 0.05).convert("RGBA")
 

@@ -142,6 +142,7 @@ template/karta_brifing_data/meta.json
 template/karta_brifing_news.py
 template/kartochki_batch.py
 template/kartochki_srazu.py
+template/kino_dok_text.py
 template/kluchi.py
 template/konkretika.py
 template/latinka.py
