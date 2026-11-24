@@ -1,0 +1,55 @@
+{
+ "anchor": "top",
+ "1": {
+  "photo": "overlays/scene_001.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "right"
+ },
+ "5": {
+  "photo": "overlays/scene_005.jpg",
+  "sound": "whoosh",
+  "at": 2.4,
+  "shape": "rect",
+  "scale": 1.2,
+  "style": "up-right"
+ },
+ "3": {
+  "text": {
+   "words": "БЕРЛИН",
+   "pos": "tl"
+  }
+ },
+ "7": {
+  "text": {
+   "words": "ПЕРЕГОВОРЫ",
+   "pos": "tc"
+  }
+ },
+ "9": {
+  "text": {
+   "words": "УСЛОВИЯ",
+   "pos": "tr"
+  }
+ },
+ "11": {
+  "text": {
+   "words": "ЕВРОПА",
+   "pos": "tl"
+  }
+ },
+ "15": {
+  "text": {
+   "words": "СТО ЛЕТ",
+   "pos": "tc"
+  }
+ },
+ "44": {
+  "text": {
+   "words": "НЕНАВИСТЬ",
+   "pos": "tc"
+  }
+ }
+}
