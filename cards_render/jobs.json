@@ -1,0 +1,140 @@
+[
+ {
+  "scene": 6,
+  "view": "split",
+  "dur": 11.44,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_006.jpg",
+   "text": "Ситуации, при которых ядерная доктрина уже позволяла ответить, были и раньше.",
+   "author": "Дмитрий Медведев",
+   "role": "заместитель председателя Совета Безопасности",
+   "accent": "Ситуации, при которых ядерная",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "cinematic.dossier",
+  "dur": 10.91,
+  "anim": 10.91,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "case": "ВЛАДИМИР ПУТИН",
+   "rows": [
+    "должность — Президент России",
+    "каждый раз оценивает масштаб ущерба",
+    "и соразмерность ответа",
+    "и всю остальную картину"
+   ],
+   "title": "Владимир Путин",
+   "photo": "cards/photo/card_007.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "charts.cartogram",
+  "dur": 9.8,
+  "anim": 9.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Иран"
+   ],
+   "accent": [
+    "Россия"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "vyrezka.gazeta",
+  "dur": 10.56,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_028.jpg",
+   "author": "Владимир Путин",
+   "role": "Президент России",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "vyrezka.figura",
+  "dur": 10.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_030.jpg",
+   "author": "Дмитрий Медведев",
+   "role": "заместитель председателя Совета Безопасности",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "film.film_single",
+  "dur": 11.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_035.jpg",
+   "title": "ПЕНТАГОН",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "devices.device_scene",
+  "dur": 9.44,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "content_path": "cards/photo/card_040.jpg",
+   "items": [
+    "Мой меч=это защита",
+    "Твой щит=это эскалация"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "zal_efir",
+  "dur": 9.36,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.36,
+   "sheets": [],
+   "text": "ЦЕНА ЭТОЙ ИГРЫ",
+   "say": "Ядерный взрыв на орбите способен вывести из строя треть спутников",
+   "author": "представитель",
+   "role": "Космическое командование США",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
