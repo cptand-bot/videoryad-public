@@ -1,0 +1,102 @@
+[
+ {
+  "scene": 32,
+  "view": "sceny.perematka",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.28,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "perematka",
+   "seconds": 9.28,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Зеленский меняет курс на ходу",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.28,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_032.jpg",
+      "god": "сейчас"
+     },
+     {
+      "photo": "cards/photo/card_032_2.jpg",
+      "god": "раньше"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Зеленский меняет курс на ходу",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.28,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_032.jpg",
+     "god": "сейчас"
+    },
+    {
+     "photo": "cards/photo/card_032_2.jpg",
+     "god": "раньше"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 57,
+  "view": "timeline",
+  "dur": 11.76,
+  "anim": 11.76,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "title": "Пока идут споры",
+   "events": [
+    {
+     "date": "Переговоры",
+     "text": "тянутся"
+    },
+    {
+     "date": "Люди",
+     "text": "женятся, едут отдыхать"
+    },
+    {
+     "date": "Европейцы",
+     "text": "всё ещё спорят об условиях"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 62,
+  "view": "forces",
+  "dur": 11.92,
+  "anim": 11.92,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "Кушнер",
+     "want": "расширить тему за пределы Украины"
+    },
+    {
+     "who": "Россия",
+     "want": "обсуждать гарантии по статье 5"
+    },
+    {
+     "who": "НАТО",
+     "want": "формат гарантий ещё не ясен"
+    }
+   ]
+  }
+ }
+]
