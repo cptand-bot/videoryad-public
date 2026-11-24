@@ -1,0 +1,96 @@
+{
+  "anchor": "top",
+  "1": {
+    "photo": "overlays/scene_001.jpg",
+    "sound": "pop",
+    "at": 2.2,
+    "shape": "rect",
+    "scale": 1.0,
+    "style": "up-center",
+    "anchor": "top",
+    "approved": true,
+    "dash_ok": true
+  },
+  "5": {
+    "photo": "overlays/scene_005.jpg",
+    "sound": "whoosh",
+    "at": 2.4,
+    "shape": "rect",
+    "scale": 1.2,
+    "style": "up-right",
+    "approved": true,
+    "dash_ok": true
+  },
+  "3": {
+    "text": {
+      "words": "БЕРЛИН",
+      "color": "green",
+      "pos": "tl",
+      "font": "default",
+      "sound": "zatvor",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "7": {
+    "text": {
+      "words": "ПЕРЕГОВОРЫ",
+      "color": "red",
+      "pos": "mc",
+      "font": "default",
+      "sound": "pshik",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "9": {
+    "text": {
+      "words": "УСЛОВИЯ",
+      "color": "orange",
+      "pos": "tr",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "11": {
+    "text": {
+      "words": "ЕВРОПА",
+      "color": "yellow",
+      "pos": "tl",
+      "font": "default",
+      "sound": "mashinka",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "15": {
+    "text": {
+      "words": "СТО ЛЕТ",
+      "color": "white",
+      "pos": "tc",
+      "font": "default",
+      "sound": "pop",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  },
+  "44": {
+    "text": {
+      "words": "НЕНАВИСТЬ",
+      "color": "orange",
+      "pos": "tc",
+      "font": "default",
+      "sound": "whoosh",
+      "at": 2.0,
+      "scale": 1.0,
+      "approved": true
+    }
+  }
+}
