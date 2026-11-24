@@ -61,14 +61,33 @@ def канал_из_пути(path):
     return ""
 
 
+def _decode_text(path):
+    """Содержимое .txt как текст, а не байты — cp1251 держит легаси темы."""
+    try:
+        данные = open(path, "rb").read()
+    except OSError:
+        return ""
+    try:
+        текст = данные.decode("utf-8")
+        if текст.count("�") <= 2:
+            return текст
+    except UnicodeDecodeError:
+        pass
+    return данные.decode("cp1251", "ignore")
+
+
 def текст_темы(папка):
-    """Самый большой содержательный .txt — как в `rewrite_brief.find_text`."""
+    """Текст темы — та же логика, что в `rewrite_brief.find_text` (23.11,
+    НА-РАСКАТКУ п.152): по ДЛИНЕ ДЕКОДИРОВАННОГО ТЕКСТА, не по байтам —
+    черновик рерайта в UTF-8 весит больше оригинала в cp1251 на то же
+    число знаков, байтовый размер путал черновик с темой."""
     канд = [f for f in os.listdir(папка)
             if f.lower().endswith(".txt")
             and not sluzhebnoe(f, СЛУЖЕБНЫЕ)]
     if not канд:
         return ""
-    return max(канд, key=lambda f: os.path.getsize(os.path.join(папка, f)))
+    return max(канд,
+               key=lambda f: len(_decode_text(os.path.join(папка, f))))
 
 
 def основа(имя_файла, канал1):

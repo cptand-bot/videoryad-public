@@ -910,7 +910,7 @@ def main():
                          "(.../БРИФ-ЗАМЕНЫ.txt), тогда бриф ляжет прямо в него")
     ap.add_argument("--thumbs", default="thumbs")
     ap.add_argument("--stage", default="audit",
-                    choices=("audit", "zamena", "scenes"))
+                    choices=("audit", "zamena", "scenes", "cards"))
     ap.add_argument("--srt", default="", help="для --stage scenes")
     ap.add_argument("--channel", default="", help="для --stage scenes")
     ap.add_argument("--no-copy", action="store_true", help="не копировать листы")
@@ -1013,6 +1013,68 @@ def main():
         print("    bash ~/.claude/skills/news-video/template/codex_ask.sh \\")
         print("      --json \"%s\" --attach \"%s\" \"%s\""
               % (os.path.join(_ряд, "codex.scenes.json"), _копия, path))
+        return 0
+
+    # --stage cards (23.11.2026, НА-РАСКАТКУ п.162, usuario-80): наполнение
+    # КАРТОЧЕК, НЕ ВЫВЕДЕННЫХ ИЗ ТЕКСТА. `kartochki_srazu.py --naznachennye
+    # --stavit` сам ставит то, что получается из текста сцены механически —
+    # вкладка зовёт его СНАЧАЛА, и этот `--stage` касается только остатка
+    # (печатается тем же инструментом в блок «материал из текста не
+    # выводится»). Раньше вкладка писала второе задание агенту с нуля под
+    # формат `kartochki_batch.py` — теперь бриф собирает его сам: дверь
+    # `kartochki_batch.py` УЖЕ принимает ответ агента терпимо (с 14.11,
+    # сама чистит чужие/выдуманные ключи), просить у агента нужно только
+    # текст сцены и честный `{id, view, args}`.
+    if a.stage == "cards":
+        _proj_c = os.path.dirname(os.path.abspath(a.scenes)) or "."
+        _scenes_c = load(a.scenes)
+        _queue_c = os.path.join(_proj_c, "cards", "queue")
+        _ждут = []
+        for _s in _scenes_c:
+            _ист_c = str(_s.get("source") or "").strip()
+            if not _ист_c.startswith(CARD):
+                continue
+            _ном_c = _s.get("id")
+            if os.path.isfile(os.path.join(_queue_c, "scene_%03d.json" % _ном_c)):
+                continue
+            _т_c = ""
+            for _k in ("text", "текст", "line", "reply", "srt_text"):
+                _v = _s.get(_k)
+                if isinstance(_v, str) and _v.strip():
+                    _т_c = _v.strip(); break
+            if _т_c:
+                _ждут.append((_ном_c, _ист_c[len(CARD):], _т_c))
+        if not _ждут:
+            print("--stage cards: нечем наполнять — все card:<вид> уже в "
+                  "cards/queue, либо scenes.json без card: вовсе. Если "
+                  "комплект только назначен, сперва прогони:")
+            print("  python3 ~/.claude/skills/news-video/template/"
+                  "kartochki_srazu.py %s --naznachennye --stavit" % a.scenes)
+            return 0
+        _строки = ["ЗАДАНИЕ: наполнить %d карточек роликового видеоряда "
+                   "содержанием ИЗ ТЕКСТА СЦЕНЫ." % len(_ждут), "",
+                   "Чисел и фамилий, которых в тексте сцены нет, НЕ "
+                   "ВЫДУМЫВАТЬ — такая карточка останется ненаполненной, "
+                   "это разрешённый исход, не ошибка.", "",
+                   "Верни ОДНИМ JSON-массивом без пояснений вокруг, "
+                   "формат терпимый (ключи можно и по-русски, и "
+                   "по-английски):",
+                   '[{"id": 22, "view": "lenta", "args": {"--text": "…", '
+                   '"--soobshchenie": ["…", "…"]}}]', "",
+                   "Карточки по сценам:"]
+        for _ном_c, _вид_c, _т_c in _ждут:
+            _строки.append("  сцена %d, вид «%s»: %s" % (_ном_c, _вид_c, _т_c))
+        _путь_c = os.path.join(a.dest, _dest_file or "ЗАДАНИЕ-КАРТОЧКИ.txt")
+        with open(_путь_c, "w", encoding="utf-8") as _fh:
+            _fh.write("\n".join(_строки) + "\n")
+        print("задание на наполнение карточек (%d шт): %s"
+              % (len(_ждут), win(_путь_c)))
+        print("  ЗВАТЬ АГЕНТА И ПРИМЕНИТЬ ОТВЕТ:")
+        print("    bash ~/.claude/skills/news-video/template/codex_ask.sh "
+              "--json \"%s\" \"%s\"" % (os.path.join(a.dest, "codex.cards.json"), _путь_c))
+        print("    python3 ~/.claude/skills/news-video/template/"
+              "kartochki_batch.py %s --zadanie \"%s\" --stavit --otpravit"
+              % (a.scenes, os.path.join(a.dest, "codex.cards.json")))
         return 0
 
     project = os.path.dirname(os.path.abspath(a.scenes)) or "."

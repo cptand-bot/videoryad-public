@@ -108,9 +108,40 @@ def find_text(folder):
              if n.lower().endswith(".txt") and not sluzhebnoe(n, skip)]
     if not cands:
         sys.exit("в папке нет текста темы: %s" % folder)
-    выбран = max(cands, key=os.path.getsize)
+    # РАЗМЕР В БАЙТАХ — ЛОЖНЫЙ КРИТЕРИЙ (23.11, НА-РАСКАТКУ п.152, usuario-80,
+    # «2-Украина 23-11»/ПЛАНЕТА). Черновик рерайта в UTF-8 тяжелее оригинала
+    # в cp1251 НА ТО ЖЕ количество знаков (кириллица: 2 байта на символ
+    # против 1), и `max(..., key=getsize)` брал черновик вместо темы.
+    # Сравниваем по ДЕКОДИРОВАННОЙ длине текста — она у кодировок не плывёт.
+    if len(cands) > 1:
+        длины = [(c, len(_decode_text(c))) for c in cands]
+        длины.sort(key=lambda x: x[1], reverse=True)
+        выбран = длины[0][0]
+        if len(длины) > 1:
+            print("  найдено несколько .txt темы, выбран по длине текста "
+                  "(не байт): %s (%d зн.); остальные: %s"
+                  % (os.path.basename(выбран), длины[0][1],
+                     ", ".join("%s (%d зн.)" % (os.path.basename(c), n)
+                               for c, n in длины[1:])), file=sys.stderr)
+    else:
+        выбран = cands[0]
     _svericha_imya(folder, выбран)
     return выбран
+
+
+def _decode_text(path):
+    """Содержимое .txt как текст, а не байты — cp1251 держит легаси темы."""
+    try:
+        данные = open(path, "rb").read()
+    except OSError:
+        return ""
+    try:
+        текст = данные.decode("utf-8")
+        if текст.count("�") <= 2:
+            return текст
+    except UnicodeDecodeError:
+        pass
+    return данные.decode("cp1251", "ignore")
 
 
 def _znachimye(имя):

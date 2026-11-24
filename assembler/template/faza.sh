@@ -818,10 +818,12 @@ start)
     # которое он подписал «МОСТЫ», забрало «Лаврова» — просто потому, что текст
     # Лаврова лёг на диск позже. Подпись окна код не видел вовсе.
     WANT_TEMA="${VIDEORYAD_TEMA:-}"
+    LYUBAYA_TEMA=0
     while [ $# -gt 0 ]; do
         case "${1:-}" in
             --wait) WAITMIN="${2:-45}"; shift 2 || true ;;
             --lyuboy-kanal) WANT_CH="ЛЮБОЙ"; shift ;;
+            --lyuboy-tema) LYUBAYA_TEMA=1; shift ;;
             --tema) WANT_TEMA="${2:-}"; shift 2 || true ;;
             "") shift ;;
             *) if [ -z "$WANT_CH" ]; then WANT_CH="$1"; elif [ -z "$WANT_TEMA" ]; then WANT_TEMA="$1"; fi; shift ;;
@@ -856,9 +858,42 @@ PYCH
     fi
     if [ -n "$WANT_TEMA" ]; then
         echo "ключ досье: $KEY · канал: $WANT_CH · ТЕМА НАЗВАНА: $WANT_TEMA · ждать до $WAITMIN мин"
+    elif [ "$LYUBAYA_TEMA" = 1 ]; then
+        echo "ключ досье: $KEY · канал вкладки: $WANT_CH · --lyuboy-tema: осознанно беру самую свежую свободную · ждать до $WAITMIN мин"
     else
-        echo "ключ досье: $KEY · канал вкладки: $WANT_CH · ТЕМА НЕ НАЗВАНА (возьму самую свежую свободную) · ждать до $WAITMIN мин"
-        echo "  чтобы взять ИМЕННО свою тему:  faza.sh start $KEY \"$WANT_CH\" --tema \"2-Мосты приказ отдан\""
+        # БЕЗ --tema БОЛЬШЕ НЕ УЕЗЖАЕМ МОЛЧА (п.150 НА-РАСКАТКУ, 23.11.2026,
+        # улов usuario-96/usuario-02): раньше здесь просто предупреждали и
+        # брали первую свободную тему канала — обе вкладки независимо
+        # запустили голый `start` и обе улетели не на свою тему. Теперь
+        # отказ, как и у отсутствующего канала выше, с живым списком свободных
+        # тем ЭТОГО канала, чтобы скопировать имя, не изобретая его по памяти.
+        echo "ОШИБКА: тема вкладки не названа — без неё start может молча уйти на чужую тему (как сегодня у usuario-96/usuario-02)."
+        echo "  свободные темы канала \"$WANT_CH\":"
+        python3 - "$NEWS" "$WANT_CH" <<'PYCH2'
+import glob, os, sys
+news, ch = sys.argv[1], sys.argv[2]
+rows = []
+pat = os.path.join(news, "*", "*", "[0-3][0-9]-[01][0-9]", "*") if ch == "ЛЮБОЙ" \
+    else os.path.join(news, ch, "*", "[0-3][0-9]-[01][0-9]", "*")
+for t in glob.glob(pat):
+    if not os.path.isdir(t):
+        continue
+    if [f for f in glob.glob(os.path.join(t, "*.mp4"))
+       if os.path.getsize(f) >= 100 * 1024 * 1024]:
+        continue
+    txt = [f for f in glob.glob(os.path.join(t, "*.txt"))
+           if not any(k in os.path.basename(f) for k in ("ЗАДАНИЕ", "БРИФ", "УПАКОВКА", "ОТВЕТ"))]
+    if not txt:
+        continue
+    rows.append(os.path.basename(t))
+for r in sorted(set(rows)):
+    print("    " + r)
+if not rows:
+    print("    (свободных тем не нашлось — либо все заняты/сданы, либо текст ещё не лёг)")
+PYCH2
+        echo "  зови явно:  faza.sh start $KEY \"$WANT_CH\" --tema \"<имя темы из списка>\""
+        echo "  (осознанно без привязки к конкретной теме: --lyuboy-tema)"
+        exit 1
     fi
     # САМАЯ СВЕЖАЯ тема с текстом по ВСЕМ каналам, кроме сданных и занятых:
     # он кладёт текст прямо перед тем, как кинуть ключ, поэтому свежесть и есть
@@ -1115,6 +1150,19 @@ tema)
     [ -n "$DAYDIR" ] || { echo "ОШИБКА: папок дня у канала нет"; exit 1; }
     DAY="$(basename "$DAYDIR")"
     echo "канал: $CHANNEL · день: $DAY"
+    # БЕЗ --tema НЕ УЕЗЖАЕМ МОЛЧА (п.150 НА-РАСКАТКУ, 23.11.2026) — тот же
+    # класс бага, что у `start`: без фильтра по теме цикл ниже берёт просто
+    # ПЕРВУЮ папку по алфавиту, не свободную осознанно. Явный обход, если
+    # правда нужна любая: `faza.sh tema "$CHANNEL" --tema ЛЮБАЯ`.
+    if [ -z "${WANT_TEMA:-}" ]; then
+        echo "ОШИБКА: тема не названа — без неё можно молча уйти на чужую тему."
+        echo "  свободные папки дня $DAY:"
+        for td in "$DAYDIR"/*/; do [ -d "$td" ] && echo "    $(basename "$td")"; done
+        echo "  зови явно:  faza.sh tema \"$CHANNEL\" --tema \"<имя темы>\""
+        echo "  (осознанно без привязки: --tema ЛЮБАЯ)"
+        exit 1
+    fi
+    [ "$WANT_TEMA" = "ЛЮБАЯ" ] && WANT_TEMA=""
     # ДВЕРЬ РЕЕСТРА ОДНА — `take_folder.py`: он сам отмечает тему занятой и
     # отвечает кодом 2, если её уже ведёт другая вкладка. Отдельный
     # `zanyato --vzyat` здесь делать НЕЛЬЗЯ: он займёт тему, и забор сам себе
