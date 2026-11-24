@@ -1,0 +1,84 @@
+[
+ {
+  "scene": 4,
+  "view": "zal_shkala",
+  "dur": 9.84,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 9.84,
+   "sheets": [],
+   "text": "Десятки раз предлагала мир",
+   "value": "2029",
+   "value_sub": "горизонт расчёта",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 17,
+  "view": "sceny.lenta_foto",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.48,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta_foto",
+   "seconds": 10.48,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Германия и Франция: от окопов к одному столу",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.48,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_017.jpg",
+      "god": "1916",
+      "podpis": "Первая мировая"
+     },
+     {
+      "photo": "cards/photo/card_017_2.jpg",
+      "god": "сейчас",
+      "podpis": "Сегодня"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Германия и Франция: от окопов к одному столу",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.48,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_017.jpg",
+     "god": "1916",
+     "podpis": "Первая мировая"
+    },
+    {
+     "photo": "cards/photo/card_017_2.jpg",
+     "god": "сейчас",
+     "podpis": "Сегодня"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 19,
+  "view": "paper_typed",
+  "dur": 9.84,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Когда речь идёт о собственных союзниках, история может закончиться, вражда может закончиться",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
