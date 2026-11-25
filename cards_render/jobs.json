@@ -1,0 +1,1363 @@
+[
+ {
+  "scene": 2,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.3,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 10.3,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Звучит это очень эффектно",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.3
+   }
+  },
+  "kwargs": {
+   "text": "Звучит это очень эффектно",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.3
+  }
+ },
+ {
+  "scene": 4,
+  "view": "zal_efir",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.9,
+   "sheets": [],
+   "text": "Рост идёт, уверяет Мерц",
+   "say": "Берлин похвастаться подобным не может",
+   "author": "Фридрих Мерц",
+   "role": "федеральный канцлер Германии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "zal_g18",
+  "dur": 12.0,
+  "anim": 12.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 12.0,
+   "sheets": [],
+   "text": "Люди считают иначе",
+   "value": "41 %",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 9,
+  "view": "charts.pie",
+  "dur": 10.1,
+  "anim": 10.1,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "без накоплений",
+     "value": 26.0
+    },
+    {
+     "label": "есть накопления",
+     "value": 74.0
+    }
+   ],
+   "unit": "%",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "bars",
+  "dur": 13.9,
+  "anim": 13.9,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "",
+   "caption": "",
+   "seconds": 13.9,
+   "bars": [
+    {
+     "label": "БЕЗ НАКОПЛЕНИЙ",
+     "value": 0.26,
+     "color": "4A90E2"
+    },
+    {
+     "label": "НАИБОЛЕЕ БЕДНЫЕ БЕЗ НАКОПЛЕНИЙ",
+     "value": 0.35,
+     "color": "48BB78"
+    },
+    {
+     "label": "ТРУДНОСТИ С ОПЛАТОЙ СЧЕТОВ",
+     "value": 0.24,
+     "color": "84848A"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 11,
+  "view": "zal_g44",
+  "dur": 14.0,
+  "anim": 14.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 14.0,
+   "sheets": [],
+   "text": "Аграрный сектор теряет",
+   "value": "-13 %",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 15,
+  "view": "zal_shkala",
+  "dur": 13.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.2,
+   "sheets": [],
+   "text": "Деньги на это пока не нашли",
+   "value": "70 млрд €",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "zal_schetchik",
+  "dur": 8.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 8.9,
+   "sheets": [],
+   "text": "Брюссель готовит ещё один заём",
+   "value": "45 млрд €",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "charts.cartogram",
+  "dur": 15.9,
+  "anim": 15.9,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Польша",
+    "Чехия",
+    "Венгрия",
+    "Словакия",
+    "Австрия"
+   ],
+   "accent": [
+    "Польша"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "duel",
+  "dur": 12.4,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "top": {
+    "who": "Роберт Фицо",
+    "text": "конструкция неприемлема для всей пятёрки",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "Андрей Бабиш",
+    "text": "убрать финансирование Украины из бюджета",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "charts.map_dist",
+  "dur": 13.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Одесса",
+     "lat": 46.48,
+     "lon": 30.72,
+     "accent": false
+    },
+    {
+     "label": "Стамбул",
+     "lat": 41.01,
+     "lon": 28.98,
+     "accent": true
+    }
+   ],
+   "admin": "Турция",
+   "place": "Босфор",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "karta_brifing",
+  "dur": 13.0,
+  "anim": 13.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Атаки в Чёрном море мешают вывозу зерна",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 6.6,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 6.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Банки не перенесли сроки платежей",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 6.6,
+    "pary": [
+     "Банки>Аграрии",
+     "Атаки в море>Экспорт зерна"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Банки не перенесли сроки платежей",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 6.6,
+   "pary": [
+    "Банки>Аграрии",
+    "Атаки в море>Экспорт зерна"
+   ]
+  }
+ },
+ {
+  "scene": 27,
+  "view": "tape",
+  "dur": 16.4,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Можно рассчитаться с банком. Можно приобрести дизельное топливо, семена и удобрения",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "film.film_single",
+  "dur": 8.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_028.jpg",
+   "title": "ЭКСПОРТ ЗЕРНА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "zal_pol",
+  "dur": 10.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.4,
+   "sheets": [],
+   "text": "Поле не засеяли весной",
+   "na_polu": "ПУСТО",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "poster.poster",
+  "dur": 9.4,
+  "anim": 9.4,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "title": "41% ЗА ЧЕРТОЙ БЕДНОСТИ",
+   "subtitle": "Миллионы семей без накоплений",
+   "hero_photo": "cards/photo/card_030.jpg",
+   "source": "Всемирный банк",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 32,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.8,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 10.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Тарифы меняются в три шага",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.8,
+    "sobytiya": [
+     "2027",
+     "2028",
+     "2029"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Тарифы меняются в три шага",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.8,
+   "sobytiya": [
+    "2027",
+    "2028",
+    "2029"
+   ]
+  }
+ },
+ {
+  "scene": 33,
+  "view": "slider",
+  "dur": 12.7,
+  "anim": 12.7,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "",
+   "min": 0.0,
+   "max": 100.0,
+   "low": 0.0,
+   "high": 100.0,
+   "marker_value": 50.0,
+   "marker_display": "50",
+   "seconds": 12.7,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "",
+   "source": ""
+  }
+ },
+ {
+  "scene": 34,
+  "view": "charts.waterfall",
+  "dur": 4.8,
+  "anim": 4.8,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "start": {
+    "label": "было",
+    "value": 4.32
+   },
+   "steps": [
+    {
+     "label": "мягкий вариант",
+     "value": 6.09
+    }
+   ],
+   "end": {
+    "label": "жёсткий вариант"
+   },
+   "unit": "₴",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "zal_makety",
+  "dur": 13.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 13.4,
+   "sheets": [],
+   "text": "Деньги на это тоже нужно найти",
+   "makety": [
+    "лэп=РЕМОНТ СЕТЕЙ",
+    "банк=НОВЫЕ ЗАЙМЫ"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "doc",
+  "dur": 8.0,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Кроме того, в меморандуме с Международным валютным фондом Украина уже приняла обязательство увеличивать стоимость жилищно коммунальных услуг",
+   "mark": "обязательство увеличивать стоимость",
+   "stamp": "МВФ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 38,
+  "view": "zal_g01",
+  "dur": 9.0,
+  "anim": 9.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 9.0,
+   "sheets": [],
+   "text": "Субсидии работают всё хуже",
+   "value": "4 % ВВП",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "charts.network",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Заявитель",
+     "label": "Заявитель",
+     "weight": 1.0
+    },
+    {
+     "id": "Дія",
+     "label": "Дія",
+     "weight": 2.0
+    },
+    {
+     "id": "Германия",
+     "label": "Германия",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Заявитель",
+     "to": "Дія",
+     "weight": 1.0
+    },
+    {
+     "from": "Дія",
+     "to": "Германия",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "charts.cartogram",
+  "dur": 8.6,
+  "anim": 8.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Польша",
+    "Чехия",
+    "Венгрия",
+    "Словакия",
+    "Австрия"
+   ],
+   "mode": "bubble",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "charts.radar",
+  "dur": 12.3,
+  "anim": 12.3,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "axes": [
+    "электричество",
+    "газ",
+    "экономия бюджета"
+   ],
+   "series": [
+    {
+     "label": "",
+     "values": [
+      41.0,
+      49.0,
+      3.2
+     ]
+    }
+   ],
+   "unit": "%",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "charts.slope",
+  "dur": 10.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "items": [
+    {
+     "label": "электричество",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "дороже в 2,4 раза"
+    },
+    {
+     "label": "газ",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "дороже почти вдвое"
+    }
+   ],
+   "source": "расчёты МВФ",
+   "sobytiya": true,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "zal",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Расходы на коммуналку вырастут вдвое",
+   "words": [
+    "ДОРОЖЕ",
+    "СЧЕТА"
+   ],
+   "sheets": [
+    "Почти половина страны за чертой бедности",
+    "Тарифы растут вдвое",
+    "Коммунальные счета",
+    "МВФ рекомендации",
+    "Бюджет Украины",
+    "Социальная помощь"
+   ],
+   "channel": "ПЛАНЕТА",
+   "dur": 10.6,
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "charts.line",
+  "dur": 10.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "x_labels": [
+    "2021",
+    "2025",
+    "сейчас"
+   ],
+   "series": [
+    {
+     "name": "бедность",
+     "values": [
+      20.0,
+      42.0,
+      41.0
+     ]
+    }
+   ],
+   "unit": "%",
+   "source": "Всемирный банк",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "sceny.lenta_foto",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.7,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta_foto",
+   "seconds": 8.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Бедность растёт из года в год",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 8.7,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_045.jpg",
+      "god": "2021",
+      "podpis": ""
+     },
+     {
+      "photo": "cards/photo/card_045_2.jpg",
+      "god": "2025",
+      "podpis": ""
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Бедность растёт из года в год",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 8.7,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_045.jpg",
+     "god": "2021",
+     "podpis": ""
+    },
+    {
+     "photo": "cards/photo/card_045_2.jpg",
+     "god": "2025",
+     "podpis": ""
+    }
+   ]
+  }
+ },
+ {
+  "scene": 47,
+  "view": "dok_title",
+  "dur": 9.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Если вам нужны цифры без переводчика, подпишитесь",
+   "accent": "без переводчика",
+   "title": "ПРОВЕРКА РЕЧИ ЧИНОВНИКОВ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "zal_g48",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Люди считают иначе, чем доклады",
+   "value": "41 %",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "zal_kub",
+  "dur": 10.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 10.3,
+   "sheets": [],
+   "text": "Деньги находят быстро, когда нужно",
+   "kick": "десятки миллиардов евро",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "cinematic.depth_of_field",
+  "dur": 8.7,
+  "anim": 8.7,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_050.jpg",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 51,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 13.6,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "globus",
+   "seconds": 13.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Случай произошёл в районе Грайц",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 13.6,
+    "region": "Германия"
+   }
+  },
+  "kwargs": {
+   "text": "Случай произошёл в районе Грайц",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 13.6,
+   "region": "Германия"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "pull",
+  "dur": 13.0,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Это восемь целых две десятых процента от числа проверенных",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "devices.device_scene",
+  "dur": 8.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "content_path": "cards/photo/card_054.jpg",
+   "items": [
+    "заявитель — доходы",
+    "Дія — справка"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.6,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 10.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Правила одни для всех получателей",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 10.6,
+    "stamp": "ГЕРМАНИЯ"
+   }
+  },
+  "kwargs": {
+   "text": "Правила одни для всех получателей",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 10.6,
+   "stamp": "ГЕРМАНИЯ"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 14.2,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 14.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Не каждый случай — умышленный обман",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 14.2,
+    "role": "заявитель социальной помощи"
+   }
+  },
+  "kwargs": {
+   "text": "Не каждый случай — умышленный обман",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 14.2,
+   "role": "заявитель социальной помощи"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "torn_split.torn_split",
+  "dur": 8.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "a_path": "cards/photo/card_057.jpg",
+   "b_path": "cards/photo/card_057_2.jpg",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "pull",
+  "dur": 8.6,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Доходы, подлежащие декларированию, должны быть указаны",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 59,
+  "view": "photo",
+  "dur": 12.9,
+  "anim": 12.9,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "watermark": "ПЛАНЕТА",
+   "photo": "cards/photo/card_059.jpg",
+   "lines": [
+    "Остаток после счетов",
+    "Бодрый процент не ест"
+   ]
+  }
+ },
+ {
+  "scene": 60,
+  "view": "paper_typed",
+  "dur": 5.6,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Для казны района проверка дала измеримый результат",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "zal_ekran",
+  "dur": 14.6,
+  "anim": 14.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 14.6,
+   "sheets": [
+    "ЭКОНОМИЯ РАЙОНА",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Сумма оказалась крупной",
+   "say": "Районная казна сэкономила заметную сумму за год",
+   "author": "власти района Грайц",
+   "role": "представитель района Грайц",
+   "source": "местные СМИ Германии",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "quote",
+  "dur": 9.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Ни один из них не стал обжаловать принятое решение",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 64,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.9,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 8.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Проверки продолжаются",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 8.9,
+    "soobshcheniya": [
+     "Германия: выплаты получают ≈626 000 украинцев",
+     "Один район: проверено 656 человек",
+     "Нарушения — у 8,2% проверенных"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Проверки продолжаются",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 8.9,
+   "soobshcheniya": [
+    "Германия: выплаты получают ≈626 000 украинцев",
+    "Один район: проверено 656 человек",
+    "Нарушения — у 8,2% проверенных"
+   ]
+  }
+ },
+ {
+  "scene": 65,
+  "view": "zal_slova",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "channel": "ПЛАНЕТА",
+   "dur": 12.6,
+   "sheets": [],
+   "text": "Система охватывает далеко не всех",
+   "na_polu": "ШЕСТЬСОТ ДВАДЦАТЬ ШЕСТЬ ТЫСЯЧ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 67,
+  "view": "charts.cartogram",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "data": [
+    "Львовская область"
+   ],
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "film.film_strip",
+  "dur": 11.3,
+  "anim": 11.3,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_068.jpg",
+    "cards/photo/card_068_2.jpg",
+    "cards/photo/card_068_3.jpg"
+   ],
+   "title": "ЗИМА БЕЗ СВЕТА",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "paper_hand",
+  "dur": 8.2,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Куда уехать семье, у которой нет накоплений?",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "dok_word",
+  "dur": 15.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Семейный бюджет слушает такие выступления очень плохо и без всякого интереса",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 71,
+  "view": "strike",
+  "dur": 6.4,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "На этом месте макроэкономический успех снимает пиджак, заходит в квартиру и ложится на стол новой платёжкой",
+   "struck": "макроэкономический успех",
+   "fix": "долг за свет и газ",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 72,
+  "view": "vyrezka.figura",
+  "dur": 11.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_072.jpg",
+   "author": "Фридрих Мерц",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.1,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Рост есть, а жизнь иная",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.1,
+    "tezisy": [
+     "41% бедных",
+     "падение доходов аграриев",
+     "риск банкротств",
+     "кредит или посевная",
+     "новые миллиарды"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Рост есть, а жизнь иная",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.1,
+   "tezisy": [
+    "41% бедных",
+    "падение доходов аграриев",
+    "риск банкротств",
+    "кредит или посевная",
+    "новые миллиарды"
+   ]
+  }
+ },
+ {
+  "scene": 75,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.7,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 12.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Возражения идут не из России",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 12.7,
+    "repliki_": [
+     "Всемирный банк|данные о бедности",
+     "МВФ|тарифный разрыв",
+     "Бюджеты ЕС|цена поддержки",
+     "Реальность|не из России"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Возражения идут не из России",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 12.7,
+   "repliki_": [
+    "Всемирный банк|данные о бедности",
+    "МВФ|тарифный разрыв",
+    "Бюджеты ЕС|цена поддержки",
+    "Реальность|не из России"
+   ]
+  }
+ },
+ {
+  "scene": 76,
+  "view": "cinematic.evidence_wall",
+  "dur": 10.6,
+  "anim": 10.6,
+  "tail_zoom": 0.0,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_076.jpg",
+     240,
+     380,
+     -4,
+     "Мерц о росте"
+    ],
+    [
+     "cards/photo/card_076_2.jpg",
+     800,
+     380,
+     3,
+     "Таблица Всемирного банка"
+    ],
+    [
+     "cards/photo/card_076_3.jpg",
+     1360,
+     380,
+     -2,
+     "Чёрное море"
+    ]
+   ],
+   "title": "ЦЕНА ПОДДЕРЖКИ",
+   "watermark": "ПЛАНЕТА"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 77,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.3,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 8.3,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Самый точный ответ даёт человек у счёта",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 8.3,
+    "role": "человек у счёта"
+   }
+  },
+  "kwargs": {
+   "text": "Самый точный ответ даёт человек у счёта",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 8.3,
+   "role": "человек у счёта"
+  }
+ },
+ {
+  "scene": 78,
+  "view": "marker_serif",
+  "dur": 9.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "text": "Займы ещё можно продлить. Новый пакет помощи можно провести через очередное согласование",
+   "watermark": "ПЛАНЕТА"
+  }
+ },
+ {
+  "scene": 79,
+  "view": "sceny.perematka",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "ПЛАНЕТА",
+  "watermark": "ПЛАНЕТА",
+  "cfg": {
+   "view": "perematka",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Весной нужны деньги на посевную",
+    "channel": "ПЛАНЕТА",
+    "watermark": "ПЛАНЕТА",
+    "dur": 11.7,
+    "kadry": [
+     {
+      "photo": "cards/photo/card_079.jpg",
+      "god": "2026"
+     },
+     {
+      "photo": "cards/photo/card_079_2.jpg",
+      "god": "2027"
+     }
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Весной нужны деньги на посевную",
+   "channel": "ПЛАНЕТА",
+   "watermark": "ПЛАНЕТА",
+   "dur": 11.7,
+   "kadry": [
+    {
+     "photo": "cards/photo/card_079.jpg",
+     "god": "2026"
+    },
+    {
+     "photo": "cards/photo/card_079_2.jpg",
+     "god": "2027"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 80,
+  "view": "dok_wall",
+  "dur": 10.0,
+  "anim": 10.0,
+  "tail_zoom": 0.045,
+  "watermark": "ПЛАНЕТА",
+  "channel": "ПЛАНЕТА",
+  "kwargs": {
+   "photo": "cards/photo/card_080.jpg",
+   "karty": [
+    "РОСТ|отчётный, не реальный",
+    "ЩЕЛЬ|между цифрой и жизнью",
+    "КРЕДИТ|не заменит посевную",
+    "ОТЧЁТ|про восстановление",
+    "ЖИЗНЬ|считает иначе"
+   ],
+   "watermark": "ПЛАНЕТА"
+  }
+ }
+]
