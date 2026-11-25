@@ -1,0 +1,1269 @@
+[
+ {
+  "scene": 3,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 16.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 16.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "ПЕРЕГОВОРЫ НА ГРАНИ",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 13.1,
+    "kick": "Киев · Москва · Вашингтон"
+   }
+  },
+  "kwargs": {
+   "text": "ПЕРЕГОВОРЫ НА ГРАНИ",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 13.1,
+   "kick": "Киев · Москва · Вашингтон"
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 6,
+  "view": "bullets",
+  "dur": 7.1,
+  "anim": 7.1,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "РОЛЬ ОТ КУШНЕРА",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Закончить конфликт",
+    "Получить гарантии безопасности",
+    "Переключиться на восстановление"
+   ]
+  }
+ },
+ {
+  "scene": 12,
+  "view": "split",
+  "dur": 9.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Причём Кушнер отдельно недоволен тем, как Зеленский ведёт переговоры публично",
+   "source": "New York Magazine",
+   "photo": "cards/photo/card_012.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 13,
+  "view": "timeline",
+  "dur": 9.2,
+  "anim": 9.2,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ПУБЛИЧНОЕ ДАВЛЕНИЕ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "начало",
+     "text": "детали выносятся наружу"
+    },
+    {
+     "date": "дальше",
+     "text": "возмущение и борьба за правоту"
+    },
+    {
+     "date": "итог",
+     "text": "договориться трудно"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 14,
+  "view": "forces",
+  "dur": 11.9,
+  "anim": 11.9,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "СДЕЛКА ПО ДИЗЕЛЮ",
+   "watermark": "5 МИНУТ",
+   "title": "МАЙАМИ",
+   "rows": [
+    {
+     "who": "ТРАМП",
+     "want": "примет дизель Путина"
+    },
+    {
+     "who": "ПУТИН",
+     "want": "смягчение санкций"
+    },
+    {
+     "who": "КУШНЕР",
+     "want": "передал украинцам"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 15,
+  "view": "zal_kub",
+  "dur": 16.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.6,
+   "sheets": [],
+   "text": "Кушнер сочувствует Зеленскому, но так переговоры не ведут",
+   "kick": "ЭМПАТИЯ — НЕ СТРАТЕГИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 19,
+  "view": "zal_pol",
+  "dur": 6.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 5.3,
+   "sheets": [],
+   "text": "Не всё покупается за деньги",
+   "na_polu": "ЦЕНА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 20,
+  "view": "forces",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "АМЕРИКАНСКИЙ ПОДХОД",
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "ДЕНЬГИ",
+     "want": "решают всё"
+    },
+    {
+     "who": "РЫНОК",
+     "want": "мерило отношений"
+    },
+    {
+     "who": "БЕЗОПАСНОСТЬ",
+     "want": "вторична"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 21,
+  "view": "zal_slova",
+  "dur": 15.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.1,
+   "sheets": [],
+   "text": "Ты думаешь в деньгах?",
+   "na_polu": "2",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "zal_efir",
+  "dur": 7.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.0,
+   "sheets": [],
+   "text": "Москва смотрит иначе",
+   "say": "Поговорить важнее, чем выпить",
+   "author": "Москва",
+   "role": "позиция Кремля",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "pull",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "За столом иногда решается то, чего не купишь ещё одним контрактом",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "zal_g01",
+  "dur": 5.8,
+  "anim": 5.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 3.5,
+   "sheets": [
+    "возмущение",
+    "борьба за правоту",
+    "кто выглядит правым"
+   ],
+   "text": "Детали наружу — давление растёт",
+   "value": "14",
+   "value_sub": "ход игры",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "duel",
+  "dur": 17.5,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "которая годами была главным источником денег",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "что Вашингтон перешёл на сторону Москвы",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 24.1,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 24.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "И Киев прямо объясняет, на что рассчитывает",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 21.0,
+    "pary": [
+     "Киев — Обеспечьте",
+     "Обеспечьте — Конгресс",
+     "Конгресс — Дотянуть"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "И Киев прямо объясняет, на что рассчитывает",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 21.0,
+   "pary": [
+    "Киев — Обеспечьте",
+    "Обеспечьте — Конгресс",
+    "Конгресс — Дотянуть"
+   ]
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 29,
+  "view": "paper_typed",
+  "dur": 3.5,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Календарь в Вашингтоне один, а зима на Украине другая",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "zal_g18",
+  "dur": 14.7,
+  "anim": 14.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 14.3,
+   "sheets": [],
+   "text": "Хегсет не одобрил ракеты Патриот",
+   "value": "48",
+   "value_sub": "ПОД ВОПРОСОМ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "zal_shkala",
+  "dur": 14.9,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 14.2,
+   "sheets": [],
+   "text": "США продали Киеву зенитные ракеты",
+   "accent": "зенитные",
+   "value": "500",
+   "value_sub": "ПОСТАВКА ПОЗЖЕ",
+   "source": "начало 2030-х",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "timeline",
+  "dur": 6.4,
+  "anim": 6.4,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "РЫЧАГИ КОНГРЕССА",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "раньше",
+     "text": "Белый дом один решает"
+    },
+    {
+     "date": "дальше",
+     "text": "Конгресс давит и голосует деньги"
+    },
+    {
+     "date": "дальше",
+     "text": "спорит о санкциях"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 33,
+  "view": "strike",
+  "dur": 11.3,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Это не киевско-вашингтонская сделка — нужна и Москва",
+   "struck": "киевско-вашингтонская сделка",
+   "fix": "союз трёх столиц",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 14.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 14.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Выгодно самой России",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 14.4,
+    "role": "членство Украины в НАТО"
+   }
+  },
+  "kwargs": {
+   "text": "Выгодно самой России",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 14.4,
+   "role": "членство Украины в НАТО"
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 35,
+  "view": "doc",
+  "dur": 16.2,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Москва боится реванша Украины силой. Членство в НАТО должно её успокоить. Украина внутри НАТО не начнёт войну сама. Иначе потеряет всех партнёров по блоку",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 37,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 4.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 4.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Цель Путина — не мир, а контроль",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.3,
+    "tezisy": [
+     "Не допустить ухода Украины из-под влияния",
+     "Продолжить фактическую оккупацию"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Цель Путина — не мир, а контроль",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.3,
+   "tezisy": [
+    "Не допустить ухода Украины из-под влияния",
+    "Продолжить фактическую оккупацию"
+   ]
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 38,
+  "view": "charts.network",
+  "dur": 13.2,
+  "anim": 13.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Путин",
+     "label": "Путин",
+     "weight": 2.0
+    },
+    {
+     "id": "НАТО",
+     "label": "НАТО",
+     "weight": 1.0
+    },
+    {
+     "id": "Зеленский",
+     "label": "Зеленский",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Путин",
+     "to": "НАТО",
+     "weight": 1.0
+    },
+    {
+     "from": "Зеленский",
+     "to": "Путин",
+     "weight": 1.0
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "quote",
+  "dur": 8.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Путин говорит о риске ротации и перевооружения украинской армии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "dok_title",
+  "dur": 15.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Цель Москвы — сломить Украину зимой",
+   "accent": "Москвы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "charts.cartogram",
+  "dur": 10.2,
+  "anim": 10.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Донецкая область"
+   ],
+   "kick": "ДОНБАСС",
+   "level": "region",
+   "admin": "Украина",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "karta_brifing",
+  "dur": 15.8,
+  "anim": 15.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Дело не в гектарах",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "tape",
+  "dur": 10.2,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Раньше ответы звучали намного конкретнее",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "dok_word",
+  "dur": 14.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если добровольный отход является поражением, тогда что является победой?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "bullets",
+  "dur": 16.5,
+  "anim": 16.5,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ЧТО ТАКОЕ ПОБЕДА",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Возврат всех территорий",
+    "Границы 1991 года",
+    "Членство в НАТО",
+    "Сохранение линии фронта"
+   ]
+  }
+ },
+ {
+  "scene": 46,
+  "view": "forces",
+  "dur": 12.2,
+  "anim": 12.2,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ДОВОД ЗЕЛЕНСКОГО",
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "УКРАИНА",
+     "want": "отдаёт территорию"
+    },
+    {
+     "who": "ГАРАНТИИ",
+     "want": "не гарантируют предел"
+    },
+    {
+     "who": "МОСКВА",
+     "want": "попросит ещё"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 47,
+  "view": "timeline",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ЖЕЛЕЗНАЯ ДВЕРЬ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "Москва",
+     "text": "требует уступок"
+    },
+    {
+     "date": "Киев",
+     "text": "считает это поражением"
+    },
+    {
+     "date": "итог",
+     "text": "отступление не добровольно"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 48,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 10.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 10.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Война получает свой механизм решений",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.9,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Война получает свой механизм решений",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.9,
+   "stamp": "утверждено"
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 49,
+  "view": "zal",
+  "dur": 9.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Лукашенко готов сам посадить Зеленского в самолёт",
+   "words": [
+    "МОСКВА",
+    "ИТОГ"
+   ],
+   "sheets": [
+    "привезти в Москву",
+    "гарантировать безопасность",
+    "три славянских народа",
+    "проще договориться без посредников",
+    "Путин ждёт в Кремле",
+    "простой способ закончить спор"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 9.9,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "charts.cartogram",
+  "dur": 10.2,
+  "anim": 10.2,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Украина",
+    "Белоруссия"
+   ],
+   "kick": "ТРИ СЛАВЯНСКИХ НАРОДА",
+   "accent": [
+    "Россия"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "charts.cartogram",
+  "dur": 18.5,
+  "anim": 18.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Украина",
+    "Белоруссия",
+    "Франция"
+   ],
+   "kick": "КТО УЧАСТВУЕТ",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "charts.map_dist",
+  "dur": 5.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Москва",
+     "lat": 55.751,
+     "lon": 37.618,
+     "accent": false
+    },
+    {
+     "label": "Киев",
+     "lat": 50.45,
+     "lon": 30.523,
+     "accent": false
+    }
+   ],
+   "kick": "ДВА МАРШРУТА",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 19.2,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 19.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кто и что говорит о переговорах",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 17.2,
+    "repliki_": [
+     "Лукашенко=не сомневаюсь в победе России",
+     "Зеленский=Россия не станет безопасной",
+     "Кушнер=нужна перезагрузка отношений",
+     "Foreign Affairs=пора договариваться"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Кто и что говорит о переговорах",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 17.2,
+   "repliki_": [
+    "Лукашенко=не сомневаюсь в победе России",
+    "Зеленский=Россия не станет безопасной",
+    "Кушнер=нужна перезагрузка отношений",
+    "Foreign Affairs=пора договариваться"
+   ]
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 55,
+  "view": "photo",
+  "dur": 5.0,
+  "anim": 5.0,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "FOREIGN AFFAIRS",
+   "source": "Foreign Affairs",
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_055.jpg",
+   "lines": [
+    "«Пора договариваться с Россией»",
+    "Позиция прямо противоположна риторике Киева"
+   ]
+  }
+ },
+ {
+  "scene": 56,
+  "view": "zal_g48",
+  "dur": 3.8,
+  "anim": 3.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 3.5,
+   "sheets": [],
+   "text": "Украина эту войну не выигрывает",
+   "source": "Foreign Affairs",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "bullets",
+  "dur": 10.6,
+  "anim": 10.6,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "КНУТ БЕЗ ПРЯНИКА",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Политика с две тысячи четырнадцатого года",
+    "Давление без результата"
+   ]
+  }
+ },
+ {
+  "scene": 59,
+  "view": "timeline",
+  "dur": 4.7,
+  "anim": 4.7,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ПОЧТИ АНЕКДОТ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "вчера",
+     "text": "просили только кнут"
+    },
+    {
+     "date": "сегодня",
+     "text": "просят и пряник"
+    },
+    {
+     "date": "итог",
+     "text": "рецепт не меняется"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 61,
+  "view": "marker_serif",
+  "dur": 7.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вы слишком долго давили и почти не предлагали стимулов",
+   "source": "Foreign Affairs",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 62,
+  "view": "bullets",
+  "dur": 5.0,
+  "anim": 5.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "СПОР О ПРЯНИКЕ",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Одни разочаровались в стимулах",
+    "Другие только сейчас просят их"
+   ]
+  }
+ },
+ {
+  "scene": 64,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.0,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 8.0,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Соглашение стало бы крупным итогом для Трампа",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 10.8,
+    "role": "президент США"
+   }
+  },
+  "kwargs": {
+   "text": "Соглашение стало бы крупным итогом для Трампа",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 10.8,
+   "role": "президент США"
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 65,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 11.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Исследование из Лондона",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.7,
+    "region": "Великобритания"
+   }
+  },
+  "kwargs": {
+   "text": "Исследование из Лондона",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.7,
+   "region": "Великобритания"
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 66,
+  "view": "timeline",
+  "dur": 9.9,
+  "anim": 9.9,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ОЦЕНКА ПОТЕРЬ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "вывод",
+     "text": "потери сравнили по странам"
+    },
+    {
+     "date": "итог",
+     "text": "Украина теряет больше людей"
+    },
+    {
+     "date": "счёт",
+     "text": "в абсолютных цифрах"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 67,
+  "view": "forces",
+  "dur": 7.8,
+  "anim": 7.8,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ПРИВЫЧНАЯ КАРТИНА",
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "РОССИЯ",
+     "want": "будто безразлична к потерям"
+    },
+    {
+     "who": "ВЫВОДЫ",
+     "want": "ставят это под сомнение"
+    },
+    {
+     "who": "КАРТИНА",
+     "want": "требует пересмотра"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 68,
+  "view": "zal_ekran",
+  "dur": 5.8,
+  "anim": 5.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 5.9,
+   "sheets": [
+    "ПОЗИЦИЯ КИЕВА",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Поражение — сдать Донбасс",
+   "say": "Отступление без боя",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "source": "интервью",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "bullets",
+  "dur": 9.2,
+  "anim": 9.2,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ВТОРАЯ ПОЛОВИНА ЗАДАЧИ",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Уйти из Донбасса — объяснимо",
+    "Но нужно объяснить, что дальше"
+   ]
+  }
+ },
+ {
+  "scene": 70,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 8.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Что такое победа и какой ценой",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.9,
+    "soobshcheniya": [
+     "война не ради того, чтобы не признать поражение"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Что такое победа и какой ценой",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.9,
+   "soobshcheniya": [
+    "война не ради того, чтобы не признать поражение"
+   ]
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 71,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.2,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 7.2,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Нужна достижимая конечная точка",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.5,
+    "sobytiya": [
+     "сейчас=переговоры без финала",
+     "дальше=месяц за месяцем без ответа"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Нужна достижимая конечная точка",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.5,
+   "sobytiya": [
+    "сейчас=переговоры без финала",
+    "дальше=месяц за месяцем без ответа"
+   ]
+  },
+  "anim": 0.0
+ },
+ {
+  "scene": 72,
+  "view": "bullets",
+  "dur": 5.3,
+  "anim": 5.3,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ЧТО ПРОБУЮТ АМЕРИКАНЦЫ",
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Деньги",
+    "Гарантии",
+    "Сроки"
+   ]
+  }
+ },
+ {
+  "scene": 73,
+  "view": "timeline",
+  "dur": 3.5,
+  "anim": 3.5,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ДВА ПРЕДЛОЖЕНИЯ",
+   "watermark": "5 МИНУТ",
+   "events": [
+    {
+     "date": "Лукашенко",
+     "text": "предлагает самолёт"
+    },
+    {
+     "date": "Зеленский",
+     "text": "ждёт новый Конгресс"
+    },
+    {
+     "date": "итог",
+     "text": "ни один шаг не сделан"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 74,
+  "view": "forces",
+  "dur": 5.7,
+  "anim": 5.7,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ДВА ГОЛОСА ЕВРОПЫ",
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "FOREIGN AFFAIRS",
+     "want": "пора договариваться"
+    },
+    {
+     "who": "ЕВРОПА",
+     "want": "готовит ограничения"
+    },
+    {
+     "who": "ЕВРОПА",
+     "want": "говорит о диалоге"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 75,
+  "view": "paper_hand",
+  "dur": 9.94,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Если отступить — значит проиграть, то что конкретно надо сделать, чтобы выиграть?",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
