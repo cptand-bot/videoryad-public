@@ -1,0 +1,10 @@
+{
+ "65": {
+  "photo": "overlays/scene_065.jpg",
+  "sound": "pop",
+  "at": 2.2,
+  "shape": "rect",
+  "scale": 1.0,
+  "style": "left"
+ }
+}
