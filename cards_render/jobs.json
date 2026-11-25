@@ -1,0 +1,194 @@
+[
+ {
+  "scene": 1,
+  "view": "duel",
+  "dur": 11.8,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Российский флаг, оружие на борту — вопросы есть?",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "…",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 2,
+  "view": "duel",
+  "dur": 13.04,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Российский флаг, оружие на борту — вопросы есть?",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Орпо: Украина имеет право. Писториус: не на Балтику.",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 3,
+  "view": "duel",
+  "dur": 5.76,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "На словах можно, а у своего берега — уже нет?",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Орпо: Украина имеет право. Писториус: не на Балтику.",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 4,
+  "view": "duel",
+  "dur": 8.88,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "На словах можно, а у своего берега — уже нет?",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Далёкий корабль — стратегия. Твой берег — быт.",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "duel",
+  "dur": 9.2,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Над Хелмом не сбили — разрешение было.",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Далёкий корабль — стратегия. Твой берег — быт.",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "duel",
+  "dur": 6.48,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Над Хелмом не сбили — разрешение было.",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Развернулся к Украине. Куда бы упало?",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 7,
+  "view": "duel",
+  "dur": 4.4,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Не хватило духу нажать на кнопку.",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Развернулся к Украине. Куда бы упало?",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "duel",
+  "dur": 2.92,
+  "anim": 2.92,
+  "tail_zoom": 0.035,
+  "watermark": "МАТРИЦА ВЛАСТИ",
+  "channel": "",
+  "kwargs": {
+   "top": {
+    "who": "ЗА",
+    "text": "Не хватило духу нажать на кнопку.",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "ПРОТИВ",
+    "text": "Включилась голова, а не лозунги.",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "МАТРИЦА ВЛАСТИ"
+  }
+ }
+]
