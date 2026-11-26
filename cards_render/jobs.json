@@ -1,0 +1,45 @@
+[
+ {
+  "scene": 53,
+  "view": "dok_title",
+  "dur": 12.32,
+  "anim": 2.601,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Нужен практический следующий шаг",
+   "accent": "следующий шаг",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "charts.line",
+  "dur": 11.28,
+  "anim": 2.601,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "Переговоры начались",
+    "Атака беспилотников",
+    "Путин отступил в переговорах"
+   ],
+   "series": [
+    {
+     "name": "",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "source": "Кушнер",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
