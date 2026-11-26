@@ -1756,6 +1756,24 @@ def check(scenes, channel="", gate="dashboard", scenes_path=""):
     # дизайну; если считать потолок по ВСЕМ `have`/`have_fx`, гейт валил бы
     # законную кнопку как нарушение.
     _свои_виды = {e["view"] for e in _список if e.get("view")}
+    # ВТОРОЙ АРСЕНАЛ (26.11.2026, живой блокер): `style_card.py` —
+    # bullets/forces/timeline — это ОТДЕЛЬНЫЙ инструмент, не входит в
+    # `_список` (который добирается только из `card_put.py`). `photo`
+    # совпал по имени случайно и ловился, а bullets/forces/timeline —
+    # НЕТ: его слово «вчера фиксили, нихуя не пофиксили» — 44 карточки
+    # `bullets` на одном ролике прошли гейт молча, потому что проверка
+    # повтора смотрит только в `_свои_виды`. Берём ключи `LIMITS` прямо у
+    # самого инструмента — одно место правды, не копия списка руками.
+    try:
+        import importlib.util as _scu
+        _scsp = _scu.spec_from_file_location(
+            "style_card", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "style_card.py"))
+        _scm = _scu.module_from_spec(_scsp)
+        _scsp.loader.exec_module(_scm)
+        _свои_виды |= set(_scm.LIMITS.keys())
+    except Exception:
+        pass
     _свои_fx = {e["fx"] for e in _список if e.get("fx")}
     for _вид_h, _n_h in sorted(have.items()):
         if _n_h > 1 and _вид_h in _свои_виды:
