@@ -293,6 +293,17 @@ print(len(sc))")"
     fi
     step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
     step "обязательные"     python3 "$T/obyazatelno.py" "$SCENES" --gate dashboard
+    # СВЕРКА ПРОПУСКОВ С ТЕКСТОМ СЦЕН (25.11.2026, НА-РАСКАТКУ.md п.174, его
+    # прямое требование: «не в бриф — на уровне кода»). Отклоняет отговорку
+    # «нет материала», если в тексте сцены на самом деле есть число, страна,
+    # имя или организация — цепочка проверки шире одних чисел.
+    step "сверка пропусков" python3 "$T/propuski_sverka.py" "$SCENES" "$PROJ/propuski.json"
+    # БЕЗОПАСНАЯ ЗОНА — ПОДКЛЮЧЕНО 25.11.2026 (его слово 13.11, до сих пор
+    # жило только ручным инструментом разработки видов, НА-РАСКАТКУ.md
+    # п.177). Живой тест 25.11: 176 кадров/клипов — 2 мин, нашёл реальные
+    # нарушения (текст в полосе субтитров). Таймаут щедрый — OCR честно
+    # небыстрый на видео, не считать зависанием раньше срока.
+    step "безопасная зона"  python3 "$T/safe_area.py" "$PROJ/images"
     step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
     step "гейт детей"       python3 "$T/deti_gate.py" check "$PROJ"
     echo ""
@@ -308,12 +319,28 @@ final)
     cd "$PROJ" || exit 1
     step "selfcheck"        python3 "$T/selfcheck.py" "$SCENES" images
     step "обязательные"     python3 "$T/obyazatelno.py" "$SCENES" --gate dashboard
+    # СВЕРКА ПРОПУСКОВ С ТЕКСТОМ СЦЕН (25.11.2026, НА-РАСКАТКУ.md п.174).
+    step "сверка пропусков" python3 "$T/propuski_sverka.py" "$SCENES" "$PROJ/propuski.json"
+    # БЕЗОПАСНАЯ ЗОНА (25.11.2026, НА-РАСКАТКУ.md п.177) — см. комментарий
+    # у первого экземпляра выше.
+    step "безопасная зона"  python3 "$T/safe_area.py" "$PROJ/images"
     # 20.11, п.135: `dossier_use.py` раньше гонялся ТОЛЬКО в `podgotovka`,
     # ДО фетча и до большинства правок — поздние замены кадров/источников
     # (его слово про фото Каллас) уходили из-под этой проверки насовсем,
     # находилось только по его прямой жалобе на готовом дашборде. Второй
     # прогон здесь, перед самим дашбордом, ловит то, что изменилось позже.
-    step "материал досье (повтор)" python3 "$T/dossier_use.py" "$SCENES"
+    # БЕЗ overlays.json/--tg ГЕЙТ НЕ ВИДИТ ПРИСТРОЕННЫЕ ВСПЛЫВАШКИ — тот же
+    # баг, что в podgotovka (25.11, НА-РАСКАТКУ.md п.172), второй экземпляр.
+    # `--tg` передаём ТОЛЬКО если файл реально есть (как и в podgotovka) —
+    # `dossier_use.py` не проверяет его существование сам, путь без файла
+    # уйдёт дальше как есть.
+    if [ -f "$PROJ/tg.json" ]; then
+        step "материал досье (повтор)" python3 "$T/dossier_use.py" "$SCENES" \
+            "$PROJ/overlays.json" --tg "$PROJ/tg.json"
+    else
+        step "материал досье (повтор)" python3 "$T/dossier_use.py" "$SCENES" \
+            "$PROJ/overlays.json"
+    fi
     step "слои на карточках" python3 "$T/cards_queue.py" --gate "$SCENES" "$PROJ"
     step "дедуп"            python3 "$T/autodedup.py" "$SCENES" images
     step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
@@ -1384,7 +1411,14 @@ podgotovka)
     step "сверка пинов"   python3 "$T/check_pins.py" "$SCENES"
     # учёт материала досье имеет смысл только когда вложения реально скачаны
     if [ -f "$PROJ/tg.json" ]; then
-        step "материал досье" python3 "$T/dossier_use.py" "$SCENES"
+        # БЕЗ overlays.json/--tg ГЕЙТ НЕ ВИДИТ ПРИСТРОЕННЫЕ ВСПЛЫВАШКИ (25.11,
+        # улов usuario-66, НА-РАСКАТКУ.md п.172) — печатал ложный [ОТКАЗ]
+        # «файлы без дела», даже когда вложения реально пристроены. Аргументы
+        # опциональны у самого dossier_use.py — overlays.json может не
+        # существовать на этой фазе, скрипт тогда просто не находит в нём
+        # совпадений, это не ошибка.
+        step "материал досье" python3 "$T/dossier_use.py" "$SCENES" \
+            "$PROJ/overlays.json" --tg "$PROJ/tg.json"
     else
         echo "[ОК]    вложений досье нет — учёт пропущен"
     fi
