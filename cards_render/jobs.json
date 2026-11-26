@@ -1,0 +1,56 @@
+[
+ {
+  "scene": 30,
+  "view": "dok_title",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "ЧАСТЬ ДЕНЕГ СВЯЗАНА С ПОМОЩЬЮ ИЗВНЕ, А НЕ С БЮДЖЕТОМ",
+   "accent": "ИЗВНЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "poster.poster",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "политический прогноз",
+   "title": "ЕСЛИ ВОЙНУ НЕ ОСТАНОВИТЬ",
+   "hero_photo": "cards/photo/card_043.jpg",
+   "features": [
+    {
+     "text": "это политическая версия, не факт"
+    }
+   ],
+   "facts": [
+    {
+     "label": "прогноз",
+     "value": "территория без функций государства"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 80,
+  "view": "dok_word",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "ДЕНЬГИ МОЖНО ПЕРЕИМЕНОВАТЬ. ЧЕЛОВЕКА — НЕТ",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
