@@ -239,6 +239,25 @@ def main():
     if scene is None:
         _fail(2, f"в {a.scenes} нет сцены {a.sid}")
 
+    # --- ПОВТОР ВИДА — ОТКАЗ В МОМЕНТ ВЫЗОВА (26.11.2026, тот же приём, что
+    # в `fullcycle/card_put.py` «ПРОВЕРКА 0» и `element_put.py», перенесён
+    # сюда ПОСЛЕДНИМ: этот файл — ОТДЕЛЬНЫЙ арсенал (bullets/forces/
+    # timeline/photo), и гейт `obyazatelno.py` до того же дня его не
+    # проверял вовсе — 44 карточки «bullets» на одном ролике прошли молча,
+    # нашёл сам пользователь на готовом дашборде. ТОЧНОЕ ИМЯ, НЕ СЕМЬЯ:
+    # ниже по файлу есть СВОЯ, более узкая проверка «не ближе N сцен»
+    # (presentation-slide gap, снимается `--force`) — это ДРУГОЕ правило,
+    # не путать; эта проверка — абсолютная, без `--force`, как у card_put.
+    for _s in scenes:
+        if int(_s.get("id", -1)) == a.sid:
+            continue
+        if str(_s.get("source") or "") == f"card:{a.kind}":
+            _fail(8, "ВИД «%s» УЖЕ ЕСТЬ В РОЛИКЕ: сцена %s."
+                     % (a.kind, _s.get("id")),
+                  "  Правило 22.11 — один вид не больше раза на ролик.",
+                  "  Ставь другой, ещё не занятый вид (bullets/forces/"
+                  "timeline/photo) или другой арсенал (card_put.py --list).")
+
     dur = float(scene.get("duration_sec") or 0)
     if dur <= 0:
         _fail(2, f"у сцены {a.sid} нет duration_sec")
