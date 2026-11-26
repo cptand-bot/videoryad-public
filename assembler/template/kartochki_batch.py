@@ -72,6 +72,30 @@ SRAZU = os.path.join(SKILL, "template", "kartochki_srazu.py")
     "sobytiya": {"relsy", "line", "slope", "pie", "waterfall", "network"},
 }
 
+# ЖУРНАЛ ЧУЖИХ КЛЮЧЕЙ — ЧТОБЫ ДАННЫЕ НЕ ТЕРЯЛИСЬ (26.11.2026). Улов
+# usuario-8f: Codex шлёт другие синонимы (--storony/--obekty/--punkty/
+# --fakt/--ocenka) под виды, которых в ДОП_КЛЮЧИ нет — расширять таблицу
+# по смыслу слова, не видя реальных данных, означает рисковать принять
+# чужое содержание в неверный вид молча. Проект, где это случилось,
+# к вечеру обычно уже сдан и убран — улики теряются. Теперь каждый такой
+# отказ пишется сюда, с реальным видом, флагом и куском значения, чтобы
+# расширять ДОП_КЛЮЧИ можно было по факту, а не по догадке.
+_ЧУЖИЕ_ЖУРНАЛ = os.path.join(SKILL, "template", "upakovka_lib",
+                              "kartochki_chuzhie_klyuchi.tsv")
+
+
+def _зафиксировать_chuzhoy(вид, флаг, значения):
+    try:
+        os.makedirs(os.path.dirname(_ЧУЖИЕ_ЖУРНАЛ), exist_ok=True)
+        _зн = str(значения[0] if значения else "")[:80].replace("\t", " ")
+        import datetime
+        with open(_ЧУЖИЕ_ЖУРНАЛ, "a", encoding="utf-8") as f:
+            f.write("%s\t%s\t%s\t%s\n"
+                    % (datetime.datetime.now().isoformat(timespec="seconds"),
+                       вид, флаг, _зн))
+    except OSError:
+        pass
+
 # Виды, которые величин не знают вовсе и ждут названия в `--place`.
 КАРТОЧНЫЕ_МЕСТА = ("map", "bubbles", "map_regions", "map_dist")
 
@@ -497,7 +521,10 @@ def _sobrat(ном, вид, ключи, scenes, корень, виды):
             continue
         dest = dest_po_flagu.get(ф, ф[2:].replace("-", "_"))
         if dest in чужие:
-            отброшено.append("%s — ключ ЧУЖОГО вида (виду «%s» он не нужен)"
+            _зафиксировать_chuzhoy(вид, флаг, значения)
+            отброшено.append("%s — ключ ЧУЖОГО вида (виду «%s» он не нужен; "
+                             "записано в kartochki_chuzhie_klyuchi.tsv для "
+                             "расширения ДОП_КЛЮЧИ по факту)"
                              % (флаг, вид))
             continue
         взято = 0
