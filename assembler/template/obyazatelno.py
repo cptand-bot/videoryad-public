@@ -1172,21 +1172,36 @@ def _пропуски_хеш(путь_файла):
         return None
 
 
+def _пары_папок(папка):
+    """`папка` и её пара по суффиксу `-cloud` (26.11.2026, живой случай:
+    координатор ставил отметку в обычной папке проекта, а selfcheck
+    вкладки шёл по `<проект>-cloud/scenes.json` — отметка и propuski.json
+    физически лежали в РАЗНЫХ папках той же темы, гейт её не находил.
+    Тот же приём, что уже есть в zamorozka.py:_метка_просмотра()."""
+    папка = os.path.abspath(папка)
+    if папка.endswith("-cloud"):
+        return [папка, папка[:-len("-cloud")]]
+    return [папка, папка + "-cloud"]
+
+
 def _пропуски_разрешены_для(scenes_path):
     if ПРОПУСКИ_РАЗРЕШЕНЫ:
         return True
     if not scenes_path:
         return False
     папка = os.path.dirname(os.path.abspath(scenes_path))
-    текущий = _пропуски_хеш(os.path.join(папка, ПРОПУСКИ_ФАЙЛ))
-    if текущий is None:
-        return False
-    try:
-        сохранённый = json.load(open(os.path.join(папка, _ПРОПУСКИ_ОТМЕТКА),
-                                      encoding="utf-8"))
-    except (OSError, ValueError):
-        return False
-    return сохранённый.get("hash") == текущий
+    for п in _пары_папок(папка):
+        текущий = _пропуски_хеш(os.path.join(п, ПРОПУСКИ_ФАЙЛ))
+        if текущий is None:
+            continue
+        try:
+            сохранённый = json.load(open(os.path.join(п, _ПРОПУСКИ_ОТМЕТКА),
+                                          encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if сохранённый.get("hash") == текущий:
+            return True
+    return False
 
 
 def _причина_пропуска(scenes_path, вид):
@@ -1207,14 +1222,17 @@ def _причина_пропуска(scenes_path, вид):
     if len(причина) >= 10 and ПРОПУСКИ_РАЗРЕШЕНЫ:
         # флаг РЕАЛЬНО был в окружении именно сейчас — обновляем отметку,
         # чтобы следующий вызов без флага прошёл для этого же propuski.json
+        # — пишем в ОБЕ папки (обычную и -cloud), её могут читать с любой.
         текущий = _пропуски_хеш(п)
         if текущий:
-            try:
-                json.dump({"hash": текущий},
-                          open(os.path.join(папка, _ПРОПУСКИ_ОТМЕТКА), "w",
-                               encoding="utf-8"))
-            except OSError:
-                pass
+            for п2 in _пары_папок(папка):
+                try:
+                    os.makedirs(п2, exist_ok=True)
+                    json.dump({"hash": текущий},
+                              open(os.path.join(п2, _ПРОПУСКИ_ОТМЕТКА), "w",
+                                   encoding="utf-8"))
+                except OSError:
+                    pass
     return причина if len(причина) >= 10 else ""
 
 

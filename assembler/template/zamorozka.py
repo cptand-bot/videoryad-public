@@ -67,6 +67,24 @@ def _pdir(p):
     return пути[0]
 
 
+def _метка_просмотра(pdir):
+    """Путь к `.posledniy_prosmotr`, который реально существует — в `pdir`
+    ИЛИ в его паре (26.11.2026, живой случай: `review.py` всегда пишет
+    метку в обычную папку `<имя>`, а `ship.sh` зовёт эту проверку по
+    `<имя>-cloud` — METKA ЕСТЬ, просто не в той папке, и инструмент врал
+    «дашборд ни разу не открывался» хотя он открывался. Тот же приём, что
+    уже в `_pdir()` выше: пробуем и с `-cloud`, и без."""
+    cands = [os.path.join(pdir, ".posledniy_prosmotr")]
+    if pdir.endswith("-cloud"):
+        cands.append(os.path.join(pdir[:-len("-cloud")], ".posledniy_prosmotr"))
+    else:
+        cands.append(os.path.join(pdir + "-cloud", ".posledniy_prosmotr"))
+    for c in cands:
+        if os.path.isfile(c):
+            return c
+    return cands[0]
+
+
 def _md5(path):
     h = hashlib.md5()
     try:
@@ -122,7 +140,7 @@ def _после_просмотра(pdir):
     слепок утверждения попадут непроверенными им глазами. Его вопрос
     18.11: «не мог ли он просочиться без моей проверки» — мог, если
     фоновый дозаказ кадра дописал файл в этом окне."""
-    метка = os.path.join(pdir, ".posledniy_prosmotr")
+    метка = _метка_просмотра(pdir)
     if not os.path.isfile(метка):
         return []
     try:
@@ -161,7 +179,7 @@ def cmd_postavit(args):
     # минуя review.py — .posledniy_prosmotr никогда не писался, и старая
     # _после_просмотра() на отсутствующую метку отвечала «подозрительных
     # нет», то есть замораживала БЕЗ единого живого показа страницы.
-    метка_просмотра = os.path.join(pdir, ".posledniy_prosmotr")
+    метка_просмотра = _метка_просмотра(pdir)
     if not os.path.isfile(метка_просмотра):
         print("!! ДАШБОРД НИ РАЗУ НЕ ОТКРЫВАЛСЯ — заморозка (и сборка) не "
               "ставится.", file=sys.stderr)
