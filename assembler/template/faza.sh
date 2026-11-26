@@ -305,7 +305,8 @@ print(len(sc))")"
     # небыстрый на видео, не считать зависанием раньше срока.
     step "безопасная зона"  python3 "$T/safe_area.py" "$PROJ/images"
     step "повтор кадров"    python3 "$T/povtor_kadrov.py" "$PROJ"
-    step "гейт детей"       python3 "$T/deti_gate.py" check "$PROJ"
+    # ВЫКЛЮЧЕНО ПОЛНОСТЬЮ И НАВСЕГДА (26.11.2026, его прямое слово).
+    # step "гейт детей"       python3 "$T/deti_gate.py" check "$PROJ"
     echo ""
     echo "ДАЛЬШЕ: дашборд НЕ поднимаем (клон идёт без утверждения) —"
     echo "  bash $0 sdacha $QNAME ${PIPE:-<труба>} \"<папка темы на D:>\""

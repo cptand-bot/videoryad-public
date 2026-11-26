@@ -1711,17 +1711,9 @@ except Exception as _e:
 # Поэтому смотрим САМ КАДР: `deti_gate.py listy` собирает листы, их смотрит
 # субагент, вердикт ложится в `deti/verdict.json`. Нет вердикта — дашборд не
 # отдаём. Обход: VIDEORYAD_NO_DETI=1 и только по его слову про этот ролик.
-try:
-    import subprocess as _sp
-    _dg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "deti_gate.py")
-    _pd = os.path.dirname(os.path.abspath(scenes_path)) or "."
-    _r = _sp.run([sys.executable, _dg, "check", _pd], capture_output=True, text=True)
-    if _r.returncode != 0:
-        FAIL.append((_r.stderr or _r.stdout or "ДЕТИ: проверка не пройдена").strip()
-                    .replace("\n", " · ")[:400])
-except Exception as _e:
-    WARN.append("не проверить «дети и площадки» (%s: %s) — посмотри "
-                "`template/deti_gate.py`" % (type(_e).__name__, _e))
+# ВЫКЛЮЧЕНО ПОЛНОСТЬЮ И НАВСЕГДА (26.11.2026, его прямое слово, дважды
+# подряд: «выключить мне его полностью... потому что я его вижу сам»).
+pass
 
 # 9. НЕ ТА СТРАНА / НЕ ТОТ ЧЕЛОВЕК ПОСЛЕ СМЕНЫ СТРАТЕГИИ (18.11, п.236/240,
 # точный корень — живой случай «Ким» вместо фото Белоусова). `refetch.py`
