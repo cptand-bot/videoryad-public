@@ -1,0 +1,864 @@
+[
+ {
+  "scene": 6,
+  "view": "slider",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_slider.py",
+  "cfg": {
+   "title": "ДЕЗЕРТИРСТВО В МЕСЯЦ",
+   "min": 0.0,
+   "max": 20.0,
+   "low": 6.5,
+   "high": 15.0,
+   "marker_value": 15.0,
+   "marker_display": "15  тыс. чел.",
+   "seconds": 13.8,
+   "range_label": "РАЗБРОС ОЦЕНОК",
+   "caption": "от 6,5 до 15 тысяч военнослужащих ежемесячно",
+   "source": ""
+  }
+ },
+ {
+  "scene": 8,
+  "view": "bars",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "МОБИЛИЗАЦИОННЫЙ РЕЗЕРВ",
+   "caption": "резерв Украины против резерва России",
+   "seconds": 13.8,
+   "bars": [
+    {
+     "label": "УКРАИНА",
+     "value": 0.13,
+     "color": "EABD23"
+    },
+    {
+     "label": "РОССИЯ",
+     "value": 0.87,
+     "color": "B92526"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 11,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 9.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Вот ещё немного. Ещё потерпеть",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.5,
+    "sobytiya": [
+     "ПОТЕРПЕТЬ",
+     "УСЛОВИЯ",
+     "КЛАСТЕР",
+     "РЕФОРМА"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Вот ещё немного. Ещё потерпеть",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.5,
+   "sobytiya": [
+    "ПОТЕРПЕТЬ",
+    "УСЛОВИЯ",
+    "КЛАСТЕР",
+    "РЕФОРМА"
+   ]
+  }
+ },
+ {
+  "scene": 18,
+  "view": "charts.line",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "x_labels": [
+    "СОГЛАСИЕ СТРАН ЕС",
+    "КЛАСТЕР СЕЛЬХОЗ",
+    "КЛАСТЕР ТРАНСПОРТ"
+   ],
+   "series": [
+    {
+     "name": "ЭТАПЫ ПЕРЕГОВОРОВ",
+     "values": [
+      1.0,
+      1.0,
+      1.0
+     ]
+    }
+   ],
+   "title": "ЭТАПЫ ПЕРЕГОВОРОВ",
+   "source": "Еврокомиссия",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 22,
+  "view": "vyrezka.gazeta",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_022.jpg",
+   "author": "Зеленский",
+   "role": "президент Украины",
+   "kick": "расширил права венгерского меньшинства",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_pol",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.8,
+   "sheets": [],
+   "text": "Условия выполнены, ответа нет",
+   "na_polu": "БИЛЕТ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "charts.pie",
+  "dur": 10.0,
+  "anim": 10.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "иностранная помощь и кредиты",
+     "value": 55.0
+    },
+    {
+     "label": "собственные доходы",
+     "value": 45.0
+    }
+   ],
+   "title": "БЮДЖЕТ УКРАИНЫ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 29,
+  "view": "paper_typed",
+  "dur": 13.8,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Кредиты потом надо возвращать. При этом деньги нужны и на оборону, и на социальную поддержку",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 30,
+  "view": "dok_title",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "ЧАСТЬ ДЕНЕГ СВЯЗАНА С ПОМОЩЬЮ ИЗВНЕ",
+   "accent": "ИЗВНЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "charts.network",
+  "dur": 13.8,
+  "anim": 13.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "ВНЕШНЕЕ ФИНАНСИРОВАНИЕ",
+     "label": "ВНЕШНЕЕ ФИНАНСИРОВАНИЕ",
+     "weight": 3.0
+    },
+    {
+     "id": "БЮДЖЕТНЫЕ ВЫПЛАТЫ",
+     "label": "БЮДЖЕТНЫЕ ВЫПЛАТЫ",
+     "weight": 5.0
+    },
+    {
+     "id": "ПОТРЕБИТЕЛЬСКИЙ СПРОС",
+     "label": "ПОТРЕБИТЕЛЬСКИЙ СПРОС",
+     "weight": 3.0
+    },
+    {
+     "id": "НАЛОГИ",
+     "label": "НАЛОГИ",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "ВНЕШНЕЕ ФИНАНСИРОВАНИЕ",
+     "to": "БЮДЖЕТНЫЕ ВЫПЛАТЫ",
+     "weight": 3.0
+    },
+    {
+     "from": "БЮДЖЕТНЫЕ ВЫПЛАТЫ",
+     "to": "ПОТРЕБИТЕЛЬСКИЙ СПРОС",
+     "weight": 2.0
+    },
+    {
+     "from": "ПОТРЕБИТЕЛЬСКИЙ СПРОС",
+     "to": "НАЛОГИ",
+     "weight": 1.0
+    }
+   ],
+   "title": "ЦЕПОЧКА ЗАВИСИМОСТИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "duel",
+  "dur": 12.9,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "Электроэнергия: тарифы уже растут",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Газ: пока есть запас прочности",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "БАНКРОТСТВО ИЛИ НЕТ",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "tezisy": [
+     "КУПЮРА НЕ У МВФ",
+     "УСЛОВИЯ РЕШАЮТ ДОВЕРИЕ",
+     "ТАРИФЫ РЕШАЮТ СУДЬБУ"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "БАНКРОТСТВО ИЛИ НЕТ",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "tezisy": [
+    "КУПЮРА НЕ У МВФ",
+    "УСЛОВИЯ РЕШАЮТ ДОВЕРИЕ",
+    "ТАРИФЫ РЕШАЮТ СУДЬБУ"
+   ]
+  }
+ },
+ {
+  "scene": 37,
+  "view": "zal_kub",
+  "dur": 12.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.6,
+   "sheets": [],
+   "text": "Тарифы решают судьбу",
+   "kick": "УКРЗАЛІЗНИЦЯ, УКРЭНЕРГО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Тема тарифов вернулась",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "soobshcheniya": [
+     "ЗЕЛЕНСКИЙ ОПРОВЕРГ СООБЩЕНИЯ О ТАРИФАХ",
+     "ВОПРОС ОТЛОЖЕН",
+     "ТЕМА ВЕРНУЛАСЬ"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Тема тарифов вернулась",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "soobshcheniya": [
+    "ЗЕЛЕНСКИЙ ОПРОВЕРГ СООБЩЕНИЯ О ТАРИФАХ",
+    "ВОПРОС ОТЛОЖЕН",
+    "ТЕМА ВЕРНУЛАСЬ"
+   ]
+  }
+ },
+ {
+  "scene": 40,
+  "view": "doc",
+  "dur": 10.4,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Можно долго спорить, кто что обещал и какой именно срок имел в виду. Но для обычного человека результат очень простой — платёжка",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "zal_slova",
+  "dur": 11.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.1,
+   "sheets": [],
+   "text": "Геополитика в одной платёжке",
+   "na_polu": "МВФ. КРЕДИТОРЫ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Власть не хочет терять контроль",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "role": "аналитик"
+   }
+  },
+  "kwargs": {
+   "text": "Власть не хочет терять контроль",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "role": "аналитик"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "poster.poster",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "политический прогноз",
+   "title": "ЕСЛИ ВОЙНУ НЕ ОСТАНОВИТЬ",
+   "hero_photo": "cards/photo/card_043.jpg",
+   "facts": [
+    {
+     "label": "прогноз",
+     "value": "территория без функций государства"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 45,
+  "view": "zal_g01",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.7,
+   "sheets": [],
+   "text": "Разговор о счёте",
+   "value": "100 МЛРД €",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "zal_g18",
+  "dur": 10.4,
+  "anim": 10.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.4,
+   "sheets": [],
+   "text": "Сто миллиардов евро Украине",
+   "value": "100 МЛРД €",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 47,
+  "view": "charts.cartogram",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Евросоюз"
+   ],
+   "title": "СТО МИЛЛИАРДОВ — ЭТО СКОЛЬКО",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "quote",
+  "dur": 11.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Сколько это в попугаях? В евро обычный мозг уже отказывается считать",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 11.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Чехия платит, Бабиш против",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.7,
+    "pary": [
+     "БЮДЖЕТ ЕС>ЧЕХИЯ",
+     "БАБИШ>ОБЩИЙ БЮДЖЕТ"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Чехия платит, Бабиш против",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.7,
+   "pary": [
+    "БЮДЖЕТ ЕС>ЧЕХИЯ",
+    "БАБИШ>ОБЩИЙ БЮДЖЕТ"
+   ]
+  }
+ },
+ {
+  "scene": 56,
+  "view": "zal",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Ле Пен не хочет Украину в ЕС",
+   "words": [
+    "ФРАНЦИЯ"
+   ],
+   "sheets": [
+    "доля кредита",
+    "второй тур выборов"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 11.4,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "cinematic.depth_of_field",
+  "dur": 10.4,
+  "anim": 10.4,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_058.jpg",
+   "title": "СОРОК ПЯТЬ МИЛЛИАРДОВ",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 59,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.1,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 11.1,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Высокая геополитика на первом этаже",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.1,
+    "repliki_": [
+     "ПЕНСИЯ|или Украина?",
+     "НАЛОГ|или Украина?",
+     "УЧИТЕЛЬ|или Украина?",
+     "ЗАРПЛАТА|или Украина?"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Высокая геополитика на первом этаже",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.1,
+   "repliki_": [
+    "ПЕНСИЯ|или Украина?",
+    "НАЛОГ|или Украина?",
+    "УЧИТЕЛЬ|или Украина?",
+    "ЗАРПЛАТА|или Украина?"
+   ]
+  }
+ },
+ {
+  "scene": 64,
+  "view": "zal_efir",
+  "dur": 10.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.4,
+   "sheets": [],
+   "text": "Граница обозначена",
+   "say": "Существующие обязательства Франция выполнит. Новых финансовых пакетов ждать не стоит",
+   "author": "Марин Ле Пен",
+   "role": "лидер партии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "charts.radar",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "axes": [
+    "покупательная способность",
+    "миграция",
+    "война на Украине"
+   ],
+   "series": [
+    {
+     "label": "МОТИВЫ ФРАНЦУЗСКИХ ИЗБИРАТЕЛЕЙ",
+     "values": [
+      59.0,
+      36.0,
+      12.0
+     ]
+    }
+   ],
+   "title": "МОТИВЫ ФРАНЦУЗСКИХ ИЗБИРАТЕЛЕЙ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 67,
+  "view": "zal_g48",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.6,
+   "sheets": [],
+   "text": "Расходы и кошелёк избирателя",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "charts.cartogram",
+  "dur": 11.7,
+  "anim": 11.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Бавария"
+   ],
+   "title": "ГЕРМАНИЯ ПРОТИВ ПОМОЩИ",
+   "level": "region",
+   "admin": "Германия",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.6,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 12.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Ставка на выборы — риск",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.6,
+    "role": "глава правительства"
+   }
+  },
+  "kwargs": {
+   "text": "Ставка на выборы — риск",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.6,
+   "role": "глава правительства"
+  }
+ },
+ {
+  "scene": 74,
+  "view": "charts.cartogram",
+  "dur": 11.4,
+  "anim": 11.4,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "США"
+   ],
+   "title": "ВАШИНГТОН: ПОХОЖАЯ ИСТОРИЯ",
+   "accent": [
+    "США"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 75,
+  "view": "tape",
+  "dur": 11.7,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Демократы обсуждают военный пакет Украине примерно на пятнадцать миллиардов долларов",
+   "accent": "пятнадцать миллиардов долларов",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 78,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 11.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Берлин: своя политическая драка",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.8,
+    "region": "Германия"
+   }
+  },
+  "kwargs": {
+   "text": "Берлин: своя политическая драка",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.8,
+   "region": "Германия"
+  }
+ },
+ {
+  "scene": 79,
+  "view": "charts.waterfall",
+  "dur": 12.6,
+  "anim": 12.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "НАПЕЧАТАТЬ",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "ЗАНЯТЬ",
+     "value": 1.0
+    },
+    {
+     "label": "ПЕРЕКИНУТЬ ИЗ СТАТЬИ",
+     "value": 1.0
+    },
+    {
+     "label": "НАЗВАТЬ ФОНДОМ",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "title": "ИЗ ЧЕГО СКЛАДЫВАЮТСЯ ДЕНЬГИ",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 80,
+  "view": "dok_word",
+  "dur": 11.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "ЧЕЛОВЕКА ТАК НЕ ПЕРЕИМЕНУЕШЬ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 81,
+  "view": "pull",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "До этого будущего ещё должен кто-то дойти",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
