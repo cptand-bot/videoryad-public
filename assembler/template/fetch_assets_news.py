@@ -1435,20 +1435,38 @@ def _queries_path(images_dir):
     return os.path.join(images_dir, "." + mn.replace("manifest", "queries"))
 
 
+def _sibling_images_dir(images_dir):
+    """Папка images/ в ПАРЕ проекта — обычная <-> <проект>-cloud
+    (26.11.2026, живой случай usuario-9b/usuario-1f: .queries.json пишется
+    в одну папку, а повторный фетч идёт по другой — сито «запрос
+    изменился» слепнет, старый/забаненный кадр остаётся. Тот же приём,
+    что уже в zamorozka.py:_метка_просмотра() и obyazatelno.py:_пары_папок()."""
+    родитель = os.path.abspath(os.path.join(images_dir, ".."))
+    хвост = os.path.basename(images_dir)
+    if родитель.endswith("-cloud"):
+        return os.path.join(родитель[:-len("-cloud")], хвост)
+    return os.path.join(родитель + "-cloud", хвост)
+
+
 def _load_queries(images_dir):
     data = {}
-    try:
-        for name in sorted(os.listdir(images_dir)):
-            if name.startswith(".queries") and name.endswith(".json"):
-                try:
-                    with open(os.path.join(images_dir, name), encoding="utf-8") as f:
-                        part = json.load(f)
-                    if isinstance(part, dict):
-                        data.update(part)
-                except (OSError, ValueError):
-                    pass
-    except OSError:
-        pass
+    for папка in (images_dir, _sibling_images_dir(images_dir)):
+        try:
+            for name in sorted(os.listdir(папка)):
+                if name.startswith(".queries") and name.endswith(".json"):
+                    try:
+                        with open(os.path.join(папка, name), encoding="utf-8") as f:
+                            part = json.load(f)
+                        if isinstance(part, dict):
+                            # СВОЯ ПАПКА СИЛЬНЕЕ: если в обеих есть запись на
+                            # тот же sid, своя (images_dir) не перезаписывается
+                            # парной — она ближе к текущему вызову.
+                            for k, v in part.items():
+                                data.setdefault(k, v)
+                    except (OSError, ValueError):
+                        pass
+        except OSError:
+            pass
     return data
 
 
