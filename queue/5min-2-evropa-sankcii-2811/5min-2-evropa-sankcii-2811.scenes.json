@@ -1,0 +1,665 @@
+{
+ "channel": "5 МИНУТ",
+ "scenes": [
+  {
+   "id": 1,
+   "start_sec": 0.0,
+   "duration_sec": 8.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/МОСКОВСКИЙ-КРЕМЛЬ-СО"
+  },
+  {
+   "id": 2,
+   "start_sec": 8.2,
+   "duration_sec": 12.7,
+   "text": "",
+   "source": "card:prolog",
+   "source_query": "карточка «prolog» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 3,
+   "start_sec": 20.9,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:bars",
+   "source_query": "карточка «bars» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bars",
+    "код": "A4",
+    "watermark": "5 МИНУТ",
+    "anim": 10.5
+   }
+  },
+  {
+   "id": 4,
+   "start_sec": 31.4,
+   "duration_sec": 12.5,
+   "text": "",
+   "source": "card:zal_g18",
+   "source_query": "карточка «zal_g18» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 5,
+   "start_sec": 43.9,
+   "duration_sec": 5.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗДАНИЕ-БЕРЛАЙМОН-БРЮССЕЛЕ",
+   "fx": "curl"
+  },
+  {
+   "id": 6,
+   "start_sec": 49.7,
+   "duration_sec": 15.8,
+   "text": "",
+   "source": "card:tribuna",
+   "source_query": "карточка «tribuna» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 7,
+   "start_sec": 65.5,
+   "duration_sec": 7.3,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-УКРАИНА/КАБИНЕТ-МИНИСТРОВ-УКРАИНЫ",
+   "fx": "filmwin"
+  },
+  {
+   "id": 8,
+   "start_sec": 72.8,
+   "duration_sec": 15.1,
+   "text": "",
+   "source": "card:duel",
+   "source_query": "карточка «duel» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 9,
+   "start_sec": 87.9,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ПЕРСОНЫ/МЕРЦ",
+   "fx": "player"
+  },
+  {
+   "id": 10,
+   "start_sec": 96.9,
+   "duration_sec": 13.8,
+   "text": "",
+   "source": "card:zal_pol",
+   "source_query": "карточка «zal_pol» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 11,
+   "start_sec": 110.7,
+   "duration_sec": 13.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/БУНДЕСТАГ-БЕРЛИНЕ-СТЕКЛЯННЫЙ",
+   "fx": "slides"
+  },
+  {
+   "id": 12,
+   "start_sec": 124.5,
+   "duration_sec": 11.0,
+   "text": "",
+   "source": "web_search",
+   "source_query": "депутат АдГ Маркус Фронмайер в Бундестаге 2026"
+  },
+  {
+   "id": 13,
+   "start_sec": 135.5,
+   "duration_sec": 14.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/БУНДЕСВЕР",
+   "fx": "stamps"
+  },
+  {
+   "id": 14,
+   "start_sec": 149.6,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:split",
+   "source_query": "карточка «split» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 15,
+   "start_sec": 161.6,
+   "duration_sec": 12.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЕДОМСТВА/НАТО",
+   "fx": "torn"
+  },
+  {
+   "id": 16,
+   "start_sec": 174.4,
+   "duration_sec": 11.9,
+   "text": "",
+   "source": "card:karta_brifing",
+   "source_query": "карточка «karta_brifing» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 17,
+   "start_sec": 186.3,
+   "duration_sec": 7.1,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/ЦЕХ-НЕМЕЦКОГО-ЗАВОДА"
+  },
+  {
+   "id": 18,
+   "start_sec": 193.4,
+   "duration_sec": 16.7,
+   "text": "",
+   "source": "card:forces",
+   "source_query": "карточка «forces» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "forces",
+    "lines": [
+     "хочет знать конечную точку",
+     "находит новые десятки миллиардов каждый год",
+     "работает без ответа"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 16.7
+   }
+  },
+  {
+   "id": 19,
+   "start_sec": 210.1,
+   "duration_sec": 10.4,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-ЕВРОПА-НАТО/ЗАЛ-ЕВРОПАРЛАМЕНТА-СТРАСБУРГЕ"
+  },
+  {
+   "id": 20,
+   "start_sec": 220.5,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "card:repliki",
+   "source_query": "карточка «repliki» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 21,
+   "start_sec": 230.2,
+   "duration_sec": 6.0,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ЛОГИСТИКА-ЕВРОПА/КОНТЕЙНЕРНЫЙ-ТЕРМИНАЛ-ПОРТА"
+  },
+  {
+   "id": 22,
+   "start_sec": 236.2,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:zal_shkala",
+   "source_query": "карточка «zal_shkala» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 23,
+   "start_sec": 248.2,
+   "duration_sec": 7.8,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/ГАЗОВАЯ-КОМПРЕССОРНАЯ-СТАНЦИЯ"
+  },
+  {
+   "id": 24,
+   "start_sec": 256.0,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "card:zal_schetchik",
+   "source_query": "карточка «zal_schetchik» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 25,
+   "start_sec": 266.6,
+   "duration_sec": 16.2,
+   "text": "",
+   "source": "local_library",
+   "source_query": "БАЗА/ВЛАСТЬ-РОССИЯ/НЕФТЕПЕРЕРАБАТЫВАЮЩИЙ-ЗАВОД-ФАКЕЛ"
+  },
+  {
+   "id": 26,
+   "start_sec": 282.8,
+   "duration_sec": 5.6,
+   "text": "",
+   "source": "card:zal_makety",
+   "source_query": "карточка «zal_makety» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 27,
+   "start_sec": 288.4,
+   "duration_sec": 12.9,
+   "text": "",
+   "source": "card:bubbles",
+   "source_query": "карточка «bubbles» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 28,
+   "start_sec": 301.3,
+   "duration_sec": 9.0,
+   "text": "",
+   "source": "card:doc",
+   "source_query": "карточка «doc» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 29,
+   "start_sec": 310.3,
+   "duration_sec": 8.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "российские спортсмены под нейтральным флагом международные соревнования"
+  },
+  {
+   "id": 30,
+   "start_sec": 318.5,
+   "duration_sec": 8.4,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "запрет спонсорства спортивные федерации Европа 2026"
+  },
+  {
+   "id": 31,
+   "start_sec": 326.9,
+   "duration_sec": 14.2,
+   "text": "",
+   "source": "card:zal_efir",
+   "source_query": "карточка «zal_efir» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 32,
+   "start_sec": 341.1,
+   "duration_sec": 11.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Урсула фон дер Ляйен выступление Еврокомиссия 2026"
+  },
+  {
+   "id": 33,
+   "start_sec": 352.4,
+   "duration_sec": 8.8,
+   "text": "",
+   "source": "card:zal",
+   "source_query": "карточка «zal» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 34,
+   "start_sec": 361.2,
+   "duration_sec": 14.3,
+   "text": "",
+   "source": "card:globus_map",
+   "source_query": "карточка «globus_map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 35,
+   "start_sec": 375.5,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:timeline",
+   "source_query": "карточка «timeline» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "timeline",
+    "title": "МОЛДАВИЯ И САНКЦИИ",
+    "lines": [
+     "оценят экономический эффект",
+     "определят, какие ограничения вводить",
+     "до конца января"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 10.5
+   }
+  },
+  {
+   "id": 36,
+   "start_sec": 386.0,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "card:marker_serif",
+   "source_query": "карточка «marker_serif» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 37,
+   "start_sec": 396.5,
+   "duration_sec": 10.7,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Клаудио Глава итальянской энергетической компании"
+  },
+  {
+   "id": 38,
+   "start_sec": 407.2,
+   "duration_sec": 9.8,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Катар СПГ танкер поставки газа 2026"
+  },
+  {
+   "id": 39,
+   "start_sec": 417.0,
+   "duration_sec": 11.8,
+   "text": "",
+   "source": "card:zal_g44",
+   "source_query": "карточка «zal_g44» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 40,
+   "start_sec": 428.8,
+   "duration_sec": 8.8,
+   "text": "",
+   "source": "card:pie",
+   "source_query": "карточка «pie» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 41,
+   "start_sec": 437.6,
+   "duration_sec": 15.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Игналинская атомная электростанция Литва"
+  },
+  {
+   "id": 42,
+   "start_sec": 452.7,
+   "duration_sec": 7.7,
+   "text": "",
+   "source": "card:zal_ekran",
+   "source_query": "карточка «zal_ekran» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 43,
+   "start_sec": 460.4,
+   "duration_sec": 8.6,
+   "text": "",
+   "source": "card:relsy",
+   "source_query": "карточка «relsy» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 44,
+   "start_sec": 469.0,
+   "duration_sec": 13.1,
+   "text": "",
+   "source": "card:network",
+   "source_query": "карточка «network» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 45,
+   "start_sec": 482.1,
+   "duration_sec": 16.3,
+   "text": "",
+   "source": "card:strike",
+   "source_query": "карточка «strike» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 46,
+   "start_sec": 498.4,
+   "duration_sec": 7.9,
+   "text": "",
+   "source": "card:zal_g01",
+   "source_query": "карточка «zal_g01» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 47,
+   "start_sec": 506.3,
+   "duration_sec": 10.5,
+   "text": "",
+   "source": "web_search",
+   "source_query": "склад Wildberries после удара 2026"
+  },
+  {
+   "id": 48,
+   "start_sec": 516.8,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "web_search",
+   "source_query": "склад маркетплейса после удара Киев 2026"
+  },
+  {
+   "id": 49,
+   "start_sec": 529.2,
+   "duration_sec": 8.9,
+   "text": "",
+   "source": "web_search",
+   "source_query": "министр экономики Украины Александр Кравченко интервью 2026"
+  },
+  {
+   "id": 50,
+   "start_sec": 538.1,
+   "duration_sec": 12.4,
+   "text": "",
+   "source": "card:zal_slova",
+   "source_query": "карточка «zal_slova» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 51,
+   "start_sec": 550.5,
+   "duration_sec": 9.7,
+   "text": "",
+   "source": "card:map",
+   "source_query": "карточка «map» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 52,
+   "start_sec": 560.2,
+   "duration_sec": 10.8,
+   "text": "",
+   "source": "web_search",
+   "source_query": "танкер после кибератаки в море 2026"
+  },
+  {
+   "id": 53,
+   "start_sec": 571.0,
+   "duration_sec": 7.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "экипаж танкера угроза в море 2026"
+  },
+  {
+   "id": 54,
+   "start_sec": 578.3,
+   "duration_sec": 17.4,
+   "text": "",
+   "source": "web_search",
+   "source_query": "газовоз Vivit Africa у побережья Техаса 2026"
+  },
+  {
+   "id": 55,
+   "start_sec": 595.7,
+   "duration_sec": 14.7,
+   "text": "",
+   "source": "web_search",
+   "source_query": "танкер теневого флота после атаки 2026"
+  },
+  {
+   "id": 56,
+   "start_sec": 610.4,
+   "duration_sec": 6.7,
+   "text": "",
+   "source": "card:quote",
+   "source_query": "карточка «quote» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 57,
+   "start_sec": 617.1,
+   "duration_sec": 12.0,
+   "text": "",
+   "source": "card:slope",
+   "source_query": "карточка «slope» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 58,
+   "start_sec": 629.1,
+   "duration_sec": 12.3,
+   "text": "",
+   "source": "card:mehanizm",
+   "source_query": "карточка «mehanizm» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 59,
+   "start_sec": 641.4,
+   "duration_sec": 8.3,
+   "text": "",
+   "source": "web_search",
+   "source_query": "грузовое судно скотовоз в порту 2026"
+  },
+  {
+   "id": 60,
+   "start_sec": 649.7,
+   "duration_sec": 15.9,
+   "text": "",
+   "source": "card:prohod",
+   "source_query": "карточка «prohod» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 61,
+   "start_sec": 665.6,
+   "duration_sec": 11.1,
+   "text": "",
+   "source": "card:waterfall",
+   "source_query": "карточка «waterfall» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 62,
+   "start_sec": 676.7,
+   "duration_sec": 10.55,
+   "text": "",
+   "source": "web_search",
+   "source_query": "танкер грузовое судно в море 2026"
+  },
+  {
+   "id": 63,
+   "start_sec": 687.25,
+   "duration_sec": 10.55,
+   "text": "",
+   "source": "card:zal_g48",
+   "source_query": "карточка «zal_g48» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 64,
+   "start_sec": 697.8,
+   "duration_sec": 10.1,
+   "text": "",
+   "source": "direct_url",
+   "source_query": "https://cdn4.telesco.pe/file/Nerwe3XAE78oNWtU5u2Y_1JK5O6dhk7N95FftdSwiSnZJcLCA1hSoxSyUdxTUEzo8k7SsAHzLCtWnm9RgQ_uN1LNjQqLiUkRkF0m3Av7i0TwrTJ0v4YRYFtdmZ3Yi8g1jdjEv9Up5VA6nl8fINjSzjVs4I6hSqGY9OZw4ht8Y28LGEFCP0z01OtdzELAzobx_CbRFSSEnTgXE0uyWX5iSDYWZMi2utXXxmuxh2BerogQEHCav6N75LOO8b08BeQHLjt3SinKI-2BjirAa4xhtjxEKW3x76Vs8ZmtJbdFoYgpnOFO2HqlEvIPm-y6Dnhj4Gv2hXZwjtaxtpqCPFUORA.jpg"
+  },
+  {
+   "id": 65,
+   "start_sec": 707.9,
+   "duration_sec": 11.1,
+   "text": "",
+   "source": "card:torn",
+   "source_query": "карточка «torn» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 66,
+   "start_sec": 719.0,
+   "duration_sec": 10.3,
+   "text": "",
+   "source": "card:map_dist",
+   "source_query": "карточка «map_dist» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 67,
+   "start_sec": 729.3,
+   "duration_sec": 17.3,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "оппозиция Румыния протест 2026"
+  },
+  {
+   "id": 68,
+   "start_sec": 746.6,
+   "duration_sec": 5.0,
+   "text": "",
+   "source": "card:pull",
+   "source_query": "карточка «pull» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 69,
+   "start_sec": 751.6,
+   "duration_sec": 11.1,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Кэлин Джорджеску суд Румыния"
+  },
+  {
+   "id": 70,
+   "start_sec": 762.7,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "card:kreslo",
+   "source_query": "карточка «kreslo» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 71,
+   "start_sec": 774.2,
+   "duration_sec": 7.2,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "Пабло Эрнандес де Кос ЕЦБ"
+  },
+  {
+   "id": 72,
+   "start_sec": 781.4,
+   "duration_sec": 10.6,
+   "text": "",
+   "source": "press_photo",
+   "source_query": "правые партии Европа выборы 2026"
+  },
+  {
+   "id": 73,
+   "start_sec": 792.0,
+   "duration_sec": 16.7,
+   "text": "",
+   "source": "card:zal_kub",
+   "source_query": "карточка «zal_kub» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 74,
+   "start_sec": 808.7,
+   "duration_sec": 10.0,
+   "text": "",
+   "source": "card:dok_title",
+   "source_query": "карточка «dok_title» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 75,
+   "start_sec": 818.7,
+   "duration_sec": 11.5,
+   "text": "",
+   "source": "card:lenta",
+   "source_query": "карточка «lenta» — кадр рисуется в облаке, фетч не нужен"
+  },
+  {
+   "id": 76,
+   "start_sec": 830.2,
+   "duration_sec": 9.5,
+   "text": "",
+   "source": "card:bullets",
+   "source_query": "карточка «bullets» — кадр рисуется в облаке, фетч за сценой не идёт",
+   "card": {
+    "kind": "bullets",
+    "title": "ДО И ПОСЛЕ ВЫБОРОВ",
+    "lines": [
+     "Избиратель ещё не проголосовал",
+     "Влияние уже хотят ограничить",
+     "Медведь за пять лет привык"
+    ],
+    "watermark": "5 МИНУТ",
+    "anim": 9.5
+   }
+  },
+  {
+   "id": 77,
+   "start_sec": 839.7,
+   "duration_sec": 6.46,
+   "text": "",
+   "source": "card:dok_word",
+   "source_query": "карточка «dok_word» — кадр рисуется в облаке, фетч не нужен"
+  }
+ ]
+}
