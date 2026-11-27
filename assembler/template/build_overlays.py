@@ -1165,10 +1165,26 @@ def ov_norm(svobodnyh):
 
 
 def _scenes_file(proj):
-    """Раскадровка проекта. `overlays_fetch`/`maps_fetch` — НЕ она."""
+    """Раскадровка проекта. `overlays_fetch`/`maps_fetch` — НЕ она.
+
+    ПРИНЯТЫЙ ФАЙЛ — ПЕРВЫЙ КАНДИДАТ, А НЕ АЛФАВИТ (27.11.2026, улов
+    `usuario-c1`: тот же класс мины, что в `faza.sh` 10.11 — `codex.scenes.json`
+    (черновик агента) стоял рядом с принятым `<проект>.scenes.json`, и
+    голый `sorted(glob(...))[0]` брал черновик, потому что «c» < «p»
+    алфавитно. Черновик без её надписей молча подменял принятый файл —
+    полчаса работы по всплывашкам пропадало без единой ошибки. Сначала
+    ищем файл по имени ПАПКИ проекта (как и faza.sh), и только если его
+    нет — любой другой *.scenes.json, но сырые файлы агента не берём.
+    """
+    base = os.path.join(proj, os.path.basename(os.path.normpath(proj))
+                         + ".scenes.json")
+    if os.path.isfile(base):
+        return base
     c = [p for p in sorted(glob.glob(os.path.join(proj, "*.scenes.json")))
          if "overlays_fetch" not in os.path.basename(p)
-         and "maps_fetch" not in os.path.basename(p)]
+         and "maps_fetch" not in os.path.basename(p)
+         and not os.path.basename(p).startswith("codex")
+         and "iz_oblaka" not in os.path.basename(p)]
     return c[0] if c else ""
 
 

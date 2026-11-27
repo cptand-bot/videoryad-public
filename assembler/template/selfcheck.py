@@ -1722,7 +1722,7 @@ pass
 try:
     _sg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "strana_gate.py")
     _pd2 = os.path.dirname(os.path.abspath(scenes_path)) or "."
-    _r2 = _sp.run([sys.executable, _sg, "check", _pd2], capture_output=True, text=True)
+    _r2 = subprocess.run([sys.executable, _sg, "check", _pd2], capture_output=True, text=True)
     if _r2.returncode != 0:
         FAIL.append((_r2.stderr or _r2.stdout or "СТРАНА/ПЕРСОНА: проверка не пройдена")
                     .strip().replace("\n", " · ")[:400])
