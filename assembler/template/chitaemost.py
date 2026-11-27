@@ -51,6 +51,11 @@ TEKSTOVYE = {
     "kalendar", "kartoteka", "oscillo", "pismo", "schyot_palochek",
     "liniya_zhizni", "pereskaz", "otschet_dney", "shtamp_lestnica",
     "sortirovka", "kompas", "chertezh",
+    # ВОСЕМЬ КАРТОЧЕК ИЗ «ОЛЬГИ» (27.11.2026). Та же причина: фон студии
+    # просторный и тёмный, сообщение несёт дискретный HUD (число/строки/
+    # полосы), а не заливка кадра.
+    "otbivka", "zastavka", "stroki_faktov", "krupnoe_chislo",
+    "schetchik_let", "cheklist", "polosy",
 }
 
 # ПАВИЛЬОНЫ И ИЗОБРАЗИТЕЛЬНЫЕ ВИДЫ: содержание несёт сама картинка, подписи
@@ -75,7 +80,11 @@ PAVILONY = {
 # здоровую карточку от пустой НИ В ОДНУ сторону, поэтому осевые диаграммы
 # судятся глазами, как карты.
 KARTY = {"map", "map_dist", "map_regions", "bubbles", "cartogram",
-         "globus_map", "relief", "radar"}
+         "globus_map", "relief", "radar",
+         # karta_koltso — O21 «Ольги» (27.11.2026): та же причина, тёмная
+         # контурная карта с мелкоконтрастной подсветкой страны, метрикой
+         # не судится (живой случай ниже).
+         "karta_koltso"}
 PORG_KONTRAST_KARTA = 0.0015
 
 

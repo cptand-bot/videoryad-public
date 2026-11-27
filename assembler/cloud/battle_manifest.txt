@@ -116,6 +116,7 @@ template/fonts/Caveat-Bold.ttf
 template/fonts/Montserrat-Bold.ttf
 template/fonts/OFL-arimo-tinos-oswald-montserrat-robotocondensed.txt
 template/fonts/Oswald-Bold.ttf
+template/fonts/Oswald-VF.ttf
 template/fonts/README.md
 template/fonts/RobotoCondensed-Bold.ttf
 template/fonts/Tinos-Bold.ttf

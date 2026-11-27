@@ -197,16 +197,24 @@ CARDS_CLOUD = os.path.join(SKILL, "fullcycle", "cards_cloud.py")
     # карты; это выбор, а не вывод.
     "kalendar":        ("accent",),
     "kartoteka":       ("accent",),
-    "oscillo":         ("accent",),
+    # oscillo/schyot_palochek/liniya_zhizni ОТКЛОНЕНЫ его отбором 27.11.2026.
     "pismo":           ("text",),
-    "schyot_palochek": ("accent", "value"),
-    "liniya_zhizni":   ("accent", "value"),
     "pereskaz":        ("items",),
     "otschet_dney":    ("value",),
     "shtamp_lestnica": ("items",),
     "sortirovka":      ("left", "right", "items"),
     "kompas":          ("value",),
     "chertezh":        ("accent",),
+    # ВОСЕМЬ КАРТОЧЕК ИЗ «ОЛЬГИ» (27.11.2026). Та же причина — метафора/
+    # фокус карточки выбор вкладки, не вывод из текста сцены.
+    "otbivka":         ("accent",),
+    "zastavka":        (),
+    "stroki_faktov":   ("items",),
+    "krupnoe_chislo":  ("value",),
+    "schetchik_let":   ("value",),
+    "cheklist":        ("items",),
+    "karta_koltso":    ("accent",),
+    "polosy":          ("items",),
 }
 
 # Служебные слова в кадр не ставим: «ПОТОМУ», «КОТОРЫЙ» объёмной строкой на
