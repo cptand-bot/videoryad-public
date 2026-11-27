@@ -112,6 +112,7 @@ template/geo_opyt.py
 template/folder_sheet.py
 template/fonts/ArialBlack.ttf
 template/fonts/Arimo-Bold.ttf
+template/fonts/Caveat-Bold.ttf
 template/fonts/Montserrat-Bold.ttf
 template/fonts/OFL-arimo-tinos-oswald-montserrat-robotocondensed.txt
 template/fonts/Oswald-Bold.ttf

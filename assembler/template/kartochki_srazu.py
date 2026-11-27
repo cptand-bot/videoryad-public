@@ -191,6 +191,22 @@ CARDS_CLOUD = os.path.join(SKILL, "fullcycle", "cards_cloud.py")
     "zal_schetchik": ("value",),
     "zal_efir":      ("say", "author"),
     "zal_ekran":     ("say", "author"),
+    # ДВЕНАДЦАТЬ КАРТОЧЕК ИЗ «ВЕРИЦЫ» (27.11.2026). Ключевые данные ставит
+    # вкладка руками — метафору (календарь/картотека/компас…) под конкретную
+    # сцену текст не подсказывает однозначно, как подсказывают страны для
+    # карты; это выбор, а не вывод.
+    "kalendar":        ("accent",),
+    "kartoteka":       ("accent",),
+    "oscillo":         ("accent",),
+    "pismo":           ("text",),
+    "schyot_palochek": ("accent", "value"),
+    "liniya_zhizni":   ("accent", "value"),
+    "pereskaz":        ("items",),
+    "otschet_dney":    ("value",),
+    "shtamp_lestnica": ("items",),
+    "sortirovka":      ("left", "right", "items"),
+    "kompas":          ("value",),
+    "chertezh":        ("accent",),
 }
 
 # Служебные слова в кадр не ставим: «ПОТОМУ», «КОТОРЫЙ» объёмной строкой на
