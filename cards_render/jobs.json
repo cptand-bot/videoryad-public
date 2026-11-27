@@ -1,0 +1,1041 @@
+[
+ {
+  "scene": 2,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 12.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Время привыкнуть к пакету?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.7,
+    "kick": "Прага"
+   }
+  },
+  "kwargs": {
+   "text": "Время привыкнуть к пакету?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.7,
+   "kick": "Прага"
+  }
+ },
+ {
+  "scene": 3,
+  "view": "bars",
+  "dur": 10.5,
+  "anim": 10.5,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {},
+  "mode": "cli",
+  "script": "build_chart_bars.py",
+  "cfg": {
+   "title": "",
+   "caption": "",
+   "seconds": 10.5,
+   "bars": [
+    {
+     "label": "С НАЧАЛА КОНФЛИКТА",
+     "value": 1.0,
+     "color": "EABD23"
+    },
+    {
+     "label": "НА 2026-2027 ГОДЫ",
+     "value": 0.17,
+     "color": "B92526"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 4,
+  "view": "zal_g18",
+  "dur": 12.5,
+  "anim": 12.5,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.5,
+   "sheets": [],
+   "text": "Бабиш: а конечная цель где?",
+   "value": "70 МЛРД",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 6,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 15.8,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 15.8,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Финансировать Украину нужно вне общего бюджета",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 15.8,
+    "role": "премьер Чехии"
+   }
+  },
+  "kwargs": {
+   "text": "Финансировать Украину нужно вне общего бюджета",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 15.8,
+   "role": "премьер Чехии"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "duel",
+  "dur": 15.1,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "что такое помощь Украине и сколько эта помощь стоит",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Если вам интересны не только сами новости",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "zal_pol",
+  "dur": 13.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 13.8,
+   "sheets": [],
+   "text": "Три кризиса сразу",
+   "na_polu": "ГЕРМАНИЯ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "split",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Эта новая сила стала возможна благодаря новым долгам",
+   "photo": "cards/photo/card_014.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "karta_brifing",
+  "dur": 11.9,
+  "anim": 11.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Поэтому помощь Киеву для Германии является ещё и защитой самой Германии",
+   "accent": "Киеву",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 18,
+  "view": "forces",
+  "dur": 16.7,
+  "anim": 16.7,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "rows": [
+    {
+     "who": "Бабиш",
+     "want": "хочет знать конечную точку"
+    },
+    {
+     "who": "ЕС",
+     "want": "находит новые десятки миллиардов каждый год"
+    },
+    {
+     "who": "Схема",
+     "want": "работает без ответа"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 20,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.7,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 9.7,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Задача — свалить медведя, логика проста",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.7,
+    "repliki_": [
+     "ЦЕЛЬ|Свалить медведя",
+     "ЛОГИКА|Навалиться сразу всем",
+     "РЕАЛЬНОСТЬ|Растянули на пять лет",
+     "ВОПРОС|Чего ждали?"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Задача — свалить медведя, логика проста",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.7,
+   "repliki_": [
+    "ЦЕЛЬ|Свалить медведя",
+    "ЛОГИКА|Навалиться сразу всем",
+    "РЕАЛЬНОСТЬ|Растянули на пять лет",
+    "ВОПРОС|Чего ждали?"
+   ]
+  }
+ },
+ {
+  "scene": 22,
+  "view": "zal_shkala",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.0,
+   "sheets": [],
+   "text": "Занятная конструкция",
+   "value": "22",
+   "value_sub": "пакета санкций подряд",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_schetchik",
+  "dur": 10.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.6,
+   "sheets": [],
+   "text": "Банков хотят отключить от СВИФТ",
+   "value": "60",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "zal_makety",
+  "dur": 5.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 5.6,
+   "sheets": [],
+   "text": "Ограничения входят и в электроэнергетику",
+   "makety": [
+    "лэп=ЭНЕРГОСЕТИ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 27,
+  "view": "charts.cartogram",
+  "dur": 12.9,
+  "anim": 12.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия"
+   ],
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 28,
+  "view": "doc",
+  "dur": 9.0,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Гражданам Евросоюза хотят запретить занимать руководящие должности в российских компаниях. Бывшим российским военным хотят закрыть въезд в Евросоюз",
+   "mark": "запрет",
+   "stamp": "ЕС",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "zal_efir",
+  "dur": 14.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 14.2,
+   "sheets": [],
+   "text": "Технологии были только началом",
+   "say": "Спортивные соревнования не должны становиться площадкой для пропаганды",
+   "author": "Урсула фон дер Ляйен",
+   "role": "глава Еврокомиссии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "zal",
+  "dur": 8.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "В чём логика двадцати двух пакетов?",
+   "words": [
+    "САНКЦИИ"
+   ],
+   "sheets": [
+    "Первый пакет",
+    "Двадцать второй пакет"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 8.8,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 14.3,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 14.3,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "План есть, цифр пока нет",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 14.3,
+    "region": "Молдавия"
+   }
+  },
+  "kwargs": {
+   "text": "План есть, цифр пока нет",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 14.3,
+   "region": "Молдавия"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "timeline",
+  "dur": 10.5,
+  "anim": 10.5,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "title": "МОЛДАВИЯ И САНКЦИИ",
+   "events": [
+    {
+     "date": "Сначала",
+     "text": "оценят последствия для своей экономики"
+    },
+    {
+     "date": "Потом",
+     "text": "определят, какие ограничения вводить"
+    },
+    {
+     "date": "Срок",
+     "text": "до конца января"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 36,
+  "view": "marker_serif",
+  "dur": 10.5,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Потом посчитаем, сколько это будет стоить",
+   "accent": "посчитаем",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "zal_g44",
+  "dur": 11.8,
+  "anim": 11.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 11.8,
+   "sheets": [],
+   "text": "Это исчезает каждый год",
+   "value": "20 МЛРД М³",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "charts.pie",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "segments": [
+    {
+     "label": "А полной замены им пока нет",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Дескальци одновременно",
+     "value": 33.333333333333336
+    },
+    {
+     "label": "Очень европейская",
+     "value": 33.333333333333336
+    }
+   ],
+   "title": "А полной замены им пока нет. Дескальци",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "zal_ekran",
+  "dur": 7.7,
+  "anim": 7.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.7,
+   "sheets": [
+    "ЭНЕРГЕТИКА ЛИТВЫ",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Два десятилетия прошли",
+   "say": "Пора возвращаться к атомной энергетике",
+   "author": "Лукас Савицкас",
+   "role": "министр энергетики Литвы",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 43,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.6,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 8.6,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Нужна базовая выработка электроэнергии",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.6,
+    "sobytiya": [
+     "Рассматривают современные",
+     "Нужна базовая выработка",
+     "Предложение хотят внести в"
+    ],
+    "рол_номер": 1
+   }
+  },
+  "kwargs": {
+   "text": "Нужна базовая выработка электроэнергии",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.6,
+   "sobytiya": [
+    "Рассматривают современные",
+    "Нужна базовая выработка",
+    "Предложение хотят внести в"
+   ],
+   "рол_номер": 1
+  }
+ },
+ {
+  "scene": 44,
+  "view": "charts.network",
+  "dur": 13.1,
+  "anim": 13.1,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Площадка",
+     "label": "Площадка",
+     "weight": 1.0
+    },
+    {
+     "id": "Геологические",
+     "label": "Геологические",
+     "weight": 2.0
+    },
+    {
+     "id": "Специалисты",
+     "label": "Специалисты",
+     "weight": 2.0
+    },
+    {
+     "id": "Законы",
+     "label": "Законы",
+     "weight": 2.0
+    },
+    {
+     "id": "Поддержка",
+     "label": "Поддержка",
+     "weight": 2.0
+    },
+    {
+     "id": "Остаётся",
+     "label": "Остаётся",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Площадка",
+     "to": "Геологические",
+     "weight": 1.0
+    },
+    {
+     "from": "Геологические",
+     "to": "Специалисты",
+     "weight": 1.0
+    },
+    {
+     "from": "Специалисты",
+     "to": "Законы",
+     "weight": 1.0
+    },
+    {
+     "from": "Законы",
+     "to": "Поддержка",
+     "weight": 1.0
+    },
+    {
+     "from": "Поддержка",
+     "to": "Остаётся",
+     "weight": 1.0
+    }
+   ],
+   "title": "Площадка уже есть. Геологические",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "strike",
+  "dur": 16.3,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вот такая энергетическая независимость получается",
+   "struck": "Вот такая",
+   "fix": "чтобы через двадцать лет искать новую технологию",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "zal_g01",
+  "dur": 7.9,
+  "anim": 7.9,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.9,
+   "sheets": [],
+   "text": "Ущерб деньгам — не всегда главная цель",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 50,
+  "view": "zal_slova",
+  "dur": 12.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 12.4,
+   "sheets": [
+    "Целью оказывается не обязательно завод",
+    "мост или электростанция"
+   ],
+   "text": "Не работает привычный сервис",
+   "na_polu": "ДОСТАТОЧНО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "charts.cartogram",
+  "dur": 9.7,
+  "anim": 9.7,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Россия",
+    "Иран"
+   ],
+   "accent": [
+    "Россия"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 56,
+  "view": "quote",
+  "dur": 6.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "А где заканчивается гражданский груз и начинается военный?",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "charts.slope",
+  "dur": 12.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "items": [
+    {
+     "label": "Двигатель",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Военная техника"
+    },
+    {
+     "label": "Электроника",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Беспилотник"
+    },
+    {
+     "label": "Продовольствие",
+     "from": 1.0,
+     "to": 1.0,
+     "to_label": "Армия"
+    }
+   ],
+   "left_label": "ГРАЖДАНСКОЕ",
+   "right_label": "ВОЕННОЕ",
+   "source": "авторская логика",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 12.3,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 12.3,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Логику границы можно растянуть на любой груз",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 12.3,
+    "pary": [
+     "Обычный мотор>военная техника",
+     "Любое судно>военный груз"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Логику границы можно растянуть на любой груз",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 12.3,
+   "pary": [
+    "Обычный мотор>военная техника",
+    "Любое судно>военный груз"
+   ]
+  }
+ },
+ {
+  "scene": 60,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 15.9,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 15.9,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Правила игры меняются",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 15.9,
+    "tezisy": [
+     "Кому принадлежит судно",
+     "Под каким флагом",
+     "Кто владеет грузом",
+     "Куда груз должен попасть"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Правила игры меняются",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 15.9,
+   "tezisy": [
+    "Кому принадлежит судно",
+    "Под каким флагом",
+    "Кто владеет грузом",
+    "Куда груз должен попасть"
+   ]
+  }
+ },
+ {
+  "scene": 61,
+  "view": "charts.waterfall",
+  "dur": 11.1,
+  "anim": 11.1,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "А Европа при этом сама всё",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Российского газа становится",
+     "value": 1.0
+    },
+    {
+     "label": "Катар должен закрывать",
+     "value": 1.0
+    },
+    {
+     "label": "Танкерные перевозки",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "title": "А Европа при этом сама всё сильнее",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 63,
+  "view": "zal_g48",
+  "dur": 10.55,
+  "anim": 10.55,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 10.55,
+   "sheets": [],
+   "text": "План хорош до первого ответа",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "torn_split.torn_split",
+  "dur": 11.1,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_065.jpg",
+   "b_path": "cards/photo/card_065_2.jpg",
+   "title": "Столько лет европейцам объясняли,",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "charts.map_dist",
+  "dur": 10.3,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Тегеран",
+     "lat": 35.7,
+     "lon": 51.4,
+     "accent": true
+    },
+    {
+     "label": "Вашингтон",
+     "lat": 38.9,
+     "lon": -77.0,
+     "accent": false
+    }
+   ],
+   "admin": "Иран",
+   "place": "Персидский залив",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 68,
+  "view": "pull",
+  "dur": 5.0,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Который победил на президентских выборах, вышел из под стражи под домашний арест",
+   "accent": "президентских",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 70,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 11.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "У него начинаются проблемы с законом",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.5,
+    "role": "крупный оппозиционный политик"
+   }
+  },
+  "kwargs": {
+   "text": "У него начинаются проблемы с законом",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.5,
+   "role": "крупный оппозиционный политик"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "zal_kub",
+  "dur": 16.7,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 16.7,
+   "sheets": [],
+   "text": "Избиратель ещё никуда не пришёл",
+   "kick": "Бюллетень ещё не брошен",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 74,
+  "view": "dok_title",
+  "dur": 10.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вот и получается европейская политика последнего времени в одном кадре",
+   "accent": "европейская",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 75,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 11.5,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 11.5,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Бабиш спрашивает: где конечная точка?",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 11.5,
+    "soobshcheniya": [
+     "Энергетические последствия считают после решений",
+     "Деньги Украине выделяют на годы вперёд"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Бабиш спрашивает: где конечная точка?",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 11.5,
+   "soobshcheniya": [
+    "Энергетические последствия считают после решений",
+    "Деньги Украине выделяют на годы вперёд"
+   ]
+  }
+ },
+ {
+  "scene": 76,
+  "view": "bullets",
+  "dur": 9.5,
+  "anim": 9.5,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "items": [
+    "Избиратель ещё не проголосовал",
+    "Влияние уже хотят ограничить",
+    "Медведь за пять лет привык"
+   ]
+  }
+ },
+ {
+  "scene": 77,
+  "view": "dok_word",
+  "dur": 6.46,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "А вот Европа, судя по всему, только начинает привыкать к последствиям собственных решений",
+   "accent": "Европа",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
