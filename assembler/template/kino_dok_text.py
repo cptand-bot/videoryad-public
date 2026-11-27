@@ -163,6 +163,11 @@ def dok_title(out=None, t=None, text="", accent="", channel="", watermark="",
     kk = out_cubic(tt)
     a = int(255 * clamp(tt * 2))
     x, y, px = SAFE_X + 20, 150, 56
+    # КЕГЛЬ САМ УЖИМАЕТСЯ, ПОКА СТРОКА НЕ ВЛЕЗЕТ (27.11.2026, улов `usuario-c1`
+    # через его личный аудит — сцена 77, строка уезжала за правый край кадра).
+    # Тот же приём D9/`fit_px`, что уже у `dok_word` выше.
+    px = fit_px(white + ("  " + acc if acc else ""), px,
+                W - x - SAFE_X, track=0.06)
     d_probe = ImageDraw.Draw(Image.new("RGBA", (4, 4)))
     f = font(px * SS)
     w1 = text_w(d_probe, white, f, 0.06)
