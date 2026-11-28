@@ -128,7 +128,7 @@ JS = """
 // «выбираю один, кликаю, появляется диалоговое окно — запись вверху и
 // запись внизу, нажимаю ОК, и ты генерируешь только его»).
 var CUR = null;
-function openDlg(item, n, src, titles, sig, where, ch, tema){
+function openDlg(item, n, src, titles, sig, where, ch, tema, top, bottom){
   // КАНАЛ И ТЕМА ЕДУТ ВМЕСТЕ С КЛИКОМ (19.11, живая авария: надпись на
   // превью ПЛАНЕТЫ легла в папку 5 МИНУТ, с чужой гаммой). Номер карточки
   // «item» — это позиция в списке на сервере, а список пересобирается
@@ -144,8 +144,11 @@ function openDlg(item, n, src, titles, sig, where, ch, tema){
   if(cap){ cap.textContent = where || ''; }
   // ПОЛЯ ОЧИЩАЮТСЯ ПРИ КАЖДОМ ОТКРЫТИИ (07.11): раньше надписи прошлой
   // темы оставались в полях, и следующий вариант получал чужой текст.
-  document.getElementById('dlg-top').value = '';
-  document.getElementById('dlg-bottom').value = '';
+  // ИСКЛЮЧЕНИЕ (28.11, правка ошибки в применённом варианте): если
+  // переоткрываем ИМЕННО ТОТ вариант, на который надписи уже легли —
+  // подставляем их, чтобы можно было поправить, а не перепечатывать.
+  document.getElementById('dlg-top').value = top || '';
+  document.getElementById('dlg-bottom').value = bottom || '';
   var ok = document.getElementById('dlg-ok');
   ok.textContent = 'ОК'; ok.disabled = false;
   document.getElementById('dlg-img').src = src + '?t=' + (sig||Date.now());
@@ -454,6 +457,34 @@ function svoyWatch(el, item, kind){
     t = setTimeout(function(){ svoyAuto(el, item, kind); }, 1200);
   });
 }
+// ПРАВКА ПРИМЕНЁННОГО ЗАГОЛОВКА (28.11, его слово: «применил заголовок,
+// а там ошибка, и поменять теперь не могу»). Поле «мой вариант» после
+// первой записи становится readOnly навсегда — это и была дыра. Кнопка
+// в блоке «твой выбор» разворачивает карточку, подставляет текущий текст
+// в поле и снимает замок, чтобы записать исправление поверх (из_журнала
+// в upakovka_dash.py берёт ПОСЛЕДНЮЮ запись — исправление станет новым
+// выбором само, без отдельного «режима редактирования» на сервере).
+function fixTitle(item, current){
+  var vars = document.getElementById('vars-' + item);
+  if(vars && vars.style.display === 'none'){
+    vars.style.display = 'block';
+    foldRemember(vars, false);
+    sost(item, {'свёрнута': false});
+    var fb = document.getElementById('foldbtn-' + item);
+    if(fb){ fb.textContent = 'свернуть — с этим закончил'; }
+  }
+  unfoldBlock('t' + item, item, 'заголовки');
+  var inp = document.getElementById('own-заголовки-' + item);
+  if(!inp){ return; }
+  inp.readOnly = false;
+  if(!inp.value && current){ inp.value = current; }
+  inp.dataset.saved = '';
+  var btn = inp.parentNode && inp.parentNode.querySelector('button');
+  if(btn){ btn.disabled = false; btn.classList.remove('done');
+           btn.textContent = 'записать исправление'; }
+  inp.focus(); inp.select();
+  inp.scrollIntoView({behavior:'smooth', block:'center'});
+}
 function zhurnal(kind, text, item, ch, tema){
   try{ fetch('/zhurnal', {method:'POST', headers:{'Content-Type':'application/json'},
        body: JSON.stringify({kind:kind, text:text, item:item||0,
@@ -741,10 +772,18 @@ def page(items, day):
             if _zag:
                 P.append('<div style="font-size:15px;font-weight:600;'
                          'margin-bottom:8px">%s</div>' % html.escape(_zag))
+                # «ИСПРАВИТЬ ЗАГОЛОВОК» (28.11, его прямое слово: «применил
+                # заголовок, там ошибка, и поменять уже не могу»). Поле
+                # «мой вариант» намертво блокировалось readOnly после первой
+                # записи — fixTitle() в JS снимает замок и подставляет
+                # текущий текст, чтобы поправить, а не писать с нуля.
                 P.append('<div class="row" style="margin:0 0 9px">'
                          '<button onclick=\'copy(%s,this)\'>копировать '
+                         'заголовок</button>'
+                         '<button onclick=\'fixTitle(%d,%s)\'>исправить '
                          'заголовок</button></div>'
-                         % json.dumps(_zag, ensure_ascii=False))
+                         % (json.dumps(_zag, ensure_ascii=False), _i,
+                            json.dumps(_zag, ensure_ascii=False)))
             if _nad_t or _nad_b:
                 P.append('<div class="hint" style="margin-bottom:8px">'
                          'надписи на превью: <b style="color:%s">%s</b></div>'
@@ -753,18 +792,45 @@ def page(items, day):
             # МИНИАТЮРА ВЫБРАННОГО ПРЕВЬЮ: с надписями, если готовое уже
             # сделано, иначе чистый вариант.
             _thumb = (it.get("превью_готовые") or {}).get(_pn)
+            # ЧИСТЫЙ (БЕЗ НАДПИСИ) ВАРИАНТ ДЛЯ ПОВТОРНОГО ОТКРЫТИЯ ОКНА
+            # (28.11) — то же самое, с чем работает сетка ниже: диалог
+            # накладывает текст на НЕТРОНУТЫЙ кадр, не на уже готовый файл.
+            _raw_src = ""
+            _nums_top = it.get("превью_номера") or list(
+                range(1, len(it.get("превью_файлы") or []) + 1))
+            for _k2, _u2 in enumerate(it.get("превью_файлы") or [], 1):
+                _num2 = _nums_top[_k2 - 1] if _k2 - 1 < len(_nums_top) else _k2
+                if _num2 == _pn:
+                    _raw_src = _u2
+                    break
             if not _thumb and _pn:
-                for _u in (it.get("превью_файлы") or []):
-                    if _u.endswith("/%d.png" % _pn):
-                        _thumb = _u
-                        break
+                _thumb = _raw_src
             if _thumb:
                 P.append('<div style="display:flex;gap:11px;'
                          'align-items:flex-start">')
-                P.append('<img src="%s?t=%s" style="width:200px;'
-                         'border-radius:6px;border:2px solid %s">'
-                         % (_thumb, int(time.time()), _accent))
-                P.append('<div class="hint">превью — вариант %d</div>' % _pn)
+                if _raw_src:
+                    _sig_top = (it.get("превью_отпечатки") or {}).get(_pn, "")
+                    _where_top = ("%s · %s · вариант %d"
+                                  % (it.get("канал", ""), it.get("тема", ""),
+                                     _pn)).replace('"', "'")
+                    _titles_top = json.dumps((it.get("надписи") or [])[:10],
+                                             ensure_ascii=False)
+                    P.append('<img src="%s?t=%s" onclick=\'openDlg(%d,%d,'
+                             '"%s",%s,"%s","%s",%s,%s,%s,%s)\' '
+                             'title="нажми, чтобы поправить надписи" '
+                             'style="width:200px;border-radius:6px;'
+                             'border:2px solid %s;cursor:pointer">'
+                             % (_thumb, int(time.time()), _i, _pn, _raw_src,
+                                _titles_top, _sig_top, _where_top, _ch_js,
+                                _tema_js, json.dumps(_nad_t, ensure_ascii=False),
+                                json.dumps(_nad_b, ensure_ascii=False), _accent))
+                else:
+                    P.append('<img src="%s?t=%s" style="width:200px;'
+                             'border-radius:6px;border:2px solid %s">'
+                             % (_thumb, int(time.time()), _accent))
+                P.append('<div class="hint">превью — вариант %d%s</div>'
+                         % (_pn, " · нажми на картинку, чтобы поправить "
+                                 "надпись" if _raw_src else ""))
                 P.append('</div>')
             elif _pn:
                 P.append('<div class="hint">превью — вариант %d</div>' % _pn)
@@ -914,13 +980,20 @@ def page(items, day):
                 _sig = (it.get("превью_отпечатки") or {}).get(_num, "")
                 _where = "%s · %s · вариант %d" % (it.get("канал", ""),
                                                    it.get("тема", ""), _num)
+                # ПОВТОРНЫЙ КЛИК ПО УЖЕ ПРИМЕНЁННОМУ ВАРИАНТУ (28.11) —
+                # подставляем надписи, которые на нём уже лежат, а не
+                # пустые поля: правим текст, а не печатаем заново.
+                _top_pref = _nad_t if (_ready and _num == _pn) else ""
+                _bot_pref = _nad_b if (_ready and _num == _pn) else ""
                 P.append('<img id="p-%d-%d" src="%s?t=%s" '
-                         'onclick=\'openDlg(%d,%d,"%s",%s,"%s","%s",%s,%s)\' '
+                         'onclick=\'openDlg(%d,%d,"%s",%s,"%s","%s",%s,%s,%s,%s)\' '
                          'title="нажми, чтобы наложить надписи" '
                          'style="width:100%%;border-radius:6px;cursor:pointer;'
                          'border:%s">'
                          % (_i, _num, _src, _sig, _i, _num, u, _titles, _sig,
                             _where.replace('"', "'"), _ch_js, _tema_js,
+                            json.dumps(_top_pref, ensure_ascii=False),
+                            json.dumps(_bot_pref, ensure_ascii=False),
                             ("3px solid %s" % _accent) if _ready
                             else "1px solid var(--line)"))
             P.append('</div>')
