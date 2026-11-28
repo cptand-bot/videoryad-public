@@ -1234,6 +1234,13 @@ def do_build(proj="."):
             return 1
 
     # ---- что лежит в overlays/ (служебное и предпросмотр дашборда — мимо)
+    # ФОТО-ВСПЛЫВАШКИ ОТКЛЮЧЕНЫ ПОЛНОСТЬЮ, НАВСЕГДА (его слово 27.11+28.11).
+    # ДО 28.11 этот цикл сам вшивал в overlays.json любой файл
+    # `overlays/scene_NNN.*` — то есть формировал фото-всплывашку из чего
+    # угодно, что туда попало (ручная заливка через review.py, остаток от
+    # `tg_overlay_fill.py`, случайная копия), а запрет держался только
+    # гейтом ПОСЛЕ, на готовом ролике. Теперь такие файлы не используются
+    # вовсе — только называются, чтобы вкладка убрала мусор из папки.
     found = {}
     for f in sorted(glob.glob(os.path.join(proj, "overlays", "scene_*"))):
         b = os.path.basename(f)
@@ -1246,28 +1253,7 @@ def do_build(proj="."):
         if os.path.getsize(f) > 0:
             found.setdefault(sid, os.path.join("overlays", b))
 
-    added, skipped_card, i = [], [], 0
-    for sid in sorted(found):
-        if str(sid) in ov or sid in ov:
-            continue                       # запись вкладки/дашборда — не трогаем
-        if sid in cards:
-            skipped_card.append(sid)       # на рисованном кадре слоёв не бывает
-            continue
-        dur = float(info.get(sid, {}).get("duration_sec") or 0) or 10.0
-        at = _floor_at(sid, 2.2 + 0.2 * i, dur)
-        at = min(at, max(0.6, dur - 2 * SLIDE - TAIL - 1.0))
-        ov[str(sid)] = {"photo": found[sid],
-                        "sound": _SND_CYCLE[i % len(_SND_CYCLE)],
-                        "at": round(at, 2),
-                        "shape": _SHAPES[i % len(_SHAPES)],
-                        "scale": _SCALES[i % len(_SCALES)],
-                        "style": _STYLES[sid % len(_STYLES)]}
-        # `anchor` НЕ пишем: вертикаль считается по каналу в `do_overlay`
-        # (ПЛАНЕТА — низ, остальные — верх), а посценный ключ ставит дашборд
-        # кнопкой «по вертикали». Записанный здесь он только заморозил бы
-        # выбор. 11.11
-        added.append(sid)
-        i += 1
+    skipped_banned = sorted(found)
 
     # ---- записи на рисованных кадрах: снимаем, решение пользователя щадим
     dropped, kept_card = [], []
@@ -1282,7 +1268,7 @@ def do_build(proj="."):
               if str(k).isdigit() and isinstance(v, dict)
               and (v.get("photo") and not resolve_photo(v["photo"]))]
 
-    if added or dropped:
+    if dropped:
         tmp = ov_path + ".tmp"
         with open(tmp, "w", encoding="utf-8") as fh:
             json.dump(ov, fh, ensure_ascii=False, indent=1)
@@ -1294,11 +1280,10 @@ def do_build(proj="."):
              and isinstance(v, dict) and isinstance(v.get("text"), dict)]
     print("канал: %s · сцен %d · файлов в overlays/: %d"
           % (chan or "не указан", len(info), len(found)))
-    if added:
-        print("ДОБАВЛЕНО записей: %d (сцены %s)"
-              % (len(added), ", ".join(map(str, added))))
-    if skipped_card:
-        print("пропущены рисованные кадры: %s" % ", ".join(map(str, skipped_card)))
+    if skipped_banned:
+        print("НЕ ИСПОЛЬЗОВАНЫ (фото-всплывашки отключены навсегда, 27.11): "
+              "%d файл(ов) в overlays/, сцены %s — убери мусор из папки"
+              % (len(skipped_banned), ", ".join(map(str, skipped_banned))))
     if dropped:
         print("СНЯТЫ записи с рисованных кадров: %s" % ", ".join(map(str, dropped)))
     if kept_card:
@@ -1315,22 +1300,11 @@ def do_build(proj="."):
         print("   норма ужата: рисованных кадров %d из %d сцен, слой на них не ложится"
               % (len(info) - len(free), len(info)))
 
-    if not photos and NORM[0] > 0:
-        # Слой НЕ собран. Молчать здесь нельзя — это и был дефект 11.11.
-        plan = free[:1] + free[3::max(1, len(free) // max(1, NORM[0] or 1))]
-        print("В overlays/ НЕТ НИ ОДНОГО КАДРА — слой не собран.")
-        print("Положи %d-%d файлов `overlays/scene_NNN.jpg` и повтори. "
-              "Ровно по ролику ложатся сцены: %s"
-              % (NORM[0], NORM[1], ", ".join(map(str, plan[:NORM[1]]))))
-        return 1
-    if not photos:
-        # Его слово 27.11: фото-всплывашки отключены — ноль, это и есть
-        # правильный исход, а не дефект. Только проверяем, что надписи
-        # (ниже) собраны — за это отвечает уже другая проверка.
-        pass
-    if len(photos) < NORM[0]:
-        print("СМОТРИ: фото-всплывашек меньше нормы — добери до %d-%d."
-              % NORM)
+    # Фото-всплывашек НОЛЬ — его слово 27.11, это и есть правильный исход,
+    # не дефект (NORM всегда (0, 0) — см. `ov_norm()`). Отдельной проверки
+    # «слой не собран»/«меньше нормы» здесь больше нет: нормы на добор нет,
+    # добирать нечего. Если `photos` всё же не пуст — это старые записи
+    # `dash_ok` на диске, их снимает только он на дашборде, не этот шаг.
     # НАДПИСИ-СЛОВА — ТОЛЬКО «5 МИНУТ» (14.11, улов `usuario-3a`). Условие
     # стояло «не ПЛАНЕТА», то есть подсказка требовала их и на ПсД, и на
     # ДИПЛОМАТИИ СИЛЫ, и на ОЛЬКЕ — а `selfcheck` там их не требует и

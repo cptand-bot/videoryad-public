@@ -4953,85 +4953,29 @@ def run_live(scenes_path, images_dir, port):
                 return self._reply(200)
 
             if route == "overlay_photo":
-                # НА РИСОВАННЫЙ КАДР ВСПЛЫВАШКУ НЕ КЛАДЁМ (09.11): отказываем
-                # ДО чтения тела и до записи файла в `overlays/`, иначе на
-                # диске остался бы кадр без записи — ровно те «сироты»,
-                # которые потом ловит `ship.sh`.
-                _нет = отказ_на_карточке(sid, "всплывашка", scenes_path)
-                if _нет:
-                    return self._otkaz(_нет)
-                n = int(self.headers.get("Content-Length", 0) or 0)
-                data = self.rfile.read(n) if n else b""
-                fname = urllib.parse.unquote(self.headers.get("X-Filename", ""))
-                ext = os.path.splitext(fname)[1].lower() or ".jpg"
-                if not (sid and data):
-                    return self._reply(400, b"no")
-                os.makedirs("overlays", exist_ok=True)
-                for old in glob.glob(os.path.join("overlays", f"scene_{sid:03d}.*")):
-                    os.remove(old)
-                path = os.path.join("overlays", f"scene_{sid:03d}{ext}")
-                with open(path, "wb") as fh:
-                    fh.write(data)
-                _uniq_forget("overlays", sid)      # фото новое — обработка старого не его
-                save_overlay(sid, {"photo": path})
-                return self._reply(200)
+                # ФОТО-ВСПЛЫВАШКИ ОТКЛЮЧЕНЫ ПОЛНОСТЬЮ, НАВСЕГДА (его слово
+                # 27.11 — «не иллюстрируют, не дополняют информацию» — и
+                # 28.11, закрывает именно этот путь формирования: раньше
+                # запрет жил только гейтом ПОСЛЕ того, как кто-то уже
+                # потратил время на поиск/загрузку кадра). Отказ ДО чтения
+                # тела — чтобы на диске не оставался файл-сирота.
+                return self._otkaz(
+                    "фото-всплывашки отключены навсегда (его слово 27.11: "
+                    "не иллюстрируют, не дополняют информацию). Текстовая "
+                    "надпись (`overlay_text`) этим не затронута.")
 
             if route == "overlay_search":
-                # НА РИСОВАННЫЙ КАДР ВСПЛЫВАШКУ НЕ КЛАДЁМ (09.11). Это ТОТ
-                # САМЫЙ путь, которым дыра и открывалась: он ищет кадр
-                # голосом, попадает на плитку нашего элемента — и фетч
-                # отработал бы впустую, а слой лёг бы после чистого
-                # `selfcheck`. Отказываем до запуска фетчера: заодно не
-                # тратим его минуту на кадр, который не нужен.
-                _нет = отказ_на_карточке(sid, "всплывашка", scenes_path)
-                if _нет:
-                    return self._otkaz(_нет, {"photo": None})
-                # user typed "find me X" for a pop-up -> run the real fetcher
-                # for one throw-away scene straight into overlays/.
-                n = int(self.headers.get("Content-Length", 0) or 0)
-                try:
-                    spec = json.loads(self.rfile.read(n) or b"{}")
-                except ValueError:
-                    return self._reply(400, b"no")
-                qtext = str(spec.get("q", "")).strip()
-                if not (sid and qtext):
-                    return self._reply(400, b"no")
-                os.makedirs("overlays", exist_ok=True)
-                for old in glob.glob(os.path.join("overlays", f"scene_{sid:03d}.*")):
-                    os.remove(old)
-                found = None
-                for src in ("press_photo", "pexels_photo"):
-                    mini = {"scenes": [{"id": sid, "text": qtext, "duration_sec": 3,
-                                        "visual_prompt": qtext, "source": src,
-                                        "source_query": qtext}]}
-                    tmpf = os.path.join("overlays", f"_search_{sid}.json")
-                    with open(tmpf, "w", encoding="utf-8") as fh:
-                        json.dump(mini, fh, ensure_ascii=False)
-                    try:
-                        subprocess.run(["python3", _script("fetch_assets_news.py"), tmpf,
-                                        "overlays", ".env"],
-                                       capture_output=True, timeout=120)
-                    except Exception:
-                        pass
-                    try:
-                        os.remove(tmpf)
-                    except OSError:
-                        pass
-                    hits = [p for p in glob.glob(os.path.join("overlays", f"scene_{sid:03d}.*"))
-                            if not p.endswith(".json") and os.path.getsize(p) > 0]
-                    if hits:
-                        found = hits[0]
-                        break
-                if found:
-                    _uniq_forget("overlays", sid)      # фото заменили — старую обработку забыть
-                    save_overlay(sid, {"photo": found})
-                    body = json.dumps({"photo": found}).encode()
-                else:
-                    body = b'{"photo":null}'
-                self.send_response(200 if found else 404)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.send_header("Content-Length", str(len(body)))
+                # ФОТО-ВСПЛЫВАШКИ ОТКЛЮЧЕНЫ ПОЛНОСТЬЮ, НАВСЕГДА — см.
+                # `overlay_photo` выше, тот же запрет (его слово 27.11+28.11).
+                # Раньше отказ срабатывал только на рисованном кадре (09.11)
+                # и пропускал обычные сцены к фетчеру — именно этот путь и
+                # тратил его минуту облака на кадр, который потом снимал
+                # гейт. Отказываем ДО запуска фетчера всегда.
+                return self._otkaz(
+                    "фото-всплывашки отключены навсегда (его слово 27.11: "
+                    "не иллюстрируют, не дополняют информацию). Текстовая "
+                    "надпись (`overlay_text`) этим не затронута.",
+                    {"photo": None})
                 self.end_headers()
                 self.wfile.write(body)
                 return
