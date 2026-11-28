@@ -1,0 +1,312 @@
+[
+ {
+  "scene": 2,
+  "view": "vyrezka.figura",
+  "dur": 9.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_002.jpg",
+   "author": "Джорджа Мелони",
+   "role": "премьер-министр Италии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 5,
+  "view": "split",
+  "dur": 10.0,
+  "anim": 2.0,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_005.jpg",
+   "text": "Никто из нас не был проинформирован",
+   "author": "Антонио Таяни",
+   "role": "министр иностранных дел Италии",
+   "accent": "Никто из нас не был",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 8,
+  "view": "poster.poster",
+  "dur": 8.61,
+  "anim": 8.61,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "title": "ОПЕРАЦИЯ В ЛИВИИ",
+   "hero_photo": "cards/photo/card_008.jpg",
+   "bottom": "Согласование снял сам Зеленский",
+   "facts": [
+    {
+     "label": "Беспилотников",
+     "value": "7"
+    },
+    {
+     "label": "Погибших в Бенгази",
+     "value": "2"
+    }
+   ],
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 9,
+  "view": "vyrezka.gazeta",
+  "dur": 8.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_009.jpg",
+   "author": "Владимир Зеленский",
+   "role": "президент Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 14,
+  "view": "film.film_single",
+  "dur": 8.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_014.jpg",
+   "title": "Атака в Бенгази",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 16,
+  "view": "krupnoe_chislo",
+  "dur": 8.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.64,
+   "value": "7",
+   "accent": "беспилотников",
+   "kick": "СКОЛЬКО ИХ БЫЛО",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 33,
+  "view": "cinematic.evidence_wall",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    [
+     "cards/photo/card_033.jpg",
+     240,
+     380,
+     -4,
+     "атака катеров"
+    ],
+    [
+     "cards/photo/card_033_2.jpg",
+     800,
+     380,
+     3,
+     "порт Бенгази"
+    ],
+    [
+     "cards/photo/card_033_3.jpg",
+     1360,
+     380,
+     -2,
+     "Зеленский объясняет"
+    ]
+   ],
+   "title": "Как это связано",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 37,
+  "view": "sceny.tribuna",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.92,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "tribuna",
+   "seconds": 7.92,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Власти Западной Ливии заявили что к атаке не причастны",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.92,
+    "role": "представитель властей Западной Ливии"
+   }
+  },
+  "kwargs": {
+   "text": "Власти Западной Ливии заявили что к атаке не причастны",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.92,
+   "role": "представитель властей Западной Ливии"
+  }
+ },
+ {
+  "scene": 46,
+  "view": "photo",
+  "dur": 6.88,
+  "anim": 6.88,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_046.jpg",
+   "title": "Ответ Таяни",
+   "lines": [
+    "Опроверг слова Зеленского",
+    "Министр иностранных дел Италии"
+   ]
+  }
+ },
+ {
+  "scene": 70,
+  "view": "cinematic.depth_of_field",
+  "dur": 7.68,
+  "anim": 7.68,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_070.jpg",
+   "title": "Морской беспилотник",
+   "watermark": "5 МИНУТ"
+  },
+  "mode": "frame"
+ },
+ {
+  "scene": 72,
+  "view": "cinematic.dossier",
+  "dur": 7.68,
+  "anim": 7.68,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "rows": [
+    "Семь морских беспилотников украинского производства",
+    "Погибли военные ЛНА и итальянские специалисты",
+    "Ответственность отрицают все стороны",
+    "Расследование продолжается"
+   ],
+   "title": "ДОСЬЕ",
+   "photo": "cards/photo/card_072.jpg",
+   "stamp": "ПЕРВОИСТОЧНИК",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 73,
+  "view": "polosy",
+  "dur": 6.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.4,
+   "items": [
+    "Бенгази=2",
+    "Кувейт=2"
+   ],
+   "kick": "ПОГИБШИЕ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 79,
+  "view": "dok_wall",
+  "dur": 7.36,
+  "anim": 7.36,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "photo": "cards/photo/card_079.jpg",
+   "karty": [
+    "РАЗГОВОР|Напряжённый, по данным Bloomberg",
+    "ПРИЧИНА|Отсутствие предупреждения",
+    "ПОСЛЕДСТВИЯ|Внутриполитические проблемы",
+    "ОТНОШЕНИЯ|Рим и Киев охладились",
+    "ВЫБОР|Таяни опроверг слова Зеленского"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 85,
+  "view": "sceny.mehanizm",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.48,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "mehanizm",
+   "seconds": 8.48,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Союзничество превращается в услугу",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.48,
+    "pary": [
+     "ЗЕЛЕНСКИЙ>ПАРТНЁРЫ"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Союзничество превращается в услугу",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.48,
+   "pary": [
+    "ЗЕЛЕНСКИЙ>ПАРТНЁРЫ"
+   ]
+  }
+ },
+ {
+  "scene": 90,
+  "view": "torn_split.torn_split",
+  "dur": 8.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "a_path": "cards/photo/card_090.jpg",
+   "b_path": "cards/photo/card_090_2.jpg",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
