@@ -1,0 +1,36 @@
+[
+ {
+  "scene": 21,
+  "view": "photo",
+  "dur": 5.84,
+  "anim": 5.84,
+  "tail_zoom": 0.0,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "watermark": "5 МИНУТ",
+   "photo": "cards/photo/card_021.jpg",
+   "title": "Италия не знала",
+   "lines": [
+    "Не согласовывали атаку",
+    "Узнали постфактум"
+   ]
+  }
+ },
+ {
+  "scene": 46,
+  "view": "kompas",
+  "dur": 6.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.88,
+   "accent": "Зеленский сменил версию",
+   "value": "В",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
