@@ -1,0 +1,75 @@
+{
+ "anchor": "top",
+ "1": {
+  "text": {
+   "words": "СЕКРЕТ ПОЛИШИНЕЛЯ",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "6": {
+  "text": {
+   "words": "НИКТО НЕ ЗНАЛ",
+   "color": "red",
+   "pos": "tr",
+   "font": "default",
+   "sound": "pop",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "18": {
+  "text": {
+   "words": "ПЯТЬ МОРЕЙ",
+   "color": "red",
+   "pos": "tr",
+   "font": "default",
+   "sound": "zatvor",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "38": {
+  "text": {
+   "words": "ВСЕ НИ ПРИ ЧЁМ",
+   "color": "red",
+   "pos": "tr",
+   "font": "default",
+   "sound": "whoosh",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "62": {
+  "text": {
+   "words": "ПИАР ПРЕВЫШЕ ВСЕГО",
+   "color": "yellow",
+   "pos": "tc",
+   "font": "default",
+   "sound": "ding",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ },
+ "88": {
+  "text": {
+   "words": "ЦЕНА ПИАРА",
+   "color": "orange",
+   "pos": "tl",
+   "font": "default",
+   "sound": "ding",
+   "at": 1.5,
+   "scale": 1.0,
+   "approved": true
+  }
+ }
+}
