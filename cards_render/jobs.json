@@ -1,0 +1,1002 @@
+[
+ {
+  "scene": 3,
+  "view": "zastavka",
+  "dur": 8.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.0,
+   "accent": "ИСТОРИЯ С ЛИВИЕЙ",
+   "kick": "за громким заявлением скрывается другая картина",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 10,
+  "view": "duel",
+  "dur": 9.44,
+  "anim": 3.2,
+  "tail_zoom": 0.035,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "top": {
+    "who": "",
+    "text": "согласовано",
+    "accent": null,
+    "source": ""
+   },
+   "bottom": {
+    "who": "",
+    "text": "Потом выясняется, что ничего не согласовано",
+    "accent": null,
+    "source": ""
+   },
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 12,
+  "view": "sceny.prolog",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.84,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prolog",
+   "seconds": 7.84,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Молчание разозлило Мелони",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.84
+   }
+  },
+  "kwargs": {
+   "text": "Молчание разозлило Мелони",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.84
+  }
+ },
+ {
+  "scene": 20,
+  "view": "pereskaz",
+  "dur": 6.0,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.0,
+   "items": [
+    "Его откуда-то доставили",
+    "Куда-то привезли",
+    "Где-то спустили на воду",
+    "Кто-то обеспечил маршрут и площадку для запуска"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 23,
+  "view": "karta_brifing",
+  "dur": 8.8,
+  "anim": 8.8,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Катеру нужно пройти Чёрное море Босфор и Дарданеллы до побережья Ливии",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 24,
+  "view": "zal_makety",
+  "dur": 7.52,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.52,
+   "sheets": [],
+   "text": "Для операции нужна логистика",
+   "makety": [
+    "корабль=МАРШРУТ",
+    "лэп=СНАБЖЕНИЕ",
+    "вертолёт=ТРАНСПОРТ"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 25,
+  "view": "quote",
+  "dur": 7.68,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Мы ничего не знали",
+   "accent": "ничего не знали",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 26,
+  "view": "karta_koltso",
+  "dur": 8.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.4,
+   "lon_c": 20.17,
+   "lat_c": 41.15,
+   "span": 50.0,
+   "country": "АЛБАНИЯ",
+   "accent": "АЛБАНИЯ",
+   "kick": "версия о запуске с албанской территории",
+   "title": "Откуда стартовал катер",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 31,
+  "view": "sortirovka",
+  "dur": 7.6,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.6,
+   "left": "ПУБЛИЧНО",
+   "right": "МОЛЧАТ",
+   "items": [
+    "Киев расширяет географию операций",
+    "Британцы предпочитают молчать",
+    "Европейцы публично дистанцируются"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 32,
+  "view": "dok_title",
+  "dur": 6.16,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Начинают спрашивать другие государства",
+   "accent": "государства",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 34,
+  "view": "zal_schetchik",
+  "dur": 8.96,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.96,
+   "sheets": [],
+   "text": "Ливийская армия пообещала ответить",
+   "value": "2",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 35,
+  "view": "charts.cartogram",
+  "dur": 7.84,
+  "anim": 7.84,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "data": [
+    "Украина"
+   ],
+   "kick": "Кому адресован ответ",
+   "mode": "bubble",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 36,
+  "view": "pull",
+  "dur": 6.83,
+  "anim": 2.6,
+  "tail_zoom": 0.05,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Власти Западной Ливии заявили что к атаке отношения не имеют",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 39,
+  "view": "marker_serif",
+  "dur": 7.68,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Секрет хорош тем что все всё понимают но доказать участие стороны крайне трудно",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 40,
+  "view": "shtamp_lestnica",
+  "dur": 7.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.2,
+   "kick": "ЧТО НЕ ДОКАЗАНО",
+   "items": [
+    "Никто не пойман за руку",
+    "Никто не подписал бумагу",
+    "Никто публично не сказал да"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 41,
+  "view": "sceny.pechat",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 6.4,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "pechat",
+   "seconds": 6.4,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Доказательства раскрыл сам Зеленский",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 6.4,
+    "stamp": "утверждено"
+   }
+  },
+  "kwargs": {
+   "text": "Доказательства раскрыл сам Зеленский",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 6.4,
+   "stamp": "утверждено"
+  }
+ },
+ {
+  "scene": 42,
+  "view": "stroki_faktov",
+  "dur": 6.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.64,
+   "items": [
+    "Сначала=согласование с партнёрами было",
+    "Потом=координации не было"
+   ],
+   "kick": "ЧТО СКАЗАЛ ЗЕЛЕНСКИЙ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 44,
+  "view": "paper_typed",
+  "dur": 8.48,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "После публичной фразы партнёра приходится либо соглашаться либо её опровергать",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 45,
+  "view": "zal_g48",
+  "dur": 6.48,
+  "anim": 6.48,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.48,
+   "sheets": [],
+   "text": "Есть пространство для манёвра",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 48,
+  "view": "dok_word",
+  "dur": 7.76,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Зачем Зеленский так поступил",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 49,
+  "view": "paper_hand",
+  "dur": 7.2,
+  "anim": 2.8,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Что изменилось бы если бы он просто промолчал",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 51,
+  "view": "sceny.kreslo",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.28,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "kreslo",
+   "seconds": 7.28,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "У Мелони нет нужды объясняться",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.28,
+    "role": "премьер-министр Италии"
+   }
+  },
+  "kwargs": {
+   "text": "У Мелони нет нужды объясняться",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.28,
+   "role": "премьер-министр Италии"
+  }
+ },
+ {
+  "scene": 52,
+  "view": "kartoteka",
+  "dur": 8.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.64,
+   "accent": "ДЖАРЕД КУШНЕР",
+   "kick": "о переговорах",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 53,
+  "view": "zal_efir",
+  "dur": 7.2,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.2,
+   "sheets": [],
+   "text": "Есть привычка выносить детали",
+   "say": "Такая тактика мешает достижению договорённостей",
+   "author": "Джаред Кушнер",
+   "role": "советник по Украине",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 54,
+  "view": "zal_pol",
+  "dur": 6.24,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.24,
+   "sheets": [],
+   "text": "Речь о самой механике переговоров",
+   "na_polu": "ТЕЛЕКАМЕРЫ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 55,
+  "view": "sceny.relsy",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.76,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "relsy",
+   "seconds": 7.76,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Речь о самой механике переговоров",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.76,
+    "sobytiya": [
+     "кто прав в споре",
+     "Речь о самой механике",
+     "они рассчитывают"
+    ],
+    "рол_номер": 1
+   }
+  },
+  "kwargs": {
+   "text": "Речь о самой механике переговоров",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.76,
+   "sobytiya": [
+    "кто прав в споре",
+    "Речь о самой механике",
+    "они рассчитывают"
+   ],
+   "рол_номер": 1
+  }
+ },
+ {
+  "scene": 56,
+  "view": "zal_ekran",
+  "dur": 8.08,
+  "anim": 8.08,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.08,
+   "sheets": [
+    "ПОВЕСТКА ПЕРЕГОВОРОВ",
+    "ПРЯМОЙ ЭФИР"
+   ],
+   "text": "Беседа должна остаться в тайне",
+   "say": "Содержание разговора окажется перед телекамерами",
+   "author": "участник переговоров",
+   "role": "дипломат",
+   "source": "закрытые переговоры",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 57,
+  "view": "sceny.globus_map",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.09,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "globus",
+   "seconds": 7.09,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Вспоминается похожий случай Южная Корея",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.09,
+    "region": "Южная Корея"
+   }
+  },
+  "kwargs": {
+   "text": "Вспоминается похожий случай Южная Корея",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.09,
+   "region": "Южная Корея"
+  }
+ },
+ {
+  "scene": 58,
+  "view": "timeline",
+  "dur": 6.8,
+  "anim": 6.8,
+  "tail_zoom": 0.06,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "kick": "ЮЖНАЯ КОРЕЯ",
+   "watermark": "5 МИНУТ",
+   "title": "Как это было с Южной Кореей",
+   "events": [
+    {
+     "date": "Раскрытие о пленных",
+     "text": "Сеул счёл извинения недостаточными"
+    },
+    {
+     "date": "Позже",
+     "text": "компания прекратила сотрудничество"
+    },
+    {
+     "date": "Итог",
+     "text": "публичность не принесла Киеву выигрыша"
+    }
+   ]
+  }
+ },
+ {
+  "scene": 59,
+  "view": "zal_g01",
+  "dur": 6.96,
+  "anim": 6.96,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.96,
+   "sheets": [],
+   "text": "И там публичность не дала",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 60,
+  "view": "charts.waterfall",
+  "dur": 8.32,
+  "anim": 8.32,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "start": {
+    "label": "зато создала проблемы",
+    "value": 1.0
+   },
+   "steps": [
+    {
+     "label": "Вот где арифметика не",
+     "value": 1.0
+    },
+    {
+     "label": "Подписывайтесь на канал",
+     "value": 1.0
+    }
+   ],
+   "end": {
+    "label": "ИТОГ"
+   },
+   "title": "Киеву какого то понятного практического",
+   "sobytiya": true,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 61,
+  "view": "sceny.lenta",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 7.04,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "lenta",
+   "seconds": 7.04,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Публичный эффект есть сразу",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 7.04,
+    "soobshcheniya": [
+     "ЭФФЕКТ: заголовки и громкое заявление есть сразу",
+     "ПОСЛЕДСТВИЯ: партнёры тушат их у себя дома"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Публичный эффект есть сразу",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 7.04,
+   "soobshcheniya": [
+    "ЭФФЕКТ: заголовки и громкое заявление есть сразу",
+    "ПОСЛЕДСТВИЯ: партнёры тушат их у себя дома"
+   ]
+  }
+ },
+ {
+  "scene": 63,
+  "view": "zal_slova",
+  "dur": 6.8,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.8,
+   "sheets": [],
+   "text": "В Ливии цена становится выше",
+   "na_polu": "ОТВЕТ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 65,
+  "view": "otbivka",
+  "dur": 6.64,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.64,
+   "accent": "ВАЖНЫЙ ПОВОРОТ",
+   "value": "1",
+   "kick": "конфликт выходит за привычную географию",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 66,
+  "view": "sceny.prohod",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 9.04,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "prohod",
+   "seconds": 9.04,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кто делает вид, что ни при чём",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 9.04,
+    "tezisy": [
+     "у всех уже выработались правила поведения",
+     "Кто что поставляет",
+     "Кто что финансирует"
+    ],
+    "рол_номер": 1
+   }
+  },
+  "kwargs": {
+   "text": "Кто делает вид, что ни при чём",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 9.04,
+   "tezisy": [
+    "у всех уже выработались правила поведения",
+    "Кто что поставляет",
+    "Кто что финансирует"
+   ],
+   "рол_номер": 1
+  }
+ },
+ {
+  "scene": 67,
+  "view": "film.film_strip",
+  "dur": 6.67,
+  "anim": 6.67,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "shots": [
+    "cards/photo/card_067.jpg",
+    "cards/photo/card_067_2.jpg",
+    "cards/photo/card_067_3.jpg",
+    "cards/photo/card_067_4.jpg"
+   ],
+   "title": "ПРЕДПОЧИТАЕТ",
+   "captions": [
+    "Кабинет-Министров-",
+    "Кабинет-Министров-",
+    "Кабинет-Министров-",
+    "Кабинет-Министров-"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 69,
+  "view": "sceny.repliki",
+  "mode": "cli",
+  "script": "sceny_cli.py",
+  "dur": 8.16,
+  "channel": "5 МИНУТ",
+  "watermark": "5 МИНУТ",
+  "cfg": {
+   "view": "repliki",
+   "seconds": 8.16,
+   "fps": 30,
+   "t0": 0.0,
+   "kwargs": {
+    "text": "Кувейт и Италия винят Иран",
+    "channel": "5 МИНУТ",
+    "watermark": "5 МИНУТ",
+    "dur": 8.16,
+    "repliki_": [
+     "Кувейт и Италия=ответственность несёт Иран",
+     "Тегеран=это операция под чужим флагом"
+    ]
+   }
+  },
+  "kwargs": {
+   "text": "Кувейт и Италия винят Иран",
+   "channel": "5 МИНУТ",
+   "watermark": "5 МИНУТ",
+   "dur": 8.16,
+   "repliki_": [
+    "Кувейт и Италия=ответственность несёт Иран",
+    "Тегеран=это операция под чужим флагом"
+   ]
+  }
+ },
+ {
+  "scene": 74,
+  "view": "charts.map_dist",
+  "dur": 8.24,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "points": [
+    {
+     "label": "Киев",
+     "lat": 50.45,
+     "lon": 30.52,
+     "accent": false
+    },
+    {
+     "label": "Кувейт",
+     "lat": 29.31,
+     "lon": 47.48,
+     "accent": false
+    }
+   ],
+   "kick": "Тысячи километров от Украины",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 75,
+  "view": "tape",
+  "dur": 7.36,
+  "anim": 2.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "И разговор о том, кто с кем что согласовал, выглядел бы совсем иначе",
+   "accent": "разговор",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 76,
+  "view": "pismo",
+  "dur": 6.4,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 6.4,
+   "text": "В Ливии Рим говорит, что его не предупредили",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 77,
+  "view": "zal_g44",
+  "dur": 7.23,
+  "anim": 7.23,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.23,
+   "sheets": [],
+   "text": "Погибли двое итальянцев",
+   "value": "2",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 78,
+  "view": "charts.network",
+  "dur": 6.56,
+  "anim": 6.56,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "nodes": [
+    {
+     "id": "Ливия",
+     "label": "Ливия",
+     "weight": 1.0
+    },
+    {
+     "id": "Рим",
+     "label": "Рим",
+     "weight": 1.0
+    },
+    {
+     "id": "Кувейт",
+     "label": "Кувейт",
+     "weight": 1.0
+    },
+    {
+     "id": "Италия",
+     "label": "Италия",
+     "weight": 1.0
+    }
+   ],
+   "links": [
+    {
+     "from": "Ливия",
+     "to": "Рим",
+     "weight": 1.0
+    },
+    {
+     "from": "Кувейт",
+     "to": "Италия",
+     "weight": 1.0
+    }
+   ],
+   "kick": "Зарубежная активность",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 81,
+  "view": "cheklist",
+  "dur": 7.92,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 7.92,
+   "items": [
+    "?Почему не предупредили",
+    "?Кто принимает решения",
+    "?Почему специалисты оказываются рядом с чужими операциями"
+   ],
+   "kick": "ВОПРОСЫ К ПАРТНЁРУ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 83,
+  "view": "chertezh",
+  "dur": 8.88,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "channel": "5 МИНУТ",
+   "dur": 8.88,
+   "accent": "ПАРТНЁРСТВО",
+   "items": [
+    "закрывают глаза на детали",
+    "не задают лишних вопросов публично",
+    "сами решают что признавать"
+   ],
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 84,
+  "view": "doc",
+  "dur": 6.8,
+  "anim": 3.4,
+  "tail_zoom": 0.04,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Партнёры хотят сами решать что признавать когда признавать и какую часть сотрудничества выставлять на свет",
+   "kick": "ИТОГ ИСТОРИИ",
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 86,
+  "view": "zal",
+  "dur": 8.37,
+  "anim": 2.6,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Ты даже не просил его об этом рассказывать",
+   "words": [
+    "УТЕЧКА",
+    "ЛИШНЕЕ"
+   ],
+   "sheets": [
+    "Координация с партнёрами",
+    "Детали должны молчать"
+   ],
+   "channel": "5 МИНУТ",
+   "dur": 8.37,
+   "watermark": "5 МИНУТ"
+  }
+ },
+ {
+  "scene": 87,
+  "view": "strike",
+  "dur": 8.4,
+  "anim": 3.0,
+  "tail_zoom": 0.045,
+  "watermark": "5 МИНУТ",
+  "channel": "5 МИНУТ",
+  "kwargs": {
+   "text": "Вопрос здесь уже не только о Ливии — сколько раз партнёры заплатят ценой за чужой пиар",
+   "struck": "не только о Ливии",
+   "watermark": "5 МИНУТ"
+  }
+ }
+]
